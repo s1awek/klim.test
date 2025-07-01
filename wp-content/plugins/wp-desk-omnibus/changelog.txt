@@ -1,0 +1,255 @@
+# WP Desk Omnibus Changelog
+
+## [2.2.13] - 2025-03-07
+### Added
+- Support for WordPress 6.8
+### Fixed
+- Improved compatibility with various translation modes in WPML plugin.
+
+## [2.2.12] - 2025-03-07
+### Added
+- Support for WooCommerce 9.8
+
+## [2.2.11] - 2025-02-07
+### Added
+- Support for WooCommerce 9.7
+
+## [2.2.10] - 2024-12-21
+### Added
+- Support for WooCommerce 9.6
+
+## [2.2.9] - 2024-12-10
+### Changed
+- Optimized background actions, like saving initial prices or adding currencies. Actions now run only in admin context, not polluting customer-facing frontend request.
+
+## [2.2.8] - 2024-11-18
+### Changed
+- Added support for WordPress 6.7.
+### Fixed
+- Normalized handling different time zones between WordPress and server.
+- Improved database migration schema execution, which sometimes might interfere with executing database backups.
+
+## [2.2.7] - 2024-10-24
+### Fixed
+- Fixed cache-related issues, when used with different object-cache plugins.
+
+## [2.2.6] - 2024-10-21
+### Added
+- Support for WooCommerce 9.4
+
+## [2.2.5] - 2024-10-10
+### Changed
+- Improved database reads with covering index.
+- Caching calculation of the lowest price for the frontend requests.
+
+## [2.2.4] - 2024-09-24
+### Fixed
+- In rare setup of WooCommerce MultiCurrency enabled without WPML and pricing mode set to automatic, prices are now correctly intercepted in all available currencies after change.
+
+## [2.2.3] - 2024-09-07
+### Added
+- Support for WooCommerce 9.3
+
+## [2.2.2] - 2024-08-07
+### Added
+- Support for WooCommerce 9.2
+
+## [2.2.1] - 2024-07-23
+### Changed
+- Added support for WordPress 6.6
+- Added support for WooCommerce 9.1
+### Fixed
+- Fixed database raising notice on duplicate key insert.
+
+## [2.2.0] - 2024-06-13
+### Added
+- A tool to validate historical prices and fix them if necessary.
+
+## [2.1.3] - 2024-06-04
+### Fixed
+- Made sure that translated products are following main product's pricing. Previously, with particular WPML settings, translated products were saving own, faulty price history.
+- Support for WooCommerce 8.9
+
+## [2.1.2] - 2024-03-21
+### Added
+- Support for WordPress 6.5
+- Support for WooCommerce 8.7
+
+## [2.1.1] - 2024-03-04
+### Changed
+- Changed WooCommerce support range to 8.4-8.6 versions.
+
+### Fixed
+- Fixed rare fatal error, when updated product prices are returned as integer from API.
+
+## [2.1.0] - 2024-01-24
+### Added
+- Introduced multi-currency support integration with WooCommerce Multilingual & Multicurrency with WPML.
+- When WPML is active, you can translate Omnibus message.
+- Prices table available on product edit page can be filtered and sorted. Additionally, the lowest price is marked on the table.
+- When product is permanently deleted, related historical prices are also removed from database.
+
+### Changed
+- Added currency code when saving prices. All previous prices are saved with default currency.
+- Added support for WooCommerce 8.5.
+- Raised minimal required PHP version to 7.4.
+- Raised minimal required WordPress version to 6.2 and minimal WooCommerce version to 8.2.
+
+### Removed
+- Removed the lowest price field in product edit view below pricing settings. You can check, which price is the lowest in the price table.
+
+## [2.0.3] - 2024-01-08
+### Fixed
+- If the lowest sale price is yet to end (set with future schedule), the lowest price message will now pad the displayed date to current time (before, it was displaying the sale end date, even when set in future).
+
+## [2.0.2] - 2023-12-18
+### Added
+- Support for WooCommerce 8.4
+
+## [2.0.1] - 08.11.2023
+### Fixed
+- Saving initial prices respects custom table prefixes, fixing the bug introduced in 2.0.0.
+
+## [2.0.0] - 07.11.2023
+
+### Added
+- Intercepted prices now include the full period when the price was valid, from the start date to the end. Increasing the specificity allows to more precisely present when the price was valid in context of Omnibus directive.
+- From now, the plugin respects sale price schedule for both sale start date and sale end date.
+- `{days}` tag in price message, which outputs the number of days Omnibus is looking back for the lowest prices.
+- Support for WordPress 6.4.
+- Support for WooCommerce 8.3.
+
+### Changed
+- `{date}` tag in price message is now formatted according to WordPress date format settings.
+- Intercepted prices are now stored with the site's timezone. Previously all dates were saved according to server's time zone.
+
+## [1.5.3] - 16.08.2023
+
+### Added
+- Support for WordPress 6.3
+- Support for WooCommerce 8.0
+
+## [1.5.2] - 04.07.2023
+
+### Changed
+- Seeking for the lowest price relative to the last promotion date no longer takes account of the current reduced price. Previously, it might lead to false positives, when two reduced prices were set for product consecutively, with the lower price comes last. This would show the current reduced price as the lowest one, even though the search should be SINCE (non inclusive) promotion date.
+
+## [1.5.1] - 27.06.2023
+
+### Added
+- Support for WooCommerce 7.9
+- New method of handling plugin updates and license.
+
+## [1.5.0] - 25.04.2023
+
+### Added
+
+- Shortcodes omnibus_price and omnibus_price_message
+
+### Fixed
+- Increased date precision when counting the lowest price of variation product with settings set to display the lowest price since last promotion date. Omnibus will no longer mistakenly display higher price, if the price was changed on the same day.
+
+## [1.4.5] - 04.04.2023
+
+### Added
+
+- Support for WordPress 6.2.
+- Support for WooCommerce 7.6.
+
+### Fixed
+
+- Fixed error on variable product page, when product has no variations.
+
+## [1.4.4] - 15.03.2023
+
+### Added
+
+- Support for WooCommerce 7.5.
+- Spanish and German language translations.
+
+## [1.4.3] - 21.02.2023
+
+### Changed
+
+- Do not display price logger table and price message for groupped products.
+
+### Fixed
+
+- Correct displaying prices with taxes for products which hasn't been changed longer than lookup period in settings.
+
+## [1.4.2] - 09.02.2023
+
+### Fixed
+
+- Omnibus is now compatible with any mysql and mariadb database.
+
+## [1.4.1] - 31.01.2023
+
+### Fixed
+
+- Improved plugin update process, which led before to API key issues.
+
+## [1.4.0] - 26.01.2023
+
+### Added
+
+- Omnibus now tracks **each** price change, both regular and reduced.
+- Added option to display the lowest price from date interval relative to last promotion date.
+- Added option to display one, cumulative price across product's variants.
+- Added option not to display any message if product's price isn't changed.
+- Each product in admin panel now have a table with up to 50 recent price changes.
+- You are able to display lowest price message on other pages than single product (archive, cart page).
+
+### Changed
+
+- Better, more readable options in message display selection.
+
+### Fixed
+
+- Improved saving product's price sometimes missing a decimal value.
+- Improved prices interception for non-public products -- now only published products save it's last price.
+- Process of initial prices interception no longer points to invalid product, preventing correct interception.
+- Plugin no longer mistakenly displays regular price on occasion, when it's set to use promotional price.
+- Correctly display taxes when enabled at WooCommerce for variable products.
+
+## [1.3.0] - 03.01.2023
+### Added
+- Added option to display a message only for products currently in promotion.
+- When using custom hook to display a price, you can now add `WC_Product` as a hook parameter.
+- Added second parameter `WC_Product` to `omnibus/core/current_price_value`.
+- Added support for WordPress 6.1
+- Added support for WooCommerce 7.2
+
+### Fixed
+- Fixed critical error when trying to log WP_Error occurred.
+- Improved checking for an array index presence in admin settings.
+
+## [1.2.0] - 21.06.2022
+### Added
+- Plugin now features bunch of settings, as content and placement of the
+message or date interval.
+
+### Fixed
+- Importing products correctly updates products' prices.
+
+## [1.1.2] - 13.06.2022
+### Fixed
+- Fixed variable product prices sometimes displayed as 0
+
+## [1.1.1] - 06.06.2022
+### Fixed
+- Fixed Polish translation string
+
+## [1.1.0] - 06.06.2022
+### Added
+- WP Desk Omnibus now has full support for products variant.
+
+### Fixed
+- Fixed rare WordPress error on admin page.
+
+## [1.0.1] - 25.05.2022
+### Fixed
+- Moved license page to plugins list to prevent error when trying to activate plugin.
+
+## [1.0.0] - 17.05.2022
+- Initial plugin release, featuring display of the lowest price from 30 days for WooCommerce products

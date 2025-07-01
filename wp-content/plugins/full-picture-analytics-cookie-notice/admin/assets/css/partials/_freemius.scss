@@ -1,0 +1,49 @@
+// FREEMIUS STYLES
+
+.fs-section,
+#fs_promo_tab{
+	display: none;
+	// box-sizing: border-box;
+}
+
+// #fs_pricing, .fs-section{
+// 	background-color: #fff;
+// 	margin: 0;
+// 	padding: 40px;
+// 	border: 1px solid #ccc;
+// 	border-top-width: 0;
+// }
+// #fs_frame{
+// 	background-color: #f1f1f1;
+// }
+
+.fs-notice{ // notice
+	.fs-notice-body{
+		margin: 0 !important;
+		line-height: 2.5em !important;
+		a{
+			vertical-align: middle !important;
+		}
+	}
+	.fs-close{
+		color: #333;
+	}
+	.fs-plugin-title{
+		display: none;
+	}
+}
+
+// #fs_pricing,
+// #fs_checkout{
+// 	border: 0;
+// 	padding: 40px 0 0;
+// }
+
+// body.full-picture_page_full_picture_tools-pricing{
+// 	#wpcontent{
+// 		padding-left: 0 !important;
+// 	}
+// 	#wpbody-content{
+// 		padding-bottom: 0 !important;
+// 	}
+// }

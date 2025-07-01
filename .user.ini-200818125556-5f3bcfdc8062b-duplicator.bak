@@ -1,0 +1,3 @@
+; Wordfence WAF
+auto_prepend_file = '/home/klimpolsxv/www/wordfence-waf.php'
+; END Wordfence WAF

@@ -1,0 +1,208 @@
+// OPTION DEBUG DATA
+
+#fupi_option_debug_box{
+	margin-top: 10px;
+	padding: 20px 0;
+	overflow-x: auto;
+}
+
+// SPECIFIC BUTTONS
+
+.fupi_customizer_link_wrap{
+	.fupi_under_field{
+		display: none;
+	}
+	.fupi_customize_notice_btn.fupi_disabled{
+		+.fupi_under_field{
+			margin-top: 12px;
+			color: #cb0b0b;
+			display: block;
+		}
+	}
+}
+
+.fupi_customize_notice_btn{
+	padding: 5px 17px !important;
+    font-size: 15px !important;
+	.dashicons{
+		font-size: 16px !important;
+	    width: 16px !important;
+	    height: 16px !important;
+	    vertical-align: text-top !important;
+		margin-right: 4px;
+	}
+	&.fupi_disabled{
+		pointer-events: none;
+		opacity: .5;
+	}
+}
+
+// CONSENT BANNER SETTINGS PAGE
+
+#fupi_settings_form.fupi_hide_manual_cookie_settings{
+	.fupi_manual_mode{
+		display: none !important;
+	}
+}
+
+// Text under the "save settings" button
+#fupi_bottom_info{
+	text-align: center
+}
+
+// ANIMATED LOADING ICON
+// https://loading.io/css/
+// requires HTML <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+
+.lds-ring {
+	display: inline-block;
+	position: relative;
+	width: 80px;
+	height: 80px;
+}
+.lds-ring div {
+	box-sizing: border-box;
+	display: block;
+	position: absolute;
+	width: 64px;
+	height: 64px;
+	margin: 8px;
+	border: 8px solid #369;
+	border-radius: 50%;
+	animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+	border-color: #369 transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+	animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+	animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+	animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.fupi_field_type_hidden{
+	display: none;
+}
+
+// POPUP WITH ADV TRIGGERS
+
+.fupi_atrig_popup_info{
+	border: 1px solid #ccc;
+	padding: 15px;
+	button{
+		margin: 10px 0 0 auto;
+	}
+	+.fupi_atrig_popup_info{
+		margin-top: 20px;
+	}
+}
+
+// CUSTOM EVENTS BUILDER
+
+.fupi_events_builder{
+	.fupi_field_type_button{
+		position: relative;
+		label{
+			margin-bottom: 15px;
+		}
+	}
+	.fupi_before_field{
+		font-weight: 500;
+		padding-right: 75px;
+		font-size: 15px !important;
+		border-bottom: 1px solid #ccc;
+		width: auto !important;
+		display: block;
+	}
+	.fupi_select_atrig{
+		flex: 1 0 auto;
+		border: 0;
+		background: none !important;
+		position: absolute !important;
+		top: auto !important;
+		bottom: 6px;
+		color: #333 !important;
+		right: 10px;
+		margin-bottom: 0 !important;
+		&:hover{
+			color: #369 !important;
+		}
+	}
+	.fupi_events_builder_evt{
+		min-width: auto !important;
+		max-width: 150px !important;
+	}
+	.fupi_r3_btns{
+		align-self: center;
+	}
+}
+
+// CUSTOM SCRIPTS MODULE
+
+.fupi_r3_scr{
+	.fupi_field_adv_trigger_wrap{
+		background: #e8f0f5;
+		padding: 10px;
+		margin-bottom: 10px;
+		border-radius: 5px;
+	}
+}
+
+.fupi_r3_scr.fupi_cscr_missing_atrig{
+	border: 2px solid #b75216;
+	.fupi_field_adv_trigger_wrap{
+		background: #ffe6c1;
+	}
+}
+.fupi_cscr_missing_atrig_msg{
+	color: lightyellow;
+    padding: 10px;
+    border-radius: 3px;
+    background-color: #b75216;
+    margin-bottom: -5px;
+    z-index: 10;
+    position: relative;
+}
+
+// STATUS PAGE
+
+.fupi_module_status{
+	font-weight: normal;
+	display: inline-block;
+	padding: 5px 10px;
+	border-radius: 100px;
+}
+
+.fupi_module_status_ok{
+	background-color: lightgreen;
+}
+
+.fupi_module_status_warning{
+	background-color: orange;
+}
+
+.fupi_module_status_alert{
+	background-color: red;
+}
+
+.fupi_module_status_ico{
+	width: 40px;
+	padding: 0 !important;
+	text-align: center;
+}
+.fupi_module_status_recommend{
+	padding: 7px 0 0;
+    margin: 8px 0 0;
+    border-top: 1px solid #eee;
+    color: #e47d00;
+}

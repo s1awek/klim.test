@@ -1,0 +1,85 @@
+{
+	"name": "wpdesk/wpdesk-omnibus",
+	"autoload": {
+		"psr-4": {
+			"OmnibusProVendor\\WPDesk\\Omnibus\\Core\\": "deprecated",
+			"WPDesk\\Omnibus\\Core\\": "src/WPDesk/Omnibus/Core"
+		},
+		"classmap": [
+			"vendor_prefixed"
+		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"unit\\": "tests/unit",
+			"WPDesk\\Omnibus\\Testing\\Codecept\\": "tests/codeception/tests/integration"
+		}
+	},
+	"config": {
+		"platform": {
+			"php": "7.4.33"
+		},
+		"archive-format": "zip",
+		"autoloader-suffix": "WPDeskOmnibus",
+		"sort-packages": true,
+		"allow-plugins": {
+			"cweagans/composer-patches": true,
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"wpdesk/wp-wpdesk-composer": true,
+			"wpdesk/wp-codeception": true,
+			"phpstan/extension-installer": true
+		},
+		"platform-check": false,
+		"gitlab-domains": ["gitlab.wpdesk.dev"]
+	},
+	"require": {
+		"php": "^7.4|^8",
+		"ext-json": "*",
+		"psr/log": "^1.0.1",
+		"wpdesk/wp-wpdesk-helper-override": "^1"
+	},
+	"require-dev": {
+		"10up/wp_mock": "^1.0",
+		"php-di/php-di": "^6.3",
+		"phpunit/phpunit": "^9",
+		"psr/clock": "^1.0",
+		"wpdesk/phpstan-rules": "^1",
+		"wpdesk/wp-code-sniffer": "^1",
+		"wpdesk/wp-codeception": "^2",
+		"wpdesk/wp-logs": "^1.10",
+		"wpdesk/wp-migrations": "^1.0",
+		"wpdesk/wp-mutex": "^1.1",
+		"wpdesk/wp-plugin-flow-paid": "^2",
+		"wpdesk/wp-wpdesk-composer": "^3"
+	},
+	"extra": {
+		"text-domain": "wpdesk-omnibus",
+		"translations-folder": "lang",
+		"translation-file-headers": {
+			"Project-Id-Version": "WP Desk Omnibus",
+			"Last-Translator": "Bartek Jaskulski <bartek.jaskulski@wpdesk.pl>",
+			"X-Poedit-WPHeader": "wpdesk-omnibus.php"
+		},
+		"po-files": {
+			"pl_PL": "pl_PL.po",
+			"es_ES": "es_ES.po",
+			"de_DE": "de_DE.po"
+		}
+	},
+	"scripts": {
+		"test": [
+			"@test:unit",
+			"@test:phpcs"
+		],
+		"test:unit": "./tools/phpunit -c phpunit-unit.xml",
+		"test:phpcs": "phpcs",
+		"phpunit-unit": "phpunit --configuration phpunit-unit.xml --coverage-text --colors=never",
+		"phpunit-integration": "phpunit --configuration phpunit-integration.xml --coverage-text --colors=never"
+	},
+	"repositories": {
+		"wpdesk": {
+			"type": "composer",
+			"url": "https://gitlab.wpdesk.dev/api/v4/group/wpdesk/-/packages/composer/"
+		}
+	}
+}

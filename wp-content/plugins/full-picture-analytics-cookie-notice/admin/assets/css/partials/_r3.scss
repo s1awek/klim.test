@@ -1,0 +1,395 @@
+// R3 REPEATER
+
+.fupi_r3_section{
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	border-radius: 5px;
+	+ .fupi_r3_section{
+		margin-top: 10px;
+	}
+	.fupi_r3_field{
+		flex: 1 0 auto;
+		min-width: 100px;
+		box-sizing: border-box;
+		padding: 0 10px 10px 0;
+		> *:not(.fupi_r3_section):not(.fupi_r3_field):not(button):not(.fupi_switch):not(.fupi_tooltip) {
+			width: 100%; // padding on the right +1px of the border
+		}
+	}
+	&.fupi_r3_repeater{
+		padding: 6px 0 0 10px;
+		.fupi_r3_btns{
+			flex: 0 0 auto;
+		}
+	}
+	+ .fupi_after_field{
+		margin-top: 6px;
+		+ .fupi_open_popup{
+			margin-top: 6px;
+		}
+	}
+	label:not(.fupi_switch){
+		display: block;
+		margin: 4px 0;
+	}
+	.fupi_field_type_label {
+	    padding-bottom: 3px !important;
+	}
+}
+
+// R3 BTNS
+
+// this pushes buttons to the right
+.fupi_r3_btns{
+	padding: 0 0 10px 0;
+	margin-left: auto;
+}
+
+.fupi_r3_btns_left{
+	.fupi_r3_btns{
+		margin-left: 0;
+	}
+}
+
+.fupi_r3_btn{
+	background-color: #d4dce3 !important;
+	border: 0 !important;
+	color: #000 !important;
+	font-size: 16px;
+	padding: 0;
+	transition: .2s all;
+	border-radius: 4px;
+	line-height: 1em;
+	cursor: pointer;
+	height: 34px !important;
+	width: 34px !important;
+	margin: 0 3px;
+	&:hover, &:focus{
+		background-color: #fde292 !important;
+	}
+	&.fupi_disabled{
+		background-color: rgba(255,255,255,0) !important;
+		opacity: .7;
+		pointer-events: none;
+	}
+}
+
+// R3 inside R3
+
+.fupi_r3_section{
+	> .fupi_field_type_r3{
+		width: 100%;
+		.fupi_r3_btns{
+			margin-left: 0;
+		}
+		.fupi_r3_btn{
+			height: 26px !important;
+			width: 26px !important;
+		}
+		&:has(>.fupi_r3_section_label){
+			.fupi_must_have_pro_ico{
+				top: 34px;
+			}
+		}
+	}
+}
+
+.fupi_r3_field{
+	position: relative;
+	&.fupi_missing_must_have{
+		background-color: #eee;
+		padding: 10px;
+		input, select, .select2, textarea, label{
+			opacity: .8;
+		}
+	}
+	.fupi_must_have_pro_ico{
+		top: 10px;
+	}
+}
+
+
+// label
+.fupi_r3_section_label{
+	font-weight: bold;
+	margin: 9px 0 5px !important;
+}
+
+.fupi_missing_must_have{
+	> .fupi_r3_section_label{
+		opacity: .6;
+	}
+}
+
+// SUB SECTIONS
+
+.fupi_r3_fields_group{
+	padding: 10px;
+    width: 100%;
+    background: #e8f0f5;
+    margin-bottom: 10px;
+    border-radius: 5px;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+}
+
+// GRID
+
+.fupi_r3_section,
+.fupi_r3_field{
+	&.fupi_col_10_grow{
+		flex: 1 0 10%;
+		min-width: 100px;
+	}
+	&.fupi_col_10{
+		flex: 0 0 10%;
+		min-width: 100px;
+	}
+	&.fupi_col_15_grow{
+		flex: 1 0 15%;
+		min-width: 100px;
+	}
+	&.fupi_col_15{
+		flex: 0 0 15%;
+		min-width: 100px;
+	}
+	&.fupi_col_20_grow{
+		flex: 1 0 20%;
+		min-width: 150px;
+	}
+	&.fupi_col_20{
+		flex: 0 0 20%;
+		min-width: 150px;
+	}
+	&.fupi_col_25_grow{
+		flex: 1 0 25%;
+		min-width: 175px;
+	}
+	&.fupi_col_25{
+		flex: 0 0 25%;
+		min-width: 175px;
+	}
+	&.fupi_col_30_grow{
+		flex: 1 0 30%;
+		min-width: 200px;
+	}
+	&.fupi_col_30{
+		flex: 0 0 30%;
+		min-width: 200px;
+	}
+	&.fupi_col_33_grow{
+		flex: 1 0 33%;
+		min-width: 200px;
+	}
+	&.fupi_col_33{
+		flex: 0 0 33%;
+		min-width: 200px;
+	}
+	&.fupi_col_35_grow{
+		flex: 1 0 35%;
+		min-width: 200px;
+	}
+	&.fupi_col_35{
+		flex: 0 0 35%;
+		min-width: 200px;
+	}
+	&.fupi_col_40_grow{
+		flex: 1 0 40%;
+		min-width: 225px;
+	}
+	&.fupi_col_40{
+		flex: 0 0 40%;
+		min-width: 225px;
+	}
+	&.fupi_col_50_grow{
+		flex: 1 0 50%;
+		min-width: 250px;
+	}
+	&.fupi_col_50{
+		flex: 0 0 50%;
+		min-width: 250px;
+	}
+	&.fupi_col_66_grow{
+		flex: 1 0 66%;
+		min-width: 300px;
+	}
+	&.fupi_col_66{
+		flex: 0 0 66%;
+		min-width: 300px;
+	}
+	&.fupi_col_70_grow{
+		flex: 1 0 70%;
+		min-width: 70%;
+	}
+	&.fupi_col_70{
+		flex: 0 0 70%;
+		min-width: 70%;
+	}
+	&.fupi_col_80_grow{
+		flex: 1 0 70%;
+		min-width: 70%;
+	}
+	&.fupi_col_80{
+		flex: 0 0 80%;
+		min-width: 80%;
+	}
+	&.fupi_col_100{
+		flex: 1 0 100%;
+	}
+}
+
+.fupi_req_txt{
+	display: none;
+}
+
+// this adds a highlight and "required" text to all required fields in a newly added section
+.fupi_highlight_req{
+	.fupi_r3_field:not(.field_filled){
+		.fupi_req{
+			border-color: #ca8a14;
+			box-shadow: 0 0 0 1px #ca8a14;
+		}
+		.fupi_req_txt{
+			display: inline-block;
+		}
+	}
+}
+
+// this adds a red highlight and "required" text when a user leaves a required field empty
+.fupi_r3_field{
+	position: relative;
+	&.field_empty{
+		.fupi_req{
+			border-color: #ca1414 !important;
+			box-shadow: 0 0 0 1px #ca1414 !important;
+		}
+		.fupi_req_txt{
+			display: inline-block;
+		}
+	}
+}
+
+.fupi_req_txt{
+	display: none;
+	position: absolute;
+	bottom: 0px;
+	left: 8px;
+	width: auto !important;
+	padding: 0px 4px;
+	font-size: 11px;
+	background: #a5a5a5;
+	color: #fff !important;
+	border-radius: 4px;
+}
+
+.fupi_simple_r3{
+	.fupi_r3_section{
+		align-items: flex-end;
+		&.fupi_r3_repeater{
+			padding: 0;
+		}
+		+.fupi_r3_section{
+			margin-top: 5px;
+		}
+	}
+}
+
+.fupi_r3_fullwidth{
+	display: block !important;
+	th{
+		display: block;
+		width: 100%;
+		max-width: 100% !important;
+		padding: 0 0 10px !important;
+	}
+	td{
+		display: block;
+		width: 100%;
+		max-width: 100% !important;
+		padding: 0 0 10px !important;
+	}
+	.fupi_r3_section{
+		align-items: flex-end;
+	}
+}
+
+// R3 - CUSTOM SCRIPTS
+
+.fupi_r3_scr{
+	.fupi_field_scr_wrap{
+		flex: 1 0 100%;
+		max-width: 100% !important;
+		margin-top: 10px;
+	}
+		textarea{
+			font-family: monospace;
+			min-height: 300px;
+		}
+	.fupi_field_disable_wrap{
+		.fupi_switch_slider.fupi_active, 
+		input:checked+.fupi_switch_slider{
+			background-color: #bd1e1e;
+		}
+	}
+}
+
+// R3 - CUSTOM EVENTS BUILDER
+
+.fupi_custom_events_builder{
+	.fupi_select_atrig{
+		margin-top: 10px;
+	}
+}
+
+// R3 - ADVANCED TRIGGERS
+
+.advanced_triggers_builder{
+	.fupi_field_cond_wrap,
+	.fupi_field_when_wrap{
+		.fupi_r3_section{
+			position: relative;
+			padding-left: 0;
+			+ .fupi_r3_section{
+				border-top: 0 !important;
+				margin-top: 0 !important;
+				&::before{
+					content: 'AND';
+					font-weight: bold;
+					position: absolute;
+					font-size: 12px;
+					padding: 5px 3px;
+					top: -13px;
+					left: 5px;
+					z-index: 10;
+					background-color: #fff;
+				}
+			}
+		}
+	}
+	.fupi_field_type_select2{
+		> .fupi_r3_field_label{
+			font-weight: bold;
+			margin: 9px 0 5px !important;
+		}
+	}
+	.fupi_field_triggers_label_wrap{
+		font-weight: bold;
+		padding-bottom: 7px !important;
+	}
+}
+
+#fupi_main .form-table{
+	.select2{
+		width: 100% !important;
+	}
+	.select2-selection{
+		padding: 4px 6px;
+		min-height: 42px !important;
+		border: 1px solid #b6c1d3 !important;
+	}
+	.select2-search__field{
+		padding: 0 !important;
+	}
+}

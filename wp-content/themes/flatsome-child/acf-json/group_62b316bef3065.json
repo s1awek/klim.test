@@ -1,0 +1,41 @@
+{
+    "key": "group_62b316bef3065",
+    "title": "Link do stanów magazynowych",
+    "fields": [
+        {
+            "key": "field_62b316e49f1f2",
+            "label": "Link do stanów magazynowych",
+            "name": "stock_link",
+            "type": "url",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page",
+                "operator": "==",
+                "value": "64"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1655904002
+}

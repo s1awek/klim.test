@@ -1,0 +1,38 @@
+#fupi_reports_nav{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+    margin: 20px 0 40px;
+    justify-content: center;
+}
+#fupi_reports_nav a{
+    flex: 0 0 auto;
+    padding: 7px 15px;
+    font-size: 15px;
+    display: block;
+}
+
+#fp_report_warnings{
+    text-align: center;
+    max-width: 1140px;
+    margin: 15px auto;
+    font-size: 15px;
+}
+
+#fupi_report_wrap{
+    margin: 0 auto;
+}
+
+.fupi_responsive_iframe {
+	position: relative;
+  	overflow: hidden;
+	width: 100%;
+	height: 0;
+}
+.fupi_responsive_iframe iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100%  !important;
+}

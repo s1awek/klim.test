@@ -1,0 +1,31 @@
+.fupi_page_status{
+    #fupi_main_col{
+        section{
+            background: #eef4f9;
+            padding: 20px;
+            border-radius: 10px;
+            + section{
+                margin-top: 20px;
+            }
+        }
+    }
+}
+
+#fupi_gdpr_helper_legend{
+    list-style-type: none;
+    margin: 40px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    padding: 10px;
+    border: 1px solid #e2e2ca;
+    background-color: #fffeeb;
+    border-radius: 5px;
+    justify-content: center;
+    li{
+        flex: 0 0 auto;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+}

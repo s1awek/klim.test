@@ -1,0 +1,522 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: przelewy24-gateway-woocommerce\n"
+"POT-Creation-Date: 2016-12-01 16:01+0100\n"
+"PO-Revision-Date: 2017-01-26 14:21+0100\n"
+"Last-Translator: \n"
+"Language-Team: Order Of Code <office@orderofcode.com>\n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c;_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;"
+"esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: inc/WC_Gateway_Przelewy24.class.php:66
+msgid "Metody płatności widoczne od razu - upuść tutaj max. 5 metod płatności:"
+msgstr ""
+"Methods of payment immediately visible - drop here max. 5 methods of payment:"
+
+#: inc/WC_Gateway_Przelewy24.class.php:67
+msgid "Metody płatności widoczne po kliknięciu przycisku (więcej...):"
+msgstr "Methods of payment visible after clicking buton (more...):"
+
+#: inc/WC_Gateway_Przelewy24.class.php:76
+msgid "Włącz/Wyłącz"
+msgstr "Turn on/off"
+
+#: inc/WC_Gateway_Przelewy24.class.php:78
+msgid "Aktywuj moduł płatności Przelewy24."
+msgstr "Activate Przelewy24 payment module."
+
+#: inc/WC_Gateway_Przelewy24.class.php:81
+msgid "Tytuł:"
+msgstr "Title:"
+
+#: inc/WC_Gateway_Przelewy24.class.php:83
+msgid "Tekst który zobaczą klienci podczas dokonywania zakupu"
+msgstr "The text that customers will see when making a purchase"
+
+#: inc/WC_Gateway_Przelewy24.class.php:84
+msgid "Przelewy24"
+msgstr "Przelewy24"
+
+#: inc/WC_Gateway_Przelewy24.class.php:86
+msgid "ID Sprzedawcy"
+msgstr "Merchant ID"
+
+#: inc/WC_Gateway_Przelewy24.class.php:88
+msgid "Identyfikator sprzedawcy nadany w systemie Przelewy24."
+msgstr "Merchant identifier in Przelewy24 system."
+
+#: inc/WC_Gateway_Przelewy24.class.php:92
+msgid "ID Sklepu"
+msgstr "Shop ID"
+
+#: inc/WC_Gateway_Przelewy24.class.php:94
+msgid "Identyfikator sklepu nadany w systemie Przelewy24."
+msgstr "Shop identifier in Przelewy24 system."
+
+#: inc/WC_Gateway_Przelewy24.class.php:98
+msgid "Klucz CRC"
+msgstr "CRC key"
+
+#: inc/WC_Gateway_Przelewy24.class.php:100
+msgid "Klucz do CRC nadany w systemie Przelewy24."
+msgstr "CRC key in Przelewy24 system."
+
+#: inc/WC_Gateway_Przelewy24.class.php:101
+msgid "(16 znaków)"
+msgstr "(16 characters)"
+
+#: inc/WC_Gateway_Przelewy24.class.php:104
+msgid "Tryb modułu"
+msgstr "Module mode"
+
+#: inc/WC_Gateway_Przelewy24.class.php:107
+msgid "Tryb przeprowadzania transakcji"
+msgstr "Transaction mode"
+
+#: inc/WC_Gateway_Przelewy24.class.php:109
+msgid "Opis"
+msgstr "Description"
+
+#: inc/WC_Gateway_Przelewy24.class.php:111
+msgid "Tekst który zobaczą klienci przy wyborze metody płatności"
+msgstr "The text that customers will see when choosing a payment method"
+
+#: inc/WC_Gateway_Przelewy24.class.php:112
+msgid "Płać z Przelewy24"
+msgstr "Pay with Przelewy24"
+
+#: inc/WC_Gateway_Przelewy24.class.php:114
+msgid "Instrukcje"
+msgstr "Instructions"
+
+#: inc/WC_Gateway_Przelewy24.class.php:116
+msgid ""
+"Tekst który zobaczą klienci po dokonaniu zakupu oraz w mailu z potwierdzeniem"
+msgstr ""
+"Text that customers will see after making purchase and in your confirmation "
+"email"
+
+#: inc/WC_Gateway_Przelewy24.class.php:117
+msgid "Dziękujemy za skorzystanie z płatności Przelewy24."
+msgstr "Thank you for using Przelewy24 payment."
+
+#: inc/WC_Gateway_Przelewy24.class.php:119
+msgid "Tryb debugowania"
+msgstr "Debugging mode"
+
+#: inc/WC_Gateway_Przelewy24.class.php:121
+msgid "Tryb do testowania poprawności działania modułu"
+msgstr "Mode for testing this module"
+
+#: inc/WC_Gateway_Przelewy24.class.php:123
+msgid "Mechanizm Basic-Auth"
+msgstr "Basic-Auth mechanism"
+
+#: inc/WC_Gateway_Przelewy24.class.php:125
+msgid "Jeśli Twój sklep używa mechanizmu Basic-Auth, podaj tutaj login i hasło"
+msgstr ""
+"If your shop uses the Basic-Auth mechanism, enter here login and password"
+
+#: inc/WC_Gateway_Przelewy24.class.php:126
+msgid "login:hasło"
+msgstr "login:password"
+
+#: inc/WC_Gateway_Przelewy24.class.php:128
+msgid "Status przed dokonaniem płatności"
+msgstr "Status before payment"
+
+#: inc/WC_Gateway_Przelewy24.class.php:128
+msgid "Jeżeli używasz płatności nienatychmiastowych, ustaw status zamówienia przed płatnością na Wstrzymane (oczekujące na płatność)"
+msgstr "If you use not immediate payment, set payment status before to on hold"
+
+#: inc/WC_Gateway_Przelewy24.class.php:131
+msgid "Domyślny"
+msgstr "Default"
+
+#: inc/WC_Gateway_Przelewy24.class.php:133
+msgid "Status po dokonaniu płatności"
+msgstr "Status after payment"
+
+#: inc/WC_Gateway_Przelewy24.class.php:138
+msgid "Klucz API"
+msgstr "API key"
+
+#: inc/WC_Gateway_Przelewy24.class.php:140
+msgid "Klucz API należy pobrać z panelu Przelewy24 z zakładki Moje dane"
+msgstr "API Key can be obtained from the Przelewy24 panel, My Data tab"
+
+#: inc/WC_Gateway_Przelewy24.class.php:141
+msgid "(32 znaki)"
+msgstr "(32 characters)"
+
+#: inc/WC_Gateway_Przelewy24.class.php:143
+msgid "Oneclick"
+msgstr "Oneclick"
+
+#: inc/WC_Gateway_Przelewy24.class.php:145
+msgid "Aktywuj płatności oneclick"
+msgstr "Activate OneClick payment"
+
+#: inc/WC_Gateway_Przelewy24.class.php:148
+msgid "Płatność w sklepie"
+msgstr "Payment in the shop"
+
+#: inc/WC_Gateway_Przelewy24.class.php:150
+msgid "Płatność kartą wewnątrz sklepu"
+msgstr "Payment by credit card within the shop"
+
+#: inc/WC_Gateway_Przelewy24.class.php:153
+msgid "Regulamin"
+msgstr "Terms of use"
+
+#: inc/WC_Gateway_Przelewy24.class.php:154
+msgid "Akceptacja regulaminu przelewy24.pl"
+msgstr "Acceptance of the przelewy24 Terms of use"
+
+#: inc/WC_Gateway_Przelewy24.class.php:156
+msgid "Pokazuje przycisk akceptacji regulaminu przelewy24.pl wewnątrz sklepu"
+msgstr "Shows the buton to accept przelewy24 Terms of use within the shop"
+
+#: inc/WC_Gateway_Przelewy24.class.php:159
+msgid "Ustawienia płatności ratalnej"
+msgstr "Installment settings"
+
+#: inc/WC_Gateway_Przelewy24.class.php:165
+msgid "Liczba kanałów płatności"
+msgstr "The number of payment channels"
+
+#: inc/WC_Gateway_Przelewy24.class.php:166
+msgid "Pokaż tylko płatności natychmiastowe"
+msgstr "Show only immediate payments"
+
+#: inc/WC_Gateway_Przelewy24.class.php:167
+msgid "To ustawienie ogranicza liczbę dostępnych metod płatności"
+msgstr "This setting limits the number of available payment methods"
+
+#: inc/WC_Gateway_Przelewy24.class.php:171
+msgid "Limit czasu na transakcję"
+msgstr "Time limit for the transaction"
+
+#: inc/WC_Gateway_Przelewy24.class.php:172
+msgid "Wartość 0 oznacza brak limitu czasu"
+msgstr "Value 0 means no time limit"
+
+#: inc/WC_Gateway_Przelewy24.class.php:176
+msgid "Pokaż metody płatności"
+msgstr "Show payment methods"
+
+#: inc/WC_Gateway_Przelewy24.class.php:177
+msgid "Pokaż dostępne metody płatności w sklepie"
+msgstr "Show available payment methods within the shop"
+
+#: inc/WC_Gateway_Przelewy24.class.php:178
+msgid "Klient może wybrać metodę płatności na stronie potwierdzenia zamówienia"
+msgstr ""
+"The customer can choose the payment method on the order confirmation page"
+
+#: inc/WC_Gateway_Przelewy24.class.php:182
+msgid ""
+"Wyświetl graficzną listę metod płatności w podsumowaniu zamówienia "
+"(Checkout). W tym trybie płatność oneclick i płatność wewnątrz sklepu nie "
+"jest dostępna w podsumowaniu zamówienia (Checkout) ."
+msgstr ""
+"Show a graphical list of payment methods in the order summary (Checkout). In "
+"this mode, OneClick payment and payment within the shop is not available in "
+"the order summary (Checkout)."
+
+#: inc/WC_Gateway_Przelewy24.class.php:186
+msgid ""
+"Użyj graficznej listy metod płatności na stronie potwierdzenia zamówienia"
+msgstr "Use a graphical list of payment methods on the order confirmation page"
+
+#: inc/WC_Gateway_Przelewy24.class.php:191
+msgid "Widoczne metody płatności"
+msgstr "Visible payment methods"
+
+#: inc/WC_Gateway_Przelewy24.class.php:204
+msgid "Opłata dodatkowa"
+msgstr "Additional fee"
+
+#: inc/WC_Gateway_Przelewy24.class.php:206
+msgid "Naliczaj opłatę dodatkową"
+msgstr "Charge additional fee"
+
+#: inc/WC_Gateway_Przelewy24.class.php:209
+msgid "Wybierz produkt wirtualny"
+msgstr "Select a virtual product"
+
+#: inc/WC_Gateway_Przelewy24.class.php:212
+msgid "Ten produkt zostanie dopisany do zamówienia"
+msgstr "This product will be added to the order"
+
+#: inc/WC_Gateway_Przelewy24.class.php:215
+msgid "Zwiększ płatność o kwotę"
+msgstr "Increase payment (value)"
+
+#: inc/WC_Gateway_Przelewy24.class.php:219
+msgid "Zwiększ płatność o procent"
+msgstr "Increase payment (percentage)"
+
+#: inc/WC_Gateway_Przelewy24.class.php:222
+msgid "Do płatności zostanie doliczona jedynie większa z tych kwot"
+msgstr "To the payment will be added only the higher of these amounts"
+
+#: inc/WC_Gateway_Przelewy24.class.php:224
+msgid "Czekaj na wynik transakcji"
+msgstr "Wait for the transaction result"
+
+#: inc/WC_Gateway_Przelewy24.class.php:229
+msgid "ZenCard włączony"
+msgstr "ZenCard turned on"
+
+#: inc/WC_Gateway_Przelewy24.class.php:232
+msgid "Włączenie ZenCard"
+msgstr "Turning on ZenCard"
+
+#: inc/WC_Gateway_Przelewy24.class.php:269
+msgid "Usługa PaymentMethods nie jest włączona dla tego sprzedawcy."
+msgstr "PaymentMethods service is not enabled for this merchant."
+
+#: inc/WC_Gateway_Przelewy24.class.php:297
+msgid "Klucz do CRC powinien mieć 16 znaków."
+msgstr "CRC key should be 16 characters long"
+
+#: inc/WC_Gateway_Przelewy24.class.php:318
+msgid "ZenCard nie jest aktywny dla tego sprzedawcy."
+msgstr "ZenCard is not active for this merchant."
+
+#: inc/WC_Gateway_Przelewy24.class.php:333
+msgid "Błąd"
+msgstr "Error"
+
+#: inc/WC_Gateway_Przelewy24.class.php:360
+msgid "Błędny ID Sprzedawcy."
+msgstr "Wrong merchant ID."
+
+#: inc/WC_Gateway_Przelewy24.class.php:361
+msgid "Błędny ID Sklepu."
+msgstr "Wrong Shop ID."
+
+#: inc/WC_Gateway_Przelewy24.class.php:378
+msgid ""
+"Błędny ID Sklepu, Sprzedawcy lub Klucz do CRC dla tego trybu pracy wtyczki."
+msgstr ""
+"Wrong Shop ID, Seller ID or CRC Key for this operation mode of the plugin."
+
+#: inc/WC_Gateway_Przelewy24.class.php:384
+msgid ""
+"Błędny klucz API dla tego ID Sklepu, Sprzedawcy lub trybu pracy wtyczki."
+msgstr ""
+"Wrong API Key for this Shop ID, Seller ID or for this operation mode of the "
+"plugin."
+
+#: inc/WC_Gateway_Przelewy24.class.php:392
+msgid "Bramka płatności Przelewy24"
+msgstr "Przelewy24 payment gateway"
+
+#: inc/WC_Gateway_Przelewy24.class.php:415
+msgid "Wystąpił błąd. Spróbuj ponownie lub wybierz inną metodę płatności."
+msgstr "An error occurred. Please try again or choose another payment method."
+
+#: inc/WC_Gateway_Przelewy24.class.php:473
+#: inc/WC_Gateway_Przelewy24.class.php:752
+msgid "Pokaż więcej metod płatności."
+msgstr "Show more payment methods."
+
+#: inc/WC_Gateway_Przelewy24.class.php:474
+#: inc/WC_Gateway_Przelewy24.class.php:753
+msgid "więcej metod płatności"
+msgstr "more payment methods"
+
+#: inc/WC_Gateway_Przelewy24.class.php:492
+#: inc/WC_Gateway_Przelewy24.class.php:612
+msgid "Tak, zapoznałem się i akceptuję warunki"
+msgstr "Yes, I have read and accept the"
+
+#: inc/WC_Gateway_Przelewy24.class.php:492
+#: inc/WC_Gateway_Przelewy24.class.php:612
+msgid "regulaminu"
+msgstr "terms and conditions"
+
+#: inc/WC_Gateway_Przelewy24.class.php:499
+msgid "Do płatności zostanie doliczona kwota"
+msgstr "To the payment it will be added the amount of"
+
+#: inc/WC_Gateway_Przelewy24.class.php:565
+#: inc/WC_Gateway_Przelewy24.class.php:1009
+msgid "IPN payment completed"
+msgstr "Płatność BPP (Błyskawiczne powiadamianie o płatności) zakończona"
+
+#: inc/WC_Gateway_Przelewy24.class.php:576
+#: inc/WC_Gateway_Przelewy24.class.php:1042
+msgid "Błąd płatności: "
+msgstr "Payment error: "
+
+#: inc/WC_Gateway_Przelewy24.class.php:576
+#: inc/WC_Gateway_Przelewy24.class.php:1042
+msgid ""
+"Przepraszamy, ale twoja transakcja nie została przeprowadzona pomyślnie, "
+"prosimy spróbować ponownie."
+msgstr ""
+"We're sorry, but your transaction was not carried out successfully, please "
+"try again."
+
+#: inc/WC_Gateway_Przelewy24.class.php:635
+msgid "Ostatnio używane"
+msgstr "Recently used"
+
+#: inc/WC_Gateway_Przelewy24.class.php:767
+msgid "Imię i nazwisko"
+msgstr "First and last name"
+
+#: inc/WC_Gateway_Przelewy24.class.php:768
+msgid "Numer karty"
+msgstr "Card number"
+
+#: inc/WC_Gateway_Przelewy24.class.php:769
+msgid "CVV"
+msgstr "CVV"
+
+#: inc/WC_Gateway_Przelewy24.class.php:770
+msgid "Data ważności"
+msgstr "Expiration date"
+
+#: inc/WC_Gateway_Przelewy24.class.php:771
+msgid "Zapłać"
+msgstr "Pay"
+
+#: inc/WC_Gateway_Przelewy24.class.php:772
+msgid "Kliknij tutaj aby kontynuować zakupy"
+msgstr "Click here to continue shopping"
+
+#: inc/WC_Gateway_Przelewy24.class.php:832
+msgid "Transakcja testowa"
+msgstr "Test transaction"
+
+#: inc/WC_Gateway_Przelewy24.class.php:833
+msgid "Zamówienie nr"
+msgstr "Order no."
+
+#: inc/WC_Gateway_Przelewy24.class.php:896
+msgid "Dodatkowe kwoty [VAT, rabaty]"
+msgstr "Extra charge [VAT and discounts]"
+
+#: inc/WC_Gateway_Przelewy24.class.php:897
+msgid "Twoje zamówienie"
+msgstr "Your order"
+
+#: inc/WC_Gateway_Przelewy24.class.php:925
+msgid "Potwierdzam zamówienie"
+msgstr "I confirm the order"
+
+#: inc/WC_Gateway_Przelewy24.class.php:926
+msgid "Złożenie zamówienia wiąże się z obowiązkiem zapłaty"
+msgstr "Placing an order entails the obligation to pay"
+
+#: inc/WC_Gateway_Przelewy24.class.php:927
+msgid "Anuluj zamówienie"
+msgstr "Cancel order"
+
+#: inc/WC_Gateway_Przelewy24.class.php:930
+msgid ""
+"Dziękujemy za złożenie zamówienia. Za chwilę nastąpi przekierowanie na "
+"stronę przelewy24.pl"
+msgstr ""
+"Thank you for your order. In a moment you will be redirected to the "
+"przelewy24.pl page"
+
+#: inc/WC_Gateway_Przelewy24.class.php:1057
+msgid ""
+"Płatność realizowana przez Przelewy24 nie została jeszcze potwierdzona. "
+"Jeśli potwierdzenie nadejdzie w czasie późniejszym, płatność zostanie "
+"automatycznie przekazana do sklepu"
+msgstr ""
+"Your payment made by Przelewy24 has not yet been confirmed. If the "
+"confirmation will come later, the payment will be automatically transferred "
+"to the shop"
+
+#: inc/WC_Gateway_Przelewy24.class.php:1081
+msgid "normalny"
+msgstr "normal"
+
+#: inc/WC_Gateway_Przelewy24.class.php:1082
+msgid "testowy"
+msgstr "test"
+
+#: inc/WC_Gateway_Przelewy24.class.php:1090
+msgid "Ukryj wszystko"
+msgstr "Hide all"
+
+#: inc/WC_Gateway_Przelewy24.class.php:1091
+msgid "Przycisk (strona płatności)"
+msgstr "Button (payment page)"
+
+#: inc/WC_Gateway_Przelewy24.class.php:1092
+msgid "Przycisk (strona płatności) i kalkulator rat (strona produktu)"
+msgstr "Button (payment page) and installments calculator (product page)"
+
+#: przelewy24-gateway-woocommerce.php:76
+msgid "Moje zapisane karty"
+msgstr "My saved cards"
+
+#: przelewy24-gateway-woocommerce.php:77
+msgid "Czy jesteś pewien?"
+msgstr "Are you sure?"
+
+#: przelewy24-gateway-woocommerce.php:78
+msgid "Usuń kartę"
+msgstr "Remove card"
+
+#: przelewy24-gateway-woocommerce.php:79
+msgid "Nie pamiętaj moich kart"
+msgstr "Do not remember my cards"
+
+#: przelewy24-gateway-woocommerce.php:80
+msgid "Brak zapamiętanych kart płatniczych"
+msgstr "No saved credit cards"
+
+#: przelewy24-gateway-woocommerce.php:81
+msgid "Zapisz"
+msgstr "Save"
+
+#: przelewy24-gateway-woocommerce.php:355
+msgid ""
+"Wystąpił błąd techniczny podczas użycia kuponu ZenCard. Kupon nie zostanie "
+"użyty."
+msgstr ""
+"There was a technical error when you use the ZenCard coupon. The coupon will "
+"not be used."
+
+#: shared-libraries/classes/Przelewy24Product.php:12
+msgid "Różnica"
+msgstr "Difference"
+
+#: shared-libraries/classes/Przelewy24Product.php:15
+msgid "Zamówienie"
+msgstr "Order"
+
+#: template/zencard-box.tpl.php:46
+msgid "(z rabatem ZenCard)"
+msgstr "(with ZenCard discount)"
+
+#: zencard/Transaction.php:87
+msgid "Wykorzystano kupon ZenCard o wartości"
+msgstr "Used ZenCard coupon worth"
+
+#: inc/WC_Gateway_Przelewy24.class.php:17
+msgid "Moduł Przelewy24.pl w tej chwili posiada podstawową funkcjonalność, która sukcesywnie będzie rozszerzana."
+msgstr "Przelewy24.pl module at the moment has basic functionality, which will be gradually expanded."
+
+#~ msgid "Title:"
+#~ msgstr "Tytuł:"

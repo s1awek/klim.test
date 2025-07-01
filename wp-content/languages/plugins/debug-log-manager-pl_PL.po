@@ -1,0 +1,275 @@
+# Translation of Plugins - Debug Log Manager - Stable (latest release) in Polish
+# This file is distributed under the same license as the Plugins - Debug Log Manager - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-06-04 22:47:34+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: pl\n"
+"Project-Id-Version: Plugins - Debug Log Manager - Stable (latest release)\n"
+
+#: bootstrap.php:245
+msgid "Sponsor"
+msgstr "Sponsoruj"
+
+#: bootstrap.php:407
+msgid "WordPress plugin/theme editor has been disabled. "
+msgstr "Edytor wtyczki/motywu w WordPress jest wyłączony. "
+
+#: bootstrap.php:276
+msgid "Disable Editor"
+msgstr "Wyłącz edytor"
+
+#: bootstrap.php:275
+msgid "Once error logging is enabled, the core's plugin/theme editor stays enabled even if error logging has been disabled later on. This allows for viewing the files where errors occurred even when logging has been disabled. You can optionally disable the editor here once you're done debugging."
+msgstr "Po włączeniu rejestrowania błędów edytor wtyczek/motywów pozostaje włączony, nawet jeśli rejestrowanie błędów zostało później wyłączone. Umożliwia to przeglądanie plików, w których wystąpiły błędy, nawet gdy rejestrowanie zostało wyłączone. Opcjonalnie możesz wyłączyć edytor tutaj po zakończeniu debugowania."
+
+#: classes/class-debug-log.php:1389 classes/class-debug-log.php:1393
+#: classes/class-debug-log.php:1396 classes/class-debug-log.php:1401
+#: classes/class-debug-log.php:1404
+msgid "Line"
+msgstr "Linia"
+
+#: classes/class-debug-log.php:1389 classes/class-debug-log.php:1393
+#: classes/class-debug-log.php:1396 classes/class-debug-log.php:1401
+#: classes/class-debug-log.php:1404
+msgid "File"
+msgstr "Plik"
+
+#: classes/class-debug-log.php:1365 classes/class-debug-log.php:1503
+msgid "PHP Exception"
+msgstr "Wyjątek PHP"
+
+#: classes/class-debug-log.php:1339
+msgid "No error message specified..."
+msgstr "Nie podano komunikatu o błędzie..."
+
+#: classes/class-debug-log.php:1294
+msgid "Plugin"
+msgstr "Wtyczka"
+
+#: classes/class-debug-log.php:1292
+msgid "Theme"
+msgstr "Motyw"
+
+#: classes/class-debug-log.php:1290
+msgid "WordPress core"
+msgstr "WordPress"
+
+#: classes/class-debug-log.php:1683
+msgid "Go to Debug Log Manager"
+msgstr "Przejdź do Menedżera Dziennika Błędów"
+
+#: bootstrap.php:337
+msgid "Debug Log | Latest Errors"
+msgstr "Dziennik zdarzeń | Ostatnie błędy"
+
+#: classes/class-debug-log.php:1515
+msgid "Last Occurrence"
+msgstr "Ostatnie wystąpienie"
+
+#: classes/class-debug-log.php:1514
+msgid "Details"
+msgstr "Szczegóły"
+
+#: classes/class-debug-log.php:1513
+msgid "Error Type"
+msgstr "Rodzaj błędu"
+
+#: classes/class-debug-log.php:1497
+msgid "All Error Types"
+msgstr "Wszystkie rodzaje błędów"
+
+#: classes/class-debug-log.php:1374 classes/class-debug-log.php:1506
+msgid "Other"
+msgstr "Inne"
+
+#: classes/class-debug-log.php:1371 classes/class-debug-log.php:1505
+msgid "JavaScript"
+msgstr "JavaScript"
+
+#: classes/class-debug-log.php:1368 classes/class-debug-log.php:1504
+msgid "Database"
+msgstr "Baza danych"
+
+#: classes/class-debug-log.php:1361 classes/class-debug-log.php:1502
+msgid "PHP Parse"
+msgstr "Analiza PHP"
+
+#: classes/class-debug-log.php:1358 classes/class-debug-log.php:1501
+msgid "PHP Deprecated"
+msgstr "Przestarzałe PHP"
+
+#: classes/class-debug-log.php:1354 classes/class-debug-log.php:1500
+msgid "PHP Notice"
+msgstr "Powiadomienie PHP"
+
+#: classes/class-debug-log.php:1350 classes/class-debug-log.php:1499
+msgid "PHP Warning"
+msgstr "Ostrzeżenie PHP"
+
+#: classes/class-debug-log.php:1344 classes/class-debug-log.php:1498
+msgid "PHP Fatal"
+msgstr "Błąd krytyczny PHP"
+
+#: classes/class-debug-log.php:312
+msgid "Disabled"
+msgstr "Wyłączone"
+
+#: classes/class-debug-log.php:301
+msgid "Enabled"
+msgstr "Włączone"
+
+#: classes/class-debug-log.php:301 classes/class-debug-log.php:312
+msgid "Auto-Refresh"
+msgstr "Automatyczne odświeżanie"
+
+#: classes/class-debug-log.php:269
+msgid "Disabled on"
+msgstr "Włączono"
+
+#: classes/class-debug-log.php:240
+msgid "Enabled on"
+msgstr "Wyłączono"
+
+#: classes/class-debug-log.php:226 classes/class-debug-log.php:1462
+#: classes/class-debug-log.php:1540 classes/class-debug-log.php:1751
+msgid "%s occurrence logged"
+msgid_plural "%s occurrences logged"
+msgstr[0] "%s zarejestrowane wystąpienie"
+msgstr[1] "%s zarejestrowane wystąpienia"
+msgstr[2] "%s zarejestrowanych wystąpień"
+
+#: classes/class-debug-log.php:52 classes/class-debug-log.php:82
+msgid "disabled"
+msgstr "wyłączone"
+
+#: classes/class-debug-log.php:48 classes/class-debug-log.php:52
+msgid "on"
+msgstr " "
+
+#: classes/class-debug-log.php:48 classes/class-debug-log.php:78
+msgid "enabled"
+msgstr "włączone"
+
+#: classes/class-debug-log.php:48 classes/class-debug-log.php:52
+#: classes/class-debug-log.php:240 classes/class-debug-log.php:269
+msgid "Error Logging"
+msgstr "Rejestrowanie błędów"
+
+#: bootstrap.php:422
+msgid "Previous"
+msgstr "Poprzednie"
+
+#: bootstrap.php:421
+msgid "Next"
+msgstr "Następne"
+
+#: bootstrap.php:420
+msgid "Last"
+msgstr "Ostatni"
+
+#: bootstrap.php:419
+msgid "First"
+msgstr "Pierwszy"
+
+#: bootstrap.php:417
+msgid "No matching records found"
+msgstr "Nie znaleziono pasujących rekordów"
+
+#: bootstrap.php:416
+msgid "Search:"
+msgstr "Szukaj:"
+
+#: bootstrap.php:415
+msgid "Show _MENU_ entries"
+msgstr "Pokaż wpisy _MENU_"
+
+#: bootstrap.php:414
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(odfiltrowane z _MAX_ wszystkich wpisów)"
+
+#: bootstrap.php:413
+msgid "Showing 0 to 0 of 0 entries"
+msgstr "Wyświetlanie od 0 do 0 z 0 wpisów"
+
+#: bootstrap.php:412
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Wyświetlanie od _START_ do _END_ z _TOTAL_ wpisów"
+
+#: bootstrap.php:411
+msgid "No data available in table"
+msgstr "Brak danych w tabeli"
+
+#: bootstrap.php:408
+msgid "Pagination is active. Auto-refresh has been disabled."
+msgstr "Podział na strony jest włączony. Automatyczne odświeżanie zostanie wyłączone."
+
+#: bootstrap.php:406
+msgid "Log file has been cleared."
+msgstr "Plik dziennika został wyczyszczony."
+
+#: bootstrap.php:405
+msgid "Entries have been copied from an existing debug.log file."
+msgstr "Wpisy zostały skopiowane z istniejącego pliku debug.log."
+
+#: bootstrap.php:404
+msgid "Error logging has been enabled and the latest entries have been loaded."
+msgstr "Włączono rejestrowanie błędów i załadowano najnowsze wpisy."
+
+#: bootstrap.php:272
+msgid "Clear Log"
+msgstr "Wyczyść dziennik"
+
+#: bootstrap.php:271
+msgid "Log file"
+msgstr "Plik dziennika"
+
+#: bootstrap.php:244
+msgid "Feedback"
+msgstr "Informacja zwrotna"
+
+#: bootstrap.php:243
+msgid "Review"
+msgstr "Recenzja"
+
+#: bootstrap.php:240
+msgid "by"
+msgstr "autor:"
+
+#: bootstrap.php:216
+msgid "Error logging is enabled. Click to access the Debug Log Manager."
+msgstr "Rejestrowanie błędów jest włączone. Kliknij, aby uzyskać dostęp do Menedżera Dziennika Debugowania"
+
+#: bootstrap.php:166
+msgid "View Debug Log"
+msgstr "Zobacz plik dziennika"
+
+#. Author URI of the plugin
+#: debug-log-manager.php
+msgid "https://bowo.io"
+msgstr "https://bowo.io"
+
+#. Author of the plugin
+#: debug-log-manager.php
+msgid "Bowo"
+msgstr "Bowo"
+
+#. Description of the plugin
+#: debug-log-manager.php
+msgid "Log errors via WP_DEBUG. Create, view and clear debug.log file."
+msgstr "Rejestruj błędy za pomocą WP_DEBUG. Utwórz, wyświetl i wyczyść plik debug.log."
+
+#. Plugin URI of the plugin
+#: debug-log-manager.php
+msgid "https://wordpress.org/plugins/debug-log-manager/"
+msgstr "https://wordpress.org/plugins/debug-log-manager/"
+
+#. Plugin Name of the plugin
+#: debug-log-manager.php bootstrap.php:150 bootstrap.php:151 bootstrap.php:181
+#: bootstrap.php:240
+msgid "Debug Log Manager"
+msgstr "Menedżer Dziennika Błędów"

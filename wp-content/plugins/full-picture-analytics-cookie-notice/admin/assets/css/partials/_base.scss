@@ -1,0 +1,119 @@
+// CLEAN UP THE PAGE
+
+// remove screen options button on the top right
+#screen-meta-links{
+	display: none;
+}
+
+// system notice
+div[class*="notice"]{
+	box-sizing: border-box;
+}
+
+// HELPERS
+
+.fupi_srt,
+.fupi_slider_nav li span{ // screen reader text
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}
+.fupi_small{
+	font-size: 13px;
+}
+.fupi_hidden:not(.fupi_do_not_hide){
+	display: none;
+}
+.fupi_clearfix{
+	content: "";
+  	clear: both;
+  	display: table;
+}
+.fupi_spacer{
+	height: 6px;
+}
+.notice{
+	box-sizing: border-box;
+}
+.fupi_warning_text{
+	color: #cb6f00;
+}
+.fupi_center_content{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+#fupi_content{
+	margin-top: 0 !important;
+	.dashicons{
+		font-size: inherit;
+		vertical-align: middle;
+	}
+	h1{
+		padding: 0 !important;
+	}
+}
+
+.fupi_cols{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+	>*{
+		min-width: 250px;
+	}
+}
+	.fupi_col_33{
+		flex: 1 0 calc(33% - 20px);
+	}
+	.fupi_col_50{
+		flex: 1 0 calc(50% - 20px);
+	}
+	.fupi_col_66{
+		flex: 1 0 calc(66% - 20px);
+	}
+
+
+// BODY & GENERAL
+
+body,
+#fs_pricing,
+#fs_frame{
+	background-color: #eef4f9 !important;
+}
+
+// CTA BUTTONS
+
+#sidenav_buy_pro_banner a.button-primary,
+.fupi_form_buttons_wrap #submit{
+	display: block;
+	width: 100%;
+	font-size: 14px;
+	text-align: center;
+	margin: 0 auto;
+	border-radius: 4px;
+	background-color: #1f6395;
+	font-weight: 500;
+	padding: 5px 10px;
+	border: 0;
+	&:hover, &:focus{
+		background-color: lighten(#1f6395, 10%);
+	}
+	.dashicons{
+		font-size: 17px;
+	}
+}
+
+#fupi_content .button-secondary{
+	background: #fff !important;
+    border-color: #40609d !important;
+	&:hover, &:focus{
+		background-color: #f7feff !important;
+	}
+}

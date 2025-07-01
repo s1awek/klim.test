@@ -1,0 +1,68 @@
+# BEGIN Imagify: rewrite rules for webp
+<IfModule mod_setenvif.c>
+# Vary: Accept for all the requests to jpeg, png, and gif.
+SetEnvIf Request_URI "\.(jpg|jpeg|jpe|png|gif)$" REQUEST_image
+</IfModule>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Check if browser supports WebP images.
+RewriteCond %{HTTP_ACCEPT} image/webp
+
+# Check if WebP replacement image exists.
+RewriteCond %{REQUEST_FILENAME}.webp -f
+
+# Serve WebP image instead.
+RewriteRule (.+)\.(jpg|jpeg|jpe|png|gif)$ $1.$2.webp [T=image/webp,NC]
+</IfModule>
+
+<IfModule mod_headers.c>
+Header append Vary Accept env=REQUEST_image
+</IfModule>
+# END Imagify: rewrite rules for webp
+
+# BEGIN Imagify: webp file type
+<IfModule mod_mime.c>
+AddType image/webp .webp
+</IfModule>
+# END Imagify: webp file type
+
+# BEGIN xmlrpc.php and wp-login.php
+<IfModule mod_alias.c>
+RedirectMatch 403 /xmlrpc.php
+RedirectMatch 403 /wp-login.php
+</IfModule>
+# END xmlprc.php and wp-login.php
+
+
+
+# BEGIN WordPress
+# Dyrektywy zawarte między "BEGIN WordPress" oraz "END WordPress"
+# są generowane dynamicznie i powinny być modyfikowane tylko za pomocą
+# filtrów WordPressa. Zmiany dokonane bezpośrednio tutaj będą nadpisywane.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
+
+# Wordfence WAF
+<Files ".user.ini">
+<IfModule mod_authz_core.c>
+Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+Order deny,allow
+Deny from all
+</IfModule>
+</Files>
+
+# END Wordfence WAF

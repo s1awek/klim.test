@@ -1,0 +1,28 @@
+<wpml-config>
+  <admin-texts>
+    <key name="fupi_cookie_notice">
+      <key name="privacy_page_id"/>
+      <key name="notif_headline_text"/>
+      <key name="notif_text"/>
+      <key name="agree_text"/>
+      <key name="ok_text"/>
+      <key name="agree_to_selected_text"/>
+      <key name="decline_text"/>
+      <key name="cookie_settings_text"/>
+      <key name="return_text"/>
+      <key name="stats_headline_text"/>
+      <key name="stats_text"/>
+      <key name="pers_headline_text"/>
+      <key name="pers_text"/>
+      <key name="marketing_headline_text"/>
+      <key name="marketing_text"/>
+      <key name="necess_headline_text"/>
+      <key name="necess_text"/>
+      <key name="stats_only_text"/>
+    </key>
+    <key name="fupi_iframeblock">
+      <key name="caption_txt"/>
+      <key name="btn_text"/>
+    </key>
+  </admin-texts>
+</wpml-config>

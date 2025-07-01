@@ -1,0 +1,174 @@
+#fupi_page_nav{
+	font-size: 14px;
+	text-align: left;
+	flex: 0 0 240px;
+	width: 240px;
+	position: relative;
+}
+
+#fupi_side_menu{
+	a,
+	#fupi_current_page,
+	.fupi_nav_section_btn,
+	.fupi_active_title{
+		width: 100%;
+		display: block;
+		line-height: 1.2;
+		padding: 12px;
+		text-align: left;
+		text-decoration: none;
+		box-sizing: border-box;
+	}
+	a,
+	.fupi_nav_section_btn{
+		&:hover{
+			background-color: #cfe2ed;
+			border-radius: 6px;
+		}
+	}
+	.fupi_nav_section_btn{
+		&.active{
+			background-color: #cfe2ed;
+		}
+	}
+	.fupi_active_title{
+		font-weight: 500;
+		background-color: #2672ab;
+		color: #fff;
+	}
+}
+
+	.fupi_sidenav_section{
+		+ .fupi_sidenav_section{
+			margin-top: 36px;
+		}
+	}
+
+		.fupi_sidenav_title{
+			display: block;
+			margin-bottom: 12px;
+			padding-left: 30px;
+			font-weight: 500;
+			position: relative;
+			.dashicons{
+				position: absolute;
+				left: 0;
+				right: 0;
+				font-size: 20px !important;
+			}
+		}
+
+		.fupi_sidenav_links{
+			padding-left: 20px;
+		}
+
+		#fupi_current_page_sidenav{
+			background-color: #fff;
+			border-radius: 6px;
+			overflow: hidden;
+			a,
+			.fupi_nav_section_btn{
+				&:hover{
+					border-radius: 0;
+				}
+			}
+		}
+
+		.fupi_nav_section_btn{
+			border: 0;
+			background: 0;
+			display: block;
+			cursor: pointer;
+		}
+
+
+#under_nav_notice{
+    border: 3px dashed #aec3cb;
+    padding: 20px 10px;
+    border-radius: 3px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+//
+// "BUY PRO" BANNER
+//
+
+
+#sidenav_buy_pro_banner{
+	border-radius: 10px;
+	background-color: #fff;
+	padding: 15px 20px 20px;
+	margin-top: 20px;
+	overflow: hidden;
+	h3{
+		font-size: 15px;
+		color: #808080;
+		font-weight: 500;
+		margin: 0;
+		padding: 18px 0 7px;
+	}	
+}
+
+// Feature slider
+
+#fupi_feature_slider{
+	margin-bottom: 25px;
+}
+	.fupi_slides{
+		margin-bottom: 20px;
+	}
+		.fupi_slide{
+			display: none;
+			line-height: 1.05;
+			.fupi_slide_main_text{
+				font-size: 18px;
+				font-weight: 500;
+				margin-bottom: 10px;
+			}
+			&.fupi_active{
+				display: block;
+			}
+			.small{
+				font-size: 14px;
+				margin: 10px 0 20px;
+			}
+		}
+
+// Sldier nav
+
+.fupi_slider_nav{
+	display: flex;
+	justify-content: center;
+	gap: 12px;
+}
+	.fupi_slider_dot{
+		background-color: #ddd;
+		border-radius: 100%;
+		width: 12px;
+		height: 12px;
+		border: 0;
+		cursor: pointer;
+		&:hover, &:focus{
+			background-color: #444;
+		}
+		&.fupi_active{
+			background-color: #444;
+		}
+	}
+
+// Sticky nav
+
+.fupi_frozen{
+	position: absolute;
+}
+
+.fupi_stick_top{
+	position: sticky;
+	top: 0 !important;
+}
+
+.fupi_stick_bottom{
+	position: fixed;
+	bottom: 0;
+}

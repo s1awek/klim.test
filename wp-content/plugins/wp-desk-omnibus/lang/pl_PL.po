@@ -1,0 +1,342 @@
+#. Plugin Name of the plugin
+msgid "Omnibus for WooCommerce"
+msgstr "Omnibus dla WooCommerce"
+
+#. Plugin URI of the plugin
+msgid "https://www.wpdesk.pl/sklep/omnibus-woocommerce/"
+msgstr ""
+
+#. Description of the plugin
+msgid "100% compliance with the EU Omnibus directive. Automatically displays the lowest product price from the last 30 days."
+msgstr "100% zgodności z dyrektywą Omnibus. Automatycznie pokazuje najniższe ceny produktów z ostatnich 30 dni."
+
+#. Author of the plugin
+msgid "WP Desk"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.wpdesk.pl/"
+msgstr ""
+
+#: src/WPDesk/Omnibus/Core/Admin/PriceTableMetabox.php:36
+msgid "Omnibus Price History"
+msgstr "Omnibus: historia cen"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:26
+msgid "General Omnibus settings"
+msgstr "Omnibus: Główne ustawienia"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:30
+msgid "Date interval"
+msgstr "Zakres dni"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:31
+msgid "Decide how many days to look back, when searching for lowest price"
+msgstr "Wybierz, ile dni wstecz szukać najniższej ceny produktu"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:40
+msgid "Method of finding the lowest price"
+msgstr "Metoda szukania najniższej ceny produktu"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:41
+msgid "Choose how to seek for product's lowest price."
+msgstr "Wybierz, w jaki sposób szukać najniższej ceny produktu."
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:45
+msgid "Find the lowest price for product since current date"
+msgstr "Znajdź najniższą cenę dla produktu od obecnej daty"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:46
+msgid "Find the lowest price since product's last promotion date"
+msgstr "Znajdź najniższą cenę od daty ostatniej przeceny produktu"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:51
+msgid "Current price is the lowest"
+msgstr "Obecna cena jest najniższa"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:52
+msgid "Choose how to behave, when current product's price is the lowest, e.g. you didn't change price longer than lookup period or you just start to use Omnibus."
+msgstr "Wybierz, jak się zachować, kiedy obecna cena produktu jest jednocześnie najniższą ceną, np. kiedy nie zmieniałeś cen dłużej, niż w zakresie sprawdzania najniższej ceny lub dopiero zaczynasz korzystać z Omnibusa."
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:56
+msgid "Display message as usual"
+msgstr "Pokaż wiadomość bez zmian"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:57
+msgid "Don't display any message"
+msgstr "Nie pokazuj żadnej wiadomości"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:62
+msgid "Display the lowest price only for promotional products"
+msgstr "Wyświetlaj najniższą cenę tylko dla produktów promocyjnych"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:63
+msgid "When displaying a message about the lowest price for a product, show it only for a product which is currently on promotion."
+msgstr "Wyświetlając komunikat o najniższej cenie produktu, pokaż go tylko dla produktu, który jest aktualnie w promocji."
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:69
+msgid "Method of displaying message for product variations"
+msgstr "Metoda pokazywania wiadomości dla wariantów produktu"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:70
+msgid "Decide whether you want to show a cumulative value for your products' variants or each of them should be treated separately."
+msgstr "Wybierz, czy chcesz pokazywać skumulowaną wartość najniższej ceny dla wszystkich wariantów danego produktu, czy też każdy wariant ma mieć osobną wartość."
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:74
+msgid "Display each product variant separately"
+msgstr "Pokaż każdy wariant produktu osobno"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:75
+msgid "Show one, the lowest price from across all product's variants"
+msgstr "Pokaż jedną, najniższą cenę spośród wszystkich wariantów produktu"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:80
+msgid "Use sale prices"
+msgstr "Wliczaj ceny promocyjne"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:94
+msgid "Available tags:</br><code>{date}</code>: the lowest price date formatted as <em>%s</em></br><code>{price}</code>: the lowest price value</br><code>{days}</code>: the value of date interval option"
+msgstr "Dostępne tagi:</br><code>{date}</code>: data najniższej ceny w formacie 1999-01-01</br><code>{price}</code>: wartość najniższej ceny</br><code>{days}</code>: wartość ustawienia zakresu dni"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:81
+msgid "Include sale prices when counting the lowest price."
+msgstr "Bierz pod uwagę ceny promocyjne, licząc najniższą cenę."
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:87
+msgid "The lowest price message"
+msgstr "Wiadomość o najniższej cenie"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:93
+#: src/WPDesk/Omnibus/Core/PriceMessage/Message.php:40
+msgid "The lowest price ({date}): {price}"
+msgstr "Najniższa cena ({date}): {price}"
+
+#: src/PluginOptions.php:56
+msgid "Customize the message displaying the lowest price."
+msgstr "Dostosuj wiadomość pokazującą najniższą cenę."
+
+#: src/PluginOptions.php:59
+msgid "Message placement"
+msgstr "Pozycja wiadomości"
+
+#: src/PluginOptions.php:65
+msgid "Choose, where to place the message. You can pick one of standard WooCommerce hooks or add here your own hook."
+msgstr "Wybierz, gdzie umieścić wiadomość. Możesz wybrać jeden ze standardowych hooków WooCommerce lub dodać tu swój własny."
+
+#: src/PluginOptions.php:41
+msgid "Display the lowest price only for promotional products"
+msgstr "Wyświetlaj najniższą cenę tylko dla produktów promocyjnych"
+
+#: src/PluginOptions.php:42
+msgid "When displaying a message about the lowest price for a product, show it only for a product which is currently on promotion."
+msgstr "Wyświetlając komunikat o najniższej cenie produktu, pokaż go tylko dla produktu, który jest aktualnie w promocji."
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:95
+msgid "Customize the message displaying the lowest price."
+msgstr "Dostosuj wiadomość pokazującą najniższą cenę."
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:103
+msgid "Omnibus message placement settings"
+msgstr "Omnibus: Ustawienia miejsca wyświelenia wiadomości"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:104
+msgid ""
+"Choose, where to place the message. You can pick one of standard WooCommerce "
+"hooks or add here your own custom hook which will be used to display message."
+"</br>Use the shortcodes <code>[omnibus_price]</code> and "
+"<code>[omnibus_price_message]</code> to display the price thru text editors."
+"</br>If you'd like to display the price of a variable product by the "
+"shortcode add the variant ID to it. Example: <code>[omnibus_price ID="
+"\"111\"]</code>"
+msgstr ""
+"Wybierz, gdzie pokazać wiadomość. Możesz wybrać jeden ze standardowych "
+"hooków WooCommerce lub dodać swój własny, niestandardowy hook, którego "
+"użyjesz do wyświetlania wiadomości.</br>Użyj shortcode'ów "
+"<code>[omnibus_price]</code> i <code>[omnibus_price_message]</code> do "
+"wyświetlania ceny w edytorach tekstu.</br>Jeśli chcesz wyświetlić cenę "
+"produktu z wariantami, dodaj w shortcode ID wariantu. Przykład: "
+"<code>[omnibus_price ID=\"111\"]</code>"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:108
+msgid "Display message on product page"
+msgstr "Pokaż wiadomość na stronie produktu"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:119
+msgid "Display message on archive page (shop page, category, tag, attributes)"
+msgstr "Pokaż wiadomość na stronie archiwum (strona sklepu, kategorii, tagu, atrybutów)"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:129
+msgid "Display message on cart page"
+msgstr "Pokaż wiadomość na stronie koszyka"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:212
+msgid "Before short description"
+msgstr "Przed krótkim opisem"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:213
+msgid "After short description"
+msgstr "Po krótkim opisie"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:214
+msgid "Before add to cart quantity"
+msgstr "Przed ilością dodania do koszyka"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:215
+msgid "After add to cart quantity"
+msgstr "Po ilości dodania do koszyka"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:216
+msgid "Before add to cart button"
+msgstr "Przed przyciskiem dodania do koszyka"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:217
+msgid "After add to cart button"
+msgstr "Po przycisku dodania do koszyka"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:218
+msgid "Before product's meta data"
+msgstr "Przed meta danymi produktu"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:219
+msgid "After product's meta data"
+msgstr "Po meta danych produktu"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:220
+msgid "Before product container"
+msgstr "Przed kontenerem produktu"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:221
+msgid "After product container"
+msgstr "Po kontenerze produktu"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:232
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:248
+msgid "Do not display"
+msgstr "Nie pokazuj"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:233
+msgid "Before product"
+msgstr "Przed produktem"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:234
+msgid "Before product title"
+msgstr "Przed tytułem produktu"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:235
+msgid "Product title"
+msgstr "Tytuł produktu"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:236
+msgid "After product title"
+msgstr "Po tytule produktu"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:237
+msgid "After product"
+msgstr "Po produkcie"
+
+#: src/WPDesk/Omnibus/Core/PluginOptions.php:249
+msgid "After product name"
+msgstr "Po nazwie produktu"
+
+#: templates/admin/price_table.php:61
+msgid "Prices table is limited to 20 entries. The lowest price – according to current plugin's configuration – is emphasized."
+msgstr "Tabela z cenami jest ograniczona do 20 wierszy. Najniższa cena – według obecnych ustawień wtyczki – jest wytłuszczona."
+
+#: templates/admin/price_table.php:10
+msgid "Product"
+msgstr "Produkt"
+
+#: templates/admin/price_table.php:11
+msgid "Price"
+msgstr "Cena"
+
+#: templates/admin/price_table.php:102
+msgid "Currency"
+msgstr "Waluta"
+
+#: templates/admin/price_table.php:12
+msgid "Date"
+msgstr "Data"
+
+#: templates/admin/price_table.php:13
+msgid "Price Type"
+msgstr "Typ ceny"
+
+#: templates/admin/price_table.php:27
+msgid "Reduced"
+msgstr "Promocyjna"
+
+#: templates/admin/price_table.php:28
+msgid "Regular"
+msgstr "Regularna"
+
+#: templates/admin/price_table.php:15
+msgid "Valid from"
+msgstr "Ważna od"
+
+#: templates/admin/price_table.php:16
+msgid "Valid to"
+msgstr "Ważna do"
+
+#: templates/admin/_filter.php:38
+msgctxt "Clear filters in table view"
+msgid "Clear"
+msgstr "Wyczyść"
+
+#: templates/admin/_filter.php:41
+msgctxt "Apply filters in table view"
+msgid "Apply"
+msgstr "Zatwierdź"
+
+#: src/WPDesk/Omnibus/Core/Admin/RepairTools.php:22
+msgid "Historical prices validation"
+msgstr "Weryfikacja zapisanych cen historycznych"
+
+#: src/WPDesk/Omnibus/Core/Admin/RepairTools.php:23
+msgid "This tool will scan your saved prices and automatically update any records that may need correction."
+msgstr "Te narzędzie przeskanuje zapisane ceny i automatycznie zaktualizuje pozycje, które wymagają poprawek."
+
+#: src/WPDesk/Omnibus/Core/Admin/RepairTools.php:25
+msgid "Validate prices"
+msgstr "Zweryfikuj ceny"
+
+#: src/WPDesk/Omnibus/Core/Admin/RepairTools.php:32
+msgid "Validating prices in background..."
+msgstr "Weryfikacja cen uruchomiona w tle..."
+
+#: templates/admin/status_page.php:9
+msgid "Omnibus Price Records"
+msgstr "Rekordy cen Omnibus"
+
+#: templates/admin/status_page.php:15
+msgid "Total price records"
+msgstr "Całkowita liczba rekordów cen"
+
+#: templates/admin/status_page.php:16
+msgid "The total number of historical price records in the database"
+msgstr "Całkowita liczba historycznych rekordów cen w bazie danych"
+
+#: templates/admin/status_page.php:20
+msgid "Products with price records"
+msgstr "Produkty z rekordami cen"
+
+#: templates/admin/status_page.php:21
+msgid "Number of unique products that have historical price records"
+msgstr "Liczba unikalnych produktów, które posiadają historyczne rekordy cen"
+
+#: templates/admin/status_page.php:25
+msgid "Records without end date"
+msgstr "Rekordy bez daty zakończenia"
+
+#: templates/admin/status_page.php:26
+msgid "Number of price records without an end date (changed field)"
+msgstr "Liczba rekordów cen bez daty zakończenia (zmienione pole)"
+
+#: templates/admin/status_page.php:38
+msgid "Products with multiple active prices"
+msgstr "Produkty z wieloma aktywnymi cenami"
+
+#: templates/admin/status_page.php:39
+msgid "Number of products that have more than 1 active price record (may indicate saving issues)"
+msgstr "Liczba produktów, które mają więcej niż 1 aktywny rekord cen (może wskazywać na problemy z zapisywaniem)"
+

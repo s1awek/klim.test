@@ -1,0 +1,72 @@
+.fupi_pseudo_table{
+    border: 1px solid #2672ab;
+    border-bottom-width: 0;
+    font-size: 14px;
+    margin-top: 50px;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+}
+
+.fupi_pseudo_table_row{
+    display: flex;
+    align-items:center;
+    border-bottom: 1px solid #ccc;
+}
+
+.fupi_pseudo_th{
+    font-weight: bold;
+    background-color: #2672ab;
+    color: #fff;
+    padding: 12px 15px;
+}
+
+.fupi_pseudo_td{
+    padding: 10px 15px;
+}
+
+@media screen and (max-width: 480px){
+    .fupi_pseudo_td,
+    .fupi_pseudo_th{
+        flex: 0 1 100%;
+    }
+}
+
+.fupi_table_cell_50{
+    flex: 0 1 50%;
+}
+
+.fupi_table_cell_40{
+    flex: 0 1 40%;
+}
+
+.fupi_table_cell_30{
+    flex: 0 1 30%;
+}
+
+.fupi_table_cell_20{
+    flex: 0 1 20%;
+}
+
+#no_backups_info{
+    font-weight: 500;
+    font-size: 16px;
+    color: #777;
+    padding: 30px 15px;
+    justify-content: center;
+}
+
+#fupi_new_import_export_buttons_wrap{
+    background-color: #e8f0f5;
+    border-radius: 0 0 10px 10px;
+    padding: 20px 10px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    border: 1px solid #2672ab;
+    border-top: 0;
+}
+
+// Hide "Save Settings" button on the section with the backups table
+#fupi_settings_form:has(#hook_main_3 + .fupi_section_descr:not(.fupi_hidden)) .fupi_form_buttons_wrap {
+    display: none;
+}

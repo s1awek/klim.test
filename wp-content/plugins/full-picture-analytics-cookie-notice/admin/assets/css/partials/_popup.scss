@@ -1,0 +1,130 @@
+// OFF CANVAS PANEL
+
+#fupi_offscreen{
+	box-sizing: border-box;
+	transition: .2s all;
+	position: fixed;
+	transform: translateX(400px);
+	opacity: 0;
+	top: 32px;
+	right: 0;
+	width: 400px;
+	overflow-y: auto;
+	height: 100vh;
+	height: calc(100vh - 32px);
+	z-index: 10;
+	border: 0;
+	background: #fff;
+	padding: 0 20px 20px;
+	box-shadow: -1px -1px 4px rgba(0,0,0,0.1);
+	&.fupi_maximized{
+		transform: translateX(640px);
+		width: 640px;
+	}
+	&.fupi_active{
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+#fupi_offscreen_close_btn,
+#fupi_offscreen_maximize_btn{
+	padding: 10px;
+	position: absolute;
+	left: 13px;
+	top: 13px;
+	z-index: 12;
+	background-color: transparent;
+	border: 0;
+	cursor: pointer;
+	transition: .2s all;
+	font-size: 20px;
+	line-height: 1;
+}
+
+#fupi_offscreen_maximize_btn{
+	left: auto;
+	right: 13px;
+	.dashicons-fullscreen-exit-alt{
+		display: none;
+	}
+	&.fupi_maximized{
+		.dashicons-fullscreen-alt{
+			display: none;
+		}
+		.dashicons-fullscreen-exit-alt{
+			display: block;
+		}
+	}
+}
+
+
+
+#fupi_offscreen_nav{
+	margin: 20px 0;
+	text-align: center;
+}
+
+	.fupi_popup_nav_btn{
+		border: 1px solid #ccc;
+		.dashicons{
+			font-size: 18px !important;
+		}
+		&.fupi_disabled{
+			pointer-events: none;
+			opacity: .5;
+		}
+	}
+
+#fupi_offscreen_content{
+	margin-top: 55px;
+	font-size: 16px;
+	line-height: 1.5em;
+	& *:not(.dashicons):not(.button):not(.button-secondary):not(.button-primary) {
+		font-size: 16px;
+		line-height: 1.5em;
+	}
+	h3{
+		font-size: 20px !important;
+	}
+}
+
+.fupi_video { // responsive video wrapper
+	position: relative;
+	padding-bottom: 56.25%; // 16:9
+	height: 0;
+	iframe {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+  }
+
+// SMALL INLINE BUTTONS
+
+#fupi_offscreen{
+	.fupi_small_btn.button-secondary{
+		max-height: auto;
+		line-height: inherit;
+	}
+}
+
+// TOGGLE BUTTON (SCREEN SIDE)
+
+#fupi_offscreen_open_btn{
+	position: fixed;
+	right: 0;
+	top: 50%;
+	border: 0;
+	background: #fff;
+	padding: 20px 5px;
+	box-shadow: -1px -1px 4px rgba(0,0,0,0.1);
+	cursor: pointer;
+	border-radius: 3px 0 0 3px;
+	.dashicons{
+		height: 24px;
+		font-size: 24px;
+	}
+}
