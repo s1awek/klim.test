@@ -17,7 +17,7 @@ Flatsome_Option::add_field( 'option', array(
 	'type'        => 'textarea',
 	'settings'    => 'cookie_notice_text',
 	'section'     => 'notifications',
-	'transport'   => $transport,
+	'transport'   => flatsome_customizer_transport(),
 	'label'       => esc_html__( 'Custom cookie text', 'flatsome-admin' ),
 	'description' => esc_html__( 'Add any HTML or shortcode here...', 'flatsome-admin' ),
 	'active_callback' => array(
@@ -51,7 +51,7 @@ Flatsome_Option::add_field( 'option', array(
 	'type'      => 'select',
 	'settings'  => 'cookie_notice_button_style',
 	'section'   => 'notifications',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'label'     => esc_html__( 'Button style', 'flatsome-admin' ),
 	'choices'   => $button_styles,
 	'active_callback' => array(
@@ -67,7 +67,7 @@ Flatsome_Option::add_field( 'option', array(
 	'type'      => 'radio-image',
 	'settings'  => 'cookie_notice_text_color',
 	'section'   => 'notifications',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'label'     => esc_html__( 'Text color', 'flatsome-admin' ),
 	'active_callback' => array(
 		array(
@@ -97,7 +97,7 @@ Flatsome_Option::add_field( 'option', array(
 		),
 	),
 	'default'   => '',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 ) );
 
 Flatsome_Option::add_field( 'option', array(

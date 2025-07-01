@@ -15,7 +15,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'  => 'header_height_sticky',
 	'label'     => __( 'Header Height on Sticky', 'flatsome-admin' ),
 	'section'   => 'header_sticky',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'   => 70,
 	'choices'   => array(
 		'min'  => 30,
@@ -35,7 +35,7 @@ Flatsome_Option::add_field( 'option', array(
 		'max'  => 30,
 		'step' => 1,
 	),
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 ) );
 
 Flatsome_Option::add_field( 'option', array(
@@ -49,7 +49,7 @@ Flatsome_Option::add_field( 'option', array(
 		'max'  => 100,
 		'step' => 1,
 	),
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 ) );
 
 Flatsome_Option::add_field( 'option', array(
@@ -102,7 +102,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'  => 'site_logo_sticky',
 	'label'     => __( 'Custom Sticky Logo', 'flatsome-admin' ),
 	'section'   => 'header_sticky',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'   => '',
 	'choices'   => array( 'save_as' => 'id' ),
 ) );

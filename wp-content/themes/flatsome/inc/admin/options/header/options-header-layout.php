@@ -25,7 +25,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'section'     => 'header-layout',
 	'multiple'    => 5,
 	'default'     => flatsome_topbar_elements_left(),
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => $nav_elements
 ));
 
@@ -38,7 +38,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'section'     => 'header-layout',
 	'multiple'    => 5,
 	'default'     => array(),
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => $nav_elements
 ));
 
@@ -51,7 +51,7 @@ Flatsome_Option::add_field( 'option',  array(
 	//'help'        => __( 'This is some extra help. You can use this to add some additional instructions for users. The main description should go in the "description" of the field, this is only to be used for help tips.', 'flatsome-admin' ),
 	'section'     => 'header-layout',
 	'multiple'    => 5,
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => flatsome_topbar_elements_right(),
 	'choices'     => $nav_elements
 ));
@@ -70,7 +70,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'header_elements_left',
 	'label'       => __( 'Left Elements', 'flatsome-admin' ),
 	'section'     => 'header-layout',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'multiple' => 5,
 	'default'     => flatsome_header_elements_left(),
 	'choices'     => $nav_elements
@@ -82,7 +82,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'header_elements_right',
 	'label'       => __( 'Right Elements', 'flatsome-admin' ),
 	'section'     => 'header-layout',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'multiple' => 5,
 	'default'     => flatsome_header_elements_right(),
 	'choices'     => $nav_elements
@@ -98,7 +98,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'section'     => 'header-layout',
 	'multiple'    => 5,
 	'default'     => flatsome_header_elements_bottom_left(),
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => $nav_elements
 ));
 
@@ -109,7 +109,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'section'     => 'header-layout',
 	'multiple'    => 5,
 	'default'     => flatsome_header_elements_bottom_center(),
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => $nav_elements
 ));
 
@@ -120,7 +120,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'section'     => 'header-layout',
 	'multiple'    => 5,
 	'default'     => flatsome_header_elements_bottom_right(),
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => $nav_elements
 ));
 
@@ -133,7 +133,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'section'     => 'header-layout',
 	'multiple'    => 5,
 	'default'     => flatsome_header_mobile_elements_top(),
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => $nav_elements
 ));
 
@@ -146,7 +146,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'section'     => 'header-layout',
 	'multiple'    => 5,
 	'default'     => flatsome_header_mobile_elements_left(),
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => $nav_elements
 ));
 
@@ -159,7 +159,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'section'     => 'header-layout',
 	'multiple'    => 5,
 	'default'     => flatsome_header_mobile_elements_right(),
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => $nav_elements
 ));
 
@@ -172,6 +172,6 @@ Flatsome_Option::add_field( 'option',  array(
 	'section'     => 'header-layout',
 	'multiple'    => 5,
 	'default'     => array(),
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => $nav_elements
 ));

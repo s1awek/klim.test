@@ -18,7 +18,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Search Icon Style', 'flatsome-admin' ),
 	'section'     => 'header_search',
 	'default'     => '',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'' => $image_url . 'search-icon-plain.svg',
 		'outline' => $image_url . 'search-icon-outline.svg',
@@ -32,7 +32,7 @@ Flatsome_Option::add_field( 'option',  array(
 Flatsome_Option::add_field( 'option',  array(
 	'type'        => 'radio-buttonset',
 	'settings'     => 'header_search_style',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'label'       => __( 'Search Icon Type', 'flatsome-admin' ),
 	//'description' => __( 'This is the control description', 'flatsome-admin' ),
 	//'help'        => __( 'This is some extra help. You can use this to add some additional instructions for users. The main description should go in the "description" of the field, this is only to be used for help tips.', 'flatsome-admin' ),
@@ -53,7 +53,7 @@ Flatsome_Option::add_field( 'option',  array(
 	//'help'        => __( 'This is some extra help. You can use this to add some additional instructions for users. The main description should go in the "description" of the field, this is only to be used for help tips.', 'flatsome-admin' ),
 	'section'     => 'header_search',
 	'default'     => '',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'' => __( 'Normal', 'flatsome-admin' ),
 		'flat' => __('Flat', 'flatsome-admin' ),
@@ -63,7 +63,7 @@ Flatsome_Option::add_field( 'option',  array(
 Flatsome_Option::add_field( 'option',  array(
   'type'        => 'text',
   'settings'     => 'search_placeholder',
-  'transport' => 'postMessage',
+  'transport' => flatsome_customizer_transport(),
   'label'       => __( 'Placeholder text', 'flatsome-admin' ),
   'section'     => 'header_search',
   'placeholder' => 'Search...',
@@ -71,7 +71,7 @@ Flatsome_Option::add_field( 'option',  array(
 
 Flatsome_Option::add_field( 'option',  array(
 	'type'        => 'checkbox',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'settings'     => 'header_search_categories',
 	'label'       => __( 'Search Categories', 'flatsome-admin' ),
 	'help'        => __( 'Search categories', 'flatsome-admin' ),
@@ -85,7 +85,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Header Search form width', 'flatsome-admin' ),
 	'section'     => 'header_search',
 	'default'     => '60',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'min'  => 10,
 		'max'  => 100,

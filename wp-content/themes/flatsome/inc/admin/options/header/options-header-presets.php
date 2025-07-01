@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 $preset_url = get_template_directory_uri().'/inc/admin/options/header/img/';
 
@@ -14,7 +14,7 @@ Flatsome_Option::add_field( 'option', array(
     'settings'    => 'preset_demo',
     'label'       => __( 'Preset', 'kirki' ),
     'section'     => 'header-presets',
-    'transport' => 'postMessage',
+    'transport' => flatsome_customizer_transport(),
     'choices'     => get_flatsome_header_presets()
 ) );
 

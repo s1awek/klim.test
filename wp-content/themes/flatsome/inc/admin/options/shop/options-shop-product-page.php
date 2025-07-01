@@ -126,7 +126,7 @@ function flatsome_customizer_shop_product_page_options() {
 						&& get_theme_mod( 'product_layout' ) !== 'gallery-wide'
 						&& get_theme_mod( 'product_layout' ) !== 'custom';
 		},
-		'transport'       => 'postMessage',
+		'transport'       => flatsome_customizer_transport(),
 		'default'         => '6',
 		'choices'         => array(
 			'8' => __( '8/12', 'flatsome-admin' ),
@@ -482,7 +482,7 @@ function flatsome_customizer_shop_product_page_options() {
 		Flatsome_Option::add_field( 'option', array(
 			'type'        => 'color',
 			'settings'    => 'swatches_color_selected',
-			'transport'   => 'postMessage',
+			'transport'   => flatsome_customizer_transport(),
 			'label'       => __( 'Color :selected', 'flatsome' ),
 			'description' => __( 'Default is Secondary color', 'flatsome-admin' ),
 			'section'     => 'product-page',

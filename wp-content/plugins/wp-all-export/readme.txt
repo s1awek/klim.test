@@ -1,8 +1,8 @@
 === Export any WordPress data to XML/CSV ===
 Contributors: soflyy, wpallimport
 Requires at least: 5.0
-Tested up to: 6.7
-Stable tag: 1.4.10
+Tested up to: 6.8
+Stable tag: 1.4.11
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -200,6 +200,9 @@ Yes. Our plugin automatically detects all custom fields, categories, and tags cr
 If you are using the free version of the plugin, you can obtain support through the WordPress.org community forums. If you have purchased the premium version, you can email us directly and we will respond as quickly as we can, typically in less than one business day.
 
 == Changelog ==
+
+= 1.4.11 =
+* improvement: add partner discounts
 
 = 1.4.10 =
 * improvement: UI updates

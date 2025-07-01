@@ -16,7 +16,7 @@ Flatsome_Option::add_field( 'option', array(
 	'description' => __( 'Select Full width, boxed or framed layout', 'flatsome-admin' ),
 	'section'     => 'layout',
 	'default'     => 'full-width',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'full-width' => __( 'Full Width', 'flatsome-admin' ),
 		'boxed' => __( 'Boxed', 'flatsome-admin' ),
@@ -30,7 +30,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'box_shadow',
 	'label'       => __( 'Add Drop Shadow to Content box', 'flatsome-admin' ),
 	'section'     => 'layout',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'active_callback' => array(
 		array(
 			'setting'  => 'body_layout',
@@ -45,7 +45,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'    => 'site_width_boxed',
 	'label'       => __( 'Site width (px)', 'flatsome-admin' ),
 	'section'     => 'layout',
-	'transport'   => 'postMessage',
+	'transport'   => flatsome_customizer_transport(),
 	'default'     => '1170',
 	'active_callback' => array(
 		array(
@@ -67,7 +67,7 @@ Flatsome_Option::add_field( 'option',  array(
   'label'       => __( 'Background Color', 'flatsome-admin' ),
   'section'     => 'layout',
 	'default'     => "",
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'active_callback' => array(
 		array(
 			'setting'  => 'body_layout',
@@ -84,7 +84,7 @@ Flatsome_Option::add_field( 'option',  array(
     'label'       => __( 'Background Image', 'flatsome-admin' ),
     'section'     => 'layout',
 	'default'     => "",
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'active_callback' => array(
 		array(
 			'setting'  => 'body_layout',
@@ -101,7 +101,7 @@ Flatsome_Option::add_field( 'option', array(
 	'label'       => __( 'Background Repeat', 'flatsome-admin' ),
 	'section'     => 'layout',
 	'default'     => 'bg-full-size',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'bg-full-size' => __( 'Full Size', 'flatsome-admin' ),
 		'bg-tiled' => __( 'Tiled', 'flatsome-admin' ),
@@ -126,7 +126,7 @@ Flatsome_Option::add_field( 'option', array(
 	'label'       => __( 'Container width (px)', 'flatsome-admin' ),
 	'description' => __( 'Set the default width of content containers. (Header, Rows etc.)', 'flatsome-admin' ),
 	'section'     => 'layout',
-	'transport'   => 'postMessage',
+	'transport'   => flatsome_customizer_transport(),
 	'default'     => '1080',
 	'choices'     => [
 		'min'  => 560,
@@ -142,7 +142,7 @@ Flatsome_Option::add_field( 'option', array(
 	'description' => __( 'Light or Dark content text color', 'flatsome-admin' ),
 	'section'     => 'layout',
 	'default'     => 'light',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'light' => $image_url . 'text-dark.svg',
 		'dark' => $image_url . 'text-light.svg'
@@ -156,5 +156,5 @@ Flatsome_Option::add_field( 'option',  array(
     'label'       => __( 'Content Background', 'flatsome-admin' ),
     'section'     => 'layout',
 	'default'     => "",
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 ));

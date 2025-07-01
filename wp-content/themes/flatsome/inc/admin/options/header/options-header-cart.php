@@ -37,7 +37,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'     => 'cart_icon_style',
 	'label'       => __( 'Cart Icon Style', 'flatsome-admin' ),
 	'section'     => 'header_cart',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => '',
 	'choices'     => array(
 		'' => $image_url . 'cart-icon-default.svg',
@@ -54,7 +54,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'     => 'cart_icon',
 	'label'       => __( 'Cart Icon', 'flatsome-admin' ),
 	'section'     => 'header_cart',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => 'basket',
 	'choices'     => array(
 		'basket' => $image_url . 'cart-icon-basket.svg',
@@ -77,7 +77,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'header_cart_total',
 	'label'       => __( 'Show cart totals', 'flatsome-admin' ),
 	'section'     => 'header_cart',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => 1,
 ));
 
@@ -86,7 +86,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'header_cart_title',
 	'label'       => __( 'Show cart title', 'flatsome-admin' ),
 	'section'     => 'header_cart',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => 1,
 ));
 
@@ -132,7 +132,7 @@ Flatsome_Option::add_field( 'option', array(
 Flatsome_Option::add_field( 'option', array(
 	'type'              => 'textarea',
 	'settings'          => 'html_cart_header',
-	'transport'         => $transport,
+	'transport'         => flatsome_customizer_transport(),
 	'label'             => __( 'Custom Content after Cart', 'flatsome-admin' ),
 	'description'       => __( 'Add Any HTML or Shortcode here...', 'flatsome-admin' ),
 	'section'           => 'header_cart',

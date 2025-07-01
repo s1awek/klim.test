@@ -14,7 +14,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'html_custom_css',
 	'label'       => __( 'Custom CSS', 'flatsome-admin' ),
 	'section'     => 'custom-css',
-	'transport'   => $transport,
+	'transport'   => flatsome_customizer_transport(),
 	'placeholder' => '.add-css-here{}',
   'choices'     => array(
     'language' => 'css',
@@ -28,7 +28,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'section'     => 'custom-css',
 	'default'     => '',
   'placeholder' => '.add-css-here{}',
-	'transport'   => $transport,
+	'transport'   => flatsome_customizer_transport(),
   'choices'     => array(
     'language' => 'css',
   ),
@@ -41,7 +41,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'section'     => 'custom-css',
 	'default'     => '',
   'placeholder' => '.add-css-here{}',
-	'transport'   => $transport,
+	'transport'   => flatsome_customizer_transport(),
   'choices'     => array(
     'language' => 'css',
   ),

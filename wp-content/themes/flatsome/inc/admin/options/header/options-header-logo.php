@@ -5,9 +5,8 @@
  *************/
 
 function flatsome_logo_name_customizer( $wp_customize ) {
-	global $transport;
-  $wp_customize->get_setting('blogname')->transport=$transport;
-  $wp_customize->get_setting('blogdescription')->transport=$transport;
+  $wp_customize->get_setting('blogname')->transport        = flatsome_customizer_transport();
+  $wp_customize->get_setting('blogdescription')->transport = flatsome_customizer_transport();
 }
 add_action( 'customize_register', 'flatsome_logo_name_customizer' );
 
@@ -22,7 +21,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'site_logo_slogan',
 	'label'       => __( 'Display below Logo', 'flatsome-admin' ),
 	'section'     => 'title_tagline',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => 0,
 ));
 
@@ -31,7 +30,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'     => 'logo_position',
 	'label'       => __( 'Logo position', 'flatsome-admin' ),
 	'section'     => 'title_tagline',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'default'     => 'left',
 	'choices'     => array(
 		'left' => $image_url . 'logo-left.svg',
@@ -45,7 +44,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'site_logo',
 	'label'       => __( 'Logo image', 'flatsome-admin' ),
 	'section'     => 'title_tagline',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => get_template_directory_uri().'/assets/img/logo.png',
 	'choices'   => array( 'save_as' => 'id' ),
 ));
@@ -56,7 +55,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Logo image - Light Version', 'flatsome-admin' ),
 	'description' => __( 'Upload an alternative light logo that will be used on Dark and Transparent Header templates', 'flatsome-admin' ),
 	'section'     => 'title_tagline',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'   => array( 'save_as' => 'id' ),
 ));
 
@@ -74,7 +73,7 @@ Flatsome_Option::add_field( 'option',  array(
 		'max'  => 700,
 		'step' => 1
 	),
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 ));
 
 Flatsome_Option::add_field( 'option',  array(
@@ -83,7 +82,7 @@ Flatsome_Option::add_field( 'option',  array(
   'label'       => __( 'Logo max width (px)', 'flatsome-admin' ),
   'section'     => 'title_tagline',
   'description' => __( 'Set the logo max width in pixels. Leave it blank to make it auto fit inside the logo container.', 'flatsome-admin' ),
-  'transport' => 'postMessage',
+  'transport' => flatsome_customizer_transport(),
 ));
 
 Flatsome_Option::add_field( 'option',  array(
@@ -97,7 +96,7 @@ Flatsome_Option::add_field( 'option',  array(
 		'max'  => 30,
 		'step' => 1
 	),
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 ));
 
 Flatsome_Option::add_field( 'option', array(

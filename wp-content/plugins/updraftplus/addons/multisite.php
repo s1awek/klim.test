@@ -236,7 +236,7 @@ if (is_multisite()) {
 				'updraft_migrator_localkeys' => array(),
 				'updraft_central_localkeys' => array(),
 
-				'updraft_autobackup_default' => 1,
+				'updraft_autobackup_default' => 0,
 				'updraft_delete_local' => 1,
 				'updraft_debug_mode' => 1,
 				'updraft_include_plugins' => 1,

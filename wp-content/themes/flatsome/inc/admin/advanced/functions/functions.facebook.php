@@ -54,7 +54,7 @@ function flatsome_facebook_accounts_html() {
       </thead>
       <tbody class="flatsome-instagram-accounts__body">
         <?php foreach ( $accounts as $username => $account ) : ?>
-        <tr class="instagram-account instagram-account--<?php echo esc_attr( $username ) ?>">
+        <tr class="instagram-account" data-instagram-account="<?php echo esc_attr( $username ); ?>">
           <td>
             <?php foreach ( $account as $key => $value ) : ?>
               <?php if ( is_string( $value ) || is_numeric( $value ) ) : ?>

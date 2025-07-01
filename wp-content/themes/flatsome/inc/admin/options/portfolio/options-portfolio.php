@@ -37,7 +37,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Single Portfolio Layout', 'flatsome-admin' ),
 	'section'     => 'fl-portfolio',
 	'default' 	  => '',
-	'transport'   => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'' => $image_url . 'portfolio.svg',
 		'sidebar-right' => $image_url . 'portfolio-sidebar-right.svg',
@@ -62,7 +62,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Single Portfolio Title', 'flatsome-admin' ),
 	'section'     => 'fl-portfolio',
 	'default' 	  => '',
-	'transport'   => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'' => $image_url . 'portfolio-title.svg',
 		'featured' => $image_url . 'portfolio-title-featured.svg',
@@ -136,7 +136,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Portfolio Style', 'flatsome-admin' ),
 	'section'     => 'fl-portfolio',
 	'default' 	  => '',
-	'transport'   => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'' => $image_url . 'portfolio-simple.svg',
 		'overlay' => $image_url . 'portfolio-overlay.svg',
@@ -274,7 +274,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Archive Portfolio Title', 'flatsome-admin' ),
 	'section'     => 'fl-portfolio',
 	'default' 	  => '',
-	'transport'   => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'' => $image_url . 'portfolio-title.svg',
 		'featured' => $image_url . 'portfolio-title-featured.svg',
@@ -310,7 +310,7 @@ Flatsome_Option::add_field( 'option',  array(
 		'center' => 'Center',
 		'disabled' => 'Disabled'
 	),
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 ));
 
 Flatsome_Option::add_field( 'option',  array(
@@ -319,7 +319,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Filter Nav style', 'flatsome-admin' ),
 	'section'     => 'fl-portfolio',
 	'default' 	  => 'line-grow',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => $nav_styles_img
 ));
 

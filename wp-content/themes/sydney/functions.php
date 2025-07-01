@@ -109,6 +109,18 @@ function sydney_setup() {
 	if ( $block_template_parts && Sydney_Modules::is_module_active( 'block-templates' ) ) {
 		add_theme_support( 'block-template-parts' );
 	}
+
+	//Add theme support for editor color palette using the theme global colors
+	$colors = array();
+	for ( $i = 1; $i <= 9; $i++ ) {
+		$colors[] = array(
+			'name' 	=> sprintf( __( 'Global Color %s', 'sydney' ), $i ),
+			'slug' 	=> 'global_color_' . $i,
+			'color' => 'var(--sydney-global-color-' . $i . ')',
+		);
+	}
+
+	add_theme_support( 'editor-color-palette', $colors );
 }
 endif; // sydney_setup
 add_action( 'after_setup_theme', 'sydney_setup' );

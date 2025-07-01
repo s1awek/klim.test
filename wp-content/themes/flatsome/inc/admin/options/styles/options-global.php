@@ -12,6 +12,6 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'button_radius',
 	'label'       => __( 'Default Button Radius', 'flatsome-admin' ),
 	'section'     => 'global-styles',
-	'transport'   => $transport,
+	'transport'   => flatsome_customizer_transport(),
 	'default'     => '',
 ));

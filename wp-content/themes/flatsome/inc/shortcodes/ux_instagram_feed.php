@@ -44,6 +44,9 @@ function ux_instagram_feed( $atts, $content = null ) {
 		$loading = 'eager';
 	}
 
+	// Add Animations.
+	$animate = $animate ? 'data-animate="' . esc_attr( $animate ) . '"' : '';
+
 	ob_start();
 
 	$limit = $photos;
@@ -104,7 +107,7 @@ function ux_instagram_feed( $atts, $content = null ) {
 			get_flatsome_repeater_start( $repeater );
 
 			foreach ( $media_array as $item ) {
-				echo '<div class="col"><div class="col-inner">';
+				echo '<div class="col" ' . $animate . '><div class="col-inner">';
 
 				$image_url = $item['media_url']
 					? set_url_scheme( $item['media_url'] )

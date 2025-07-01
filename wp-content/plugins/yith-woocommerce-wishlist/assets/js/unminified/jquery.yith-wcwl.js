@@ -693,7 +693,12 @@ jQuery( function ( $ ) {
 				row_id.remove();
 			}
 
-			form.append( '<input type="hidden" name="row_id" class="row-id" value="' + id + '"/>' );
+			var input = $( '<input>', {
+				type: 'hidden',
+				name: 'row_id',
+				class: 'row-id'
+			} ).val( id );
+			form.append( input );
 		} ).prettyPhoto( ppParams );
 
 		// add & remove class to body when popup is opened

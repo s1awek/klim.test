@@ -552,10 +552,12 @@ if ( ! function_exists( 'flatsome_wc_get_gallery_image_html' ) ) {
 
 /* Move demo store notice to top. */
 function flatsome_move_store_notice() {
-    if ( get_theme_mod( 'woocommerce_store_notice_top' ) ) {
-        remove_action( 'wp_footer', 'woocommerce_demo_store' );
-        add_action ( 'flatsome_after_body_open', 'woocommerce_demo_store', 0 );
-    }
+	if ( ! fl_woocommerce_version_check( '9.9.0' ) ) {
+		if ( get_theme_mod( 'woocommerce_store_notice_top' ) ) {
+			remove_action( 'wp_footer', 'woocommerce_demo_store' );
+			add_action( 'flatsome_after_body_open', 'woocommerce_demo_store', 0 );
+		}
+	}
 }
 add_action( 'wp_loaded', 'flatsome_move_store_notice' );
 

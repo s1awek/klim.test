@@ -14,7 +14,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'     => 'account_icon_style',
 	'label'       => __( 'Icon Style', 'flatsome-admin' ),
 	'section'     => 'header_account',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => '',
 	'choices'     => array(
 		'' => $image_url . 'disabled.svg',
@@ -33,7 +33,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Show label', 'flatsome-admin' ),
 	'description' => __( 'Display label for logged in users.', 'flatsome-admin' ),
 	'section'     => 'header_account',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => 1,
 ));
 
@@ -43,7 +43,7 @@ Flatsome_Option::add_field( 'option', array(
 	'label'           => __( 'Use username as label', 'flatsome-admin' ),
 	'description'     => __( 'Display username instead of fixed label for logged in users.', 'flatsome-admin' ),
 	'section'         => 'header_account',
-	'transport'       => $transport,
+	'transport'       => flatsome_customizer_transport(),
 	'active_callback' => array(
 		array(
 			'setting'  => 'header_account_title',
@@ -67,7 +67,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'  => 'account_login_style',
 	'label'     => __( 'Login Style', 'flatsome-admin' ),
 	'section'   => 'header_account',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'   => 'lightbox',
 	'choices'   => array(
 		'link'     => __( 'Link', 'flatsome-admin' ),
@@ -89,7 +89,7 @@ Flatsome_Option::add_field( 'option', array(
 	'label'       => __( 'Show "Register" label', 'flatsome-admin' ),
 	'description' => __( 'Display "Register" for non logged in users.', 'flatsome-admin' ),
 	'section'     => 'header_account',
-	'transport'   => $transport,
+	'transport'   => flatsome_customizer_transport(),
 ) );
 
 Flatsome_Option::add_field( 'option', array(

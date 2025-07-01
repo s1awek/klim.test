@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Flexible Checkout Fields plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Flexible Checkout Fields 4.1.21\n"
+"Project-Id-Version: Flexible Checkout Fields 4.1.24\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/flexible-checkout-fields\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-05-23T15:39:02+00:00\n"
+"POT-Creation-Date: 2025-07-01T07:40:03+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: flexible-checkout-fields\n"
@@ -93,26 +93,26 @@ msgstr ""
 msgid "Order"
 msgstr ""
 
-#: classes/plugin.php:923
+#: classes/plugin.php:905
 msgid "Uploading file..."
 msgstr ""
 
-#: classes/plugin.php:998
+#: classes/plugin.php:980
 msgid "Start here"
 msgstr ""
 
-#: classes/plugin.php:999
+#: classes/plugin.php:981
 #: src/Settings/Menu.php:35
 #: vendor_prefixed/wpdesk/wp-builder/src/Plugin/AbstractPlugin.php:188
 msgid "Settings"
 msgstr ""
 
-#: classes/plugin.php:1000
+#: classes/plugin.php:982
 #: vendor_prefixed/wpdesk/wp-builder/src/Plugin/AbstractPlugin.php:184
 msgid "Docs"
 msgstr ""
 
-#: classes/plugin.php:1004
+#: classes/plugin.php:986
 #: src/Settings/Option/LogicAdvOption.php:58
 #: src/Settings/Option/SettingSectionsAdvOption.php:37
 msgid "Upgrade to PRO"

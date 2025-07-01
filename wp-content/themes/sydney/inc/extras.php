@@ -43,6 +43,11 @@ function sydney_body_classes( $classes ) {
 	if ( $transparent_header ) {
 		$classes[] = 'transparent-header';
 	}
+
+	//Check if current page has blocks
+	if ( isset( $post ) && function_exists( 'has_blocks' ) && has_blocks() ) {
+		$classes[] = 'syd-has-blocks';
+	}
 	
 	return $classes;
 }
@@ -1089,7 +1094,11 @@ add_filter( 'nav_menu_css_class', 'sydney_nav_menu_css_class', 10, 4 );
  * @return array $atts Updated attributes for the li element.
  */
 function sydney_nav_menu_link_attributes( $atts, $menu_item, $args, $depth ) {
-	$atts[ 'class' ] = 'sydney-dropdown-link';
-	return $atts;
+    if ( isset( $atts['class'] ) ) {
+        $atts['class'] .= ' sydney-dropdown-link';
+    } else {
+        $atts['class'] = 'sydney-dropdown-link';
+    }
+    return $atts;
 }
 add_filter( 'nav_menu_link_attributes', 'sydney_nav_menu_link_attributes', 10, 4 );

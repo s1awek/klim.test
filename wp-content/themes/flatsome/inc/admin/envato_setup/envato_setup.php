@@ -2117,11 +2117,11 @@ if ( ! class_exists( 'Envato_Theme_Setup_Wizard' ) ) {
 
 			<p class="error">Item Support <strong>DOES NOT</strong> Include:</p>
 			<ul>
-				<li>Customization services (this is available through <a href="http://studiotracking.envato.com/aff_c?offer_id=4&aff_id=1564&source=DemoInstall" target="_blank">Envato Studio</a>)</li>
-				<li>Installation services (this is available through <a href="http://studiotracking.envato.com/aff_c?offer_id=4&aff_id=1564&source=DemoInstall" target="_blank">Envato Studio</a>)</li>
+				<li>Customization services</li>
+				<li>Installation services</li>
 				<li>Help and Support for non-bundled 3rd party plugins (i.e. plugins you install yourself later on)</li>
 			</ul>
-			<p>More details about item support can be found in the ThemeForest <a href="http://themeforest.net/page/item_support_policy" target="_blank">Item Support Polity</a>. </p>
+			<p>More details about item support can be found in the ThemeForest <a href="https://themeforest.net/page/item_support_policy" target="_blank">Item Support Polity</a>. </p>
 			<p class="envato-setup-actions step">
 				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>" class="button button-primary button-large button-next"><?php _e( 'Agree and Continue', 'envato_setup' ); ?></a>
 				<?php wp_nonce_field( 'envato-setup' ); ?>
@@ -2140,7 +2140,7 @@ if ( ! class_exists( 'Envato_Theme_Setup_Wizard' ) ) {
 			<h1><?php _e( 'Your Website is Ready!', 'envato_setup' ); ?></h1>
 
 			<p class="lead success">Congratulations! The theme has been activated and your website is ready. Login to your WordPress dashboard to make changes and modify any of the default content to suit your needs.</p>
-			<p>Please come back and <a href="http://themeforest.net/downloads" target="_blank">leave a 5-star rating</a> if you are happy with this theme. <br/>Follow <a  href="https://twitter.com/uxthemes" target="_blank">@uxthemes</a> on Twitter to see updates. Thanks! </p>
+			<p>Please come back and <a href="https://themeforest.net/downloads" target="_blank">leave a 5-star rating</a> if you are happy with this theme. <br/>Follow <a  href="https://twitter.com/uxthemes" target="_blank">@uxthemes</a> on Twitter to see updates. Thanks! </p>
 
 			<div class="envato-setup-next-steps">
 				<div class="envato-setup-next-steps-first">
@@ -2154,10 +2154,10 @@ if ( ! class_exists( 'Envato_Theme_Setup_Wizard' ) ) {
 				<div class="envato-setup-next-steps-last">
 					<h2><?php _e( 'More Resources', 'envato_setup' ); ?></h2>
 					<ul>
-						<li class="documentation"><a href="http://uxthemes.helpscoutdocs.com"><?php _e( 'Theme Documentation', 'envato_setup' ); ?></a></li>
-						<li class="woocommerce documentation"><a href="https://docs.woocommerce.com/document/woocommerce-101-video-series/"><?php _e( 'Learn how to use WooCommerce', 'envato_setup' ); ?></a></li>
+						<li class="documentation"><a href="https://docs.uxthemes.com/"><?php _e( 'Theme Documentation', 'envato_setup' ); ?></a></li>
+						<li class="woocommerce documentation"><a href="https://woocommerce.com/documentation/woocommerce/"><?php _e( 'Learn how to use WooCommerce', 'envato_setup' ); ?></a></li>
 						<li class="howto"><a href="https://wordpress.org/support/"><?php _e( 'Learn how to use WordPress', 'envato_setup' ); ?></a></li>
-						<li class="rating"><a href="http://themeforest.net/downloads"><?php _e( 'Leave an Item Rating', 'envato_setup' ); ?></a></li>
+						<li class="rating"><a href="https://themeforest.net/downloads"><?php _e( 'Leave an Item Rating', 'envato_setup' ); ?></a></li>
 					</ul>
 				</div>
 			</div>

@@ -11,7 +11,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'        => 'flatsome_lightbox_bg',
 	'label'           => __( 'Backdrop color', 'flatsome-admin' ),
 	'section'         => 'lightbox',
-	'transport'       => $transport,
+	'transport'       => flatsome_customizer_transport(),
 	'default'         => '',
 ) );
 
@@ -28,7 +28,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'  => 'drawer_width',
 	'section'   => 'lightbox',
 	'label'     => __( 'Drawer width', 'flatsome' ),
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'   => Flatsome_Default::DRAWER_WIDTH,
 ) );
 

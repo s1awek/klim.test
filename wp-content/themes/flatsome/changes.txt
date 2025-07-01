@@ -1,3 +1,19 @@
+--- 3.19.14 ---
+FIXED: Duplicate store notice when move to top is enabled due to WooCommerce hook change.
+FIXED: Setup wizard not accessible.
+
+DEV: Added ux_builder_ajax_posts_search_posts_get_posts_args filter.
+DEV: Added ux_builder_ajax_terms_search_terms_get_terms_args filter.
+
+Note: Option 'Move store notice to the top' is removed since this is now the default placement.
+
+--- 3.19.13 ---
+NEW: WooCommerce 9.9 compatibility.
+
+FIXED: Instagram admin username including dot and following digit.
+FIXED: Instagram Feed element animation setting not applying to items.
+FIXED: PHP notice: Translation loading for the flatsome domain was triggered too early.
+
 --- 3.19.12 ---
 NEW: WooCommerce 9.8 compatibility.
 

@@ -9,7 +9,6 @@ Flatsome_Option::add_section( 'blog-layout', array(
 Flatsome_Option::add_field( 'option',  array(
 	'type'        => 'textarea',
 	'settings'     => 'blog_header',
-	//'transport' => $transport,
 	'label'       => __( 'Blog Homepage Header', 'flatsome-admin' ),
 	'description' => __( 'Enter HTML for blog header here. Will be placed above content and sidebar. Shortcodes are allowed. F.ex [block id="blog-header"]', 'flatsome-admin' ),
 	'section'     => 'blog-layout',
@@ -30,7 +29,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Blog Sidebar', 'flatsome-admin' ),
 	'section'     => 'blog-layout',
 	'default'     => 'right-sidebar',
-	'transport'	  => $transport,
+	'transport'	  => flatsome_customizer_transport(),
 	'choices'     => array(
 		'right-sidebar' => $image_url . 'layout-right.svg',
 		'left-sidebar' => $image_url . 'layout-left.svg',
@@ -44,7 +43,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'blog_layout_divider',
 	'label'       => __( 'Enable Sidebar Divider', 'flatsome-admin' ),
 	'section'     => 'blog-layout',
-	'transport'	  => $transport,
+	'transport'	  => flatsome_customizer_transport(),
 	'default'     => 1,
 ));
 
@@ -112,7 +111,7 @@ Flatsome_Option::add_field( 'option', array(
 Flatsome_Option::add_field( 'option',  array(
 	'type'        => 'checkbox',
 	'settings'     => 'blog_show_excerpt',
-	'transport'	  => $transport,
+	'transport'	  => flatsome_customizer_transport(),
 	'label'       => __( 'Show Excerpts Only', 'flatsome-admin' ),
 	'help'        => __( 'Show Excerpts only of the Blog posts. You can manually add a Read More link by adding a More Tag to the Post Content.', 'flatsome-admin' ),
 	'section'     => 'blog-layout',
@@ -125,7 +124,7 @@ Flatsome_Option::add_field( 'option',  array(
 'label'       => __( 'Blog Background Color', 'flatsome-admin' ),
 'section'     => 'blog-layout',
 'default'     => '',
-'transport' => 'postMessage',
+'transport' => flatsome_customizer_transport(),
 'js_vars'   => array(
 	array(
 		'element'  => '.blog-wrapper',
@@ -147,7 +146,7 @@ Flatsome_Option::add_field( 'option',  array(
 		'max'  => 5,
 		'step' => 1
 	),
-	'transport' => $transport
+	'transport' => flatsome_customizer_transport()
 ));
 
 Flatsome_Option::add_field( 'option',  array(
@@ -161,7 +160,7 @@ Flatsome_Option::add_field( 'option',  array(
 		'max'  => 5,
 		'step' => 1
 	),
-	'transport' => $transport
+	'transport' => flatsome_customizer_transport()
 ));
 
 

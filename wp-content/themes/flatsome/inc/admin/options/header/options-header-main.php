@@ -25,7 +25,7 @@ Flatsome_Option::add_field( 'option', array(
 	'label'       => __( 'Header Width', 'flatsome-admin' ),
 	'section'     => 'main_bar',
 	'default'     => 'container',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'container' => $image_url . 'container.svg',
 		'full-width' => $image_url . 'full-width.svg'
@@ -43,7 +43,7 @@ Flatsome_Option::add_field( 'option',  array(
 		'max'  => 500,
 		'step' => 1
 	),
-	'transport' => 'postMessage'
+	'transport' => flatsome_customizer_transport(),
 ));
 
 Flatsome_Option::add_field( 'option',  array(
@@ -52,7 +52,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Text color', 'flatsome-admin' ),
 	'section'     => 'main_bar',
 	'default'     => 'light',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'dark' => $image_url . 'text-light.svg',
 		'light' => $image_url . 'text-dark.svg'
@@ -67,7 +67,7 @@ Flatsome_Option::add_field( 'option',  array(
     'label'       => __( 'Background Color', 'flatsome-admin' ),
     'section'     => 'main_bar',
 	'default'     => 'rgba(255,255,255,0.9)',
-	'transport' => 'postMessage'
+	'transport' => flatsome_customizer_transport(),
 ));
 
 
@@ -78,7 +78,7 @@ Flatsome_Option::add_field( 'option',  array(
     'help' => __( 'Image is added to .header container. Try set a header background with opacity if you can not see the background image. (Drag the alpha slider in the background selector)', 'flatsome-admin' ),
     'section'     => 'main_bar',
 	'default'     => "",
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 ));
 
 
@@ -89,7 +89,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'section'     => 'main_bar',
 	'default'     => 'repeat',
 	'choices'     => $bg_repeat,
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'active_callback' => array(
 		array(
 			'setting'  => 'header_bg_img',
@@ -104,7 +104,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'box_shadow_header',
 	'label'       => __( 'Add Shadow', 'flatsome-admin' ),
 	'section'     => 'main_bar',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'default'     => 0,
 ));
 
@@ -113,7 +113,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'header_divider',
 	'label'       => __( 'Add Divider', 'flatsome-admin' ),
 	'section'     => 'main_bar',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => 1,
 ));
 
@@ -143,7 +143,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Navigation Style', 'flatsome-admin' ),
 	'section'     => 'main_bar',
 	'default'     => '',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => $nav_styles_img
 ));
 
@@ -152,7 +152,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'nav_size',
 	'label'       => __( 'Nav Size', 'flatsome-admin' ),
 	'section'     => 'main_bar',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => '',
 	'choices'     => $nav_sizes
 ));
@@ -162,7 +162,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'nav_spacing',
 	'label'       => __( 'Nav Spacing', 'flatsome-admin' ),
 	'section'     => 'main_bar',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => '',
 	'choices'     => $nav_sizes
 ));
@@ -173,7 +173,7 @@ Flatsome_Option::add_field( 'option',  array(
 		'settings'     => 'nav_uppercase',
 		'label'       => __( 'Uppercase', 'flatsome-admin' ),
 		'section'     => 'main_bar',
-	    'transport' => $transport,
+	    'transport' => flatsome_customizer_transport(),
 		'default'     => 1,
 ));
 
@@ -197,7 +197,7 @@ Flatsome_Option::add_field( 'option',  array(
 		'max'  => 500,
 		'step' => 1
 	),
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 ));
 
 Flatsome_Option::add_field( 'option',  array(
@@ -211,7 +211,7 @@ Flatsome_Option::add_field( 'option',  array(
 		'max'  => 50,
 		'step' => 1
 	),
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 ));
 
 Flatsome_Option::add_field( 'option',  array(
@@ -219,7 +219,7 @@ Flatsome_Option::add_field( 'option',  array(
     'settings'     => 'type_nav_color',
     'label'       => __( 'Nav Color', 'flatsome-admin' ),
 	'section'     => 'main_bar',
-    'transport' => $transport
+    'transport' => flatsome_customizer_transport()
 ));
 
 Flatsome_Option::add_field( 'option',  array(
@@ -227,7 +227,7 @@ Flatsome_Option::add_field( 'option',  array(
     'settings'     => 'type_nav_color_hover',
     'label'       => __( 'Nav Color :hover', 'flatsome-admin' ),
 	'section'     => 'main_bar',
-    'transport' => $transport
+    'transport' => flatsome_customizer_transport()
 ));
 
 Flatsome_Option::add_field( 'option',  array(
@@ -237,7 +237,7 @@ Flatsome_Option::add_field( 'option',  array(
     'label'       => __( 'Icons Color', 'flatsome-admin' ),
     'section'     => 'main_bar',
 	'default'     => '',
-	'transport' => $transport
+	'transport' => flatsome_customizer_transport()
 ));
 
 Flatsome_Option::add_field( 'option',  array(
@@ -247,7 +247,7 @@ Flatsome_Option::add_field( 'option',  array(
     'label'       => __( 'Icons Color :hover', 'flatsome-admin' ),
     'section'     => 'main_bar',
 	'default'     => '',
-	'transport' => $transport
+	'transport' => flatsome_customizer_transport()
 ));
 
 
@@ -267,7 +267,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Height - Transparent Header', 'flatsome-admin' ),
 	'section'     => 'main_bar',
 	'default'     => 90,
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'min'  => 30,
 		'max'  => 500,
@@ -282,7 +282,7 @@ Flatsome_Option::add_field( 'option',  array(
     'label'       => __( 'Transparent Header Background Color', 'flatsome-admin' ),
     'section'     => 'main_bar',
 	'default'     => '',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 ));
 
 Flatsome_Option::add_field( 'option',  array(
@@ -290,6 +290,6 @@ Flatsome_Option::add_field( 'option',  array(
     'settings'     => 'header_bg_transparent_shade',
 	'label'       => __( 'Add Shade', 'flatsome-admin' ),
 	'section'     => 'main_bar',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'default'     => 0,
 ));

@@ -786,7 +786,11 @@ class Wt_Import_Export_For_Woo_Basic_History
 						
 						// Validate the file is within allowed directory
 						if($file_path && $real_log_dir && strpos($file_path, $real_log_dir) === 0 && file_exists($file_path)) {
-						
+							//  Clear previous output before downloading
+							while ( ob_get_level() > 0 ) {
+								@ob_end_clean();
+							}
+							@ob_start();						
 							header('Pragma: public');
 						    header('Expires: 0');
 						    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');

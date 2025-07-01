@@ -24,7 +24,7 @@ Flatsome_Option::add_field( 'option',  array(
 		'max'  => 500,
 		'step' => 1
 	),
-	'transport' => 'postMessage'
+	'transport' => flatsome_customizer_transport()
 ));
 
 Flatsome_Option::add_field( 'option', array(
@@ -32,7 +32,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'     => 'logo_position_mobile',
 	'label'       => __( 'Logo position', 'flatsome-admin' ),
 	'section'     => 'header_mobile',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => 'center',
 	'choices'     => array(
 		'left' => $image_url . 'logo-left.svg',
@@ -46,7 +46,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'label'       => __( 'Menu Icon Style', 'flatsome-admin' ),
 	'section'     => 'header_mobile',
 	'default'     => '',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'' => $image_url . 'nav-icon-plain.svg',
 		'outline' => $image_url . 'nav-icon-outline.svg',
@@ -61,7 +61,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'menu_icon_title',
 	'label'       => __( 'Show Menu title', 'flatsome-admin' ),
 	'section'     => 'header_mobile',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => 0,
 ));
 
@@ -70,7 +70,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'     => 'mobile_overlay',
 	'label'       => __( 'Menu Overlay', 'flatsome-admin' ),
 	'section'     => 'header_mobile',
-	'transport'	  => $transport,
+	'transport'	  => flatsome_customizer_transport(),
 	'default'     => 'left',
 	'choices'     => array(
 		'left' => $image_url . 'overlay-left.svg',
@@ -95,14 +95,14 @@ Flatsome_Option::add_field( '', array(
 ) );
 
 Flatsome_Option::add_field( 'option', array(
-	'type'        => 'radio',
-	'settings'    => 'mobile_submenu_parent_behavior',
-	'label'       => __( 'Menu item behavior', 'flatsome' ),
-	'description' => __( 'Click behavior for menu items with a submenu', 'flatsome' ),
-	'section'     => 'header_mobile',
-	'transport'   => 'refresh',
-	'default'     => '',
-	'choices'     => array(
+	'type'            => 'radio',
+	'settings'        => 'mobile_submenu_parent_behavior',
+	'label'           => __( 'Menu item behavior', 'flatsome' ),
+	'description'     => __( 'Click behavior for menu items with a submenu', 'flatsome' ),
+	'section'         => 'header_mobile',
+	'transport'       => 'refresh',
+	'default'         => '',
+	'choices'         => array(
 		''       => __( 'Open link', 'flatsome' ),
 		'toggle' => __( 'Toggle submenu', 'flatsome' ),
 	),
@@ -194,7 +194,7 @@ Flatsome_Option::add_field( 'option',  array(
   'settings'     => 'mobile_sidebar',
   'label'       => __( 'Menu elements', 'flatsome' ),
   'section'     => 'header_mobile',
-  'transport'   => $transport,
+  'transport'   => flatsome_customizer_transport(),
   'multiple' => 10,
   'default'     => flatsome_header_mobile_sidebar(),
   'choices'     => $nav_elements
@@ -238,7 +238,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'     => 'mobile_overlay_color',
 	'label'       => __( 'Overlay Color', 'flatsome-admin' ),
 	'section'     => 'header_mobile',
-	'transport'	  => $transport,
+	'transport'	  => flatsome_customizer_transport(),
 	'default'     => '',
 	'choices'     => array(
 		'' => $image_url . 'text-dark.svg',
@@ -253,5 +253,5 @@ Flatsome_Option::add_field( 'option',  array(
     'label'       => __( 'Background Color', 'flatsome-admin' ),
 	'section'     => 'header_mobile',
 	'default'     => '',
-	'transport' => 'postMessage'
+	'transport' => flatsome_customizer_transport()
 ));

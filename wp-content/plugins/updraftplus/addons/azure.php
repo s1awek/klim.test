@@ -7,7 +7,7 @@ Version: 1.5
 Shop: /shop/azure/
 Include: includes/azure
 IncludePHP: methods/addon-base-v2.php
-RequiresPHP: 5.3.3
+RequiresPHP: 5.6
 Latest Change: 1.13.12
 */
 // @codingStandardsIgnoreEnd
@@ -629,7 +629,7 @@ class UpdraftPlus_Addons_RemoteStorage_azure extends UpdraftPlus_RemoteStorage_A
 				?>
 				<img width="434" src="{{storage_image_url}}">
 				{{{simplexmlelement_existence_label}}}
-				<p><a href="https://account.live.com/developers/applications/create" target="_blank">{{credentials_creation_link_text}}</a></p>
+				<p><a href="https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade" target="_blank">{{credentials_creation_link_text}}</a></p>
 				<p><a href="https://teamupdraft.com/documentation/updraftplus/topics/cloud-storage/microsoft-azure/how-to-add-microsoft-azure-to-your-updraftplus-account-settings?utm_source=udp-plugin&utm_medium=referral&utm_campaign=paac&utm_content=azure-instructions&utm_creative_format=text" target="_blank">{{configuration_helper_link_text}}</a></p>
 			</td>
 		</tr>

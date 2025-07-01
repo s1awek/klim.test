@@ -47,11 +47,11 @@ class Terms {
     $query = array_key_exists( 'query', $_GET ) ? sanitize_text_field( $_GET['query'] ) : array();
     $option = array_key_exists( 'option', $_GET ) ? flatsome_clean( $_GET['option'] ) : array();
 
-    $terms = get_terms( $option['taxonomies'], array(
+    $terms = get_terms( $option['taxonomies'], apply_filters( 'ux_builder_ajax_terms_search_terms_get_terms_args', array(
       'number' => 25,
       'search' => $query,
       'hide_empty' => false,
-    ) );
+    ) ) );
 
     $items = array_map( function ($term) {
       return array(

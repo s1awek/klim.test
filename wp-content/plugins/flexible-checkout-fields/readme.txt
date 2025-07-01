@@ -4,7 +4,7 @@ Donate link: https://www.wpdesk.net/flexible-checkout-fields-woocommerce/
 Tags: woocommerce checkout fields, woocommerce checkout manager, woocommerce checkout, custom fields, checkout field customizer
 Requires at least: 5.2
 Tested up to: 6.8
-Stable tag: 4.1.21
+Stable tag: 4.1.24
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -313,6 +313,10 @@ You can install this plugin like any other WordPress plugin.
 3. Activate the plugin through the Plugins menu in WordPress Administration.
 
 You can also use WordPress uploader to upload plugin zip file in menu Plugins -> Add New -> Upload Plugin. Then go directly to point 3.
+
+== Data use policy ==
+
+Learn about [Use of Data Policy by WP Desk Plugins](https://wpdesk.net/terms-conditions/privacy-policy-use-of-data-collected-by-wp-desk-plugins/?utm_source=wporg&utm_medium=link&utm_campaign=data-use-policy)
 
 == Frequently Asked Questions ==
 
@@ -685,6 +689,16 @@ Yes 😊.
 If you are upgrading from the old WooCommerce Checkout Fields version (1.1, woocommerce-checkout-fields) make sure to completely delete the old version first. Your settings will be kept. If you install the new version without deleting the old one you may break your WordPress installation.
 
 == Changelog ==
+
+= 4.1.24 - 2025-07-01 =
+* Added support for WooCommerce 10.0
+
+= 4.1.23 - 2025-06-23 =
+* Fixed fatal error on new woocommerce email preview feature in some checkout configurations
+
+= 4.1.22 - 2025-06-12 =
+* Added support for WooCommerce 9.9
+* Clean up unused js scripts
 
 = 4.1.21 - 2025-05-23 =
 * Fixed faq url

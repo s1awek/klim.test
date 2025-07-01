@@ -13,7 +13,7 @@ Flatsome_Option::add_section( 'top_bar', array(
 Flatsome_Option::add_field( 'option',  array(
 	'type'        => 'checkbox',
 	'settings'     => 'topbar_show',
-	//'transport' => $transport,
+	//'transport' => flatsome_customizer_transport(),
 	'label'       => __( 'Enable Top Bar', 'flatsome-admin' ),
 	'section'     => 'top_bar',
 	'default'     => 1,
@@ -51,7 +51,7 @@ Flatsome_Option::add_field( 'option',  array(
 		'max'  => 100,
 		'step' => 1
 	),
-	'transport' => 'postMessage'
+	'transport' => flatsome_customizer_transport()
 ));
 
 
@@ -68,7 +68,7 @@ Flatsome_Option::add_field( 'option',  array(
 		),
 	),
 	'default'     => 'dark',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => array(
 		'dark' => $image_url . 'text-light.svg',
 		'light' => $image_url . 'text-dark.svg'
@@ -91,7 +91,7 @@ Flatsome_Option::add_field( 'option',  array(
 	    ),
     ),
     'default' => '',
-    'transport' => 'postMessage',
+    'transport' => flatsome_customizer_transport(),
 	'js_vars'   => array(
 		array(
 			'element'  => '.header-top',
@@ -128,7 +128,7 @@ Flatsome_Option::add_field( 'option',  array(
 		),
 	),
 	'default'     => 'divided',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'     => $nav_styles_img
 ));
 
@@ -137,7 +137,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'  => 'nav_top_uppercase',
 	'label'     => __( 'Uppercase', 'flatsome-admin' ),
 	'section'   => 'top_bar',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'active_callback' => array(
 		array(
 			'setting'  => 'topbar_show',
@@ -168,7 +168,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'  => 'nav_height_top',
 	'label'     => __( 'Nav Height', 'flatsome-admin' ),
 	'section'   => 'top_bar',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'active_callback' => array(
 		array(
 			'setting'  => 'topbar_show',
@@ -189,7 +189,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'    => 'type_nav_top_color',
 	'label'       => __( 'Nav Color', 'flatsome-admin' ),
 	'section'     => 'top_bar',
-	'transport'   => $transport,
+	'transport'   => flatsome_customizer_transport(),
 	'active_callback' => array(
 		array(
 			'setting'  => 'topbar_show',
@@ -204,7 +204,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'    => 'type_nav_top_color_hover',
 	'label'       => __( 'Nav Color :hover', 'flatsome-admin' ),
 	'section'     => 'top_bar',
-	'transport'   => $transport,
+	'transport'   => flatsome_customizer_transport(),
 	'active_callback' => array(
 		array(
 			'setting'  => 'topbar_show',

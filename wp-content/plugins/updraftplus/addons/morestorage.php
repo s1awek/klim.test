@@ -211,7 +211,7 @@ class UpdraftPlus_Addon_MoreStorage {
 	 */
 	public function config_print_add_instance_label($storage, $storage_object) {
 		$input_class = is_object($storage_object) ? $storage_object->get_css_classes() : "updraftplusmethod ".$storage;
-		$input_name_id_attr = is_object($storage_object) ? $storage_object->output_settings_field_name_and_id('instance_label') . ' ' . $storage . '_updraft_instance_label' : '';
+		$input_name_id_attr = is_object($storage_object) ? $storage_object->output_settings_field_name_and_id('instance_label', true) . ' ' . $storage . '_updraft_instance_label' : '';
 		?>
 			<input type="hidden" class="<?php echo esc_attr($input_class);?>" <?php echo wp_kses($input_name_id_attr, array()); ?> value="{{instance_label}}" />
 		<?php

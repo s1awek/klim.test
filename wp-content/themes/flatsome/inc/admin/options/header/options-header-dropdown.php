@@ -20,7 +20,7 @@ Flatsome_Option::add_field( '', array(
 Flatsome_Option::add_field( 'option', array(
 	'type'      => 'color-alpha',
 	'settings'  => 'dropdown_bg',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'label'     => __( 'Background color', 'flatsome-admin' ),
 	'section'   => 'header_dropdown',
 	'default'   => '',
@@ -30,7 +30,7 @@ Flatsome_Option::add_field( 'option', array(
 Flatsome_Option::add_field( 'option', array(
 	'type'      => 'checkbox',
 	'settings'  => 'dropdown_border_enabled',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'label'     => __( 'Add border', 'flatsome-admin' ),
 	'section'   => 'header_dropdown',
 	'default'   => 1,
@@ -39,7 +39,7 @@ Flatsome_Option::add_field( 'option', array(
 Flatsome_Option::add_field( 'option', array(
 	'type'            => 'color-alpha',
 	'settings'        => 'dropdown_border',
-	'transport'       => $transport,
+	'transport'       => flatsome_customizer_transport(),
 	'label'           => __( 'Border Color', 'flatsome-admin' ),
 	'section'         => 'header_dropdown',
 	'active_callback' => array(
@@ -56,7 +56,7 @@ Flatsome_Option::add_field( 'option', array(
 	'type'      => 'checkbox',
 	'settings'  => 'dropdown_shadow',
 	'label'     => __( 'Add shadow', 'flatsome-admin' ),
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'section'   => 'header_dropdown',
 	'default'   => 1,
 ) );
@@ -72,7 +72,7 @@ Flatsome_Option::add_field( 'option', array(
 		'max'  => 200,
 		'step' => 1,
 	),
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 ) );
 
 Flatsome_Option::add_field( 'option', array(
@@ -80,7 +80,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'  => 'dropdown_radius',
 	'label'     => __( 'Dropdown radius', 'flatsome-admin' ),
 	'section'   => 'header_dropdown',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'default'   => '0',
 	'choices'   => array(
 		'0'    => __( '0px', 'flatsome-admin' ),
@@ -104,7 +104,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'    => 'dropdown_arrow',
 	'label'       => __( 'Add arrow', 'flatsome-admin' ),
 	'description' => __( 'Shows a focusing arrow towards the active menu item.', 'flatsome-admin' ),
-	'transport'   => $transport,
+	'transport'   => flatsome_customizer_transport(),
 	'section'     => 'header_dropdown',
 	'default'     => 1,
 ) );
@@ -112,7 +112,7 @@ Flatsome_Option::add_field( 'option', array(
 Flatsome_Option::add_field( 'option', array(
 	'type'      => 'radio-image',
 	'settings'  => 'dropdown_style',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'label'     => __( 'Link Style', 'flatsome-admin' ),
 	'section'   => 'header_dropdown',
 	'default'   => 'default',
@@ -128,7 +128,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'  => 'dropdown_text',
 	'label'     => __( 'Text Color', 'flatsome-admin' ),
 	'section'   => 'header_dropdown',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'default'   => 'light',
 	'choices'   => array(
 		'light' => __( 'Dark', 'flatsome-admin' ),
@@ -139,7 +139,7 @@ Flatsome_Option::add_field( 'option', array(
 Flatsome_Option::add_field( 'option', array(
 	'type'      => 'radio-buttonset',
 	'settings'  => 'dropdown_text_style',
-	'transport' => 'postMessage',
+	'transport' => flatsome_customizer_transport(),
 	'label'     => __( 'Text Style', 'flatsome-admin' ),
 	'section'   => 'header_dropdown',
 	'default'   => 'simple',

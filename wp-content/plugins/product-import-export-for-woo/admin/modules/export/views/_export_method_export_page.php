@@ -5,32 +5,63 @@ if (!defined('ABSPATH')) {
 ?>
 <div class="wt_iew_export_main">
     
-    <!-- <div id="product-type-notice" style="display:none;">
-        <div class="notice notice-warning" style="margin:0px; display:block; background:rgb(241, 239, 221);">
-            <?php
-            // Check if post type is product and has unsupported product types
-            $post_type = isset($_GET['wt_iew_export_post_type']) ? sanitize_text_field($_GET['wt_iew_export_post_type']) : '';
-                
-            $args = array(
-                    'post_type' => 'variable',
-                    'posts_per_page' => -1,
-                    'fields' => 'ids'
+    <div id="product-type-notice" style="display:block;">
+        <?php
+            // Define unsupported types to check
+            $unsupported_types = array(
+                'variable'     => 'Variable',
+                'subscription' => 'Subscription',
+                'bundle'       => 'Bundle',
+                'composite'    => 'Composite',
+            );
+
+            $detected_types = array();
+
+            foreach ($unsupported_types as $type => $label) {
+                $args = array(
+                    'type'   => $type,
+                    'limit'  => 1,
+                    'return' => 'ids',
                 );
+                $products = wc_get_products($args);
+                if (!empty($products)) {
+                    $detected_types[] = $label;
+                }
+            }
+
+            if (!empty($detected_types)) {
+                $last = array_pop($detected_types);
+                if (empty($detected_types)) {
+                    $types_string = $last;
+                } else {
+                    $types_string = implode(', ', $detected_types) . ' and ' . $last;
+                }
                 
-            $variable_products = wc_get_products( $args );
-                
-            if ($variable_products) {
                 ?>
-                <p>
-                    <strong>Uh oh! Unsupported Product Types Detected</strong><br/>
-                    Your site has variable products that the free version does not support. <a href="https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_products_page&utm_medium=basic_revamp&utm_campaign=Product_Import_Export" target="_blank" rel="noopener noreferrer">Upgrade to Pro</a> to include them in your export/import.
-                </p>
-                    
+                <div class="notice notice-warning" style="width: 100%; max-width: 810px; margin-left: 0px; display: inline-flex; padding: 16px 18px 16px 26px; justify-content: flex-end; align-items: center; border-radius: 8px; border: 1px solid var(--Warning-W300, #EACB78); background: var(--Warning-W50, #FFFDF5); box-sizing: border-box;">
+                    <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 7px; display: inline-flex; width: 100%;">  
+                        <div style="align-self: stretch; color: #2A3646; font-size: 14px; font-family: Inter; font-weight: 600; line-height: 16px; word-wrap: break-word">
+                            Uh oh! Unsupported Product Types Detected
+                        </div>
+                        <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: flex; width: 100%;">
+                            <div style="width: 100%; max-width: 679px">
+                                <span style="color: #2A3646; font-size: 14px; font-family: Inter; font-weight: 400; word-wrap: break-word">
+                                Your site has <?php echo esc_html($types_string); ?> products that the free version does not support.
+                                </span>
+                                <a href="https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_file_upload&utm_medium=basic_revamp&utm_campaign=Product_Import_Export2.5.3" style="color: #0576FE; font-size: 14px; font-family: Inter; font-weight: 400; text-decoration: underline; word-wrap: break-word" target="_blank" rel="noopener noreferrer">
+                                    Upgrade to Pro
+                                </a>
+                                <span style="color: #2A3646; font-size: 14px; font-family: Inter; font-weight: 400; word-wrap: break-word">
+                                    to include them in your export/import.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <?php
             }
             ?>
-        </div>
-    </div> -->
+    </div>
     
 	<p><?php echo $step_info['description']; ?></p>
 	
@@ -41,7 +72,6 @@ if (!defined('ABSPATH')) {
     <div class="wt_iew_warn wt_iew_export_template_wrn" style="display:none;">
         <?php _e('Please select an export template.');?>
     </div>
-    <div id="product-type-message" class="updated" style="margin:0px;display: none;background: #dceff4;"><p><?php esc_html_e('The free version of this plugin exports and imports only WooCommerce Simple, Grouped and External/Affiliate product types.'); ?></p></div>
 	<table class="form-table wt-iew-form-table">
 		<tr>
 			<th><label><?php _e('Select an export method');?></label></th>

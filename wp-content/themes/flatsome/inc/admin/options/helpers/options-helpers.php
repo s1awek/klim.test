@@ -24,7 +24,7 @@ function flatsome_customizer_blocks() {
   return $blocks;
 }
 
-// Set default transport
+// Deprecated global transport (use flatsome_customizer_transport() instead).
 $transport = 'postMessage';
 if ( ! isset( $wp_customize->selective_refresh ) ) {
   $transport = 'refresh';

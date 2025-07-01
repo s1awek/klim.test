@@ -15,7 +15,7 @@ Flatsome_Option::add_field( 'option', array(
 	'label'     => __( 'Title Background Color', 'flatsome-admin' ),
 	'section'   => 'fl-my-account',
 	'default'   => '',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 ));
 
 Flatsome_Option::add_field( 'option',  array(
@@ -23,7 +23,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'settings'     => 'facebook_login_bg',
 	'label'       => __( 'Title Background Image', 'flatsome-admin' ),
 	'section'     => 'fl-my-account',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'default'     => ''
 ));
 
@@ -34,7 +34,7 @@ Flatsome_Option::add_field( 'option', array(
 	'description' => __( 'For logged in users only.', 'flatsome-admin' ),
 	'section'     => 'fl-my-account',
 	'default'     => 'left',
-	'transport'   => $transport,
+	'transport'   => flatsome_customizer_transport(),
 	'choices'     => array(
 		'left'   => $image_url . 'align-left.svg',
 		'center' => $image_url . 'align-center.svg',
@@ -48,7 +48,7 @@ Flatsome_Option::add_field( 'option', array(
 	'label'     => __( 'Text color', 'flatsome-admin' ),
 	'section'   => 'fl-my-account',
 	'default'   => 'dark',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'choices'   => array(
 		'light' => $image_url . 'text-light.svg',
 		'dark'  => $image_url . 'text-dark.svg',
@@ -58,7 +58,7 @@ Flatsome_Option::add_field( 'option', array(
 Flatsome_Option::add_field( 'option',  array(
 	'type'        => 'text',
 	'settings'     => 'facebook_login_text',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'label'       => __( 'Login Text', 'flatsome-admin' ),
 	'description' => __( '', 'flatsome-admin' ),
 	'section'     => 'fl-my-account',

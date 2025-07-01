@@ -39,7 +39,7 @@ Flatsome_Option::add_field( 'option',  array(
 	'max'  => 1000,
 	'step' => 1
 	),
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 ));
 
 Flatsome_Option::add_field( 'option', array(

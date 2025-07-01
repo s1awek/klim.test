@@ -233,8 +233,8 @@ require get_template_directory() . '/inc/admin/options/styles/options-type.php';
 /**
  * Theme Admin
  */
-if(current_user_can( 'manage_options')){
-  require get_template_directory() . '/inc/admin/admin-init.php';
+if ( current_user_can( 'manage_options' ) ) {
+	require get_template_directory() . '/inc/admin/admin-init.php';
 }
 
 /**

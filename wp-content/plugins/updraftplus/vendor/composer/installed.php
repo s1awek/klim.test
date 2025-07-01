@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'updraftplus/updraftplus',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => 'a5571e3db259958a3e5331ed049774ffbe37ec25',
+        'pretty_version' => 'v1.25.6',
+        'version' => '1.25.6.0',
+        'reference' => 'b764a0467c6dfc015ad577019636aaf4054a5a7f',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -362,9 +362,9 @@
             'dev_requirement' => false,
         ),
         'updraftplus/updraftplus' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => 'a5571e3db259958a3e5331ed049774ffbe37ec25',
+            'pretty_version' => 'v1.25.6',
+            'version' => '1.25.6.0',
+            'reference' => 'b764a0467c6dfc015ad577019636aaf4054a5a7f',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

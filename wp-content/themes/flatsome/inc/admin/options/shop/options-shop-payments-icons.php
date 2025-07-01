@@ -12,7 +12,7 @@ Flatsome_Option::add_field( 'option', array(
 	'settings'  => 'payment_icons',
 	'label'     => __( 'Payment Icons', 'flatsome-admin' ),
 	'section'   => 'payment-icons',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 	'multiple'  => 99,
 	'default'   => array( 'visa', 'paypal', 'stripe', 'mastercard', 'cashondelivery' ),
 	'choices'   => flatsome_get_payment_icons_list(),
@@ -24,7 +24,7 @@ Flatsome_Option::add_field( 'option', array(
 	'label'     => __( 'Custom Icons (Replace)', 'flatsome-admin' ),
 	'section'   => 'payment-icons',
 	'default'   => '',
-	'transport' => $transport,
+	'transport' => flatsome_customizer_transport(),
 ) );
 
 Flatsome_Option::add_field( 'option', array(

@@ -43,13 +43,13 @@ class Posts {
     // Return an error if nonce is invalid.
     check_ajax_referer( 'ux-builder-' . $post_id, 'security' );
 
-    $posts = get_posts( array(
+    $posts = get_posts( apply_filters( 'ux_builder_ajax_posts_search_posts_get_posts_args', array(
       's' => $query,
       'numberposts' => 25,
       'ignore_sticky_posts' => true,
       'post_type' => isset( $option['post_type'] ) ? flatsome_clean( $option['post_type'] ) : null,
       'suppress_filters' => false
-      ) );
+	) ) );
 
       // Get relative url's for all found posts.
       foreach ( $posts as &$post) {

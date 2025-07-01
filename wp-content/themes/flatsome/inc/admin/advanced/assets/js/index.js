@@ -75,7 +75,7 @@ wp.domReady(function () {
 
   function addAccount (data) {
     var tbody = document.querySelector('.flatsome-instagram-accounts__body')
-    var tr = document.querySelector('.instagram-account--' + data.username)
+    var tr = document.querySelector('[data-instagram-account="' + data.username + '"]')
     var id = wp.escapeHtml.escapeAttribute(data.id)
     var username = wp.escapeHtml.escapeAttribute(data.username)
     var accessToken = wp.escapeHtml.escapeAttribute(data.access_token)
@@ -83,7 +83,7 @@ wp.domReady(function () {
     var expiresAt = parseInt(data.expires_at, 10)
 
     var html = [
-      '<tr class="instagram-account instagram-account-updated instagram-account--' + username + '">',
+      '<tr class="instagram-account instagram-account-updated" data-instagram-account="' + username + '">',
       '<td>',
       '<input type="hidden" name="facebook_accounts[' + username + '][type]" value="instagram">',
       '<input type="hidden" name="facebook_accounts[' + username + '][id]" value="' + id + '">',

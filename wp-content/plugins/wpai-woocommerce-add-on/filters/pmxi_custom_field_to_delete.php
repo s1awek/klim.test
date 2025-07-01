@@ -22,6 +22,19 @@ function pmwi_pmxi_custom_field_to_delete($field_to_delete, $pid, $post_type, $o
         return false;
     }
 
+    // Check if the field is handled internally and should not be deleted unless marked for update
+    if (class_exists('wpai_woocommerce_add_on\XmlImportWooCommerceService') && $options['update_all_data'] == 'no' && !empty($options['is_using_new_product_import_options'])) {
+        $custom_fields_handled_internally = wpai_woocommerce_add_on\XmlImportWooCommerceService::$custom_fields_handled_internally;
+        if(isset($custom_fields_handled_internally[$post_type]) && array_key_exists($cur_meta_key, $custom_fields_handled_internally[$post_type])) {
+            $internal_field = $custom_fields_handled_internally[$post_type][$cur_meta_key];
+            if(isset($options[$internal_field[0]]) && $options[$internal_field[0]] && isset($options[$internal_field[1]]) && $options[$internal_field[1]]) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
 	if ($cur_meta_key == '_is_first_variation_created') {
 		delete_post_meta($pid, $cur_meta_key);
 		return false;
@@ -80,6 +93,6 @@ function pmwi_pmxi_custom_field_to_delete($field_to_delete, $pid, $post_type, $o
             return false;
         }
 	}
-	
+
 	return true;		
 }

@@ -14,7 +14,7 @@
     'type'        => 'select',
     'settings'     => 'wishlist_icon',
     'label'       => __( 'Wishlist Icon', 'flatsome-admin' ),
-    'transport' => $transport,
+    'transport' => flatsome_customizer_transport(),
     'section'     => 'header_wishlist',
     'default'     => 'heart',
     'choices'     => array(
@@ -34,7 +34,7 @@
     'settings'     => 'wishlist_icon_style',
     'label'       => __( 'Wishlist Icon Style', 'flatsome-admin' ),
     'section'     => 'header_wishlist',
-    'transport' => $transport,
+    'transport' => flatsome_customizer_transport(),
     'default'     => '',
     'choices'     => array(
       '' => $image_url . 'icon-plain.svg',
@@ -53,7 +53,7 @@
     //'description' => __( 'This is the control description', 'flatsome-admin' ),
     //'help'        => __( 'This is some extra help. You can use this to add some additional instructions for users. The main description should go in the "description" of the field, this is only to be used for help tips.', 'flatsome-admin' ),
     'section'     => 'header_wishlist',
-    'transport' => $transport,
+    'transport' => flatsome_customizer_transport(),
     'default'     => 1,
   ));
 
@@ -62,7 +62,7 @@
     'settings'     => 'header_wishlist_label',
     'label'       => __( 'Custom Title', 'flatsome-admin' ),
     'section'     => 'header_wishlist',
-    'transport' => $transport,
+    'transport' => flatsome_customizer_transport(),
     'default'     => '',
   ));
 

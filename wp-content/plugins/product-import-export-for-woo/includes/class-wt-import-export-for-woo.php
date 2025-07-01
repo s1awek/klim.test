@@ -84,7 +84,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Basic')) {
 			if (defined('WT_P_IEW_VERSION')) {
 				$this->version = WT_P_IEW_VERSION;
 			} else {
-				$this->version = '2.5.3';
+				$this->version = '2.5.4';
 			}
 			$this->plugin_name = 'wt-import-export-for-woo-basic';
 			
@@ -191,7 +191,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Basic')) {
 
 			$plugin_i18n = new Wt_Import_Export_For_Woo_i18n_Basic();
 
-			$this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
+			$this->loader->add_action('init', $plugin_i18n, 'load_plugin_textdomain');
 		}
 
 		/**

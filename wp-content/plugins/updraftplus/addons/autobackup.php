@@ -324,7 +324,7 @@ class UpdraftPlus_Addon_Autobackup {
 	public function updraftplus_autobackup_blurb() {
 		$ret = '<div class="updraft-ad-container updated" style="display:block;">';
 		$ret .= '<h3 style="margin-top: 2px;">'. __('Be safe with an automatic backup', 'updraftplus').'</h3>';
-		$ret .= '<input '.((UpdraftPlus_Options::get_updraft_option('updraft_autobackup_default', true)) ? 'checked="checked"' : '').' type="checkbox" id="updraft_autobackup" value="doit" name="updraft_autobackup"> <label for="updraft_autobackup">'.
+		$ret .= '<input '.((UpdraftPlus_Options::get_updraft_option('updraft_autobackup_default')) ? 'checked="checked"' : '').' type="checkbox" id="updraft_autobackup" value="doit" name="updraft_autobackup"> <label for="updraft_autobackup">'.
 		__('Automatically backup (where relevant) plugins, themes and the WordPress database with UpdraftPlus before updating', 'updraftplus').
 		'</label><br><input checked="checked" type="checkbox" value="set" name="updraft_autobackup_setdefault" id="updraft_autobackup_sdefault"> <label for="updraft_autobackup_sdefault">'.
 		__('Remember this choice for next time (you will still have the chance to change it)', 'updraftplus').
@@ -337,7 +337,7 @@ class UpdraftPlus_Addon_Autobackup {
 	}
 
 	public function admin_footer_insertintoform() {
-		$def = UpdraftPlus_Options::get_updraft_option('updraft_autobackup_default', true);
+		$def = UpdraftPlus_Options::get_updraft_option('updraft_autobackup_default');
 		$godef = $def ? 'yes' : 'no';
 		// Note - now, in the new-style widgetised setup (Feb 2015), we always set updraftplus_noautobackup=1 - because the actual backup will be done in-page. But that is not done here - it is done when the form is submitted, in updraft_try_inpage();
 		?>
@@ -1185,7 +1185,7 @@ ENDHERE;
 			<?php
 		}
 		?>
-		<input <?php if (UpdraftPlus_Options::get_updraft_option('updraft_autobackup_default', true)) echo 'checked="checked"';?> type="checkbox" id="<?php echo esc_attr($id);?>" value="<?php echo esc_attr($value);?>" name="<?php echo esc_attr($id);?>">
+		<input <?php if (UpdraftPlus_Options::get_updraft_option('updraft_autobackup_default')) echo 'checked="checked"';?> type="checkbox" id="<?php echo esc_attr($id);?>" value="<?php echo esc_attr($value);?>" name="<?php echo esc_attr($id);?>">
 		<?php if (!$include_wrapper) echo '<br>'; ?>
 		<label for="<?php echo esc_attr($id);?>"><?php esc_html_e('Backup (where relevant) plugins, themes and the WordPress database with UpdraftPlus before updating', 'updraftplus');?></label><br>
 		<?php

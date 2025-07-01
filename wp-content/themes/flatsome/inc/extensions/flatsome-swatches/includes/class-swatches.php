@@ -40,18 +40,32 @@ final class Swatches {
 	 * Swatches constructor.
 	 */
 	private function __construct() {
+		add_action( 'init', array( $this, 'init' ) );
+	}
+
+	/**
+	 * Initialize.
+	 */
+	public function init() {
 		$this->types = array(
 			'ux_color' => esc_html__( 'UX Color', 'flatsome' ),
 			'ux_image' => esc_html__( 'UX Image', 'flatsome' ),
 			'ux_label' => esc_html__( 'UX Label', 'flatsome' ),
 		);
 
-		$theme         = wp_get_theme( get_template() );
-		$this->version = $theme->get( 'Version' );
+		$this->version = flatsome()->version();
 
 		$this->includes();
 
-		add_action( 'init', array( $this, 'init' ) );
+		add_filter( 'product_attributes_type_selector', array( $this, 'add_attribute_types' ) );
+
+		if ( is_admin() ) {
+			$this->admin();
+		}
+
+		if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+			$this->frontend();
+		}
 	}
 
 	/**
@@ -63,21 +77,6 @@ final class Swatches {
 		}
 
 		require_once dirname( __FILE__ ) . '/class-swatches-frontend.php';
-	}
-
-	/**
-	 * Initialize.
-	 */
-	public function init() {
-		add_filter( 'product_attributes_type_selector', array( $this, 'add_attribute_types' ) );
-
-		if ( is_admin() ) {
-			$this->admin();
-		}
-
-		if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
-			$this->frontend();
-		}
 	}
 
 	/**
