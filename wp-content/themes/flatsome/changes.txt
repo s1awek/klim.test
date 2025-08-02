@@ -1,3 +1,6 @@
+--- 3.19.15 ---
+NEW: WooCommerce 10.0 compatibility.
+
 --- 3.19.14 ---
 FIXED: Duplicate store notice when move to top is enabled due to WooCommerce hook change.
 FIXED: Setup wizard not accessible.
