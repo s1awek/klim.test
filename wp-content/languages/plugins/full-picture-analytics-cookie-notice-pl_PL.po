@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Analytics &amp; Privacy Toolkit &#8211; WP Full Picture - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-01 12:09:47+0000\n"
+"PO-Revision-Date: 2025-07-03 07:55:15+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,50 +18,6 @@ msgstr "Menedżer narzędzi śledzących pozwala kontrolować narzędzia śledz�
 #: includes/class-fupi-get-gdpr-status.php:65
 msgid "Enable it if you use tracking tools on your website, live chat applications, social buttons, social login options or your website loads content from other sites (YouTube video, maps, etc.)."
 msgstr "Włącz to, jeśli korzystasz z narzędzi śledzących w swojej witrynie, aplikacji do czatu, przycisków społecznościowych, opcji logowania społecznościowego lub Twoja witryna ładuje treści z innych witryn (filmy z YouTube, mapy itp.)."
-
-#: admin/common/pages/parts/fupi-page_part-side-nav.php:110
-msgid "Get All Pro Features"
-msgstr "Odblokuj Funkcje Pro"
-
-#: admin/common/pages/parts/fupi-page_part-side-nav.php:105
-msgid "With metadata tracking"
-msgstr "Ze śledzeniem metadanych"
-
-#: admin/common/pages/parts/fupi-page_part-side-nav.php:104
-msgid "Track custom user and post data important to your business."
-msgstr "Śledź niestandardowe dane użytkowników i postów ważne dla Twojej firmy."
-
-#: admin/common/pages/parts/fupi-page_part-side-nav.php:101
-msgid "Monitor your site for JavaScript errors in Google Analytics."
-msgstr "Monitoruj swoją witrynę pod kątem błędów JavaScript w Google Analytics."
-
-#: admin/common/pages/parts/fupi-page_part-side-nav.php:98
-msgid "See how to do it with Lead Scoring"
-msgstr "Zobacz, jak to zrobić z Lead Scoringiem"
-
-#: admin/common/pages/parts/fupi-page_part-side-nav.php:97
-msgid "Learn which of your traffic sources and ad campaigns bring you the best traffic."
-msgstr "Dowiedz się, które źródła ruchu i kampanie reklamowe przynoszą najlepszy ruch."
-
-#: admin/common/pages/parts/fupi-page_part-side-nav.php:94
-msgid "Available in GA and Meta Pixel"
-msgstr "Dostępne w GA i Meta Pixel"
-
-#: admin/common/pages/parts/fupi-page_part-side-nav.php:93
-msgid "Improve conersion tracking with server-side tracking and enhanced attribution"
-msgstr "Usprawnij śledzenie konwersji dzięki śledzeniu po stronie serwera i ulepszonej atrybucji"
-
-#: admin/common/pages/parts/fupi-page_part-side-nav.php:90
-msgid "See how to do it with Advanced Triggers"
-msgstr "Zobacz, jak to zrobić z Zaawansowanymi Trigerami"
-
-#: admin/common/pages/parts/fupi-page_part-side-nav.php:89
-msgid "Measure how many visitors are really interested in your products"
-msgstr "Odkryj, ilu odwiedzających jest naprawdę zainteresowanych Twoimi produktami"
-
-#: admin/common/pages/parts/fupi-page_part-side-nav.php:85
-msgid "WP Full Picture Pro"
-msgstr "WP Full Picture Pro"
 
 #: includes/class-fupi-get-gdpr-status.php:801
 msgid "The tool enables additional functions after visitors agree to using their personal data for:"
@@ -600,6 +556,14 @@ msgstr "Szukaj stron..."
 msgid "There was an error registering the site in ConsentsDB. Save the secret key and try again."
 msgstr "Wystąpił błąd podczas rejestracji witryny w ConsentsDB. Zapisz tajny klucz i spróbuj ponownie."
 
+#: admin/common/pages/parts/fupi-page_part-side-nav.php:102
+msgid "See the pricing"
+msgstr "Zobacz cennik"
+
+#: admin/common/pages/parts/fupi-page_part-side-nav.php:96
+msgid "Use server-side tracking in Meta Pixel and Google Analytics"
+msgstr "Korzystaj ze śledzenia po stronie serwera w Meta Pixel i Google Analytics"
+
 #: admin/common/pages/parts/fupi-page_part-footer.php:1
 msgid "Leave a review. It helps a lot."
 msgstr "Zostaw recenzję. To bardzo pomaga."
@@ -824,6 +788,10 @@ msgstr "Plik usunięty"
 #: admin/modules/main/main-admin.php:221 admin/modules/main/main-admin.php:351
 msgid "Backup file not found"
 msgstr "Nie znaleziono pliku kopii zapasowej"
+
+#: admin/common/pages/parts/fupi-page_part-side-nav.php:85
+msgid "Get Pro"
+msgstr "Kup Pro"
 
 #: includes/class-fupi-get-gdpr-status.php:2011
 msgid "Make sure that none of the tools you install with GTM track personaly indentifiable information."
@@ -1554,6 +1522,10 @@ msgstr "Bezpieczne czcionki"
 #: public/modules/cook/fupi-display-cookie-notice.php:282
 msgid "Consent banner"
 msgstr "Baner zgody"
+
+#: admin/common/pages/parts/fupi-page_part-side-nav.php:92
+msgid "See what traffic sources bring you the best traffic"
+msgstr "Zobacz, które źródła ruchu przynoszą najlepszy ruch"
 
 #: admin/common/pages/parts/fupi-page_part-guides.php:51
 msgid "Documentation & support"
@@ -3088,7 +3060,7 @@ msgstr "Nazwa zdarzenia lub nazwa linku"
 
 #: admin/modules/ga41/ga41-fields.php:166
 msgid "Links"
-msgstr "Linki"
+msgstr "Odnośniki"
 
 #: admin/modules/ga41/ga41-fields.php:162
 msgid "This option is recommended if you have many different affiliate links on the website and you are an advanced GA user."
@@ -7622,6 +7594,8 @@ msgstr "Sposób użycia"
 msgid "Track custom metadata"
 msgstr "Śledź niestandardowe metadane"
 
+#: admin/common/pages/parts/fupi-page_part-side-nav.php:93
+#: admin/common/pages/parts/fupi-page_part-side-nav.php:97
 #: admin/modules/blockscr/blockscr-faq.php:49
 #: admin/modules/blockscr/blockscr-fields.php:155
 #: admin/modules/cook/cook-fields.php:14 admin/modules/cook/cook-fields.php:23

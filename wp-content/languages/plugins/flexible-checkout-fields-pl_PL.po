@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Flexible Checkout Fields for WooCommerce &#8211; WooCommerce Checkout Manager - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-07-09 12:09:52+0000\n"
+"PO-Revision-Date: 2025-07-08 07:32:07+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -11,24 +11,24 @@ msgstr ""
 "Language: pl\n"
 "Project-Id-Version: Plugins - Flexible Checkout Fields for WooCommerce &#8211; WooCommerce Checkout Manager - Stable (latest release)\n"
 
-#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/PluginActionLinks.php:101
+#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/PluginActionLinks.php:75
 msgid "Disable usage tracking"
 msgstr "Wyłącz śledzenie użycia"
 
-#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/PluginActionLinks.php:96
+#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/PluginActionLinks.php:70
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-notice.php:41
 msgid "Enable usage tracking"
 msgstr "Włącz śledzenie użycia"
 
-#: classes/plugin.php:993
+#: classes/plugin.php:980
 msgid "Start here"
 msgstr "Zacznij tutaj"
 
-#: vendor_prefixed/wpdesk/ltv-dashboard-widget/src/DashboardWidget.php:292
+#: vendor_prefixed/wpdesk/ltv-dashboard-widget/src/DashboardWidget.php:296
 msgid "Download"
 msgstr "Pobierz"
 
-#: vendor_prefixed/wpdesk/ltv-dashboard-widget/src/DashboardWidget.php:288
+#: vendor_prefixed/wpdesk/ltv-dashboard-widget/src/DashboardWidget.php:293
 msgid "Learn more"
 msgstr "Dowiedz się więcej"
 
@@ -50,46 +50,46 @@ msgstr "Polach dodanych przez wtyczkę Flexible Checkout Fields"
 #: src/Settings/Option/LogicAdvOption.php:54
 msgctxt "pro-features-list"
 msgid "Date"
-msgstr "Dacie"
+msgstr "Data"
 
 #: src/Settings/Option/LogicAdvOption.php:53
 msgctxt "pro-features-list"
 msgid "Payment method"
-msgstr "Metodzie płatności"
+msgstr "Metoda płatności"
 
 #: src/Settings/Option/LogicAdvOption.php:52
 msgctxt "pro-features-list"
 msgid "Shipping method"
-msgstr "Metodzie wysyłki"
+msgstr "Metoda wysyłki"
 
 #: src/Settings/Option/LogicAdvOption.php:51
 msgctxt "pro-features-list"
 msgid "User role"
-msgstr "Roli użytkownika"
+msgstr "Rola użytkownika"
 
 #: src/Settings/Option/LogicAdvOption.php:50
 msgctxt "pro-features-list"
 msgid "Cart"
-msgstr "Koszyku"
+msgstr "Koszyk"
 
 #: src/Settings/Option/LogicAdvOption.php:49
 msgctxt "pro-features-list"
 msgid "WooCommerce default fields"
-msgstr "Polach WooCommerce"
+msgstr "Domyślne pola WooCommerce"
 
 #: src/Settings/Option/LogicAdvOption.php:47
 msgid "Set multiple conditions <b>(OR)</b> under one or more condition groups <b>(AND)</b>. Add conditional logic based on:"
-msgstr "Ustaw wiele warunków <b>(LUB)</b> w ramach jednej lub kilku grup warunków <b>(ORAZ)</b>. Dodaj logikę warunkową opartą na:"
+msgstr "Ustaw wiele warunków <b>(LUB)</b> w jednej lub więcej grupach warunków <b>(I)</b>. Dodaj logikę warunkową na podstawie:"
 
 #: src/Settings/Menu.php:34
 msgid "Start Here!"
-msgstr "Zacznij tutaj"
+msgstr "Zacznij tutaj!"
 
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/views/tracker-connect.php:70
 msgid "Current settings and usage information of %1$s plugins"
 msgstr "Ustawienia i informacje o użytkowaniu wtyczek %1$s"
 
-#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/OptOut.php:41
+#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/OptOut.php:42
 msgid "You successfully opted out of collecting usage data by %1$s. If you change your mind, you can always opt in later in the plugin's quick links."
 msgstr "Twoja rezygnacja ze zbierania danych użytkowania wtyczek przez %1$s została przyjęta. Jeśli zmienisz zdanie, zawsze możesz włączyć zgodę poprzez szybkie linki w menu wtyczek."
 
@@ -97,15 +97,15 @@ msgstr "Twoja rezygnacja ze zbierania danych użytkowania wtyczek przez %1$s zos
 msgid "The &#8220;%s&#8221; plugin is temporarily disabled since the required %s plugin is being upgraded."
 msgstr "Wtyczka &#8220;%s&#8221; została chwilowo wyłączona, ponieważ wymagana wtyczka %s jest właśnie aktualizowana."
 
-#: vendor_prefixed/wpdesk/ltv-dashboard-widget/src/DashboardWidget.php:286
+#: vendor_prefixed/wpdesk/ltv-dashboard-widget/src/DashboardWidget.php:291
 msgid "Buy now"
 msgstr "Kup teraz"
 
-#: vendor_prefixed/wpdesk/ltv-dashboard-widget/src/DashboardWidget.php:304
+#: vendor_prefixed/wpdesk/ltv-dashboard-widget/src/DashboardWidget.php:307
 msgid "More info"
 msgstr "Więcej informacji"
 
-#: vendor_prefixed/wpdesk/ltv-dashboard-widget/src/DashboardWidget.php:59
+#: vendor_prefixed/wpdesk/ltv-dashboard-widget/src/DashboardWidget.php:65
 msgid "Grow your business with WP Desk"
 msgstr "Rozwiń swój biznes dzięki WP Desk"
 
@@ -139,12 +139,12 @@ msgstr "Pomiń i wyłącz"
 msgid "Submit and Deactivate"
 msgstr "Wyślij i wyłącz"
 
-#: vendor_prefixed/wpdesk/wp-wpdesk-deactivation-modal/src/Model/FormTemplate.php:28
+#: vendor_prefixed/wpdesk/wp-wpdesk-deactivation-modal/src/Model/FormTemplate.php:49
 msgid "If you have a moment, please let us know why you are deactivating plugin (anonymous feedback):"
 msgstr "Jeśli masz chwilę, prosimy, daj nam znać, dlaczego wyłączasz wtyczkę (anonimowa opinia):"
 
 #. translators: %1$s: plugin name
-#: vendor_prefixed/wpdesk/wp-wpdesk-deactivation-modal/src/Model/FormTemplate.php:25
+#: vendor_prefixed/wpdesk/wp-wpdesk-deactivation-modal/src/Model/FormTemplate.php:38
 msgid "You are deactivating %1$s plugin"
 msgstr "Wyłączasz wtyczkę %1$s"
 
@@ -173,7 +173,7 @@ msgstr "Cieszymy się, że (z naszą małą pomocą %1$s) sklep jest teraz lepie
 
 #: templates/notices/review.php:17
 msgid "Thanks for using the free version of Flexible Checkout Fields!"
-msgstr "Dziękujemy za korzystanie z darmowej wersji Flexible Checkout Fields!"
+msgstr "Dziękujemy za korzystanie z bezpłatnej wersji Elastyczne pola płatności!"
 
 #. translators: %1$s: field label, %2$s: divider
 #: src/Validator/Error/NumberStepError.php:18
@@ -280,7 +280,7 @@ msgstr "Błąd połączenia z WordPress REST API."
 
 #: src/Settings/Page.php:238
 msgid "No fields available."
-msgstr "Pola ceny są dostępne."
+msgstr "Brak dostępnych pól."
 
 #. translators: %1$s: break line, %2$s: anchor opening tag, %3$s: anchor
 #. closing tag
@@ -306,7 +306,7 @@ msgstr "Ta wartość jest zbyt długa."
 
 #: src/Settings/Page.php:219
 msgid "Select color"
-msgstr "Kolor"
+msgstr "Wybierz kolor"
 
 #: src/Settings/Page.php:218
 msgid "Upload image"
@@ -318,7 +318,7 @@ msgstr "Dowiedz się więcej"
 
 #: src/Settings/Page.php:212
 msgid "Add New"
-msgstr "Dodaj nowy"
+msgstr "Utwórz"
 
 #: src/Settings/Page.php:210
 msgid "Edit settings"
@@ -334,11 +334,11 @@ msgstr "Pozostałe pola"
 
 #: src/Settings/Page.php:151
 msgid "Picker Fields"
-msgstr "Pola otwarte"
+msgstr "Pola wyboru"
 
 #: src/Settings/Page.php:147
 msgid "Option Fields"
-msgstr "Pola z opcjami"
+msgstr "Pola opcji"
 
 #: src/Settings/Page.php:143
 msgid "Text Fields"
@@ -356,7 +356,7 @@ msgstr "Wartość minimalna"
 msgid "Max value"
 msgstr "Wartość maksymalna"
 
-#: classes/plugin.php:999 src/Settings/Option/LogicAdvOption.php:58
+#: classes/plugin.php:986 src/Settings/Option/LogicAdvOption.php:58
 #: src/Settings/Option/SettingSectionsAdvOption.php:37
 msgid "Upgrade to PRO"
 msgstr "Ulepsz do PRO"
@@ -410,17 +410,17 @@ msgstr "Wartość"
 
 #: src/Settings/Option/NameOption.php:46
 msgid "Meta name"
-msgstr "Nazwa meta"
+msgstr "Meta nazwy"
 
 #: src/Settings/Option/ImageWidthOption.php:48
 msgid "Image width (in pixels)"
-msgstr "Rozmiar grafiki (w pikselach)"
+msgstr "Szerokość obrazka (w pikselach)"
 
 #: src/Settings/Option/ImageOption.php:40
 #: src/Settings/Option/ImageWidthOption.php:40
 #: src/Settings/Option/LabelOption.php:40 src/Settings/Page.php:223
 msgid "This field is required."
-msgstr "Pole wymagane."
+msgstr "To pole jest wymagane."
 
 #: src/Settings/Option/FormattingNewLineOption.php:30
 msgid "Display the field on a new line"
@@ -436,7 +436,7 @@ msgstr "Wpisz klasy CSS oddzielone spacją."
 
 #: src/Settings/Menu.php:36
 msgid "Checkout Sections"
-msgstr "Dodatkowe sekcje"
+msgstr "Sekcje kasy"
 
 #: src/Field/Type/Wc/WcAddress2Type.php:43
 #: src/Field/Type/Wc/WcContactType.php:42
@@ -460,11 +460,11 @@ msgstr "Obszar tekstowy"
 
 #: src/Field/Type/SelectType.php:28
 msgid "Select"
-msgstr "Select (Lista rozwijana)"
+msgstr "Wybierz"
 
 #: src/Field/Type/RadioType.php:25
 msgid "Radio"
-msgstr "Pole wyboru"
+msgstr "Radio"
 
 #: src/Field/Type/RadioImagesType.php:25
 msgid "Radio with images"
@@ -484,7 +484,7 @@ msgstr "Liczba"
 
 #: src/Field/Type/MultiCheckboxType.php:25
 msgid "Multi-checkbox"
-msgstr "Multi-checkbox"
+msgstr "Wiele pól wyboru"
 
 #: src/Field/Type/ImageType.php:39 src/Settings/Option/ImageOption.php:48
 msgid "Image"
@@ -544,19 +544,19 @@ msgstr "Formatowanie na stronach/w e-mailach"
 msgid "Pages/e-mails"
 msgstr "Strony/e-maile"
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:513
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:501
 msgid "The &#8220;%s&#8221; plugin cannot run without %s PHP setting set to %s. Please contact your host and ask them to set %s."
 msgstr "Wtyczka &#8222;%s&#8221; nie może zostać włączona bez %s, aby ustawić %s. Proszę skontaktować się z administratorem, aby ustawić %s."
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:488
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:476
 msgid "The &#8220;%s&#8221; plugin cannot run without %s PHP module installed. Please contact your host and ask them to install %s."
 msgstr "Wtyczka &#8222;%s&#8221; nie może działać bez modułu PHP: %s. Proszę skontaktować się z hostingodawcą w celu zainstalowania %s."
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:446
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:434
 msgid "The &#8220;%s&#8221; plugin requires activating %s plugin. <a href=\"%s\">Activate %s</a>"
-msgstr "Wtyczka &#8220;%s&#8221; wymaga aktywnej wtyczki %s. <a href=\"%s\">Aktywuj %s →</a>"
+msgstr "Wtyczka &#8220;%s&#8221; wymaga włączenia wtyczki %s. <a href=\"%s\">Włącz %s</a>"
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:440
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:428
 msgid "The &#8220;%s&#8221; plugin requires free %s plugin. <a href=\"%s\">Install %s</a>"
 msgstr "Wtyczka &#8220;%s&#8221; wymaga bezpłatnej wtyczki %s. <a href=\"%s\">Zainstaluj %s →</a>"
 
@@ -620,7 +620,7 @@ msgstr "Alarm"
 
 #: vendor_prefixed/wpdesk/wp-logs/src/deprecated/wpdesk-logger.php:59
 msgid "Emergency"
-msgstr "Nagła awaria"
+msgstr "Awaryjny"
 
 #: vendor_prefixed/wpdesk/wp-logs/src/deprecated/wpdesk-logger.php:59
 msgid "Disabled"
@@ -632,11 +632,11 @@ msgstr "Wymagalność tego pola jest kontrolowana przez WooCommerce i nie może 
 
 #: src/Field/Type/MultiSelectType.php:25
 msgid "Multi-select"
-msgstr "Multi-select"
+msgstr "Wybór wielokrotny"
 
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-notice.php:22
 msgid "We need your help to improve <strong>WP Desk plugins</strong>, so they are more useful for you and the rest of <strong>30,000+ users</strong>. By collecting data on how you use our plugins, you will help us a lot. We will not collect any sensitive data, so you can feel safe."
-msgstr "Potrzebujemy Twojej pomocy, aby ulepszyć <strong> wtyczki WP Desk </strong>, tak aby były bardziej przydatne dla Ciebie i pozostałych <strong> ponad 30 000 użytkowników </strong>. Udstępniając dane o tym, jak korzystasz z naszych wtyczek, bardzo nam pomożesz. Nie będziemy gromadzić żadnych wrażliwych danych, więc możesz czuć się bezpiecznie."
+msgstr "Potrzebujemy Twojej pomocy, aby ulepszyć <strong>wtyczki WP Desk</strong>, aby były bardziej przydatne dla Ciebie i pozostałych <strong>ponad 30 000 użytkowników</strong>. Zbierając dane o tym, jak korzystasz z naszych wtyczek, bardzo nam pomożesz. Nie będziemy zbierać żadnych poufnych danych, więc możesz czuć się bezpiecznie."
 
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/views/tracker-connect.php:81
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-connect.php:73
@@ -666,7 +666,7 @@ msgstr "Walidacja"
 
 #: src/Settings/Tab/DisplayTab.php:23
 msgid "Display On"
-msgstr "Wyświetlanie"
+msgstr "Wyświetl na"
 
 #: src/Settings/Page.php:222
 msgid "Name"
@@ -697,11 +697,11 @@ msgstr "Kod pocztowy"
 #: src/Settings/Option/ValidationPostcodeOption.php:18
 #: src/Settings/Option/ValidationWcOption.php:18
 msgid "Phone"
-msgstr "Numer telefonu"
+msgstr "Telefon"
 
 #: classes/filed-validation.php:94
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #: classes/filed-validation.php:93
 #: src/Settings/Option/ValidationPostcodeOption.php:16
@@ -719,7 +719,7 @@ msgstr "Domyślna"
 msgid "You successfully opted out of collecting usage data by WP Desk. If you change your mind, you can always opt in later in the plugin's quick links."
 msgstr "Zrezygnowałeś z gromadzenia danych użytkowania przez WP Desk. Jeśli zmienisz zdanie, zawsze możesz wyrazić zgodę później, korzystając z szybkich łączy wtyczki."
 
-#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-deactivate.php:126
+#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/class-wpdesk-tracker.php:160
 msgid "Submit &amp; Deactivate"
 msgstr "Wyślij i wyłącz"
 
@@ -765,7 +765,7 @@ msgstr "Jaka jest nazwa tej wtyczki?"
 #: vendor_prefixed/wpdesk/wp-wpdesk-deactivation-modal/src/Model/DefaultFormOptions.php:18
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-deactivate.php:48
 msgid "I found a better plugin"
-msgstr "Mam lepszą wtyczkę"
+msgstr "Znalazłem lepszą wtyczkę"
 
 #: vendor_prefixed/wpdesk/wp-wpdesk-deactivation-modal/src/Model/DefaultFormOptions.php:17
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-deactivate.php:38
@@ -779,11 +779,11 @@ msgstr "Wtyczka nagle przestała działać"
 
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-deactivate.php:19
 msgid " If you have a moment, please let us know why you are deactivating plugin (anonymous feedback):"
-msgstr "Jeśli masz chwilę, prosimy daj nam znać dlaczego wtyczkę została wyłączona (anonimowo):"
+msgstr " Jeśli masz chwilę, poinformuj nas, dlaczego wyłączasz wtyczkę (anonimowa opinia):"
 
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-deactivate.php:11
 msgid "You are deactivating %s plugin."
-msgstr "Dezaktywujesz wtyczkę %s."
+msgstr "Wyłączasz wtyczkę %s."
 
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/views/tracker-connect.php:91
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-connect.php:83
@@ -838,11 +838,11 @@ msgstr "Cześć %s,"
 
 #: classes/tracker.php:332
 msgid "Opt-out"
-msgstr "Opt-out"
+msgstr "Brak zgody"
 
 #: classes/tracker.php:329
 msgid "Opt-in"
-msgstr "Opt-in"
+msgstr "Zgoda"
 
 #: src/Field/Type/FileType.php:25
 msgid "File Upload"
@@ -854,7 +854,7 @@ msgstr "HTML"
 
 #: src/Field/Type/TimeType.php:25
 msgid "Time"
-msgstr "Godzina"
+msgstr "Czas"
 
 #: src/Field/Type/DateType.php:25
 msgid "Date"
@@ -862,11 +862,11 @@ msgstr "Data"
 
 #: src/Field/Type/CheckboxType.php:44
 msgid "Checkbox"
-msgstr "Pole zaznaczenia"
+msgstr "Pole wyboru"
 
 #: src/Settings/Option/SettingSectionsAdvOption.php:31
 msgid "Get Flexible Checkout Fields PRO to use Custom Sections"
-msgstr "Kup wtyczkę Flexible Chcekout Fields PRO, aby używać dodatkowych sekcji"
+msgstr "Uzyskaj Elastyczne pola płatności PRO, aby korzystać z niestandardowych sekcji"
 
 #: src/Settings/Tab/AdvancedTab.php:23
 msgid "Advanced"
@@ -902,7 +902,7 @@ msgstr "Zarządzaj polami formularza WooCommerce. Zmień kolejność, etykiety, 
 #. Plugin URI of the plugin
 #: flexible-checkout-fields.php
 msgid "https://www.wpdesk.net/products/flexible-checkout-fields-pro-woocommerce/"
-msgstr " https://www.wpdesk.net/products/flexible-checkout-fields-pro-woocommerce/"
+msgstr "https://www.wpdesk.net/products/flexible-checkout-fields-pro-woocommerce/"
 
 #. Plugin Name of the plugin
 #: flexible-checkout-fields.php classes/settings.php:35 classes/settings.php:38
@@ -911,12 +911,12 @@ msgstr " https://www.wpdesk.net/products/flexible-checkout-fields-pro-woocommerc
 msgid "Flexible Checkout Fields"
 msgstr "Flexible Checkout Fields"
 
-#: vendor_prefixed/wpdesk/wp-builder/src/Plugin/AbstractPlugin.php:191
+#: vendor_prefixed/wpdesk/wp-builder/src/Plugin/AbstractPlugin.php:181
 msgid "Support"
 msgstr "Wsparcie"
 
-#: classes/plugin.php:995
-#: vendor_prefixed/wpdesk/wp-builder/src/Plugin/AbstractPlugin.php:194
+#: classes/plugin.php:982
+#: vendor_prefixed/wpdesk/wp-builder/src/Plugin/AbstractPlugin.php:184
 msgid "Docs"
 msgstr "Dokumentacja"
 
@@ -924,45 +924,45 @@ msgstr "Dokumentacja"
 msgid "Additional Information"
 msgstr "Informacje dodatkowe"
 
-#: classes/plugin.php:971
+#: classes/plugin.php:958
 msgid "Previous"
 msgstr "Poprzedni"
 
-#: classes/plugin.php:970
+#: classes/plugin.php:957
 msgid "Next"
 msgstr "Następny"
 
-#: classes/plugin.php:967
+#: classes/plugin.php:954
 msgid "Today"
 msgstr "Dzisiaj"
 
-#: classes/plugin.php:966
+#: classes/plugin.php:953
 msgid "Close"
 msgstr "Zamknij"
 
-#: classes/plugin.php:918
+#: classes/plugin.php:905
 msgid "Uploading file..."
 msgstr "Przesyłanie pliku..."
 
-#: classes/plugin.php:349 src/Settings/Menu.php:72
+#: classes/plugin.php:354 src/Settings/Menu.php:72
 msgid "Order"
 msgstr "Zamówienie"
 
-#: classes/plugin.php:342 src/Settings/Menu.php:71
+#: classes/plugin.php:347 src/Settings/Menu.php:71
 msgid "Shipping"
 msgstr "Wysyłka"
 
-#: classes/plugin.php:335 src/Settings/Menu.php:70
+#: classes/plugin.php:340 src/Settings/Menu.php:70
 msgid "Billing"
-msgstr "Płatność"
+msgstr "Rozliczenie"
 
 #: src/Settings/Option/SettingJqueryCssOption.php:39
 msgid "Remember that some fields, i.e. datepicker use jQuery UI CSS. The plugin adds a default CSS but sometimes it can create some visual glitches."
-msgstr "Pamiętaj, że niektóre pola formularza jak np. datepicker korzystają z CSS jQuery UI. Wtyczka dodaje standardowe style CSS, jednak czasem może mieć to wpływ na wygląd twojej strony."
+msgstr "Pamiętaj, że niektóre pola, np. selektor daty, używają jQuery UI CSS. Wtyczka dodaje domyślny CSS, ale czasami może powodować pewne wizualne błędy."
 
 #: src/Settings/Option/SettingJqueryCssOption.php:30
 msgid "Disable jquery-ui.css on the frontend"
-msgstr "Wyłącz jquery-ui.css na stronie"
+msgstr "Wyłącz jquery-ui.css we front-endzie"
 
 #: src/Settings/Option/CssOption.php:39
 msgid "CSS class"
@@ -973,7 +973,7 @@ msgid "Placeholder"
 msgstr "Symbol zastępczy"
 
 #: templates/fields/colorpicker.php:22 templates/fields/email.php:22
-#: templates/fields/inspirecheckbox.php:33 templates/fields/number.php:22
+#: templates/fields/inspirecheckbox.php:35 templates/fields/number.php:22
 #: templates/fields/phone.php:22 templates/fields/text.php:22
 #: templates/fields/textarea.php:22 templates/fields/url.php:22
 msgid "Required Field"
@@ -1007,8 +1007,8 @@ msgstr "Rodzaj pola"
 msgid "Add new field"
 msgstr "Dodaj nowe pole"
 
-#: classes/plugin.php:994 src/Settings/Menu.php:35
-#: vendor_prefixed/wpdesk/wp-builder/src/Plugin/AbstractPlugin.php:198
+#: classes/plugin.php:981 src/Settings/Menu.php:35
+#: vendor_prefixed/wpdesk/wp-builder/src/Plugin/AbstractPlugin.php:188
 msgid "Settings"
 msgstr "Ustawienia"
 
