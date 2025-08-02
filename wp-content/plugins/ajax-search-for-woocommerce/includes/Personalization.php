@@ -13,6 +13,10 @@ class Personalization {
 		add_action( 'wp_head', array( $this, 'printStyle' ) );
 
 		if ( is_admin() ) {
+			if ( apply_filters( 'dgwt/wcas/personalization/disable_inline_styles_in_admin', false ) ) {
+				return;
+			}
+
 			add_action( 'admin_enqueue_scripts', function () {
 				// Register personalization styles used in block editor.
 				wp_register_style( 'dgwt-wcas-style-personalization', false, array(), true, true );
@@ -26,7 +30,11 @@ class Personalization {
 	 *
 	 * @return void
 	 */
-	public function printStyle() { ?>
+	public function printStyle() {
+		if ( apply_filters( 'dgwt/wcas/personalization/disable_inline_styles', false ) ) {
+			return;
+		}
+        ?>
 		<style>
 			<?php echo $this->getStyles(); ?>
 		</style>

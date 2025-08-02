@@ -40,7 +40,7 @@ if ( ! empty( $input ) ) foreach( $input as $key => $value ) {
 
 				break;
 			default:
-				$clean_val = strip_tags( stripslashes( $value ) );
+				$clean_val = is_bool ( $value ) || is_string ( $value ) ? strip_tags( stripslashes( $value ) ) : false;
 				break;
 		}
 

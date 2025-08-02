@@ -22,25 +22,31 @@ switch( $section_id ){
 	// LOADING
 
 	case 'fupi_fbp1_loading':
-		$ret_text = '<p>' . esc_html__( 'Change when this tool loads and starts tracking visitors.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Here you can change when and where this tool loads. This is all optional.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
-	// EVENTS TRACKING
+	// PRIVACY
+
+	case 'fupi_fbp1_basic':
+		$ret_text = '<p>' . esc_html__( 'These settings impact the amount and precision of collected data.', 'full-picture-analytics-cookie-notice') . '</p>';
+	break;
+
+	// SIMPLE EVENTS
 
 	case 'fupi_fbp1_events':
-		$ret_text = '<p>' . esc_html__( 'Track actions that visitors take on your website.', 'full-picture-analytics-cookie-notice' ) . '</p>';
+		$ret_text = '<p>' . esc_html__('Use functions on this page to track simple events, like clicking a button or submitting a form.', 'full-picture-analytics-cookie-notice' ) . '</p>';
+	break;
+
+	// COMPLEX EVENTS
+
+	case 'fupi_fbp1_atrig':
+		$ret_text = '<p>' . esc_html__( 'Use functions on this page to track complex events, with many conditions, for example, when a visitor from France visits 5 product pages in one session. You can set these conditions in the "Advanced triggers" module.' , 'full-picture-analytics-cookie-notice' ) . '</p>';
 	break;
 
 	// PARAMETERS TRACKING
 
 	case 'fupi_fbp1_wpdata':
 		$ret_text = '<p>' . esc_html__( 'Use event parameters to add context to tracked events. You can use them later to better define custom audiences.', 'full-picture-analytics-cookie-notice' ) . '</p>';
-	break;
-
-	// CONDITIONAL TRACKING
-
-	case 'fupi_fbp1_atrig':
-		$ret_text = '<p>' .sprintf( esc_html__( 'Track when visitors behave like potential clients. Learn %1$smore about lead scoring%2$s and %3$show to set it up%2$s', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/blog/lead-scoring-in-web-analytics-what-is-it-and-how-to-use-it/">', '</a>', '<a href="https://wpfullpicture.com/support/documentation/how-to-use-lead-scoring/">' ) . '</p>';
 	break;
 
 	// E-COMMERCE

@@ -585,7 +585,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Export {
                         }                        
                     } elseif ('_stock_status' == $column) {
                         $stock_status = self::format_data($product->meta->$column);
-                        $product_type = ( WC()->version < '3.0' ) ? $product_object->product_type : $product_object->get_type();
+                        $product_type = ( version_compare( WC()->version, '3.0', '<' ) ) ? $product_object->product_type : $product_object->get_type();
                         $row[$column] = !empty($stock_status) ? $stock_status : ( ( 'variable' == $product_type || 'variable-subscription' == $product_type ) ? '' : 'instock' );
                     } elseif(('_sku' == $column || 'sku' == $column)) {
                         $row[$column] = $product->meta->$column;

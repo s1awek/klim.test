@@ -21,19 +21,10 @@ $sections = array(
 				'label_for' 		=> $option_arr_id . '[id]',
 				'under field'		=> '<p>' . esc_html__( 'To get Pinterest Tag ID go to your Pinterest dashboard > "Ads" > "Conversions" > Pinterest Tag is in the table in the center of the screen.', 'full-picture-analytics-cookie-notice') . '</p>',
 			),
-			array(
-				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Enable Enhanced Match for improved conversion tracking', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'track_user_emails',
-				'must_have'			=> 'pro',
-				'option_arr_id'		=> $option_arr_id,
-				'popup3'			=> '<p>' .esc_html__( 'When this settings is enabled, WP Full Picture will send to Pinterest encrypted email addresses of your visitors (when they browse the site while being logged in or when they make a purchase).', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p style="color: red;">' .esc_html__( 'Depending on the privacy laws in the countries where your visitors live (NOT where you are from) you may have to disclose this information in your privacy policy.', 'full-picture-analytics-cookie-notice' ) . '</p>',
-			)
 		),
 	),
 
-	// INSTALLATION
+	// LOADING
 
 	array(
 		'section_id' => 'fupi_pin_loading',
@@ -47,7 +38,7 @@ $sections = array(
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . sprintf( esc_html__( 'This will load the tracking tool for all website visitors, including administrators, bots, excluded users, people browsing from excluded locations and people that didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=referral&utm_campaign=settings_link">', '</a>' ) . '</p>',
+				<p>' . sprintf( esc_html__( 'This will load the tracking script for all website visitors, including administrators, bots, excluded users, people browsing from excluded locations and people that didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
 			),
 			array(
 				'type'	 			=> 'toggle',
@@ -85,6 +76,23 @@ $sections = array(
 					),
 				),
 			),
+		),
+	),
+
+	// DATA COLLECTION
+
+	array(
+		'section_id' => 'fupi_pin_basic',
+		'section_title' => esc_html__( 'Data collection settings', 'full-picture-analytics-cookie-notice' ),
+		'fields' => array(
+			array(
+				'type'	 			=> 'toggle',
+				'label' 			=> esc_html__( 'Enable Enhanced Match for improved conversion tracking', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'track_user_emails',
+				'must_have'			=> 'pro',
+				'option_arr_id'		=> $option_arr_id,
+				'popup'				=> '<p>' .esc_html__( 'When this settings is enabled, WP Full Picture will send to Pinterest encrypted email addresses of your visitors (when they browse the site while being logged in or when they make a purchase).', 'full-picture-analytics-cookie-notice' ) . '</p>',
+			)
 		),
 	),
 

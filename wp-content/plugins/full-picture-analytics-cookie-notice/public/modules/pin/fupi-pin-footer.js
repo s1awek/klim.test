@@ -17,7 +17,7 @@ FP.fns.load_pin_footer = function() {
 
     function track_pin_event( event_name, payload ){
         pintrk('track', event_name, payload );
-        if ( fp.vars.debug ) console.log('[FP] Pinterest "' + event_name + '" event: ', payload);
+        if ( fp.main.debug ) console.log('[FP] Pinterest "' + event_name + '" event: ', payload);
     }
 
     // TRACK IMPRESSIONS

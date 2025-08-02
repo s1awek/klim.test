@@ -1,8 +1,8 @@
 <?php
 
 $tracked_taxonomies = ['category', 'post_tag', 'post_format'];
-if ( !empty( $this->main['tracked_taxonomies'] ) && is_array( $this->main['tracked_taxonomies'] ) ) {
-    $tracked_taxonomies = array_merge( $tracked_taxonomies, $this->main['tracked_taxonomies'] );
+if ( !empty( $this->track['tracked_taxonomies'] ) && is_array( $this->track['tracked_taxonomies'] ) ) {
+    $tracked_taxonomies = array_merge( $tracked_taxonomies, $this->track['tracked_taxonomies'] );
 }
 //
 // LOGIN STATUS AND USER ROLE
@@ -51,7 +51,7 @@ if ( is_home() ) {
             $fpdata['author_name'] = $dirty_author_name;
         }
         // author ID (requires admin approval)
-        if ( isset( $this->main['show_author_id'] ) ) {
+        if ( isset( $this->track['show_author_id'] ) ) {
             $fpdata['author_id'] = (int) $post->post_author;
         }
         // Post's taxonomy terms
@@ -143,7 +143,7 @@ if ( is_home() ) {
                             $term = get_queried_object();
                             if ( $term ) {
                                 $fpdata['author'] = $term->data->display_name;
-                                if ( !empty( $this->main['hide_author_id'] ) ) {
+                                if ( !empty( $this->track['show_author_id'] ) ) {
                                     $fpdata['author_id'] = $term->data->id;
                                 }
                             }

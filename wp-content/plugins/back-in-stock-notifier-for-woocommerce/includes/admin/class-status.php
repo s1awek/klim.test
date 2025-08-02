@@ -7,17 +7,14 @@ if ( ! class_exists( 'CWG_Instock_Status' ) ) {
 
 	class CWG_Instock_Status {
 
-
-
-
 		public function __construct() {
 			add_action( 'admin_menu', array( $this, 'add_settings_menu' ) );
 			add_action( 'admin_head', array( $this, 'hide_notice' ) );
 			add_action( 'wp_ajax_cwginstock_test_email', array( $this, 'schedule_test_email_callback' ) );
 			add_action( 'cwginstock_send_test_email', array( $this, 'send_scheduled_test_email' ) );
 			add_action( 'wp_ajax_cwginstock_backend_ui', array( $this, 'change_backend_ui' ) );
+			add_action( 'wp_ajax_cwginstock_delete_all_posts', array( $this, 'delete_subscribers_data' ) );
 		}
-
 		public function add_settings_menu() {
 			add_submenu_page( 'edit.php?post_type=cwginstocknotifier', __( 'Status', 'back-in-stock-notifier-for-woocommerce' ), __( 'Status', 'back-in-stock-notifier-for-woocommerce' ), 'manage_woocommerce', 'cwg-instock-status', array( $this, 'manage_settings' ) );
 		}
@@ -225,6 +222,7 @@ if ( ! class_exists( 'CWG_Instock_Status' ) ) {
 			</table>
 
 			<hr>
+
 			<table class="form-table">
 				<tbody>
 					<tr>
@@ -261,6 +259,23 @@ if ( ! class_exists( 'CWG_Instock_Status' ) ) {
 					</tr>
 				</tbody>
 			</table>
+
+			<hr>
+			<table class="form-table">
+				<tbody>
+					<tr>
+						<th scope="row">Delete All Subscription Posts & Related Data</th>
+						<td>
+							<button id="cwginstock_delete_all_posts_btn" style="background:#d63638;color:#fff;">Delete All Posts &
+								Related
+								Data</button>
+							<p id="cwginstock_delete_all_posts_status"></p>
+
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
 
 			<?php
 		}
@@ -356,6 +371,55 @@ if ( ! class_exists( 'CWG_Instock_Status' ) ) {
 				die();
 			}
 		}
+
+		public function delete_subscribers_data() {
+			if (
+				! current_user_can( 'manage_woocommerce' ) ||
+				! isset( $_POST['security'] ) ||
+				! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['security'] ) ), 'cwginstock_delete_all_posts_and_related' )
+			) {
+				wp_send_json_error( array( 'message' => esc_html__( 'Unauthorized request.', 'back-in-stock-notifier-for-woocommerce' ) ) );
+			}
+
+			global $wpdb;
+
+			// Get all post IDs of type 'cwginstocknotifier'
+			$post_ids = $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT ID FROM {$wpdb->posts} WHERE post_type = %s",
+					'cwginstocknotifier'
+				)
+			);
+
+			if ( empty( $post_ids ) ) {
+				wp_send_json_success( array( 'message' => esc_html__( 'No posts found to delete.', 'back-in-stock-notifier-for-woocommerce' ) ) );
+			}
+
+			// Build placeholder string like: %d, %d, %d
+			$placeholders = implode( ', ', array_fill( 0, count( $post_ids ), '%d' ) );
+
+			// Build queries with safe bindings
+			$tables_and_columns = array(
+				$wpdb->term_relationships => 'object_id',
+				$wpdb->postmeta => 'post_id',
+				$wpdb->posts => 'ID',
+			);
+
+			foreach ( $tables_and_columns as $table => $column ) {
+				$sql = "DELETE FROM {$table} WHERE {$column} IN ($placeholders)";
+				$args = array_merge( array( $sql ), $post_ids );
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$wpdb->query( call_user_func_array( array( $wpdb, 'prepare' ), $args ) );
+			}
+
+			wp_send_json_success( array( 'message' => esc_html__( 'All subscription posts and related data deleted successfully.', 'back-in-stock-notifier-for-woocommerce' ) ) );
+		}
+
+
+
+
+
+
 	}
 
 	new CWG_Instock_Status();

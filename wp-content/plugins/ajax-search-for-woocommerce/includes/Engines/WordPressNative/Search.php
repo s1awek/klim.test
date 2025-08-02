@@ -84,7 +84,7 @@ class Search {
         );
         // Search results page
         add_action( 'init', function () {
-            if ( apply_filters( 'dgwt/wcas/override_search_results_page', true ) ) {
+            if ( apply_filters( 'dgwt/wcas/override_search_results_page', true ) && !Helpers::isNoFiboSearchModeActive() ) {
                 add_filter( 'pre_get_posts', array($this, 'overwriteSearchPage'), 900001 );
                 add_filter(
                     'posts_search',
@@ -134,6 +134,7 @@ class Search {
             $stats = new Recorder();
             $stats->listen();
         }
+        Helpers::maybeInjectFiboDebugFields( 'score' );
     }
 
     /**
@@ -296,7 +297,8 @@ class Search {
             }
             $results = $this->convertGroupsToSuggestions();
             // Show more
-            if ( !empty( $this->groups['product']['results'] ) && count( $this->groups['product']['results'] ) < $totalProducts ) {
+            $showMoreProductsLink = apply_filters( 'dgwt/wcas/search_results/show_more_products_link', false );
+            if ( !empty( $this->groups['product']['results'] ) && ($showMoreProductsLink || count( $this->groups['product']['results'] ) < $totalProducts) ) {
                 $results[] = array(
                     'value' => '',
                     'total' => $totalProducts,
@@ -388,6 +390,9 @@ class Search {
             // Get SKU
             if ( in_array( 'sku', $fields, true ) ) {
                 $r['sku'] = $product->getSKU();
+            }
+            if ( Helpers::isFiboDebugEnabled( 'score' ) ) {
+                $r['score'] = round( $post->score, 2 );
             }
             // Is on sale
             //					if ( DGWT_WCAS()->settings->getOption( 'show_sale_badge' ) === 'on' ) {
@@ -852,7 +857,8 @@ class Search {
             }
         }
         // Remove products headline when there are only product type suggestion
-        if ( $totalHeadlines === 1 ) {
+        $alwaysShowProductHeadline = apply_filters( 'dgwt/wcas/search_results/always_show_product_headline', false );
+        if ( !$alwaysShowProductHeadline && $totalHeadlines === 1 ) {
             $i = 0;
             $unset = false;
             foreach ( $suggestions as $key => $suggestion ) {

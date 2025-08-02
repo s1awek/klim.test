@@ -56,6 +56,31 @@ add_action( 'wp_footer', function () {
 				max-width: none;
 			}
 		}
-	</style>
+
+        @media (max-width: 959px) {
+            header ul .dgwt-wcas-search-wrapp a.dgwt-wcas-enable-mobile-form {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+            .dgwt-wcas-search-wrapp {
+                padding: 2px 25px;
+            }
+        }
+
+        @media (min-width: 960px) {
+            .dgwt-wcas-sf-wrapp::before {
+                position: absolute;
+                width: 0;
+                height: 0;
+                overflow: hidden;
+            }
+            .dgwt-wcas-search-wrapp {
+                display: inline-grid;
+            }
+        }
+    </style>
 	<?php
 } );

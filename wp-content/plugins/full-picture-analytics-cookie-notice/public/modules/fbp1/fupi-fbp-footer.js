@@ -150,10 +150,10 @@ FP.fns.fbp_woo_events = () => {
 	// track order
 	// unless we already do it through server with advanced order tracking
 	if ( fp.woo.order_data_ready ) {
-		if ( ! fp.vars.is_pro || ! ( fp.fbp.server_side && fp.fbp.adv_orders ) ) {
+		if ( ! fp.main.is_pro || ! ( fp.fbp.server_side && fp.fbp.adv_orders ) ) {
 			track_cart('order');
 		} else {
-			if ( fp.vars.debug ) console.log( '[FP] Meta Pixel purchase event is tracked by the server-side script' );
+			if ( fp.main.debug ) console.log( '[FP] Meta Pixel purchase event is tracked by the server-side script' );
 		}
 	};
 
@@ -257,7 +257,7 @@ FP.fns.fbp_standard_events = () => {
 		fp.fbp.track_scroll = FP.formatScrollPoints( fp.fbp.track_scroll );
 		FP.addAction( ['scroll', 'active_time_tick'], function(){
 			// check if the window was scrolled
-			if ( fp.fbp.track_scroll.length > 0 && fpdata.activity.total >= fp.vars.track_scroll_time && fpdata.scrolled.current_px >= fp.vars.track_scroll_min ) {
+			if ( fp.fbp.track_scroll.length > 0 && fpdata.activity.total >= fp.track.track_scroll_time && fpdata.scrolled.current_px >= fp.track.track_scroll_min ) {
 				var reachedPoint = FP.isScrollTracked( fp.fbp.track_scroll );
 				if ( reachedPoint ) {
 					// remove from array the scroll points that were already reached

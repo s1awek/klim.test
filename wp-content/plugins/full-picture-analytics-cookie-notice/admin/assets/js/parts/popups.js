@@ -4,11 +4,10 @@
 	let offscreen = FP.findID('fupi_offscreen'),
 		offscreen_content_el = FP.findID('fupi_offscreen_content'),
 		offscreen_close_btn = FP.findID('fupi_offscreen_close_btn'),
-		offscreen_maximize_btn = FP.findID('fupi_offscreen_maximize_btn'),
+		// offscreen_maximize_btn = FP.findID('fupi_offscreen_maximize_btn'),
 		content_els = FP.findAll('table.form-table .fupi_popup_content:not(.fupi_do_not_create_popup_icon)'),
 		next_popup_btn = FP.findID('fupi_offscreen_next_btn'),
 		prev_popup_btn = FP.findID('fupi_offscreen_prev_btn'),
-		open_btn_side = FP.findID('fupi_offscreen_open_btn'),
 		current_popup_index = -1,
 		popup_history = [];
 
@@ -113,10 +112,10 @@
 
 	// maximize/minimize popup
 
-	function maximize_popup () {
-		offscreen.classList.toggle('fupi_maximized');
-		offscreen_maximize_btn.classList.toggle('fupi_maximized');
-	};
+	// function maximize_popup () {
+	// 	offscreen.classList.toggle('fupi_maximized');
+	// 	offscreen_maximize_btn.classList.toggle('fupi_maximized');
+	// };
 
 	// start
 
@@ -138,8 +137,7 @@
 		}
 	})
 
-	if ( open_btn_side ) open_btn_side.addEventListener('click', show_popup );
 	if ( offscreen_close_btn ) offscreen_close_btn.addEventListener( 'click', hide_popup );
-	if ( offscreen_maximize_btn ) offscreen_maximize_btn.addEventListener( 'click', maximize_popup );
+	// if ( offscreen_maximize_btn ) offscreen_maximize_btn.addEventListener( 'click', maximize_popup );
 
 })();

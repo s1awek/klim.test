@@ -7,7 +7,7 @@ FP.fns.send_ga4_evt = ( nr, evt_name, data )=>{
 	// trim the name to max 40 chars
 	evt_name = evt_name.substring(0, 40);
 	gtag( 'event', evt_name, data);
-	if ( fp.vars.debug ) console.log('[FP] GA #' + nr + ' event: ' + evt_name, data);
+	if ( fp.main.debug ) console.log('[FP] GA #' + nr + ' event: ' + evt_name, data);
 };
 
 FP.fns.ga4_woo_events = ()=>{
@@ -102,7 +102,7 @@ FP.fns.ga4_woo_events = ()=>{
 			};
 				
 			gtag( 'event', 'view_item_list', payload_o );
-			if ( fp.vars.debug ) console.log( '[FP] GA event view_item_list:', payload_o );
+			if ( fp.main.debug ) console.log( '[FP] GA event view_item_list:', payload_o );
 		};
 
 		if ( single_arr.length > 0 ) {
@@ -115,7 +115,7 @@ FP.fns.ga4_woo_events = ()=>{
 			};
 
 			gtag( 'event', 'view_item', payload_o );
-			if ( fp.vars.debug ) console.log( '[FP] GA event view_item:', payload_o );
+			if ( fp.main.debug ) console.log( '[FP] GA event view_item:', payload_o );
 		}
 	};
 
@@ -150,7 +150,7 @@ FP.fns.ga4_woo_events = ()=>{
 		};
 
 		gtag('event', 'view_item', payload_o);
-		if (fp.vars.debug) console.log('[FP] GA view_item event:', payload_o);
+		if (fp.main.debug) console.log('[FP] GA view_item event:', payload_o);
 	}
 
 	FP.addAction( ['woo_variant_view'], woo_variant_view );
@@ -195,7 +195,7 @@ FP.fns.ga4_woo_events = ()=>{
 		};
 
 		if ( typeof gtag !== 'undefined' ) gtag( 'event', event_name, payload_o );
-		if ( fp.vars.debug ) console.log( '[FP] GA ' + event_name + ' event: ', payload_o );
+		if ( fp.main.debug ) console.log( '[FP] GA ' + event_name + ' event: ', payload_o );
 	}
 
 	FP.addAction( ['woo_teaser_click'], data => {
@@ -262,15 +262,15 @@ FP.fns.ga4_woo_events = ()=>{
 		}
 		
 		gtag( 'event', event_name, payload_o );
-		if ( fp.vars.debug ) console.log( '[FP] GA ' + event_name + ' event: ', payload_o );
+		if ( fp.main.debug ) console.log( '[FP] GA ' + event_name + ' event: ', payload_o );
 	}
 
 	// track order
 	if ( fp.woo.order_data_ready ) {
-		if ( ! fp.vars.is_pro || ! ( fp.ga41.server_side && fp.ga41.adv_orders ) ) {
+		if ( ! fp.main.is_pro || ! ( fp.ga41.server_side && fp.ga41.adv_orders ) ) {
 			track_cart('order');
 		} else {
-			if ( fp.vars.debug ) console.log( '[FP] GA purchase event is tracked by the server-side script' );
+			if ( fp.main.debug ) console.log( '[FP] GA purchase event is tracked by the server-side script' );
 		}
 	};
 
@@ -308,8 +308,8 @@ FP.fns.ga4_standard_events = nr => {
 
 			if (
 				_ga.track_scroll.length > 0 &&
-				fpdata.activity.total >= fp.vars.track_scroll_time &&
-				fpdata.scrolled.current_px >= fp.vars.track_scroll_min
+				fpdata.activity.total >= fp.track.track_scroll_time &&
+				fpdata.scrolled.current_px >= fp.track.track_scroll_min
 			){
 				var reachedPoint = FP.isScrollTracked( _ga.track_scroll );
 				

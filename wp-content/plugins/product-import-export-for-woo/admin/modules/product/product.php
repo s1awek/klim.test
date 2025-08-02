@@ -299,14 +299,61 @@ class Wt_Import_Export_For_Woo_Basic_Product {
         }
         $out = array();
         $product_categories = get_terms('product_cat', array('hide_empty' => false) );
-        if (!is_wp_error($product_categories)) {
+        if ( ! is_wp_error( $product_categories ) ) {
             $version = get_bloginfo('version');
-            foreach ($product_categories as $category) {
-                $out[$category->slug] = (( $version < '4.8') ? $category->name : get_term_parents_list($category->term_id, 'product_cat', array('separator' => ' -> ')));
+            foreach ( $product_categories as $category ) {
+                if ( $version < '4.8' ) {
+                    $out[$category->slug] = $category->name;
+                } else {
+                    // 2.5.5 - Use a safer approach to get parent list
+                    $parent_list = $this->get_safe_term_parents_list( $category->term_id, 'product_cat' );
+                    if ( ! empty( $parent_list ) ) {
+                        $out[$category->slug] = $parent_list;
+                    } else {
+                        continue;
+                    }
+                }
             }
         }
         $this->product_categories = $out;
         return $out;
+    }
+
+    /**
+     * Safely get term parents list without using get_term_parents_list which can cause WP_Error issues
+     * @param int $term_id Term ID
+     * @param string $taxonomy Taxonomy name
+     * @return string Parent list or empty string on failure
+     * 
+     * @since 2.5.5
+     */
+    private function get_safe_term_parents_list($term_id, $taxonomy) {
+        try {
+            $term = get_term( $term_id, $taxonomy );
+            if ( is_wp_error( $term ) || ! $term ) {
+                return '';
+            }
+
+            $parents = get_ancestors( $term_id, $taxonomy, 'taxonomy' );
+            if ( empty( $parents ) ) {
+                return $term->name;
+            }
+
+            // Add current term to the beginning
+            array_unshift( $parents, $term_id );
+            
+            $parent_names = array();
+            foreach ( array_reverse( $parents ) as $parent_id ) {
+                $parent = get_term( $parent_id, $taxonomy );
+                if ( ! is_wp_error( $parent ) && $parent ) {
+                    $parent_names[] = $parent->name;
+                }
+            }
+
+            return implode( ' -> ', $parent_names );
+        } catch ( Exception $e ) {
+            return '';
+        }
     }
 
     private function get_product_tags() {

@@ -548,8 +548,9 @@
 })(jQuery);
 
 jQuery(document).ready(function() {
-    jQuery('#fupi_page_nav, #fupi_side_menu').theiaStickySidebar({
+    jQuery('#fupi_nav_col, #fupi_side_menu').theiaStickySidebar({
         additionalMarginTop: 50,
         additionalMarginBottom : 50,
+        minWidth: 1100
     });
 });

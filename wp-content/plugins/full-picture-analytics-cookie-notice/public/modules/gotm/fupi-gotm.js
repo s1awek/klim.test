@@ -21,7 +21,7 @@ FP.fns.load_gtm = () => {
 
 	// PASS IF CURRENT USER IS TRACKABLE
 
-	data_o['fp_trackCurrentUser'] = fp.vars.track_current_user;
+	data_o['fp_trackCurrentUser'] = fp.main.track_current_user;
 
 	// PAGE TYPE
 	if ( fp.gtm.page_type && fpdata.page_type && fpdata.page_type.length > 1 )

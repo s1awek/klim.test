@@ -2,6 +2,8 @@
 
 namespace DgoraWcas\Integrations\Plugins;
 
+use DgoraWcas\Helpers;
+
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -10,6 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class PluginsCompatibility {
 
 	public function __construct() {
+		// Break early if the "nofibosearch" mode is active.
+		if ( Helpers::isNoFiboSearchModeActive() ) {
+			return;
+		}
+
 		$this->loadCompatibilities();
 	}
 

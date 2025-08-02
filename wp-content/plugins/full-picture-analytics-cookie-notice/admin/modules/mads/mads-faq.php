@@ -64,7 +64,7 @@
                     <li>' . esc_html__( '"woo product view" or "woo list item view" for "Other" event.', 'full-picture-analytics-cookie-notice') . '</li>
                 </ol>
             </li>
-            <li>' . esc_html__( 'In the "Revenue" field choose "Conversion value may vary" (for all events except the "woo list item view" even).', 'full-picture-analytics-cookie-notice') . '</li>
+            <li>' . esc_html__( 'For events "Purchase", "Checkout" and "Add to cart" choose "Conversion value may vary" in the "Revenue" field.', 'full-picture-analytics-cookie-notice') . '</li>
             <li>' . esc_html__( 'In the "Set up tagging" section choose "Yes, the UET tag was already installed[...]".', 'full-picture-analytics-cookie-notice') . '</li>
             <li>' . esc_html__( 'Your choice in the "Install event tag" does not matter.', 'full-picture-analytics-cookie-notice') . '</li>
         </ol>

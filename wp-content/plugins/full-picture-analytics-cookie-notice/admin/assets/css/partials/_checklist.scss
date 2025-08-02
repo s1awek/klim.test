@@ -1,5 +1,5 @@
 // HELP NAV
-
+/*
 #fupi_help{
 	padding: 5px 20px 5px 20px;
 	margin: 0;
@@ -48,7 +48,7 @@
 		opacity: .9;
 	}
 }
-
+*/
 // CHECKLIST
 
 #fupi_offscreen_content .fupi_checklist_heading{
@@ -108,4 +108,10 @@
 			}
 		}
 	}
+}
+
+#fupi_offscreen_feedback_link{
+    text-align: center;
+    font-size: 16px;
+    margin: 40px auto 0;
 }

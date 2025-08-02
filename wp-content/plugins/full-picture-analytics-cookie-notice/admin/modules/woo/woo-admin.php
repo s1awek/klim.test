@@ -4,12 +4,16 @@ class Fupi_WOO_admin {
 
     private $settings;
     private $main;
+    private $tools;
+    private $proofrec;
     private $user_cap = 'manage_options';
 
     public function __construct(){
         
         $this->settings = get_option('fupi_woo');
         $this->main = get_option('fupi_main');
+        $this->tools = get_option('fupi_tools');
+        $this->proofrec = get_option('fupi_proofrec');
 
         $this->add_actions_and_filters();
     }
@@ -33,6 +37,16 @@ class Fupi_WOO_admin {
     public function sanitize_fields( $input ){
         
         include 'woo-sanitize.php';
+
+        if ( apply_filters( 'fupi_updating_many_options', false ) ) return $clean_data;
+
+        if ( ! empty ( $this->tools['cook'] ) && ! empty ( $this->tools['proofrec'] ) && ! empty ( get_privacy_policy_url() ) ) {
+
+			include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
+			$gdpr_checker = new Fupi_compliance_status_checker( 'woo', $clean_data );
+            $gdpr_checker->send_and_return_status();
+		}
+
 		include FUPI_PATH . '/admin/common/fupi-clear-cache.php';
 		return $clean_data; 
     }

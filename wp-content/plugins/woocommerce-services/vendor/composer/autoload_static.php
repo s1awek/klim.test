@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit64aa5212709a8599650117a5e27c72f2
+class ComposerStaticInit7109386222804879fea6838ada605690
 {
     public static $files = array (
         '3773ef3f09c37da5478d578e32b03a4b' => __DIR__ . '/..' . '/automattic/jetpack-assets/actions.php',
@@ -14,11 +14,16 @@ class ComposerStaticInit64aa5212709a8599650117a5e27c72f2
     public static $prefixLengthsPsr4 = array (
         'A' => 
         array (
+            'Automattic\\WCServices\\' => 22,
             'Automattic\\Jetpack\\Autoloader\\' => 30,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'Automattic\\WCServices\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
+        ),
         'Automattic\\Jetpack\\Autoloader\\' => 
         array (
             0 => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src',
@@ -92,6 +97,16 @@ class ComposerStaticInit64aa5212709a8599650117a5e27c72f2
         'Automattic\\Jetpack\\Status\\Visitor' => __DIR__ . '/..' . '/automattic/jetpack-status/src/class-visitor.php',
         'Automattic\\Jetpack\\Terms_Of_Service' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-terms-of-service.php',
         'Automattic\\Jetpack\\Tracking' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-tracking.php',
+        'Automattic\\WCServices\\Integrations\\WooCommerceBlocksIntegration' => __DIR__ . '/../..' . '/src/Integrations/WooCommerceBlocksIntegration.php',
+        'Automattic\\WCServices\\StoreApi\\AbstractStoreApiExtension' => __DIR__ . '/../..' . '/src/StoreApi/AbstractStoreApiExtension.php',
+        'Automattic\\WCServices\\StoreApi\\Extensions\\StoreNoticesExtension' => __DIR__ . '/../..' . '/src/StoreApi/Extensions/StoreNoticesExtension.php',
+        'Automattic\\WCServices\\StoreApi\\StoreApiExtendSchema' => __DIR__ . '/../..' . '/src/StoreApi/StoreApiExtendSchema.php',
+        'Automattic\\WCServices\\StoreApi\\StoreApiExtensionController' => __DIR__ . '/../..' . '/src/StoreApi/StoreApiExtensionController.php',
+        'Automattic\\WCServices\\StoreNotices\\StoreNotice' => __DIR__ . '/../..' . '/src/StoreNotices/StoreNotice.php',
+        'Automattic\\WCServices\\StoreNotices\\StoreNoticeTypes' => __DIR__ . '/../..' . '/src/StoreNotices/StoreNoticeTypes.php',
+        'Automattic\\WCServices\\StoreNotices\\StoreNoticesController' => __DIR__ . '/../..' . '/src/StoreNotices/StoreNoticesController.php',
+        'Automattic\\WCServices\\StoreNotices\\StoreNoticesNotifier' => __DIR__ . '/../..' . '/src/StoreNotices/StoreNoticesNotifier.php',
+        'Automattic\\WCServices\\Utils' => __DIR__ . '/../..' . '/src/Utils.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Jetpack_IXR_Client' => __DIR__ . '/..' . '/automattic/jetpack-connection/legacy/class-jetpack-ixr-client.php',
         'Jetpack_IXR_ClientMulticall' => __DIR__ . '/..' . '/automattic/jetpack-connection/legacy/class-jetpack-ixr-clientmulticall.php',
@@ -105,9 +120,9 @@ class ComposerStaticInit64aa5212709a8599650117a5e27c72f2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit64aa5212709a8599650117a5e27c72f2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit64aa5212709a8599650117a5e27c72f2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit64aa5212709a8599650117a5e27c72f2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7109386222804879fea6838ada605690::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7109386222804879fea6838ada605690::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7109386222804879fea6838ada605690::$classMap;
 
         }, null, ClassLoader::class);
     }

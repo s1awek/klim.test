@@ -1,12 +1,30 @@
 .fupi_page_status{
     #fupi_main_col{
         section{
-            background: #eef4f9;
-            padding: 20px;
-            border-radius: 10px;
+            margin: 0 auto;
+            max-width: 640px;
+            padding: 20px 0;
+            // border-radius: 10px;
             + section{
                 margin-top: 20px;
             }
+            h3{
+                font-size: 24px;
+                font-family: "Merriweather", serif;
+                font-weight: 400;
+            }
+            td{
+                font-size: 17px;
+            }
+        }
+    }
+    .fupi_classic_table{
+        border: 0;
+        td{
+            border: 0;
+        }
+        td+td{
+            padding-bottom: 30px;
         }
     }
 }
@@ -19,13 +37,22 @@
     gap: 10px 20px;
     padding: 10px;
     border: 1px solid #e2e2ca;
-    background-color: #fffeeb;
-    border-radius: 5px;
+    background-color: #f0f0f1;
+    // border-radius: 5px;
     justify-content: center;
     li{
         flex: 0 0 auto;
         display: flex;
         gap: 6px;
         align-items: center;
+    }
+}
+
+td.fupi_module_status_ico{
+    position: relative;
+    vertical-align: top;
+    .dashicons{
+        position: relative;
+        top: 14px;
     }
 }

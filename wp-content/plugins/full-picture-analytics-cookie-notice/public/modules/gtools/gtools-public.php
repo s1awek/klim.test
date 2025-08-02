@@ -17,6 +17,8 @@ class Fupi_GTOOLS_public {
 
     private $gads_settings;
 
+    private $gtag_settings;
+
     public function __construct() {
         $this->tools = get_option( 'fupi_tools' );
         $this->main = get_option( 'fupi_main' );
@@ -31,6 +33,9 @@ class Fupi_GTOOLS_public {
         }
         if ( $this->gads_enabled ) {
             $this->gads_settings = get_option( 'fupi_gads' );
+        }
+        if ( $this->ga41_enabled || $this->gads_enabled ) {
+            $this->gtag_settings = get_option( 'fupi_gtag' );
         }
         if ( empty( $this->ga41_settings ) && empty( $this->gads_settings ) ) {
             return;
@@ -55,6 +60,13 @@ class Fupi_GTOOLS_public {
                 2
             );
         }
+        if ( !empty( $this->gtag_settings['custom_gateway'] ) ) {
+            add_action( 'wp_head', array($this, 'add_custom_gtag_gateway_async_script'), -1 );
+        }
+    }
+
+    public function add_custom_gtag_gateway_async_script() {
+        echo '<script async="" src="' . trailingslashit( esc_attr( $this->gtag_settings['custom_gateway'] ) ) . '"></script>';
     }
 
     public function enqueue_scripts() {
@@ -135,6 +147,10 @@ class Fupi_GTOOLS_public {
     }
 
     public function add_data_to_fp_object( $fp ) {
+        // GTAG
+        if ( !empty( $this->gtag_settings ) ) {
+            $fp['gtag'] = $this->gtag_settings;
+        }
         // GA4
         if ( !empty( $this->ga41_settings ) ) {
             $fp['ga41'] = $this->ga41_settings;

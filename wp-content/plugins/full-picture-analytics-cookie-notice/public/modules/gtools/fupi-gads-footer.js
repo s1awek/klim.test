@@ -36,7 +36,7 @@ FP.fns.gads_woo_events = () => {
 			};
 
 			gtag('event', 'view_item', payload_o );
-			if ( fp.vars.debug ) console.log('[FP] GAds view_item event:', payload_o);
+			if ( fp.main.debug ) console.log('[FP] GAds view_item event:', payload_o);
 		}
 	};
 
@@ -73,7 +73,7 @@ FP.fns.gads_woo_events = () => {
 		};
 
 		gtag('event', 'add_to_cart', payload_event );
-		if ( fp.vars.debug ) console.log('[FP] GAds add_to_cart event:', payload_event);
+		if ( fp.main.debug ) console.log('[FP] GAds add_to_cart event:', payload_event);
 
 		if ( ! fp.gads.woo_add_to_cart_conv_id ) return;
 
@@ -85,7 +85,7 @@ FP.fns.gads_woo_events = () => {
 		}
 
 		gtag('event', 'conversion', payload_conversion );
-		if ( fp.vars.debug ) console.log('[FP] GAds add_to_cart conversion', payload_conversion);
+		if ( fp.main.debug ) console.log('[FP] GAds add_to_cart conversion', payload_conversion);
 	}
 
 	FP.addAction( ['woo_add_to_cart'], data =>{
@@ -122,7 +122,7 @@ FP.fns.gads_woo_events = () => {
 		};
 		
 		gtag( 'event', 'checkout', payload_event );
-		if ( fp.vars.debug ) console.log( '[FP] GAds checkout event: ', payload_event );
+		if ( fp.main.debug ) console.log( '[FP] GAds checkout event: ', payload_event );
 
 		if ( ! fp.gads.woo_checkout_conv_id ) return;
 
@@ -134,7 +134,7 @@ FP.fns.gads_woo_events = () => {
 		}
 
 		gtag('event', 'conversion', payload_conversion );
-		if ( fp.vars.debug ) console.log('[FP] GAds checkout conversion', payload_conversion);
+		if ( fp.main.debug ) console.log('[FP] GAds checkout conversion', payload_conversion);
 	};
 
 	// track the start of checkout (except when the whole page or its part is refreshed)
@@ -174,18 +174,18 @@ FP.fns.gads_woo_events = () => {
 		}
 
 		if ( items_a.length == 0 ) return false;
-		
+
 		// Track event
 		
 		let payload_event = {
 			'items' : items_a, 
 			'value' : cart.value,
-			'currency' : fpdata.woo.currency,
+			'currency' : fpdata.woo.currency, 
 			'send_to' : fp.gads.id2 || fp.gads.id,
 		};
 
 		gtag('event', 'purchase', payload_event );
-		if ( fp.vars.debug ) console.log('[FP] GAds purchase event', payload_event);
+		if ( fp.main.debug ) console.log('[FP] GAds purchase event', payload_event);
 
 		// Track conversion
 
@@ -194,13 +194,13 @@ FP.fns.gads_woo_events = () => {
 		let payload_conversion = {
 			'items' : items_a, 
 			'value' : cart.value,
-			'currency' : fpdata.woo.currency,
-			'transaction_id': fpdata.woo.order.id,
+			'currency' : fpdata.woo.currency, 
 			'send_to' : ( fp.gads.id2 || fp.gads.id ) + '/' + fp.gads.woo_conv_id,
+			'transaction_id': fpdata.woo.order.id,
 		}
 
 		gtag('event', 'conversion', payload_conversion );
-		if ( fp.vars.debug ) console.log('[FP] GAds purchase conversion', payload_conversion);
+		if ( fp.main.debug ) console.log('[FP] GAds purchase conversion', payload_conversion);
 	};
 
 	if ( fp.woo.order_data_ready ) track_purchase();
@@ -214,7 +214,7 @@ FP.fns.gads_standard_events = () => {
 		FP.addAction( ['click'], function(){
 			if ( fpdata.clicked.link && fpdata.clicked.link.is_email ) {
 				gtag( 'event', 'conversion', {'send_to': ( fp.gads.id2 || fp.gads.id ) + '/' + fp.gads.track_email } );
-				if ( fp.vars.debug ) console.log('[FP] GAds conversion event: email link click', ( fp.gads.id2 || fp.gads.id ) + '/' + fp.gads.track_email );
+				if ( fp.main.debug ) console.log('[FP] GAds conversion event: email link click', ( fp.gads.id2 || fp.gads.id ) + '/' + fp.gads.track_email );
 			}
 		} );
 	}
@@ -225,7 +225,7 @@ FP.fns.gads_standard_events = () => {
 		FP.addAction( ['click'], function(){
 			if ( fpdata.clicked.link && fpdata.clicked.link.is_tel ) {
 				gtag( 'event', 'conversion', {'send_to': ( fp.gads.id2 || fp.gads.id ) + '/' + fp.gads.track_tel } );
-				if ( fp.vars.debug ) console.log('[FP] GAds conversion event: tel link click', ( fp.gads.id2 || fp.gads.id ) + '/' + fp.gads.track_tel );
+				if ( fp.main.debug ) console.log('[FP] GAds conversion event: tel link click', ( fp.gads.id2 || fp.gads.id ) + '/' + fp.gads.track_tel );
 			}
 		} );
 	}
@@ -241,7 +241,7 @@ FP.fns.gads_standard_events = () => {
 
 			gtag( 'event', 'conversion', {'send_to': ( fp.gads.id2 || fp.gads.id ) + '/' + el.dataset['gads_view'] } );
 			
-			if ( fp.vars.debug ) console.log('[FP] GAds conversion event: element view', ( fp.gads.id2 || fp.gads.id ) + '/' + el.dataset['gads_view'] );
+			if ( fp.main.debug ) console.log('[FP] GAds conversion event: element view', ( fp.gads.id2 || fp.gads.id ) + '/' + el.dataset['gads_view'] );
 		};
 		
 		FP.intersectionObserver( newly_added_els, fp.gads.track_views, 'gads', send_el_view_evt, true);
@@ -259,7 +259,7 @@ FP.fns.gads_standard_events = () => {
 			var trackedAffLink_convID = FP.getTrackedAffiliateLink( fp.gads.track_affiliate );
 			if ( trackedAffLink_convID ) {
 				gtag( 'event', 'conversion', {'send_to' : ( fp.gads.id2 || fp.gads.id ) + '/' + trackedAffLink_convID });
-				if ( fp.vars.debug ) console.log('[FP] GAds conversion event: affiliate click', ( fp.gads.id2 || fp.gads.id ) + '/' + trackedAffLink_convID );
+				if ( fp.main.debug ) console.log('[FP] GAds conversion event: affiliate click', ( fp.gads.id2 || fp.gads.id ) + '/' + trackedAffLink_convID );
 			}
 		} );
 	}
@@ -271,7 +271,7 @@ FP.fns.gads_standard_events = () => {
 			var submittedForm_convID = FP.getSubmittedForm( fp.gads.track_forms );
 			if ( submittedForm_convID ){
 				gtag( 'event', 'conversion', {'send_to' : ( fp.gads.id2 || fp.gads.id ) + '/' + submittedForm_convID } );
-				if ( fp.vars.debug ) console.log('[FP] GAds conversion event: form submit', ( fp.gads.id2 || fp.gads.id ) + '/' + submittedForm_convID);
+				if ( fp.main.debug ) console.log('[FP] GAds conversion event: form submit', ( fp.gads.id2 || fp.gads.id ) + '/' + submittedForm_convID);
 			}
 		})
 	}
@@ -283,7 +283,7 @@ FP.fns.gads_standard_events = () => {
 			var trackedEl_convID  = FP.getClickTarget( fp.gads.track_elems );
 			if ( trackedEl_convID ) {
 				gtag( 'event', 'conversion', { 'send_to' : ( fp.gads.id2 || fp.gads.id ) + '/' + trackedEl_convID } );
-				if ( fp.vars.debug ) console.log('[FP] GAds conversion event: element click', ( fp.gads.id2 || fp.gads.id ) + '/' + trackedEl_convID );
+				if ( fp.main.debug ) console.log('[FP] GAds conversion event: element click', ( fp.gads.id2 || fp.gads.id ) + '/' + trackedEl_convID );
 			}
 		})
 	}

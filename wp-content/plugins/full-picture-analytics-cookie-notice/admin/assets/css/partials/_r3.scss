@@ -4,7 +4,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-start;
-	border-radius: 5px;
+	// border-radius: 5px;
 	+ .fupi_r3_section{
 		margin-top: 10px;
 	}
@@ -59,7 +59,7 @@
 	font-size: 16px;
 	padding: 0;
 	transition: .2s all;
-	border-radius: 4px;
+	// border-radius: 4px;
 	line-height: 1em;
 	cursor: pointer;
 	height: 34px !important;
@@ -127,9 +127,9 @@
 .fupi_r3_fields_group{
 	padding: 10px;
     width: 100%;
-    background: #e8f0f5;
+    background: #f2f2f2;
     margin-bottom: 10px;
-    border-radius: 5px;
+    // border-radius: 5px;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-start;
@@ -391,5 +391,6 @@
 	}
 	.select2-search__field{
 		padding: 0 !important;
+		margin: 0;
 	}
 }

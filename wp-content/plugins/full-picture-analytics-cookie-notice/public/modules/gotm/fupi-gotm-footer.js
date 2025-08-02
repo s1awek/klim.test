@@ -3,7 +3,7 @@ FP.fns.push_to_gtm_dl = ( evt_name, payload ) => {
 	if ( ! fp.gtm['clear_woo_data'] ) window[fp.gtm.datalayer].push({ ecommerce: null });
 
 	window[fp.gtm.datalayer].push( payload );
-	if ( fp.vars.debug ) console.log( '[FP] GTM event ' + evt_name + ':', payload );
+	if ( fp.main.debug ) console.log( '[FP] GTM event ' + evt_name + ':', payload );
 };
 
 FP.fns.gotm_woo_events = () => {
@@ -362,7 +362,7 @@ FP.fns.gotm_standard_events = function(){
 		fp.gtm.track_scroll = FP.formatScrollPoints( fp.gtm.track_scroll );
 		FP.addAction( ['scroll', 'active_time_tick'], function(){
 			// check if the window was scrolled
-			if ( fp.gtm.track_scroll.length > 0 && fpdata.activity.total >= fp.vars.track_scroll_time && fpdata.scrolled.current_px >= fp.vars.track_scroll_min ) {
+			if ( fp.gtm.track_scroll.length > 0 && fpdata.activity.total >= fp.track.track_scroll_time && fpdata.scrolled.current_px >= fp.track.track_scroll_min ) {
 				var reachedPoint = FP.isScrollTracked( fp.gtm.track_scroll );
 				if ( reachedPoint ) {
 					// remove from array the scroll points that were already reached

@@ -145,6 +145,28 @@ add_action( 'wp_head', function () {
 			top: calc(100% + 11px);
 		}
 
+        #top .dgwt-wcas-search-wrapp .dgwt-wcas-search-form .dgwt-wcas-sf-wrapp input[type="search"].dgwt-wcas-search-input {
+            padding-left: 40px;
+        }
+
+        .dgwt-wcas-style-pirx .dgwt-wcas-search-form .dgwt-wcas-sf-wrapp button.dgwt-wcas-search-submit {
+            top: 11px;
+            left: 16px
+        }
+
+        .dgwt-wcas-style-pirx.dgwt-wcas-style-pirx-compact .dgwt-wcas-sf-wrapp button.dgwt-wcas-search-submit {
+            top: 5px;
+            left: 13px;
+        }
+
+        .dgwt-wcas-style-solaris .dgwt-wcas-sf-wrapp button.dgwt-wcas-search-submit {
+            min-height: auto;
+        }
+
+        .dgwt-wcas-preloader.dgwt-wcas-close, .dgwt-wcas-voice-search {
+            height: calc(100% - 20px);
+        }
+
 		@media (max-width: 767px) {
 			.menu-item-search-dropdown {
 				z-index: 100;

@@ -546,7 +546,7 @@ switch ( $recipe['type'] ) {
     // =======
     case 'atrig_select':
         $atrig_opts = get_option( 'fupi_atrig' );
-        $default_option_text = ( !empty( $recipe['default_option_text'] ) ? esc_attr( $recipe['default_option_text'] ) : esc_attr__( 'Please select', 'full-picture-analytics-cookie-notice' ) );
+        $default_option_text = ( !empty( $recipe['default_option_text'] ) ? esc_attr( $recipe['default_option_text'] ) : esc_attr__( 'Select advanced trigger', 'full-picture-analytics-cookie-notice' ) );
         $options_markup = '<option value=\'\'>' . $default_option_text . '</option>';
         $selected_trigger_active = false;
         if ( !empty( $atrig_opts ) ) {
@@ -608,9 +608,9 @@ switch ( $recipe['type'] ) {
         break;
     // =======
     case 'custom_meta_select':
-        $trackmeta_opts = get_option( 'fupi_trackmeta' );
+        $trackmeta_opts = get_option( 'fupi_track' );
         $options_markup = '<option value=\'\'>' . esc_html__( 'Please select', 'full-picture-analytics-cookie-notice' ) . '</option>';
-        if ( !empty( $trackmeta_opts ) && !empty( $trackmeta_opts['custom_data_ids'] ) && count( $trackmeta_opts['custom_data_ids'] ) > 0 ) {
+        if ( !empty( $trackmeta_opts['custom_data_ids'] ) && count( $trackmeta_opts['custom_data_ids'] ) > 0 ) {
             foreach ( $trackmeta_opts['custom_data_ids'] as $trackmeta ) {
                 // Name
                 $name_type = '(Post meta)';
@@ -695,6 +695,10 @@ if ( isset( $recipe['tooltip'] ) ) {
 if ( isset( $recipe['after field'] ) ) {
     printf( '<span class="fupi_after_field"> %s</span>', $recipe['after field'] );
 }
+// TEXT BELOW FIELD
+if ( isset( $recipe['under field'] ) ) {
+    printf( '<div class="fupi_under_field">%s</div>', $recipe['under field'] );
+}
 // POPUP
 if ( isset( $recipe['popup'] ) ) {
     $clean_id = str_replace( array('[', ']'), '_', $field_id );
@@ -721,10 +725,6 @@ if ( isset( $recipe['popup2_id'] ) ) {
 // POPUP3 ID
 if ( isset( $recipe['popup3_id'] ) ) {
     printf( '<span class="fupi_create_popup_link fupi_popup3" data-popup_id="%1$s" aria-hidden="true"></span>', $recipe['popup3_id'] );
-}
-// TEXT BELOW FIELD
-if ( isset( $recipe['under field'] ) ) {
-    printf( '<div class="fupi_under_field">%s</div>', $recipe['under field'] );
 }
 // "MUST HAVE" INFO
 echo $must_have_html;

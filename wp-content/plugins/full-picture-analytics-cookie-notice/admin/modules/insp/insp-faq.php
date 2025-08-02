@@ -1,11 +1,6 @@
 <?php
 
-    $questions = [
-        [
-            'id' => 'install',
-            'title' => esc_html__('How to install Inspectlet', 'full-picture-analytics-cookie-notice' ),
-        ],
-    ];
+    $questions = [];
 
     // Do not use IDs below!
     // The code will be copied to a popup and IDs will double

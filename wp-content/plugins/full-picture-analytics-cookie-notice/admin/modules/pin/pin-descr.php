@@ -23,7 +23,13 @@ switch( $section_id ){
 	// LOADING
 
 	case 'fupi_pin_loading':
-		$ret_text = '<p>' . esc_html__( 'Change when this tool loads and starts tracking visitors.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Here you can change when and where this tool loads. This is all optional.', 'full-picture-analytics-cookie-notice') . '</p>';
+	break;
+
+	// DATA COLLECTION
+
+	case 'fupi_pin_basic':
+		$ret_text = '<p>' . esc_html__( 'These settings impact the amount and precision of collected data.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
 	// E-COMMERCE

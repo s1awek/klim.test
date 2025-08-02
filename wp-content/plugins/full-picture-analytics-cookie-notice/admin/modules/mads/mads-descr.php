@@ -21,11 +21,19 @@ switch( $section_id ){
     // LOADING
 
 	case 'fupi_mads_loading':
-		$ret_text = '<p>' . esc_html__( 'Change when this tool loads and starts tracking visitors.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Here you can change when and where this tool loads. This is all optional.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
+    // DATA COLLECTION
+
+    case 'fupi_mads_basic':
+		$ret_text = '<p>' . esc_html__( 'These settings impact the amount and precision of collected data.', 'full-picture-analytics-cookie-notice') . '</p>';
+	break;
+
+    // EVENTS
+
     case 'fupi_mads_events':
-        $ret_text = '<p>' . sprintf( esc_html__( '%1$sRegister event actions in MS Ads%2$s and use them to track conversions and build custom audiences for remarketing purposes.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-track-specific-user-actions-as-conversions-in-microsoft-advertising/" >','</a>') . '</p>';
+        $ret_text = '<p>' . esc_html__('Use functions on this page to track simple events, like clicking a button or submitting a form.', 'full-picture-analytics-cookie-notice' ) . ' ' . sprintf( esc_html__( '%1$sRegister them MS Ads%2$s to track conversions and build custom audiences.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-track-specific-user-actions-as-conversions-in-microsoft-advertising/" >','</a>') . '</p>';
     break;
 
 	case 'fupi_mads_ecomm':
@@ -41,7 +49,7 @@ switch( $section_id ){
                     <li>' . esc_html__( 'list item view', 'full-picture-analytics-cookie-notice') . ' (as "woo list item view" event)</li>
                 </ol>
                 <p>' . esc_html__( 'All these events are sent with product information.', 'full-picture-analytics-cookie-notice' ) . '</p>
-                <h3 style="color: #e47d00;">' . esc_html__( 'What you should do next', 'full-picture-analytics-cookie-notice' ) . '</h3>
+                <h3 class="fupi_warning_text">' . esc_html__( 'What you should do next', 'full-picture-analytics-cookie-notice' ) . '</h3>
                 <p>' . esc_html__( 'To use the tracked data to track conversions or create custom audienes, you need to register these events in your MS Ads panel.', 'full-picture-analytics-cookie-notice' ) . '</p>
                 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
                     <button type="button" class="button-secondary fupi_open_popup" data-popup="fupi_woo_track_conv_popup">' . esc_html__( 'How to register ecommerce events in MS Ads', 'full-picture-analytics-cookie-notice') . '</button>

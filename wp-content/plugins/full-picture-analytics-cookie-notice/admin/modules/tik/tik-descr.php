@@ -23,13 +23,13 @@ switch( $section_id ){
 	// LOADING
 
 	case 'fupi_tik_loading':
-		$ret_text = '<p>' . esc_html__( 'Change when this tool loads and starts tracking visitors.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Here you can change when and where this tool loads. This is all optional.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
 	// EVENT CONVERSIONS
 
 	case 'fupi_tik_events':
-		$ret_text = '<p><a class="button-secondary" href="https://wpfullpicture.com/support/documentation/tracking-events-with-tiktok-pixel/?utm_source=fp_admin&utm_medium=referral&utm_campaign=settings_link">' . esc_html__( 'Learn how to set it up', 'full-picture-analytics-cookie-notice') . '</a></p>';
+		$ret_text = '<p>' . esc_html__( 'Use functions on this page to track simple events, like clicking a button or submitting a form.' , 'full-picture-analytics-cookie-notice' ) . ' <a href="https://wpfullpicture.com/support/documentation/tracking-events-with-tiktok-pixel/?utm_source=fp_admin&utm_medium=fp_link">' . esc_html__( 'Learn how to set it up', 'full-picture-analytics-cookie-notice') . '</a></p>';
 	break;
 
 	// WOO

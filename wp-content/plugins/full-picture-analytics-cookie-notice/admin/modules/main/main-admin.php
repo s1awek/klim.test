@@ -5,11 +5,13 @@ class Fupi_MAIN_admin {
     private $settings;
     private $tools;
     private $cook;
+	private $proofrec;
 
     public function __construct(){
         $this->settings = get_option('fupi_main');
         $this->tools = get_option('fupi_tools');
         $this->cook = get_option('fupi_cook');	
+		$this->proofrec = get_option('fupi_proofrec');
         $this->add_actions_and_filters();
     }
 
@@ -41,11 +43,16 @@ class Fupi_MAIN_admin {
 
         include 'main-sanitize.php';
 
+		if ( apply_filters( 'fupi_updating_many_options', false ) ) return $clean_data;
+
+
         // UPDATE CDB
 
-        if ( ! empty ( $tools['cook'] ) && ! empty( $this->cook['cdb_key'] ) && ! empty ( get_privacy_policy_url() ) ) {
+        if ( ! empty ( $this->tools['cook'] ) && ! empty ( $this->tools['proofrec'] ) && ! empty ( get_privacy_policy_url() ) ) {
+
 			include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
-			new Fupi_compliance_status_checker( 'cdb', $this->cook, false );
+			$gdpr_checker = new Fupi_compliance_status_checker( 'main', $clean_data );
+			$gdpr_checker->send_and_return_status();
 		}
 
         // GENERATE FILES
@@ -107,6 +114,8 @@ class Fupi_MAIN_admin {
 			}
 		}
 
+		$saved_options['fupi_versions'] = get_option('fupi_versions');
+
 		// get consent banner options
 		$customizer_options = get_option( 'fupi_cookie_notice' );
 		if ( ! empty( $customizer_options ) ) {
@@ -145,7 +154,9 @@ class Fupi_MAIN_admin {
 		$saved_options[ 'theme_mods' ] = [];
 
 		foreach ( $banner_style_mods as $mod_id ) {
+			
 			$value = get_theme_mod( $mod_id );
+			
 			if ( empty( $value ) ) {
 				$saved_options[ 'theme_mods' ][$mod_id] = 'no_value';
 			} else {
@@ -169,7 +180,7 @@ class Fupi_MAIN_admin {
 		$index_file_path = $folder_path . '/index.php';
 
 		if ( ! file_exists( $index_file_path ) ) {
-			$index_file_content = '<?php
+				$index_file_content = '<?php
 	header("HTTP/1.0 403 Forbidden");
 	echo "Access denied.";
 	exit;';
@@ -259,85 +270,22 @@ class Fupi_MAIN_admin {
 		if ( ! current_user_can('manage_options') || ! $correct_nonce ) wp_send_json_error(array('message' => esc_html__('Permission denied', 'full-picture-analytics-cookie-notice' )));
 		
 		// Restore settings
-		$uploaded_settings = isset($_POST['settings']) ? $_POST['settings'] : '';
-		$this->fupi_restore_settings( $uploaded_settings );
-	}
+		$uploaded_settings = isset($_POST['settings']) ? $_POST['settings'] : ''; // gets decoded JSON
 
-	private function fupi_restore_settings( $uploaded_settings ){
-
-		if ( empty( $uploaded_settings ) ) wp_send_json_error(array('message' => esc_html__('No settings data received', 'full-picture-analytics-cookie-notice' )));
-
-		// Update the settings
-
-		foreach ( $uploaded_settings as $option_id => $option_value ) {
-
-			switch ( $option_id ) {
-				
-				case 'theme_mods':
-					foreach ( $option_value as $mod_id => $value ) {
-						if ( $value == "no_value" ) {
-							remove_theme_mod($mod_id);
-						} else {
-							set_theme_mod( $mod_id, $value );
-						}
-					}
-				break;
-				
-				case 'fupi_reports':
-
-					if ( $option_value == 'no_value' ) {
-						delete_option( 'fupi_reports' );
-					} else {
-						
-						// scripts are encoded during sanitisation. We must encode them before they are sanitized with html_entity_decode( $saved_value, ENT_QUOTES ) 
-						if ( ! empty( $option_value['dashboards'] ) ) {
-							foreach ( $option_value['dashboards'] as $i => $dash ) {
-								$option_value['dashboards'][$i]['iframe'] = html_entity_decode( $option_value['dashboards'][$i]['iframe'], ENT_QUOTES );
-							}
-						}
-						
-						update_option( 'fupi_reports', $option_value );
-					}
-
-				break;
-				case 'fupi_cscr':
-					if ( $option_value == 'no_value' ) {
-						delete_option( 'fupi_cscr' );
-					} else {
-						// scripts are encoded during sanitisation. We must encode them before they are sanitized with html_entity_decode( $saved_value, ENT_QUOTES )
-						$placements = array('fupi_head_scripts', 'fupi_footer_scripts');
-
-						foreach ( $placements as $placement_name ) { // gets string 'fupi_head_scripts'
-							if ( ! empty ( $option_value[$placement_name] ) ) {
-								$placement_scripts = $option_value[$placement_name];
-								$i = 0;
-								foreach ( $placement_scripts as $single_script_data ) {
-									$decoded_val = html_entity_decode( $single_script_data['scr'], ENT_QUOTES );
-									$option_value[$placement_name][$i]['scr'] = $decoded_val;
-									if ( ! empty ( $option_value[$placement_name][$i]['html'] ) ) {
-										$decoded_html = html_entity_decode( $single_script_data['html'], ENT_QUOTES );
-										$option_value[$placement_name][$i]['html'] = $decoded_html;
-									}
-									$i++;
-								}
-								
-							}
-						}
-
-						update_option( 'fupi_cscr', $option_value );
-					}
-				break;
-				default:
-					if ( $option_value == 'no_value' ) {
-						delete_option( $option_id );
-					} else {
-						update_option( $option_id, $option_value );
-					}
-				break;
-			}
+		if ( ! is_array( $uploaded_settings ) ) {
+			wp_send_json_error( array( 'message' => esc_html__('Error. Incorrect format of uploaded data', 'full-picture-analytics-cookie-notice' ) ) );
+			return;
 		}
-	
-		wp_send_json_success(array('message' => 'Settings processed successfully'));
+
+		include_once FUPI_PATH . '/admin/common/fupi_updater.php';
+		$updater = new Fupi_Updater();
+		$update_ok = $updater->run( true, $uploaded_settings );
+
+		if ( $update_ok ) {
+			wp_send_json_success( array('message' => esc_html__('Settings restorred successfully', 'full-picture-analytics-cookie-notice' ) ) );
+		} else {
+			wp_send_json_error( array( 'message' => esc_html__('No settings data received', 'full-picture-analytics-cookie-notice' ) ) );
+		}
 	}
 
 	public function fupi_ajax_restore_settings_backup(){
@@ -356,7 +304,20 @@ class Fupi_MAIN_admin {
 
 		// Restore settings
 		$file_contents = json_decode( file_get_contents( $file_path ), true );
-		$this->fupi_restore_settings( $file_contents );
-	}
+		
+		if ( ! is_array( $file_contents ) ) {
+			wp_send_json_error( array( 'message' => esc_html__('Error. Incorrect format of uploaded data', 'full-picture-analytics-cookie-notice' ) ) );
+			return;
+		}
 
+		include_once FUPI_PATH . '/admin/common/fupi_updater.php';
+		$updater = new Fupi_Updater();
+		$update_ok = $updater->run( true, $file_contents );
+
+		if ( $update_ok ) {
+			wp_send_json_success( array('message' => esc_html__('Settings restorred successfully', 'full-picture-analytics-cookie-notice' ) ) );
+		} else {
+			wp_send_json_error( array( 'message' => esc_html__('No settings data received', 'full-picture-analytics-cookie-notice' ) ) );
+		}
+	}
 }

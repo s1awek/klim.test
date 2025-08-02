@@ -3,7 +3,7 @@
     border-bottom-width: 0;
     font-size: 14px;
     margin-top: 50px;
-    border-radius: 10px 10px 0 0;
+    // border-radius: 10px 10px 0 0;
     overflow: hidden;
 }
 
@@ -56,8 +56,8 @@
 }
 
 #fupi_new_import_export_buttons_wrap{
-    background-color: #e8f0f5;
-    border-radius: 0 0 10px 10px;
+    background-color: #f2f2f2;
+    // border-radius: 0 0 10px 10px;
     padding: 20px 10px;
     display: flex;
     gap: 20px;
@@ -67,6 +67,6 @@
 }
 
 // Hide "Save Settings" button on the section with the backups table
-#fupi_settings_form:has(#hook_main_3 + .fupi_section_descr:not(.fupi_hidden)) .fupi_form_buttons_wrap {
-    display: none;
-}
+// #fupi_settings_form:has(#hook_main_3 + .fupi_section_descr:not(.fupi_hidden)) .fupi_form_buttons_wrap {
+//     display: none;
+// }

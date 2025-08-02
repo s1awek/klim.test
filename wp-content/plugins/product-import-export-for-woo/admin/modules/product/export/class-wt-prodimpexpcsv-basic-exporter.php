@@ -624,7 +624,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Bulk_Export {
         $post_columns['meta'] = 'Meta (custom fields)';
         $post_columns['attributes'] = 'Attributes';
 
-        if (WC()->version < '2.7.0') {
+        if ( version_compare( WC()->version, '2.7.0', '<' ) ) {
             $post_columns['_visibility'] = 'visibility';
         }
         if (apply_filters('wpml_setting', false, 'setup_complete')) {

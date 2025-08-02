@@ -23,6 +23,14 @@ class FacetWP {
             return;
         }
         if ( version_compare( FACETWP_VERSION, '3.5.5' ) < 0 ) {
+            add_filter( 'dgwt/wcas/troubleshooting/unsupported_plugin_versions', function ( $unsupportedPluginVersions ) {
+                $unsupportedPluginVersions[] = array(
+                    'name'           => 'FacetWP',
+                    'currentVersion' => FACETWP_VERSION,
+                    'minimumVersion' => '3.5.5',
+                );
+                return $unsupportedPluginVersions;
+            } );
             return;
         }
         // Search page

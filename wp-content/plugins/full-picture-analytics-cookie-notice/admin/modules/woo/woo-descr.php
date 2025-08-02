@@ -11,7 +11,11 @@ switch( $section_id ){
 	break;
 
 	case 'fupi_woo_adv':
-		$ret_text = '<p>' . esc_html__( 'Status-Based Order Tracking is an alternative method of tracking purchases. At the moment it is only available in Meta Pixel and Google Analytics and needs to be enabled in their settings.', 'full-picture-analytics-cookie-notice' ) . ' <button type="button" class="fupi_open_popup button button-secondary" data-popup="fupi_adv_tracking_popup">' . esc_html__('Learn more', 'full-picture-analytics-cookie-notice' ) . '</button></p>';
+		$ret_text = '<p>' . esc_html__( 'Status-Based Order Tracking is an alternative method of tracking purchases. At the moment it is only available in Meta Pixel and Google Analytics and needs to be enabled in their settings.', 'full-picture-analytics-cookie-notice' ) . ' <button type="button" class="fupi_open_popup fupi_faux_link" data-popup="fupi_adv_tracking_popup">' . esc_html__('Learn more', 'full-picture-analytics-cookie-notice' ) . ' <span class="fupi_open_popup_i">i</span></button></p>';
+	break;
+
+	case 'fupi_woo_priv':
+		$ret_text = '<p>' . esc_html__('Make WooCommerce Order Attribution follow GDPR', 'full-picture-analytics-cookie-notice' ) . '</p>';
 	break;
 
 	case 'fupi_woo_custom':

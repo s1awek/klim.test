@@ -6,12 +6,14 @@ class Fupi_TOOLS_admin {
     private $cook;
     private $main;
     private $tools;
+    private $proofrec;
 
     public function __construct(){
         $this->settings = get_option('fupi_tools');
         $this->cook = get_option('fupi_cook');	
         $this->main = get_option('fupi_main');
         $this->tools = get_option('fupi_tools');
+        $this->proofrec = get_option('fupi_proofrec');
 
         $this->add_actions_and_filters();
     }
@@ -41,13 +43,36 @@ class Fupi_TOOLS_admin {
 	public function sanitize_fields( $input ) {
 		
         include 'tools-sanitize.php';
+		if ( apply_filters( 'fupi_updating_many_options', false ) ) return $clean_data;
 
-        // UPDATE CDB
+        // If the proofrec module has been disabled
+        // - Turn off CRON for sending emails 
+        // - Remove the setting for sending emails
 
-        if ( ! empty ( $clean_data['cook'] ) && ! empty( $this->cook['cdb_key'] ) && ! empty ( get_privacy_policy_url() ) ) {
+        if ( ! empty ( $this->tools['proofrec'] ) && empty ( $clean_data['proofrec'] ) ) {
+
+            // Turn off CRON for sending emails 
+            $timestamp = wp_next_scheduled( 'fupi_consents_backup_cron_event' );
+            
+            while ( $timestamp ) {
+                wp_unschedule_event( $timestamp, 'fupi_consents_backup_cron_event' );
+                $timestamp = wp_next_scheduled( 'fupi_consents_backup_cron_event' );
+            }
+
+            // Remove the setting for sending emails - this needs to be manually switched on every time the module is enabled, to send initial config and PP to the email
+            if ( ! empty( $this->proofrec['storage_location'] ) && $this->proofrec['storage_location'] == 'email' ) {
+                unset( $this->proofrec['storage_location'] );
+                update_option( 'fupi_proofrec', $this->proofrec );
+            }
+        }
+
+         // UPDATE TRACKING INFO IN CDB / EMAIL
+
+        if ( ! empty ( $clean_data['cook'] ) && ! empty ( $clean_data['proofrec'] ) && ! empty ( get_privacy_policy_url() ) ) {
             include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
-            new Fupi_compliance_status_checker( 'cdb', $this->cook, false, $clean_data );
-        }		
+            $gdpr_checker = new Fupi_compliance_status_checker( 'tools', $clean_data );
+            $gdpr_checker->send_and_return_status();
+        }
 
         // GENERATE FILES
 

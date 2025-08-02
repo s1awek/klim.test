@@ -25,10 +25,10 @@ FP.fns.clar_woo_events = () => {
 		clarity( 'set', 'product view', 'product view' );
 
 		clarity( 'set', 'product view - item id', ids_a );
-		if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: product view - item id', ids_a );
+		if ( fp.main.debug ) console.log('[FP] MS Clarity tag: product view - item id', ids_a );
 
 		clarity( 'set', 'product view - item name', names_a );
-		if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: product view - item name', names_a );
+		if ( fp.main.debug ) console.log('[FP] MS Clarity tag: product view - item name', names_a );
 		
 		// prevent double tracking in case the next teasers are added dynamically
 		fp.woo.clar.single.push(...item_ids);
@@ -62,10 +62,10 @@ FP.fns.clar_woo_events = () => {
 		} );
 
 		clarity( 'set', event_name + ' - item id', ids_a );
-		if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: ' + event_name + ' - item id', ids_a );
+		if ( fp.main.debug ) console.log('[FP] MS Clarity tag: ' + event_name + ' - item id', ids_a );
 
 		clarity( 'set', event_name + ' - item name', names_a );
-		if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: ' + event_name + ' - item name', names_a );
+		if ( fp.main.debug ) console.log('[FP] MS Clarity tag: ' + event_name + ' - item name', names_a );
 	};
 
 	FP.addAction( ['woo_add_to_cart'], data =>{
@@ -102,13 +102,13 @@ FP.fns.clar_woo_events = () => {
 		if ( ids_a.length == 0 ) return false;
 
 		clarity( 'set', event_name, event_name );
-		if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: ' + event_name );
+		if ( fp.main.debug ) console.log('[FP] MS Clarity tag: ' + event_name );
 
 		clarity( 'set', event_name + ' - item id', ids_a );
-		if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: ' + event_name + ' - item id', ids_a );
+		if ( fp.main.debug ) console.log('[FP] MS Clarity tag: ' + event_name + ' - item id', ids_a );
 
 		clarity( 'set', event_name + ' - item name', names_a );
-		if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: ' + event_name + ' - item name', names_a );
+		if ( fp.main.debug ) console.log('[FP] MS Clarity tag: ' + event_name + ' - item name', names_a );
 	}
 
 	// track order
@@ -138,7 +138,7 @@ FP.fns.clar_standard_events = () => {
 		FP.addAction( ['click'], function(){
 			if ( fpdata.clicked.link && fpdata.clicked.link.is_outbound ) {
 				clarity( 'set', 'Outbound link click', fpdata.clicked.link.href );
-				if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: outbound click', fpdata.clicked.link.href);
+				if ( fp.main.debug ) console.log('[FP] MS Clarity tag: outbound click', fpdata.clicked.link.href);
 			}
 		})
 	}
@@ -150,7 +150,7 @@ FP.fns.clar_standard_events = () => {
 			var trackedAffLink = FP.getTrackedAffiliateLink( fp.clar.tag_affiliate );
 			if ( trackedAffLink ) {
 				clarity( 'set', 'Affiliate link click', trackedAffLink );
-				if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: affiliate click', trackedAffLink);
+				if ( fp.main.debug ) console.log('[FP] MS Clarity tag: affiliate click', trackedAffLink);
 			}
 		})
 	}
@@ -161,7 +161,7 @@ FP.fns.clar_standard_events = () => {
 		FP.addAction( ['click'], function(){
 			if ( fpdata.clicked.link && ( fpdata.clicked.link.is_email || fpdata.clicked.link.is_tel ) ) {
 				clarity( 'set', 'Contact link click', fpdata.clicked.link.safe_email || fpdata.clicked.link.safe_tel );
-				if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: contact click', fpdata.clicked.link.safe_email || fpdata.clicked.link.safe_tel );
+				if ( fp.main.debug ) console.log('[FP] MS Clarity tag: contact click', fpdata.clicked.link.safe_email || fpdata.clicked.link.safe_tel );
 			}
 		});
 	}
@@ -173,7 +173,7 @@ FP.fns.clar_standard_events = () => {
 			var filename = FP.getTrackedFilename( fp.clar.tag_file_downl );
 			if ( filename ) {
 				clarity( 'set', 'File download', filename );
-				if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: download', filename );
+				if ( fp.main.debug ) console.log('[FP] MS Clarity tag: download', filename );
 			}
 		})
 	}
@@ -185,7 +185,7 @@ FP.fns.clar_standard_events = () => {
 			var formName = FP.getSubmittedForm( fp.clar.tag_forms );
 			if ( formName ){
 				clarity( 'set', 'Form submit', formName );
-				if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: form submit', formName);
+				if ( fp.main.debug ) console.log('[FP] MS Clarity tag: form submit', formName);
 			}
 		})
 	}
@@ -198,7 +198,7 @@ FP.fns.clar_standard_events = () => {
 		let send_el_view_evt = el => {
 			let name = el.dataset['clar_view'] || 'name not provided';
 			clarity( 'set', 'Element view', name );
-			if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: element view', name);
+			if ( fp.main.debug ) console.log('[FP] MS Clarity tag: element view', name);
 		};
 		
 		FP.intersectionObserver( newly_added_els, fp.clar.tag_views, 'clar', send_el_view_evt, true );
@@ -215,7 +215,7 @@ FP.fns.clar_standard_events = () => {
 		FP.addAction( ['click'], function(){
 			if ( fpdata.clicked.link && fpdata.clicked.link.is_anchor ){
 				clarity( 'set', 'Anchor link click', fpdata.clicked.link.href );
-				if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: anchor click', fpdata.clicked.link.href);
+				if ( fp.main.debug ) console.log('[FP] MS Clarity tag: anchor click', fpdata.clicked.link.href);
 			}
 		})
 	}
@@ -227,7 +227,7 @@ FP.fns.clar_standard_events = () => {
 			var name  = FP.getClickTarget( fp.clar.tag_elems );
 			if ( name ) {
 				clarity( 'set', 'Page element click', name );
-				if ( fp.vars.debug ) console.log('[FP] MS Clarity tag: element click', name);
+				if ( fp.main.debug ) console.log('[FP] MS Clarity tag: element click', name);
 			}
 		})
 	}

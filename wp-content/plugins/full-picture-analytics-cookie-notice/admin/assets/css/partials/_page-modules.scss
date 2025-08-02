@@ -31,7 +31,7 @@
 		padding: 0;
 	}
 	th{
-		font-weight: 500;
+		font-weight: 400;
 		padding: 16px 8px 0;
 		font-size: 14px;
 	}
@@ -60,6 +60,15 @@
 	}
 }
 
+@media screen and (max-width: 1099px) {
+	#fupi_settings_form table.fupi_table_grid{
+		tr{
+			flex: 1 0 40%;
+			max-width: 100%;
+		}
+	}
+}
+
 // text "this link has no settings"
 .fupi_no_link_info{
 	font-size: 13px;
@@ -67,7 +76,7 @@
 
 // Basic modules
 
-.fupi_basic_headline{
+.fupi_tools_integr_headline{
 	width: 100%;
 	margin: 30px 10px 10px;
 	p{
@@ -75,17 +84,7 @@
 		margin: 10px 0 0;
 	}
 }
-
-.fupi_adv_headline{
-	width: 100%;
-	margin: 0 10px 10px;
-	p{
-		font-size: 15px;
-		margin: 10px 0 0;
-	}
-}
-	.fupi_basic_headline_title,
-	.fupi_adv_headline_title{
+	.fupi_tools_integr_headline_title{
 		font-weight: 500;
 		font-size: 20px;
 	}
@@ -94,30 +93,12 @@
 
 .fupi_page_tools{
 	#fupi_settings_form{
-		h2{
-			background-color: #e0ecf5 !important;
-			border-radius: 10px;
-			text-align: center;
-			&:first-of-type{
-				padding-bottom: 50px;
-			}
-		}
 		.fupi_section_descr{
-			background-color: #e0ecf5;
-			border-radius: 10px;
-			> p{
-				text-align: center;
-			}
-			&:first-of-type{
-				background-color: #fff;
-				margin-top: 0;
-				border-radius: 10px;
-				margin-bottom: 10px;
-			}
+			margin-bottom: 0;
+			// border-radius: 10px;
 		}
 	}
 	.fupi_descr_buttons_wrappers{
-		margin-top: -19px; 
 		display: flex; 
 		justify-content: center; 
 		gap: 30px;
@@ -153,7 +134,7 @@
 		button{
 			flex: 0 0 auto;
 			border: 0;
-			background-color: #c8efec;
+			background-color: #f5e4cd;
 			color: #000;
 			&.fupi_active{
 				background-color: #ffdc94;

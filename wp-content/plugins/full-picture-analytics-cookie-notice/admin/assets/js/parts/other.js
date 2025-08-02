@@ -123,19 +123,6 @@
 
 (()=>{
 
-	// ADD "ACCOUNT" LINK TO SIDE NAV
-
-	let sidebar_account_link = FP.findFirst('#toplevel_page_full_picture_tools a[href="https://wpfullpicture.com/account/"]'),
-		sidenav_section = FP.findFirst('.fupi_sidenav_account_section');
-
-	if ( sidebar_account_link && sidenav_section ) {
-		sidenav_section.style.display = 'block';
-		FP.findFirst( 'a', sidenav_section ).href = sidebar_account_link.href;
-	}
-})();
-
-(()=>{
-
 	// SLIDER with info on PRO features
 
 	function show_random_slide( slide_dots, slides ){

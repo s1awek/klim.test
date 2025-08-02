@@ -18,6 +18,8 @@ class Product {
 
     private $variations = array();
 
+    private $indexingFailureReason = '';
+
     public function __construct( $product ) {
         if ( !empty( $product ) && is_object( $product ) && is_a( $product, 'WC_Product' ) ) {
             $this->productID = $product->get_id();
@@ -599,16 +601,20 @@ class Product {
      * @return bool
      */
     public function isPublishedAndVisible() {
-        $result = false;
         if ( !$this->isValid() ) {
-            return $result;
+            return false;
         }
-        if ( $this->getWooObject()->get_status() === 'publish' ) {
-            if ( in_array( $this->getWooObject()->get_catalog_visibility(), array('visible', 'search') ) ) {
-                $result = true;
-            }
+        $status = $this->getWooObject()->get_status();
+        $visibility = $this->getWooObject()->get_catalog_visibility();
+        if ( $status !== 'publish' ) {
+            $this->indexingFailureReason = 'Product is not published.';
+            return false;
         }
-        return $result;
+        if ( !in_array( $visibility, array('visible', 'search') ) ) {
+            $this->indexingFailureReason = 'Product is not visible in catalog or search.';
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -622,7 +628,7 @@ class Product {
         if ( $this->getWooObject()->get_type() === 'variable' && empty( $this->getAvailableVariations() ) ) {
             $canIndex = false;
         }
-        return $canIndex;
+        return apply_filters( 'dgwt/wcas/can_index_variable_parent', $canIndex, $this );
     }
 
 }

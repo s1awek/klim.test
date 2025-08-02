@@ -1,7 +1,7 @@
 ;(function(window){
 
-	function can_enable_ga4() 	{ return FP.isAllowedToLoad( 'ga4', ['stats'], ['id'], 1, fp.notice && fp.notice.gtag_no_cookie_mode ); }
-	function can_enable_gads() 	{ return FP.isAllowedToLoad( 'gads', ['stats','marketing'], ['id'], false, fp.notice && fp.notice.gtag_no_cookie_mode ); }
+	function can_enable_ga4() 	{ return FP.isAllowedToLoad( 'ga4', ['stats'], ['id'], 1, true ); }
+	function can_enable_gads() 	{ return FP.isAllowedToLoad( 'gads', ['stats','marketing'], ['id'], false, true ); }
 
 	load_gtag( can_enable_ga4(), can_enable_gads() );
 
@@ -24,7 +24,7 @@
 
 		// ! Datalayer is already created in head-js.php
 
-		if ( ! fp.loading.includes('gtg') ) {
+		if ( ! fp.loading.includes('gtg') && ! fp?.gtag?.custom_gateway ) {
 
 			fp.loading.push('gtg');
 
@@ -41,7 +41,7 @@
 		};
 	}
 
-	function enable_tags( enable_ga4, enable_gads ){
+	function enable_tags( enable_ga4, enable_gads ) {
 
 		if ( ! fp.loaded.includes('gtg') ) {
 			window.gtag('js', new Date());

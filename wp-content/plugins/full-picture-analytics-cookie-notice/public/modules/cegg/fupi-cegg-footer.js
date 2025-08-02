@@ -2,7 +2,7 @@
 
 FP.fns.add_cegg_tag = ( tag ) => {
 	window.CE2.addTag( tag );
-	if ( fp.vars.debug ) console.log( '[FP] CrazyEgg tag: ' + tag );
+	if ( fp.main.debug ) console.log( '[FP] CrazyEgg tag: ' + tag );
 }
 
 FP.fns.cegg_woo_events = ()=>{

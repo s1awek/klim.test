@@ -2,6 +2,8 @@
 
 namespace DgoraWcas\Integrations\Themes;
 
+use DgoraWcas\Helpers;
+
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -16,8 +18,12 @@ class ThemesCompatibility {
 	private $supportActive = false;
 
 	public function __construct() {
-		$this->setCurrentTheme();
+		// Break early if the "nofibosearch" mode is active.
+		if ( Helpers::isNoFiboSearchModeActive() ) {
+			return;
+		}
 
+		$this->setCurrentTheme();
 		$this->loadCompatibilities();
 	}
 
@@ -388,15 +394,6 @@ class ThemesCompatibility {
 					'forceMobileOverlayBreakpoint' => 991,
 				),
 			),
-			'listeo'           => array(
-				'slug' => 'listeo',
-				'name' => 'Listeo',
-				'args' => array(
-					'forceMobileOverlay'           => true,
-					'forceMobileOverlayBreakpoint' => 980,
-					'forceLayoutBreakpoint'        => 980,
-				),
-			),
 		);
 	}
 
@@ -409,7 +406,15 @@ class ThemesCompatibility {
 		foreach ( $this->supportedThemes() as $theme ) {
 			if ( $theme['slug'] === $this->themeSlug ) {
 				if ( isset( $theme['args']['minimumVersion'] ) && version_compare( $this->themeVersion, $theme['args']['minimumVersion'], '<' ) ) {
+					$currentVersion = $this->themeVersion;
 					// Break if theme version is lower than required.
+					add_filter( 'dgwt/wcas/troubleshooting/unsupported_theme_version', function () use ( $theme, $currentVersion ) {
+						return [
+							'name'           => $theme['name'],
+							'currentVersion' => $currentVersion,
+							'minimumVersion' => $theme['args']['minimumVersion'],
+						];
+					} );
 					break;
 				}
 

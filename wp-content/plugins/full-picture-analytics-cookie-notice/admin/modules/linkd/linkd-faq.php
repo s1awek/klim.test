@@ -1,11 +1,6 @@
 <?php
 
-    $questions = [
-        [
-            'id' => 'track_convert',
-            'title' => esc_html__('How to track conversions', 'full-picture-analytics-cookie-notice' ),
-        ],
-    ];
+    $questions = [];
 
     // Do not use IDs below!
     // The code will be copied to a popup and IDs will double

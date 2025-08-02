@@ -5,7 +5,7 @@ Tags: WooCommerce, Product Feed, Google Shopping, Facebook Catalog, XML
 Requires at least: 4.4
 Tested Up To: 6.8
 Requires PHP: 5.6
-Stable tag: 6.5.69
+Stable tag: 6.5.74
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -330,12 +330,27 @@ Using pro version:
 
 == Changelog ==
 
+= 6.5.74 (2025-07-28) =
+* Updated: Code Refactor
+
+= 6.5.73 (2025-07-21) =
+* Tweak: WooCommerce version 10.0 compatibility checked
+
+= 6.5.72 (2025-07-15) =
+* Updated: Code Refactor
+
+= 6.5.71 (2025-07-08) =
+* Updated: Our Plugins page text
+
+= 6.5.70 (2025-07-02) =
+* Removed: Summer sale discount banner
+
 = 6.5.69 (2025-06-30) =
 * Tweak: WooCommerce version 9.9 compatibility checked
 
 = 6.5.68 (2025-06-24) =
 * Added: Summer sale discount banner
-* Updated: Settings page text update
+* Updated: Settings page text
 
 = 6.5.67 (2025-06-16) =
 * Added: Filter Hook for JSON file type

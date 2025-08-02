@@ -151,7 +151,7 @@
         }
 
         // STOP tracking an excluded visitor (MUST be after checking FORCE LOAD)
-        if ( ! fp.vars.track_current_user ) return false;
+        if ( ! fp.main.track_current_user ) return false;
 
         // STOP if the script is set NOT to load in the current location
         if ( geo_a && ! shouldCustomScriptLoadHere( geo_a ) ) return false;
@@ -192,7 +192,7 @@
         }
 
         // STOP tracking an excluded visitor (MUST be after checking FORCE LOAD)
-        if ( ! fp.vars.track_current_user ) return false;
+        if ( ! fp.main.track_current_user ) return false;
 
         // STOP if the script is set NOT to load in the current location
         if ( ! shouldScriptLoadHere( id ) ) return false;
@@ -433,7 +433,7 @@
 		// PREVENT MULTI CLICKS
 	    // Do not run this function if a visitor clicks the element multiple times in a short time-span
 	    var now = Date.now();
-	    if ( ! ( ! FP.v.lastClick || now - FP.v.lastClick > fp.vars.dblclck_time ) ) return;
+	    if ( ! ( ! FP.v.lastClick || now - FP.v.lastClick > fp.track.dblclck_time ) ) return;
 	    FP.v.lastClick = now;
 		
 		// PREVENT REDIRECTS
@@ -441,13 +441,13 @@
 		// prevent default if a visitor clicked a link that is to be opened on the current tab
 		var link_el = e.target.closest('a[href]');
 
-		if ( link_el && ! is_middle_click && link_el.target != '_blank' && fp.vars.link_click_delay  ){
+		if ( link_el && ! is_middle_click && link_el.target != '_blank' && fp.track.link_click_delay  ){
 			e.preventDefault(); // prevents redirects
 			e.stopPropagation(); // prevents other event listeners from firing
 			e.target.classList.add('fupi_click_stopped');
 			e.target.style.pointerEvents = 'none';
 			redirect_stopped = true;
-			if ( fp.vars.debug ) console.log('[FP] link-click stopped');
+			if ( fp.main.debug ) console.log('[FP] link-click stopped');
 		};
 
 		// GET CLICK DATA
@@ -489,7 +489,7 @@
 					fpdata.clicked.element.click();
 					fpdata.clicked.element.classList.remove('fupi_click_stopped');
 					e.target.style.pointerEvents = '';
-					if ( fp.vars.debug ) console.log('[FP] Initiated click event after all FP functions');
+					if ( fp.main.debug ) console.log('[FP] Initiated click event after all FP functions');
 				}
 			}
 		);
@@ -665,10 +665,10 @@
         setTimeout ( ()=>{ FP.doActions( ['dom_loaded'] ) }, 250 ); // we must add a small delay to make sure that all triggers are hooked
 
         // start listening to form submits
-        setTimeout( ()=>{ document.addEventListener('submit', formSubmitEvents ) }, fp.vars.formsubm_trackdelay ? fp.vars.formsubm_trackdelay * 1000 : 1000 );
+        setTimeout( ()=>{ document.addEventListener('submit', formSubmitEvents ) }, fp.track.formsubm_trackdelay ? fp.track.formsubm_trackdelay * 1000 : 1000 );
         
         // start listening to DOM modifications
-		if ( fp.vars.use_mutation_observer ) FP.detectAddedElement( addedNodes => {
+		if ( fp.track.use_mutation_observer ) FP.detectAddedElement( addedNodes => {
             let els = FP.nl2Arr( addedNodes );
             if ( els.length > 0 ) FP.doActions( ['dom_modified'], els );
         } );

@@ -1,10 +1,10 @@
 === Analytics & Privacy Toolkit - WP Full Picture ===
 Contributors: chrisplaneta, freemius
 Donate link: https://wpfullpicture.com/
-Tags: woocommerce, consent mode, analytics, gdpr, gtm
+Tags: Consent mode, Analytics, GDPR, GTM, Google Ads
 Requires at least: 5.4.0
 Tested up to: 6.8.1
-Stable tag: 8.5.3.2
+Stable tag: 9.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,7 +103,7 @@ WP Full Picture Pro is a powerful tool for businesses. It offers:
 - **CAPI / Server-side tracking** - more accurate tracking in Meta Pixel and Google Analytics (for WooCommerce orders).
 - **Status-based order tracking** - tracking purchases when they get specific order status.
 - **Advanced Triggers** - this lets you track multi-step actions, like visiting 5 product pages or showing interest in a product.
-- **Lead scoring** - scores visitors based on their actions to see which traffic sources bring the best leads.
+- **Visitor scoring** - scores visitors based on their actions to see which traffic sources bring the best leads.
 - **Metadata tracking** - tracking custom user, post and taxonomy data.
 - and more
 
@@ -190,6 +190,42 @@ No. WP Full Picture is focused on tracking and privacy. To generate a product ca
 6. View traffic and marketing reports in the admin panel
 
 == Changelog ==
+
+= 9.0.0 (02-07-2025) =
+
+* [New] User interface overhaul, including major code refactoring, new modules, changed settings and improved texts
+* [New] Setup mode
+* [New] Records of consent can be now stored in email account (PRO only)
+* [New] Backup restoration functions are built from scratch
+* [New] You can now add meta tags in the head section of HTML
+* [New] MS UET Consent Mode
+* [New] Added Custom events tracking to the second module of Google Analytics
+* [Update] Google Advanced Consent Mode is now enabled by default
+* [Update] Google Tag now loads for all visits (tracking managed by advanced consent mode)
+* [Update] [Custom Scripts] HTML comments are now automatically removed from the pasted code
+* [Update] Backups are now sorted by date
+* [Update] fp_info shortcode now includes information on iframes and automatically managed, 3rd-party tracking tools
+* [Update] fp_info shortcode now checks for duplicates
+* [Update] [Rest/ AJAX calls] Changed function for getting visitor's IP address
+* [Fix] [Blocking scripts] Rewritten method of blocking scripts with specific content
+* [Fix] Added a fallback widget list name for WooCommerce
+* [Removed] Removed Pixel Caffeine from supported plugins in the Tracking Tools Manager
+* [Removed] Privacy mode in Hotjar has been removed and replaced with data supression option
+* [Removed] [GA, GAds, MS Ads] Removed setting to track without waiting for consent as they did not work with consent modes
+* [Removed] Enabling debug mode no longer displays WP options below the "Save settings" button
+* [Other] Visitors are now always asked for consent after new tracking tools are enabled or priv. policy text changes
+* [Other] [Woo] Move "blocking sourcebuster.js" to WooCommerce settings
+* [Other] Added a "feedback" button under all popup texts
+
+= 8.5.3.4 (21-05-2025) [Pro-only update] =
+
+* [Fix] [Woo] Added a check for the "billing_address_2" field in checkout
+* [Info] Version numbers from 8.5.3.1 to 8.5.3.3 were made available only for Free users in WP repository. They are identical to 8.5.3. They were published because of an error in WP org's plugin repository.
+
+= 8.5.3.4 (21-05-2025) [Pro-only update] =
+
+* [Fix] [Woo] Added a check for the "billing_address_2" field in checkout
+* [Info] Version numbers from 8.5.3.1 to 8.5.3.3 were made available only for Free users in WP repository. They are identical to 8.5.3. They were published because of an error in WP org's plugin repository.
 
 = 8.5.3 (19-05-2025) =
 
@@ -337,7 +373,7 @@ No. WP Full Picture is focused on tracking and privacy. To generate a product ca
 
 * [New] [Privacy] [Pro] [Beta] Saving consents in the cloud database
 * [New] [Privacy] GDPR setup helper
-* [New] [Pro] Lead scoring
+* [New] [Pro] Visitor scoring
 * [New] WP Full Picture is now fully translated to Polish
 * [New] [Plausible] Added an option to track properties as goals
 * [New] [Plausible] [Pro] Custom events tracking

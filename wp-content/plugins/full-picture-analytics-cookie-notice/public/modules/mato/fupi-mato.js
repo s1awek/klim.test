@@ -10,7 +10,7 @@
 
 	document.addEventListener('fupi_consents_changed', function (e) {
 		if ( fp.mato.no_cookies && fpdata.cookies.stats ) {
-			if ( fp.vars.debug ) console.log('[FP] Matomo - cookie permissions have been updated. Matomo is now running in cookie mode');
+			if ( fp.main.debug ) console.log('[FP] Matomo - cookie permissions have been updated. Matomo is now running in cookie mode');
 			_paq.push(['setCookieConsentGiven']);
 		}
 	});
@@ -39,21 +39,21 @@
 				// and the cookies notice will show up here
 				if ( fp.notice.enabled && ( fp.notice.mode == 'optin' || fp.notice.mode == 'optout' ) ) {
 					// enable privacy mode
-					if ( fp.vars.debug ) console.log('[FP] Matomo - consent mode enabled');
+					if ( fp.main.debug ) console.log('[FP] Matomo - consent mode enabled');
 					_paq.push(['requireCookieConsent']); // << this means that tracking will be done without cookies
 				}
 			// if the visitor made some cookies choices
 			} else {
 				// but didn\'t agree to stats
 				if ( ! fpdata.cookies.stats ) {
-					if ( fp.vars.debug ) console.log('[FP] Matomo - consent mode enabled');
+					if ( fp.main.debug ) console.log('[FP] Matomo - consent mode enabled');
 					// disable cookie permission in case it was given earlier
 					_paq.push(['forgetCookieConsentGiven']); 
 					// enable consent mode
 					_paq.push(['requireCookieConsent']);
 				// and agreed to cookies
 				} else {
-					if ( fp.vars.debug ) console.log('[FP] Matomo - Cookie permissions have been updated. Matomo is now running in a standard mode (with cookies)');
+					if ( fp.main.debug ) console.log('[FP] Matomo - Cookie permissions have been updated. Matomo is now running in a standard mode (with cookies)');
 					_paq.push(['setCookieConsentGiven']);
 				}
 			}

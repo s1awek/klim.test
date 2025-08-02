@@ -75,7 +75,7 @@ FP.fns.mads_woo_events = ()=>{
 			};
 				
 			window.uetq.push( 'event', 'woo list item view', payload_o );
-			if ( fp.vars.debug ) console.log('[FP] MS Ads "woo list item view" event action', payload_o);
+			if ( fp.main.debug ) console.log('[FP] MS Ads "woo list item view" event action', payload_o);
 		};
 
 		if ( single_ids_a.length > 0 ) {
@@ -90,7 +90,7 @@ FP.fns.mads_woo_events = ()=>{
 			if ( fpdata.content_id ) payload_o['ecomm_category'] = fpdata.content_id;
 			
 			window.uetq.push( 'event', 'woo product view', payload_o );
-			if ( fp.vars.debug ) console.log('[FP] MS Ads "woo product view" event action', payload_o);
+			if ( fp.main.debug ) console.log('[FP] MS Ads "woo product view" event action', payload_o);
 
 		}
 	};
@@ -118,7 +118,7 @@ FP.fns.mads_woo_events = ()=>{
 		if ( fpdata.content_id ) payload_o['ecomm_category'] = fpdata.content_id;
 
 		window.uetq.push( 'event', 'woo product view', payload_o );
-		if ( fp.vars.debug ) console.log('[FP] MS Ads "woo product view" event action', payload_o);
+		if ( fp.main.debug ) console.log('[FP] MS Ads "woo product view" event action', payload_o);
 	}
 
 	FP.addAction( ['woo_variant_view'], woo_variant_view );
@@ -163,7 +163,7 @@ FP.fns.mads_woo_events = ()=>{
 		};
 
 		window.uetq.push( 'event', 'woo add to cart', payload_o );
-		if ( fp.vars.debug ) console.log('[FP] MS Ads "woo add to cart" event action', payload_o);
+		if ( fp.main.debug ) console.log('[FP] MS Ads "woo add to cart" event action', payload_o);
 	}
 
 	FP.addAction( ['woo_add_to_cart'], data =>{
@@ -210,7 +210,7 @@ FP.fns.mads_woo_events = ()=>{
 		}
 		
 		window.uetq.push( 'event', 'woo ' + event_name, payload_o );
-		if ( fp.vars.debug ) console.log('[FP] MS Ads "woo ' + event_name + '" event action', payload_o);
+		if ( fp.main.debug ) console.log('[FP] MS Ads "woo ' + event_name + '" event action', payload_o);
 	}
 
 	// track order
@@ -244,7 +244,7 @@ FP.fns.mads_standard_events = function(){
 			if ( ! el.dataset.mads_view ) return;
 
 			window.uetq.push( 'event', el.dataset.mads_view, {} );
-			if ( fp.vars.debug ) console.log( '[FP] MS Ads event action: ' + el.dataset.mads_view );
+			if ( fp.main.debug ) console.log( '[FP] MS Ads event action: ' + el.dataset.mads_view );
 		};
 		
 		FP.intersectionObserver( newly_added_els, fp.mads.track_views, 'mads', send_el_view_evt, true);
@@ -262,7 +262,7 @@ FP.fns.mads_standard_events = function(){
 			var evt_action = FP.getTrackedAffiliateLink( fp.mads.track_affiliate );
 			if ( evt_action ) {
 				window.uetq.push( 'event', evt_action, {} );
-				if ( fp.vars.debug ) console.log( '[FP] MS Ads event action: ' + evt_action );
+				if ( fp.main.debug ) console.log( '[FP] MS Ads event action: ' + evt_action );
 			}
 		})
 	}
@@ -274,7 +274,7 @@ FP.fns.mads_standard_events = function(){
 			var is_tracked_file = FP.getTrackedFilename( fp.mads.track_file_downl.formats );
 			if ( is_tracked_file ) {
 				window.uetq.push( 'event', fp.mads.track_file_downl.val, {} );
-				if ( fp.vars.debug ) console.log( '[FP] MS Ads event action: ' + fp.mads.track_file_downl.val );
+				if ( fp.main.debug ) console.log( '[FP] MS Ads event action: ' + fp.mads.track_file_downl.val );
 			}
 		})
 	}
@@ -286,7 +286,7 @@ FP.fns.mads_standard_events = function(){
 			var evt_action = FP.getSubmittedForm( fp.mads.track_forms );
 			if ( evt_action ){
 				window.uetq.push( 'event', evt_action, {} );
-				if ( fp.vars.debug ) console.log( '[FP] MS Ads event action: ' + evt_action );
+				if ( fp.main.debug ) console.log( '[FP] MS Ads event action: ' + evt_action );
 			}
 		})
 	}
@@ -298,7 +298,7 @@ FP.fns.mads_standard_events = function(){
 			var evt_action  = FP.getClickTarget( fp.mads.track_elems );
 			if ( evt_action ) {
 				window.uetq.push( 'event', evt_action, {} );
-				if ( fp.vars.debug ) console.log( '[FP] MS Ads event action: ' + evt_action );
+				if ( fp.main.debug ) console.log( '[FP] MS Ads event action: ' + evt_action );
 			}
 		})
 	}

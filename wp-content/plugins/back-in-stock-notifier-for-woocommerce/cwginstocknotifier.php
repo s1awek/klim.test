@@ -5,14 +5,14 @@
  * Plugin Name: Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro
  * Plugin URI: https://codewoogeek.online/shop/free-plugins/back-in-stock-notifier/
  * Description: Notify subscribed users when products back in stock
- * Version: 5.9.0
+ * Version: 6.0.5
  * Author: codewoogeek
  * Requires Plugins: woocommerce
  * Author URI: https://codewoogeek.online
  * Text Domain: back-in-stock-notifier-for-woocommerce
  * Domain Path: /languages
  * WC requires at least: 2.2.0
- * WC tested up to: 9.9.4
+ * WC tested up to: 10.0.3
  * @package     back-in-stock-notifier-for-woocommerce
  * @author      codewoogeek
  * @copyright   2025 CodeWooGeek, LLC
@@ -47,7 +47,7 @@ if ( ! class_exists( 'CWG_Instock_Notifier' ) ) {
 		 *
 		 * @var string Version
 		 */
-		public $version = '5.9.0';
+		public $version = '6.0.5';
 
 		/**
 		 * Instance variable
@@ -85,7 +85,7 @@ if ( ! class_exists( 'CWG_Instock_Notifier' ) ) {
 		 * Construct the class
 		 */
 		public function __construct() {
-			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+			include_once ABSPATH . 'wp-admin/includes/plugin.php';
 			$this->avoid_header_sent();
 			$this->define_constant();
 			$this->initialize();
@@ -97,6 +97,9 @@ if ( ! class_exists( 'CWG_Instock_Notifier' ) ) {
 			add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
 			add_action( 'before_woocommerce_init', array( $this, 'declare_wc_compatibility' ) );
 
+			if ( is_admin() ) {
+				add_action( 'wp_dashboard_setup', array( 'CWG_Back_In_Stock_Dashboard_Widget', 'init' ) );
+			}
 			register_deactivation_hook( __FILE__, array( $this, 'clear_schedule_events' ) );
 		}
 
@@ -142,6 +145,8 @@ if ( ! class_exists( 'CWG_Instock_Notifier' ) ) {
 			include 'includes/class-site-checker.php';
 			include 'includes/class-stock-arrival.php';
 			include 'includes/class-stock-arrival-settings.php';
+			include 'includes/class-queue.php';
+			include 'includes/class-dashboard-widget.php';
 		}
 
 		/**
@@ -297,14 +302,16 @@ if ( ! class_exists( 'CWG_Instock_Notifier' ) ) {
 		public function admin_enqueue_scripts() {
 			$screen = get_current_screen();
 			if ( isset( $screen->id ) && ( ( 'cwginstocknotifier_page_cwg-instock-mailer' == $screen->id ) || ( 'edit-cwginstocknotifier' == $screen->id ) || ( 'cwginstocknotifier_page_cwg-instock-status' == $screen->id ) || ( 'cwginstocknotifier_page_cwg-instock-extensions' == $screen->id ) ) ) {
+				wp_enqueue_script( 'sweetalert2', CWGINSTOCK_PLUGINURL . 'assets/js/sweetalert2.min.js', array( 'jquery' ), $this->version, true );
 				wp_enqueue_style( 'cwginstock_admin_css', CWGINSTOCK_PLUGINURL . '/assets/css/admin.css', array(), $this->version );
-				wp_register_script( 'cwginstock_admin_js', CWGINSTOCK_PLUGINURL . '/assets/js/admin.js', array( 'jquery', 'wc-enhanced-select' ), $this->version, array( 'in_footer' => true ) );
+				wp_register_script( 'cwginstock_admin_js', CWGINSTOCK_PLUGINURL . '/assets/js/admin.js', array( 'jquery', 'wc-enhanced-select', 'wp-i18n' ), $this->version, array( 'in_footer' => true ) );
 				wp_localize_script(
 					'cwginstock_admin_js',
 					'cwg_enhanced_selected_params',
 					array(
 						'search_tags_nonce' => wp_create_nonce( 'search-tags' ),
 						'ajax_url' => admin_url( 'admin-ajax.php' ),
+						'confirm_nonce' => wp_create_nonce( 'cwginstock_delete_all_posts_and_related' ),
 					)
 				);
 				wp_enqueue_script( 'cwginstock_admin_js' );
@@ -391,7 +398,7 @@ if ( ! class_exists( 'CWG_Instock_Notifier' ) ) {
 	 * @since 1.0
 	 */
 	function CWG_Instock_Notifier() {
-		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 		if ( cwg_is_woocommerce_activated() ) {
 			return CWG_Instock_Notifier::instance();
 		}
@@ -405,7 +412,7 @@ if ( ! class_exists( 'CWG_Instock_Notifier' ) ) {
 		 * @return bool
 		 */
 		function cwg_is_woocommerce_activated() {
-			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+			include_once ABSPATH . 'wp-admin/includes/plugin.php';
 			if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 				return true;
 			} elseif ( is_plugin_active_for_network( 'woocommerce/woocommerce.php' ) ) {

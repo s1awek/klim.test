@@ -23,19 +23,19 @@ switch( $section_id ){
 	// LOADING
 
 	case 'fupi_insp_loading':
-		$ret_text = '<p>' . esc_html__( 'Change when this tool loads and starts tracking visitors.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Here you can change when and where this tool loads. This is all optional.', 'full-picture-analytics-cookie-notice') . '</p>';
+	break;
+
+	// DATA COLLECTION
+
+	case 'fupi_insp_basic':
+		$ret_text = '<p>' . esc_html__( 'These settings impact the amount and precision of collected data.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
 	// TAGS
 
 	case 'fupi_insp_tags':
-		$ret_text = '<p>' . esc_html__( 'Tracked data is used to tag recordings, to let you quickly find the ones that show what you need.', 'full-picture-analytics-cookie-notice') . '</p>';
-	break;
-
-	// USER IDENTIFICATION
-
-	case 'fupi_insp_user':
-		$ret_text = '<p>' . esc_html__( 'Identified users can be associated with session recordings.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Here you can tag session recordings with user actions and extra information.', 'full-picture-analytics-cookie-notice' ) . '</p>';
 	break;
 
 	// E-COMMERCE

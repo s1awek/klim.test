@@ -10,7 +10,7 @@
 	// FUNCTIONS
 
 	function allow_loading_hotj(){
-		 return FP.isAllowedToLoad( 'hotj', ['stats'], ['id'], false, fp.hotj && fp.hotj.no_pii ); // module id in fp.XX, required cookie permission, setting name with required data (like in fp.gtm.setting_name)
+		 return FP.isAllowedToLoad( 'hotj', ['stats'], ['id'], false, fp.hotj && fp.hotj.data_suppression ); // module id in fp.XX, required cookie permission, setting name with required data (like in fp.gtm.setting_name)
 	}
 
 	function load_hotj() {
@@ -46,7 +46,7 @@
 		// Send static tags
 		if ( static_tags.length > 0 ) {
 			hj( 'event', static_tags );
-			if ( fp.vars.debug ) console.log('[FP] Hotjar tag: sent static tags', static_tags );
+			if ( fp.main.debug ) console.log('[FP] Hotjar tag: sent static tags', static_tags );
 		}
 
 		

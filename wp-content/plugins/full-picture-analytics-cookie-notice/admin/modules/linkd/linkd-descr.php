@@ -23,19 +23,19 @@ switch( $section_id ){
 	// LOADING
 	
 	case 'fupi_linkd_loading':
-		$ret_text = '<p>' . esc_html__( 'Change when this tool loads and starts tracking visitors.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Here you can change when and where this tool loads. This is all optional.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
-    // EVENT CONVERSIONS
+    // SIMPLE EVENTS
 
 	case 'fupi_linkd_events':
-		$ret_text = '<p>' . esc_html__( 'To track conversions you need to register them in LinkedIn Campaign Manager and paste their IDs in the form below.', 'full-picture-analytics-cookie-notice') . '<button type="button" class="button-secondary fupi_open_popup" data-popup="fupi_track_convert_popup">' . esc_html__('How to do it','full-picture-analytics-cookie-notice') . '</button></p>';
+		$ret_text = '<p>' . esc_html__('Use functions on this page to track simple events, like clicking a button or submitting a form.', 'full-picture-analytics-cookie-notice' ) . ' ' . esc_html__( 'To get conversion IDs you need to register these events in LinkedIn Campaign Manager and paste their IDs in the form below.', 'full-picture-analytics-cookie-notice') . ' <button type="button" class="fupi_faux_link fupi_open_popup" data-popup="fupi_track_convert_popup">' . esc_html__('Learn more','full-picture-analytics-cookie-notice') . ' <span class="fupi_open_popup_i">i</span></button></p>';
 	break;
 
 	case 'fupi_linkd_ecomm':
 
 		if ( empty( $no_woo_descr_text ) ) {
-			$ret_text = '<p>' . esc_html__( 'To track conversions you need to register them in LinkedIn Campaign Manager and paste their IDs in the form below.', 'full-picture-analytics-cookie-notice') . ' <button type="button" class="button-secondary fupi_open_popup" data-popup="fupi_track_convert_popup">' . esc_html__('Learn how to do it','full-picture-analytics-cookie-notice') . '</button></p>';
+			$ret_text = '<p>' . esc_html__( 'To track conversions you need to register them in LinkedIn Campaign Manager and paste their IDs in the form below.', 'full-picture-analytics-cookie-notice') . ' <button type="button" class="fupi_faux_link fupi_open_popup" data-popup="fupi_track_convert_popup">' . esc_html__('Learn more','full-picture-analytics-cookie-notice') . ' <span class="fupi_open_popup_i">i</span></button></p>';
 		} else {
 			$ret_text = $no_woo_descr_text;
 		};

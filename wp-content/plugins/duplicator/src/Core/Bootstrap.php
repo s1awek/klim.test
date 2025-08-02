@@ -39,8 +39,7 @@ use Duplicator\Core\Notifications\Review;
 use Duplicator\Core\Views\TplMng;
 use Duplicator\Utils\CronUtils;
 use Duplicator\Utils\ExtraPlugins\CrossPromotion;
-use Duplicator\Utils\ExtraPlugins\ExtraPluginsMng;
-use Duplicator\Utils\Upsell;
+use Duplicator\Utils\LinkManager;
 use Duplicator\Views\DashboardWidget;
 use Duplicator\Views\EducationElements;
 use Duplicator\Utils\UsageStatistics\StatsBootstrap;
@@ -59,7 +58,7 @@ class Bootstrap
         if (is_admin()) {
             add_action('plugins_loaded', array(__CLASS__, 'update'));
             add_action('plugins_loaded', array(__CLASS__, 'wpfrontIntegrate'));
-            add_action('plugins_loaded', array(__CLASS__, 'loadTextdomain'));
+            add_action('init', array(__CLASS__, 'loadTextdomain'));
 
             /* ========================================================
             * ACTIVATE/DEACTIVE/UPDATE HOOKS
@@ -344,7 +343,7 @@ class Bootstrap
                 'page_title'  => $proTitle,
                 'menu_title'  => $proTitle,
                 'capability'  => 'manage_options',
-                'menu_slug'   => Upsell::getCampaignUrl('admin-menu', 'Upgrade to Pro'),
+                'menu_slug'   => LinkManager::getCampaignUrl('admin-menu', 'Upgrade to Pro'),
                 'callback'    => null,
             )
         );
@@ -522,7 +521,7 @@ class Bootstrap
               array_unshift($links, $settings_link);
              */
             $upgrade_link = '<a style="color: #1da867;" class="dup-plugins-list-pro-upgrade" href="' .
-                esc_url(Upsell::getCampaignUrl('plugin-actions-link')) . '" target="_blank">' .
+                esc_url(LinkManager::getCampaignUrl('plugin-actions-link')) . '" target="_blank">' .
                 '<strong style="display: inline;">' .
                 esc_html__("Upgrade to Pro", 'duplicator') .
                 '</strong></a>';

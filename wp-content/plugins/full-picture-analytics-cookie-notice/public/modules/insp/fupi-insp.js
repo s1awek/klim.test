@@ -56,7 +56,7 @@
 
 		if ( has_static_tags ) {
 			__insp.push( [ 'tagSession', static_tags ] );
-			if ( fp.vars.debug ) console.log('[FP] Inspectlet tags: ', static_tags );
+			if ( fp.main.debug ) console.log('[FP] Inspectlet tags: ', static_tags );
 		}
 
 		

@@ -1,6 +1,6 @@
 FP.fns.track_tik_evt = ( event_name, payload = false ) => {
 	ttq.track( event_name, payload );
-	if ( fp.vars.debug ) console.log('[FP] TikTok "' + event_name + '" event: ', payload );
+	if ( fp.main.debug ) console.log('[FP] TikTok "' + event_name + '" event: ', payload );
 };
 
 FP.fns.tik_woo_events = () => {

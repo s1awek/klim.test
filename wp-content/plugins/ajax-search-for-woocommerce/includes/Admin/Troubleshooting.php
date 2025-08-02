@@ -616,6 +616,66 @@ class Troubleshooting {
     }
 
     /**
+     * Test to verify whether the theme we integrate with meet the minimum supported versions
+     *
+     * @return array The test result.
+     */
+    public function getTestMinThemeVersion() {
+        $result = array(
+            'label'       => '',
+            'status'      => 'good',
+            'description' => '',
+            'actions'     => '',
+            'test'        => 'MinThemeVersion',
+        );
+        $unsupportedTheme = apply_filters( 'dgwt/wcas/troubleshooting/unsupported_theme_version', [] );
+        if ( !empty( $unsupportedTheme ) ) {
+            $result['status'] = 'critical';
+            $result['label'] = __( "Unsupported theme version", 'ajax-search-for-woocommerce' );
+            $result['description'] .= '<p>' . sprintf(
+                __( 'We’ve detected that you’re using the %1$s theme, which we support, but your current version (%2$s) is not compatible with our integration. To activate and use our integration properly, please update the theme to at least version %3$s.', 'ajax-search-for-woocommerce' ),
+                '<strong>' . $unsupportedTheme['name'] . '</strong>',
+                '<strong>v' . $unsupportedTheme['currentVersion'] . '</strong>',
+                '<strong>v' . $unsupportedTheme['minimumVersion'] . '</strong>'
+            ) . '</p>';
+        }
+        return $result;
+    }
+
+    /**
+     * Test to verify whether plugins we integrate with meet the minimum supported versions
+     *
+     * @return array The test result.
+     */
+    public function getTestMinPluginVersions() {
+        $result = array(
+            'label'       => '',
+            'status'      => 'good',
+            'description' => '',
+            'actions'     => '',
+            'test'        => 'MinPluginVersions',
+        );
+        $unsupportedPlugins = apply_filters( 'dgwt/wcas/troubleshooting/unsupported_plugin_versions', [] );
+        if ( !empty( $unsupportedPlugins ) ) {
+            $result['status'] = 'critical';
+            $result['label'] = __( "Unsupported plugin versions", 'ajax-search-for-woocommerce' );
+            $result['description'] .= '<p>' . __( 'We have detected that you are using plugins that we integrate with, but in versions that we do not support:', 'ajax-search-for-woocommerce' ) . '</p>';
+            $result['description'] .= '<ol>';
+            foreach ( $unsupportedPlugins as $unsupportedPlugin ) {
+                $result['description'] .= '<li>' . sprintf(
+                    __( '%1$s, current version: %2$s, minimum version: %3$s', 'ajax-search-for-woocommerce' ),
+                    '<strong>' . $unsupportedPlugin['name'] . '</strong>',
+                    '<strong>v' . $unsupportedPlugin['currentVersion'] . '</strong>',
+                    '<strong>v' . $unsupportedPlugin['minimumVersion'] . '</strong>'
+                ) . '</li>';
+            }
+            $result['description'] .= '</ol>';
+            $result['description'] .= '<p>' . __( 'The integrations will not be activated unless the plugins are updated to the minimum required versions.', 'ajax-search-for-woocommerce' ) . '</p>';
+        }
+        return $result;
+    }
+
+    /**
      * Test if images need to be regenerated
      *
      * @return array The test result.
@@ -710,6 +770,14 @@ class Troubleshooting {
                 array(
                     'label' => __( 'Elementor search results template', 'ajax-search-for-woocommerce' ),
                     'test'  => 'ElementorSearchResultsTemplate',
+                ),
+                array(
+                    'label' => __( 'Minimum theme version', 'ajax-search-for-woocommerce' ),
+                    'test'  => 'MinThemeVersion',
+                ),
+                array(
+                    'label' => __( 'Minimum theme versions', 'ajax-search-for-woocommerce' ),
+                    'test'  => 'MinPluginVersions',
                 )
             ),
             'async'  => array(array(

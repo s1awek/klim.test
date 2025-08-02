@@ -291,7 +291,7 @@ echo '<!-- WP Full Picture - Consent Banner & Analytics - START -->
 				<button type="button" id="fupi_decline_cookies_btn" data-classes="fupi_button" class="fupi_button ' . $btn_class . '">' . $current_texts['decline'] . '</button>
 				<button type="button" data-classes="fupi_button" class="fupi_close_banner_btn fupi_button fupi_hidden ' . $btn_class . '">' . $current_texts['close'] . '</button>
 			</div>
-			<div class="fupi_cdb_info fupi_hidden">
+			<div class="fupi_consent_info fupi_hidden">
 				<span class="fupi_consent_id"></span><br><span class="fupi_consent_date"></span>
 			</div>
 			<p class="fupi_poweredBy">Powered by <a class="fupi_poweredBy_link" href="https://wpfullpicture.com/?utm_source=usersite&utm_medium=poweredby&utm_campaign=' . $fupi_campaignName . '" rel="nofollow noopener">WP Full Picture ' . $fupi_version . '</a></p>
@@ -341,7 +341,7 @@ if ( is_customize_preview() || (!$hidden_elements || $hidden_elements && !in_arr
 					<button type="button" id="fupi_return_btn" data-classes="fupi_button" class="fupi_button ' . $btn_class . '">' . $current_texts['return'] . '</button>
 					<button type="button" data-classes="fupi_button" class="fupi_close_banner_btn fupi_button fupi_hidden ' . $btn_class . '">' . $current_texts['close'] . '</button>
 				</div>
-				<div class="fupi_cdb_info fupi_hidden">
+				<div class="fupi_consent_info fupi_hidden">
 					<span class="fupi_consent_id"></span><br><span class="fupi_consent_date"></span>
 				</div>
 				<p class="fupi_poweredBy">Powered by <a class="fupi_poweredBy_link" href="https://wpfullpicture.com/?utm_source=usersite&utm_medium=poweredby&utm_campaign=' . $fupi_campaignName . '" rel="nofollow noopener">WP Full Picture ' . $fupi_version . '</a></p>

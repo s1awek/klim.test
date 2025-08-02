@@ -72,7 +72,7 @@
 				}
 			});
 		}, { 
-			rootMargin: fp.vars.intersections 
+			rootMargin: fp.track.intersections 
 		} );
 
 		fp.observers[observer_name] = observer;
@@ -182,7 +182,7 @@
 
 	// ON FORM SUBMIT
 
-	// var wait_for_forms = fp.vars.formsubm_trackdelay ? fp.vars.formsubm_trackdelay * 1000 : 1000; // we are waiting for all the forms to load before we start tracking submissions.
+	// var wait_for_forms = fp.track.formsubm_trackdelay ? fp.track.formsubm_trackdelay * 1000 : 1000; // we are waiting for all the forms to load before we start tracking submissions.
 
 	// function listenToFormSubmits(e){
 	// 	fpdata.submitted_form = { 'element' : e.target };

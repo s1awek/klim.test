@@ -115,45 +115,28 @@
 (()=>{
 	
 	// CONSENT BANNER > TOGGLE HIDDEN RADIOS & "MANUAL" FIELDS
+	
+	let mode_select = FP.findFirst('.fupi_cookie_notice_modes select');
 
-	let mode_radios = FP.findAll('.fupi_cookie_notice_modes input[type="radio"]');
+	if ( ! mode_select ) return;
+	
+	// first we hide all manual fields
+	FP.findID('fupi_settings_form').classList.add('fupi_hide_manual_cookie_settings');
+	
+	// show manual fields if manual radio is checked
+	toggle_manual_fields();
 
-	function toggle_manual_fields( radio ){
-		if ( radio.value == 'manual' ) {
+	function toggle_manual_fields(){
+		if ( mode_select.value == 'manual' ) {
 			FP.findID('fupi_settings_form').classList.remove('fupi_hide_manual_cookie_settings');
 		} else {
 			FP.findID('fupi_settings_form').classList.add('fupi_hide_manual_cookie_settings');
 		}
-	} 
-
-	// first we hide all manual fields
-	if ( mode_radios.length > 0 ) {
-		FP.findID('fupi_settings_form').classList.add('fupi_hide_manual_cookie_settings');
-	};
+	}
 
 	// then we go over each radio field
-	mode_radios.forEach( radio => {
+	mode_select.addEventListener('change', toggle_manual_fields )
 
-		let toggle = FP.findFirst('.fupi_cn_mode .fupi_switch_slider[data-mode="' + radio.value + '"]');
-	
-		// if we haven active radio
-		if ( toggle && radio.checked ) {
-			// make the toggle sldier active
-			toggle.classList.add('fupi_active');
-			// and show manual fields if we need to
-			if ( radio.value == 'manual' ) FP.findID('fupi_settings_form').classList.remove('fupi_hide_manual_cookie_settings');
-		}
-	
-		// Toggle on click
-		toggle.addEventListener('click', () => {
-			if ( ! toggle.classList.contains('fupi_active') ) {
-				FP.findFirst('.fupi_cn_mode .fupi_active').classList.remove('fupi_active');
-				toggle.classList.add('fupi_active');
-				radio.checked = true;
-				toggle_manual_fields(radio);
-			}
-		})
-	} )
 })();
 
 (()=>{

@@ -10,6 +10,8 @@ class Fupi {
 
     protected $main;
 
+    protected $track;
+
     protected $modules;
 
     protected $plugin_name;
@@ -22,7 +24,12 @@ class Fupi {
         }
         $this->plugin_name = 'full_picture';
         $this->tools = get_option( 'fupi_tools' );
+        // Enable GTAG module if google ads or analytics are enabled
+        if ( !empty( $this->tools['ga41'] ) || !empty( $this->tools['gads'] ) ) {
+            $this->tools['gtag'] = true;
+        }
         $this->main = get_option( 'fupi_main' );
+        $this->track = get_option( 'fupi_track' );
         // $this->fupi_versions = get_option('fupi_versions');
         $this->load_dependencies();
         $this->set_locale();
@@ -71,7 +78,7 @@ class Fupi {
         $this->loader->add_action( 'init', $plugin_admin, 'perform_updates' );
         // LOAD MODULES
         foreach ( $this->modules as $module ) {
-            if ( $module['type'] != 'settings' && empty( $this->tools[$module['id']] ) ) {
+            if ( empty( $this->tools[$module['id']] ) && !isset( $module['always_enabled'] ) ) {
                 continue;
             }
             if ( is_customize_preview() && empty( $module['load_in_customizer'] ) ) {
@@ -112,11 +119,16 @@ class Fupi {
         // includes all the "Get" scripts
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'fupi_enqueue_js_helpers' );
         // LOAD MODULES
+        // Load when enabled
         $gtools_loaded = false;
         $html_mods_loaded = false;
         if ( !empty( $this->tools ) ) {
             foreach ( $this->modules as $module ) {
-                if ( empty( $this->tools[$module['id']] ) || $module['type'] == 'settings' ) {
+                if ( $module['id'] == 'modules' ) {
+                    continue;
+                }
+                // always enabled
+                if ( empty( $this->tools[$module['id']] ) && !isset( $module['always_enabled'] ) ) {
                     continue;
                 }
                 if ( is_customize_preview() && empty( $module['load_in_customizer'] ) ) {
@@ -131,14 +143,6 @@ class Fupi {
                             $plugin_public->load_module( 'gtools', false );
                         }
                         break;
-                    case 'iframeblock':
-                    case 'blockscr':
-                    case 'safefonts':
-                        if ( !$html_mods_loaded ) {
-                            $html_mods_loaded = true;
-                            $plugin_public->load_module( 'htmlmods', false );
-                        }
-                        break;
                     case 'gtm':
                         $plugin_public->load_module( 'gotm', false );
                         break;
@@ -150,14 +154,28 @@ class Fupi {
         }
         // SERVER OPERATIONS
         if ( !empty( $this->main['server_method'] ) && $this->main['server_method'] == 'ajax' ) {
-            // Add AJAX CB
+            // Add AJAX CB to not logged in users
             $this->loader->add_action( 'wp_ajax_nopriv_fupi_ajax', $plugin_public, 'fupi_ajax_hooks' );
             // AJAX for non-logged-in users
+            $this->loader->add_action( 'wp_ajax_fupi_ajax', $plugin_public, 'fupi_ajax_hooks' );
         } else {
+            // Register CORS for Rest API
+            $this->loader->add_action(
+                'rest_api_init',
+                $plugin_public,
+                'fupi_add_CORS_support',
+                5
+            );
             // Add a Rest API endpoint
             $this->loader->add_action( 'rest_api_init', $plugin_public, 'fupi_rest_hooks' );
-            // REST API
         }
+        // MODIFY HTML
+        $this->loader->add_action(
+            'template_redirect',
+            $plugin_public,
+            'fupi_maybe_buffer_output',
+            2
+        );
     }
 
     public function run() {

@@ -19,14 +19,14 @@
 		if ( fp.linkd.woo_add_to_cart_id ) {
 			FP.addAction( ['woo_add_to_cart'], () =>{
 				window.lintrk( 'track', { 'conversion_id': fp.linkd.woo_add_to_cart_id } );
-				if ( fp.vars.debug ) console.log( '[FP] LinkedIn "add to cart" event. ID:', fp.linkd.woo_add_to_cart_id );
+				if ( fp.main.debug ) console.log( '[FP] LinkedIn "add to cart" event. ID:', fp.linkd.woo_add_to_cart_id );
 			} );
 		}
 
 		// TRACK ORDER
 		if ( fp.linkd.woo_purchase_id && fp.woo.order_data_ready ) {
 			window.lintrk( 'track', { 'conversion_id': fp.linkd.woo_purchase_id } );
-			if ( fp.vars.debug ) console.log( '[FP] LinkedIn "purchase" event. ID:', fp.linkd.woo_purchase_id);
+			if ( fp.main.debug ) console.log( '[FP] LinkedIn "purchase" event. ID:', fp.linkd.woo_purchase_id);
 		}
 		
 		// TRACK CHECKOUT
@@ -35,13 +35,13 @@
 			if ( fp.woo.checkout_data_ready ) {
 				fp.linkd.woo_checkout_tracked = true;
 				window.lintrk( 'track', { 'conversion_id': fp.linkd.woo_checkout_start_id } );
-				if ( fp.vars.debug ) console.log( '[FP] LinkedIn "checkout" event. ID:', fp.linkd.woo_checkout_start_id);
+				if ( fp.main.debug ) console.log( '[FP] LinkedIn "checkout" event. ID:', fp.linkd.woo_checkout_start_id);
 			} else {
 				document.addEventListener( 'fupi_woo_checkout_data_ready', ()=>{
 					if ( ! fp.linkd.woo_checkout_tracked ) {
 						fp.linkd.woo_checkout_tracked = true;
 						window.lintrk( 'track', { 'conversion_id': fp.linkd.woo_checkout_start_id } )
-						if ( fp.vars.debug ) console.log( '[FP] LinkedIn "checkout" event. ID:', fp.linkd.woo_checkout_start_id);
+						if ( fp.main.debug ) console.log( '[FP] LinkedIn "checkout" event. ID:', fp.linkd.woo_checkout_start_id);
 					}
 				})
 			};
@@ -57,7 +57,7 @@
 				var conv_id  = FP.getClickTarget( fp.linkd.track_elems );
 				if ( conv_id ) {
 					window.lintrk('track', { conversion_id: conv_id });
-					if ( fp.vars.debug ) console.log('[FP] LinkedIn "element click" conversion. ID:', conv_id);
+					if ( fp.main.debug ) console.log('[FP] LinkedIn "element click" conversion. ID:', conv_id);
 				}
 			})
 		}
@@ -68,7 +68,7 @@
 			FP.addAction( ['click'], function(){
 				if ( fpdata.clicked.link && fpdata.clicked.link.is_email ) {
 					window.lintrk('track', { conversion_id: fp.linkd.track_email });
-					if ( fp.vars.debug ) console.log('[FP] LinkedIn "email link click" conversion. ID:', fp.linkd.track_email );
+					if ( fp.main.debug ) console.log('[FP] LinkedIn "email link click" conversion. ID:', fp.linkd.track_email );
 				}
 			} );
 		}
@@ -79,7 +79,7 @@
 			FP.addAction( ['click'], function(){
 				if ( fpdata.clicked.link && fpdata.clicked.link.is_tel ) {
 					window.lintrk('track', { conversion_id: fp.linkd.track_tel });
-					if ( fp.vars.debug ) console.log('[FP] LinkedIn "tel link click" conversion. ID:', fp.linkd.track_tel );
+					if ( fp.main.debug ) console.log('[FP] LinkedIn "tel link click" conversion. ID:', fp.linkd.track_tel );
 				}
 			} );
 		}
@@ -94,7 +94,7 @@
 				if ( ! el.dataset.linkd_view ) return;
 
 				window.lintrk('track', { conversion_id: el.dataset.linkd_view });
-				if ( fp.vars.debug ) console.log('[FP] LinkedIn "element visibility" conversion. ID:', el.dataset.linkd_view );
+				if ( fp.main.debug ) console.log('[FP] LinkedIn "element visibility" conversion. ID:', el.dataset.linkd_view );
 			};
 			
 			FP.intersectionObserver( newly_added_els, fp.linkd.track_views, 'linkd', send_el_view_evt, true);
@@ -109,7 +109,7 @@
 
 		var send_el_view_evt = function (el) {
 			window.lintrk('track', { conversion_id: el.dataset.fp_linkd_convid });
-			if ( fp.vars.debug ) console.log('[FP] LinkedIn "element visibility" conversion. ID:', el.dataset.fp_linkd_convid );
+			if ( fp.main.debug ) console.log('[FP] LinkedIn "element visibility" conversion. ID:', el.dataset.fp_linkd_convid );
 		};
 
 		// TRACK FORM SUBMITS
@@ -119,7 +119,7 @@
 				var conv_id = FP.getSubmittedForm( fp.linkd.track_forms );
 				if ( conv_id ){
 					window.lintrk('track', { conversion_id: conv_id });
-					if ( fp.vars.debug ) console.log('[FP] LinkedIn "form submit" conversion. ID:', conv_id);
+					if ( fp.main.debug ) console.log('[FP] LinkedIn "form submit" conversion. ID:', conv_id);
 				}
 			})
 		}
@@ -131,7 +131,7 @@
 				var conv_id = FP.getTrackedAffiliateLink( fp.linkd.track_affiliate );
 				if ( conv_id ) {
 					window.lintrk('track', { conversion_id: conv_id });
-					if ( fp.vars.debug ) console.log('[FP] LinkedIn "affiliate link click" conversion. ID:', conv_id);
+					if ( fp.main.debug ) console.log('[FP] LinkedIn "affiliate link click" conversion. ID:', conv_id);
 				}
 			} );
 		};

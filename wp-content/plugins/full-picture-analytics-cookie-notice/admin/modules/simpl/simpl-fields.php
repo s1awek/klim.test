@@ -69,7 +69,7 @@ $sections = array(
 				'el_class'			=> 'fupi_condition fupi_condition_reverse',
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
-				'popup2'			=> sprintf( esc_html__( 'When this setting is enabled, Simple Analytics will load for all visitors - even for bots, logged in administrators and excluded users and locations (with the geolocation module). %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=referral&utm_campaign=settings_link">', '</a>' ),
+				'popup2'			=> sprintf( esc_html__( 'When this setting is enabled, Simple Analytics will load for all visitors - even for bots, logged in administrators and excluded users and locations (with the geolocation module). %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ),
 			),
 			array(
 				'type'	 			=> 'r3',

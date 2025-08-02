@@ -23,6 +23,8 @@
 	    })(window, document, "clarity", "script", fp.clar.id);
 
 		// SET CONSENT
+		// we must set it here, and not the head.js, because window.clarity is not set before the above script loads
+		// clarity('consent', false) is triggered by the consent banner JS
 
 		// if the user agreed in the past
 		if ( fpdata.cookies ){

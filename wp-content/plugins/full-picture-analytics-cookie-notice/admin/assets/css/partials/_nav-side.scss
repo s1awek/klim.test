@@ -1,117 +1,177 @@
-#fupi_page_nav{
+
+#fupi_nav_col{
 	font-size: 14px;
 	text-align: left;
-	flex: 0 0 240px;
-	width: 240px;
-	position: relative;
+	background: #203B52;
 }
 
-#fupi_side_menu{
-	a,
-	#fupi_current_page,
-	.fupi_nav_section_btn,
-	.fupi_active_title{
-		width: 100%;
+@media screen and (min-width: 1100px){
+	#fupi_nav_col{
+		flex: 0 0 250px;
+		padding: 30px 0;
+		border-radius: 20px 0 0 20px;
+		width: 250px;
+		position: relative;
+	}
+}
+
+.fupi_sidenav_section{
+	+ .fupi_sidenav_section{
+		margin-top: 30px;
+	}
+}
+
+.fupi_sidenav_item:not(h3){
+	font-size: 14px;
+	display: block;
+	font-weight: normal;
+	line-height: 1.2;
+	padding: 12px 16px;
+	text-align: left;
+	text-decoration: none;
+	box-sizing: border-box;
+	color: #cdf1ff;
+	margin: 0;
+	&:not(.fupi_has_subnav){
+		&:focus, &:hover{
+			background-color: #fff;
+			color: #222;
+		}
+	}
+	img{
+		width: 20px;
+		height: 20px;
+		margin-right: 15px;
+		vertical-align: middle;
+	}
+	.dashicons{
+		font-size: 20px;
+		margin-right: 15px;
+		vertical-align: middle;
+		line-height: 20px;
+		color: #0f8fc2;
+	}
+	.fupi_sidenav_title{
+		max-width: calc(100% - 30px);
+		position: relative;
+		top: 2px;
+	}
+	&.fupi_alt_style{
+		.fupi_sidenav_title{
+			padding-left: 35px;
+			display: block;
+			line-height: 1.3em;
+		}	
+	}
+	&.fupi_current{
+		background: #fff;
+		flex-wrap: wrap;
+		color: #111;
+		>.fupi_sidenav_title{
+			font-weight: 500;
+		}
+	}
+}
+
+.fupi_sidenav_section_title{
+	color: #fff;
+	padding-left: 15px;
+	font-weight: 500 !important;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-size: 12px !important;
+}
+
+
+.fupi_sidenav_section{
+	.fupi_alt_style{
+		display: block !important;
+		+.fupi_alt_style{
+			border-top: 0;
+			margin-top: 0 !important
+		}
+	}
+}
+
+#fupi_sidenav_sub{
+	margin-top: 12px;
+}
+
+	.fupi_sidenav_sub_item{
+		font-size: 14px;
 		display: block;
+		width: 100%;
+		font-weight: normal;
 		line-height: 1.2;
-		padding: 12px;
+		padding: 12px 12px 12px 35px;
 		text-align: left;
 		text-decoration: none;
 		box-sizing: border-box;
-	}
-	a,
-	.fupi_nav_section_btn{
+		color: #000;
+		margin: 0;
+		// border-radius: 6px;
+		border: 0;
+		background: transparent;
+		cursor: pointer;
+		&:focus,
 		&:hover{
-			background-color: #cfe2ed;
-			border-radius: 6px;
+			background-color: #e4f3fe;
 		}
-	}
-	.fupi_nav_section_btn{
 		&.active{
-			background-color: #cfe2ed;
+			background-color: #bcddf1;
 		}
 	}
-	.fupi_active_title{
-		font-weight: 500;
-		background-color: #2672ab;
-		color: #fff;
-	}
-}
-
-	.fupi_sidenav_section{
-		+ .fupi_sidenav_section{
-			margin-top: 36px;
-		}
-	}
-
-		.fupi_sidenav_title{
-			display: block;
-			margin-bottom: 12px;
-			padding-left: 30px;
-			font-weight: 500;
-			position: relative;
-			.dashicons{
-				position: absolute;
-				left: 0;
-				right: 0;
-				font-size: 20px !important;
-			}
-		}
-
-		.fupi_sidenav_links{
-			padding-left: 20px;
-		}
-
-		#fupi_current_page_sidenav{
-			background-color: #fff;
-			border-radius: 6px;
-			overflow: hidden;
-			a,
-			.fupi_nav_section_btn{
-				&:hover{
-					border-radius: 0;
-				}
-			}
-		}
-
-		.fupi_nav_section_btn{
-			border: 0;
-			background: 0;
-			display: block;
-			cursor: pointer;
-		}
-
-
-#under_nav_notice{
-    border: 3px dashed #aec3cb;
-    padding: 20px 10px;
-    border-radius: 3px;
-    margin-top: 20px;
-    text-align: center;
-}
 
 //
 // "BUY PRO" BANNER
 //
 
-
-#sidenav_buy_pro_banner{
-	border-radius: 10px;
-	background-color: #fff;
-	padding: 15px 20px 20px;
-	margin-top: 20px;
-	overflow: hidden;
+#fupi_sidenav_banner{
+	padding: 30px 20px 20px;
+	margin: 60px 0 0 0;
+	position: relative;
+	background: #355577;
 	h3{
-		font-size: 15px;
-		color: #808080;
+		font-size: 16px;
+		color: #fff;
 		font-weight: 500;
-		margin: 0;
-		padding: 18px 0 7px;
-	}	
+		margin: 0 0 15px;
+		padding: 0;
+		text-align: center;
+	}
+	.button-primary{
+		text-align: center;
+		width: 100%;
+		padding: 5px;
+    	font-size: 15px;
+		margin-bottom: 10px;
+		background: #deac00;
+		&:hover, &:focus{
+			background: #ffd64c;
+		}
+	}
 }
+	#fupi_sidenav_banner_unlock_icon{
+		position: absolute;
+		top: -25px;
+		left: 50%;
+		font-size: 30px;
+		color: #fff;
+		width: 40px;
+		height: 40px;
+		text-align: center;
+		line-height: 30px;
+		background-color: #6eabde;
+		border-radius: 100%;
+		margin-left: -20px;
+		.dashicons{
+			width: 30px;
+			height: 30px;
+		}
+	}
 
 // Feature slider
-
+/*
 #fupi_feature_slider{
 	margin-bottom: 25px;
 }
@@ -135,7 +195,7 @@
 			}
 		}
 
-// Sldier nav
+// Slider nav
 
 .fupi_slider_nav{
 	display: flex;
@@ -156,7 +216,7 @@
 			background-color: #444;
 		}
 	}
-
+*/
 // Sticky nav
 
 .fupi_frozen{

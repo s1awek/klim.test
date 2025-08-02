@@ -2,7 +2,7 @@ FP.fns.pla_woo_events = () => {
 
 	function track_pla_event( event_name, event_goal_id, payload ){
 		if ( typeof plausible !== 'undefined' ) plausible( event_goal_id, { 'props' : payload } );
-		if ( fp.vars.debug ) console.log('[FP] Plausible "' + event_name + '" goal (id: ' + event_goal_id + '):', { 'props' : payload } );
+		if ( fp.main.debug ) console.log('[FP] Plausible "' + event_name + '" goal (id: ' + event_goal_id + '):', { 'props' : payload } );
 	}
 
 	// TRACK ADD TO CART
@@ -133,7 +133,7 @@ FP.fns.pla_woo_events = () => {
 		if ( order.coupons.length > 0 ) payload_o['order_used_coupon'] = order.coupons[0];
 		
 		if ( typeof plausible !== 'undefined' ) plausible( fp.pla.track_woo_purchases, payload_o );
-		if ( fp.vars.debug ) console.log('[FP] Plausible "checkout" goal (id: ' + fp.pla.track_woo_purchases + '):', payload_o );
+		if ( fp.main.debug ) console.log('[FP] Plausible "checkout" goal (id: ' + fp.pla.track_woo_purchases + '):', payload_o );
 	}
 
 	if ( fp.pla.track_woo_purchases && fp.woo.order_data_ready ) track_purchase();
@@ -154,10 +154,10 @@ FP.fns.pla_standard_events = () => {
 			
 			if ( fp.pla.track_visib_goalname ) {
 				if ( typeof plausible != 'undefined' ) plausible( fp.pla.track_visib_goalname, { 'props' : { 'name' : name } } );
-				if ( fp.vars.debug ) console.log( '[FP] Plausible goal "' + fp.pla.track_visib_goalname + '" with a property "name: ' + name + '"' );
+				if ( fp.main.debug ) console.log( '[FP] Plausible goal "' + fp.pla.track_visib_goalname + '" with a property "name: ' + name + '"' );
 			} else {
 				if ( typeof plausible != 'undefined' ) plausible( name );
-				if ( fp.vars.debug ) console.log( '[FP] Plausible goal "' + name + '"' );
+				if ( fp.main.debug ) console.log( '[FP] Plausible goal "' + name + '"' );
 			}
 		};
 		
@@ -178,10 +178,10 @@ FP.fns.pla_standard_events = () => {
 			if ( name ) {
 				if ( fp.pla.track_affiliate_goalname ) {
 					if ( typeof plausible != 'undefined' ) plausible( fp.pla.track_affiliate_goalname, { 'props': { 'link' : name } } );
-					if ( fp.vars.debug ) console.log( '[FP] Plausible goal "' + fp.pla.track_affiliate_goalname + '" with a property "link: ' + name + '"' );
+					if ( fp.main.debug ) console.log( '[FP] Plausible goal "' + fp.pla.track_affiliate_goalname + '" with a property "link: ' + name + '"' );
 				} else {
 					if ( typeof plausible != 'undefined' ) plausible( name );
-					if ( fp.vars.debug ) console.log( '[FP] Plausible goal "' + name + '"' );
+					if ( fp.main.debug ) console.log( '[FP] Plausible goal "' + name + '"' );
 				}
 			}
 		})
@@ -197,7 +197,7 @@ FP.fns.pla_standard_events = () => {
 					'type' : fpdata.clicked.link.is_email ? 'email' : 'tel',
 				};
 				if ( typeof plausible !== 'undefined' ) plausible( fp.pla.track_contact_links, {'props': props} );
-				if ( fp.vars.debug ) console.log( '[FP] Plausible goal: "' + fp.pla.track_contact_links + '" with properties ', props );
+				if ( fp.main.debug ) console.log( '[FP] Plausible goal: "' + fp.pla.track_contact_links + '" with properties ', props );
 			}
 		});
 	}
@@ -209,7 +209,7 @@ FP.fns.pla_standard_events = () => {
 			var filename = FP.getTrackedFilename( fp.pla.track_file_downl );
 			if ( filename ) {
 				if ( typeof plausible !== 'undefined' ) plausible( fp.pla.track_file_downl_goalname, { 'props': { 'file' : filename } } );
-				if ( fp.vars.debug ) console.log( '[FP] Plausible goal: "' + fp.pla.track_file_downl_goalname + '" with a property "file: ' + filename + '"' );
+				if ( fp.main.debug ) console.log( '[FP] Plausible goal: "' + fp.pla.track_file_downl_goalname + '" with a property "file: ' + filename + '"' );
 			}
 		})
 	}
@@ -222,10 +222,10 @@ FP.fns.pla_standard_events = () => {
 			if ( name ){
 				if ( fp.pla.track_forms_goalname ) {
 					if ( typeof plausible != 'undefined' ) plausible( fp.pla.track_forms_goalname, { 'props': { 'form' : name } } );
-					if ( fp.vars.debug ) console.log( '[FP] Plausible goal: "' + fp.pla.track_forms_goalname + '" with a property "form: ' + name + '"' );
+					if ( fp.main.debug ) console.log( '[FP] Plausible goal: "' + fp.pla.track_forms_goalname + '" with a property "form: ' + name + '"' );
 				} else {
 					if ( typeof plausible != 'undefined' ) plausible( name );
-					if ( fp.vars.debug ) console.log( '[FP] Plausible goal: "' + name + '"' );
+					if ( fp.main.debug ) console.log( '[FP] Plausible goal: "' + name + '"' );
 				}
 			}
 		})
@@ -239,10 +239,10 @@ FP.fns.pla_standard_events = () => {
 			if ( name ) {
 				if ( fp.pla.track_elems_goalname ) {
 					if ( typeof plausible != 'undefined' ) plausible( fp.pla.track_elems_goalname, { 'props': { 'page element' : name } } );
-					if ( fp.vars.debug ) console.log( '[FP] Plausible goal: "' + fp.pla.track_elems_goalname + '" with a property "page element: ' + name + '"' );
+					if ( fp.main.debug ) console.log( '[FP] Plausible goal: "' + fp.pla.track_elems_goalname + '" with a property "page element: ' + name + '"' );
 				} else {
 					if ( typeof plausible != 'undefined' ) plausible( name );
-					if ( fp.vars.debug ) console.log( '[FP] Plausible goal: "' + name + '"');
+					if ( fp.main.debug ) console.log( '[FP] Plausible goal: "' + name + '"');
 				}
 			}
 		})

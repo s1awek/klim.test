@@ -2,25 +2,8 @@
 
     $questions = [
         [
-            'id' => 'install',
-            'title' => esc_html__('How to install X / Twitter pixel', 'full-picture-analytics-cookie-notice' ),
-        ],
-        [
             'id' => 'track_actions',
             'title' => esc_html__('How to track non-WooCommerce events', 'full-picture-analytics-cookie-notice' ),
-        ],
-        [
-            'id' => 'woo',
-            'title' => esc_html__('How to track WooCommerce events', 'full-picture-analytics-cookie-notice' ),
-        ],
-        [
-            'id' => 'track_forms',
-            'title' => esc_html__('How to properly track forms', 'full-picture-analytics-cookie-notice' ),
-            'url'   => 'https://wpfullpicture.com/support/documentation/how-to-choose-the-best-way-to-track-form-submissions/'
-        ],
-        [
-            'id' => 'testing',
-            'title' => esc_html__('How to test and debug X setup', 'full-picture-analytics-cookie-notice' ),
         ],
     ];
 
@@ -51,19 +34,6 @@
             <li>' . esc_html__( 'In the last step click "Tag manager" tab and copy the Event ID.', 'full-picture-analytics-cookie-notice') . '</li>
             <li>' . esc_html__( 'Paste that ID in the fields in the "Single events" section.', 'full-picture-analytics-cookie-notice') . '</li>
         </ol>
-    </div>
-    
-    <div id="fupi_testing_popup" class="fupi_popup_content">
-        <p>' . esc_html__('To test if your installation of X Ads pixel works correctly:', 'full-picture-analytics-cookie-notice' ) . '</p>
-        <ol>
-            <li>' . esc_html__('Open your website in incognito mode', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__('Turn off the "Force load" option in the "Loading" section.', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__('Turn of ad blockers', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__('Agree to cookies (if you enabled the Consent Banner)', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__('Start browsing your website', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__('Turn on the "Force load" option in the "Loading" section.', 'full-picture-analytics-cookie-notice' ) . '</li>
-        </ol>
-        <p>' . esc_html__('Your actions should show up in X Ads traffic reports.', 'full-picture-analytics-cookie-notice' ) . '</p>
     </div>
 
     <div id="fupi_woo_popup" class="fupi_popup_content">

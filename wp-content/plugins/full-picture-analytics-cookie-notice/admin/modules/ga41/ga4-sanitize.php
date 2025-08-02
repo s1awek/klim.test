@@ -174,9 +174,8 @@ if ( ! empty ( $input ) ) foreach( $input as $key => $value ) {
 				break;
 				
 			default:
-				//$ret_val = apply_filters('fupi_extra_ga4_sanit', $clean_key, $value );
-				$clean_val = empty( $ret_val ) ? strip_tags( stripslashes( $value ) ) : $ret_val;
-				break;
+				$clean_val = is_bool ( $value ) || is_string ( $value ) ? strip_tags( stripslashes( $value ) ) : false;
+			break;
 		}
 
 		// error_log('sanitized ' . $clean_key . ' value: ' . json_encode($clean_val) );

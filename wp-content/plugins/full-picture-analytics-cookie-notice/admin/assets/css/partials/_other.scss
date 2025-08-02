@@ -12,8 +12,8 @@
 	.fupi_under_field{
 		display: none;
 	}
-	.fupi_customize_notice_btn.fupi_disabled{
-		+.fupi_under_field{
+	&:has(.fupi_disabled){
+		.fupi_under_field{
 			margin-top: 12px;
 			color: #cb0b0b;
 			display: block;
@@ -23,13 +23,12 @@
 
 .fupi_customize_notice_btn{
 	padding: 5px 17px !important;
-    font-size: 15px !important;
 	.dashicons{
-		font-size: 16px !important;
-	    width: 16px !important;
-	    height: 16px !important;
+		font-size: 18px !important;
+	    width: 18px !important;
+	    height: 18px !important;
 	    vertical-align: text-top !important;
-		margin-right: 4px;
+		margin-right: 7px;
 	}
 	&.fupi_disabled{
 		pointer-events: none;
@@ -151,10 +150,10 @@
 
 .fupi_r3_scr{
 	.fupi_field_adv_trigger_wrap{
-		background: #e8f0f5;
+		background: #f2f2f2;
 		padding: 10px;
 		margin-bottom: 10px;
-		border-radius: 5px;
+		// border-radius: 5px;
 	}
 }
 
@@ -200,9 +199,44 @@
 	padding: 0 !important;
 	text-align: center;
 }
-.fupi_module_status_recommend{
-	padding: 7px 0 0;
-    margin: 8px 0 0;
-    border-top: 1px solid #eee;
-    color: #e47d00;
+// .fupi_module_status_recommend{
+// 	padding: 7px 0 0;
+//     margin: 8px 0 0;
+//     border-top: 1px solid #eee;
+//     color: #e47d00;
+// }
+.fupi_module_extra_descr{
+	border-top: 1px solid #ccc;
+	padding-top: 15px;
+}
+
+// NAVIGATION ON THE PAGE WITH RECORDS OF CONSENT
+
+.fupi_tablenav .fupi_tablenav-pages {
+    margin: 10px 0;
+	justify-items: center;
+}
+
+.fupi_tablenav.bottom{
+	margin-bottom: 30px;
+}
+
+.fupi_tablenav-pages > * {
+	display: inline-block;
+    font-size: 16px;
+    text-decoration: none;
+    line-height: 30px;
+    padding: 0 12px;
+    border: 1px solid #666;
+	background-color: #fff;
+}
+
+.fupi_tablenav-pages a{
+	&:hover, &:focus{
+		background-color: #efefef;
+	}
+}
+
+.fupi_tablenav-pages > span{
+	background-color: #efefef;
 }

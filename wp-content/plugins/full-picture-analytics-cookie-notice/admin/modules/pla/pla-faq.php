@@ -1,83 +1,42 @@
 <?php
 
-    $questions = [
-        [
-            'id' => 'install',
-            'title' => esc_html__('How to install Plausible', 'full-picture-analytics-cookie-notice' ),
-        ],
-        [
-            'id' => 'setup',
-            'title' => esc_html__('How to track custom data with Plausible?', 'full-picture-analytics-cookie-notice' ),
-        ],
-        [
-            'id' => 'stats',
-            'title' => esc_html__('How to display Plausible statistics in WP admin', 'full-picture-analytics-cookie-notice' ),
-        ],
-        [
-            'id' => 'sources_mod',
-            'p_id' => 'main',
-            'title' => esc_html__('How to improve Plausible\'s data quality', 'full-picture-analytics-cookie-notice' ),
-        ],
-        [
-            'id' => 'testing',
-            'title' => esc_html__('How to test and debug Plausible setup', 'full-picture-analytics-cookie-notice' ),
-        ],
-    ];
+    $questions = [];
 
     // Do not use IDs inside the wrappers below!
     // The internal HTML will be copied to a popup and IDs will double
     
     $answers = '
-    <div id="fupi_install_popup" class="fupi_popup_content">
-        <p>' . sprintf( esc_html__('All you need to do to install Plausible is %1$senter this domain in your Plausible admin panel%2$s.', 'full-picture-analytics-cookie-notice' ), '<a href="https://plausible.io/docs/add-website" target="_blank">', '</a>' ) . '</p>
-        <p>' . esc_html__('WP Full Picture has already installed all the necessary scripts on your website and they will remain active as long as you have this module enabled.', 'full-picture-analytics-cookie-notice' ) . '</p>
+
+    <div id="fupi_installation_modes_popup" class="fupi_popup_content">
+        <p>' . esc_html__( 'If you choose to install Plausible with WP Full Picture, you will be able to use unique functions of WP FP and track more things, e.g. user actions and data types. However, some ad blockers may stop Plausible from tracking visitors (unless you use a self-hosted Plausible).', 'full-picture-analytics-cookie-notice' ) . '</p>
+        <p>' . esc_html__( 'If you choose to extend Plausible\'s own plugin, most ad blockers will not block tracking, but you will no longer be able to track that many things.', 'full-picture-analytics-cookie-notice')  . '</p>
     </div>
 
-    <div id="fupi_stats_popup" class="fupi_popup_content">
-        <p>' . esc_html__('To display Plausible statistics in WP Admin, you need to:', 'full-picture-analytics-cookie-notice' ) . '</p>
-        <ol>
-            <li>' . esc_html__( 'enable the "Reports & Statistics" module,', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__( 'return to this page,', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__( 'go to the new section "Statistics in WP admin",', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__( 'and follow instructions you find there.', 'full-picture-analytics-cookie-notice' ) . '</li>
-        </ol>
+    <div id="fupi_differences_popup" class="fupi_popup_content">
+
+        <p>' . esc_html__('Plausible gives you two ways to track user actions - as events with properties and without them. Let\'s explain the difference on an example.', 'full-picture-analytics-cookie-notice' ) . '</p>
+
+        <p>' . esc_html__('Imagine that you want to track click on three different buttons - A, B and C.', 'full-picture-analytics-cookie-notice' ) . '</p>
+
+        <p>' . esc_html__('If you track them only with events, then you will see in Plausible three different events, like "Clicked button A", "Clicked button B" and "Clicked button C".', 'full-picture-analytics-cookie-notice' ) . '</p>
+
+        <p>' . esc_html__('If you track them with events and properties, you will see in Plausible one event "Button Clicked" with properties "Button A", "Button B" and "Button C".', 'full-picture-analytics-cookie-notice' ) . '</p>
+
+        <p class="fupi_warning_text">' . esc_html__('We recommend the first method, since it is easier and does not require a Business plan. Plus, you cannot use properties in funnels', 'full-picture-analytics-cookie-notice' ) . '</p>
     </div>
 
     <div id="fupi_setup_popup" class="fupi_popup_content">
 
-        <p>' . esc_html__('WP Full Picture lets you track 2 types of custom data:', 'full-picture-analytics-cookie-notice' ) . '</p>
+        <p>' . esc_html__('To register user actions and their properties in Plausible:', 'full-picture-analytics-cookie-notice' ) . '</p>
+
         <ol>
-            <li>' . esc_html__( 'custom goals - these are user actions like form submissions, clicks on page elements, ecommerce events, etc.,', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__( 'and custom properties - they give more info about the events. These can be names of clicked page elements, product ids, etc.', 'full-picture-analytics-cookie-notice' ) . '</li>
+            <li>' . esc_html__( 'give descriptive names to actions you want to track,', 'full-picture-analytics-cookie-notice' ) . '</li>
+            <li>' . esc_html__( 'enable Setup Mode in WP FP (in the General Settings) and start a test,', 'full-picture-analytics-cookie-notice' ) . '</li>
+            <li>' . esc_html__( 'do all the actions that you\'ve just set up,', 'full-picture-analytics-cookie-notice' ) . '</li>
+            <li>' . esc_html__( 'in the Plausible Analytics panel go to the Site Settings page > Goals > Custom Goal / Property and click "Add new",', 'full-picture-analytics-cookie-notice' ) . '</li>
+            <li>' . esc_html__( 'you should see there a dropdown field with goal / property names that you entered in the "name" fields of this module.', 'full-picture-analytics-cookie-notice' ) . '</li>
         </ol>
 
-        <p style="color:#e47d00;">' . esc_html__('Attention! Only users of Plausible Business plan can view properties in the reports.', 'full-picture-analytics-cookie-notice' ) . '</p>
-
-        <h3>' . esc_html__('How to track custom events (goals) and properties', 'full-picture-analytics-cookie-notice' ) . '</h3>
-
-        <p>' . esc_html__('To track custom data, simply fill in the fields on this page and register new event names (goal names) and property names in your Plausible analytics account.', 'full-picture-analytics-cookie-notice' ) . '</p>
-        <p>' . esc_html__('In the Plausible Analytics panel go to the Site Settings page, choose Goals or Custom Properties and click "Add new". The dropdowns you find there should contain names that you entered while setting up tracking. If you cannot see them, enter them manually or take some actions on your site (in incognito mode of your browser) and refresh the registration page.', 'full-picture-analytics-cookie-notice' ) . '</p>
-
-        <p>' . esc_html__('P.S. If you are registering goals for ecommerce purchases, also enable the "revenue tracking" switch in the goal creation popup.', 'full-picture-analytics-cookie-notice' ) . '</p>
-    </div>
-
-    <div id="fupi_sources_mod_popup" class="fupi_popup_content">
-        <p>' . esc_html__('WP FP can improve accuracy of data sources reported by Plausible by up to 20%. All you have to do is go to the "General settings" page and fill in the fields in the section "Tracking accuracy tweaks"', 'full-picture-analytics-cookie-notice' ) . '</p>
-        <p>' . esc_html__('By doing this, you will:', 'full-picture-analytics-cookie-notice' ) . '</p>
-        <ol>
-            <li>' . esc_html__('see in your Plausible reports traffic from some popular Android applications (normally reported as Direct traffic),', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__('properly assign traffic sources to conversions (often assigned to payment gateways)', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__('and make analysing traffic from social networks much easier.', 'full-picture-analytics-cookie-notice' ) . '</li>
-        </ol>
-    </div>
-    
-    <div id="fupi_testing_popup" class="fupi_popup_content">
-        <p>' . esc_html__('To test if your installation of Plausible works correctly:', 'full-picture-analytics-cookie-notice' ) . '</p>
-        <ol>
-            <li>' . esc_html__('Open your website in incognito mode', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__('Turn of ad blockers', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__('Start browsing your website', 'full-picture-analytics-cookie-notice' ) . '</li>
-        </ol>
-        <p>' . esc_html__('Your actions should show up in Plausible\'s traffic reports.', 'full-picture-analytics-cookie-notice' ) . '</p>
+        <p>' . esc_html__('P.S. If you are registering ecommerce actions, such as purchases, also enable the "revenue tracking" switch in the goal creation popup.', 'full-picture-analytics-cookie-notice' ) . '</p>
     </div>';
 ?>

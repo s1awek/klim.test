@@ -9,7 +9,7 @@ FP.fns.insp_woo_events = () => {
 
 		if ( item_ids.length > 0 ) {
 			__insp.push( [ 'tagSession', 'product view' ] );
-			if ( fp.vars.debug ) console.log( '[FP] Inspectlet "product view" tag');
+			if ( fp.main.debug ) console.log( '[FP] Inspectlet "product view" tag');
 		}
 
 		// prevent double tracking in case the next teasers are added dynamically
@@ -23,23 +23,23 @@ FP.fns.insp_woo_events = () => {
 
 	FP.addAction( ['woo_add_to_cart'], () =>{
 		__insp.push( [ 'tagSession', 'add to cart' ] );
-		if ( fp.vars.debug ) console.log( '[FP] Inspectlet "add to cart" tag');
+		if ( fp.main.debug ) console.log( '[FP] Inspectlet "add to cart" tag');
 	} );
 
 	FP.addAction( ['woo_add_to_wishlist'], () => {
 		__insp.push( [ 'tagSession', 'add to wishlist' ] );
-		if ( fp.vars.debug ) console.log( '[FP] Inspectlet "add to wishlist" tag');
+		if ( fp.main.debug ) console.log( '[FP] Inspectlet "add to wishlist" tag');
 	} );
 
 	FP.addAction( ['woo_remove_from_cart'], () => {
 		__insp.push( [ 'tagSession', 'remove from cart' ] );
-		if ( fp.vars.debug ) console.log( '[FP] Inspectlet "remove from cart" tag');
+		if ( fp.main.debug ) console.log( '[FP] Inspectlet "remove from cart" tag');
 	} );
 
 	// track order
 	if ( fp.woo.order_data_ready ) {
 		__insp.push( [ 'tagSession', 'purchase' ] );
-		if ( fp.vars.debug ) console.log( '[FP] Inspectlet "purchase" tag');
+		if ( fp.main.debug ) console.log( '[FP] Inspectlet "purchase" tag');
 	}
 
 	// track the start of checkout (except when the whole page or its part is refreshed)
@@ -47,13 +47,13 @@ FP.fns.insp_woo_events = () => {
 		if ( fp.woo.checkout_data_ready ) {
 			fp.insp.woo_checkout_tracked = true;
 			__insp.push( [ 'tagSession', 'checkout' ] );
-			if ( fp.vars.debug ) console.log( '[FP] Inspectlet "checkout" tag');
+			if ( fp.main.debug ) console.log( '[FP] Inspectlet "checkout" tag');
 		} else {
 			document.addEventListener( 'fupi_woo_checkout_data_ready', ()=>{
 				if ( ! fp.insp.woo_checkout_tracked ) {
 					fp.insp.woo_checkout_tracked = true;
 					__insp.push( [ 'tagSession', 'checkout' ] );
-					if ( fp.vars.debug ) console.log( '[FP] Inspectlet "checkout" tag');
+					if ( fp.main.debug ) console.log( '[FP] Inspectlet "checkout" tag');
 				}
 			})
 		};
@@ -68,7 +68,7 @@ FP.fns.insp_standard_events = function() {
 		FP.addAction( ['click'], function(){
 			if ( fpdata.clicked.link && fpdata.clicked.link.is_outbound ) {
 				__insp.push( [ 'tagSession', { 'outbound link click' : fpdata.clicked.link.href } ] );
-				if ( fp.vars.debug ) console.log( '[FP] Inspectlet tag: outbound click', fpdata.clicked.link.href );
+				if ( fp.main.debug ) console.log( '[FP] Inspectlet tag: outbound click', fpdata.clicked.link.href );
 			}
 		})
 	}
@@ -80,7 +80,7 @@ FP.fns.insp_standard_events = function() {
 			var name = FP.getTrackedAffiliateLink( fp.insp.tag_affiliate );
 			if ( name ) {
 				__insp.push( [ 'tagSession', { 'affiliate link click' :  name } ] );
-				if ( fp.vars.debug ) console.log( '[FP] Inspectlet tag: affiliate click', name );
+				if ( fp.main.debug ) console.log( '[FP] Inspectlet tag: affiliate click', name );
 			}
 		})
 	}
@@ -91,7 +91,7 @@ FP.fns.insp_standard_events = function() {
 		FP.addAction( ['click'], function(){
 			if ( fpdata.clicked.link && ( fpdata.clicked.link.is_email || fpdata.clicked.link.is_tel ) ) {
 				__insp.push( [ 'tagSession', { 'contact link click' : fpdata.clicked.link.safe_email || fpdata.clicked.link.safe_tel } ] );
-				if ( fp.vars.debug ) console.log( '[FP] Inspectlet tag: contact click', fpdata.clicked.link.safe_email || fpdata.clicked.link.safe_tel );
+				if ( fp.main.debug ) console.log( '[FP] Inspectlet tag: contact click', fpdata.clicked.link.safe_email || fpdata.clicked.link.safe_tel );
 			}
 		});
 	}
@@ -103,7 +103,7 @@ FP.fns.insp_standard_events = function() {
 			var filename = FP.getTrackedFilename( fp.insp.tag_file_downl );
 			if ( filename ) {
 				__insp.push( [ 'tagSession', { 'file download' : filename } ] );
-				if ( fp.vars.debug ) console.log( '[FP] Inspectlet tag: download', filename );
+				if ( fp.main.debug ) console.log( '[FP] Inspectlet tag: download', filename );
 			}
 		})
 	}
@@ -115,7 +115,7 @@ FP.fns.insp_standard_events = function() {
 			var name = FP.getSubmittedForm( fp.insp.tag_forms );
 			if ( name ){
 				__insp.push( [ 'tagSession', { 'form submit' : name } ] );
-				if ( fp.vars.debug ) console.log( '[FP] Inspectlet tag: form submit', name );
+				if ( fp.main.debug ) console.log( '[FP] Inspectlet tag: form submit', name );
 			}
 		})
 	}
@@ -128,7 +128,7 @@ FP.fns.insp_standard_events = function() {
 		let send_el_view_evt = el => {
 			let name = el.dataset['insp_view'] || 'name not provided';
 			__insp.push( [ 'tagSession', 'element view: ' + name ] );
-			if ( fp.vars.debug ) console.log( '[FP] Inspectlet tag: element view', name );
+			if ( fp.main.debug ) console.log( '[FP] Inspectlet tag: element view', name );
 		};
 		
 		FP.intersectionObserver( newly_added_els, fp.insp.tag_views, 'insp', send_el_view_evt, true);
@@ -145,7 +145,7 @@ FP.fns.insp_standard_events = function() {
 		FP.addAction( ['click'], function(){
 			if ( fpdata.clicked.link && fpdata.clicked.link.is_anchor ){
 				__insp.push( [ 'tagSession', { 'anchor click' : fpdata.clicked.link.element.textContent } ] );
-				if ( fp.vars.debug ) console.log( '[FP] Inspectlet tag: anchor click', fpdata.clicked.link.element.textContent );
+				if ( fp.main.debug ) console.log( '[FP] Inspectlet tag: anchor click', fpdata.clicked.link.element.textContent );
 			}
 		})
 	}
@@ -157,7 +157,7 @@ FP.fns.insp_standard_events = function() {
 			var name  = FP.getClickTarget( fp.insp.tag_elems );
 			if ( name ) {
 				__insp.push( [ 'tagSession', { 'page element click' : name } ] );
-				if ( fp.vars.debug ) console.log( '[FP] Inspectlet tag: element click', name );
+				if ( fp.main.debug ) console.log( '[FP] Inspectlet tag: element click', name );
 			}
 		})
 	}

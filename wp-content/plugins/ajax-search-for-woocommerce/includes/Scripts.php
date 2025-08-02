@@ -12,6 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Scripts {
 
 	public function __construct() {
+		// Break early if the "nofibosearch" mode is active.
+		if ( Helpers::isNoFiboSearchModeActive() ) {
+			return;
+		}
+
 		add_action( 'wp_enqueue_scripts', array( $this, 'loadScripts' ) );
 	}
 

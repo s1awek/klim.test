@@ -179,6 +179,19 @@ if ( ! class_exists( 'CWG_Instock_Post_Type' ) ) {
 					'label_count' => _n_noop( 'Purchased <span class="count">(%s)</span>', 'Purchased <span class="count">(%s)</span>', 'back-in-stock-notifier-for-woocommerce' ),
 				)
 			);
+
+			register_post_status(
+				'cwg_queued',
+				array(
+					'label' => _x( 'Queued', 'post', 'back-in-stock-notifier-for-woocommerce' ),
+					'public' => true,
+					'exclude_from_search' => false,
+					'show_in_admin_all_list' => true,
+					'show_in_admin_status_list' => true,
+					/* translators: %s: count */
+					'label_count' => _n_noop( 'Queued <span class="count">(%s)</span>', 'Queued <span class="count">(%s)</span>', 'back-in-stock-notifier-for-woocommerce' ),
+				)
+			);
 		}
 
 		public function display_subscribers_count() {
@@ -265,6 +278,14 @@ if ( ! class_exists( 'CWG_Instock_Post_Type' ) ) {
 								echo '<strong>' . esc_html__( 'Available Quantity:', 'back-in-stock-notifier-for-woocommerce' ) . '</strong> <span class="' . esc_attr( $status_color_class ) . '">' . esc_html( $prod_obj->get_stock_quantity() ) . '</span>';
 							}
 						}
+					} else {
+						echo wp_kses_post(
+							sprintf(
+								// translators: %d is the id of deleted product.
+								__( 'Product #%d (deleted or not exists)', 'back-in-stock-notifier-for-woocommerce' ),
+								intval( $pid )
+							)
+						);
 					}
 					break;
 
@@ -337,7 +358,11 @@ if ( ! class_exists( 'CWG_Instock_Post_Type' ) ) {
 					break;
 				case 'cwg_doubleoptin':
 					$doubleoptin = __( 'Waiting for Confirmation', 'back-in-stock-notifier-for-woocommerce' );
-					echo wp_kses_post( "<mark class='cwgmark' style='background:red;'>$doubleoptin</mark>" );
+					echo wp_kses_post( "<mark class='cwgmark cwgdoubleoptin'>$doubleoptin</mark>" );
+					break;
+				case 'cwg_queued':
+					$queued = __( 'Queued', 'back-in-stock-notifier-for-woocommerce' );
+					echo wp_kses_post( "<mark class='cwgmark cwgqueued'>$queued</mark>" );
 					break;
 				default:
 					$otherstatus = $get_post_status;
@@ -889,20 +914,20 @@ add_action(
 			add_action(
 				'all_admin_notices',
 				function () {
-					?>
+				?>
 			<div class="notice notice-success cwg_marketing_notice">
 				<p>
-					<strong>Pay Once, Benefit Forever</strong>: All Add-ons Included, No Monthly Commitment - Just $39! <a
+					<strong>Pay Once, Benefit Forever</strong>: All Add-ons Included, No Monthly Commitment - Just $49! <a
 						href="https://codewoogeek.online/shop/back-in-stock-notifier/bundle-add-ons/" target="_blank"><strong>Buy
 							Now Bundle Add-ons!</strong></a>
 				</p>
 				<p>
-					Your payment isn't just for a product - it's for progress. Buy now, or support us directly via <a
-						href="https://paypal.me/codewoogeeksoftwares" target="_blank">PayPal</a>
+					Your payment isn't just for a product - it's for progress. Buy now, or donate us directly via <a
+						href="https://www.paypal.com/donate/?hosted_button_id=M72YSS7BWF32C" target="_blank">PayPal</a>
 				</p>
 			</div>
-					<?php
-				}
+			<?php
+			}
 			);
 		}
 	}

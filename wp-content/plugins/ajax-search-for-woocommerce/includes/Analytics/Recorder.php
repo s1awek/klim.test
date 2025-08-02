@@ -62,6 +62,15 @@ class Recorder {
         }
         $phrase = strtolower( substr( $phrase, 0, 255 ) );
         $lang = ( !empty( $lang ) && Multilingual::isLangCode( $lang ) ? $lang : '' );
+        $shouldRecord = apply_filters( 'dgwt/wcas/analytics/should_record', true, array(
+            'phrase'       => $phrase,
+            'hits'         => $hits,
+            'lang'         => $lang,
+            'autocomplete' => $autocomplete,
+        ) );
+        if ( !$shouldRecord ) {
+            return;
+        }
         $this->push(
             $phrase,
             $hits,

@@ -4,6 +4,8 @@ $option_arr_id = 'fupi_woo';
 
 $sections = array(
 
+	// BASIC SETTINGS
+
 	array(
 		'section_id' => 'fupi_woo_main',
 		'section_title' => esc_html__( 'Basic settings', 'full-picture-analytics-cookie-notice' ),
@@ -29,7 +31,6 @@ $sections = array(
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> esc_html__('This setting only applies to the total value of the purchase. If a tracking tool allows for tracking shipping cost as a separate value, then it will be tracked no matter whether this option is turned on or off.','full-picture-analytics-cookie-notice'),
 			),
-			// a select field with 3 options
 			array(
 				'type' 				=> 'radio',
 				'label' 			=> esc_html__('Method of tracking variable products','full-picture-analytics-cookie-notice'),
@@ -58,12 +59,6 @@ $sections = array(
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> '<p>' . esc_html__('This will send "product view" events when visitors switch between product variants.','full-picture-analytics-cookie-notice') . '</p>',
 			),
-			// array(
-			// 	'type' 				=> 'toggle',
-			// 	'label' 			=> esc_html__('Track parent products instead of its variants','full-picture-analytics-cookie-notice'), // Track product variants as if they were parent products
-			// 	'field_id' 			=> 'variable_as_simple',
-			// 	'option_arr_id'		=> $option_arr_id,
-			// ),
 			array(
 				'type' 				=> 'toggle',
 				'label' 			=> esc_html__('Do not track product views after a page is refreshed','full-picture-analytics-cookie-notice'),
@@ -77,53 +72,26 @@ $sections = array(
 		),
 	),
 
+	// PRIVACY
+
 	array(
-		'section_id' => 'fupi_woo_custom',
-		'section_title' => esc_html__( 'Custom adjustments', 'full-picture-analytics-cookie-notice' ),
+		'section_id' => 'fupi_woo_priv',
+		'section_title' => esc_html__( 'Privacy', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
-				'type'	 			=> 'text',
-				'label' 			=> esc_html__( 'CSS selectors of custom product teasers', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'teaser_wrapper_sel',
-				'option_arr_id'		=> $option_arr_id,
-				'label_for' 		=> $option_arr_id . '[teaser_wrapper_sel]',
-				'placeholder'		=> esc_html__('e.g. .product', 'full-picture-analytics-cookie-notice' ),
-				'under field'		=> esc_html__('You can provide a coma separated list of CSS selectors.', 'full-picture-analytics-cookie-notice' ),
-				'popup2'	 		=> '<p>' . esc_html__('By default, all product teasers (products in lists) in WooCommerce are wrapped in &lt;li&gt;elements. However, some themes or plugins may use a different tag. If this happens, tracking clicks in the "add to cart" buttons and views of teasers may not work correctly.', 'full-picture-analytics-cookie-notice') . '</p>
-					<p>' . esc_html__('You can fix it here. Provide CSS selector of an HTML element which wraps around product teasers on your site (often this is an element with a class "product").', 'full-picture-analytics-cookie-notice') . '</p>
-					<p class="fupi_warning_text">' . esc_html__('Attention. Tracking will only work if there is a &lt;script&gt; element with class "fupi_prod_data" inside the product teaser\'s HTML. If it is missing, then it means that the teaser does not use standard WooCommerce hooks to display its content, and WP Full Picture will not be able to track it.', 'full-picture-analytics-cookie-notice') . '</p>',
-			),
-			array(
-				'type'	 			=> 'text',
-				'label' 			=> esc_html__( 'CSS selector of "Add to wishlist" button', 'full-picture-analytics-cookie-notice' ),
-				'under field'		=> esc_html__( 'Enter CSS class or ID', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'wishlist_btn_sel',
-				'option_arr_id'		=> $option_arr_id,
-				'label_for' 		=> $option_arr_id . '[wishlist_btn_sel]',
-				'placeholder'		=> esc_html__('e.g. .my-add-to-wishlist', 'full-picture-analytics-cookie-notice' ),
-				'popup'		 		=> '<p>' . esc_html__('Enter CSS selector of an "add to wishlist" button used on your site (if it uses any). The wishlist button needs to be positioned in your HTML right after the "Add to cart" button to work. Other placements may not work correctly. The tracking doesn\'t work with grouped products.', 'full-picture-analytics-cookie-notice') . '</p>',
-			),
-			array(
 				'type' 				=> 'toggle',
-				'label' 			=> esc_html__('Add "Product brand" field to "edit product" pages','full-picture-analytics-cookie-notice'),
-				'field_id' 			=> 'add_brand_tax',
-				'class'				=> 'fupi_deprecated',
-				'el_class'			=> 'fupi_condition fupi_condition_reverse',
-				'el_data_target'	=> 'fupi_add_brand_tax_cond',
+				'label' 			=> esc_html__('Use Order Attribution only when visitors consent to tracking','full-picture-analytics-cookie-notice'),
+				'must have'			=> 'cook',
+				'field_id' 			=> 'block_sbjs',
 				'option_arr_id'		=> $option_arr_id,
-				'under field'		=> '<p>' . esc_html__('This function will be removed by the end of 2025. Please migrate to standard WooCommerce brands (avail in WooCommerce 9.6+)','full-picture-analytics-cookie-notice') . '</p>',
-			),
-			array(
-				'type' 				=> 'taxonomies select',
-				'label' 			=> esc_html__('Use custom "product brand" taxonomy instead of the default one in WooCommerce','full-picture-analytics-cookie-notice'),
-				'class'				=> 'fupi_join fupi_add_brand_tax_cond fupi_deprecated',
-				'field_id' 			=> 'brand_tax',
-				'option_arr_id'		=> $option_arr_id,
-				'under field'		=> '<p>' . esc_html__('This function will be removed by the end of 2025. Please migrate to standard WooCommerce brands (avail in WooCommerce 9.6+)','full-picture-analytics-cookie-notice') . '</p>',
-				'popup'				=> '<p>' . esc_html__('Use it to track product brands saved by a different plugin. Choose taxonomy name in which your plugin saves product brands.', 'full-picture-analytics-cookie-notice') . '</p>',
+				'popup'				=> '<p>' . esc_html__('This will stop WooCommerce from collecting information about the sources of conversions from users who did not agree to tracking statistics.','full-picture-analytics-cookie-notice') . '</p>
+				<p>' . esc_html__('Order attribution information is available on your WooCommerce order details pages.','full-picture-analytics-cookie-notice') . '</p>
+				<p>' . sprintf( esc_html__('Alternatively, you can completely disable Order Attribution on %1$sthis page%2$s', 'full-picture-analytics-cookie-notice'), '<a href="/wp-admin/admin.php?page=wc-settings&tab=advanced&section=features" target="_blank">', '</a>' ) . '</p>',
 			),
 		),
 	),
+
+	// STATUS-BASED ORDER TRACKING
 
 	array(
 		'section_id' => 'fupi_woo_adv',
@@ -148,6 +116,54 @@ $sections = array(
 				'option_arr_id'		=> $option_arr_id,
 				'under field'		=> '<p>' . esc_html__('Recommended statuses - Cancelled and Refunded.', 'full-picture-analytics-cookie-notice') . '</p>',
 				'popup'		 		=> '<p>' . esc_html__('You can enter here multiple order statuses indicating that the order has been cancelled or refunded. The "refund" event will be sent only the first time an order gets a matching status.', 'full-picture-analytics-cookie-notice') . '</p>',
+			),
+		),
+	),
+
+	array(
+		'section_id' => 'fupi_woo_custom',
+		'section_title' => esc_html__( 'Custom adjustments', 'full-picture-analytics-cookie-notice' ),
+		'fields' => array(
+			array(
+				'type'	 			=> 'text',
+				'label' 			=> esc_html__( 'CSS selector of "Add to wishlist" button', 'full-picture-analytics-cookie-notice' ),
+				'under field'		=> esc_html__( 'Enter CSS class or ID', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'wishlist_btn_sel',
+				'option_arr_id'		=> $option_arr_id,
+				'label_for' 		=> $option_arr_id . '[wishlist_btn_sel]',
+				'placeholder'		=> esc_html__('e.g. .my-add-to-wishlist', 'full-picture-analytics-cookie-notice' ),
+				'popup'		 		=> '<p>' . esc_html__('Enter CSS selector of an "add to wishlist" button used on your site (if it uses any). The wishlist button needs to be positioned in your HTML right after the "Add to cart" button to work. Other placements may not work correctly. The tracking doesn\'t work with grouped products.', 'full-picture-analytics-cookie-notice') . '</p>',
+			),
+			array(
+				'type'	 			=> 'text',
+				'label' 			=> esc_html__( 'CSS selectors of custom product teasers', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'teaser_wrapper_sel',
+				'option_arr_id'		=> $option_arr_id,
+				'label_for' 		=> $option_arr_id . '[teaser_wrapper_sel]',
+				'placeholder'		=> esc_html__('e.g. .product', 'full-picture-analytics-cookie-notice' ),
+				'under field'		=> esc_html__('You can provide a coma separated list of CSS selectors.', 'full-picture-analytics-cookie-notice' ),
+				'popup2'	 		=> '<p>' . esc_html__('By default, all product teasers (products in lists) in WooCommerce are wrapped in &lt;li&gt;elements. However, some themes or plugins may use a different tag. If this happens, tracking clicks in the "add to cart" buttons and views of teasers may not work correctly.', 'full-picture-analytics-cookie-notice') . '</p>
+					<p>' . esc_html__('You can fix it here. Provide CSS selector of an HTML element which wraps around product teasers on your site (often this is an element with a class "product").', 'full-picture-analytics-cookie-notice') . '</p>
+					<p class="fupi_warning_text">' . esc_html__('Attention. Tracking will only work if there is a &lt;script&gt; element with class "fupi_prod_data" inside the product teaser\'s HTML. If it is missing, then it means that the teaser does not use standard WooCommerce hooks to display its content, and WP Full Picture will not be able to track it.', 'full-picture-analytics-cookie-notice') . '</p>',
+			),
+			array(
+				'type' 				=> 'toggle',
+				'label' 			=> esc_html__('Add "Product brand" field to "edit product" pages','full-picture-analytics-cookie-notice'),
+				'field_id' 			=> 'add_brand_tax',
+				'class'				=> 'fupi_deprecated',
+				'el_class'			=> 'fupi_condition fupi_condition_reverse',
+				'el_data_target'	=> 'fupi_add_brand_tax_cond',
+				'option_arr_id'		=> $option_arr_id,
+				'under field'		=> '<p>' . esc_html__('This function will be removed by the end of 2025. Please migrate to standard WooCommerce brands (avail in WooCommerce 9.6+)','full-picture-analytics-cookie-notice') . '</p>',
+			),
+			array(
+				'type' 				=> 'taxonomies select',
+				'label' 			=> esc_html__('Use custom "product brand" taxonomy instead of the default one in WooCommerce','full-picture-analytics-cookie-notice'),
+				'class'				=> 'fupi_join fupi_add_brand_tax_cond fupi_deprecated',
+				'field_id' 			=> 'brand_tax',
+				'option_arr_id'		=> $option_arr_id,
+				'under field'		=> '<p>' . esc_html__('This function will be removed by the end of 2025. Please migrate to standard WooCommerce brands (avail in WooCommerce 9.6+)','full-picture-analytics-cookie-notice') . '</p>',
+				'popup'				=> '<p>' . esc_html__('Use it to track product brands saved by a different plugin. Choose taxonomy name in which your plugin saves product brands.', 'full-picture-analytics-cookie-notice') . '</p>',
 			),
 		),
 	),

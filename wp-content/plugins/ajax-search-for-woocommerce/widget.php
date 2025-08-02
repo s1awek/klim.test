@@ -60,6 +60,7 @@ if ( class_exists( 'WC_Widget' ) ) {
 		 * @param array $instance
 		 */
 		public function widget( $args, $instance ) {
+			ob_start();
 
 			$this->widget_start( $args, $instance );
 			$params = '';
@@ -78,6 +79,10 @@ if ( class_exists( 'WC_Widget' ) ) {
 			echo do_shortcode( '[fibosearch' . $params . ']' );
 
 			$this->widget_end( $args );
+
+			$html = ob_get_clean();
+
+			echo apply_filters( 'dgwt/wcas/widget/html', $html, $args, $instance );
 		}
 
 	}

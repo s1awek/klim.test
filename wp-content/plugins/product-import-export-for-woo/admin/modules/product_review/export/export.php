@@ -207,7 +207,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Export {
                     continue;
                 }
                 if ($column == 'product_title' && !empty($temp_product_id)) {
-                    $temp_product_object = ( isset($temp_product_id) && WC()->version >= '3.0') ? wc_get_product($temp_product_id) : get_product($temp_product_id);
+                    $temp_product_object = ( isset($temp_product_id) && version_compare( WC()->version, '3.0', '>=' ) ) ? wc_get_product($temp_product_id) : get_product($temp_product_id);
                     $row[$column] = $temp_product_object->get_title();
                     continue;
                 }

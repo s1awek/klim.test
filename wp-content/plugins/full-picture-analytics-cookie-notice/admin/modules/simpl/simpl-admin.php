@@ -26,6 +26,9 @@ class Fupi_SIMPL_admin {
 
     public function sanitize_fields( $input ){
         include 'simpl-sanitize.php';
+
+        if ( apply_filters( 'fupi_updating_many_options', false ) ) return $clean_data;
+        
 		include FUPI_PATH . '/admin/common/fupi-clear-cache.php';
 		return $clean_data; 
     }

@@ -86,7 +86,7 @@ FP.fns.mato_woo_events = () => {
 			if (Object.hasOwnProperty.call(cart, id)) {
 				cart_value += cart[id]['qty'] * cart[id]['price'];
 				_paq.push( [ 'addEcommerceItem', id, cart[id]['name'], cart[id]['cat'], cart[id]['price'], cart[id]['qty'] ] );
-				if ( fp.vars.debug ) console.log( '[FP] Matomo "addEcommerceItem" event: ', [ id, cart[id]['name'], cart[id]['cat'], cart[id]['price'], cart[id]['qty'] ] );
+				if ( fp.main.debug ) console.log( '[FP] Matomo "addEcommerceItem" event: ', [ id, cart[id]['name'], cart[id]['cat'], cart[id]['price'], cart[id]['qty'] ] );
 			}
 		};
 
@@ -96,13 +96,13 @@ FP.fns.mato_woo_events = () => {
 	function remove_products_from_cart( removed ) {
 		removed.forEach( id => {
 			_paq.push( [ 'removeEcommerceItem', id ] );
-			if ( fp.vars.debug ) console.log( '[FP] Matomo "removeEcommerceItem" by id:', id );
+			if ( fp.main.debug ) console.log( '[FP] Matomo "removeEcommerceItem" by id:', id );
 		});
 	};
 
 	function send_cart_update( cart_value ){
 		_paq.push(['trackEcommerceCartUpdate', cart_value]); 
-		if ( fp.vars.debug ) console.log( '[FP] Matomo "trackEcommerceCartUpdate" event: ', cart_value );
+		if ( fp.main.debug ) console.log( '[FP] Matomo "trackEcommerceCartUpdate" event: ', cart_value );
 	}
 	
 	// TRACK IMPRESSIONS
@@ -131,7 +131,7 @@ FP.fns.mato_woo_events = () => {
 		] );
 
 		_paq.push(['trackPageView']);
-		if ( fp.vars.debug ) console.log( '[FP] Matomo "setEcommerceView" event: ', [ prod_tracked_id, prod_name, prod_cat, prod_price] );
+		if ( fp.main.debug ) console.log( '[FP] Matomo "setEcommerceView" event: ', [ prod_tracked_id, prod_name, prod_cat, prod_price] );
 	};
 
 	if ( ! ( fp.woo.dont_track_views_after_refresh && fpdata.refreshed ) ){
@@ -156,7 +156,7 @@ FP.fns.mato_woo_events = () => {
 			prod.price
 		]);
 		
-		if ( fp.vars.debug ) console.log('[FP] Matomo "setEcommerceView" event: ', [prod_id, prod_name, prod_cat, prod.price]);
+		if ( fp.main.debug ) console.log('[FP] Matomo "setEcommerceView" event: ', [prod_id, prod_name, prod_cat, prod.price]);
 	}
 
 	FP.addAction( ['woo_variant_view'], woo_variant_view );
@@ -219,7 +219,7 @@ FP.fns.mato_woo_events = () => {
 				prod.qty
 			] );
 
-			if ( fp.vars.debug ) console.log( '[FP] Matomo "addEcommerceItem" event: ', [ prod_tracked_id, prod_name, prod_cat, prod_price, prod.qty ] );
+			if ( fp.main.debug ) console.log( '[FP] Matomo "addEcommerceItem" event: ', [ prod_tracked_id, prod_name, prod_cat, prod_price, prod.qty ] );
 		}
 
 		let track_real_order_id = false;
@@ -250,7 +250,7 @@ FP.fns.mato_woo_events = () => {
 
 		_paq.push(['trackEvent', 'Ecommerce', 'Purchase', 'Purchase']);
 		
-		if ( fp.vars.debug ) console.log( '[FP] Matomo "trackEcommerceOrder" event: ', order_payload );
+		if ( fp.main.debug ) console.log( '[FP] Matomo "trackEcommerceOrder" event: ', order_payload );
 
 		FP.deleteCookie('fp_matomo_cart__tmp');
 	}
@@ -268,15 +268,15 @@ FP.fns.mato_standard_events = () => {
 		FP.addAction( ['scroll', 'active_time_tick'], function(){
 			if (
 				fp.mato.track_scroll.length > 0 &&
-				fpdata.activity.total >= fp.vars.track_scroll_time &&
-				fpdata.scrolled.current_px >= fp.vars.track_scroll_min
+				fpdata.activity.total >= fp.track.track_scroll_time &&
+				fpdata.scrolled.current_px >= fp.track.track_scroll_min
 			) {
 				var reachedPoint = FP.isScrollTracked( fp.mato.track_scroll );
 				if ( reachedPoint ) {
 					// remove from array the scroll points that were already reached
 					fp.mato.track_scroll = fp.mato.track_scroll.filter( function( point ){ return point > reachedPoint } );
 					_paq.push(['trackEvent', 'Page Scroll Depth', 'Scroll', 'Scrolled to ' + reachedPoint, reachedPoint]);
-					if ( fp.vars.debug ) console.log('[FP] Matomo event: page scrolled to ', reachedPoint );
+					if ( fp.main.debug ) console.log('[FP] Matomo event: page scrolled to ', reachedPoint );
 				}
 			}
 		} );
@@ -292,7 +292,7 @@ FP.fns.mato_standard_events = () => {
 			if ( ! el.dataset.mato_view ) return;
 
 			_paq.push(['trackEvent', 'Page Element View', 'View', el.dataset.mato_view]);
-			if ( fp.vars.debug ) console.log('[FP] Matomo event: viewed page element ', el.dataset.mato_view );
+			if ( fp.main.debug ) console.log('[FP] Matomo event: viewed page element ', el.dataset.mato_view );
 		};
 		
 		FP.intersectionObserver( newly_added_els, fp.mato.track_views, 'mato', send_el_view_evt, true);
@@ -309,7 +309,7 @@ FP.fns.mato_standard_events = () => {
 			var trackedAffLink = FP.getTrackedAffiliateLink( fp.mato.track_affiliate );
 			if ( trackedAffLink ) {
 				_paq.push(['trackEvent', 'Affiliate Link Click', 'Click', trackedAffLink]);
-				if ( fp.vars.debug ) console.log('[FP] Matomo event: clicked affiliate link ', trackedAffLink );
+				if ( fp.main.debug ) console.log('[FP] Matomo event: clicked affiliate link ', trackedAffLink );
 			}
 		} );
 	}
@@ -324,7 +324,7 @@ FP.fns.mato_standard_events = () => {
 					contact =  fpdata.clicked.link.safe_email || fpdata.clicked.link.safe_tel;
 					
 				_paq.push(['trackEvent', 'Contact Link Click', action, contact ]);
-				if ( fp.vars.debug ) console.log('[FP] Matomo event: ' +  action + ': ' + contact );
+				if ( fp.main.debug ) console.log('[FP] Matomo event: ' +  action + ': ' + contact );
 			}
 		} );
 	}
@@ -336,7 +336,7 @@ FP.fns.mato_standard_events = () => {
 			var submittedForm = FP.getSubmittedForm( fp.mato.track_forms );
 			if ( submittedForm ){
 				_paq.push(['trackEvent', 'Form Submission', 'Form Submission', submittedForm]);
-				if ( fp.vars.debug ) console.log('[FP] Matomo event: Submitted form ' + submittedForm );
+				if ( fp.main.debug ) console.log('[FP] Matomo event: Submitted form ' + submittedForm );
 			}
 		})
 	}
@@ -348,7 +348,7 @@ FP.fns.mato_standard_events = () => {
 			var trackedElName  = FP.getClickTarget( fp.mato.track_elems );
 			if ( trackedElName ) {
 				_paq.push(['trackEvent', 'Page Click', 'Click', trackedElName]);
-				if ( fp.vars.debug ) console.log('[FP] Matomo event: clicked ' + trackedElName );
+				if ( fp.main.debug ) console.log('[FP] Matomo event: clicked ' + trackedElName );
 			}
 		} )
 	}

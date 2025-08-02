@@ -392,7 +392,7 @@ class Wt_Import_Export_For_Woo_Basic_Import
 			return '.'.$vl;
 		}, $file_extensions);
 
-		if(WC()->version < '6.7.0')
+		if ( version_compare( WC()->version, '6.7.0', '<' ) )
 		{
 			$review_url = admin_url('edit-comments.php');
 		} else {

@@ -236,6 +236,9 @@ If you use WPML to translate attributes, you only need configure attribute image
 2. Swatches on single product page
 
 == Changelog ==
+/** 1.1.12 - 2025.07.24**/
+- Updated: VillaTheme support
+
 /** 1.1.11 - 2025.05.12**/
 - Updated: Compatible with Dokan - vendors can easily edit product swatches from the product edit page on their vendor dashboard
 

@@ -31,7 +31,7 @@
 		cloned_section = remove_extra_repeaters(cloned_section);
 		current_section.parentElement.insertBefore(cloned_section, current_section.nextSibling);
 
-		if ( module_id == 'cscr' || module_id == 'blockscr' || module_id == 'reports' || module_id == 'atrig' ) {
+		if ( module_id == 'cscr' || module_id == 'cook' || module_id == 'reports' || module_id == 'atrig' ) {
 			let id_field = FP.findFirst('.fupi_field_id_wrap input', cloned_section);
 			if ( id_field ) id_field.value = generate_random_id();
 		}
@@ -290,6 +290,13 @@
 		// remove all ending "</script>" tags
 		script = script.replaceAll('</script>', '');
 
+		// remove all HTML comments including everything between <!-- and -->
+		script = script.replaceAll(/<!--/g, '//');
+		script = script.replaceAll(/-->/g, '');
+
+		// remove noscript tags with everything in between
+		script = script.replaceAll(/<noscript>[\s\S]*?<\/noscript>/g, '');
+
 		// find all <script[something or nothing]> tags
 		let start_regex = /<script[\s\S]*?>/gi,
 			matches = script.match(start_regex),
@@ -483,7 +490,7 @@
 	// check if there are any r3s on page
 	if ( FP.findFirst('.fupi_r3_repeater') ) {
 		
-		if ( module_id == 'cscr' || module_id == 'blockscr' || module_id == 'reports' || module_id == 'atrig' ) fill_empty_id_fields_with_random_ids();
+		if ( module_id == 'cscr' || module_id == 'cook' || module_id == 'reports' || module_id == 'atrig' ) fill_empty_id_fields_with_random_ids();
 
 		enable_all_select2s();
 		enable_section_buttons();

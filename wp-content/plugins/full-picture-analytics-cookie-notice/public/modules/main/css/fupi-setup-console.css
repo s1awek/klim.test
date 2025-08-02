@@ -1,0 +1,189 @@
+.fupi_hidden {
+  display: none !important;
+}
+
+.fupi_srt {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+}
+
+#fupi_console_wrap {
+  position: fixed;
+  z-index: 9999999;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transform: translateX(-100%);
+          transform: translateX(-100%);
+}
+
+#fupi_console_fixed_btn {
+  z-index: 1;
+  padding: 7px 14px 7px;
+  border-radius: 0 20px 20px 0;
+  background-color: #fff;
+  -webkit-box-shadow: 3px 0 10px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 3px 0 10px 0 rgba(0, 0, 0, 0.2);
+  -webkit-transform: translateX(100%);
+          transform: translateX(100%);
+  border: 0 !important;
+}
+#fupi_console_fixed_btn img {
+  width: 28px;
+  height: 30px;
+}
+
+#fupi_console {
+  max-height: 100vh;
+  width: 280px;
+  background-color: #fff;
+  color: #000;
+  padding: 20px;
+  z-index: 2;
+  font-size: 14px;
+  line-height: 1.4em;
+  overflow-y: auto;
+  -webkit-box-shadow: 3px 0 10px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 3px 0 10px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+  border-radius: 0 10px 10px 0;
+  -webkit-transform: translateX(100%);
+          transform: translateX(100%);
+}
+#fupi_console.fupi_trackable #fupi_console_step1,
+#fupi_console.fupi_trackable #fupi_start_test {
+  display: none;
+}
+#fupi_console.fupi_not_trackable #fupi_console_step2,
+#fupi_console.fupi_not_trackable #fupi_simulate_first_visit,
+#fupi_console.fupi_not_trackable #fupi_end_test,
+#fupi_console.fupi_not_trackable #fupi_show_banner {
+  display: none;
+}
+#fupi_console strong {
+  font-weight: 500;
+}
+
+#fupi_console,
+#fupi_console h2,
+#fupi_console h3,
+#fupi_console button {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+#fupi_console_intro {
+  margin-left: -20px;
+  margin-right: -20px;
+  padding: 1px 20px;
+  background-color: #e5f6ff;
+}
+
+#fupi_console_buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  margin-top: 20px;
+}
+#fupi_console_buttons button {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 100%;
+          flex: 0 0 100%;
+  border-radius: 100px;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  font-size: 14px !important;
+  padding: 5px 14px !important;
+  line-height: 1.3em !important;
+}
+#fupi_console_buttons button:hover, #fupi_console_buttons button:active {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  font-size: 14px !important;
+  padding: 5px 14px !important;
+}
+#fupi_console_buttons .fupi_primary_button {
+  background-color: #f3c836 !important;
+  color: #000 !important;
+  border: 1px solid #bf9c27 !important;
+}
+#fupi_console_buttons .fupi_primary_button:hover, #fupi_console_buttons .fupi_primary_button:active {
+  color: #000 !important;
+  background-color: #f9e296 !important;
+  border: 1px solid #bf9c27 !important;
+}
+#fupi_console_buttons .fupi_secondary_button {
+  background-color: #f3faff !important;
+  color: #112849 !important;
+  border: 1px solid #517b9d !important;
+}
+#fupi_console_buttons .fupi_secondary_button:hover, #fupi_console_buttons .fupi_secondary_button:active {
+  color: #112849 !important;
+  background-color: #fff !important;
+  border: 1px solid #517b9d !important;
+}
+
+#fupi_console_close_btn {
+  display: block !important;
+  color: #000 !important;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px !important;
+  padding: 10px !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  line-height: 1em !important;
+  -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
+          box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
+}
+#fupi_console_close_btn:hover, #fupi_console_close_btn:active {
+  -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
+          box-shadow: 0 0 0 0 rgba(0, 0, 0, 0) !important;
+  font-size: 20px !important;
+  padding: 10px !important;
+  background-color: transparent !important;
+  color: #000 !important;
+  border: 0 !important;
+}
+
+.fupi_i_btn {
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-size: 13px !important;
+  line-height: 13px !important;
+  padding: 1px 0 0 0;
+  vertical-align: middle;
+  border: 0;
+  color: #fff !important;
+  text-align: center;
+  font-weight: bold;
+  background-color: #93afd1 !important;
+  border-radius: 100%;
+  width: 16px !important;
+  height: 16px !important;
+  font-family: Georgia, serif;
+  font-style: italic;
+  cursor: pointer;
+  margin-left: 6px;
+}
+.fupi_i_btn:hover, .fupi_i_btn:active {
+  opacity: 0.8;
+}

@@ -6,7 +6,7 @@ FP.fns.hotj_woo_events = () => {
 	function track_items( data, event_name, action ){
 		
 		hj( 'event', event_name );
-		if ( fp.vars.debug ) console.log( '[FP] Hotjar "' + event_name + '" event' );
+		if ( fp.main.debug ) console.log( '[FP] Hotjar "' + event_name + '" event' );
 
 		let track_params = fp.hotj[ 'tag_woo_' + action + '_data' ];
 		
@@ -47,7 +47,7 @@ FP.fns.hotj_woo_events = () => {
 			event_name = 'woo ' + type;
 		
 		hj( 'event', event_name );
-		if ( fp.vars.debug ) console.log( '[FP] Hotjar "' + event_name + '" event');
+		if ( fp.main.debug ) console.log( '[FP] Hotjar "' + event_name + '" event');
 
 		if ( ! track_params ) return;
 		
@@ -65,7 +65,7 @@ FP.fns.hotj_woo_events = () => {
 
 		if ( type == 'order' && track_params.includes('id') ) {
 			// track order IDs if hotjar is NOT in privacy mode (this means that it is loaded after required consents)
-			if ( ! fp.hotj.no_pii ) hj( 'event', 'order ' + fpdata.woo.order.id )
+			if ( ! fp.hotj.data_suppression ) hj( 'event', 'order ' + fpdata.woo.order.id )
 		};
 	}
 
@@ -99,7 +99,7 @@ FP.fns.hotj_standard_events = function() {
 			if ( fpdata.clicked.link && fpdata.clicked.link.is_outbound ) {
 				hj( 'event', 'outbound link click' );
 				hj( 'event', 'outbound: ' + fpdata.clicked.link.href );
-				if ( fp.vars.debug ) console.log( '[FP] Hotjar "outbound click" event:', fpdata.clicked.link.href );
+				if ( fp.main.debug ) console.log( '[FP] Hotjar "outbound click" event:', fpdata.clicked.link.href );
 			}
 		})
 	}
@@ -112,7 +112,7 @@ FP.fns.hotj_standard_events = function() {
 			if ( name ) {
 				hj( 'event', 'affiliate link click' );
 				hj( 'event', 'affiliate: ' + name );
-				if ( fp.vars.debug ) console.log( '[FP] Hotjar "affiliate click" event', name );
+				if ( fp.main.debug ) console.log( '[FP] Hotjar "affiliate click" event', name );
 			}
 		})
 	}
@@ -125,7 +125,7 @@ FP.fns.hotj_standard_events = function() {
 				hj( 'event', 'contact link click' );
 				if ( fpdata.clicked.link.safe_email ) hj( 'event', 'mail to ' + fpdata.clicked.link.safe_email );
 				if ( fpdata.clicked.link.safe_tel ) hj( 'event', 'tel to ...' + fpdata.clicked.link.safe_tel );
-				if ( fp.vars.debug ) console.log( '[FP] Hotjar "contact click" event' );
+				if ( fp.main.debug ) console.log( '[FP] Hotjar "contact click" event' );
 			}
 		});
 	}
@@ -138,7 +138,7 @@ FP.fns.hotj_standard_events = function() {
 			if ( filename ) {
 				hj( 'event', 'file download' );
 				hj( 'event', 'download: ' +  filename );
-				if ( fp.vars.debug ) console.log('[FP] Hotjar "download" event:', filename);
+				if ( fp.main.debug ) console.log('[FP] Hotjar "download" event:', filename);
 			}
 		})
 	}
@@ -151,7 +151,7 @@ FP.fns.hotj_standard_events = function() {
 			if ( name ){
 				hj( 'event', 'form submit' );
 				hj( 'event', 'form submit: ' + name );
-				if ( fp.vars.debug ) console.log('[FP] Hotjar "form submit" event:', name);
+				if ( fp.main.debug ) console.log('[FP] Hotjar "form submit" event:', name);
 			}
 		})
 	}
@@ -165,7 +165,7 @@ FP.fns.hotj_standard_events = function() {
 			let name = el.dataset['hotj_view'] || 'name not provided';
 			hj( 'event', 'element view' );
 			hj( 'event', name + ' viewed' );
-			if ( fp.vars.debug ) console.log('[FP] Hotjar "element view" event:', name);
+			if ( fp.main.debug ) console.log('[FP] Hotjar "element view" event:', name);
 		};
 		
 		FP.intersectionObserver( newly_added_els, fp.hotj.tag_views, 'hotj', send_el_view_evt, true);
@@ -183,7 +183,7 @@ FP.fns.hotj_standard_events = function() {
 			if ( fpdata.clicked.link && fpdata.clicked.link.is_anchor ){
 				hj( 'event', 'anchor link click' );
 				hj( 'event', 'anchor click:' + fpdata.clicked.link.href );
-				if ( fp.vars.debug ) console.log('[FP] Hotjar "anchor click" event:', fpdata.clicked.link.href );
+				if ( fp.main.debug ) console.log('[FP] Hotjar "anchor click" event:', fpdata.clicked.link.href );
 			}
 		})
 	}
@@ -195,7 +195,7 @@ FP.fns.hotj_standard_events = function() {
 			var name  = FP.getClickTarget( fp.hotj.tag_elems );
 			if ( name ) {
 				hj( 'event', 'page element click: ' + name );
-				if ( fp.vars.debug ) console.log('[FP] Hotjar "element click" event:', name);
+				if ( fp.main.debug ) console.log('[FP] Hotjar "element click" event:', name);
 			}
 		})
 	}

@@ -3,7 +3,7 @@ FP.fns.track_twit_evt = ( event_name, event_id, payload = false ) => {
 	
 
 	twq( 'event', event_id, payload);
-	if ( fp.vars.debug ) console.log('[FP] X / Twitter "' + event_name + '" event (event id: ' + event_id + '): ', payload);
+	if ( fp.main.debug ) console.log('[FP] X / Twitter "' + event_name + '" event (event id: ' + event_id + '): ', payload);
 };
 
 FP.fns.twit_woo_events = () => {

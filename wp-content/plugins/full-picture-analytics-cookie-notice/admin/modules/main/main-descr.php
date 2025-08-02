@@ -1,32 +1,48 @@
 <?php
 
+// include_once FUPI_PATH . '/includes/fupi_modules_data.php';
+include_once FUPI_PATH . '/public/modules/main/fpinfo_generator.php';
+$fupi_fpinfo_generator = new Fupi_fpinfo_generator( 'list' );
+$fp_info_output = $fupi_fpinfo_generator->output();
 $ret_text = '';
 
 switch( $section_id ){
 
+	case 'fupi_main_setupmode':
+		$ret_text = '<div>
+			<p>' . esc_html__( 'Enable setup mode to test the configuration of WP Full Picture and its modules.', 'full-picture-analytics-cookie-notice') . '</p>
+			<button type="button" class="fupi_faux_link fupi_open_popup" data-popup="fupi_debug_info_popup">' . esc_html__( 'Learn how it works', 'full-picture-analytics-cookie-notice') . ' <span class="fupi_open_popup_i">i</span></button>
+		</div>';
+	break;
+
 	// DO NOT TRACK
 
 	case 'fupi_main_no_track':
-
-		$ret_text = '<p>' . esc_html__( 'Here you can specify what users and user groups / roles you don\'t want to track. These settings will work on all the tracking tools installed with WP Full Picture\'s modules (except GTM), and tools managed by the "Tracking Tools Manager" module.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Here you can choose what users you do not want to track. This will work on all the tools installed with WP FP modules and those controlled by the Consent Banner. Tools installed with GTM need extra work (more info in that module)', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
-	// CHANGE DEFAULT SETTINGS
+	// BASIC SETTINGS
 
-	case 'fupi_main_default':
-		$ret_text = '<p>' . esc_html__( 'These settings change how tracking tools integrated with WP Full Picture track data and what they can track.' , 'full-picture-analytics-cookie-notice' ) . '</p>';
-	break;
-
-	// Traffic sources modifications
-
-	case 'fupi_main_ref':
-		$ret_text = '<p>' . esc_html__( 'These options improve accuracy of tracking traffic sources.' , 'full-picture-analytics-cookie-notice' ) . '</p>';
-	break;
-
-	// OTHER SETTINGS
-
-	case 'fupi_main_other':
+	case 'fupi_main_basic':
 		$ret_text = '<p>' . esc_html__( 'These settings change various aspects of WP Full Picture.' , 'full-picture-analytics-cookie-notice' ) . '</p>';
+	break;
+
+	// ADVANCED SETTINGS
+
+	case 'fupi_main_advanced':
+		$ret_text = '<p>' . esc_html__( 'Settings for advanced users and developers.' , 'full-picture-analytics-cookie-notice' ) . '</p>';
+	break;
+
+	// META TAGS
+
+    case 'fupi_main_meta':
+        $ret_text = '<p>' . esc_html__('Verify website ownership in various platforms.', 'full-picture-analytics-cookie-notice' ) . '</p>';
+    break;
+
+	// PERFORMANCE
+
+	case 'fupi_main_perf':
+		$ret_text = '<p>' . esc_html__('Improve page-speed and compatibility with caching tools.', 'full-picture-analytics-cookie-notice' ) . '</p>';
 	break;
 
 	// IMPORT / EXPORT
@@ -44,7 +60,7 @@ switch( $section_id ){
 			'alert_error_text' => esc_html__( 'There was an error processing the file.', 'full-picture-analytics-cookie-notice' ),
 		];
 
-		$output = '<p>' . esc_html__( 'Back up WP Full Picture\'s settings to easily move them between installations or before making bigger changes.', 'full-picture-analytics-cookie-notice' ) . '</p>
+		$output = '<p style="text-align: center; max-width: 640px; margin-left: auto; margin-right: auto;">' . esc_html__( 'Back up WP Full Picture\'s settings to easily move them between installations or before making bigger changes.', 'full-picture-analytics-cookie-notice' ) . '</p>
 		<script>
 			let fupi_import_export_data = ' . json_encode( $js_vars ) . ';
 		</script>';
@@ -69,14 +85,17 @@ switch( $section_id ){
 			$output .= '<div id="no_backups_info" class="fupi_pseudo_table_row">' . esc_html__( 'No backups found', 'full-picture-analytics-cookie-notice' ) . '</div>';
 		} else {
 
+			$backup_rows = [];
+
 			foreach( $files as $file ){
 				
 				$file_name = basename( $file );
 				
 				// file creation date is in the format YYYY-MM-DD HH:MM:SS
-				$file_creation_date = date( 'Y-m-d H:i:s', filemtime( $file ) );
+				$file_timestamp = filemtime( $file );
+				$file_creation_date = date( 'Y-m-d H:i:s', $file_timestamp );
 
-				$output .= '<div class="fupi_pseudo_table_row fupi_backups_row" data-file="' . esc_attr( $file_name ) . '">
+				$backup_rows[$file_timestamp] = '<div class="fupi_pseudo_table_row fupi_backups_row" data-file="' . esc_attr( $file_name ) . '">
 					<div class="fupi_pseudo_td fupi_table_cell_50">' . esc_attr( $file_name ) . '</div>
 					<div class="fupi_pseudo_td fupi_table_cell_20">' . esc_attr( $file_creation_date ) . '</div>
 					<div class="fupi_pseudo_td fupi_table_cell_30">
@@ -85,6 +104,14 @@ switch( $section_id ){
 						<a href="' . esc_url(admin_url('admin-post.php?action=wpfp_download_backup&file=' . esc_attr($file_name) . '')) . '" class="fupi_backup_download button-secondary">' . esc_html__( 'Download', 'full-picture-analytics-cookie-notice' ) . '</a>
 					</div>
 				</div>';
+			}
+
+			// sort rows by the key value in descending order
+			if ( count( $backup_rows ) > 0 ) {
+				krsort( $backup_rows );
+				$output .= implode( '', $backup_rows );
+			} else {
+				$output .= '<div id="no_backups_info" class="fupi_pseudo_table_row">' . esc_html__( 'No backups found', 'full-picture-analytics-cookie-notice' ) . '</div>';
 			}
 		}
 
@@ -96,14 +123,30 @@ switch( $section_id ){
 			<button type="button" class="fupi_faux_link fupi_upload_backup_file_btn"><span class="dashicons dashicons-upload"></span> ' . esc_html__( 'Restore settings from a backup file', 'full-picture-analytics-cookie-notice' ) . '</button>
 		</div>';
 
-		$ret_text = $output;
+		$ret_text = [
+			'content' => $output,
+			'classes' => 'fupi_descr_standard_width'
+		];
 
 	break;
 
-	// OTHER SETTINGS
+	// FUPI SHORTCODE
 
-	case 'fupi_main_experim':
-		$ret_text = '<p>' . esc_html__( 'These settings are experimental. They will be introduced into core if no users report issues with them.' , 'full-picture-analytics-cookie-notice' ) . '</p>';
+	case 'fupi_main_shortcode':
+
+		$ret_text = [
+			'classes' => 'fupi_descr_standard_width',
+			'content' => '<div class="fupi_cols" style="text-align: left; margin-top: 20px;">
+				<div class="fupi_col_50">
+					<p>' . sprintf( esc_html__('Use the shortcode %1$s[fp_info]%2$s in your privacy policy. It will display a list of tracking tools which you installed with WP Full Picture\'s modules (except GTM) or control with the Consent Banner.', 'full-picture-analytics-cookie-notice' ), '<code>', '</code>' ) . '</p>
+					<p>' . esc_html__('The list automatically updates when you make changes in your tools. Use the form below to provide information about tools that are missing from the list (e.g. installed with GTM).', 'full-picture-analytics-cookie-notice' ) . '</p>
+				</div>
+				<div class="fupi_col_50" style="border: 2px solid #ccc; padding: 0 20px 20px; box-sizing: border-box; margin-top: 1em;">
+					<p><strong style="text-transform: uppercase; font-size: 13px; letter-spacing: 1px;">' . esc_html__('Preview', 'full-picture-analytics-cookie-notice' ) . '</strong></p>
+					'. $fp_info_output . '
+				</div>
+			</div>'
+		];
 	break;
 };
 

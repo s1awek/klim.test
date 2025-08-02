@@ -50,6 +50,37 @@ function cwginstock_turnstile_callback(response) {
 	// }
 }
 
+function cwgdetectTurnstileByHiddenInput(timeout = 4000) {
+	const interval = 100;
+	let waited = 0;
+
+	const checker = setInterval(() => {
+		const input = document.querySelector('input[name="cf-turnstile-response"][id^="cf-chl-widget-"]');
+
+		if (input) {
+			clearInterval(checker);
+			console.log('Turnstile rendered');
+		} else if (waited >= timeout) {
+			clearInterval(checker);
+
+			console.warn('Turnstile did NOT render (hidden input not found).');
+			//add fallback code where it is not loaded
+			const implicit_cfparent = document.querySelector('.cf-turnstile');
+
+			if (implicit_cfparent) {
+				const newDiv = document.createElement('div');
+				newDiv.id = 'cwg-turnstile-captcha';
+				implicit_cfparent.replaceWith(newDiv);
+				instock_notifier.turnstilecallback();
+			}
+
+		}
+		waited += interval;
+	}, interval);
+}
+if (cwginstock_get_bot_type == 'turnstile' && cwginstock_turnstile_enabled == '1') {
+	window.addEventListener('load', cwgdetectTurnstileByHiddenInput);
+}
 var instock_notifier = {
 	init: function () {
 		if (cwginstock_is_popup == 'no') {
@@ -108,7 +139,7 @@ var instock_notifier = {
 		}
 	},
 	generate_v3_response: function () {
-		if (cwginstock_recaptcha_enabled == '1' && cwginstock_is_v3_recaptcha == 'yes') {
+		if (cwginstock_get_bot_type == 'recaptcha' && cwginstock_recaptcha_enabled == '1' && cwginstock_is_v3_recaptcha == 'yes') {
 			grecaptcha.ready(
 				function () {
 					grecaptcha.execute(cwginstock_recaptcha_site_key, { action: 'subscribe_form' }).then(

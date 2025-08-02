@@ -88,11 +88,11 @@ if ( ! empty( $input ) ) foreach( $input as $key => $value ) {
 					$clean_val['countries'] = sanitize_text_field( $value['countries'] );
 				};
 
-				break;
+			break;
+			
 			default:
-				// trigger_error('stripslashes of ' . $clean_key . $value);
-				$clean_val = strip_tags( stripslashes( $value ) );
-				break;
+				$clean_val = is_bool ( $value ) || is_string ( $value ) ? strip_tags( stripslashes( $value ) ) : false;
+			break;
 		}
 
 		// error_log('sanitized ' . $clean_key . ' value: ' . json_encode($clean_val) );

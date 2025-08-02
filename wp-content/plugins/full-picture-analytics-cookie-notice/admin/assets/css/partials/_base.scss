@@ -38,12 +38,21 @@ div[class*="notice"]{
 }
 .fupi_spacer{
 	height: 6px;
+	+.fupi_under_field{
+		margin-top: 0;
+	}
 }
 .notice{
 	box-sizing: border-box;
 }
 .fupi_warning_text{
-	color: #cb6f00;
+	// color: #cb6f00;
+	color: #000;
+	background-color: #ffffb5;
+	outline: 5px solid #ffffb5;
+}
+.fupi_alert_text{
+	color: red;
 }
 .fupi_center_content{
 	display: flex;
@@ -79,41 +88,37 @@ div[class*="notice"]{
 		flex: 1 0 calc(66% - 20px);
 	}
 
-
-// BODY & GENERAL
-
-body,
-#fs_pricing,
-#fs_frame{
-	background-color: #eef4f9 !important;
-}
-
 // CTA BUTTONS
 
-#sidenav_buy_pro_banner a.button-primary,
-.fupi_form_buttons_wrap #submit{
-	display: block;
-	width: 100%;
-	font-size: 14px;
-	text-align: center;
-	margin: 0 auto;
-	border-radius: 4px;
-	background-color: #1f6395;
+#fupi_content .button-primary,
+.fupi_form_buttons_wrap #submit,
+#fupi_get_pro_link{
+    background-color: #f3c836;
+    border: 1px solid #bf9c27;
+	border-radius: 50px;
 	font-weight: 500;
-	padding: 5px 10px;
-	border: 0;
+    color: #000;
 	&:hover, &:focus{
-		background-color: lighten(#1f6395, 10%);
+		background-color: lighten(#f3c836, 20%);
 	}
-	.dashicons{
-		font-size: 17px;
-	}
+}
+
+.fupi_form_buttons_wrap #submit{
+    padding: 5px 25px !important;
 }
 
 #fupi_content .button-secondary{
-	background: #fff !important;
-    border-color: #40609d !important;
+	background: #f3faff;
+	border-radius: 50px;
+	color: #112849;
+	border-color: #517b9d;
+	padding-left: 1em;
+	padding-right: 1em;
 	&:hover, &:focus{
-		background-color: #f7feff !important;
+		background-color: #fff !important;
 	}
+}
+
+.fupi_section_descr button.button-secondary{
+	line-height: 1em !important;
 }

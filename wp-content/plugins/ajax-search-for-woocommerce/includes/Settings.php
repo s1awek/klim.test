@@ -163,6 +163,8 @@ class Settings {
         $searchLayoutLink = 'https://fibosearch.com/documentation/features/search-bar-layout/';
         $searchHistory = 'https://fibosearch.com/user-search-history/';
         $noResultsExtLink = 'https://fibosearch.com/documentation/tips-tricks/extended-no-results-message/';
+        $searchBySkuLink = 'https://fibosearch.com/documentation/plugins-integrations/search-in-single-variations/#search-by-exact-sku-match';
+        $searchByGuidLink = 'https://fibosearch.com/documentation/plugins-integrations/search-in-single-variations/#search-by-exact-guid-match';
         $readMore = __( '<a target="_blank" href="%s">Read more</a> about this feature.', 'ajax-search-for-woocommerce' );
         $settingsFields = array(
             'dgwt_wcas_basic'        => apply_filters( 'dgwt/wcas/settings/section=basic', array(
@@ -573,7 +575,7 @@ class Settings {
                     'type'    => 'checkbox',
                     'desc'    => ( dgoraAsfwFs()->is_premium() ? __( 'searching also in variable products GUID', 'ajax-search-for-woocommerce' ) : sprintf( __( 'Searching in variable products GUID is available only in <a target="_blank" href="%s">the pro version</a>.', 'ajax-search-for-woocommerce' ), Upgrade::getUpgradeUrl() ) ),
                     'default' => 'off',
-                    'class'   => 'js-dgwt-wcas-adv-settings dgwt-wcas-hidden',
+                    'class'   => 'js-dgwt-wcas-adv-settings dgwt-wcas-hidden dgwt-wcas-premium-only',
                 ),
                 200 => array(
                     'name'    => 'search_in_product_attributes',

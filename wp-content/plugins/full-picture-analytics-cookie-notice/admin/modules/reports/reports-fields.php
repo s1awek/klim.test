@@ -6,12 +6,11 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_reports_main',
-		'section_title' => esc_html__( 'Settings', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Analytics dashboards in WP admin', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
-	
 			array(
 				'type'	 			=> 'r3',
-				'label' 			=> esc_html__( 'Reports', 'full-picture-analytics-cookie-notice' ),
+				'label' 			=> esc_html__( 'Dashboards settings', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'dashboards',
 				'option_arr_id'		=> $option_arr_id,
 				'class'				=> 'fupi_fullwidth_tr',
@@ -19,24 +18,24 @@ $sections = array(
 				'is_repeater'		=> true,
 				'fields'			=> array(
 					array(
+						'label'				=> esc_html__( 'Dashboard\'s name', 'full-picture-analytics-cookie-notice' ),
 						'type'				=> 'text',
-						'placeholder'		=> esc_html__( 'Report name', 'full-picture-analytics-cookie-notice' ),
 						'el_class'			=> 'fupi_internal_title',
-						'class'		=> 'fupi_col_100',
+						'class'				=> 'fupi_col_100',
 						'field_id'			=> 'title',
 						'required'			=> true,
 					),
 					array(
 						'type'				=> 'textarea',
-						'label'				=> esc_html__( '<iframe> code', 'full-picture-analytics-cookie-notice' ),
-						'class'		=> 'fupi_col_100',
+						'label'				=> esc_html__( 'Dashboard\'s <iframe> code (embed code)', 'full-picture-analytics-cookie-notice' ),
+						'class'				=> 'fupi_col_100',
 						'field_id'			=> 'iframe',
 						'format'			=> 'htmlentities',
 						'required'			=> true,
 					),
 					array(
 						'type' 				=> 'user_search',
-						'label' 			=> esc_html__( 'Let non-admin users view this report', 'full-picture-analytics-cookie-notice' ),
+						'label' 			=> esc_html__( 'Select non-admin users who can access this dashboard (optional)', 'full-picture-analytics-cookie-notice' ),
 						'field_id' 			=> 'selected_users',
 						'option_arr_id' 	=> $option_arr_id,
 						'class'		=> 'fupi_col_100',
@@ -78,12 +77,10 @@ $sections = array(
 			array(
 				'type' 				=> 'user_search',
 				'field_id' 			=> 'selected_users',
-				'label' 			=> esc_html__( 'Let non-admin users view all reports', 'full-picture-analytics-cookie-notice' ),
+				'label' 			=> esc_html__( 'Select non-admin users who can access all dashboards', 'full-picture-analytics-cookie-notice' ),
 				'option_arr_id' 	=> $option_arr_id,
 				'must_have'			=> 'admin',
 				'under field'		=> '<p>' . esc_html__( 'Users assigned to specific reports will overwrite these values.', 'full-picture-analytics-cookie-notice') . '</p>',
-				'popup2'			=> '<p style="color: #e47d00">' . esc_html__( 'Attention! This setting will let users access the Reports page but NOT view it! Users must have the rights to access the reports in the service that you use to generate them, e.g. Looker Studio or Databox.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p style="color: #e47d00">' . esc_html__( 'Attention. As a security measure, the "Reports" page won\'t be accessible to users without the right to edit posts.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
 		),
 	),

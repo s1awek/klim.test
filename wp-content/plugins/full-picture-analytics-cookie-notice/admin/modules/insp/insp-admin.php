@@ -5,11 +5,13 @@ class Fupi_INSP_admin {
     private $settings;
     private $tools;
     private $cook;
+    private $proofrec;
 
     public function __construct(){
         $this->settings = get_option('fupi_insp');
         $this->tools = get_option('fupi_tools');
         $this->cook = get_option('fupi_cook');	
+        $this->proofrec = get_option('fupi_proofrec');
         $this->add_actions_and_filters();
     }
 
@@ -32,10 +34,13 @@ class Fupi_INSP_admin {
     public function sanitize_fields( $input ){
         
         include 'insp-sanitize.php';
+
+        if ( apply_filters( 'fupi_updating_many_options', false ) ) return $clean_data;
 		
-		if ( ! empty ( $this->tools['cook'] ) && ! empty( $this->cook['cdb_key'] ) && ! empty ( get_privacy_policy_url() ) ) {
+		if ( ! empty ( $this->tools['cook'] ) && ! empty ( $this->tools['proofrec'] ) && ! empty ( get_privacy_policy_url() ) ) {
 			include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
-			new Fupi_compliance_status_checker( 'cdb', $this->cook, false );
+			$gdpr_checker = new Fupi_compliance_status_checker( 'insp', $clean_data );
+            $gdpr_checker->send_and_return_status();
 		}
 		
 		include FUPI_PATH . '/admin/common/fupi-clear-cache.php';

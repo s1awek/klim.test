@@ -4,13 +4,13 @@ $option_arr_id = 'fupi_cscr';
 $footer_scr_fields = array();
 $scr_fields = array(
     array(
-        'placeholder' => esc_html__( 'Name', 'full-picture-analytics-cookie-notice' ),
+        'label'       => esc_html__( 'Name*', 'full-picture-analytics-cookie-notice' ),
         'type'        => 'text',
         'el_class'    => 'fupi_internal_title',
         'field_id'    => 'title',
         'class'       => 'fupi_col_100',
         'required'    => true,
-        'under field' => esc_html__( '(Used on the GDPR setup helper page, data saved with visitors consents and by the "Privacy Policy Extras" module)', 'full-picture-analytics-cookie-notice' ),
+        'under field' => esc_html__( '(This is displayed by the [fp_info] shortcode, in the "GDPR setup info" page and in proofs of visitors\' consents.', 'full-picture-analytics-cookie-notice' ),
     ),
     array(
         'type'     => 'hidden',
@@ -32,7 +32,7 @@ $scr_fields = array(
             '<strong>',
             '</strong>',
             '&lt;script>',
-            '<a href="https://wpfullpicture.com/support/documentation/how-to-add-custom-scripts-in-a-privacy-respecting-way/?utm_source=fp_admin&utm_medium=referral&utm_campaign=documentation_link" target="_blank">',
+            '<a href="https://wpfullpicture.com/support/documentation/how-to-add-custom-scripts-in-a-privacy-respecting-way/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">',
             '</a>'
         ),
     ),
@@ -44,7 +44,7 @@ $scr_fields = array(
         'start_sub_section' => true,
     ),
     array(
-        'label'           => esc_html__( 'Script\'s privacy policy URL (Used by the "Privacy Policy Extras" module if the script installs a tracking tool)', 'full-picture-analytics-cookie-notice' ),
+        'label'           => esc_html__( 'Script\'s privacy policy URL (for use in [fp_info] shortcode)', 'full-picture-analytics-cookie-notice' ),
         'type'            => 'url',
         'field_id'        => 'pp_url',
         'class'           => 'fupi_col_100',
@@ -64,7 +64,7 @@ $footer_scr_fields = array_merge( $scr_fields, $html_field );
 if ( isset( $this->tools['cook'] ) ) {
     $cook_scr_fields = array(
         array(
-            'label'             => esc_html__( 'Load when visitors agree to using their data for these purposes (leave blank to load instantly)', 'full-picture-analytics-cookie-notice' ),
+            'label'             => esc_html__( 'Load when visitors agree to', 'full-picture-analytics-cookie-notice' ),
             'type'              => 'label',
             'field_id'          => 'types_label',
             'start_sub_section' => true,

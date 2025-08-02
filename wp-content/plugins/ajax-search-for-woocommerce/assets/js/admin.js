@@ -474,7 +474,8 @@
                     var options = loadedOptions;
 
                     if (optionsRaw.length > 0) {
-                        optionsRaw = JSON.parse('["' + decodeURI(optionsRaw.replace(/&/g, "\",\"").replace(/=/g, "\",\"")) + '"]');
+                        optionsRaw = decodeURI(optionsRaw).replace(/"/g, '\\"');
+                        optionsRaw = JSON.parse('["' + optionsRaw.replace(/&/g, '","').replace(/=/g, '","') + '"]');
 
                         var lastKey = '';
 

@@ -31,12 +31,13 @@
 	let fupi_settings_form 	= FP.findID('fupi_settings_form'),
 		fupi_admin_page 	= FP.getUrlParamByName('page'),
 		headlines 			= FP.findAll( '#fupi_settings_form h2' );
+		sub_items_added		= false;
 
 	function add_sub_items(){
 
 		if ( headlines.length < 2 ) return;
 
-		let current_page_el = FP.findID('fupi_current_page_sidenav'),
+		let current_page_el = FP.findFirst('.fupi_sidenav_item.fupi_current'),
 			output = '<div id="fupi_sidenav_sub">',
 			active_tab = fupi_settings_form.dataset.activetab;
 		
@@ -45,37 +46,74 @@
 			let h_txt = headline.innerText,
 				current_class = i == 0  ? 'active' : '';
 			
-			output += '<button type="button" data-target="hook_' + active_tab + '_' + i + '" class="fupi_nav_section_btn ' + current_class + '"><span>' + h_txt + '</span></button>';
+			output += '<button type="button" data-target="hook_' + active_tab + '_' + i + '" class="fupi_sidenav_sub_item ' + current_class + '"><span>' + h_txt + '</span></button>';
 			headline.setAttribute( 'id', 'hook_' + active_tab + '_' + i );
 			headline.classList.add( 'fupi_hook', 'fupi_el');
 		});
 
+		// current_page_el.insertAdjacentHTML('beforebegin', '<button id="fupi_toggle_hidden_menu_items"><span class="dashicons dashicons-menu-alt"></span><span class="fupi_srt">Menu</span></button>');
 		current_page_el.insertAdjacentHTML('beforeend', output + '</div>');
+		current_page_el.classList.add('fupi_has_subnav');
+
+		sub_items_added = true;
 	}
+	/*
+	function hide_not_active_menu_items(){
+
+		// get all sidenav sections
+		let sections = FP.findAll('.fupi_sidenav_section');
+
+		// hide menu elements that do not have current (active) menu items
+		sections.forEach( section => {
+			
+			let current_page_link = FP.findFirst( '.fupi_current', section );
+			
+			if ( ! current_page_link ) {
+				section.style.display = 'none';
+				section.classList.add('fupi_hideable_menu_element');
+			} else {
+				// hide all menu items within this section which are not current or are marked with alt style
+				let $not_active_menu_items = jQuery('.fupi_sidenav_item:not(.fupi_current):not(.fupi_alt_style)');
+				$not_active_menu_items.hide().addClass('fupi_hideable_menu_element');
+			}
+		});
+
+		// add event to toggle button
+		FP.findID( 'fupi_toggle_hidden_menu_items' ).addEventListener( 'click', () => {
+
+			// jQuery - get all elements with class fupi_hideable_menu_element
+			let $hidden_elements = jQuery('#fupi_nav_col .fupi_hideable_menu_element');
+ 
+			// Use jQuery to animate showing all hidden sections
+			$hidden_elements.slideToggle( 300 );
+
+			// Use jQuery to slide hide element with id fupi_toggle_hidden_menu_items
+			jQuery('#fupi_toggle_hidden_menu_items').slideToggle( 300 );
+		});
+	}*/
 
 	function remove_highlight_from_active_menu_item(){
-		let active_menu_link = FP.findFirst('#fupi_page_nav .fupi_nav_section_btn.active');
+		let active_menu_link = FP.findFirst('#fupi_nav_col .fupi_sidenav_sub_item.active');
 		if ( active_menu_link ) active_menu_link.classList.remove('active');
 	}
 
 	function enable_sections_toggle(){
 
 		// headlines = FP.findAll('#fupi_settings_form h2');
-		let fupi_page_nav_links = FP.findAll('#fupi_page_nav .fupi_nav_section_btn:not(.fupi_never_active)');
+		let fupi_nav_col_links = FP.findAll('#fupi_nav_col .fupi_sidenav_sub_item');
 
 		// make 1st section visible & unhide form
 		if ( headlines.length > 1 ) show_section( headlines[0].id ); // show first section
-		// if ( fupi_settings_form ) fupi_settings_form.classList.remove('fupi_hidden');
 
 		// add events to links that add a target to url & show sections
-		if ( fupi_page_nav_links.length > 1 ) {
+		if ( fupi_nav_col_links.length > 1 ) {
 
-			fupi_page_nav_links.forEach( link => {
+			fupi_nav_col_links.forEach( link => {
 				link.addEventListener( 'click', () => {
 					if ( ! link.classList.contains('active') ) {
 						let hook = link.dataset.target;
 						show_section( hook );
-						FP.setCookie('fp_last_section', hook ); // remember chosen section
+						FP.setCookie('fp_viewed_section', JSON.stringify( [ hook, document.location ] ) ); // remember chosen section
 					}
 				} )
 			} )
@@ -84,22 +122,27 @@
 
 	function show_last_viewed_section(){
 
-		let last_viewed_section_hook = FP.readCookie('fp_last_section');
+		let last_viewed_section = FP.readCookie('fp_viewed_section');
 
-		if ( last_viewed_section_hook ) {
-			let section_menu_item = FP.findFirst( '.fupi_nav_section_btn[data-target="' + last_viewed_section_hook + '"]' );
-			if ( ! section_menu_item ) {
-				FP.setCookie('fp_last_section', false );
-			} else {
-				show_section( last_viewed_section_hook );
-			};
-		}
+		if ( ! last_viewed_section ) return;
+
+		last_viewed_section = JSON.parse( last_viewed_section );
+
+		// do nothing if the page was reloaded or refreshed
+		if ( last_viewed_section[1] == document.location ) return; 
+
+		let section_menu_item = FP.findFirst( '.fupi_sidenav_sub_item[data-target="' + last_viewed_section[0] + '"]' );
+		if ( ! section_menu_item ) {
+			FP.deleteCookie('fp_viewed_section' );
+		} else {
+			show_section( last_viewed_section[0] );
+		};
 	}
 
 	function show_section( hook ) {
 
 		let section_elements 	= FP.findAll( '.fupi_el, .form-table' ),
-			pseudo_link 		= FP.findFirst( '.fupi_nav_section_btn[data-target="' + hook + '"]' );
+			pseudo_link 		= FP.findFirst( '.fupi_sidenav_sub_item[data-target="' + hook + '"]' );
 
 		if ( pseudo_link ) {
 
@@ -116,12 +159,32 @@
 		}
 	}
 
-	if ( fupi_admin_page && fupi_admin_page != 'full_picture_tools' && fupi_settings_form) {
-		add_sub_items();
-		enable_sections_toggle();
+	if ( fupi_admin_page && fupi_settings_form) {
+		
+		if ( fupi_admin_page != 'full_picture_tools' ){
+			add_sub_items();
+			//if ( sub_items_added ) hide_not_active_menu_items();
+			enable_sections_toggle();
+		}
+
 		show_last_viewed_section();
 	};
 
+})();
+
+// TOGGLE MENU O MOBILES
+
+(()=>{
+
+	$toggle_menu_btn = FP.findID('fupi_mobile_nav_toggle_button');
+
+	if ( ! $toggle_menu_btn ) return;
+
+	$menu = FP.findID('fupi_side_menu');
+
+	$toggle_menu_btn.addEventListener('click', () => {
+		$menu.classList.toggle('fupi_show_mobile_menu');
+	});
 })();
 
 (() => {
@@ -268,45 +331,28 @@
 (()=>{
 	
 	// CONSENT BANNER > TOGGLE HIDDEN RADIOS & "MANUAL" FIELDS
+	
+	let mode_select = FP.findFirst('.fupi_cookie_notice_modes select');
 
-	let mode_radios = FP.findAll('.fupi_cookie_notice_modes input[type="radio"]');
+	if ( ! mode_select ) return;
+	
+	// first we hide all manual fields
+	FP.findID('fupi_settings_form').classList.add('fupi_hide_manual_cookie_settings');
+	
+	// show manual fields if manual radio is checked
+	toggle_manual_fields();
 
-	function toggle_manual_fields( radio ){
-		if ( radio.value == 'manual' ) {
+	function toggle_manual_fields(){
+		if ( mode_select.value == 'manual' ) {
 			FP.findID('fupi_settings_form').classList.remove('fupi_hide_manual_cookie_settings');
 		} else {
 			FP.findID('fupi_settings_form').classList.add('fupi_hide_manual_cookie_settings');
 		}
-	} 
-
-	// first we hide all manual fields
-	if ( mode_radios.length > 0 ) {
-		FP.findID('fupi_settings_form').classList.add('fupi_hide_manual_cookie_settings');
-	};
+	}
 
 	// then we go over each radio field
-	mode_radios.forEach( radio => {
+	mode_select.addEventListener('change', toggle_manual_fields )
 
-		let toggle = FP.findFirst('.fupi_cn_mode .fupi_switch_slider[data-mode="' + radio.value + '"]');
-	
-		// if we haven active radio
-		if ( toggle && radio.checked ) {
-			// make the toggle sldier active
-			toggle.classList.add('fupi_active');
-			// and show manual fields if we need to
-			if ( radio.value == 'manual' ) FP.findID('fupi_settings_form').classList.remove('fupi_hide_manual_cookie_settings');
-		}
-	
-		// Toggle on click
-		toggle.addEventListener('click', () => {
-			if ( ! toggle.classList.contains('fupi_active') ) {
-				FP.findFirst('.fupi_cn_mode .fupi_active').classList.remove('fupi_active');
-				toggle.classList.add('fupi_active');
-				radio.checked = true;
-				toggle_manual_fields(radio);
-			}
-		})
-	} )
 })();
 
 (()=>{
@@ -375,6 +421,15 @@
 
 	if ( fupi_basic_module && fupi_basic_headline_html ){
 		fupi_basic_module.insertAdjacentHTML( 'beforebegin', fupi_basic_headline_html.innerHTML );
+	}
+
+	// Add a "Tag Managers" headline
+
+	let fupi_tagman_module		= FP.findFirst('tr.fupi_tagman'),
+		fupi_tagman_headline_html = FP.findFirst('.fupi_tagman_headline_html_template');
+
+	if ( fupi_tagman_module && fupi_tagman_headline_html ){
+		fupi_tagman_module.insertAdjacentHTML( 'beforebegin', fupi_tagman_headline_html.innerHTML );
 	}
 })();
 // FILTER THE LIST OF TOOLS
@@ -451,7 +506,7 @@
 		cloned_section = remove_extra_repeaters(cloned_section);
 		current_section.parentElement.insertBefore(cloned_section, current_section.nextSibling);
 
-		if ( module_id == 'cscr' || module_id == 'blockscr' || module_id == 'reports' || module_id == 'atrig' ) {
+		if ( module_id == 'cscr' || module_id == 'cook' || module_id == 'reports' || module_id == 'atrig' ) {
 			let id_field = FP.findFirst('.fupi_field_id_wrap input', cloned_section);
 			if ( id_field ) id_field.value = generate_random_id();
 		}
@@ -710,6 +765,13 @@
 		// remove all ending "</script>" tags
 		script = script.replaceAll('</script>', '');
 
+		// remove all HTML comments including everything between <!-- and -->
+		script = script.replaceAll(/<!--/g, '//');
+		script = script.replaceAll(/-->/g, '');
+
+		// remove noscript tags with everything in between
+		script = script.replaceAll(/<noscript>[\s\S]*?<\/noscript>/g, '');
+
 		// find all <script[something or nothing]> tags
 		let start_regex = /<script[\s\S]*?>/gi,
 			matches = script.match(start_regex),
@@ -903,7 +965,7 @@
 	// check if there are any r3s on page
 	if ( FP.findFirst('.fupi_r3_repeater') ) {
 		
-		if ( module_id == 'cscr' || module_id == 'blockscr' || module_id == 'reports' || module_id == 'atrig' ) fill_empty_id_fields_with_random_ids();
+		if ( module_id == 'cscr' || module_id == 'cook' || module_id == 'reports' || module_id == 'atrig' ) fill_empty_id_fields_with_random_ids();
 
 		enable_all_select2s();
 		enable_section_buttons();
@@ -945,11 +1007,10 @@
 	let offscreen = FP.findID('fupi_offscreen'),
 		offscreen_content_el = FP.findID('fupi_offscreen_content'),
 		offscreen_close_btn = FP.findID('fupi_offscreen_close_btn'),
-		offscreen_maximize_btn = FP.findID('fupi_offscreen_maximize_btn'),
+		// offscreen_maximize_btn = FP.findID('fupi_offscreen_maximize_btn'),
 		content_els = FP.findAll('table.form-table .fupi_popup_content:not(.fupi_do_not_create_popup_icon)'),
 		next_popup_btn = FP.findID('fupi_offscreen_next_btn'),
 		prev_popup_btn = FP.findID('fupi_offscreen_prev_btn'),
-		open_btn_side = FP.findID('fupi_offscreen_open_btn'),
 		current_popup_index = -1,
 		popup_history = [];
 
@@ -1054,10 +1115,10 @@
 
 	// maximize/minimize popup
 
-	function maximize_popup () {
-		offscreen.classList.toggle('fupi_maximized');
-		offscreen_maximize_btn.classList.toggle('fupi_maximized');
-	};
+	// function maximize_popup () {
+	// 	offscreen.classList.toggle('fupi_maximized');
+	// 	offscreen_maximize_btn.classList.toggle('fupi_maximized');
+	// };
 
 	// start
 
@@ -1079,9 +1140,8 @@
 		}
 	})
 
-	if ( open_btn_side ) open_btn_side.addEventListener('click', show_popup );
 	if ( offscreen_close_btn ) offscreen_close_btn.addEventListener( 'click', hide_popup );
-	if ( offscreen_maximize_btn ) offscreen_maximize_btn.addEventListener( 'click', maximize_popup );
+	// if ( offscreen_maximize_btn ) offscreen_maximize_btn.addEventListener( 'click', maximize_popup );
 
 })();
 
@@ -1301,19 +1361,6 @@
 		});  
 
 	});
-})();
-
-(()=>{
-
-	// ADD "ACCOUNT" LINK TO SIDE NAV
-
-	let sidebar_account_link = FP.findFirst('#toplevel_page_full_picture_tools a[href="https://wpfullpicture.com/account/"]'),
-		sidenav_section = FP.findFirst('.fupi_sidenav_account_section');
-
-	if ( sidebar_account_link && sidenav_section ) {
-		sidenav_section.style.display = 'block';
-		FP.findFirst( 'a', sidenav_section ).href = sidebar_account_link.href;
-	}
 })();
 
 (()=>{
@@ -2007,8 +2054,9 @@ jQuery( document ).ready( function($) {
 })(jQuery);
 
 jQuery(document).ready(function() {
-    jQuery('#fupi_page_nav, #fupi_side_menu').theiaStickySidebar({
+    jQuery('#fupi_nav_col, #fupi_side_menu').theiaStickySidebar({
         additionalMarginTop: 50,
         additionalMarginBottom : 50,
+        minWidth: 1100
     });
 });

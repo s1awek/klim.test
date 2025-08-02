@@ -1,6 +1,7 @@
 <?php
 
 $ret_text = '';
+$how_to_useit = '<p style="text-align: center;" class="fupi_warning_text"><button type="button" class="fupi_faux_link fupi_open_popup" data-popup="fupi_howtouseit_popup">' . esc_html__( 'How NOT to use Google Ads with WP Full Picture.', 'full-picture-analytics-cookie-notice' ) . ' <span class="fupi_open_popup_i">i</span></button></p>';
 
 switch( $section_id ){
 
@@ -16,25 +17,37 @@ switch( $section_id ){
 		</div>
 
 		<div id="fupi_installed_info" class="fupi_installation_status fupi_hidden">
-			<img src="' . FUPI_URL . 'admin/assets/img/success_ico.png" aria-hidden="true"> <p>' . esc_html__( 'Well done! Google Ads is installed', 'full-picture-analytics-cookie-notice' ) . '<br><span class="fupi_small">' . esc_html__( 'The data is sent to Google Ads conversion ID ', 'full-picture-analytics-cookie-notice' ) . ' ' . $conv_id . '</span>.</p>
-		</div>';
+			<img src="' . FUPI_URL . 'admin/assets/img/success_ico.png" aria-hidden="true"> <p>' . esc_html__( 'Well done! Google Ads is installed', 'full-picture-analytics-cookie-notice' ) . '<br><span class="fupi_small">' . esc_html__( 'The data is sent to Google Tag ID', 'full-picture-analytics-cookie-notice' ) . ' ' . $conv_id . '</span>.</p>
+		</div>' . $how_to_useit;
 	break;
 
 	// LOADING
 
 	case 'fupi_gads_loading':
-		$ret_text = '<p>' . esc_html__( 'Change when this tool loads and starts tracking visitors.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Here you can change when and where this tool loads. This is all optional.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
-	// CUSTOM EVENTS TRACKING
-	
-	case 'fupi_gads_atrig':
-		$ret_text = '<p>' .sprintf( esc_html__( 'Track when visitors behave like potential clients. Learn %1$smore about lead scoring%2$s and %3$show to set it up%2$s', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/blog/lead-scoring-in-web-analytics-what-is-it-and-how-to-use-it/">', '</a>', '<a href="https://wpfullpicture.com/support/documentation/how-to-use-lead-scoring/">' ) . '</p>';
+	// PRIVACY
+
+	case 'fupi_gads_basic':
+		$ret_text = '<p>' . esc_html__( 'These settings impact the amount and precision of collected data.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 		
-	// EVENTS TRACKING
+	// SIMPLE EVENTS
 	case 'fupi_gads_events':
-		$ret_text = '<p>' . sprintf( esc_html__('Provide %1$sconversion labels%2$s in the fields below to track visitors\' actions as conversions.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-get-google-ads-tag-id-conversion-id/">', '</a>' ) . '</p>';
+		$ret_text = '<div>
+			<p>' . esc_html__('Use functions on this page to track as conversions simple events, like clicking a button or submitting a form.', 'full-picture-analytics-cookie-notice' ) . '</p>
+			<p>' . sprintf( esc_html__('%1$sFollow this tutorial%2$s to get conversion labels for use on this page.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-get-google-ads-tag-id-conversion-id/">', '</a>' ) . '</p>
+		</div>';
+	break;
+
+	// COMPLEX EVENTS
+	
+	case 'fupi_gads_atrig':
+		$ret_text = '<div>
+			<p>' . esc_html__( 'Use functions on this page to track complex events as conversions. Complex events can have many conditions, for example, when a visitor from France visits 5 product pages in one session. You can set these conditions in the "Advanced triggers" module.' , 'full-picture-analytics-cookie-notice' ) . '</p>
+			<p>' . sprintf( esc_html__('%1$sFollow this tutorial%2$s to get conversion labels for use on this page.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-get-google-ads-tag-id-conversion-id/">', '</a>' ) . '</p>
+		</div>';
 	break;
 
 	// E-COMMERCE

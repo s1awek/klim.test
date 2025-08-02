@@ -64,7 +64,7 @@ class Fupi_generate_cscr_files {
         // GET title
         $cscr_title = esc_attr( $script_data['title'] );
         // BUILD SCRIPT
-        return "\r\n\r\n    // {$scr_id}\r\n    \r\n    if ( allow_loading_{$scr_id}() ) load_{$scr_id}();\r\n\r\n    document.addEventListener( 'fp_load_scripts', () => { if ( allow_loading_{$scr_id}() ) load_{$scr_id}(); } );\r\n\r\n    function allow_loading_{$scr_id}(){\r\n        return FP.isAllowedToLoad_basic( '{$scr_id}', {$force_load}, {$permissions_s}, {$geo} );\r\n    };\r\n        \r\n    function load_{$scr_id}(){\r\n        fp.loaded.push('{$scr_id}');\r\n        if ( fp.vars.debug ) console.log('[FP] Custom script loaded: {$cscr_title} ');\r\n        " . $atrig_start . "\r\n\r\n        // Script start\r\n        " . html_entity_decode( $script_data['scr'], ENT_QUOTES ) . "\r\n        // Script end\r\n        " . $atrig_end . "\r\n    };\r\n";
+        return "\r\n\r\n    // {$scr_id}\r\n    \r\n    if ( allow_loading_{$scr_id}() ) load_{$scr_id}();\r\n\r\n    document.addEventListener( 'fp_load_scripts', () => { if ( allow_loading_{$scr_id}() ) load_{$scr_id}(); } );\r\n\r\n    function allow_loading_{$scr_id}(){\r\n        return FP.isAllowedToLoad_basic( '{$scr_id}', {$force_load}, {$permissions_s}, {$geo} );\r\n    };\r\n        \r\n    function load_{$scr_id}(){\r\n        fp.loaded.push('{$scr_id}');\r\n        if ( fp.main.debug ) console.log('[FP] Custom script loaded: {$cscr_title} ');\r\n        " . $atrig_start . "\r\n\r\n        // Script start\r\n        " . html_entity_decode( $script_data['scr'], ENT_QUOTES ) . "\r\n        // Script end\r\n        " . $atrig_end . "\r\n    };\r\n";
     }
 
     private function get_files_contents() {

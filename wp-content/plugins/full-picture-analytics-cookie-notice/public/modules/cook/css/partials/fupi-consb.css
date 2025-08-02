@@ -903,7 +903,7 @@ input:checked + .fupi_switch_slider:before {
     height: 44px;
   }
 }
-.fupi_cdb_info {
+.fupi_consent_info {
   font-size: 12px;
   text-align: right;
   margin: 5px 0 0;
@@ -913,7 +913,7 @@ input:checked + .fupi_switch_slider:before {
       -ms-flex-order: 990;
           order: 990;
 }
-.fupi_cdb_info a {
+.fupi_consent_info a {
   color: #777;
   text-decoration: underline !important;
 }

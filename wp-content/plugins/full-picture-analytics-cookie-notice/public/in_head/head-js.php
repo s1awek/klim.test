@@ -20,8 +20,8 @@ fp.notice.vars = {};
 	};
 
 	// BROKEN LINK TRACKING + REDIRECT TO A CUSTOM 404 PAGE
-	if( fp.vars.track404 && fpdata.page_type == "404" && ! FP.getUrlParamByName("broken_link_location") ){
-		const location = fp.vars.redirect404_url ? new URL( fp.vars.redirect404_url ) : window.location;
+	if( fp.track.track404 && fpdata.page_type == "404" && ! FP.getUrlParamByName("broken_link_location") ){
+		const location = fp.track.redirect404_url ? new URL( fp.track.redirect404_url ) : window.location;
 		window.location = location + ( location.search ? "&" : "?" ) + "broken_link_location=" + ( document.referrer || "direct_traffic_or_unknown" ) + "&broken_link=" + window.location;
 	}
 
@@ -163,6 +163,12 @@ fp.notice.vars = {};
 		}
     };
 
+	// Change the value of track_current_user to true if there is a cookie "fp_track_me"
+	let track_me = FP.readCookie(\'fp_track_me\');
+	if ( track_me ) {
+		fp.main.track_current_user = true;
+	};
+
 	// CHECK FOR BOT TRAFFIC
 	// -- modified version of https://stackoverflow.com/a/65563155/7702522
 	
@@ -170,14 +176,14 @@ fp.notice.vars = {};
 	fpdata.is_robot = (() => {
 		
 		// SMALL list
-		if ( fp.vars.bot_list == "basic" ) {
+		if ( fp.main.bot_list == "basic" ) {
 			
 			const robots = new RegExp([/bot/,/spider/,/crawl/,/APIs-Google/,/AdsBot/,/Googlebot/,/mediapartners/,/Google Favicon/,/FeedFetcher/,/Google-Read-Aloud/,/googleweblight/,/bingbot/,/yandex/,/baidu/,/duckduck/,/Yahoo Link Preview/,/ia_archiver/,/facebookexternalhit/,/pinterest\\.combot/,/redditbot/,/slackbot/,/Twitterbot/,/WhatsApp/,/S[eE][mM]rushBot/].map((r) => r.source).join("|"),"i");
 
 			return robots.test(navigator.userAgent);
 
 		// BIG list
-		} else if ( fp.vars.bot_list == "big" ) {
+		} else if ( fp.main.bot_list == "big" ) {
 
 			const robots = new RegExp([
 				/Googlebot/, /AdsBot/, /Feedfetcher-Google/, /Mediapartners-Google/, /Mediapartners/, /APIs-Google/, 
@@ -275,13 +281,14 @@ fp.notice.vars = {};
 	// GENERATE A RANDOM STRING FOR VARIOUS USES
 	fp.random = FP.getRandomStr(7);
 
-	// GTAG & GTM STUFF
+	// SET INITIAL GTAG, GTM AND MS ADS STUFF
 
-	// First, we set the dataLayers for GA and GAds (and GTM DataLayer if it has no DL Protection enabled)
+	// First, we set the dataLayers for GA, GAds and MS Ads
 
 	window.dataLayer = window.dataLayer || [];
 	window.gtag = function(){window.dataLayer.push(arguments);}
-
+	window.uetq = window.uetq || [];
+	
 	// next, we set a separate GTM DataLayer if it has DL Protection enabled
 
 	if ( fp.gtm ) {
@@ -294,7 +301,7 @@ fp.notice.vars = {};
 
 	// UPDATE COOKIE DATA - fupi_cookies and fpdata.cookies
 
-	let magic_keyw = FP.getUrlParamByName( fp.vars.magic_keyword ),
+	let magic_keyw = FP.getUrlParamByName( fp.main.magic_keyword ),
 		ga4_debug = FP.getUrlParamByName("ga4_debug"),
 		cookies = FP.readCookie(\'fp_cookie\');
 	
@@ -306,7 +313,7 @@ fp.notice.vars = {};
 
 		var updated_cookies = { \'stats\' : false, \'personalisation\' : false, \'marketing\' : false, \'disabled\' : true };
 
-		fp.vars.track_current_user = false;
+		fp.main.track_current_user = false;
 		FP.setCookie(\'fp_cookie\', JSON.stringify(updated_cookies), 7300 );
 		fpdata.cookies = updated_cookies;
 
@@ -345,28 +352,27 @@ fp.notice.vars = {};
 
 				var updated_cookies = { \'stats\' : false, \'personalisation\' : false, \'marketing\' : false, \'disabled\' : true };
 				
-				fp.vars.track_current_user = false;
+				fp.main.track_current_user = false;
 				FP.setCookie(\'fp_cookie\', JSON.stringify(updated_cookies), 7300 );
 				fpdata.cookies = updated_cookies;
 
 			} else if ( fp.notice ) {
 
-				if ( fp.notice.ask_for_consent_again ){
+				// ask for consent again
 
-					if ( fp.notice.priv_policy_update ) {
-						if ( ! cookies.pp_pub || cookies.pp_pub != fp.notice.priv_policy_update ) changed = true;
-					}
-					
-					if ( fp.tools ){
-						if ( ! cookies.tools || ! fp.tools.every( id => cookies.tools.includes(id) ) ) changed = true;
-					}
+				if ( fp.notice.priv_policy_update ) {
+					if ( ! cookies.pp_pub || cookies.pp_pub != fp.notice.priv_policy_update ) changed = true;
+				}
+				
+				if ( fp.tools ){
+					if ( ! cookies.tools || ! fp.tools.every( id => cookies.tools.includes(id) ) ) changed = true;
 				}
 		
 				if ( changed ) {
 					FP.deleteCookie(\'fp_cookie\');
 				} else {
 					fpdata.cookies = cookies;
-					if ( fpdata.cookies.disabled ) fp.vars.track_current_user = false;
+					if ( fpdata.cookies.disabled ) fp.main.track_current_user = false;
 				}
 			}
 		}
@@ -375,9 +381,8 @@ fp.notice.vars = {};
 	//
 	// CONSENT BANNER 
 	//
-
 	
-	if ( fp.vars.track_current_user && ! fp.vars.is_customizer && fp.notice.enabled && ! fpdata.cookies && fp.notice.display_notice ) {
+	if ( fp.main.track_current_user && ! fp.main.is_customizer && fp.notice.enabled && ! fpdata.cookies && fp.notice.display_notice ) {
 		
 		// BLUR BACKGROUND
 		if ( fp.notice.blur_page ) {
@@ -394,7 +399,7 @@ fp.notice.vars = {};
 
 		if ( fp.vars.use_other_cmp ) return;
 
-		if ( fp.vars.debug ) console.log(\'[FP] Updating consents\');
+		if ( fp.main.debug ) console.log(\'[FP] Updating consents\');
 		
 		// if the user made a choice in the past
 		if ( fpdata.cookies ){
@@ -425,26 +430,48 @@ fp.notice.vars = {};
 			}
 		}
 
-		if ( ! fp.vars.is_customizer ) {
-		
+		if ( ! fp.main.is_customizer ) {
+
+			// set MS Ads consent
+			
+			window.uetq.push( "consent", "default", {
+				"ad_storage": "denied"
+			});
+			
+			if ( fpdata.cookies ){
+				if ( fpdata.cookies.stats && fpdata.cookies.marketing ) {
+					window.uetq.push( "consent", "update", {
+						"ad_storage": "granted"
+					});
+				}
+			} else {
+				if ( ! ( fp.notice.enabled && fp.notice.mode == "optin" ) ) {
+					window.uetq.push( "consent", "update", {
+						"ad_storage": "granted"
+					});
+				}
+			}
+			
 			// Set GTAG consents
 
 			["gtag", "fupi_gtm_gtag"].forEach( tag_name => {
 
 				if ( tag_name == "fupi_gtm_gtag" && ! window.fupi_gtm_gtag ) return;
 
-				// if the user made a choice in the past
-				if ( fpdata.cookies ){
+				// set defaults to denied
 
-					window[tag_name]("consent", "default", {
-						"ad_storage": "denied",
-						"ad_user_data" : "denied",
-						"ad_personalization" : "denied",
-						"analytics_storage": "denied",
-						"personalization_storage": "denied",
-						"functionality_storage": "denied",
-						"security_storage": "granted",
-					});
+				window[tag_name]("consent", "default", {
+					"ad_storage": "denied",
+					"ad_user_data" : "denied",
+					"ad_personalization" : "denied",
+					"analytics_storage": "denied",
+					"personalization_storage": "denied",
+					"functionality_storage": "denied",
+					"security_storage": "granted",
+				});
+
+				// update if the user made a choice in the past
+				if ( fpdata.cookies ){
 					
 					window[tag_name]("consent", "update", {
 						"ad_storage": fpdata.cookies.marketing ? "granted" : "denied",
@@ -456,30 +483,15 @@ fp.notice.vars = {};
 						"security_storage": "granted",
 					});
 					
-					if ( fp.vars.debug ) console.log("[FP] Google consents set to user choices");
+					if ( fp.main.debug ) console.log("[FP] Google consents set to user choices");
 				
 				// if no choice was made in the past
 				} else {
 					
-					// deny all if consent banner is in optin mode
-					if ( fp.notice.enabled && fp.notice.mode == "optin" ) {
+					// agree to all if consent banner is disabled or is in optout or notification mode
+					if ( ! ( fp.notice.enabled && fp.notice.mode == "optin" ) ) {
 						
-						window[tag_name]("consent", "default", {
-							"ad_storage": "denied",
-							"ad_user_data" : "denied",
-							"ad_personalization" : "denied",
-							"analytics_storage": "denied",
-							"personalization_storage": "denied",
-							"functionality_storage": "denied",
-							"security_storage": "granted",
-						});
-					
-						if ( fp.vars.debug ) console.log("[FP] All Google consents denied");
-					
-					// agree to all if consent banner is disabled or we are in optout or notification mode
-					} else {
-						
-						window[tag_name]("consent", "default", {
+						window[tag_name]("consent", "update", {
 							"ad_storage": "granted",
 							"ad_user_data" : "granted",
 							"ad_personalization" : "granted",
@@ -489,13 +501,13 @@ fp.notice.vars = {};
 							"security_storage": "granted",
 						});
 					
-						if ( fp.vars.debug ) console.log("[FP] All Google consents granted");
+						if ( fp.main.debug ) console.log("[FP] All Google consents granted");
 					};
 				}
 			} );
 			
 			// we set URL Passthrough for standard GTAG
-			if ( fp.notice.enabled && fp.notice.gtag_no_cookie_mode && fp.notice.url_passthrough && ( fp.notice.mode == "optin" || fp.notice.mode == "optout" ) ) {
+			if ( fp?.gtag?.url_passthrough && fp.notice.enabled && ( fp.notice.mode == "optin" || fp.notice.mode == "optout" ) ) {
 				window.gtag("set", "url_passthrough", true);
 			};
 		}
@@ -506,11 +518,11 @@ fp.notice.vars = {};
 	FP.postToServer = ( event_data_a, cb = false ) => {
 
 		if ( fpdata.is_robot ) return;
-		if ( fp.vars.debug ) console.log( "[FP] Posting to server", event_data_a );
+		if ( fp.main.debug ) console.log( "[FP] Posting to server", event_data_a );
 
-		let fetch_url = fp.vars.server_method == "rest" ? "/index.php?rest_route=/fupi/v1/sender" : "/wp-admin/admin-ajax.php?action=fupi_ajax";
+		let fetch_url = fp.main.server_method == "rest" ? "/index.php?rest_route=/fupi/v1/sender" : "/wp-admin/admin-ajax.php?action=fupi_ajax";
 
-		if ( fp.vars.debug || event_data_a[0][0] == \'cdb\') {
+		if ( fp.main.debug || event_data_a[0][0] == \'cdb\') {
 		
 			fetch( fetch_url, {
 				method: "POST",

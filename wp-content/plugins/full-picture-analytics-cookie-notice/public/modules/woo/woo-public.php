@@ -113,6 +113,7 @@ class Fupi_WOO_public {
         );
         // Any page - for adding products to cart with a URL parameter add-to-cart - ok
         add_action( 'wp_footer', array($this, 'fupi_woo_add_to_cart_from_url'), 999 );
+        // add_action('woocommerce_add_to_cart', array( $this, 'fupi_woo_add_to_cart_action', 10, 6));
         // checkout - checkout page and order confirmation page - ok
         add_action( 'wp_head', array($this, 'fupi_woo_get_order_data'), 100 );
         // TO DO:
@@ -734,6 +735,16 @@ class Fupi_WOO_public {
             $parent_id
         ) );
         return "<!--noptimize--><script data-no-optimize='1' nowprocket class='fupi_woo_group_item'>FP.prepareProduct( 'group_item', {$id}, {$prod_data} );</script><!--/noptimize-->" . $html;
+    }
+
+    public function fupi_woo_add_to_cart_action(
+        $cart_item_key,
+        $product_id,
+        $quantity,
+        $variation_id,
+        $variation,
+        $cart_item_data
+    ) {
     }
 
     public function fupi_woo_add_to_cart_from_url() {

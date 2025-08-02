@@ -43,6 +43,8 @@
 .woocommerce_page_dgwt_wcas_settings .sp-eafree-review-notice,
 .woocommerce_page_dgwt_wcas_settings #beacon-container,
 .woocommerce_page_dgwt_wcas_settings #nri-slug-wrapper,
+.woocommerce_page_dgwt_wcas_settings .toucan-welcome-panel,
+.woocommerce_page_dgwt_wcas_debug .toucan-welcome-panel,
 .woocommerce_page_dgwt_wcas_debug #beacon-container {
 	display: none !important;
 }

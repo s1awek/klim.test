@@ -210,6 +210,12 @@ a.dgwt-wcas-product-details-readmore:hover {
 	line-height: 110%;
 }
 
+.dgwt-wcas-st .dgwt-wcas-score {
+	color: #8e44ad;
+	font-weight: bold;
+	font-size: 80%;
+}
+
 .dgwt-wcas-st > span {
 	display: inline-block;
 	vertical-align: middle;

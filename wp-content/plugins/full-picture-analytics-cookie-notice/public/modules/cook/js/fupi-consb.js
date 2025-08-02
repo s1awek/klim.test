@@ -7,7 +7,8 @@
 	let notice = FP.findID('fupi_cookie_notice'),
 		toggler = FP.findID('fupi_notice_toggler'),
 		panel = {},
-		setup_done = false;
+		setup_done = false,
+		cdb_cookie = [];
 
 	panel.welcome = FP.findID('fupi_welcome_panel');
 	panel.settings = FP.findID('fupi_settings_panel');
@@ -50,7 +51,7 @@
 				show_notice_on_link_click(true); // true == set switches
 			} else {
 				set_default_switches();
-				if ( fp.vars.track_current_user ) {
+				if ( fp.main.track_current_user ) {
 					fp.notice.display_notice ? show_notice() : show_toggler();
 				};
 				show_notice_on_link_click(true);
@@ -62,7 +63,7 @@
 			show_popup_elements();
 			transform_notice_into_infobox();
 
-			if ( fp.vars.track_current_user && ! fpdata.cookies ) {
+			if ( fp.main.track_current_user && ! fpdata.cookies ) {
 				auto_agree_to_all_cookies();
 				show_notice();
 			};
@@ -105,13 +106,17 @@
 		return timezone_int >= 0 ? '+' + timezone_int : timezone_int + '';
 	}
 
-	function can_save_in_cdb(){
-		if ( ! fp.notice.save_in_cdb ) return false;
-		if ( ! fp.notice.save_all_consents && ( fpdata.is_robot || fpdata.activity.total == 0 ) ) return false;
+	function get_timezoneName(){
+		return Intl.DateTimeFormat().resolvedOptions().timeZone;
+	}
+
+	function can_save_consents(){
+		if ( ! fp?.proofrec?.save_consent ) return false;
+		if ( ! fp?.proofrec?.save_all_consents && ( fpdata.is_robot || fpdata.activity.total == 0 ) ) return false;
 		return true;
 	}
 
-	function update_cdb_id() {
+	function save_consent_id_in_cookie() {
 
 		// creates and saves cdb_id in a cookie
 		let cdb_id_cookie = FP.readCookie( 'cdb_id' );
@@ -140,7 +145,9 @@
 			}
 		}
 		
-		FP.setCookie( 'cdb_id', JSON.stringify( [fp.notice.cdb_id, fp.notice.consent_times ] ), 365 );
+		cdb_cookie = [ fp.notice.cdb_id, fp.notice.consent_times ];
+
+		FP.setCookie( 'cdb_id', JSON.stringify( cdb_cookie ), 365 );
 	};
 
 	function mark_cdb_id_as_confirmed( server_response ){
@@ -151,41 +158,60 @@
 				fp.notice.consent_times[0][1] = true;
 				FP.setCookie( 'cdb_id', JSON.stringify( [fp.notice.cdb_id, fp.notice.consent_times ] ), 365 );
 				fp.notice.cdb_id_confirmed = true;
-				if ( fp.vars.debug ) console.log('[FP] Consent saved in CDB');
+				if ( fp.main.debug ) console.log('[FP] Consent saved in CDB');
 			}
 		}
 		
 		// Optionally reload page
 		if ( fp.notice.reload_page_after_saving_cdb ) {
-			if ( fp.vars.debug ) console.log('[FP] Reloading page');
+			if ( fp.main.debug ) console.log('[FP] Reloading page');
 			location.reload();
 		}
 	}
 
 	function save_preferences_in_cdb( prev_consents ) {
 
-		if ( ! can_save_in_cdb() ) return;
+		if ( ! can_save_consents() ) return;
 
-		if ( fp.vars.debug ) console.log('[FP] Saving consent in CDB');
+		if ( fp.main.debug ) console.log('[FP] Saving consent');
 
 		let newCookieVal = fpdata.cookies;
 		
 		fp.notice.consent_time = Date.now();
 		fp.notice.cdb_waiting_for_response = true;
 
-		update_cdb_id();
+		save_consent_id_in_cookie();
 
-		let visit_info = newCookieVal;
+		let payload = newCookieVal;
 		
-		visit_info['consentBannerMode'] = fp.notice.mode;
-		visit_info['previousConsents'] = prev_consents;
-		visit_info['geolocatedCountry'] = fp.geo && fpdata.country ? fpdata.country : 'Geolocation disabled';
-		visit_info['cdbID'] = fp.notice.cdb_id;
-		visit_info['timestamp'] = fp.notice.consent_time;
+		payload['consentBannerMode'] = fp.notice.mode;
+		payload['previousConsents'] = prev_consents;
+		payload['geolocatedCountry'] = fp.geo && fpdata.country ? fpdata.country : 'Geolocation disabled';
+		payload['cdbID'] = fp.notice.cdb_id;
+		payload['timestamp'] = fp.notice.consent_time;
 
-		if ( prev_consents ) visit_info['cookiesBeforeConsent'] = listCookies();
+		if ( cdb_cookie.length > 0 ) {
+			
+			let prev_cons_timestamps = [];
+			
+			cdb_cookie[1].forEach( ( timestamp_arr, i ) => {
+				prev_cons_timestamps.push( timestamp_arr[0] );
+			});
 
-		FP.postToServer( [[ 'cdb', true, visit_info ]], mark_cdb_id_as_confirmed ); // if callback will not fire, then cdb_id will still be set by the fallback in maybe_wait_to_reload_page()
+			if ( prev_cons_timestamps.length > 0  ) payload['previousConsentsTimestamps'] = prev_cons_timestamps;
+		}
+
+		// if ( prev_consents['statistics'] || prev_consents['marketing'] || prev_consents['personalisation'] ) payload['cookiesBeforeConsent'] = listCookies();
+
+		let event_type = 'cdb',
+			event_id = false;
+
+		if ( fp?.proofrec?.storage_location == 'email' ) {
+			event_type = 'process';
+			event_id = 'proofrec_db_save';
+		}
+
+		FP.postToServer( [[ event_type, event_id, payload ]], mark_cdb_id_as_confirmed ); // if callback will not fire, then cdb_id will still be set by the fallback in maybe_wait_to_reload_page()
 	}
 
 	// SETUP CONSENT BANNER
@@ -235,12 +261,15 @@
 			'fp_visitorPrivacyPreferences' : fpdata.cookies,
 		} );
 
-		// MS
+		// MS Ads
+		window.uetq.push( 'consent', 'update', {'ad_storage': permissions['ad_storage'] } );
+
+		// MS CLARITY
 		if ( window.clarity ) {
 			fpdata.cookies.stats ? window.clarity('consent') : window.clarity('consent', false);
 		}
 
-		if ( fp.vars.debug ) console.log('[FP] Consents updated', permissions);
+		if ( fp.main.debug ) console.log('[FP] Consents updated', permissions);
 	}	
 
 	function hide_popup_elements(){
@@ -341,7 +370,7 @@
 				
 				if ( set_switches ) set_switches_state();
 
-				add_cdb_data();
+				add_consent_id_to_banner();
 				
 				show_notice_wrapper();
 				
@@ -356,13 +385,13 @@
 		});
 	}
 
-	function add_cdb_data(){
+	function add_consent_id_to_banner(){
 
 		let cookie_val =  FP.readCookie( 'cdb_id' ),
 			cdb_id = false,
-			cdb_info_boxes = FP.findAll('.fupi_cdb_info'); // one on each CB panel
+			consent_info_boxes = FP.findAll('.fupi_consent_info'); // one on each CB panel
 
-		if ( ! ( fp.notice.save_in_cdb && cookie_val && cdb_info_boxes.length > 0 && fpdata.cookies && fpdata.cookies.time && fpdata.cookies.timezone ) ) return;
+		if ( ! ( fp?.proofrec?.save_consent && cookie_val && consent_info_boxes.length > 0 && fpdata.cookies && fpdata.cookies.time && fpdata.cookies.timezone ) ) return;
 
 		// if consent was prior to 8.5 
 		// ( checks if cookie_val is not a STRINGified array )
@@ -371,7 +400,7 @@
 			cdb_id = cookie_val;
 
 			// fill in the HTML box
-			cdb_info_boxes.forEach( box => {
+			consent_info_boxes.forEach( box => {
 			
 				let id_el = FP.findFirst( '.fupi_consent_id', box );
 				if ( id_el ) id_el.innerHTML = cdb_id;
@@ -392,14 +421,16 @@
 
 			// fill in the HTML box
 
-			cdb_info_boxes.forEach( box => {
+			consent_info_boxes.forEach( box => {
 			
 				let id_el = FP.findFirst( '.fupi_consent_id', box ),
 					is_consent_saved = cons_times_a[0][1],
 					consentID = cdb_id + '_' + cons_times_a[0][0];
 
 				if ( id_el ) {
-					id_el.innerHTML = fp?.notice?.consent_access && is_consent_saved ? '<a href="https://consentsdb.com/public/consent/' + consentID + '" target="_blank">' + consentID + '</a>' : consentID;
+
+					// maybe add a link to ConsentsDB
+					id_el.innerHTML = fp?.proofrec?.consent_access && fp?.proofrec?.storage_location == 'cdb' && is_consent_saved ? '<a href="https://consentsdb.com/public/consent/' + consentID + '" target="_blank">' + consentID + '</a>' : consentID;
 				}
 	
 				let date_el = FP.findFirst( '.fupi_consent_date', box );
@@ -463,7 +494,7 @@
 				remove_scroll_lock();
 
 				// save cookies and fire events
-				if ( fp.vars.track_current_user ) accept_all_cookies_and_fire_custom_event();
+				if ( fp.main.track_current_user ) accept_all_cookies_and_fire_custom_event();
 				if ( FP.manageIframes ) FP.manageIframes(); // unblock iframes
 			});
 		}
@@ -479,7 +510,7 @@
 				remove_scroll_lock();
 
 				// save cookies and fire events
-				if ( fp.vars.track_current_user ) accept_stats_cookies_and_fire_custom_event();
+				if ( fp.main.track_current_user ) accept_stats_cookies_and_fire_custom_event();
 				if ( FP.manageIframes ) FP.manageIframes(); // unblock iframes
 			})
 		}
@@ -510,7 +541,7 @@
 				remove_scroll_lock();
 
 				// save cookies and fire events
-				if ( fp.vars.track_current_user ) accept_chosen_cookies_and_fire_custom_events();
+				if ( fp.main.track_current_user ) accept_chosen_cookies_and_fire_custom_events();
 				if ( FP.manageIframes ) FP.manageIframes();
 			});
 		}
@@ -566,7 +597,8 @@
 			'pp_pub' : fp.notice.priv_policy_update,
 			'tools' : fp.tools,
 			'time' : get_date(),
-			'timezone' : get_timezone()
+			'timezone' : get_timezone(),
+			'timezoneName' : get_timezoneName(),
 		};
 
 		FP.setCookie('fp_cookie', JSON.stringify(fpdata.cookies), 182 );
@@ -612,7 +644,8 @@
 				'pp_pub' : fp.notice.priv_policy_update,
 				'tools' : fp.tools,
 				'time' : get_date(),
-				'timezone' : get_timezone()
+				'timezone' : get_timezone(),
+				'timezoneName' : get_timezoneName(),
 			};
 	
 			FP.setCookie('fp_cookie', JSON.stringify(fpdata.cookies), 182 );
@@ -646,7 +679,8 @@
 			'pp_pub' : fp.notice.priv_policy_update,
 			'tools' : fp.tools,
 			'time' : get_date(),
-			'timezone' : get_timezone()
+			'timezone' : get_timezone(),
+			'timezoneName' : get_timezoneName(),
 		};
 
 		if ( panel.settings ){ // when the settings panel is visible, we set to true only those cookies which settings are not hidden 
@@ -663,7 +697,8 @@
 				'pp_pub' : fp.notice.priv_policy_update,
 				'tools' : fp.tools,
 				'time' : get_date(),
-				'timezone' : get_timezone()
+				'timezone' : get_timezone(),
+				'timezoneName' : get_timezoneName(),
 			};
 		}
 
@@ -692,7 +727,8 @@
 			'pp_pub' : fp.notice.priv_policy_update,
 			'tools' : fp.tools,
 			'time' : get_date(),
-			'timezone' : get_timezone()
+			'timezone' : get_timezone(),
+			'timezoneName' : get_timezoneName(),
 		};
 
 		FP.setCookie('fp_cookie', JSON.stringify(fpdata.cookies), 182 );
@@ -729,7 +765,8 @@
 			'pp_pub' : fp.notice.priv_policy_update,
 			'tools' : fp.tools,
 			'time' : get_date(),
-			'timezone' : get_timezone()
+			'timezone' : get_timezone(),
+			'timezoneName' : get_timezoneName(),
 		};
 
 		FP.setCookie('fp_cookie', JSON.stringify(fpdata.cookies), 182 );
@@ -749,14 +786,10 @@
 
 	function decline_all_cookies() {
 
-		if ( ! fp.vars.track_current_user ) return;
+		if ( ! fp.main.track_current_user ) return;
 
 		let needs_a_reload = check_if_needs_a_reload(),
-			prev_consents = {
-				'statistics' : fpdata?.cookies?.stats,
-				'marketing' : fpdata?.cookies?.marketing,
-				'personalisation' : fpdata?.cookies?.personalisation
-			};
+			prev_consents = get_prev_consents();
 
 		fp.notice.reload_page_after_saving_cdb = needs_a_reload;
 		
@@ -768,7 +801,8 @@
 			'pp_pub' : fp.notice.priv_policy_update,
 			'tools' : fp.tools,
 			'time' : get_date(),
-			'timezone' : get_timezone()
+			'timezone' : get_timezone(),
+			'timezoneName' : get_timezoneName(),
 		};
 
 		FP.setCookie('fp_cookie', JSON.stringify(fpdata.cookies), 182 );
@@ -789,9 +823,9 @@
 		// if we should wait for server response
 		if ( fp.notice.cdb_waiting_for_response ) {
 			setTimeout( function() {
-				if (fp.vars.debug ) console.log('[FP] Waiting for CDB server response before reloading the page');
+				if (fp.main.debug ) console.log('[FP] Waiting for CDB server response before reloading the page');
 				if ( ! fp.notice.cdb_id_confirmed ) {
-					if ( fp.vars.debug ) console.log('[FP] Reloading page after timeout');
+					if ( fp.main.debug ) console.log('[FP] Reloading page after timeout');
 					location.reload();
 				}
 			}, 2000 ); // this is max wait time. The reload is also triggered by the FP.postToServer script

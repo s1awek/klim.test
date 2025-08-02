@@ -5,6 +5,7 @@ namespace DgoraWcas;
 use DgoraWcas\Engines\TNTSearchMySQL\SearchQuery\SearchResultsPageQuery;
 use DgoraWcas\Engines\TNTSearchMySQL\Support\Cache;
 use DgoraWcas\Integrations\Solver;
+use DgoraWcas\Admin\Troubleshooting;
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) {
     exit;
@@ -1472,7 +1473,7 @@ class Helpers {
                 'force_refresh_checkout'            => true,
             ) ),
             'voice_search_enabled'            => defined( 'DGWT_WCAS_VOICE_SEARCH_ENABLE' ) && DGWT_WCAS_VOICE_SEARCH_ENABLE,
-            'voice_search_lang'               => apply_filters( 'dgwt/wcas/scripts/voice_search_lang', get_bloginfo( 'language' ) ),
+            'voice_search_lang'               => apply_filters( 'dgwt/wcas/scripts/voice_search_lang', Helpers::getBCP47LangCode( get_bloginfo( 'language' ) ) ),
             'show_recently_searched_products' => false,
             'show_recently_searched_phrases'  => false,
             'go_to_first_variation_on_submit' => false,
@@ -2079,6 +2080,118 @@ class Helpers {
         global $wpdb;
         $result = $wpdb->get_var( "\n\t\t\t\tSELECT COUNT(*)\n\t\t\t\tFROM {$wpdb->posts} as posts\n\t\t\t\tINNER JOIN {$wpdb->wc_product_meta_lookup} AS lookup ON posts.ID = lookup.product_id\n\t\t\t\tWHERE\n\t\t\t\tposts.post_type IN ( 'product', 'product_variation' )\n\t\t\t\tAND posts.post_status != 'trash'\n\t\t\t\tAND lookup.global_unique_id <> ''\n\t\t\t\t" );
         return intval( $result ) > 0;
+    }
+
+    /**
+     * Get BCP 47 language code
+     *
+     * This is used in speech recognition: https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition/lang
+     * List of BCP 47 language codes: https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oe376/6c085406-a698-4e12-9d4d-c3b0ee3dbc4a
+     */
+    public static function getBCP47LangCode( $language ) {
+        $bcp47Map = [
+            'en' => 'en-US',
+            'de' => 'de-DE',
+            'fr' => 'fr-FR',
+            'es' => 'es-ES',
+            'it' => 'it-IT',
+            'pt' => 'pt-PT',
+            'pl' => 'pl-PL',
+            'ru' => 'ru-RU',
+            'nl' => 'nl-NL',
+            'sv' => 'sv-SE',
+            'tr' => 'tr-TR',
+            'ar' => 'ar-SA',
+            'ja' => 'ja-JP',
+            'cs' => 'cs-CZ',
+            'da' => 'da-DK',
+            'fi' => 'fi-FI',
+            'no' => 'no-NO',
+            'fa' => 'fa-IR',
+            'el' => 'el-GR',
+            'vi' => 'vi-VN',
+            'hu' => 'hu-HU',
+            'uk' => 'uk-UA',
+        ];
+        if ( isset( $bcp47Map[$language] ) ) {
+            return $bcp47Map[$language];
+        }
+        return str_replace( '_', '-', $language );
+    }
+
+    /**
+     * Calculates the Levenshtein distance for multibyte (UTF-8) strings.
+     *
+     * @param string $s1
+     * @param string $s2
+     * @return int
+     */
+    public static function levenshteinUtf8( $s1, $s2 ) {
+        $charMap = [];
+        $s1 = self::utf8ToExtendedAscii( $s1, $charMap );
+        $s2 = self::utf8ToExtendedAscii( $s2, $charMap );
+        return levenshtein( $s1, $s2 );
+    }
+
+    /**
+     * Check if "nofibosearch" mode is active
+     *
+     * @return bool
+     */
+    public static function isNoFiboSearchModeActive() {
+        return isset( $_GET['nofibosearch'] ) && $_GET['nofibosearch'] === '1' || apply_filters( 'dgwt/wcas/nofibosearch', '' ) === '1';
+    }
+
+    /**
+     * Check if FiboDebug mode is enabled for a specific key
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    public static function isFiboDebugEnabled( string $key ) : bool {
+        if ( !isset( $_GET['fibodebug'] ) ) {
+            return false;
+        }
+        $debugFlags = array_map( 'trim', explode( ',', $_GET['fibodebug'] ) );
+        return in_array( $key, $debugFlags, true );
+    }
+
+    /**
+     * Maybe enable FiboDebug mode for a specific debug key (e.g. 'score', 'nofuzzy').
+     *
+     * This will add a hidden input field to the search form and a custom parameter to search requests.
+     */
+    public static function maybeInjectFiboDebugFields( string $key ) : void {
+        if ( !self::isFiboDebugEnabled( $key ) ) {
+            return;
+        }
+        add_action( 'dgwt/wcas/form', function () {
+            printf( '<input type="hidden" name="fibodebug" value="%s"/>', esc_attr( $_GET['fibodebug'] ) );
+        } );
+        add_filter( 'dgwt/wcas/search_bar/custom_params', function ( $params ) {
+            $params['fibodebug'] = $_GET['fibodebug'];
+            return $params;
+        } );
+    }
+
+    /**
+     * Converts multibyte characters to single-byte for use in levenshtein().
+     *
+     * @param string $str
+     * @param array  $map
+     * @return string
+     */
+    private static function utf8ToExtendedAscii( $str, &$map ) {
+        if ( !preg_match_all( '/[\\xC0-\\xF7][\\x80-\\xBF]+/', $str, $matches ) ) {
+            return $str;
+        }
+        foreach ( $matches[0] as $mbc ) {
+            if ( !isset( $map[$mbc] ) ) {
+                $map[$mbc] = chr( 128 + count( $map ) );
+            }
+        }
+        return strtr( $str, $map );
     }
 
 }

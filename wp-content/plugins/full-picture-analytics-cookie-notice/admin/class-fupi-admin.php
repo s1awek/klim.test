@@ -9,6 +9,8 @@ class Fupi_Admin {
 
     private $tools;
 
+    private $proofrec;
+
     private $main;
 
     private $cook_enabled;
@@ -18,7 +20,6 @@ class Fupi_Admin {
 
     private $user_cap;
 
-    // private $trackmeta;
     private $is_woo_enabled;
 
     private $reports;
@@ -35,12 +36,17 @@ class Fupi_Admin {
         $this->version = $version;
         $this->versions = get_option( 'fupi_versions' );
         $this->tools = get_option( 'fupi_tools' );
+        // Enable GTAG module if google ads or analytics are enabled
+        if ( !empty( $this->tools['ga41'] ) || !empty( $this->tools['gads'] ) ) {
+            $this->tools['gtag'] = true;
+        }
+        // add gtag to tools if ga or gads are active
         $this->reports = get_option( 'fupi_reports' );
         $this->main = get_option( 'fupi_main' );
+        $this->proofrec = get_option( 'fupi_proofrec' );
         $this->cook_enabled = !empty( $this->tools ) && isset( $this->tools['cook'] );
         // $this->geo_enabled 					= ! empty( $this->tools ) && isset ( $this->tools['geo'] );
         $this->cook = get_option( 'fupi_cook' );
-        // $this->trackmeta 					= get_option('fupi_trackmeta');
         $this->user_cap = 'manage_options';
         $this->is_woo_enabled = false;
         // $this->sync_run						= false;
@@ -229,42 +235,59 @@ class Fupi_Admin {
         );
         // SUBPAGES
         $modules_opts = [];
+        $sections_to_show = [];
+        // Filter subpages to show
         foreach ( $this->fupi_modules as $module ) {
+            // STOP if module is not avail
             if ( !$module['is_avail'] || !$module['has_admin_page'] ) {
                 continue;
             }
-            if ( $module['id'] == 'main' || $module['id'] == 'tools' || $module['id'] == 'status' || isset( $this->tools[$module['id']] ) ) {
-                // do not add a page for Woo settings if the plugin is deactivated
-                if ( $module['id'] == 'woo' && empty( $this->is_woo_enabled ) ) {
-                    continue;
-                }
-                array_push( $modules_opts, [
-                    'full_picture_tools',
-                    // parent slug
-                    $fupi_modules_names[$module['id']],
-                    // page title
-                    $fupi_modules_names[$module['id']],
-                    // menu title
-                    $this->user_cap,
-                    // capability
-                    'full_picture_' . $module['id'],
-                    // menu slug
-                    array($this, 'fupi_display_admin_page'),
-                ] );
+            // STOP if module is not enabled
+            if ( !isset( $this->tools[$module['id']] ) && !isset( $module['always_enabled'] ) ) {
+                continue;
             }
+            // STOP Woo module if WooCommerce is deactivated
+            if ( $module['id'] == 'woo' && empty( $this->is_woo_enabled ) ) {
+                continue;
+            }
+            // MARK this section if it contains non-sticky links
+            if ( !isset( $module['sticky_link'] ) ) {
+                $sections_to_show[] = $module['type'];
+            }
+            array_push( $modules_opts, [$module['type'], [
+                'full_picture_tools',
+                // parent slug
+                $fupi_modules_names[$module['id']],
+                // page title
+                $fupi_modules_names[$module['id']],
+                // menu title
+                $this->user_cap,
+                // capability
+                'full_picture_' . $module['id'],
+                // menu slug
+                array($this, 'fupi_display_admin_page'),
+            ]] );
         }
+        // Add modules from addons
         $addons_opts = apply_filters( 'fupi_add_page', [] );
         // !! ADDON
         $modules_opts = array_merge( $modules_opts, $addons_opts );
-        foreach ( $modules_opts as $mod_opts ) {
+        // Add links to subpages
+        foreach ( $modules_opts as $module_options ) {
+            $module_section = $module_options[0];
+            $module_data = $module_options[1];
+            // SKIP this link if its section contains only "sticky" modules
+            if ( !in_array( $module_section, $sections_to_show ) ) {
+                continue;
+            }
             // make sure that only premium users can use premium function
-            if ( empty( $mod_opts[3] ) ) {
-                $mod_opts[3] = ( fupi_fs()->can_use_premium_code() ? $this->user_cap : 'manage_options' );
+            if ( empty( $module_data[3] ) ) {
+                $module_data[3] = ( fupi_fs()->can_use_premium_code() ? $this->user_cap : 'manage_options' );
             }
-            if ( empty( $mod_opts[5] ) ) {
-                $mod_opts[5] = array($this, 'fupi_display_admin_page');
+            if ( empty( $module_data[5] ) ) {
+                $module_data[5] = array($this, 'fupi_display_admin_page');
             }
-            add_submenu_page( ...$mod_opts );
+            add_submenu_page( ...$module_data );
         }
     }
 
@@ -345,9 +368,18 @@ class Fupi_Admin {
         $all_modules_data = array_merge( $this->fupi_modules, $addons_data );
         foreach ( $all_modules_data as $module ) {
             if ( $module['id'] == $tab_slug ) {
-                $ret_txt = apply_filters( 'fupi_' . $module['id'] . '_get_page_descr', $a['id'], $no_woo_descr_text );
-                if ( !empty( $ret_txt ) ) {
-                    echo '<div class="fupi_section_descr fupi_el">' . $ret_txt . '</div>';
+                $ret_val = apply_filters( 'fupi_' . $module['id'] . '_get_page_descr', $a['id'], $no_woo_descr_text );
+                if ( !empty( $ret_val ) ) {
+                    if ( is_array( $ret_val ) ) {
+                        $ret_txt = $ret_val['content'];
+                        $classes = ( empty( $ret_val['classes'] ) ? '' : $ret_val['classes'] );
+                        $style = ( empty( $ret_val['style'] ) ? '' : ' style="' . $ret_val['style'] . '"' );
+                    } else {
+                        $ret_txt = $ret_val;
+                        $classes = '';
+                        $style = '';
+                    }
+                    echo '<div class="fupi_section_descr fupi_el ' . $classes . '" ' . $style . '>' . $ret_txt . '</div>';
                     break;
                 }
             }
@@ -382,7 +414,7 @@ class Fupi_Admin {
                 }
             }
         }
-        // Reports from the "Reports & Statistics" module
+        // Reports from the "Analytics Dashboards" module
         if ( isset( $this->tools['reports'] ) && !empty( $this->reports ) && !empty( $this->reports['dashboards'] ) ) {
             $show_to_current_user = false;
             // check if current user is allowed to view all reports
@@ -507,53 +539,13 @@ class Fupi_Admin {
     //
     // SETTINGS UPDATER
     //
-    public function string_settings_to_array( $opt_name, $settings_names = [], $simple_arr_settings_names = [] ) {
-        $opt = get_option( $opt_name );
-        if ( isset( $opt ) ) {
-            if ( count( $settings_names ) > 0 ) {
-                foreach ( $settings_names as $set_name ) {
-                    if ( isset( $opt[$set_name] ) && is_string( $opt[$set_name] ) ) {
-                        $set_val = $opt[$set_name];
-                        $lines_arr = explode( PHP_EOL, $set_val );
-                        $ret_arr = [];
-                        foreach ( $lines_arr as $line ) {
-                            $line = trim( $line );
-                            $sub_arr = [];
-                            if ( str_contains( $line, '@' ) ) {
-                                $vals = explode( '@', $line );
-                                $sub_arr['sel'] = trim( $vals[0] );
-                                $sub_arr['val'] = trim( $vals[1] );
-                                array_push( $ret_arr, $sub_arr );
-                            } else {
-                                $sub_arr['sel'] = $line;
-                                array_push( $ret_arr, $sub_arr );
-                            }
-                        }
-                        $opt[$set_name] = $ret_arr;
-                    }
-                }
-            }
-            if ( count( $simple_arr_settings_names ) > 0 ) {
-                foreach ( $simple_arr_settings_names as $simp_name ) {
-                    if ( isset( $opt[$simp_name] ) && is_string( $opt[$simp_name] ) ) {
-                        $ret_arr = [];
-                        $vals = explode( '@', $opt[$simp_name] );
-                        $ret_arr['sel'] = trim( $vals[0] );
-                        $ret_arr['val'] = trim( $vals[1] );
-                        $opt[$simp_name] = $ret_arr;
-                    }
-                }
-            }
-            update_option( $opt_name, $opt );
-        }
-    }
-
     public function perform_updates() {
         if ( !empty( $this->versions ) && $this->versions[1] == FUPI_VERSION ) {
             return;
         }
         require_once FUPI_PATH . '/admin/common/fupi_updater.php';
-        // clears cache at the end
+        $updater = new Fupi_Updater();
+        $updater->run();
     }
 
     //
@@ -595,9 +587,10 @@ class Fupi_Admin {
         ) );
         $results = array();
         foreach ( $pages as $page ) {
+            $status_info = ( $page->post_status == 'publish' ? '' : '(' . $page->post_status . ')' );
             $results[] = array(
                 'id'   => $page->ID,
-                'text' => sprintf( '%s (%s)', $page->post_title, $page->post_status ),
+                'text' => sprintf( '%s %s', $page->post_title, $status_info ),
             );
         }
         wp_send_json( $results );

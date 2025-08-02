@@ -54,7 +54,7 @@
 			fbq( event_type, evt_name, custom_data, { 'eventID' : evt_id } );
 		}
 		
-		if ( fp.vars.debug ) console.log( '[FP] Meta Pixel "' + evt_name + '" event:', custom_data );
+		if ( fp.main.debug ) console.log( '[FP] Meta Pixel "' + evt_name + '" event:', custom_data );
 
 		
 	}

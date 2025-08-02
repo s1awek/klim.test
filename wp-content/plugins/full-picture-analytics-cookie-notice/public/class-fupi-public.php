@@ -7,7 +7,13 @@ class Fupi_Public {
 
     public $main;
 
+    public $track;
+
     public $tools;
+
+    public $woo;
+
+    public $proofrec;
 
     protected $cook;
 
@@ -20,7 +26,10 @@ class Fupi_Public {
         $this->version = $version;
         $this->tools = get_option( 'fupi_tools' );
         $this->main = get_option( 'fupi_main' );
+        $this->track = get_option( 'fupi_track' );
         $this->cook = get_option( 'fupi_cook' );
+        $this->woo = get_option( 'fupi_woo' );
+        $this->proofrec = get_option( 'fupi_proofrec' );
     }
 
     public function load_module( $moduleName, $is_premium = false ) {
@@ -83,20 +92,21 @@ class Fupi_Public {
             'actions'         => [],
             'observers'       => [],
             'tools'           => [],
+            'vars'            => [],
             'notice'          => [
                 'enabled' => false,
             ],
         ];
         $fpdata = [];
-        include_once dirname( __FILE__ ) . '/in_head/data-main.php';
+        include_once dirname( __FILE__ ) . '/modules/main/data-main.php';
+        include_once dirname( __FILE__ ) . '/modules/track/data-track.php';
         include_once dirname( __FILE__ ) . '/in_head/data-wp.php';
         $fp = apply_filters( 'fupi_modify_fp_object', $fp );
         $fpdata = apply_filters( 'fupi_modify_fpdata_object', $fpdata );
         // OUTPUT THE DATA
         $output = '<!--noptimize--><script id=\'fp_data_js\' type="text/javascript" data-no-optimize="1" nowprocket>
 			
-			var fp_premium = ' . json_encode( fupi_fs()->can_use_premium_code() ) . ',
-				FP = { \'fns\' : {} },
+			var FP = { \'fns\' : {} },
 				fp = ' . json_encode( $fp ) . ',
 				fpdata = ' . json_encode( $fpdata ) . ';';
         // fp_nonce = "' . wp_create_nonce('wp_rest'). '";'; // It has to be "wp_rest" This is required!
@@ -154,9 +164,6 @@ class Fupi_Public {
     // SERVER-SIDE TRACKING
     //
     private function get_current_user_ip() {
-        if ( !empty( $this->user_ip ) ) {
-            return;
-        }
         // Get current user IP address
         if ( !empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
             $user_ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -173,12 +180,10 @@ class Fupi_Public {
             } else {
                 if ( !empty( $_SERVER['HTTP_X_REAL_IP'] ) ) {
                     $user_ip = $_SERVER['HTTP_X_REAL_IP'];
-                } else {
-                    $user_ip = false;
                 }
             }
             if ( !filter_var( $user_ip, FILTER_VALIDATE_IP ) ) {
-                $user_ip = false;
+                $user_ip = '127.0.0.1';
             }
         }
         return $user_ip;
@@ -191,23 +196,23 @@ class Fupi_Public {
         if ( empty( $cdbID ) ) {
             return;
         }
-        if ( !(isset( $this->cook ) && isset( $this->cook['cdb_key'] )) ) {
+        if ( empty( $this->proofrec['cdb_key'] ) ) {
             return;
         }
         // MAKE PAYLOAD
         $gmt_offset = get_option( 'gmt_offset' );
         $timezone = ( $gmt_offset >= 0 ? '+' . $gmt_offset : $gmt_offset . '' );
         $payload = [
-            'installID'       => fupi_fs()->get_site()->id,
             'consentID'       => $cdbID . '_' . $visit_info->timestamp,
             'serverTimezone'  => $timezone,
             'serverTimestamp' => current_time( 'Y-m-d H:i:s' ),
             'visit'           => $visit_info,
         ];
+        $payload['installID'] = 999999;
         // RETURN REQUEST DATA
         $requests_a[] = [
             'url'             => 'https://prod-fr.consentsdb.com/api/cookies',
-            'headers'         => ['Content-Type: application/json', 'x-api-key: ' . $this->cook['cdb_key']],
+            'headers'         => ['Content-Type: application/json', 'x-api-key: ' . $this->proofrec['cdb_key']],
             'payload'         => $payload,
             'return_response' => 'CDB',
         ];
@@ -219,8 +224,85 @@ class Fupi_Public {
         register_rest_route( 'fupi/v1', '/sender', [
             'methods'             => 'POST',
             'callback'            => [$this, 'fupi_process_server_calls'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => [$this, 'verify_same_domain_request'],
         ] );
+    }
+
+    // Restricts REST API writes to same-domain only (uses origin/referrer/page url).
+    public function verify_same_domain_request() {
+        if ( empty( $this->main['verify_permissions'] ) ) {
+            return true;
+        }
+        $site_domain = $this->get_site_domain();
+        $referer = ( isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '' );
+        $origin = ( isset( $_SERVER['HTTP_ORIGIN'] ) ? $_SERVER['HTTP_ORIGIN'] : '' );
+        $data = json_decode( file_get_contents( 'php://input' ), true );
+        $page_url = ( isset( $data['extra_data']['page_url'] ) ? $data['extra_data']['page_url'] : '' );
+        if ( $this->is_same_domain( $referer, $site_domain ) || $this->is_same_domain( $origin, $site_domain ) || $this->is_same_domain( $page_url, $site_domain ) ) {
+            return true;
+        }
+        return new WP_Error('rest_forbidden', 'WP FP data can only be submitted from the same domain.', array(
+            'status' => 403,
+        ));
+    }
+
+    public function get_site_domain() {
+        $site_url = get_site_url();
+        $parsed_url = parse_url( $site_url );
+        return ( isset( $parsed_url['host'] ) ? $parsed_url['host'] : '' );
+    }
+
+    // Checks if the URL is the given domain or a subdomain of it.
+    public function is_same_domain( $url, $domain ) {
+        if ( empty( $url ) || empty( $domain ) ) {
+            return false;
+        }
+        $parsed_url = parse_url( $url );
+        $url_host = ( isset( $parsed_url['host'] ) ? $parsed_url['host'] : '' );
+        if ( empty( $url_host ) ) {
+            return false;
+        }
+        $domain = preg_replace( '/^www\\./i', '', $domain );
+        $url_host = preg_replace( '/^www\\./i', '', $url_host );
+        if ( $url_host === $domain ) {
+            return true;
+        }
+        $domain_pattern = '/\\.' . preg_quote( $domain, '/' ) . '$/i';
+        if ( preg_match( $domain_pattern, $url_host ) ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Adds CORS support for REST endpoints (same-domain only).
+     */
+    public function fupi_add_CORS_support() {
+        add_filter(
+            'rest_pre_serve_request',
+            function (
+                $served,
+                $result,
+                $request,
+                $server
+            ) {
+                $site_domain = $this->get_site_domain();
+                $origin = ( isset( $_SERVER['HTTP_ORIGIN'] ) ? $_SERVER['HTTP_ORIGIN'] : '' );
+                if ( !empty( $origin ) && $this->is_same_domain( $origin, $site_domain ) ) {
+                    header( 'Access-Control-Allow-Origin: ' . $origin );
+                    header( 'Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS' );
+                    header( 'Access-Control-Allow-Credentials: true' );
+                    header( 'Access-Control-Allow-Headers: Authorization, Content-Type, X-Requested-With' );
+                }
+                if ( 'OPTIONS' === $_SERVER['REQUEST_METHOD'] ) {
+                    status_header( 200 );
+                    exit;
+                }
+                return $served;
+            },
+            10,
+            4
+        );
     }
 
     // AJAX HOOKS
@@ -239,7 +321,6 @@ class Fupi_Public {
     public function fupi_process_server_calls( $request, $is_ajax = false ) {
         $data_arr = ( $is_ajax ? $request : json_decode( $request->get_body() ) );
         // you can also use "$request->get_params();" or these >>> https://www.coditty.com/code/wordpress-api-custom-route-access-post-parameters
-        // get IP
         $userIP = $this->get_current_user_ip();
         $requests_a = [];
         foreach ( $data_arr as $event_data ) {
@@ -272,6 +353,43 @@ class Fupi_Public {
             include_once FUPI_PATH . '/public/common/send-to-remote-server.php';
             return ( count( $responses ) > 0 ? $responses : 'Server call has been processed.' );
         }
+    }
+
+    // HTML MODS
+    public function fupi_maybe_buffer_output() {
+        ob_start( array($this, 'fupi_return_buffer') );
+    }
+
+    public function fupi_return_buffer( $html ) {
+        if ( !$html ) {
+            return $html;
+        }
+        // Copy HTML
+        $orig_html = $html;
+        if ( !empty( $this->tools['cook'] ) ) {
+            // SCRIPTS BLOCKER
+            $blockscr_enabled = !empty( $this->cook['scrblk_auto_rules'] ) || !empty( $this->cook['control_other_tools'] ) && !empty( $this->cook['scrblk_manual_rules'] );
+            if ( !empty( $blockscr_enabled ) ) {
+                include_once dirname( __FILE__ ) . '/common/blockscr_parser.php';
+            }
+            // IFRAMES BLOCKER
+            $iframeblock_enabled = !empty( $this->cook['iframe_auto_rules'] ) || !empty( $this->cook['control_other_iframes'] ) && !empty( $this->cook['iframe_manual_rules'] );
+            if ( $iframeblock_enabled ) {
+                // make sure we do not try to manage iframes in the bricks builder editor (it breaks)
+                $can_load_iframe_parser = !(function_exists( 'bricks_is_builder' ) && bricks_is_builder());
+                if ( $can_load_iframe_parser ) {
+                    include_once dirname( __FILE__ ) . '/common/iframeblock_parser.php';
+                }
+            }
+        }
+        // SAFE FONTS
+        if ( isset( $this->tools['safefonts'] ) ) {
+            include_once dirname( __FILE__ ) . '/common/safefonts_parser.php';
+        }
+        if ( !empty( $html ) ) {
+            return $html;
+        }
+        return $orig_html;
     }
 
 }

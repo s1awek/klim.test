@@ -505,6 +505,9 @@ if ( ! class_exists( 'CWG_Instock_Notifier_Product' ) ) {
 			do_action( 'cwginstock_custom_form', $parent_product, $child );
 		}
 		public function woocommerce_bulk_variations_compatibility( $column, $row, $variation_ids, $is_single_variation, $variation ) {
+			if ( ! $variation ) {
+				return;
+			}
 			$product_id = $variation->get_parent_id();
 			$parent_obj = wc_get_product( $product_id );
 			if ( $variation->get_stock_status() == 'outofstock' ) {

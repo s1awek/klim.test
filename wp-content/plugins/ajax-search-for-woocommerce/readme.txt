@@ -2,9 +2,9 @@
 Contributors: damian-gora, matczar
 Tags: woocommerce search, ajax search, search by sku, product search, woocommerce
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.30.0
+Stable tag: 1.31.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ The most popular **WooCommerce product search plugin**. It gives your users a we
 
 By default, WooCommerce provides a very simple search solution, without live product search or even SKU search. FiboSearch (formerly Ajax Search for WooCommerce) provides advanced search with live suggestions.
 
-Who doesn’t love instant, as-you-type suggestions? In 2023, customers expect smart product search. Baymard Institute’s latest UX research reveals that search autocomplete, auto-suggest, or an instant search feature **is now offered on 96% of major e-commerce sites**. It's a must-have feature for every online business that can’t afford to lose customers. Why? FiboSearch helps users save time and makes shopping easier. As a result, Fibo really boosts sales.
+Who doesn’t love instant, as-you-type suggestions? In 2025, customers expect smart product search. Baymard Institute’s latest UX research reveals that search autocomplete, auto-suggest, or an instant search feature **is now offered on 96% of major e-commerce sites**. It's a must-have feature for every online business that can’t afford to lose customers. Why? FiboSearch helps users save time and makes shopping easier. As a result, Fibo really boosts sales.
 
 = Features =
 &#9989; **Search by product title, long and short description**
@@ -147,6 +147,36 @@ You can read more and compare Pro and Free features here: [Full comparison - Pro
 9. Sample settings page (Search Analytics tab)
 
 == Changelog ==
+
+= 1.31.0, July 16, 2025 =
+* ADDED: Info about **Elementor widget**
+* ADDED: Documentation links to **Search in SKU** and **GUID**
+* ADDED: Add filter to conditionally disable analytics recording (e.g. by IP, phrase, lang)
+* ADDED: Add the ARIA label to the search icon for accessibility improvement
+* ADDED: Option to skip plugin loading on search page by adding the `nofibosearch=1` parameter to the URL
+* ADDED: Troubleshooting — tests for the minimum required versions of themes and plugins with available integrations
+* ADDED: New filter to optionally show “**Products**” headline when only product suggestions are returned
+* ADDED: Filter to always show “**See all products**” button in autocomplete
+* ADDED: Filter to disable inline styles from the `Personalization` class
+* ADDED: CSS adjustments in **Uncode theme** — centered the search bar in the menu
+* FIXED: Managing initial search bar interactivity before the main script has loaded
+* FIXED: Incorrect language code in speech recognition
+* FIXED: Removed the `.woocommerce` class from the FiboSearch bar widget
+* FIXED: Prevent JS error when `getFormWrapper` returns undefined or empty `jQuery` object
+* FIXED: Deprecated: `Automatic conversion of false to array` (PHP >= 8.1)
+* FIXED: Styling issues in the **Enfold theme**
+* FIXED: There was an error in the SQL syntax that occurred during the plugin uninstallation process
+* FIXED: Escape double quotes in `optionsRaw` to prevent `JSON.parse` errors
+* TWEAK: Moved the JS 'fibosearch/show-details-panel' event to just before the preloader is hidden
+* TWEAK: Code styling adjustments
+* TWEAK: Hiding unwanted banner on settings page
+* TWEAK: Optimized database queries
+* REFACTOR: Removed **Listeo** theme integration
+* UPDATED: Updating the `.pot` file
+* UPDATED: Freemius SDK
+
+
+
 
 = 1.30.0, January 27, 2025 =
 * ADDED: “**Bricks theme**” integration – support for “Products” element on the search results page
@@ -334,22 +364,5 @@ You can read more and compare Pro and Free features here: [Full comparison - Pro
 * CHANGE: Remove information that Analytics is a beta feature
 * CHANGE: Remove information that Darkened Background is a beta feature
 * CHANGE: Set "Pirx" as a default search bar style
-
-
-
-= 1.21.0, November 21, 2022 =
-* ADDED: Integration with Product GTIN (EAN, UPC, ISBN) for WooCommerce plugin
-* ADDED: Integration with EAN for WooCommerce plugin
-* ADDED: Troubleshooting - checks if products thumbnails need to be regenerated
-* FIXED: Missing translation domain in some texts
-* FIXED: Support variants of &lt;br&gt; tag in product names in autocomplete
-* FIXED: Unable to embed search bar as a widget
-* FIXED: Disable voice search for Chrome on iPhone or iPad
-* FIXED: Integration with the Astra theme - unclosed  &lt;div&gt; tag
-* FIXED: Exclude save phrases to analyze when the phrase is 'fibotests' or the user has a specific role.
-* FIXED: UI_FIXER: check if event listeners were correctly added to search inputs. If no, reinitiate the search instance
-* FIXED: UI_FIXER: rebuild all search bars without correct JS events
-* FIXED: Redundant DB queries related to the existence of plugin tables
-* CHANGE: Updated Freemius SDK to v2.5.2
 
 [See changelog for all versions](https://fibosearch.com/changelog/).

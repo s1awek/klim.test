@@ -359,7 +359,7 @@ $wp_customize->add_control( 'fupi_cookie_notice[blur_page]', array(
     'active_callback' => $hide_when_banner_only_notifies,
 ) );
 // HIDE ELEMENTS
-$hide_descr = sprintf( esc_html__( 'Automatic setup of the consent banner is enabled. It will show / hide the "Decline" button depending on the visitor\'s location. %1$sLearn more%2$s', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/setting-up-the-cookie-notice/?utm_source=fp_admin&utm_medium=referral&utm_campaign=documentation_link" target="_blank">', '</a>' );
+$hide_descr = sprintf( esc_html__( 'Automatic setup of the consent banner is enabled. It will show / hide the "Decline" button depending on the visitor\'s location. %1$sLearn more%2$s', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/setting-up-the-cookie-notice/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">', '</a>' );
 $hide_options = array(
     'settings_btn' => esc_html__( 'Hide "Settings" button & panel', 'full-picture-analytics-cookie-notice' ),
     'stats'        => esc_html__( 'Hide "statistics" section (in the "Settings" panel)', 'full-picture-analytics-cookie-notice' ),

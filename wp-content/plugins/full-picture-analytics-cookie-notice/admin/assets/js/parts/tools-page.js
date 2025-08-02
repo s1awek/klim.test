@@ -26,4 +26,13 @@
 	if ( fupi_basic_module && fupi_basic_headline_html ){
 		fupi_basic_module.insertAdjacentHTML( 'beforebegin', fupi_basic_headline_html.innerHTML );
 	}
+
+	// Add a "Tag Managers" headline
+
+	let fupi_tagman_module		= FP.findFirst('tr.fupi_tagman'),
+		fupi_tagman_headline_html = FP.findFirst('.fupi_tagman_headline_html_template');
+
+	if ( fupi_tagman_module && fupi_tagman_headline_html ){
+		fupi_tagman_module.insertAdjacentHTML( 'beforebegin', fupi_tagman_headline_html.innerHTML );
+	}
 })();

@@ -6,16 +6,66 @@ class Fupi_Generate_Files {
     private $main;
     private $cook;
 
-    public function __construct(){
-        $this->tools = get_option('fupi_tools');
-        $this->main = get_option('fupi_main');
-        $this->cook = get_option('fupi_cook');
-    }
+	// $options can have the following keys:
+	// - folder
+	// - file_name
+	// - file_format
+	// - file_content
+
+	public function __construct() {
+		$this->tools = get_option( 'fupi_tools' );
+    	$this->main = get_option( 'fupi_main' );
+    	$this->cook = get_option( 'fupi_cook' );
+	}
+
+	public function make_file( $options ){
+
+		// Create directory
+
+		$folder_path = trailingslashit( wp_upload_dir()['basedir'] ) . 'wpfp/' . $options['folder'];
+
+		if ( ! file_exists( $folder_path ) ) {
+			mkdir( $folder_path, 0755, true );
+		}
+
+		// Save file
+
+		$file_path = $folder_path . '/' . $options['file_name'] . '.' . $options['file_format'];
+
+		if ( $options['file_format'] == 'json' ) {
+			$options['file_content'] = json_encode( $options['file_content'], JSON_UNESCAPED_UNICODE );
+		}
+
+		$result = file_put_contents( $file_path, $options['file_content'] );
+
+		if ( $result === false && ! empty( $this->main['debug'] ) ) {
+			trigger_error('[FP] Error generating ' . $file_path . ' file');
+			return 'error';
+		};
+
+		// Add index.php to the same folder
+
+		$index_file_path = $folder_path . '/index.php';
+
+		if ( ! file_exists( $index_file_path ) ) {
+			$index_file_content = '<?php
+			header("HTTP/1.0 403 Forbidden");
+			echo "Access denied.";
+			exit;';
+		
+			file_put_contents( $index_file_path, $index_file_content );
+		};
+
+		if ( ! empty( $this->main['debug'] ) ) trigger_error('[FP] Generated ' . $options['file_name'] . '.' . $options['file_format'] . ' file');
+
+		return $file_path;
+
+	}
 
 	// GENERATE HEAD.JS
 
 	public function make_head_js_file( $updated_settings_id, $clean_data ){ // $updated_settings_id is used in the head-js.php and location.php
-		
+
 		$output = ''; // the variable $output is also used in the head-js
 		
 		// GET contents of head_js (data saved in $output var)
@@ -37,6 +87,11 @@ class Fupi_Generate_Files {
 
 		// combine head and helpers JS
 		$result = file_put_contents( $head_js_file_path, $output );
+
+		if ( $result === false && ! empty( $this->main['debug'] ) ) {
+			trigger_error('[FP] Error generating head.js file');
+			// return 'error';
+		};
 
 		// check if index.php file is in the same folder
 		$index_file_path = $js_folder_path . '/index.php';

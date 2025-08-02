@@ -1,6 +1,6 @@
 <?php
 
-use Duplicator\Utils\Upsell;
+use Duplicator\Utils\LinkManager;
 
 defined('ABSPATH') || defined('DUPXABSPATH') || exit;
 ?>
@@ -13,7 +13,7 @@ defined('ABSPATH') || defined('DUPXABSPATH') || exit;
         <?php
             echo sprintf(
                 __('%1$sManage Licenses%2$s', 'duplicator'),
-                '<a target="_blank" href="' . esc_url(Upsell::getCampaignUrl('license-tab', 'Manage Licenses')) . '">',
+                '<a target="_blank" href="' . esc_url(LinkManager::getCampaignUrl('license-tab', 'Manage Licenses')) . '">',
                 '</a>'
             );
             ?>
@@ -27,7 +27,7 @@ defined('ABSPATH') || defined('DUPXABSPATH') || exit;
             <i class="far fa-check-square"></i> <?php esc_html_e('Basic Features', 'duplicator'); ?> <br/>
             <i class="far fa-square"></i> 
             <a target="_blank" 
-                href="<?php echo esc_url(Upsell::getCampaignUrl('license-tab', 'Pro Features')); ?>"
+                href="<?php echo esc_url(LinkManager::getCampaignUrl('license-tab', 'Pro Features')); ?>"
             >
                 <?php esc_html_e('Pro Features', 'duplicator'); ?>
             </a><br>
@@ -53,7 +53,7 @@ defined('ABSPATH') || defined('DUPXABSPATH') || exit;
                             'strong' => array(),
                         )
                     ),
-                    esc_url(Upsell::getCampaignUrl('license-tab', 'upgrading to PRO'))
+                    esc_url(LinkManager::getCampaignUrl('license-tab', 'upgrading to PRO'))
                 ); ?>
             </p>
             <p class="discount-note">

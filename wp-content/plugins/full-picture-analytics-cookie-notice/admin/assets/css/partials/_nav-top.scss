@@ -1,0 +1,127 @@
+#fupi_top_bar{
+    max-width: 480px;
+    margin: 20px auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.top_menu_section{
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    background: #cfd8e2;
+}
+
+    .fupi_top_nav_link{
+        flex: 0 0 auto;
+        padding: 10px;
+        text-decoration: none;
+        color: #000;
+        text-align: center;
+        font-size: 15px;
+        &:hover, &:focus{
+            background-color: #fff;
+            color: #222;
+        }
+    }
+
+    #fupi_get_pro_link{
+        text-align: center;
+    }
+
+    #fupi_top_setup_info{
+        align-self: center;
+        margin-right: auto;
+        font-size: 15px;
+        strong{
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+    }
+
+@media screen and (max-width: 1099px){
+    #fupi_top_setup_info{
+        order: 1;
+        text-align: center;
+        padding: 10px;
+    }
+    #fupi_pro_nav{
+        order: 2;
+        padding: 0;
+        background-color: transparent;
+    }
+    #fupi_top_nav{
+        margin-top: 15px;
+        flex: 0 0 100%;
+        order: 3;
+        justify-content: center;
+    }
+        #fupi_get_pro_link{
+            flex: 1 1 auto;
+            padding: 10px 20px;
+        }
+
+    #fupi_mobile_nav_toggle_button{
+        order: 4;
+    }
+}
+
+@media screen and (min-width: 1100px){
+    #fupi_top_bar{
+        max-width: 1240px;
+        width: 100%;
+        justify-content: space-between;
+        gap: 30px;
+    }
+        .top_menu_section{
+            border-radius: 100px;
+            justify-content: space-evenly;
+            padding: 3px;
+        }
+            .fupi_top_nav_link{
+                border-radius: 100px;
+                padding: 12px 18px;
+            }
+}
+
+//
+// TOGGLING MENUS ON MOBILE
+//
+
+#fupi_mobile_nav_toggle_button{
+	display: none;
+}
+
+@media screen and (max-width: 1099px){
+
+	#fupi_mobile_nav_toggle_button{
+        flex: 0 0 100%;
+		display: block;
+        border-radius: 100px;
+	}
+
+    #fupi_side_menu{
+        border: 3px solid #263a50;
+    }
+
+	#fupi_side_menu:not(.fupi_show_mobile_menu){
+		.fupi_sidenav_section{
+			margin-top: 0;
+			>h3, >a{
+				display: none;
+			}
+			&:not(:has(.fupi_current)){
+				.fupi_alt_style{
+					display: none !important;
+				}
+			}
+		}
+	}
+
+    #fupi_sidenav_banner{
+        display: none;
+    }
+}

@@ -14,36 +14,30 @@ class Fupi_REPORTS_admin {
     }
 
     private function add_actions_and_filters(){
-        add_action( 'fupi_register_setting_reports', array( $this, 'register_module_settings' ) );
-        add_filter( 'fupi_reports_add_fields_settings', array( $this, 'add_fields_settings' ), 10, 1 );
-        add_filter( 'fupi_reports_get_faq_data', array( $this, 'get_faq_data' ), 10, 1 );
-        add_filter( 'fupi_reports_get_page_descr', array( $this, 'get_page_descr' ), 10, 2 );
+        add_action( 'fupi_register_setting_reports', array( $this, 'register_reports_module_settings' ) );
+        add_filter( 'fupi_reports_add_fields_settings', array( $this, 'add_reports_fields_settings' ), 10, 1 );
+        add_filter( 'fupi_reports_get_page_descr', array( $this, 'get_reports_page_descr' ), 10, 2 );
     }
 
-    public function add_fields_settings( $sections ){
+    public function add_reports_fields_settings( $sections ){
         include_once 'reports-fields.php';
         return $sections;
     }
 
-    public function register_module_settings(){
-        register_setting( 'fupi_reports', 'fupi_reports', array( 'sanitize_callback' => array( $this, 'sanitize_fields' ) ) );
+    public function register_reports_module_settings(){
+        register_setting( 'fupi_reports', 'fupi_reports', array( 'sanitize_callback' => array( $this, 'sanitize_reports_fields' ) ) );
     }
 
-    public function sanitize_fields( $input ){
+    public function sanitize_reports_fields( $input ){
         include 'reports-sanitize.php';
+
+        if ( apply_filters( 'fupi_updating_many_options', false ) ) return $clean_data;
+        
 		include FUPI_PATH . '/admin/common/fupi-clear-cache.php';
 		return $clean_data; 
     }
 
-    public function get_faq_data( $empty_arr ){
-        include_once 'reports-faq.php';
-        return [ 
-            'q' => $questions, 
-            'a' => $answers 
-        ];
-    }
-
-    public function get_page_descr( $section_id, $no_woo_descr_text ){
+    public function get_reports_page_descr( $section_id, $no_woo_descr_text ){
         include 'reports-descr.php';
         return $ret_text;
     }

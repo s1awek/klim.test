@@ -20,32 +20,17 @@ $sections = array(
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[id]',
 				'placeholder'		=> esc_html__( 'G-0000000 or GT-0000000', 'full-picture-analytics-cookie-notice'),
-				'under field'		=> '<p>' . sprintf( esc_html__( '%1$sLearn where to find it%2$s', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-install-google-analytics-4/">', '</a>') . '</p>',
+				'under field'		=> '<p>' . sprintf( esc_html__( '%1$sLearn where to find it%2$s', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-install-google-analytics-4/">', '</a>') . '</p>
+					<p>' . esc_html__( 'Tip. To pass installation check, enable "Force load" in the "Loading" section. Disable it after the check.', 'full-picture-analytics-cookie-notice') . '</p>',
 			),
 			array(
 				'type' 				=> 'toggle',
-				'label' 			=> esc_html__( 'Avoid issues when using multiple GAs on a single site', 'full-picture-analytics-cookie-notice' ),
+				'label' 			=> esc_html__( 'Try to avoid conflicts with other Google Analytics installations', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'cookie_prefix',
 				'option_arr_id'		=> $option_arr_id,
-				'popup2'			=> '<p>' . esc_html__( 'Enable this function if you installed another GA tracking script with a different plugin, the Custom Scripts module or a Google Tag Manager.', 'full-picture-analytics-cookie-notice') . '</p>',
+				'popup2'			=> '<p>' . esc_html__( 'Enable this function if you installed another Google Analytics with a different plugin, the Custom Scripts module or a Google Tag Manager. It will change the cookie prefix of this installation to avoid conflicts.', 'full-picture-analytics-cookie-notice') . '</p>
+				<p class="fupi_warning_text">' . esc_html__( 'Using multiple Google Analytics that are installed in different ways is highly discouraged and may cause unexpected tracking issues. Test before using in production.', 'full-picture-analytics-cookie-notice') . '</p>',
 			),
-			array(
-				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Enhanced Conversions', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'enh_conv',
-				'must_have'			=> 'pro',
-				'option_arr_id'		=> $option_arr_id,
-				'popup3'			=> '<p style="color: red">' . esc_html__( 'This function only has an effect if you link your Google Analytics with your Google Ads account.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . esc_html__( 'Enhanced Conversions improves the accuracy of conversion tracking in Google Ads when it is linked with Google Analytics. This option sends to Google your visitors\' personal information, like their email address, first and last name and physical address. This information is later used by Google to better match the conversions with specific users.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p>' . esc_html__( 'To implement Enhanced Conversions in Google Ads via Google Analytics follow the steps below.', 'full-picture-analytics-cookie-notice') . '</p>
-					<ol>
-						<li>' . esc_html__('Go to your Google Analytics panel > Admin (settings page) > Data Collection > and enable "User-provided data collection" ', 'full-picture-analytics-cookie-notice') . '</li>
-						<li>' . esc_html__('Go back to the Admin page (settings page) > and link your GA with G Ads in Google Ads links section" ', 'full-picture-analytics-cookie-notice') . '</li>
-						<li>' . esc_html__('Enable "Enhanced Conversions" via Google Tag in your Google Ads account. You will find it in "Goals" > "Conversions" > "Settings" > "Enhanced conversions" > and select "Google tag" from the dropdown. If you can\'t see these menu elements, please switch to the new menu using the "Appearance" switch in the top.', 'full-picture-analytics-cookie-notice') . '</li>
-						<li>' . sprintf( esc_html__( 'Make sure you agree and comply with Google\'s %1$sCustomer Data policies%2$s, %3$sGoogle Ads Data Processing Terms%2$s and privacy law in your country.', 'full-picture-analytics-cookie-notice' ), '<a href="https://support.google.com/adspolicy/answer/7475709?sjid=6953114821919544275-EU">', '</a>', '<a href="https://business.safety.google/adsprocessorterms/">' ) . '</li>
-						<li>' . esc_html__('Add information to your privacy policy that you send personal user data to Google.', 'full-picture-analytics-cookie-notice' ) . '</li>
-					</ol>',
-			)
 		),
 	),
 
@@ -63,17 +48,7 @@ $sections = array(
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . sprintf( esc_html__( 'This will load the tracking tool for all website visitors, including administrators, bots, excluded users, people browsing from excluded locations and people that didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=referral&utm_campaign=settings_link">', '</a>' ) . '</p>',
-				),
-			array(
-				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Track without waiting for consent', 'full-picture-analytics-cookie-notice' ),
-				'class'				=> 'fupi_load_opts',
-				'must_have'			=> 'cook',
-				'field_id' 			=> 'disreg_cookies',
-				'option_arr_id'		=> $option_arr_id,
-				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p>' . esc_html__( 'Visitors will still be able to turn off tracking by declining tracking / cookies.', 'full-picture-analytics-cookie-notice' ) . '</p>'
+				<p>' . sprintf( esc_html__( 'This will load the tracking script for all website visitors, including administrators, bots, excluded users, people browsing from excluded locations and people that didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
 			),
 			array(
 				'type'	 			=> 'r3',
@@ -92,7 +67,7 @@ $sections = array(
 							'excl'				=> esc_html__('All except','full-picture-analytics-cookie-notice'),
 							'incl'				=> esc_html__('Only in','full-picture-analytics-cookie-notice'),
 						),
-						'class'		=> 'fupi_col_20',
+						'class'				=> 'fupi_col_20',
 					),
 					array(
 						'type'				=> 'text',
@@ -104,22 +79,47 @@ $sections = array(
 		),
 	),
 
-	// Tracking events
+	// Privacy settings
 
 	array(
-		'section_id' => 'fupi_ga41_events',
-		'section_title' => esc_html__( 'Tracking events', 'full-picture-analytics-cookie-notice' ),
+		'section_id' => 'fupi_ga41_basic',
+		'section_title' => esc_html__( 'Data collection settings', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Identify logged-in users across devices and browsers', 'full-picture-analytics-cookie-notice' ),
+				'label' 			=> esc_html__( 'Enhanced Conversions', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'enh_conv',
+				'must_have'			=> 'pro',
+				'option_arr_id'		=> $option_arr_id,
+				'under field'		=> esc_html__( 'This has an effect only if you link your Google Analytics with your Google Ads', 'full-picture-analytics-cookie-notice' ),
+				'popup'			=> '<p>' . esc_html__( 'Enhanced Conversions improves the accuracy of conversion tracking in Google Ads when it is linked with Google Analytics. This option sends to Google your visitors\' personal information, like their email address, first and last name and physical address. This information is later used by Google to better match the conversions with specific users.', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<p>' . esc_html__( 'To implement Enhanced Conversions in Google Ads via Google Analytics follow the steps below.', 'full-picture-analytics-cookie-notice') . '</p>
+					<ol>
+						<li>' . esc_html__('Go to your Google Analytics panel > Admin (settings page) > Data Collection > and enable "User-provided data collection" ', 'full-picture-analytics-cookie-notice') . '</li>
+						<li>' . esc_html__('Go back to the Admin page (settings page) > and link your GA with G Ads in Google Ads links section" ', 'full-picture-analytics-cookie-notice') . '</li>
+						<li>' . esc_html__('Enable "Enhanced Conversions" via Google Tag in your Google Ads account. You will find it in "Goals" > "Conversions" > "Settings" > "Enhanced conversions" > and select "Google tag" from the dropdown. If you can\'t see these menu elements, please switch to the new menu using the "Appearance" switch in the top.', 'full-picture-analytics-cookie-notice') . '</li>
+						<li>' . sprintf( esc_html__( 'Make sure you agree and comply with Google\'s %1$sCustomer Data policies%2$s, %3$sGoogle Ads Data Processing Terms%2$s and privacy law in your country.', 'full-picture-analytics-cookie-notice' ), '<a href="https://support.google.com/adspolicy/answer/7475709?sjid=6953114821919544275-EU">', '</a>', '<a href="https://business.safety.google/adsprocessorterms/">' ) . '</li>
+						<li>' . esc_html__('Add information to your privacy policy that you send personal user data to Google.', 'full-picture-analytics-cookie-notice' ) . '</li>
+					</ol>',
+			),
+			array(
+				'type'	 			=> 'toggle',
+				'label' 			=> esc_html__( 'Cross-device and cross-browser tracking', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'set_user_id',
 				'must_have'			=> 'pro',
 				'option_arr_id'		=> $option_arr_id,
-				'popup2'			=> '<p>' . esc_html__( 'When you enable this option WP Full Picture will start sending to Google Analytics IDs of logged-in users. These IDs will be used to recognize users when they log in to your site again on different devices or browsers.', 'full-picture-analytics-cookie-notice') . '</p>
-					<p>' . sprintf( esc_html__( 'You can learn more about it from %1$sGoogle\'s documentation%2$s.', 'full-picture-analytics-cookie-notice'), '<a href="https://support.google.com/analytics/answer/9213390?hl=en" target="_blank">', '</a>') . '</p>
-					<p style="color:#e47d00">' . esc_html__( 'Attention! You must add to your privacy policy information on your use of this ID.', 'full-picture-analytics-cookie-notice') . '</p>',
+				'popup'				=> '<p>' . esc_html__( 'Identifies logged-in users across devices and browsers by their user WordPress user IDs.', 'full-picture-analytics-cookie-notice') . '</p>
+					<p>' . sprintf( esc_html__( 'You can learn more about it from %1$sGoogle\'s documentation%2$s.', 'full-picture-analytics-cookie-notice'), '<a href="https://support.google.com/analytics/answer/9213390?hl=en" target="_blank">', '</a>') . '</p>',
 			),
+		),
+	),
+
+	// EVENTS
+
+	array(
+		'section_id' => 'fupi_ga41_events',
+		'section_title' => esc_html__( 'Tracking simple events', 'full-picture-analytics-cookie-notice' ),
+		'fields' => array(
 			array(
 				'type'	 			=> 'radio',
 				'label' 			=> esc_html__( 'Track clicks on email and tel. links', 'full-picture-analytics-cookie-notice' ),
@@ -136,7 +136,7 @@ $sections = array(
 					<p>' . esc_html__( 'This option is recommended if you do not have many phone and email links on your website and/or you are not an advanced GA user.', 'full-picture-analytics-cookie-notice' ) . '</p>
 					<h3>' . esc_html__( '"Track as one event with different parameters" option', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<p>' . esc_html__( 'When you choose this option, WP FP will send to your GA events "email_link_click" and "tel_link_click".', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p>' . sprintf ( esc_html__( 'To see information on what links were clicked, you need to %3$sregister a custom dimension in GA%4$s with event parameter %1$scontact_click%2$s and build a custom report.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=referral&utm_campaign=documentation_link">', '</a>' ) . '</p>
+					<p>' . sprintf ( esc_html__( 'To see information on what links were clicked, you need to %3$sregister a custom dimension in GA%4$s with event parameter %1$scontact_click%2$s and build a custom report.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>
 					<p>' . esc_html__( 'This option is recommended if you have many different contact links on the website and you are an advanced GA user.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
 			array(
@@ -158,7 +158,7 @@ $sections = array(
 					<h3>' . esc_html__( '"Track as one event with different parameters" option', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<p>' . esc_html__( 'When you choose this option, every time someone clicks an affiliate link, WP FP will send to your GA event "affiliate_link_click".', 'full-picture-analytics-cookie-notice' ) . '</p>
 					<p>' . esc_html__( 'Information about the names of the links will be sent to GA as event parameters.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p>' . sprintf ( esc_html__( 'To see these parameters / names of clicked links in your GA reports, you need to %3$sregister a custom dimension in GA%4$s with event parameter %1$saffiliate_link_click%2$s and build a custom report.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=referral&utm_campaign=documentation_link">', '</a>' ) . '</p>
+					<p>' . sprintf ( esc_html__( 'To see these parameters / names of clicked links in your GA reports, you need to %3$sregister a custom dimension in GA%4$s with event parameter %1$saffiliate_link_click%2$s and build a custom report.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>
 					<p>' . esc_html__( 'This option is recommended if you have many different affiliate links on the website and you are an advanced GA user.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
 				array(
@@ -174,14 +174,14 @@ $sections = array(
 							'placeholder'		=> esc_html__( 'Url part, e.g. /go/', 'full-picture-analytics-cookie-notice' ),
 							'type'				=> 'text',
 							'field_id'			=> 'sel',
-							'class'		=> 'fupi_col_35_grow',
+							'class'				=> 'fupi_col_35_grow',
 							'required'			=> true,
 						),
 						array(
 							'placeholder'		=> esc_html__( 'Event name or link name', 'full-picture-analytics-cookie-notice' ),
 							'type'				=> 'text',
 							'field_id'			=> 'val',
-							'class'		=> 'fupi_col_35_grow',
+							'class'				=> 'fupi_col_35_grow',
 							'required'			=> true,
 						),
 					),
@@ -206,7 +206,7 @@ $sections = array(
 					<h3>' . esc_html__( '"Track as one event with different parameters" option', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<p>' . esc_html__( 'When you choose this option, every time someone clicks an element, WP FP will send to your GA event "element_click".', 'full-picture-analytics-cookie-notice' ) . '</p>
 					<p>' . esc_html__( 'Information about the names of the clicked elements will be sent to GA as event parameters.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p>' . sprintf ( esc_html__( 'To see these parameters / names in your GA reports, you need to %3$sregister a custom dimension in GA%4$s with event parameter %1$selement_click%2$s and build a custom report.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=referral&utm_campaign=documentation_link">', '</a>' ) . '</p>
+					<p>' . sprintf ( esc_html__( 'To see these parameters / names in your GA reports, you need to %3$sregister a custom dimension in GA%4$s with event parameter %1$selement_click%2$s and build a custom report.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>
 					<p>' . esc_html__( 'This option is recommended if you want to track clicks on many different elements on the website and you are an advanced GA user.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
 				array(
@@ -224,7 +224,7 @@ $sections = array(
 							<li>' . esc_html__( 'If you are tracking events with a single event name but different parameters, you can add in the "name" field a placeholder [name]. It will be replaced with the first 20 characters of the text inside the clicked element. Make sure it has any.', 'full-picture-analytics-cookie-notice' ) . '</li>
 						</ol>
 						<h3>' . esc_html__( 'Attention!', 'full-picture-analytics-cookie-notice') . '</h3>
-						<p style="color: #e47d00;">' . esc_html__( 'To correctly track clicks in page elements OTHER than links (e.g. buttons), you need to provide CSS selectors of ALL clickable elements inside that element.', 'full-picture-analytics-cookie-notice' ) . '</p>
+						<p class="fupi_warning_text">' . esc_html__( 'To correctly track clicks in page elements OTHER than links (e.g. buttons), you need to provide CSS selectors of ALL clickable elements inside that element.', 'full-picture-analytics-cookie-notice' ) . '</p>
 						<p>' . esc_html__( 'The easiest way to do it is to use the asterisk symbol "*". For example, to track clicks in buttons provide:', 'full-picture-analytics-cookie-notice' ) . ' <code>.my_button, .my_button *</code>.</p>
 						<p><a href="https://wpfullpicture.com/support/documentation/how-to-track-clicks-in-page-page-elements/" target="_blank">' . esc_html__( 'Learn more about tracking clicks', 'full-picture-analytics-cookie-notice' ) . '</a></p>',
 					'fields'			=> array(
@@ -232,14 +232,14 @@ $sections = array(
 							'placeholder'		=> esc_html__( 'CSS selector e.g. #sth img', 'full-picture-analytics-cookie-notice' ),
 							'type'				=> 'text',
 							'field_id'			=> 'sel',
-							'class'		=> 'fupi_col_35_grow',
+							'class'				=> 'fupi_col_35_grow',
 							'required'			=> true,
 						),
 						array(
 							'placeholder'		=> esc_html__( 'Event name or element name', 'full-picture-analytics-cookie-notice' ),
 							'type'				=> 'text',
 							'field_id'			=> 'val',
-							'class'		=> 'fupi_col_35_grow',
+							'class'				=> 'fupi_col_35_grow',
 							'required'			=> true,
 						),
 					)
@@ -271,14 +271,14 @@ $sections = array(
 							'placeholder'		=> esc_html__( 'CSS selector e.g. #form_id', 'full-picture-analytics-cookie-notice' ),
 							'type'				=> 'text',
 							'field_id'			=> 'sel',
-							'class'		=> 'fupi_col_35_grow',
+							'class'				=> 'fupi_col_35_grow',
 							'required'			=> true,
 						),
 						array(
 							'placeholder'		=> esc_html__('Event name or form name','full-picture-analytics-cookie-notice'),
 							'type'				=> 'text',
 							'field_id'			=> 'val',
-							'class'		=> 'fupi_col_35_grow',
+							'class'				=> 'fupi_col_35_grow',
 							'required'			=> true,
 						),
 					)
@@ -295,18 +295,17 @@ $sections = array(
 					'evt'				=> esc_html__( 'Track every element with a different event', 'full-picture-analytics-cookie-notice'),
 					'params'			=> esc_html__( 'Track every element with the same event but different parameter (advanced)', 'full-picture-analytics-cookie-notice'),
 				),
-				'popup2'			=> '<p>' . esc_html__( 'Enable this function to track when specific page elements are visible to the visitor.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p>' . esc_html__( 'Elements are treated as "visible" when they are 200px inside the screen (you can change it in the General Settings). Each view is counted once per page view.', 'full-picture-analytics-cookie-notice') . '</p>
+				'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'This function works only on elements which are present in the HTML at the moment of rendering the page. To track elements added later, enable the "DOM listener" function in the Shared tracking settings > Tracking improvements.', 'full-picture-analytics-cookie-notice') . '</p>
+					<p>' . esc_html__( 'Enable this function to track when specific page elements are visible to the visitor.', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<p>' . esc_html__( 'Elements are treated as "visible" when they are 200px inside the screen (you can change it on the "shared tracking settings" page). Each view is counted once per page view.', 'full-picture-analytics-cookie-notice') . '</p>
 					<h3>' . esc_html__( '"Track every element with a different event" option', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<p>' . sprintf( esc_html__( 'When you choose this option, every time someone sees a page element you specify, WP FP will send to GA an event with a name for this element. The event names must follow %1$sthese naming rules%2$s.', 'full-picture-analytics-cookie-notice' ), '<a href="https://support.google.com/analytics/answer/13316687?hl=en#zippy=%2Cweb" target="_blank">', '</a>' ) . '</p>
 					<p>' . esc_html__( 'This option is recommended if you do not intend to set many event names and/or you are not an advanced GA user.', 'full-picture-analytics-cookie-notice' ) . '</p>
 					<h3>' . esc_html__( '"Track as one event with different parameters" option', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<p>' . esc_html__( 'When you choose this option, every time someone sees a page elements, WP FP will send to your GA event "element_view".', 'full-picture-analytics-cookie-notice' ) . '</p>
 					<p>' . esc_html__( 'Information about the names of the seen elements will be sent to GA as event parameters.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p>' . sprintf ( esc_html__( 'To see these parameters / names in your GA reports, you need to %3$sregister a custom dimension in GA%4$s with event parameter %1$sviewed_element%2$s and build a custom report.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=referral&utm_campaign=documentation_link">', '</a>' ) . '</p>
-					<p>' . esc_html__( 'This option is recommended if you want to track clicks on many different elements on the website and you are an advanced GA user.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<h3>' . esc_html__( 'Other information', 'full-picture-analytics-cookie-notice' ) . '</h3>
-					<p style="color:#e47d00">' . esc_html__( 'This tracks only elements which are present in the HTML at the moment of rendering the page. To track elements added later, enable the "DOM listener" function in the General Settings.', 'full-picture-analytics-cookie-notice') . '</p>',
+					<p>' . sprintf ( esc_html__( 'To see these parameters / names in your GA reports, you need to %3$sregister a custom dimension in GA%4$s with event parameter %1$sviewed_element%2$s and build a custom report.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>
+					<p>' . esc_html__( 'This option is recommended if you want to track clicks on many different elements on the website and you are an advanced GA user.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
 				array(
 					'type'	 			=> 'r3',
@@ -321,14 +320,14 @@ $sections = array(
 							'placeholder'		=> esc_html__( 'CSS selector e.g. .side img', 'full-picture-analytics-cookie-notice' ),
 							'type'				=> 'text',
 							'field_id'			=> 'sel',
-							'class'		=> 'fupi_col_35_grow',
+							'class'				=> 'fupi_col_35_grow',
 							'required'			=> true,
 						),
 						array(
 							'placeholder'		=> esc_html__( 'Event name or element name (required)', 'full-picture-analytics-cookie-notice' ),
 							'type'				=> 'text',
 							'field_id'			=> 'val',
-							'class'		=> 'fupi_col_35_grow',
+							'class'				=> 'fupi_col_35_grow',
 							'required'			=> true,
 						),
 					)
@@ -352,7 +351,7 @@ $sections = array(
 					<h3>' . esc_html__( '"Track as one event with different parameters" option', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<p>' . esc_html__( 'When you choose this option, every time someone reaches a specified depthd, WP FP will send to your GA event "scroll".', 'full-picture-analytics-cookie-notice' ) . '</p>
 					<p>' . esc_html__( 'Information about the depth will be sent to GA as event parameters.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p>' . sprintf ( esc_html__( 'To see these parameters in your GA reports, you need to %3$sregister a custom dimension in GA%4$s with event parameter %1$spercent_scrolled%2$s and build a custom report.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=referral&utm_campaign=documentation_link">', '</a>' ) . '</p>
+					<p>' . sprintf ( esc_html__( 'To see these parameters in your GA reports, you need to %3$sregister a custom dimension in GA%4$s with event parameter %1$spercent_scrolled%2$s and build a custom report.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>
 					<p>' . esc_html__( 'This option is recommended if you want to track clicks on many different elements on the website and you are an advanced GA user.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
 				array(
@@ -372,7 +371,7 @@ $sections = array(
 				'must_have'			=> 'pro',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[track_engagement]',
-				'popup2'			=> '<p style="color: #e47d00">' . sprintf ( esc_html__( 'To have the timer data available in GA, you need to %3$sregister a custom metric in GA%4$s with event parameter %1$suser_engagement_time%2$s. Unit of measurement: seconds.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=referral&utm_campaign=documentation_link">', '</a>' ) . '
+				'popup2'			=> '<p class="fupi_warning_text">' . sprintf ( esc_html__( 'To have the timer data available in GA, you need to %3$sregister a custom metric in GA%4$s with event parameter %1$suser_engagement_time%2$s. Unit of measurement: seconds.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '
 					<p>' . esc_html__ ( 'This feature lets you measure how much time users actively spend on your website (scrolling, reading, etc.).', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . esc_html__ ( 'This does not, however, use Google Analytics\' method of tracking engagement time. The method used here is more precise but it requires the use of Calculated Metrics feature of GA, which requires certain knowledge and experience.', 'full-picture-analytics-cookie-notice') . '</p>
 					<h3>' . esc_html__ ( 'How does it work?', 'full-picture-analytics-cookie-notice') . '</h3>
@@ -385,10 +384,73 @@ $sections = array(
 					<p>' . esc_html__ ( 'This means, that in order to learn how much time the user was engaged with the content, you need to add all these numbers together.', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . esc_html__ ( 'This can be done using Google\'s Calculated Metrics feature. Here\'s a guide with an explainer video showing how to do it. Please mind, that this is for advanced GA users.', 'full-picture-analytics-cookie-notice') . ' <a href="https://www.lovesdata.com/blog/calculated-metrics">' . esc_html__( 'Go to the tutorial', 'full-picture-analytics-cookie-notice' ) . '</a></p>',
 			),
+			array(
+				'type'	 			=> 'toggle',
+				'label' 			=> esc_html__( 'Track JavaScript errors', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'js_err_dimens',
+				'must_have'			=> 'pro',
+				'option_arr_id'		=> $option_arr_id,
+				'popup2'				=> '<p>' .  esc_html__( 'This will send to Google Analytics descriptions of JavaScript errors on your site. Use it with caution! If your site has many errors, the number of events may exceed Google Analytics\' limit. Events descriptions are limited to 100 characters (Google\'s limit).', 'full-picture-analytics-cookie-notice') . '</p><p>' . sprintf ( esc_html__( 'To see this data in reports you need to %3$sregister a custom dimension in GA%4$s with event parameter %1$sjs_error_details%2$s.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
+			),
 		),
 	),
 
-	// WP DATA TRACKING
+	// CUSTOM EVENTS
+
+	array(
+		'section_id' => 'fupi_ga41_atrig',
+		'section_title' => esc_html__( 'Tracking complex events', 'full-picture-analytics-cookie-notice' ),
+		'fields' => array(
+			array(
+				'type'	 			=> 'r3',
+				'label' 			=> esc_html__( 'Track when specific conditions are met', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'custom_events',
+				'class'				=> 'fupi_events_builder fupi_fullwidth_tr',
+				'must_have'			=> 'pro atrig',
+				'option_arr_id'		=> $option_arr_id,
+				'is_repeater'		=> true,
+				'fields'			=> array(
+					array(
+						'label'				=> esc_html__( 'When this happens', 'full-picture-analytics-cookie-notice' ),
+						'type' 				=> 'atrig_select',
+						'field_id'			=> 'atrig_id',
+						'class'				=> 'fupi_col_30',
+						'required'			=> true,
+						'format'			=> 'key'
+					),
+					array(
+						'type'	 			=> 'select',
+						'label' 			=> esc_html__( '...for...', 'full-picture-analytics-cookie-notice' ),
+						'field_id' 			=> 'repeat',
+						'option_arr_id'		=> $option_arr_id,
+						'class'				=> 'fupi_col_15',
+						'options'			=> array(
+							'no'				=> esc_html__( 'The first time', 'full-picture-analytics-cookie-notice' ),
+							'yes'				=> esc_html__( 'Every time', 'full-picture-analytics-cookie-notice' ),
+						),
+					),
+					array(
+						'type'				=> 'text',
+						'label'				=> esc_html__( 'Send to GA event', 'full-picture-analytics-cookie-notice' ),
+						'placeholder'		=> esc_html__( 'event_name', 'full-picture-analytics-cookie-notice' ),
+						'field_id'			=> 'evt_name',
+						'el_class'			=> 'fupi_events_builder_evt',
+						'required'			=> true,
+						'class'				=> 'fupi_col_20',
+					),
+					array(
+						'type'				=> 'number',
+						'label'				=> esc_html__( 'Value (optional)', 'full-picture-analytics-cookie-notice' ),
+						'field_id'			=> 'evt_val',
+						'required'			=> true,
+						'class'				=> 'fupi_col_20',
+					),
+				),
+			)
+		),
+	),
+
+	// EVENT PARAMETERS
 
 	array(
 		'section_id' => 'fupi_ga41_wpdata',
@@ -465,7 +527,7 @@ $sections = array(
 				'el_data_target'	=> 'fupi_tax_terms_opts',
 				'format'			=> 'key',
 				'under field'		=> esc_html__( 'Only lowercase letters, digits and underscores. Parameter name cannot start with a digit.', 'full-picture-analytics-cookie-notice' ),
-				'popup'				=> '<p>' . esc_html__('This will track what categories, tags and formats are associated with posts and pages. You can enable tracking other terms and / or post types in the "General Settings" > "Default Tracking Settings".','full-picture-analytics-cookie-notice') . '</p>',
+				'popup'				=> '<p>' . esc_html__('This will track the categories, tags and formats of posts and pages. You can enable tracking other terms in the "Shared tracking settings" > "Default settings".','full-picture-analytics-cookie-notice') . '</p>',
 			),
 				array(
 					'type'	 			=> 'toggle',
@@ -512,18 +574,19 @@ $sections = array(
 				'label_for' 		=> $option_arr_id . '[post_author]',
 				'format'			=> 'key',
 				'under field'		=> esc_html__( 'Only lowercase letters, digits and underscores. Parameter name cannot start with a digit.', 'full-picture-analytics-cookie-notice' ),
-				'popup2'			=> '<p style="color: #e47d00;">' . esc_html__( 'Tracking personally identifiable information is against Google\'s policy. Make sure that the displayed names are pseudonyms.', 'full-picture-analytics-cookie-notice') . '</p>',
+				'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'Tracking personally identifiable information is against Google\'s policy. Make sure that the displayed names are pseudonyms.', 'full-picture-analytics-cookie-notice') . '</p>',
 			),
 			array(
 				'type'	 			=> 'text',
 				'label' 			=> esc_html__( 'Track authors IDs', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'author_id',
-				'must_have'			=> 'field|main|show_author_id|exists|Enable_tracking_authors_IDs_in_General_Settings',
+				'must_have'			=> 'field|fupi_track|show_author_id|exists|Enable_tracking_authors_IDs_in_Shared_Tracking_Settings',
 				'placeholder'		=> esc_html__( 'Parameter name, e.g. "author_id"', 'full-picture-analytics-cookie-notice' ),
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[author_id]',
 				'format'			=> 'key',
 				'under field'		=> esc_html__( 'Only lowercase letters, digits and underscores. Parameter name cannot start with a digit.', 'full-picture-analytics-cookie-notice' ),
+				'popup3'			=> '<p style="color: red">' . esc_html__('Do not enable this option if authors of content of your site have administrator rights. This will expose their IDs making attacks easier. Don\'t help attackers hack your site.', 'full-picture-analytics-cookie-notice') . '</p>',
 			),
 			array(
 				'type'	 			=> 'text',
@@ -537,14 +600,15 @@ $sections = array(
 			),
 			array(
 				'type'	 			=> 'r3',
-				'label' 			=> esc_html__( 'Track custom metadata', 'full-picture-analytics-cookie-notice' ),
+				'label' 			=> esc_html__( 'Track metadata', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_cf',
-				'must_have'			=> 'pro trackmeta',
+				'must_have'			=> 'pro',
 				'class'				=> 'fupi_metadata_tracker fupi_simple_r3',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'popup'				=> '<p>' . esc_html__( 'This setting lets you track custom metadata that was previously registerd in the Metadata Tracking page.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p>' . esc_html__( 'To view data in your Google Analytics reports you also need to register custom dimensions in Google Analytics\' panel using the same event parameter names as you entered in the fields.', 'full-picture-analytics-cookie-notice' ) . '</p>
+				'popup2'				=> '<p>' . esc_html__( 'This setting lets you track metadata (hidden and/or custom data of your content, users and post/page terms).', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<p>' . esc_html__( 'To track metadata you need to register it in the "Shared tracking settings" > "Extra tracking functions". After you do this, refresh this page and choose what you want to track.', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<p class="wupi_warning_text">' . esc_html__( 'To view data in your Google Analytics reports you need to register custom dimensions in Google Analytics\' panel using the same event parameter names as you entered in the fields.', 'full-picture-analytics-cookie-notice' ) . '</p>
 					<p>' . esc_html__( 'Event parameter names must contain only lowercase letters, digits and underscores and cannot begin with a digit.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 				'fields'			=> array(
 					array(
@@ -564,79 +628,7 @@ $sections = array(
 		),
 	),
 
-	// ADVANCED TRIGGERS
-
-	array(
-		'section_id' => 'fupi_ga41_atrig',
-		'section_title' => esc_html__( 'Tracking lead scores and custom events', 'full-picture-analytics-cookie-notice' ),
-		'fields' => array(
-			array(
-				'type'	 			=> 'r3',
-				'label' 			=> esc_html__( 'Track when specific conditions are met', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'custom_events',
-				'class'				=> 'fupi_events_builder fupi_fullwidth_tr',
-				'must_have'			=> 'pro atrig',
-				'option_arr_id'		=> $option_arr_id,
-				'is_repeater'		=> true,
-				'fields'			=> array(
-					array(
-						'label'				=> esc_html__( 'When this happens', 'full-picture-analytics-cookie-notice' ),
-						'type' 				=> 'atrig_select',
-						'field_id'			=> 'atrig_id',
-						'class'		=> 'fupi_col_30',
-						'required'			=> true,
-						'format'			=> 'key'
-					),
-					array(
-						'type'	 			=> 'select',
-						'label' 			=> esc_html__( '...for...', 'full-picture-analytics-cookie-notice' ),
-						'field_id' 			=> 'repeat',
-						'option_arr_id'		=> $option_arr_id,
-						'class'		=> 'fupi_col_15',
-						'options'			=> array(
-							'no'				=> esc_html__( 'The first time', 'full-picture-analytics-cookie-notice' ),
-							'yes'				=> esc_html__( 'Every time', 'full-picture-analytics-cookie-notice' ),
-						),
-					),
-					array(
-						'type'				=> 'text',
-						'label'				=> esc_html__( 'Send to GA event', 'full-picture-analytics-cookie-notice' ),
-						'placeholder'		=> esc_html__( 'event_name', 'full-picture-analytics-cookie-notice' ),
-						'field_id'			=> 'evt_name',
-						'el_class'			=> 'fupi_events_builder_evt',
-						'required'			=> true,
-						'class'		=> 'fupi_col_20',
-					),
-					array(
-						'type'				=> 'number',
-						'label'				=> esc_html__( 'Value (optional)', 'full-picture-analytics-cookie-notice' ),
-						'field_id'			=> 'evt_val',
-						'required'			=> true,
-						'class'		=> 'fupi_col_20',
-					),
-				),
-			)
-		),
-	),
-
-	// OTHER TRACKING SETTINGS
-
-	array(
-		'section_id' => 'fupi_ga41_other',
-		'section_title' => esc_html__( 'Other', 'full-picture-analytics-cookie-notice' ),
-		'fields' => array(
-			array(
-				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Track JavaScript errors', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'js_err_dimens',
-				'must_have'			=> 'pro',
-				'option_arr_id'		=> $option_arr_id,
-				'popup2'				=> '<p>' .  esc_html__( 'This will send to Google Analytics descriptions of JavaScript errors on your site. Use it with caution! If your site has many errors, the number of events may exceed Google Analytics\' limit. Events descriptions are limited to 100 characters (Google\'s limit).', 'full-picture-analytics-cookie-notice') . '</p><p>' . sprintf ( esc_html__( 'To see this data in reports you need to %3$sregister a custom dimension in GA%4$s with event parameter %1$sjs_error_details%2$s.', 'full-picture-analytics-cookie-notice') , ' <span style="background: #fdf3ce;">', '</span>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=referral&utm_campaign=documentation_link">', '</a>' ) . '</p>',
-			),
-		),
-	),
-
-	// WOOCPMMERCE
+	// WOOCOMMERCE
 
 	array(
 		'section_id' => 'fupi_ga41_ecomm',

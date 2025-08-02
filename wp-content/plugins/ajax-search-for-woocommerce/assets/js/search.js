@@ -301,7 +301,8 @@
             suggestionsContainerOrientTop: 'dgwt-wcas-suggestions-wrapp--top',
             inputFilled: 'dgwt-wcas-search-filled',
             darkenOverlayMounted: 'js-dgwt-wcas-search-darkoverl-mounted',
-            fixed: 'dgwt-wcas-suggestions-wrapp-fixed'
+            fixed: 'dgwt-wcas-suggestions-wrapp-fixed',
+            initialized: 'dgwt-wcas-suggestions-wrapp-initialized'
         };
         that.hint = null;
         that.hintValue = '';
@@ -484,7 +485,8 @@
 
             that.hideAfterClickOutsideListener();
 
-            // Mark as initialized
+            that.getFormWrapper().addClass(that.classes.initialized);
+
             that.suggestionsContainer.addClass('js-dgwt-wcas-initialized');
 
             if (that.detailsContainer && that.detailsContainer.length > 0) {
@@ -599,13 +601,10 @@
             });
 
             // Position preloader
-            if (document.readyState === 'complete') {
+            that.positionPreloaderAndMic();
+            $(window).on('load', function () {
                 that.positionPreloaderAndMic();
-            } else {
-                $(window).on('load', function () {
-                    that.positionPreloaderAndMic();
-                });
-            }
+            });
 
             that.el.on('keydown.autocomplete', function (e) {
                 that.onKeyPress(e);
@@ -809,13 +808,10 @@
                 }
             });
 
-            if (document.readyState == 'complete') {
+            that.reloadFlexibleLayout();
+            $(window).on('load.autocomplete', function () {
                 that.reloadFlexibleLayout();
-            } else {
-                $(window).on('load.autocomplete', function () {
-                    that.reloadFlexibleLayout();
-                });
-            }
+            });
 
         },
         activateMobileOverlayMode: function () {
@@ -1886,13 +1882,11 @@
             }
 
             $(document).trigger('dgwtWcasDetailsPanelLoaded', that);
-            document.dispatchEvent(new CustomEvent('fibosearch/show-details-panel', {
-                detail: that
-            }));
+
         },
         updatePrices: function (noAjax) {
             var that = this,
-                i, j,
+                i,
                 productsToLoad = [];
 
             if (!(that.options.showPrice && that.options.dynamicPrices)) {
@@ -1909,7 +1903,13 @@
                     typeof that.suggestions[i].type != 'undefined'
                     && (that.suggestions[i].type == 'product' || that.suggestions[i].type == 'product_variation')
                 ) {
-                    var key = 'product__' + that.suggestions[i].post_id;
+                    var key = '';
+                    if (typeof that.suggestions[i].variation_id !== 'undefined') {
+                        // Variation as single product.
+                        key = 'product__' + that.suggestions[i].variation_id;
+                    } else {
+                        key = 'product__' + that.suggestions[i].post_id;
+                    }
 
                     if (typeof that.cachedPrices[key] != 'undefined') {
 
@@ -1918,8 +1918,12 @@
                     } else {
 
                         that.applyPreloaderForPrice(i);
-
-                        productsToLoad.push(that.suggestions[i].post_id);
+                        if (typeof that.suggestions[i].variation_id !== 'undefined') {
+                            // Variation as single product.
+                            productsToLoad.push(that.suggestions[i].variation_id);
+                        } else {
+                            productsToLoad.push(that.suggestions[i].post_id);
+                        }
                     }
                 }
 
@@ -1938,29 +1942,30 @@
                     type: 'post',
                     url: dgwt_wcas.ajax_prices_endpoint,
                     success: function (response) {
-
-                        if (typeof response.success != 'undefined' && response.success && response.data.length > 0) {
-                            for (i = 0; i < response.data.length; i++) {
-
-                                var postID = response.data[i].id,
-                                    price = response.data[i].price;
-
-                                if (that.suggestions.length > 0) {
-                                    for (j = 0; j < that.suggestions.length; j++) {
-                                        if (
-                                            typeof that.suggestions[j].type != 'undefined'
-                                            && (that.suggestions[j].type == 'product' || that.suggestions[j].type == 'product_variation')
-                                            && that.suggestions[j].post_id == postID
-                                        ) {
-
-                                            var key = 'product__' + postID;
-
-                                            that.cachedPrices[key] = price;
-
-                                            that.updatePrice(j, price);
-
-                                        }
-                                    }
+                        if (
+                            typeof response.success != 'undefined'
+                            && response.success
+                            && Object.keys(response.data).length > 0
+                            && that.suggestions.length > 0
+                        ) {
+                            for (i = 0; i < that.suggestions.length; i++) {
+                                if (
+                                    typeof that.suggestions[i].type !== 'undefined'
+                                    && that.suggestions[i].type === 'product'
+                                    && typeof response.data[that.suggestions[i].post_id] === 'string'
+                                ) {
+                                    key = 'product__' + that.suggestions[i].post_id;
+                                    that.cachedPrices[key] = response.data[that.suggestions[i].post_id];
+                                    that.updatePrice(i, response.data[that.suggestions[i].post_id]);
+                                } else if (
+                                    typeof that.suggestions[i].type !== 'undefined'
+                                    && that.suggestions[i].type === 'product_variation'
+                                    && typeof that.suggestions[i].variation_id !== 'undefined'
+                                    && typeof response.data[that.suggestions[i].variation_id] === 'string'
+                                ) {
+                                    key = 'product__' + that.suggestions[i].variation_id;
+                                    that.cachedPrices[key] = response.data[that.suggestions[i].variation_id];
+                                    that.updatePrice(i, response.data[that.suggestions[i].variation_id]);
                                 }
                             }
                         }
@@ -2062,6 +2067,10 @@
                 $containerDetails = that.getDetailsContainer(),
                 objectHash = utils.hashCode(objectID),
                 $el = $containerDetails.find('.dgwt-wcas-details-inner[data-object="' + objectHash + '"]');
+
+            document.dispatchEvent(new CustomEvent('fibosearch/show-details-panel', {
+                detail: that
+            }));
 
             if ($el.length) {
                 that.preloader('hide', 'details', '');
@@ -2545,6 +2554,8 @@
             // Open Title wrapper
             html += '<div class="dgwt-wcas-st">';
 
+
+
             // Custom content before title (3rd party)
             html += that.apply3rdPartyPlaceholder('title_before', suggestion);
 
@@ -2579,6 +2590,11 @@
 
             // Custom content after description (3rd party)
             html += that.apply3rdPartyPlaceholder('content_after', suggestion);
+
+            // Display score (only visible in debug mode with ?fibodebug=score)
+            if (typeof suggestion.score !== 'undefined') {
+                html += '<div class="dgwt-wcas-score">Score: ' + suggestion.score + '</div>';
+            }
 
             // Close title wrapper
             html += '</div>';
@@ -2628,7 +2644,11 @@
                 $searchWrapp = that.getFormWrapper(),
                 style = 'solaris'; //Default style
 
-            $($searchWrapp.attr('class').split(/\s+/)).each(function (index) {
+             if (!$searchWrapp || $searchWrapp.length === 0) {
+                return style;
+             }
+
+            $($searchWrapp?.attr('class')?.split(/\s+/)).each(function (index) {
                 if (/dgwt-wcas-style-/i.test(this)) {
                     style = this.replace(/dgwt-wcas-style-/i, '');
                 }
@@ -3852,6 +3872,18 @@
 
             $('.dgwt-wcas-search-input').dgwtWcasAutocomplete(window.dgwt_wcas.config);
 
+            /**
+             * If a user clicked on the search bar o an icon before it finished initializing,
+             * trigger a focus or click on that after initialization.
+             */
+            var $focusedElement = $(document.activeElement);
+            if ($focusedElement.length) {
+                if ($focusedElement.hasClass('dgwt-wcas-search-input')) {
+                    $focusedElement.trigger('focus');
+                } else if ($focusedElement.hasClass('js-dgwt-wcas-search-icon-handler')) {
+                    $focusedElement.trigger('click');
+                }
+            }
         });
 
 

@@ -1,11 +1,11 @@
 === Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro ===
-Contributors: codewoogeek
+Contributors: codewoogeek, propluginslab
 Tags: email, notification, outofstock, waitlist, stock
 Donate link: https://codewoogeek.online/product-category/back-in-stock-notifier/
 Requires at least: 4.7
-Tested up to: 6.8.1
+Tested up to: 6.8.2
 Requires PHP: 7.4
-Stable tag: 5.9.0
+Stable tag: 6.0.5
 License: GPL-3.0+
 License URI: [https://www.gnu.org/licenses/gpl-3.0.txt](https://www.gnu.org/licenses/gpl-3.0.txt)
 
@@ -264,6 +264,34 @@ You can contact us via the support Forum of WordPress or by creating a support t
 
 
 == Changelog ==
+= 6.0.5 2025-07-23 =
+* Fix: Fatal error related to Bulk Variations Grid compatibility
+* Tweak: Displayed "Product Deleted" info in list table instead of leaving it blank
+* Tweak: Enhanced dashboard report
+* Tweak: Updated POT file
+
+= 6.0.4 2025-07-16 =
+* New: Added "Delete Subscribers Data" option on the Status page with confirmation prompt
+* Tweak: Removed unwanted HTML tags in Dashboard Widget report
+* Tweak: Updated POT file
+
+= 6.0.2 2025-07-14 =
+* Fix: "Subscribe" button remained disabled when bot protection was turned off
+* Tweak: Added fallback option when Turnstile fails to load implicitly
+
+= 6.0.1 2025-07-13 =
+* Fix: Issue with "Keep Subscribed" status option when using the new "Queued" status
+* Fix: Conflict between Turnstile and Contact Form 7 Turnstile Integration
+* Tweak: Compatibility tested with WooCommerce 10.0.0
+
+= 6.0.0 2025-07-09 =
+* New: Added Queued status
+* New: Reports Dashboard Widget
+* Tweak: Map variable product name when the option "Trigger mail to variable product subscribers when any other variation of that product is back in stock" is enabled
+* Tweak: Enhanced status color code
+* Tweak: Tested with WooCommerce 9.9.5
+* Tweak: POT File updated
+
 = 5.9.0 2025-06-23 =
 * New : Hide Subscribe Form on Free or Zero Price Out of Stock Products
 * Tweak: JS variable appended with proper prefix

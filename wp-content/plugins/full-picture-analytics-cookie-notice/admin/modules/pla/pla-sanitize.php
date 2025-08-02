@@ -100,13 +100,13 @@ if ( ! empty ( $input ) ) foreach( $input as $key => $value ) {
 						if ( empty( $section['atrig_id'] ) || empty( $section['evt_name'] ) ) continue;
 						$clean_val[$j]['atrig_id'] = sanitize_key( $section['atrig_id'] );
 						$clean_val[$j]['evt_name'] = sanitize_text_field( $section['evt_name'] );
-						if ( ! empty ( $section['repeat'] ) ) $clean_val[$j]['repeat'] = sanitize_key( $section['repeat'] );
+						$clean_val[$j]['repeat'] = empty( $section['repeat'] ) ? 'no' :  sanitize_key( $section['repeat'] );
 						$j++;
 					}
 				};
 				break;
 			default:
-				$clean_val = strip_tags( stripslashes( $value ) );
+				$clean_val = is_bool ( $value ) || is_string ( $value ) ? strip_tags( stripslashes( $value ) ) : false;
 		
 				break;
 		}

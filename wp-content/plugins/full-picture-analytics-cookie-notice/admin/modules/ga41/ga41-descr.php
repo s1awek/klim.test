@@ -1,6 +1,7 @@
 <?php
 
 $ret_text = '';
+$how_to_useit = '<p style="text-align: center;" class="fupi_warning_text"><button type="button" class="fupi_faux_link fupi_open_popup" data-popup="fupi_howtouseit_popup">' . esc_html__( 'How NOT to use Google Analytics with WP Full Picture.', 'full-picture-analytics-cookie-notice' ) . ' <span class="fupi_open_popup_i">i</span></button></p>';
 
 switch( $section_id ){
 
@@ -16,32 +17,37 @@ switch( $section_id ){
 		</div>
 		<div id="fupi_installed_info" class="fupi_installation_status fupi_hidden">
 			<img src="' . FUPI_URL . 'admin/assets/img/success_ico.png" aria-hidden="true"> <p>' . esc_html__( 'Well done! GA 4 is installed', 'full-picture-analytics-cookie-notice' ) . '<br><span class="fupi_small">' . esc_html__( 'The data is sent to an account with measurement ID ', 'full-picture-analytics-cookie-notice' ) . $ga4_id . '</span>.</p>
-		</div>';
+		</div>' . $how_to_useit;
 	break;
 
 	// LOADING
 	
 	case 'fupi_ga41_loading':
-		$ret_text = '<p>' . esc_html__( 'Change when this tool loads and starts tracking visitors.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Here you can change when and where this tool loads. This is all optional.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
-	// EVENTS TRACKING
+	// DATA COLLECTION
+
+	case 'fupi_ga41_basic':
+		$ret_text = '<p>' . esc_html__( 'These settings impact the amount and precision of collected data.', 'full-picture-analytics-cookie-notice') . '</p>';
+	break;
+
+	// EVENTS
 
 	case 'fupi_ga41_events':
-		$ret_text = '<p>' . esc_html__( 'Track what actions visitors take on your site. you can send them to GA as either different events with no parameters (easy) or single events with parameters (advanced). Click "i" icons next to labels below to learn more.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__('Use functions on this page to track simple events, like clicking a button or submitting a form.', 'full-picture-analytics-cookie-notice' ) . ' ' . esc_html__( 'You can send them to GA as either separate events (every action gets a unique event - easy) or single events with parameters that identify actions (advanced).', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
-	// CONDITIONAL TRACKING
+	// COMPLEX EVENTS
 	
 	case 'fupi_ga41_atrig':
-		$ret_text = '<p>' .sprintf( esc_html__( 'Track when visitors behave like potential clients. Learn %1$smore about lead scoring%2$s and %3$show to set it up%2$s', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/blog/lead-scoring-in-web-analytics-what-is-it-and-how-to-use-it/">', '</a>', '<a href="https://wpfullpicture.com/support/documentation/how-to-use-lead-scoring/">' ) . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Use functions on this page to track complex events, with many conditions, for example, when a visitor from France visits 5 product pages in one session. You can set these conditions in the "Advanced triggers" module.' , 'full-picture-analytics-cookie-notice' ) . '</p>';
 	break;
 
-	// WP DATA
+	// PARAMS
 	
 	case 'fupi_ga41_wpdata':
-		$ret_text = '<p>' . esc_html__( 'Event parameters give context to GA events.', 'full-picture-analytics-cookie-notice') . '</p>
-		<p class="fupi_warning_text">' . sprintf( esc_html__( 'In order to see them in GA, you need to %1$sregistered them as custom dimensions%2$s.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/">', '</a>' ) . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Event parameters give context to events.', 'full-picture-analytics-cookie-notice') . ' <span class="fupi_warning_text">' . sprintf( esc_html__( 'In order to see them in GA, you need to %1$sregistered them as custom dimensions%2$s.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/">', '</a>' ) . '</span></p>';
 	break;
 
 	// E-COMMERCE

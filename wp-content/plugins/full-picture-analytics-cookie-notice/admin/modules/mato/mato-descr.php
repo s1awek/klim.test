@@ -34,7 +34,13 @@ switch( $section_id ){
 	// LOADING
 	
 	case 'fupi_mato_loading':
-		$ret_text = '<p>' . esc_html__( 'Change when this tool loads and starts tracking visitors.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Here you can change when and where this tool loads. This is all optional.', 'full-picture-analytics-cookie-notice') . '</p>';
+	break;
+
+	// DATA COLLECTION
+
+	case 'fupi_mato_basic':
+		$ret_text = '<p>' . esc_html__( 'These settings impact the amount and precision of collected data.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
 	// WP DATA TRACKING
@@ -46,13 +52,13 @@ switch( $section_id ){
 	// EVENTS TRACKING
 
 	case 'fupi_mato_events':
-		$ret_text = '<p>' . esc_html__( 'Track actions that visitors take on your website.', 'full-picture-analytics-cookie-notice' ) . '</p>';
+		$ret_text = '<p>' . esc_html__('Use functions on this page to track simple events, like clicking a button or submitting a form.', 'full-picture-analytics-cookie-notice' ) . '</p>';
 	break;
 
 	// CUSTOM EVENTS TRACKING
 
 	case 'fupi_mato_atrig':
-		$ret_text = '<p>' .sprintf( esc_html__( 'Track when visitors behave like potential clients. Learn %1$smore about lead scoring%2$s and %3$show to set it up%2$s', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/blog/lead-scoring-in-web-analytics-what-is-it-and-how-to-use-it/">', '</a>', '<a href="https://wpfullpicture.com/support/documentation/how-to-use-lead-scoring/">' ) . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Use functions on this page to track complex events, with many conditions, for example, when a visitor from France visits 5 product pages in one session. You can set these conditions in the "Advanced triggers" module.' , 'full-picture-analytics-cookie-notice' ) . '</p>';
 	break;
 
 	// WOOCOMMERCE
@@ -66,7 +72,7 @@ switch( $section_id ){
 				<p>' . esc_html__( 'After you do this, WP FP will track and send to Matomo these events:', 'full-picture-analytics-cookie-notice') . '</p>
 				<ol class="fupi_checked_list">
 					<li>' . esc_html__( 'purchase (as an internal and separate event)', 'full-picture-analytics-cookie-notice') . '</li>
-					<li>' . sprintf( esc_html__( 'product view %1$s(only as an internal Matomo event!)%2$s', 'full-picture-analytics-cookie-notice'), '<strong style="color: #e47d00">', '</strong>' ) . '</li>
+					<li>' . sprintf( esc_html__( 'product view %1$s(only as an internal Matomo event!)%2$s', 'full-picture-analytics-cookie-notice'), '<strong class="fupi_warning_text">', '</strong>' ) . '</li>
 					<li>' . esc_html__( 'add to cart (as an internal and separate event)', 'full-picture-analytics-cookie-notice') . '</li>
 					<li>' . esc_html__( 'remove from cart (as an internal and separate event)', 'full-picture-analytics-cookie-notice') . '</li>
 				</ol>

@@ -8,10 +8,12 @@ switch( $section_id ){
 	// <a href="" data-srcid="9EIODjx3jy0" class="fupi_vid_thumb fupi_vid"><img src="'.FUPI_URL.'\admin\settings\img\fp-first-steps-vid_min.jpg"><span class="fupi_vid_thumb_play_btn dashicons dashicons-controls-play"></span></a>
 	case 'fupi_tools_integrations':
 
-		$ret_text = '<div class="fupi_descr_buttons_wrappers">
-			<button type="button" id="fupi_toggle_filters_section" class="button-secondary">' . esc_html__('Filter by features','full-picture-analytics-cookie-notice') . '</button>
-		</div>
-		<div id="fupi_tools_filters">
+		$ret_text = [ 'content' => '
+			<p style="text-align: center;">' . esc_html__( 'Use these modules to install the tracking tools you need', 'full-picture-analytics-cookie-notice') . '</p>
+			<div class="fupi_descr_buttons_wrappers">
+				<button type="button" id="fupi_toggle_filters_section" class="button-secondary">' . esc_html__('Filter by features','full-picture-analytics-cookie-notice') . '</button>
+			</div>
+			<div id="fupi_tools_filters">
 				<p id="fupi_filters_title">' . esc_html__('Filter by features','full-picture-analytics-cookie-notice') . ':</p>
 				<div id="fupi_tools_filters_wrap">
 
@@ -34,26 +36,25 @@ switch( $section_id ){
 					<button class="fupi_filter_btn button fupi_tooltip" type="button" data-tag="surveys">' . esc_html__('Surveys','full-picture-analytics-cookie-notice') . ' <span class="fupi_tooltiptext">' . esc_html__('Get feedback straight from your visitors','full-picture-analytics-cookie-notice') . '</span></button>
 				
 				</div>
-			</div>';
+			</div>',
+		];
 
-	break;
-
-	// TAG MANAGERS
-
-	case 'fupi_tools_tagmanagers':
-		$ret_text = '<p>' . esc_html__( 'Install tools not listed above.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
 	// PRIVACY
 
 	case 'fupi_tools_privacy':
-		$ret_text = '<p>' . esc_html__( 'Track visitors in compliance with GDPR, PiPEDA, CCPA and other privacy laws.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = [
+			'content' => '<p>' . esc_html__( 'Track visitors in compliance with GDPR, PiPEDA, CCPA and other privacy laws.', 'full-picture-analytics-cookie-notice') . '</p>',
+		];
 	break;
 
 	// EXTENSIONS
 
 	case 'fupi_tools_ext':
-		$ret_text = '<p>' . esc_html__( 'Add extra features to other modules.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = [
+			'content' => '<p>' . esc_html__( 'Add extra features to other modules.', 'full-picture-analytics-cookie-notice') . '</p>',
+		];
 	break;
 };
 
