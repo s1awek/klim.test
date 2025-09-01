@@ -1,0 +1,1576 @@
+# Translation of Plugins - Advanced Database Cleaner - Stable (latest release) in Polish
+# This file is distributed under the same license as the Plugins - Advanced Database Cleaner - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-08-18 08:58:33+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: pl\n"
+"Project-Id-Version: Plugins - Advanced Database Cleaner - Stable (latest release)\n"
+
+#: includes/overview_settings.php:172
+msgid "Displays a menu at the left side of your network admin panel"
+msgstr "Wyświetla menu po lewej stronie panelu administracyjnego sieci"
+
+#: includes/overview_settings.php:170
+msgid "Show network plugin menu"
+msgstr "Pokaż menu wtyczki w sieci"
+
+#: includes/overview_settings.php:166
+msgid "(In main site only)"
+msgstr "(Tylko na stronie głównej)"
+
+#: includes/header_page_filter.php:221
+msgid "In site"
+msgstr "W witrynie"
+
+#: includes/header_page_filter.php:62
+msgid "Table status"
+msgstr "Status tabeli"
+
+#: includes/edit_item_categorization.php:105
+msgid "WordPress core"
+msgstr "WordPress"
+
+#: includes/edit_item_categorization.php:102
+msgid "WordPress"
+msgstr "WordPress"
+
+#: includes/class_clean_options.php:612
+msgid "Total size of autoloaded options: "
+msgstr "Łączny rozmiar automatycznie wczytywanych opcji: "
+
+#: includes/class_clean_options.php:608
+msgid "This size should be reduced to prevent performance issues"
+msgstr "Rozmiar powinien zostać zredukowany, by ograniczyć błędy wydajności"
+
+#: includes/class_clean_options.php:608
+msgid "Good"
+msgstr "Dobrze!"
+
+#: includes/class_clean_options.php:120
+msgid "Indicates whether an option is autoloaded or not. Values to autoload are: %1$s. Values to not autoload are: %2$s"
+msgstr "Określa, czy dana opcja jest automatycznie wczytywana. Wartości automatycznego wczytywania to: %1$s.. Wartości, które nie powodują automatycznego wczytywania to: %2$s"
+
+#: includes/class_clean_cron.php:397 includes/class_clean_options.php:443
+#: includes/class_clean_tables.php:532
+msgid "Dismiss similar messages"
+msgstr "Zamykaj podobne wiadomości"
+
+#: advanced-db-cleaner.php:712
+msgid "Dismiss"
+msgstr "Zamknij"
+
+#: advanced-db-cleaner.php:705
+msgid "No, not good enough"
+msgstr "Nie jest dość dobra"
+
+#: advanced-db-cleaner.php:703
+msgid "I already did"
+msgstr "Już to zrobiłem"
+
+#: advanced-db-cleaner.php:701
+msgid "Ok, you deserved it"
+msgstr "Ok, zasługujesz na to"
+
+#: advanced-db-cleaner.php:697
+msgid "You have been using <a href=\"admin.php?page=advanced_db_cleaner\">Advanced DB Cleaner</a> for more than 1 week. Would you mind taking a few seconds to give it a 5-star rating on WordPress? Thank you in advance :)"
+msgstr "Używasz <a href=\"admin.php?page=advanced_db_cleaner\">Advanced DB Cleaner</a> od ponad tygodnia. Czy mógłbyś poświęcić kilka sekund, aby wystawić mu 5 gwiazdek w WordPressi? Z góry dziękuję :)"
+
+#: advanced-db-cleaner.php:696
+msgid "Awesome!"
+msgstr "Wspaniałe!"
+
+#: advanced-db-cleaner.php:337
+msgid "The scan will process all items, continue?"
+msgstr "Przeskanowane zostaną wszystkie elementy. Kontynuować?"
+
+#: includes/license/ADBC_EDD_SL_Plugin_Updater.php:287
+msgid "Update now."
+msgstr "Aktualizuj teraz."
+
+#: includes/license/ADBC_EDD_SL_Plugin_Updater.php:276
+msgid "%1$sView version %2$s details%3$s or %4$supdate now%5$s."
+msgstr "%1$s Wyświetl szczegóły wersji %2$s%3$s lub %4$saktualizuj teraz%5$s."
+
+#. translators: 1. opening anchor tag, do not translate 2. the new plugin
+#. version 3. closing anchor tag, do not translate.
+#: includes/license/ADBC_EDD_SL_Plugin_Updater.php:268
+msgid "%1$sView version %2$s details%3$s."
+msgstr "%1$s Wyświetl szczegóły %2$swersji %3$s."
+
+#: includes/license/ADBC_EDD_SL_Plugin_Updater.php:263
+msgid "Contact your network administrator to install the update."
+msgstr "Skontaktuj się z administratorem sieci, aby zainstalować aktualizację."
+
+#. translators: the plugin name.
+#: includes/license/ADBC_EDD_SL_Plugin_Updater.php:257
+msgid "There is a new version of %1$s available."
+msgstr "Dostępna jest nowa wersja %1$s."
+
+#: includes/license/adbc-edd-sample-plugin.php:326
+msgid "Unknown error occurred, please try again."
+msgstr "Wystąpił nieznany błąd, spróbuj ponownie."
+
+#: includes/license/adbc-edd-sample-plugin.php:316
+msgid "Deactivated!"
+msgstr "Wyłączono!"
+
+#: includes/license/adbc-edd-sample-plugin.php:305
+msgid "Your license is no longer valid."
+msgstr "Twoja licencja nie jest już ważna."
+
+#: includes/license/adbc-edd-sample-plugin.php:301
+msgid "Your license is valid."
+msgstr "Twoja licencja jest ważna."
+
+#: includes/license/adbc-edd-sample-plugin.php:292
+msgid "License cannot be activated."
+msgstr "Nie można aktywować licencji."
+
+#: includes/license/adbc-edd-sample-plugin.php:288
+msgid "Activated!"
+msgstr "Włączono!"
+
+#: includes/license/adbc-edd-sample-plugin.php:275
+msgid "An error has occurred, please try again."
+msgstr "Wystąpił błąd, prosimy spróbować ponownie."
+
+#: includes/license/adbc-edd-sample-plugin.php:257
+msgid "Invalid license."
+msgstr "Nieprawidłowa licencja."
+
+#: includes/license/adbc-edd-sample-plugin.php:199
+msgid "Empty license field!"
+msgstr "Puste pole licencji!"
+
+#: includes/license/adbc-edd-sample-plugin.php:193
+msgid "Cannot proceed!"
+msgstr "Nie można kontynuować!"
+
+#: includes/license/adbc-edd-sample-plugin.php:166
+msgid "Security check failed!"
+msgstr "Błąd sprawdzania zabezpieczenia!"
+
+#: includes/license/adbc-edd-sample-plugin.php:128
+msgid "License key"
+msgstr "Klucz licencji"
+
+#: includes/license/adbc-edd-sample-plugin.php:118
+msgid "My account"
+msgstr "Moje konto"
+
+#: includes/license/adbc-edd-sample-plugin.php:106
+msgid "Check status"
+msgstr "Sprawdź status"
+
+#: includes/license/adbc-edd-sample-plugin.php:90
+msgid "Status:"
+msgstr "Status:"
+
+#: includes/functions.php:1546
+msgid "Please select at least one menu to show the plugin"
+msgstr "Aby wyświetlić wtyczkę, wybierz co najmniej jedno menu"
+
+#: includes/functions.php:1539
+msgid "An error has occurred. Please try again!"
+msgstr "Wystąpił błąd. Spróbuj ponownie!"
+
+#: includes/functions.php:1521
+msgid "Not sufficient permissions!"
+msgstr "Brak odpowiednich uprawnień!"
+
+#: advanced-db-cleaner.php:332
+msgid "Please wait ..."
+msgstr "Proszę czekać...."
+
+#: includes/edit_item_categorization.php:68
+msgid "The cron tasks above belong to:"
+msgstr "Powyższe zadania cron są powiązane z:"
+
+#: includes/edit_item_categorization.php:64
+msgid "The options above belong to:"
+msgstr "Opcje powyżej są powiązane z:"
+
+#: includes/edit_item_categorization.php:60
+msgid "The tables above belong to:"
+msgstr "Tabele powyżej są powiązane z:"
+
+#: includes/edit_item_categorization.php:10
+msgid "Manual correction of the categorization"
+msgstr "Ręczna korekta kategoryzacji"
+
+#: includes/custom-clean-view/header_page_custom_clean.php:9
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:286
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:139
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:304
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:147
+msgid "Return"
+msgstr "Powrót"
+
+#: includes/custom-clean-view/class_clean_transient.php:23
+msgid "Expired transient"
+msgstr "Przedawniona pamięć podręczna"
+
+#: includes/class_clean_tables.php:316
+msgid "Scan selected tables"
+msgstr "Skanuj zaznaczone tabele"
+
+#: includes/class_clean_options.php:217
+msgid "Scan selected options"
+msgstr "Skanuj zaznaczone opcje"
+
+#: includes/class_clean_cron.php:546 includes/class_clean_options.php:592
+#: includes/class_clean_tables.php:680
+msgid "Stopping..."
+msgstr "Zatrzymywanie..."
+
+#: includes/class_clean_cron.php:542 includes/class_clean_options.php:588
+#: includes/class_clean_tables.php:676
+msgid "Stop the scan"
+msgstr "Zatrzymaj skanowanie"
+
+#: includes/class_clean_cron.php:220 includes/class_clean_options.php:218
+#: includes/class_clean_tables.php:317
+msgid "Edit categorization"
+msgstr "Edytuj kategorię"
+
+#: includes/class_clean_cron.php:219
+msgid "Scan selected tasks"
+msgstr "Skanuj zaznaczone zadania"
+
+#: advanced-db-cleaner.php:338
+msgid "Do you want to scan all items or only uncategorized ones?"
+msgstr "Czy chcesz skanować wszystkie elementy czy tylko te bez kategorii?"
+
+#: advanced-db-cleaner.php:336
+msgid "The scan time depends on your DB size and number of files"
+msgstr "Czas skanowania zależy od rozmiaru bazy danych i liczby plików"
+
+#: advanced-db-cleaner.php:334
+msgid "Scan all items"
+msgstr "Skanuj wszystkie elementy"
+
+#: advanced-db-cleaner.php:333
+msgid "All items"
+msgstr "Wszystkie elementy"
+
+#: advanced-db-cleaner.php:347
+msgid "Continue"
+msgstr "Kontynuuj"
+
+#: advanced-db-cleaner.php:344
+msgid "Are you sure?"
+msgstr "Czy jesteś pewien?"
+
+#: advanced-db-cleaner.php:341
+msgid "No items selected!"
+msgstr "Nie wybrano elementów!"
+
+#: advanced-db-cleaner.php:339
+msgid "Unexpected error! Please refresh the page and try again!"
+msgstr "Nieoczekiwany błąd! Odśwież stronę i spróbuj ponownie!"
+
+#: includes/custom-clean-view/class_clean_relationships.php:22
+msgid "Orphaned Relationships"
+msgstr "Osierocone relacje"
+
+#: includes/functions.php:330
+msgid "Orphaned relationships"
+msgstr "Osierocone relacje"
+
+#: includes/custom-clean-view/header_page_custom_clean.php:150
+#: includes/header_page_filter.php:328
+msgid "Delete custom filter"
+msgstr "Usuń własny filtr"
+
+#: includes/edit_item_categorization.php:92 includes/header_page_filter.php:194
+msgid "Themes"
+msgstr "Motywy"
+
+#: includes/edit_item_categorization.php:82 includes/header_page_filter.php:177
+msgid "Plugins"
+msgstr "Wtyczki"
+
+#: includes/header_page_filter.php:84
+msgid "To repair"
+msgstr "Do naprawy"
+
+#: includes/header_page_filter.php:76
+msgid "To optimize"
+msgstr "Do optymalizacji"
+
+#: includes/sidebar.php:28
+msgid "The price will increase soon! Buy now at lower price!"
+msgstr "Cena wkrótce wzrośnie! Kup teraz w niższej cenie!"
+
+#: includes/sidebar.php:22
+msgid "Premium & technical support"
+msgstr "Premium i pomoc techniczna"
+
+#: includes/sidebar.php:10
+msgid "Upgrade to Pro"
+msgstr "Ulepsz do wersji pro"
+
+#: includes/custom-clean-view/class_clean_comment.php:64
+msgid "Trackback content"
+msgstr "Treść trackbacków"
+
+#: includes/custom-clean-view/class_clean_comment.php:62
+msgid "Trackback"
+msgstr "Trackback"
+
+#: includes/custom-clean-view/class_clean_comment.php:55
+msgid "Pingback content"
+msgstr "Treść pingbacków"
+
+#: includes/custom-clean-view/class_clean_comment.php:53
+msgid "Pingback"
+msgstr "Pingback"
+
+#: includes/custom-clean-view/class_clean_comment.php:28
+#: includes/custom-clean-view/class_clean_comment.php:37
+#: includes/custom-clean-view/class_clean_comment.php:46
+msgid "Comment content"
+msgstr "Treść komentarza"
+
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:58
+msgid "Term meta key"
+msgstr "Klucz danych meta taksonomii"
+
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:57
+msgid "Orphaned Terms Meta"
+msgstr "Osierocone dane meta taksonomii"
+
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:56
+msgid "Orphaned Term Meta"
+msgstr "Osierocone dane meta taksonomii"
+
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:49
+msgid "User meta key"
+msgstr "Klucz danych meta użytkownika"
+
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:48
+msgid "Orphaned Users Meta"
+msgstr "Osierocone dane meta użytkowników"
+
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:47
+msgid "Orphaned User Meta"
+msgstr "Osierocone dane meta użytkownika"
+
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:39
+msgid "Orphaned posts meta"
+msgstr "Osierocone dane meta wpisów"
+
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:30
+msgid "Orphaned comments meta"
+msgstr "Osierocone dane meta komentarzy"
+
+#: includes/custom-clean-view/class_clean_relationships.php:245
+msgid "Selected 'Orphaned relationships' successfully cleaned!"
+msgstr "Wybrane „Osierocone relacje” zostały wyczyszczone!"
+
+#: includes/custom-clean-view/header_page_custom_clean.php:132
+#: includes/header_page_filter.php:306
+msgid "Show"
+msgstr "Pokaż"
+
+#: includes/custom-clean-view/header_page_custom_clean.php:127
+#: includes/header_page_filter.php:301
+msgid "Items per page"
+msgstr "Elementów na stronę"
+
+#: includes/custom-clean-view/header_page_custom_clean.php:82
+#: includes/header_page_filter.php:254
+msgid "Filter"
+msgstr "Filtruj"
+
+#: includes/custom-clean-view/header_page_custom_clean.php:69
+msgid "Search in"
+msgstr "Szukaj w polu"
+
+#: includes/custom-clean-view/header_page_custom_clean.php:65
+#: includes/header_page_filter.php:44 includes/header_page_filter.php:46
+msgid "Search for"
+msgstr "Szukaj"
+
+#: includes/custom-clean-view/header_page_custom_clean.php:22
+msgid "Total Found"
+msgstr "Znaleziono łącznie"
+
+#: includes/custom-clean-view/class_clean_transient.php:313
+msgid "Selected 'Transients' successfully cleaned!"
+msgstr "Wybrane „Stany przejściowe” zostały wyczyszczone!"
+
+#: includes/custom-clean-view/class_clean_comment.php:254
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:240
+#: includes/custom-clean-view/class_clean_relationships.php:188
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:235
+#: includes/custom-clean-view/class_clean_transient.php:234
+msgid "No elements found!"
+msgstr "Nie znaleziono elementów!"
+
+#: includes/custom-clean-view/class_clean_transient.php:151
+msgid "Expires In"
+msgstr "Wygasa za"
+
+#: includes/custom-clean-view/class_clean_transient.php:149
+msgid "Transient name"
+msgstr "Nazwa stanu przejściowego"
+
+#: includes/custom-clean-view/class_clean_transient.php:114
+msgid "Expired"
+msgstr "Wygasło"
+
+#: includes/functions.php:1006
+msgid "Single event"
+msgstr "Pojedyncze wydarzenie"
+
+#: includes/functions.php:824
+msgid "This page will reload several times during this scan!"
+msgstr "Ta strona będzie odświeżana kilka razy podczas skanowania!"
+
+#: includes/functions.php:711
+msgid "Wordpress core"
+msgstr "WordPress"
+
+#: includes/functions.php:705
+msgid "Orphan!"
+msgstr "Sierota!"
+
+#: includes/functions.php:692
+msgid "Uncategorized!"
+msgstr "Bez kategorii!"
+
+#: includes/functions.php:675
+msgid "This item is not categorized yet! Please click on scan button above to categorize it."
+msgstr "Ten element nie ma przypisanej kategorii! Kliknij na przycisk skanowania, by przypisać kategorię do tej opcji."
+
+#: includes/functions.php:521 includes/functions.php:532
+#: includes/functions.php:543
+msgid "Orphans"
+msgstr "Osierocone"
+
+#: advanced-db-cleaner.php:335 includes/functions.php:520
+#: includes/functions.php:531 includes/functions.php:542
+msgid "Uncategorized"
+msgstr "Bez kategorii"
+
+#: includes/functions.php:519 includes/functions.php:530
+#: includes/functions.php:541 includes/header_page_filter.php:69
+#: includes/header_page_filter.php:114 includes/header_page_filter.php:154
+#: includes/header_page_filter.php:226
+msgid "All"
+msgstr "Wszystko"
+
+#: includes/custom-clean-view/class_clean_transient.php:24
+#: includes/functions.php:333
+msgid "Expired transients"
+msgstr "Przedawniona pamięć podręczna"
+
+#: includes/functions.php:327
+msgid "Orphaned term meta"
+msgstr "Osierocone dane meta taksonomii"
+
+#: includes/functions.php:325
+msgid "Orphaned user meta"
+msgstr "Osierocone dane meta użytkownika"
+
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:29
+#: includes/functions.php:323
+msgid "Orphaned comment meta"
+msgstr "Osierocone dane meta komentarza"
+
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:38
+#: includes/functions.php:321
+msgid "Orphaned post meta"
+msgstr "Osierocone dane meta wpisu"
+
+#: includes/custom-clean-view/class_clean_comment.php:63
+#: includes/functions.php:318
+msgid "Trackbacks"
+msgstr "Trackbacki"
+
+#: includes/custom-clean-view/class_clean_comment.php:54
+#: includes/functions.php:316
+msgid "Pingbacks"
+msgstr "Pingbacki"
+
+#: includes/functions.php:313
+msgid "Trashed comments"
+msgstr "Komentarze w koszu"
+
+#: includes/functions.php:306
+msgid "Trashed posts"
+msgstr "Wpisy w koszu"
+
+#: advanced-db-cleaner.php:342
+msgid "You are about to clean some of your unused data. This operation is irreversible!"
+msgstr "Zamierzasz usunąć część nieużywanych danych. Ta operacja jest nieodwracalna!"
+
+#: includes/class_general_cleanup.php:398
+msgid "Items to clean"
+msgstr "Elementy do wyczyszyczenia"
+
+#: includes/class_general_cleanup.php:354
+msgid "Cleanup schedule(s) set"
+msgstr " - zaplanowane czyszczenia"
+
+#: includes/class_general_cleanup.php:334
+msgid "Element(s) can be cleaned!"
+msgstr "- elementy do wyczyszczenia"
+
+#: includes/class_general_cleanup.php:190
+msgid "Keep the last x days’ data from being displayed, and therefore from being cleaned. The plugin will always show only data older than the number of days you have specified."
+msgstr "Zablokuj wyświetlanie danych z ostatnich x dni, a tym samym ich czyszczenie. Wtyczka zawsze będzie wyświetlać tylko dane starsze niż określona liczba dni."
+
+#: includes/class_general_cleanup.php:185
+msgid "Indicates if you have selected the item to be cleaned automatically on a scheduled task. A green image indicates that the item is scheduled while a grey image indicated the opposite."
+msgstr "Wskazuje, czy wybrano element do automatycznego czyszczenia w ramach zaplanowanego zadania. Zielony obraz oznacza, że element jest zaplanowany, a szary – że nie."
+
+#: advanced-db-cleaner.php:346 includes/class_general_cleanup.php:154
+#: includes/edit_item_categorization.php:120
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: includes/class_general_cleanup.php:112
+msgid "Scheduled in:"
+msgstr "Zaplanowano:"
+
+#: includes/class_general_cleanup.php:72
+msgid "Please keep in mind that this will change the value of 'keep last' of your corresponding scheduled tasks as well!"
+msgstr "Pamiętaj, że spowoduje to również zmianę wartości opcji „pomiń ostatnie” w powiązanych, zaplanowanych zadaniach!"
+
+#: includes/class_general_cleanup.php:68 includes/class_general_cleanup.php:72
+msgid "The 'keep last' value saved successfully!"
+msgstr "Zapisano wartość „pomiń ostatnie”!"
+
+#: includes/class_clean_cron.php:452
+msgid "Please <a href=\"?page=advanced_db_cleaner&aDBc_tab=premium\">upgrade</a> to Pro to categorize and detect orphaned tasks"
+msgstr "Aby kategoryzować i wykrywać porzucone zadania, <a href=\"?page=advanced_db_cleaner&aDBc_tab=premium\">zaktualizuj</a> do wersji pro"
+
+#: includes/class_clean_cron.php:413
+msgid "Scan tasks"
+msgstr "Skanuj zadania"
+
+#: includes/class_clean_cron.php:395
+msgid "Some of your tasks are not categorized yet! Please click on the button below to categorize them!"
+msgstr "Niektóre z twoich zadań nie mają przypisanych kategorii! Kliknij poniższy przycisk, aby je skategoryzować!"
+
+#: includes/class_clean_cron.php:387
+msgid "Tasks below seem to be orphan! However, please delete only those you are sure to be orphan!"
+msgstr "Poniższe zadania wydają się być porzucone! Proszę jednak usunąć tylko te, co do których masz pewność, że są porzucone!"
+
+#: includes/class_clean_cron.php:170
+msgid "None"
+msgstr "Brak"
+
+#: includes/class_clean_cron.php:114
+msgid "Arguments"
+msgstr "Argumenty"
+
+#: includes/class_clean_cron.php:109
+msgid "Indicates the creator of the task: either a plugin, a theme or WordPress itself. If not sure about the creator, an estimation (%) will be displayed. The higher the percentage is, the more likely that the task belongs to that creator."
+msgstr "Wskazuje twórcę zadania: wtyczkę, motyw lub samego WordPressa. W przypadku braku pewności co do autora, zostanie wyświetlona wartość procentowa [%]. Im wyższa wartość, tym większe prawdopodobieństwo, że zadanie należy do tego twórcy."
+
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:214
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:265
+msgid "Perform operations"
+msgstr "Wykonywanie operacji"
+
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:160
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:168
+msgid "By default, all your database tables will be optimized and/or repaired (if needed) according to your schedule settings"
+msgstr "Domyślnie wszystkie tabele bazy danych zostaną zoptymalizowane i/lub naprawione (jeśli będzie to konieczne) zgodnie z ustawieniami harmonogramu"
+
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:149
+msgid "Add optimize schedule"
+msgstr "Zaplanuj optymalizację"
+
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:95
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:103
+msgid "Please choose at least one operation to perform!"
+msgstr "Proszę wybrać co najmniej jedną operację do wykonania!"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:323
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:176
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:377
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:225
+msgid "Schedule name"
+msgstr "Nazwa harmonogramu"
+
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:314
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:157
+msgid "Edit cleanup schedule"
+msgstr "Edytuj harmonogram czyszczenia"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:377
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:251
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:433
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:295
+msgid "Save the schedule"
+msgstr "Zaplanuj"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:361
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:235
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:417
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:279
+msgid "Schedule status"
+msgstr "Status harmonogramu"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:357
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:210
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:413
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:261
+msgid "Start time (GMT)"
+msgstr "Czas rozpoczęcia (GMT)"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:353
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:206
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:409
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:257
+msgid "Start date"
+msgstr "Data rozpoczęcia"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:327
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:180
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:383
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:231
+msgid "Frequency of execution"
+msgstr "Częstotliwość wykonywania"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:296
+msgid "Add cleanup schedule"
+msgstr "Zaplanuj czyszczenie"
+
+#: includes/class_general_cleanup.php:199
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:186
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:194
+msgid "Keep last"
+msgstr "Pomiń ostatnie"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:185
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:193
+msgid "Elements to include in the schedule"
+msgstr "Elementy do załączenia w harmonogramie"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:180
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:188
+msgid "Only data that is older than the number you have specified will be cleaned based on you schedule parameters. To change this value, click on \"go back\" button."
+msgstr "Tylko dane starsze niż podana liczba zostaną wyczyszczone zgodnie z planem. Aby zmienić tę wartość, kliknij przycisk „Powrót”."
+
+#: includes/class_general_cleanup.php:156
+#: includes/class_general_cleanup.php:163
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:159
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:167
+msgid "N/A"
+msgstr "brak"
+
+#: includes/class_general_cleanup.php:148
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:155
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:163
+msgid "days"
+msgstr "dni"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:117
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:126
+msgid "Please select at least one item to include in the schedule from the table below!"
+msgstr "Proszę wybrać co najmniej jedną pozycję z poniższej tabeli, którą chcesz uwzględnić w harmonogramie!"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:113
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:115
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:122
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:123
+msgid "Please give a name to your schedule!"
+msgstr "Nazwij twój harmonogram!"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:109
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:111
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:118
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:119
+msgid "Please change the name! Only letters, numbers and underscores are allowed!"
+msgstr "Zmień nazwę! Dozwolone są tylko litery, cyfry i podkreślenia!"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:105
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:107
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:114
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:115
+msgid "The name you have specified is already used by another schedule! Please change it!"
+msgstr "Podana nazwa jest już używana przez inny harmonogram! Proszę ją zmienić!"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:101
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:103
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:110
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:111
+msgid "Please specify a valide date!"
+msgstr "Określ poprawną datę!"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:97
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:99
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:106
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:107
+msgid "Please specify a valide time!"
+msgstr "Określ poprawny czas!"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:93
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:91
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:102
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:99
+msgid "The clean-up schedule saved successfully but it is inactive!"
+msgstr "Harmonogram czyszczenia został pomyślnie zapisany, ale jest wyłączony!"
+
+#: includes/premium_page.php:91
+msgid "Buy now and get all pro features!"
+msgstr "Kup teraz i otrzymaj wszystkie funkcje premium!"
+
+#: includes/premium_page.php:57
+msgid "Get quick support"
+msgstr "Zdobądź szybkie wsparcie"
+
+#: includes/premium_page.php:19 includes/sidebar.php:14
+msgid "Filter & search specific items"
+msgstr "Filtruj i szukaj konkretnych elementów"
+
+#: includes/license/ADBC_EDD_SL_Plugin_Updater.php:519
+msgid "Error"
+msgstr "Błąd"
+
+#: includes/license/ADBC_EDD_SL_Plugin_Updater.php:519
+msgid "You do not have permission to install plugin updates"
+msgstr "Brak uprawnień do aktualizacji wtyczek"
+
+#: includes/license/adbc-edd-sample-plugin.php:271
+msgid "Your license key has reached its activation limit."
+msgstr "Twój klucz licencyjny osiągnął swój limit aktywacji."
+
+#. translators: the plugin name
+#: includes/license/adbc-edd-sample-plugin.php:267
+msgid "This appears to be an invalid license key for %s."
+msgstr "Klucz licencyjny dla %s nie jest poprawny."
+
+#: includes/license/adbc-edd-sample-plugin.php:262
+msgid "Your license is not active for this URL."
+msgstr "Twoja licencja nie jest aktywna dla tego adresu URL."
+
+#: includes/license/adbc-edd-sample-plugin.php:253
+msgid "Your license key has been disabled."
+msgstr "Twój klucz licencyjny został wyłączony."
+
+#. translators: the license key expiration date
+#: includes/license/adbc-edd-sample-plugin.php:246
+msgid "Your license key expired on %s."
+msgstr "Twój klucz licencyjny wygasł %s."
+
+#: includes/license/adbc-edd-sample-plugin.php:230
+msgid "An error occurred, please try again."
+msgstr "Wystąpił błąd, proszę spróbować ponownie."
+
+#: advanced-db-cleaner.php:349
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:371
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:245
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:427
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:289
+#: includes/license/adbc-edd-sample-plugin.php:73
+msgid "Inactive"
+msgstr "Wyłączono"
+
+#: includes/license/adbc-edd-sample-plugin.php:142
+msgid "Deactivate license"
+msgstr "Wyłącz licencję"
+
+#: advanced-db-cleaner.php:348
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:367
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:241
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:423
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:285
+#: includes/license/adbc-edd-sample-plugin.php:64
+msgid "Active"
+msgstr "Włączono"
+
+#: includes/license/adbc-edd-sample-plugin.php:134
+msgid "Activate license"
+msgstr "Włącz licencję"
+
+#: includes/class_clean_options.php:498
+msgid "Please <a href=\"?page=advanced_db_cleaner&aDBc_tab=premium\">upgrade</a> to Pro to categorize and detect orphaned options"
+msgstr "Aby kategoryzować i wykrywać osierocone opcje, <a href=\"?page=advanced_db_cleaner&aDBc_tab=premium\">zaktualizuj</a> do wersji pro"
+
+#: includes/class_clean_options.php:459
+msgid "Scan options"
+msgstr "Skanuj opcje"
+
+#: includes/class_clean_options.php:441
+msgid "Some of your options are not categorized yet! Please click on the button below to categorize them!"
+msgstr "Niektóre z opcji nie są jeszcze skategoryzowane! Kliknij poniższy przycisk, aby przypisać do nich kategorie!"
+
+#: includes/class_clean_options.php:433
+msgid "Options below seem to be orphan! However, please delete only those you are sure to be orphan!"
+msgstr "Poniższe opcje wydają się być porzucone! Proszę jednak usunąć tylko te, co do których masz pewność, że faktycznie zostały osierocone!"
+
+#: includes/class_clean_options.php:376
+msgid "Autoload value successfully changed!"
+msgstr "Wartość automatycznego wczytywania została pomyślnie zmieniona!"
+
+#: includes/class_clean_options.php:237
+msgid "No options found!"
+msgstr "Nie znaleziono opcji!"
+
+#: includes/class_clean_options.php:220
+msgid "Set autoload to no"
+msgstr "Ustaw automatyczne wczytywanie na NIE"
+
+#: includes/class_clean_options.php:219
+msgid "Set autoload to yes"
+msgstr "Ustaw automatyczne wczytywanie na TAK"
+
+#: includes/class_clean_options.php:108
+msgid "Indicates the creator of the option: either a plugin, a theme or WordPress itself. If not sure about the creator, an estimation (%) will be displayed. The higher the percentage is, the more likely that the option belongs to that creator."
+msgstr "Wskazuje twórcę opcji: wtyczki, motywu lub samego WordPressa. W przypadku braku pewności co do twórcy, zostanie wyświetlona wartość szacunkowa (%). Im wyższy procent, tym większe prawdopodobieństwo, że opcja należy do tego twórcy."
+
+#: advanced-db-cleaner.php:343
+msgid "You are about to empty some of your tables. This operation is irreversible!"
+msgstr "Zamierzasz opróżnić część swoich tabel. Ta operacja jest nieodwracalna!"
+
+#: advanced-db-cleaner.php:345
+msgid "Don't forget to make a backup of your database first!"
+msgstr "Nie zapomnij najpierw wykonać kopii zapasowej swojej bazy danych!"
+
+#: includes/class_clean_tables.php:851 includes/class_general_cleanup.php:432
+msgid "Add new schedule"
+msgstr "Utwórz harmonogram"
+
+#: includes/class_clean_tables.php:830 includes/class_general_cleanup.php:148
+#: includes/class_general_cleanup.php:411
+msgid "Edit"
+msgstr "Edytuj"
+
+#: includes/class_clean_tables.php:817 includes/class_general_cleanup.php:396
+msgid "Frequency"
+msgstr "Częstotliwość"
+
+#: includes/class_clean_tables.php:813 includes/class_general_cleanup.php:392
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:337
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:190
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:393
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:241
+msgid "Monthly"
+msgstr "Co miesiąc"
+
+#: includes/class_clean_tables.php:810 includes/class_general_cleanup.php:389
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:336
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:189
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:392
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:240
+msgid "Weekly"
+msgstr "Co tydzień"
+
+#: includes/class_clean_tables.php:807 includes/class_general_cleanup.php:386
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:335
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:188
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:391
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:239
+msgid "Daily"
+msgstr "Codziennie"
+
+#: includes/class_clean_tables.php:804 includes/class_general_cleanup.php:383
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:334
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:187
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:390
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:238
+msgid "Twice a day"
+msgstr "Dwa razy dziennie"
+
+#: includes/class_clean_tables.php:801 includes/class_general_cleanup.php:380
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:333
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:186
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:389
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:237
+msgid "Hourly"
+msgstr "Co godzinę"
+
+#: includes/class_clean_tables.php:798 includes/class_general_cleanup.php:377
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:332
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:185
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:388
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:236
+msgid "Once"
+msgstr "Raz"
+
+#: includes/class_clean_tables.php:793
+msgid "Perform"
+msgstr "Zrób to"
+
+#: includes/class_clean_tables.php:778 includes/class_general_cleanup.php:362
+#: includes/custom-clean-view/header_page_custom_clean.php:76
+msgid "Name"
+msgstr "Nazwa"
+
+#: includes/class_clean_tables.php:770
+msgid "optimize schedule(s) set"
+msgstr "- zaplanowane optymalizacje"
+
+#: includes/class_clean_tables.php:749
+msgid "table(s) should be repaired!"
+msgstr "- tabele do naprawienia!"
+
+#: includes/class_clean_tables.php:734
+msgid "You can save around"
+msgstr "Możesz zaoszczędzić około"
+
+#: includes/class_clean_tables.php:586
+msgid "Please <a href=\"?page=advanced_db_cleaner&aDBc_tab=premium\">upgrade</a> to Pro to categorize and detect orphaned tables"
+msgstr "Aby kategoryzować i wykrywać porzucone tabele, <a href=\"?page=advanced_db_cleaner&aDBc_tab=premium\">zaktualizuj</a> do wersji pro"
+
+#: includes/class_clean_cron.php:415 includes/class_clean_options.php:461
+#: includes/class_clean_tables.php:549
+msgid "Continue scanning ..."
+msgstr "Kontynuuj skanowanie..."
+
+#: includes/class_clean_tables.php:547
+msgid "Scan tables"
+msgstr "Skanuj tabele"
+
+#: includes/class_clean_tables.php:530
+msgid "Some of your tables are not categorized yet! Please click on the button below to categorize them!"
+msgstr "Niektóre z twoich tabel nie są jeszcze skategoryzowane! Kliknij poniższy przycisk, aby przypisać im kategorie!"
+
+#: includes/class_clean_tables.php:522
+msgid "Tables below seem to be orphan! However, please delete only those you are sure to be orphan!"
+msgstr "Poniższe tabele wydają się być porzucone! Proszę jednak usunąć tylko te, co do których masz pewność, że faktycznie zostały porzucone!"
+
+#: includes/class_clean_tables.php:466
+msgid "Some of your tables cannot be repaired!"
+msgstr "Nie można naprawić niektórych z twoich tabel!"
+
+#: includes/class_clean_tables.php:463
+msgid "Selected tables repaired successfully!"
+msgstr "Wybrane tabele zostały naprawione!"
+
+#: includes/class_clean_tables.php:433
+msgid "Selected tables emptied successfully!"
+msgstr "Wybrane tabele zostały opróżnione!"
+
+#: includes/class_clean_tables.php:414
+msgid "Selected tables optimized successfully!"
+msgstr "Wybrane tabele zostały zoptymalizowane!"
+
+#: includes/class_clean_tables.php:338
+msgid "No tables found!"
+msgstr "Nie znaleziono żadnych tabel."
+
+#: includes/class_clean_tables.php:320
+msgid "Empty rows"
+msgstr "Wyczyść wiersze"
+
+#: includes/class_clean_tables.php:319 includes/class_clean_tables.php:791
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:231
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:275
+msgid "Repair"
+msgstr "Napraw"
+
+#: includes/class_clean_tables.php:272
+msgid "to repair"
+msgstr "do naprawy"
+
+#: includes/class_clean_tables.php:271
+msgid "Corrupted!"
+msgstr "Przerwano!"
+
+#: includes/class_clean_tables.php:264
+msgid "to optimize"
+msgstr "do optymalizacji"
+
+#: includes/class_clean_tables.php:262
+msgid "Lost space"
+msgstr "Stracona przestrzeń"
+
+#: includes/class_clean_cron.php:116 includes/class_clean_options.php:136
+#: includes/class_clean_tables.php:191 includes/header_page_filter.php:238
+msgid "Site"
+msgstr "Witryna"
+
+#: includes/class_clean_tables.php:182
+msgid "Indicates the creator of the table: either a plugin, a theme or WordPress itself. If not sure about the creator, an estimation (%) will be displayed. The higher the percentage is, the more likely that the table belongs to that creator."
+msgstr "Wskazuje twórcę taabeli: wtyczkę, motyw lub samego WordPressa. W przypadku braku pewności co do autora, zostanie wyświetlona wartość procentowa [%]. Im wyższa wartość, tym większe prawdopodobieństwo, że tabela należy do tego twórcy."
+
+#: includes/class_clean_tables.php:80 includes/class_general_cleanup.php:46
+msgid "The clean-up schedule deleted successfully!"
+msgstr "Harmonogram czyszczenia został usunięty!"
+
+#: includes/class_clean_cron.php:48 includes/class_clean_options.php:48
+#: includes/class_clean_tables.php:55
+msgid "The plugin needs to create the following directory \"%1$s\" to save the scan results but this was not possible automatically. Please create that directory manually and set correct permissions so it can be writable by the plugin."
+msgstr "Wtyczka musi utworzyć następujący katalog „%1$s”, aby zapisać wyniki skanowania, ale nie było to możliwe automatycznie. Utwórz ten katalog ręcznie i ustaw odpowiednie uprawnienia, aby wtyczka mogła do niego zapisywać."
+
+#: includes/overview_settings.php:204
+msgid "If checked, it will hide the above premium tab"
+msgstr "Jeśli pole jest zaznaczone, ukryje powyższą zakładkę premium"
+
+#: includes/overview_settings.php:202
+msgid "Hide premium tab"
+msgstr "Ukryj kartę premium"
+
+#: includes/overview_settings.php:192
+msgid "Displays a menu under \"tools\" menu"
+msgstr "Wyświetla menu wtyczki w menu „narzędzia”"
+
+#: includes/overview_settings.php:190
+msgid "Show plugin menu under tools"
+msgstr "Pokaż menu wtyczki w narzędziach"
+
+#: advanced-db-cleaner.php:849
+msgid "License"
+msgstr "Licencja"
+
+#: advanced-db-cleaner.php:846
+msgid "Cron jobs"
+msgstr "Zadania Cron"
+
+#: advanced-db-cleaner.php:819
+msgid "Activate now"
+msgstr "Włącz teraz"
+
+#: advanced-db-cleaner.php:818
+msgid "Please activate your license key to get lifetime automatic updates and support."
+msgstr "Aktywuj twój klucz licencyjny, by dostać dożywotnie aktualizacje i wsparcie techniczne."
+
+#: advanced-db-cleaner.php:794 advanced-db-cleaner.php:804
+msgid "Support"
+msgstr "Pomoc techniczna"
+
+#: advanced-db-cleaner.php:789
+msgid "Contact me"
+msgstr "Skontaktuj się ze mną"
+
+#: advanced-db-cleaner.php:787
+msgid "Need help?"
+msgstr "Potrzebujesz pomocy?"
+
+#: advanced-db-cleaner.php:780
+msgid "By"
+msgstr "Autor"
+
+#: advanced-db-cleaner.php:331
+msgid "Scanning ..."
+msgstr "Skanowanie..."
+
+#: advanced-db-cleaner.php:259
+msgid "The old pro of Advanced DB Cleaner has been de-activated since the new pro version is active."
+msgstr "Stara wersja pro programu Advanced DB Cleaner została wyłączona , ponieważ włączona jest nowa wersja pro."
+
+#: advanced-db-cleaner.php:250
+msgid "The free version of Advanced DB Cleaner has been de-activated since the pro version is active."
+msgstr "Bezpłatna wersja Advanced DB Cleaner została wyłączona, ponieważ włączona jest wersja pro."
+
+#. Author URI of the plugin
+#: advanced-db-cleaner.php
+msgid "https://www.sigmaplugin.com"
+msgstr "https://www.sigmaplugin.com"
+
+#. Author of the plugin
+#: advanced-db-cleaner.php
+msgid "Younes JFR."
+msgstr "Younes JFR."
+
+#. Description of the plugin
+#: advanced-db-cleaner.php
+msgid "Clean database by deleting unused data such as 'old revisions', 'old drafts', 'orphan options', etc. Optimize database and more."
+msgstr "Wyczyść bazę danych, usuwając nieużywane dane, takie jak „stare wersje”, „stare wersje robocze”, „opcje osierocone” itp. Zoptymalizuj bazę danych i nie tylko."
+
+#. Plugin URI of the plugin
+#: advanced-db-cleaner.php
+msgid "https://sigmaplugin.com/downloads/wordpress-advanced-database-cleaner"
+msgstr "https://sigmaplugin.com/downloads/wordpress-advanced-database-cleaner"
+
+#. Plugin Name of the plugin
+#: advanced-db-cleaner.php
+msgid "Advanced Database Cleaner"
+msgstr "Advanced Database Cleaner"
+
+#: includes/premium_page.php:88
+msgid "Buy now!"
+msgstr "Kup teraz!"
+
+#: includes/premium_page.php:72
+msgid "Great support service!"
+msgstr "Świetna pomoc techniczna!"
+
+#: includes/premium_page.php:67
+msgid "No additional fees"
+msgstr "Brak dodatkowych opłat"
+
+#: includes/premium_page.php:62
+msgid "Get technical support"
+msgstr "Pomoc techniczna"
+
+#: includes/premium_page.php:47
+msgid "We are available to support you!"
+msgstr "Jesteśmy, by cię wspierać!"
+
+#: includes/premium_page.php:45
+msgid "Need support as well ?"
+msgstr "Potrzebujesz również wsparcia?"
+
+#: includes/premium_page.php:34 includes/sidebar.php:20
+msgid "Detect orphaned cron tasks"
+msgstr "Wykryto osierocone zadania cron"
+
+#: includes/premium_page.php:9
+msgid "Find more advanced features!"
+msgstr "Odkryj więcej zaawansowanych funkcji!"
+
+#: includes/premium_page.php:7
+msgid "Need more features ?"
+msgstr "Potrzebujesz więcej funkcji?"
+
+#: includes/overview_settings.php:218
+msgid "Save settings"
+msgstr "Zapisz ustawienia"
+
+#: includes/overview_settings.php:184
+msgid "Displays a menu at the left side of your WP admin"
+msgstr "Wyświetla menu po lewej stronie panelu administracyjnego WP"
+
+#: includes/overview_settings.php:182
+msgid "Show plugin left menu"
+msgstr "Pokaż menu wtyczki po lewej stronie"
+
+#: includes/overview_settings.php:157
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: includes/overview_settings.php:147
+msgid "Local time"
+msgstr "Czas lokalny"
+
+#: includes/overview_settings.php:141
+msgid "seconds"
+msgstr "sekund"
+
+#: includes/overview_settings.php:139
+msgid "Script Max timeout"
+msgstr "Maksymalny czas wykonania skryptu:"
+
+#: includes/overview_settings.php:131
+msgid "Number of sites"
+msgstr "Liczba witryn"
+
+#: includes/overview_settings.php:123
+msgid "WP multisite Enabled ?"
+msgstr "Włączono sieć witryn WP?"
+
+#: includes/overview_settings.php:115
+msgid "Total cron tasks"
+msgstr "Liczba zadań cron"
+
+#: includes/overview_settings.php:107
+msgid "Total options"
+msgstr "Liczba opcji"
+
+#: includes/overview_settings.php:99
+msgid "Total tables"
+msgstr "Liczba tabel"
+
+#: includes/overview_settings.php:91
+msgid "Database size"
+msgstr "Rozmiar bazy danych"
+
+#: includes/overview_settings.php:83
+msgid "WP Version"
+msgstr "Wersja WP"
+
+#: includes/overview_settings.php:77
+msgid "Overview"
+msgstr "Przegląd"
+
+#: includes/header_page_filter.php:132 includes/overview_settings.php:69
+msgid "No"
+msgstr "Nie"
+
+#: includes/header_page_filter.php:121 includes/overview_settings.php:66
+msgid "Yes"
+msgstr "Tak"
+
+#: includes/overview_settings.php:29
+msgid "Indicates the total number of rows in your options table, including transients..."
+msgstr "Wskazuje całkowitą liczbę wierszy w tabeli opcji, wliczając w to wartości przejściowe..."
+
+#: includes/overview_settings.php:22
+msgid "Indicates the total number of rows in your option tables of all your network sites, including transients..."
+msgstr "Wskazuje całkowitą liczbę wierszy w tabelach opcji wszystkich witryn sieciowych, wliczając w to obiekty przejściowe..."
+
+#: includes/functions.php:1003
+msgid "Unknown!"
+msgstr "Nieznane!"
+
+#: includes/functions.php:546
+msgid "WP tables"
+msgstr "Tabele WP"
+
+#: includes/functions.php:545
+msgid "Themes tables"
+msgstr "Tabele motywów"
+
+#: includes/functions.php:544
+msgid "Plugins tables"
+msgstr "Tabele wtyczek"
+
+#: includes/functions.php:535
+msgid "WP options"
+msgstr "Opcje WP"
+
+#: includes/functions.php:534
+msgid "Themes options"
+msgstr "Opcje motywów"
+
+#: includes/functions.php:533
+msgid "Plugins options"
+msgstr "Opcje wtyczek"
+
+#: includes/functions.php:524
+msgid "WP tasks"
+msgstr "Zadania WP"
+
+#: includes/functions.php:523
+msgid "Themes tasks"
+msgstr "Zadania motywów"
+
+#: includes/functions.php:522
+msgid "Plugins tasks"
+msgstr "Zadania wtyczek"
+
+#: includes/custom-clean-view/class_clean_relationships.php:36
+msgid "Orphaned Relationship"
+msgstr "Osierocone relacje"
+
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:46
+msgid "Revision title"
+msgstr "Tytuł wersji"
+
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:45
+#: includes/functions.php:302
+msgid "Revisions"
+msgstr "Wersje"
+
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:44
+msgid "Revision"
+msgstr "Wersja"
+
+#: includes/custom-clean-view/class_clean_relationships.php:107
+msgid "Term order"
+msgstr "Sortowanie taksonomii"
+
+#: includes/custom-clean-view/class_clean_relationships.php:106
+msgid "Term taxonomy id"
+msgstr "Identyfikator taksonomii"
+
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:40
+msgid "Post meta key"
+msgstr "Klucz danych meta wpisu"
+
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:37
+msgid "Trash post title"
+msgstr "Tytuł wpisu w koszu"
+
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:36
+msgid "Trash posts"
+msgstr "Wpisy w koszu"
+
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:35
+msgid "Trash post"
+msgstr "Wpis w koszu"
+
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:28
+msgid "Auto draft title"
+msgstr "Tytuł automatycznego szkicu"
+
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:27
+#: includes/functions.php:304
+msgid "Auto drafts"
+msgstr "Automatyczne szkice"
+
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:26
+msgid "Auto draft"
+msgstr "Automatyczny szkic"
+
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:160
+msgid "Meta value"
+msgstr "Wartość danych meta."
+
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:31
+msgid "Comment meta key"
+msgstr "Klucz danych meta komentarza"
+
+#: includes/custom-clean-view/header_page_custom_clean.php:20
+msgid "Custom cleanup of"
+msgstr "Własne czyszczenie:"
+
+#: includes/custom-clean-view/class_clean_comment.php:173
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:153
+msgid "Date"
+msgstr "Data"
+
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:152
+msgid "Content"
+msgstr "Treść"
+
+#: includes/custom-clean-view/class_clean_comment.php:171
+msgid "Author"
+msgstr "Autor"
+
+#: includes/custom-clean-view/class_clean_comment.php:170
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:158
+#: includes/custom-clean-view/class_clean_relationships.php:105
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:150
+#: includes/custom-clean-view/class_clean_transient.php:148
+msgid "ID"
+msgstr "Identyfikator"
+
+#: includes/custom-clean-view/class_clean_comment.php:45
+msgid "Trash comments"
+msgstr "Komentarze w koszu"
+
+#: includes/custom-clean-view/class_clean_comment.php:44
+msgid "Trash comment"
+msgstr "Komentarz w koszu"
+
+#: includes/custom-clean-view/class_clean_comment.php:36
+#: includes/functions.php:311
+msgid "Spam comments"
+msgstr "Komentarze oznaczone jako spam"
+
+#: includes/custom-clean-view/class_clean_comment.php:35
+msgid "Spam comment"
+msgstr "Komentarz oznaczony jako spam"
+
+#: includes/custom-clean-view/class_clean_comment.php:27
+#: includes/functions.php:309
+msgid "Pending comments"
+msgstr "Oczekujące komentarze"
+
+#: includes/custom-clean-view/class_clean_comment.php:26
+msgid "Pending comment"
+msgstr "Oczekujący komentarz"
+
+#: includes/class_clean_tables.php:728
+msgid "table(s) should be optimized!"
+msgstr "- tabele do optymalizacji!"
+
+#: includes/class_clean_tables.php:707
+msgid "Your database is optimized!"
+msgstr "Twoja baza danych jest zoptymalizowana!"
+
+#: includes/class_clean_tables.php:190
+msgid "Lost"
+msgstr "Zaginione"
+
+#: includes/class_clean_tables.php:788 includes/class_general_cleanup.php:372
+msgid "Next run"
+msgstr "Następne uruchomienie"
+
+#: includes/class_general_cleanup.php:146
+#: includes/edit_item_categorization.php:118
+msgid "Save"
+msgstr "Zapisz"
+
+#: includes/class_general_cleanup.php:198
+msgid "Scheduled"
+msgstr "Zaplanowane"
+
+#: includes/class_general_cleanup.php:292
+msgid "Selected elements successfully cleaned!"
+msgstr "Wybrane elementy zostały wyczyszczone!"
+
+#: includes/class_general_cleanup.php:257
+#: includes/class_general_cleanup.php:325
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:262
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:280
+msgid "Your database is clean!"
+msgstr "Twoja baza danych jest czysta!"
+
+#: includes/class_general_cleanup.php:250
+#: includes/custom-clean-view/class_clean_comment.php:247
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:233
+#: includes/custom-clean-view/class_clean_relationships.php:181
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:228
+#: includes/custom-clean-view/class_clean_transient.php:227
+msgid "Clean"
+msgstr "Wyczyść"
+
+#: includes/class_general_cleanup.php:197
+msgid "View"
+msgstr "Zobacz"
+
+#: includes/class_general_cleanup.php:196
+msgid "Count"
+msgstr "Licznik"
+
+#: includes/class_general_cleanup.php:195
+msgid "Elements to clean"
+msgstr "Elementy do czyszczenia"
+
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:90
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:88
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:99
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:96
+msgid "The clean-up schedule saved successfully!"
+msgstr "Harmonogram czyszczenia został pomyślnie zapisany!"
+
+#: includes/class_general_cleanup.php:19
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:20
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:20
+msgid "Elements"
+msgstr "Elementy"
+
+#: includes/class_general_cleanup.php:18
+#: includes/custom-schedule-view/class_add_cleanup_schedule.php:19
+#: includes/custom-schedule-view/class_edit_cleanup_schedule.php:19
+msgid "Element"
+msgstr "Element"
+
+#: includes/premium_page.php:29 includes/sidebar.php:18
+msgid "Detect orphaned tables"
+msgstr "Wykryto osierocone tabele"
+
+#: includes/class_clean_tables.php:393
+msgid "Selected tables cleaned successfully!"
+msgstr "Wybrane tabele zostały wyczyszczone!"
+
+#: includes/class_clean_options.php:134 includes/class_clean_tables.php:189
+msgid "Size"
+msgstr "Rozmiar"
+
+#: includes/class_clean_tables.php:188
+msgid "Rows"
+msgstr "Wiersze"
+
+#: includes/class_clean_tables.php:186
+msgid "Table name"
+msgstr "Nazwa tabeli"
+
+#: includes/class_clean_tables.php:187
+msgid "Prefix"
+msgstr "Prefiks"
+
+#: includes/class_clean_tables.php:36
+msgid "Table"
+msgstr "Tabela"
+
+#: includes/premium_page.php:24 includes/sidebar.php:16
+msgid "Detect orphaned options"
+msgstr "Wykryto osierocone opcje"
+
+#: includes/class_clean_options.php:292
+msgid "Selected options cleaned successfully!"
+msgstr "Wybrane opcje zostały wyczyszczone!"
+
+#: includes/class_clean_options.php:135
+#: includes/custom-clean-view/class_clean_transient.php:152
+#: includes/header_page_filter.php:107
+msgid "Autoload"
+msgstr "Automatyczne wczytywanie"
+
+#: includes/class_clean_options.php:133
+#: includes/custom-clean-view/class_clean_transient.php:150
+#: includes/custom-clean-view/header_page_custom_clean.php:78
+msgid "Value"
+msgstr "Wartość"
+
+#: includes/class_clean_options.php:132
+msgid "Option name"
+msgstr "Nazwa opcji"
+
+#: includes/class_clean_options.php:29
+msgid "Option"
+msgstr "Opcja"
+
+#: advanced-db-cleaner.php:340
+msgid "Please select an action!"
+msgstr "Proszę wybrać opcję!"
+
+#: includes/class_clean_cron.php:335
+msgid "Selected scheduled tasks cleaned successfully!"
+msgstr "Wybrane zaplanowane zadania czyszczenia zostały wykonane!"
+
+#: includes/class_clean_cron.php:513 includes/class_clean_options.php:558
+#: includes/class_clean_tables.php:646
+#: includes/custom-clean-view/header_page_custom_clean.php:92
+#: includes/functions.php:696 includes/header_page_filter.php:266
+msgid "Available in Pro version!"
+msgstr "Dostępne w wersji pro!"
+
+#: includes/class_clean_cron.php:237
+msgid "No tasks found!"
+msgstr "Nie znaleziono żadnych zad!"
+
+#: includes/class_clean_cron.php:221 includes/class_clean_options.php:221
+#: includes/class_clean_tables.php:321 includes/class_clean_tables.php:835
+#: includes/class_general_cleanup.php:416
+msgid "Delete"
+msgstr "Usuń"
+
+#: includes/class_clean_cron.php:117 includes/class_clean_options.php:137
+#: includes/class_clean_tables.php:192 includes/header_page_filter.php:149
+msgid "Belongs to"
+msgstr "Kategoria opcji"
+
+#: includes/custom-clean-view/class_clean_comment.php:174
+#: includes/custom-clean-view/class_clean_meta_comment_post_user_term.php:161
+#: includes/custom-clean-view/class_clean_relationships.php:108
+#: includes/custom-clean-view/class_clean_revision_draft_trash.php:154
+#: includes/custom-clean-view/class_clean_transient.php:153
+msgid "Site id"
+msgstr "Identyfikator witryny"
+
+#: includes/class_clean_cron.php:115
+msgid "Next run - Frequency"
+msgstr "Następne uruchomienie - Częstotliwość"
+
+#: includes/class_clean_cron.php:113
+msgid "Hook name"
+msgstr "Nazwa hooka"
+
+#: includes/class_clean_cron.php:30
+msgid "Tasks"
+msgstr "Zadania"
+
+#: includes/class_clean_cron.php:29
+msgid "Task"
+msgstr "Zadanie"
+
+#: advanced-db-cleaner.php:848
+msgid "Premium"
+msgstr "Premium"
+
+#: advanced-db-cleaner.php:847
+msgid "Overview & settings"
+msgstr "Przegląd i ustawienia"
+
+#: advanced-db-cleaner.php:845 includes/class_clean_options.php:30
+msgid "Options"
+msgstr "Opcje"
+
+#: advanced-db-cleaner.php:844 includes/class_clean_tables.php:37
+msgid "Tables"
+msgstr "Tabele"
+
+#: includes/class_clean_tables.php:318 includes/class_clean_tables.php:790
+#: includes/custom-schedule-view/class_add_optimize_schedule.php:227
+#: includes/custom-schedule-view/class_edit_optimize_schedule.php:271
+msgid "Optimize"
+msgstr "Optymalizuj"
+
+#: advanced-db-cleaner.php:843
+msgid "General clean-up"
+msgstr "Ogólne czyszczenie"
+
+#: advanced-db-cleaner.php:372
+msgid "Once monthly"
+msgstr "Raz w miesiącu"
+
+#: advanced-db-cleaner.php:367
+msgid "Once weekly"
+msgstr "Raz w tygodniu"

@@ -935,3 +935,7 @@ function klim_sort_users_by_custom_columns($query)
     // Registration date sorting is natively supported, no need for custom handling
 }
 add_action('pre_get_users', 'klim_sort_users_by_custom_columns');
+
+add_filter( 'action_scheduler_queue_runner_concurrent_batches', function() {
+	return 10;
+} );
