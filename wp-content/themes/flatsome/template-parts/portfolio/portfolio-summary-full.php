@@ -3,9 +3,10 @@
  * Portfolio full summary.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.18.0
+ * @flatsome-version 3.20.0
  */
 
+$tooltip = get_theme_mod( 'social_icons_tooltip', 1 ) ? 'true' : 'false';
 ?>
 <div class="row">
 	<?php if ( ! get_theme_mod( 'portfolio_title' ) ) { ?>
@@ -17,7 +18,7 @@
 			<h1 class="entry-title is-xlarge uppercase"><?php the_title(); ?></h1>
 			<?php if ( get_theme_mod( 'portfolio_share', 1 ) ) : ?>
 				<div class="portfolio-share is-small">
-					<?php echo flatsome_apply_shortcode( 'share', array( 'style' => 'small' ) ); ?>
+					<?php echo flatsome_apply_shortcode( 'share', array( 'style' => 'small', 'tooltip' => $tooltip ) ); ?>
 				</div>
 			<?php endif; ?>
 		</div>
@@ -33,7 +34,7 @@
 		<?php } ?>
 		<?php if ( get_theme_mod( 'portfolio_title' ) == 'featured' ) { ?>
 			<div class="portfolio-share">
-				<?php echo flatsome_apply_shortcode( 'share' ); ?>
+				<?php echo flatsome_apply_shortcode( 'share', array( 'tooltip' => $tooltip ) ); ?>
 			</div>
 		<?php } ?>
 	</div>

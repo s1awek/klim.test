@@ -20,31 +20,44 @@ function flatsome_template( $name, array $vars = array() ) {
 
 /**
  * Converts an array into html attributes.
+ * The 'class' and 'rel' attributes can be supplied as arrays and will be converted to space-separated strings.
  *
  * @param array $atts Attributes array.
  *
  * @return string
  */
 function flatsome_html_atts( array $atts ) {
-	$string = '';
+	$result = [];
 
 	$atts = apply_filters( 'flatsome_html_atts', $atts );
 
 	foreach ( $atts as $key => $value ) {
-		if ( $value === null ) continue;
-		if ( is_array( $value ) ) $value = implode( ' ', $value );
-		if ( empty( $value ) ) {
-			$string .= "$key ";
-			continue;
+		if ( $value === null || $value === '' ) continue;
+
+		if ( str_starts_with( $key, 'aria-' ) ) {
+			if ( is_bool( $value ) ) {
+				$value = $value ? 'true' : 'false';
+			}
+		} elseif ( $key === 'class' || $key === 'rel' ) {
+			if ( is_array( $value ) ) {
+				$value = implode( ' ', $value );
+			}
 		}
-		$string .= "$key=\"$value\" ";
+
+		if ( $value === false ) continue;
+
+		if ( $value === true ) {
+			$result[] = $key;
+		} else {
+			$result[] = $key . '="' . $value . '"';
+		}
 	}
 
-	return $string;
+	return implode( ' ', $result );
 }
 
 /**
- * Processes the 'target' and 'rel' attributes for an HTML tag.
+ * Filter function, processes the 'target' and 'rel' attributes for an HTML tag.
  *
  * This function prepares the 'target' and 'rel' attributes for an HTML tag based on the given input attributes.
  * If the 'target' attribute is set to '_blank', it adds 'noopener' to the 'rel' attribute.
@@ -80,6 +93,32 @@ function flatsome_process_target_rel_attributes( array $atts ) {
 }
 
 add_filter( 'flatsome_html_atts', 'flatsome_process_target_rel_attributes' );
+
+/**
+ * Filter function, add attributes to the HTML tag.
+ *
+ * @param array $atts An array containing the input attributes.
+ *
+ * @return array An array with the processed attributes.
+ */
+function flatsome_html_atts_add_attributes( array $atts ) {
+	if ( empty( $atts['role'] ) ) {
+		return $atts;
+	}
+
+	$data = [];
+
+	if ( $atts['role'] === 'button' ) {
+		$data['data-flatsome-role-button'] = true;
+	}
+	if ( $atts['role'] === 'radiogroup' ) {
+		$data['data-flatsome-role-radiogroup'] = true;
+	}
+
+	return empty( $data ) ? $atts : array_merge( $atts, $data );
+}
+
+add_filter( 'flatsome_html_atts', 'flatsome_html_atts_add_attributes' );
 
 /**
  * Get Flatsome Icon classes

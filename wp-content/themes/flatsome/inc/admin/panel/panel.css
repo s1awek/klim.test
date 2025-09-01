@@ -219,3 +219,10 @@ table.flatsome-status-table.widefat thead th {
 	fill: #2271b1
 }
 
+/* Panel Tabs txt content styles */
+.panel-tab-content-pre {
+  padding:50px 30px 20px;
+  overflow:hidden auto;
+  white-space:pre-wrap;
+  font-size:0.9em;
+}

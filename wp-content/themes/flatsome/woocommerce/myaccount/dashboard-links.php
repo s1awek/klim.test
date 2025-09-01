@@ -3,7 +3,7 @@
  * Dashboard links
  *
  * @package          Flatsome/WooCommerce/Templates
- * @flatsome-version 3.19.9
+ * @flatsome-version 3.20.0
  */
 
 ?>
@@ -19,7 +19,7 @@
     ));
   ?>
 <?php } else if(!function_exists('wc_get_account_menu_items')) { ?>
-    <li>Define your My Account dropdown menu in <b>Appearance > Menus</b></li>
+    <li>Define your My Account dropdown menu in <strong>Appearance > Menus</strong></li>
 <?php } ?>
 
 <?php if ( function_exists( 'wc_get_account_menu_items' ) && get_theme_mod( 'wc_account_links', 1 ) ) { ?>

@@ -3,7 +3,7 @@
  * Newsletter element.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.16.0
+ * @flatsome-version 3.20.0
  */
 
 $icon_style = get_theme_mod( 'newsletter_icon_style', 'plain' );
@@ -30,11 +30,22 @@ $behavior .= ' version="' . $version . '"';
 <li class="header-newsletter-item has-icon">
 
 <?php if($icon_style && $icon_style !== 'plain') echo '<div class="header-button">'; ?>
-<a href="#header-newsletter-signup" class="tooltip <?php if($icon_style) echo get_flatsome_icon_class($icon_style, 'small'); ?>"
-  title="<?php echo $title; ?>">
+<?php
+$link_atts = [
+	'href'          => '#header-newsletter-signup',
+	'class'         => 'tooltip' . ( $icon_style ? ' ' . get_flatsome_icon_class( $icon_style, 'small' ) : '' ),
+	'role'          => 'button',
+	'title'         => esc_attr( $title ),
+	'aria-label'    => esc_attr( $label ),
+	'aria-expanded' => 'false',
+	'aria-haspopup' => 'dialog',
+	'aria-controls' => 'header-newsletter-signup',
+];
+?>
+<a <?php echo flatsome_html_atts( $link_atts ); ?>>
 
   <?php if($icon_style) { ?>
-    <i class="icon-envelop"></i>
+    <?php echo get_flatsome_icon( 'icon-envelop' ); ?>
   <?php } ?>
 
   <?php if($label) { ?>

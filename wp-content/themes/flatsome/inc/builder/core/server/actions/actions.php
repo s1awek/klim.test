@@ -151,16 +151,32 @@ function ux_builder_edit_form_top() {
 }
 
 /**
+ * Add UX Builder edit link to row actions.
+ *
+ * @deprecated 3.20.0 Use ux_builder_row_actions instead
+ *
+ * @param  array  $actions
+ * @param  object $page_object
+ *
+ * @return void
+ */
+function ux_builder_page_row_actions( $actions, $page_object ) {
+	_deprecated_function( __FUNCTION__, '3.20.0', 'ux_builder_row_actions' );
+
+	ux_builder_row_actions( $actions, $page_object );
+}
+
+/**
  * Add inline links to post tables.
  *
- * @param  array $actions
+ * @param  array  $actions
  * @param  object $page_object
  *
  * @return array
  */
-function ux_builder_page_row_actions( $actions, $page_object ) {
+function ux_builder_row_actions( $actions, $page_object ) {
 	// Do not show UX Builder link on Shop page.
-	if ( function_exists( 'is_woocommerce' ) && $page_object->ID == wc_get_page_id( 'shop' ) ) {
+	if ( is_woocommerce_activated() && $page_object->ID == wc_get_page_id( 'shop' ) ) {
 		return $actions;
 	}
 
@@ -178,7 +194,8 @@ function ux_builder_page_row_actions( $actions, $page_object ) {
 	return $actions;
 }
 
-add_filter( 'page_row_actions', 'ux_builder_page_row_actions', 10, 2 );
+add_filter( 'page_row_actions', 'ux_builder_row_actions', 10, 2 );
+add_filter( 'post_row_actions', 'ux_builder_row_actions', 10, 2 );
 
 /**
  * Search only page title when searching for posts.

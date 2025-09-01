@@ -3,7 +3,7 @@
  * Account links.
  *
  * @package          Flatsome/WooCommerce/Templates
- * @flatsome-version 3.19.6
+ * @flatsome-version 3.20.0
  */
 
 ?>
@@ -18,7 +18,7 @@
 	) );
 	?>
 <?php } elseif ( ! get_theme_mod( 'wc_account_links', 1 ) ) { ?>
-	<li>Define your My Account dropdown menu in <b>Appearance > Menus</b> or enable default WooCommerce Account Endpoints.</li>
+	<li>Define your My Account dropdown menu in <strong>Appearance > Menus</strong> or enable default WooCommerce Account Endpoints.</li>
 <?php } ?>
 
 <?php if ( function_exists( 'wc_get_account_menu_items' ) && get_theme_mod( 'wc_account_links', 1 ) ) { ?>

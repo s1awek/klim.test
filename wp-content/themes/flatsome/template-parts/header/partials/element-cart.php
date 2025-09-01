@@ -3,7 +3,7 @@
  * Cart element.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.19.0
+ * @flatsome-version 3.20.0
  */
 
 if(is_woocommerce_activated() && flatsome_is_wc_cart_available() ) {
@@ -23,17 +23,25 @@ if(is_woocommerce_activated() && flatsome_is_wc_cart_available() ) {
     $cart_style = 'link';
   }
 
+	$is_cart_link = $cart_style === 'link';
+
 	$link_atts = array(
-		'href'  => is_customize_preview() ? '#' : esc_url( wc_get_cart_url() ), // Prevent none link mode to navigate in customizer.
-		'class' => 'header-cart-link ' . get_flatsome_icon_class( $icon_style, 'small' ),
-		'title' => esc_attr__( 'Cart', 'woocommerce' ),
+		'href'          => is_customize_preview() ? '#' : esc_url( wc_get_cart_url() ), // Prevent none link mode to navigate in customizer.
+		'class'         => 'header-cart-link nav-top-link ' . get_flatsome_icon_class( $icon_style, 'small' ),
+		'title'         => esc_attr__( 'Cart', 'woocommerce' ),
+		'aria-label'    => esc_attr__( 'View cart', 'woocommerce' ),
+		'aria-expanded' => $is_cart_link ? null : 'false',
+		'aria-haspopup' => $is_cart_link ? null : 'true',
+		'role'          => $is_cart_link ? null : 'button',
 	);
 
 	if ( $cart_style === 'off-canvas' ) {
-		$link_atts['class']     .= ' off-canvas-toggle nav-top-link';
-		$link_atts['data-open']  = '#cart-popup';
-		$link_atts['data-class'] = 'off-canvas-cart';
-		$link_atts['data-pos']   = 'right';
+		$link_atts['class']        .= ' off-canvas-toggle';
+		$link_atts['data-open']     = '#cart-popup';
+		$link_atts['data-class']    = 'off-canvas-cart';
+		$link_atts['data-pos']      = 'right';
+		$link_atts['aria-haspopup'] = 'dialog';
+		$link_atts['aria-controls'] = 'cart-popup';
 	}
 
 	if ( fl_woocommerce_version_check( '7.8.0' ) && ! wp_script_is( 'wc-cart-fragments' ) ) {
@@ -67,9 +75,7 @@ else { ?>
     <strong><?php echo WC()->cart->get_cart_contents_count(); ?></strong>
   </span>
   <?php } else { ?>
-  <i class="icon-shopping-<?php echo $icon;?>"
-    data-icon-label="<?php echo WC()->cart->get_cart_contents_count(); ?>">
-  </i>
+  <?php echo get_flatsome_icon( 'icon-shopping-' . $icon, null, array( 'data-icon-label' => WC()->cart->get_cart_contents_count() ) ); ?>
   <?php } ?>
 <?php }  ?>
 </a>

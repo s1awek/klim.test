@@ -584,3 +584,17 @@ function flatsome_box_item_toggle_end( $items ) {
 function flatsome_array_insert( array $array, array $values, $offset ) {
   return array_slice( $array, 0, $offset, true ) + $values + array_slice( $array, $offset, null, true );
 }
+
+/**
+ * Checks if a specific multi-gallery option is enabled.
+ *
+ * Determines whether a specific gallery type has been enabled for separate lightbox display.
+ *
+ * @since 3.20.0
+ *
+ * @param string $gallery_type The gallery type to check ('gallery' or 'banner-grid').
+ * @return bool True if the specified gallery type is enabled, false otherwise
+ */
+function flatsome_is_multi_gallery( $gallery_type ) {
+	return in_array( $gallery_type, get_theme_mod( 'flatsome_separate_lightbox_galleries', [] ), true );
+}

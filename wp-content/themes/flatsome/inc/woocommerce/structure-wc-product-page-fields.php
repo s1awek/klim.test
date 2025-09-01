@@ -92,7 +92,7 @@ if ( ! function_exists( 'wc_custom_product_data_fields' ) ) {
 				'placeholder' => 'https://www.youtube.com/watch?v=Ra_iiSIn4OI',
 				'label'       => __( 'Product Video', 'flatsome' ),
 				'style'       => 'width:100%;',
-				'description' => __( 'Enter a Youtube or Vimeo Url of the product video here. We recommend uploading your video to Youtube.', 'flatsome' ),
+				'description' => __( 'Enter your product video URL here. Accepts YouTube, Vimeo, MP4 or WEBM links. YouTube upload recommended for best performance.', 'flatsome' ),
 			),
 			array(
 				'id'          => '_product_video_size',

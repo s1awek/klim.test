@@ -5,6 +5,16 @@
  * @package Flatsome
  */
 
+$link_options    = require __DIR__ . '/commons/links.php';
+$link_aria_label = array(
+	'link_aria_label' => array(
+		'type'    => 'textfield',
+		'heading' => __( 'Aria label', 'flatsome' ),
+	),
+);
+
+$link_options['options'] = flatsome_ux_builder_array_insert_after( $link_options['options'], 'link', $link_aria_label );
+
 add_ux_builder_shortcode( 'ux_lottie', array(
 	'name'      => __( 'Lottie', 'flatsome' ),
 	'category'  => __( 'Content', 'flatsome' ),
@@ -169,7 +179,7 @@ add_ux_builder_shortcode( 'ux_lottie', array(
 				),
 			),
 		),
-		'link_options'     => require __DIR__ . '/commons/links.php',
+		'link_options'     => $link_options,
 		'advanced_options' => require __DIR__ . '/commons/advanced.php',
 	),
 ) );

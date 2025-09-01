@@ -3,7 +3,7 @@
  * Header vertical menu template.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.18.0
+ * @flatsome-version 3.20.0
  */
 
 $classes_opener  = array( 'header-vertical-menu__opener' );
@@ -13,10 +13,24 @@ if ( get_theme_mod( 'header_nav_vertical_text_color', 'dark' ) === 'dark' ) $cla
 if ( get_theme_mod( 'header_nav_vertical_fly_out_text_color', 'light' ) === 'dark' ) $classes_fly_out[]  = 'dark';
 if ( is_front_page() && get_theme_mod( 'header_nav_vertical_fly_out_frontpage', 1 ) ) $classes_fly_out[] = 'header-vertical-menu__fly-out--open';
 if ( get_theme_mod( 'header_nav_vertical_fly_out_shadow', 1 ) ) $classes_fly_out[]                       = 'has-shadow';
+
+$is_open = is_front_page() && get_theme_mod( 'header_nav_vertical_fly_out_frontpage', 1 );
+
+$opener_atts = [
+	'class'         => $classes_opener,
+	'tabindex'      => 0,
+	'role'          => 'button',
+	'aria-expanded' => $is_open ? 'true' : 'false',
+	'aria-haspopup' => 'menu',
+];
+
+$flyout_atts = [
+	'class' => $classes_fly_out,
+];
 ?>
 
-<li class="header-vertical-menu" role="navigation">
-	<div class="<?php echo esc_attr( implode( ' ', $classes_opener ) ); ?>">
+<li class="header-vertical-menu">
+	<div <?php echo flatsome_html_atts( $opener_atts ); ?>>
 		<?php if ( get_theme_mod( 'header_nav_vertical_icon_style', 'plain' ) ) : ?>
 			<span class="header-vertical-menu__icon">
 				<?php echo get_flatsome_icon( 'icon-menu' ); ?>
@@ -36,9 +50,8 @@ if ( get_theme_mod( 'header_nav_vertical_fly_out_shadow', 1 ) ) $classes_fly_out
 		</span>
 		<?php echo get_flatsome_icon( 'icon-angle-down' ); ?>
 	</div>
-	<div class="<?php echo esc_attr( implode( ' ', $classes_fly_out ) ); ?>">
+	<div <?php echo flatsome_html_atts( $flyout_atts ); ?>>
 		<?php
-		// TODO maybe refactor flatsome_header_nav() to render here?
 		if ( has_nav_menu( 'vertical' ) ) {
 			wp_nav_menu( array(
 				'theme_location' => 'vertical',

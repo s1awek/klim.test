@@ -3,7 +3,7 @@
  * Button 2 element.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.19.0
+ * @flatsome-version 3.20.0
  */
 
 ?>
@@ -18,10 +18,10 @@
 			'rel'         => get_theme_mod( 'header_button_2_link_rel' ),
 			'radius'      => get_theme_mod( 'header_button_2_radius', '99px' ),
 			'size'        => get_theme_mod( 'header_button_2_size' ),
-			'color'       => get_theme_mod( 'header_button_2_color', 'primary' ),
+			'color'       => get_theme_mod( 'header_button_2_color', 'secondary' ),
 			'depth'       => get_theme_mod( 'header_button_2_depth', '0' ),
 			'depth_hover' => get_theme_mod( 'header_button_2_depth_hover', '0' ),
-			'style'       => get_theme_mod( 'header_button_2_style' ),
+			'style'       => get_theme_mod( 'header_button_2_style', 'outline' ),
 			'icon'        => get_theme_mod( 'header_button_2_icon' ),
 			'icon_pos'    => get_theme_mod( 'header_button_2_icon_position' ),
 			'icon_reveal' => get_theme_mod( 'header_button_2_icon_visibility' ),

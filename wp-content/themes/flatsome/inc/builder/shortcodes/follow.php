@@ -40,6 +40,11 @@ add_ux_builder_shortcode( 'follow', array(
             'max' => '300',
             'min' => '50',
         ),
+		'tooltip' => array(
+			'type'    => 'checkbox',
+			'heading' => __( 'Tooltips' ),
+			'default' => 'true',
+		),
         'social_icons' => array(
 	        'type' => 'group',
 	        'heading' => 'Follow Icons',

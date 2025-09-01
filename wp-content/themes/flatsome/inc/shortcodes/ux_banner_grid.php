@@ -21,6 +21,7 @@ function flatsome_banner_grid($atts, $content = null) {
 
     if ( $class ) $classes[] = $class;
     if ( $visibility ) $classes[] = $visibility;
+	if ( flatsome_is_multi_gallery( 'banner-grid' ) ) $classes[] = 'lightbox-multi-gallery';
 
     // Fix old
     if($padding == '0px'){

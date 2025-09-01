@@ -133,7 +133,14 @@ function flatsome_terms_and_conditions_checkbox_text( $link_style ) {
 	$terms_link = $terms_page_id ? '<a href="' . esc_url( get_permalink( $terms_page_id ) ) . '" target="_blank" rel="noopener">' . esc_html__( 'Terms and conditions', 'woocommerce' ) . '</a>' : esc_html__( 'Terms and conditions', 'woocommerce' );
 
 	if ( $link_style === 'lightbox' ) {
-		$terms_link = $terms_page_id ? '<a href="#terms-and-conditions-lightbox">' . esc_html__( 'Terms and conditions', 'woocommerce' ) . '</a>' : esc_html__( 'Terms and conditions', 'woocommerce' );
+		$terms_link = $terms_page_id
+			? '<a ' . flatsome_html_atts( [
+				'href'          => '#terms-and-conditions-lightbox',
+				'role'          => 'button',
+				'aria-haspopup' => 'dialog',
+				'aria-expanded' => 'false',
+			] ) . '>' . esc_html__( 'Terms and conditions', 'woocommerce' ) . '</a>'
+			: esc_html__( 'Terms and conditions', 'woocommerce' );
 	}
 
 	$text = str_replace( '[terms]', $terms_link, $text );

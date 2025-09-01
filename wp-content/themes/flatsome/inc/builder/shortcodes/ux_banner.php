@@ -1,4 +1,14 @@
 <?php
+$link_options    = require __DIR__ . '/commons/links.php';
+$link_aria_label = array(
+	'link_aria_label' => array(
+		'type'    => 'textfield',
+		'heading' => __( 'Aria label', 'flatsome' ),
+	),
+);
+
+$link_options['options'] = flatsome_ux_builder_array_insert_after( $link_options['options'], 'link', $link_aria_label );
+
 
 add_ux_builder_shortcode( 'ux_banner', array(
   'type' => 'container',
@@ -135,7 +145,7 @@ add_ux_builder_shortcode( 'ux_banner', array(
     'background_options' => require( __DIR__ . '/commons/background.php' ),
     'shape_divider_options' => require( __DIR__ . '/commons/shape-divider.php' ),
     'border_options' => require( __DIR__ . '/commons/border.php' ),
-    'link_options' => require( __DIR__ . '/commons/links.php' ),
+    'link_options' => $link_options,
     'video_options' => require( __DIR__ . '/commons/video.php' ),
     'advanced_options' => require( __DIR__ . '/commons/advanced.php'),
     'sticky' => array(

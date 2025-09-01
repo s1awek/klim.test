@@ -113,13 +113,22 @@ function ux_instagram_feed( $atts, $content = null ) {
 					? set_url_scheme( $item['media_url'] )
 					: '';
 
+
+				$alt_text = '';
+				if ( ! empty( $item['alt_text'] ) ) {
+					$alt_text = $item['alt_text'];
+				} elseif ( ! empty( $item['description'] ) ) {
+					$alt_text = $item['description'];
+				}
+
 				if ( $caption ) {
 					$caption = $item['description'];
 				}
+
 				?><div class="img has-hover no-overflow">
 					<div class="dark instagram-image-container image-<?php echo esc_attr( $image_hover ); ?> instagram-image-type--<?php echo esc_attr( $item['type'] ); ?>">
-						<a href="<?php echo esc_url( $item['link'] ); ?>" target="_blank" rel="noopener" class="plain">
-							<?php echo flatsome_get_image( $image_url, false, $caption ); ?>
+						<a href="<?php echo esc_url( $item['link'] ); ?>" target="_blank" rel="noopener" class="plain"<?php if ( empty( $alt_text ) ) echo ' aria-label="' . esc_attr__( 'Instagram image', 'flatsome' ) . '"'; ?>>
+							<?php echo flatsome_get_image( $image_url, false, $alt_text ); ?>
 							<?php if ( $image_overlay ) { ?>
 								<div class="overlay" style="background-color: <?php echo esc_attr( $image_overlay ); ?>"></div>
 							<?php } ?>
@@ -139,7 +148,7 @@ function ux_instagram_feed( $atts, $content = null ) {
 	if ( $link != '' ) {
 		?>
 		<a class="plain uppercase" href="<?php echo trailingslashit( '//instagram.com/' . esc_attr( trim( $username ) ) ); ?>" rel="me"
-			 target="<?php echo esc_attr( $target ); ?>"><?php echo get_flatsome_icon( 'icon-instagram' ); ?><?php echo wp_kses_post( $link ); ?></a>
+			 target="<?php echo esc_attr( $target ); ?> aria-label="<?php echo esc_attr__( 'Follow on Instagram', 'flatsome' ); ?>"><?php echo get_flatsome_icon( 'icon-instagram' ); ?><?php echo wp_kses_post( $link ); ?></a>
 		<?php
 	}
 
@@ -160,6 +169,7 @@ function flatsome_instagram_get_placeholder_feed( $limit ) {
 	return array_fill( 0, $limit, array(
 		'media_url'   => $media_url,
 		'link'        => '#',
+		'alt_text'    => '',
 		'type'        => 'placeholder',
 		'description' => '',
 	) );
@@ -214,7 +224,7 @@ function flatsome_instagram_request_media( $access_token ) {
 	$response = wp_remote_get(
 		add_query_arg(
 			array(
-				'fields'       => 'media_type,media_url,thumbnail_url,caption,permalink',
+				'fields'       => 'media_type,media_url,thumbnail_url,caption,permalink,children{alt_text}',
 				'access_token' => $access_token,
 			),
 			'https://graph.instagram.com/me/media'
@@ -238,6 +248,7 @@ function flatsome_instagram_request_media( $access_token ) {
 			$media_url = isset( $entry['media_url'] ) ? $entry['media_url'] : '';
 			$caption   = isset( $entry['caption'] ) ? wp_kses( $entry['caption'], array() ) : '';
 			$permalink = isset( $entry['permalink'] ) ? $entry['permalink'] : '';
+			$alt_text  = isset( $entry['children']['data'][0]['alt_text'] ) ? $entry['children']['data'][0]['alt_text'] : '';
 
 			if ( isset( $entry['thumbnail_url'] ) ) {
 				$media_url = $entry['thumbnail_url'];
@@ -248,6 +259,7 @@ function flatsome_instagram_request_media( $access_token ) {
 				'description' => $caption,
 				'media_url'   => $media_url,
 				'link'        => $permalink,
+				'alt_text'    => $alt_text,
 			);
 		},
 		$body['data']

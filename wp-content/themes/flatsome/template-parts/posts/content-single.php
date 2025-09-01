@@ -3,7 +3,7 @@
  * Posts content single.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.16.0
+ * @flatsome-version 3.20.0
  */
 
 ?>
@@ -19,7 +19,10 @@
 		// SHARE ICONS
 		echo '<div class="blog-share text-center">';
 		echo '<div class="is-divider medium"></div>';
-		echo do_shortcode( '[share]' );
+		echo flatsome_apply_shortcode( 'share', array(
+			'style'   => get_theme_mod( 'social_icons_style', 'outline' ),
+			'tooltip' => get_theme_mod( 'social_icons_tooltip', 1 ) ? 'true' : 'false',
+		) );
 		echo '</div>';
 	} ?>
 </div>

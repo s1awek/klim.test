@@ -80,6 +80,7 @@ function flatsome_ux_banner( $atts, $content = null ){
 		'padding'            => '',
 		// Link.
 		'link'               => '',
+		'link_aria_label'    => '',
 		'target'             => '',
 		'rel'                => '',
 	), $atts ) );
@@ -90,10 +91,6 @@ function flatsome_ux_banner( $atts, $content = null ){
    ob_start();
 
 	$classes   = array( 'has-hover' );
-	$link_atts = array(
-		'target' => $target,
-		'rel'    => array( $rel ),
-	);
 
    // Custom Class.
    if($class) $classes[] = $class;
@@ -139,11 +136,21 @@ function flatsome_ux_banner( $atts, $content = null ){
    /* Visibility */
    if($visibility) $classes[] = $visibility;
 
-   /* Links */
-   $start_link = "";
-   $end_link = "";
+	/* Links */
+	$start_link = '';
+	$end_link   = '';
+	$link_atts  = array(
+		'class'      => 'fill',
+		'href'       => esc_url( $link ),
+		'aria-label' => esc_attr( $link_aria_label ),
+		'target'     => esc_attr( $target ),
+		'rel'        => esc_attr( $rel ),
+	);
 
-   if($link) {$start_link = '<a class="fill" href="' . esc_url( $link ) . '"' . flatsome_parse_target_rel( $link_atts ) . '>'; $end_link = '</a>';};
+	if ( $link ) {
+		$start_link = sprintf( '<a %s>', flatsome_html_atts( $link_atts ) );
+		$end_link   = '</a>';
+	}
 
    /* Parallax  */
    if($parallax){
@@ -186,7 +193,19 @@ function flatsome_ux_banner( $atts, $content = null ){
               if($text_bg && !$padding) $padding = '30px 30px 30px 30px';
               $depth = '';
               if($text_bg) $depth = '1';
-              echo do_shortcode( '[text_box text_align="'.$text_align.'" parallax="'.$parallax_text.'" animate="'.$animation.'" depth="'.$depth.'" padding="'.$padding.'" bg="'.$text_bg.'" text_color="'.$text_color.'" width="'.intval($text_width).'" width__sm="60%" position_y="'.$y.'" position_x="'.$x.'"]'.$content.'[/text_box]' );
+				echo flatsome_apply_shortcode( 'text_box', array(
+					'text_align'  => $text_align,
+					'parallax'    => $parallax_text,
+					'animate'     => $animation,
+					'depth'       => $depth,
+					'padding'     => $padding,
+					'bg'          => $text_bg,
+					'text_color'  => $text_color,
+					'width'       => intval( $text_width ),
+					'width__sm'   => '60%',
+					'position_y'  => $y,
+					'position_x'  => $x,
+				), $content );
             } ?>
         </div>
       </div>

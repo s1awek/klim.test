@@ -3,32 +3,43 @@
  * Mobile contact element.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.19.9
+ * @flatsome-version 3.20.0
  */
 
+$mobile_link_atts = [
+	'href'               => '#',
+	'data-open'          => '#header-contact',
+	'data-visible-after' => 'true',
+	'data-pos'           => 'center',
+	'class'              => 'icon show-for-medium',
+	'role'               => 'button',
+	'aria-label'         => esc_attr__( 'Contact information', 'flatsome' ),
+	'aria-expanded'      => 'false',
+	'aria-controls'      => 'header-contact',
+	'aria-haspopup'      => 'dialog',
+];
+
+$class      = 'has-icon';
+$icon_size  = get_theme_mod( 'contact_icon_size', '16px' );
+$class_link = 'tooltip';
+$nav        = 'nav-divided nav-uppercase';
+$label      = true;
+
+if ( get_theme_mod( 'contact_style', 'left' ) == 'icons' ) {
+	$label = false;
+}
+
+if ( get_theme_mod( 'contact_style', 'left' ) == 'top' ) {
+	$class .= ' icon-top';
+}
 ?>
 <li class="header-contact-wrapper">
 	<?php
-		$class = 'has-icon';
-		$icon_size = get_theme_mod( 'contact_icon_size', '16px' );
-		$class_link = 'tooltip';
-		$nav = 'nav-divided nav-uppercase';
-		$label = true;
-
-		if ( get_theme_mod( 'contact_style', 'left' ) == 'icons' ) {
-			$label = false;
-		}
-
-		if ( get_theme_mod( 'contact_style', 'left' ) == 'top' ) {
-			$class .= ' icon-top';
-		}
+	printf( '<div class="header-button"><a %s>%s</a></div>',
+		flatsome_html_atts( $mobile_link_atts ),
+		get_flatsome_icon( 'icon-envelop', $icon_size )
+	);
 	?>
-
-	<div class="header-button"><a href="#"
-		data-open="#header-contact"
-		data-visible-after="true"  data-class="text-center" data-pos="center"
-		class="icon show-for-medium"><?php echo get_flatsome_icon('icon-envelop',$icon_size); ?></a>
-	</div>
 
 	<ul id="header-contact" class="nav <?php echo $nav; ?> header-contact hide-for-medium">
 		<?php if ( get_theme_mod( 'contact_location', '' ) ) { ?>

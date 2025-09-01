@@ -39,6 +39,11 @@ add_ux_builder_shortcode( 'share', array(
             'max' => '300',
             'min' => '50',
         ),
+		'tooltip' => array(
+			'type'    => 'checkbox',
+			'heading' => __( 'Tooltips' ),
+			'default' => 'true',
+		),
         'advanced_options' => require( __DIR__ . '/commons/advanced.php'),
     ),
 ) );

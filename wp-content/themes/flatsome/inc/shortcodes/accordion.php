@@ -140,7 +140,7 @@ function ux_accordion_item( $atts, $content = null, $tag = '' ) {
 	?>
 	<div id="<?php echo esc_attr( $atts['id'] ); ?>" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 		<a <?php echo flatsome_html_atts( $link_atts ); ?>>
-			<button class="toggle" aria-label="<?php esc_attr_e( 'Toggle', 'flatsome' ); ?>"><i class="icon-angle-down"></i></button>
+			<button class="toggle" aria-label="<?php esc_attr_e( 'Toggle', 'flatsome' ); ?>"><?php echo get_flatsome_icon( 'icon-angle-down' ); ?></button>
 			<span><?php echo wp_kses_post( $atts['title'] ); ?></span>
 		</a>
 		<div <?php echo flatsome_html_atts( $accordion_inner_atts ); ?>>

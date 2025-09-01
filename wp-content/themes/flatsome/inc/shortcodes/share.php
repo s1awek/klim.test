@@ -23,6 +23,7 @@ function flatsome_share( $atts, $content = null, $tag = '' ) {
 			'size'       => '',
 			'align'      => '',
 			'scale'      => '',
+			'tooltip'    => 'true',
 			'style'      => '',
 		),
 		$atts,
@@ -70,7 +71,9 @@ function flatsome_share( $atts, $content = null, $tag = '' ) {
 	if ( ! $style ) $style = get_theme_mod( 'social_icons_style', 'outline' );
 
 	$classes = get_flatsome_icon_class( $style );
-	$classes = $classes . ' tooltip';
+
+	// Tooltip.
+	if ( $tooltip === 'true' ) $classes .= ' tooltip';
 
 	$share = get_theme_mod( 'social_icons', array( 'facebook', 'twitter', 'email', 'linkedin', 'pinterest', 'whatsapp' ) );
 

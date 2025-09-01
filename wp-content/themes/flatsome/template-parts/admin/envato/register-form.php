@@ -3,7 +3,7 @@
  * Register form.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.19.0
+ * @flatsome-version 3.20.0
  */
 
 if ( $args['form'] ) : ?>
@@ -50,7 +50,7 @@ if ( $args['form'] ) : ?>
 		<?php if ( empty( $issues ) && $registration->get_option( 'domain' ) ) : ?>
 		<p>
 			<?php esc_html_e( 'Registered domain:', 'flatsome' ); ?>
-			<b><?php echo esc_html( $registration->get_option( 'domain' ) ); ?></b>
+			<strong><?php echo esc_html( $registration->get_option( 'domain' ) ); ?></strong>
 			<?php if ( ! $registration->is_public() ) : ?>
 				<code><?php echo esc_html( strtolower( $registration->get_option( 'type' ) ) ); ?></code>
 			<?php endif; ?>
@@ -58,16 +58,15 @@ if ( $args['form'] ) : ?>
 		<?php endif; ?>
 
 		<?php if ( $args['show_terms'] ) : ?>
-			<p>
+			<p style="margin:1em 0 1.3em">
 				<?php if ( $registration->get_code() ) : ?>
 					<input type="hidden" name="flatsome_envato_terms" value="1" />
 					<input type="checkbox" checked readonly onclick="return false;">
 				<?php else : ?>
 					<input type="checkbox" <?php checked( $confirmed ); ?> id="flatsome_envato_terms" name="flatsome_envato_terms">
 				<?php endif; ?>
-				<label for="flatsome_envato_terms" style="display: inline-block;vertical-align: top;width: 90%;margin-top: 2px;font-size: 14px">
-					Confirm that, according to the Envato License Terms, each license entitles one person for a single project.
-					Creating multiple unregistered installations is a copyright violation.
+				<label for="flatsome_envato_terms" style="display: inline-block;vertical-align: top;width: 90%;margin-top: 4px;font-size: 13px;">
+					Confirm that, according to the Envato License Terms, each license entitles one person for a single project and creating multiple unregistered installations is a copyright violation, while also acknowledging that all other parts of the theme, other than PHP code and integrated HTML, including but not limited to the CSS code, JavaScript code, images, and design, are licensed according to the license purchased from Envato.
 					<a href="https://themeforest.net/licenses/standard" target="_blank" rel="noopener">More info</a>.
 				</label>
 			</p>

@@ -21,13 +21,16 @@ class Flatsome_Default {
 	const COLOR_PRIMARY = '#446084';
 
 	/** Secondary Color */
-	const COLOR_SECONDARY = '#d26e4b';
+	const COLOR_SECONDARY = '#C05530';
 
 	/** Success Color */
-	const COLOR_SUCCESS = '#7a9c59';
+	const COLOR_SUCCESS = '#627D47';
 
 	/** Alert Color */
 	const COLOR_ALERT = '#b20000';
+
+	/** Base Color */
+	const COLOR_BASE = '#4a4a4a';
 
 	/** Link Color */
 	const LINK_COLOR       = '#334862';

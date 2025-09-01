@@ -1129,6 +1129,9 @@ if ( ! class_exists( 'Envato_Theme_Setup_Wizard' ) ) {
 
 					// Make child theme an allowed theme (network enable theme)
 					$allowed_themes = get_site_option( 'allowedthemes' );
+					if ( ! is_array( $allowed_themes ) ) {
+						$allowed_themes = [];
+					}
 					$allowed_themes[ $new_theme_name ] = true;
 					update_site_option( 'allowedthemes', $allowed_themes );
 				}

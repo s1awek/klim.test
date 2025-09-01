@@ -83,7 +83,8 @@ class Flatsome_Recent_Post_Widget extends WP_Widget {
 				</div>
 				<div class="flex-col flex-grow">
 					  <a href="<?php the_permalink() ?>" title="<?php echo esc_attr( get_the_title() ? get_the_title() : get_the_ID() ); ?>"><?php if ( get_the_title() ) the_title(); else the_ID(); ?></a>
-				   	  <span class="post_comments op-7 block is-xsmall"><?php comments_popup_link( '', __( '<strong>1</strong> Comment', 'flatsome' ), __( '<strong>%</strong> Comments', 'flatsome' ) ); ?></span>
+					  <?php /* translators: %s: Post title. */ ?>
+				   	  <span class="post_comments op-8 block is-xsmall"><?php comments_popup_link( '<span class="screen-reader-text">' . sprintf( __( 'No Comments<span class="screen-reader-text"> on %s</span>', 'default' ), get_the_title() ) . '</span>' ); ?></span>
 				</div>
 			</div>
 		</li>

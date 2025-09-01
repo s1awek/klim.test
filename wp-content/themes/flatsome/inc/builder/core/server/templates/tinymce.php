@@ -94,6 +94,11 @@ if ( isset( $_GET['post'] ) ) {
       display: flex !important;
       flex-direction: column;
     }
+		/* Advanced Editor Tools plugin menubar fix */
+    .mce-menubar > .mce-container-body:has(> .mce-menubtn) {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
     .media-modal {
       top: 0 !important;
       right: 0 !important;

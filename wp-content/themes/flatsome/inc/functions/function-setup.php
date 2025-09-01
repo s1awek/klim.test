@@ -253,17 +253,18 @@ function flatsome_scripts() {
 			'toggleButton' => __( 'Toggle', 'flatsome' ),
 		),
 		'options'            => array(
-			'cookie_notice_version'          => get_theme_mod( 'cookie_notice_version', '1' ),
-			'swatches_layout'                => get_theme_mod( 'swatches_layout' ),
-			'swatches_disable_deselect'      => get_theme_mod( 'swatches_disable_deselect' ),
-			'swatches_box_select_event'      => get_theme_mod( 'swatches_box_select_event' ),
-			'swatches_box_behavior_selected' => get_theme_mod( 'swatches_box_behavior_selected' ),
-			'swatches_box_update_urls'       => get_theme_mod( 'swatches_box_update_urls', '1' ),
-			'swatches_box_reset'             => get_theme_mod( 'swatches_box_reset' ),
-			'swatches_box_reset_limited'     => get_theme_mod( 'swatches_box_reset_limited' ),
-			'swatches_box_reset_extent'      => get_theme_mod( 'swatches_box_reset_extent' ),
-			'swatches_box_reset_time'        => get_theme_mod( 'swatches_box_reset_time', 300 ),
-			'search_result_latency'          => get_theme_mod( 'search_result_latency', '0' ),
+			'cookie_notice_version'                 => get_theme_mod( 'cookie_notice_version', '1' ),
+			'swatches_layout'                       => get_theme_mod( 'swatches_layout' ),
+			'swatches_disable_deselect'             => get_theme_mod( 'swatches_disable_deselect' ),
+			'swatches_box_select_event'             => get_theme_mod( 'swatches_box_select_event' ),
+			'swatches_box_behavior_selected'        => get_theme_mod( 'swatches_box_behavior_selected' ),
+			'swatches_box_update_urls'              => get_theme_mod( 'swatches_box_update_urls', '1' ),
+			'swatches_box_reset'                    => get_theme_mod( 'swatches_box_reset' ),
+			'swatches_box_reset_limited'            => get_theme_mod( 'swatches_box_reset_limited' ),
+			'swatches_box_reset_extent'             => get_theme_mod( 'swatches_box_reset_extent' ),
+			'swatches_box_reset_time'               => get_theme_mod( 'swatches_box_reset_time', 300 ),
+			'search_result_latency'                 => get_theme_mod( 'search_result_latency', '0' ),
+			'header_nav_vertical_fly_out_frontpage' => get_theme_mod( 'header_nav_vertical_fly_out_frontpage', 1 ),
 		),
 	);
 
@@ -341,6 +342,19 @@ function flatsome_ux_builder_scripts( $context ) {
 }
 
 add_action( 'ux_builder_enqueue_scripts', 'flatsome_ux_builder_scripts', 10 );
+
+
+/**
+ * Remove MediaElement.js scripts and styles.
+ */
+function flatsome_deregister_mejs() {
+	if ( get_theme_mod( 'disable_mejs' ) ) {
+		wp_deregister_script( 'wp-mediaelement' );
+		wp_deregister_style( 'wp-mediaelement' );
+	}
+}
+
+add_action( 'wp_enqueue_scripts', 'flatsome_deregister_mejs', PHP_INT_MAX );
 
 /**
  * Remove jQuery migrate.

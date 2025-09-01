@@ -1,3 +1,82 @@
+--- 3.20.1 ---
+FIXED: Prevent PHP error when WooCommerce brands is disabled by code.
+
+UPDATED: Google Fonts list.
+
+--- 3.20.0 ---
+NEW: WCAG 2.2 frontend accessibility updates.
+NEW: WooCommerce 10.1 compatibility.
+NEW: Catalog empty star rating option.
+NEW: Added alt text support for Instagram images and product thumbnails (accessibility).
+NEW: Added Flatsome_Icon class for icon handling and payment icon support.
+NEW: Added Grid multi-gallery support.
+NEW: Added new a11y behavior to theme scripts (accessibility).
+NEW: Added tooltip show/hide option to the follow and share global elements.
+NEW: Added tooltip show/hide option to the follow, share and team member shortcode elements.
+NEW: Banner link aria-label option.
+NEW: Lottie link aria-label option.
+NEW: Cart coupon form position option.
+NEW: Category filter overlay position option (left/right/center).
+NEW: Improved accessibility for swatches.
+NEW: Improved SVG icons for accessibility.
+NEW: Option to disable MediaElement script and CSS.
+NEW: Single product page (mobile) filter overlay position option (left/right/center).
+NEW: Swatches: Option to make out-of-stock items display inactive in shop loop.
+NEW: Added webp and avif image lightbox support.
+
+ENHANCEMENT: Added a new license tab to the admin panel.
+ENHANCEMENT: Added support for MP4 and youtu.be video links in the product video section.
+ENHANCEMENT: Clarified the message displayed when a purchase code is already registered.
+ENHANCEMENT: Clarified theme registration confirmation message.
+ENHANCEMENT: Improved checkout steps (accessibility).
+ENHANCEMENT: Improved dynamic icon generation using get_flatsome_icon function throughout the theme.
+ENHANCEMENT: Improved handling of HTML attributes for roles and ARIA in helper functions.
+ENHANCEMENT: Improved HTML attributes handling in flatsome_html_atts function with updated support for aria-, class, rel, and role attributes (accessibility).
+ENHANCEMENT: Improved keyboard navigation and focus management for swatches (accessibility).
+ENHANCEMENT: Improved overall accessibility in elements and templates.
+ENHANCEMENT: Improved styling for active and hover states in vertical fly-out navigation menu.
+ENHANCEMENT: Scroll for more now scrolls to the next sibling element.
+ENHANCEMENT: Show brand meta data in quick view.
+ENHANCEMENT: Updated default secondary and success color darkness (accessibility).
+ENHANCEMENT: Various CSS improvements.
+ENHANCEMENT: Vertical menu is now fully keyboard accessible.
+ENHANCEMENT: Don't load password meter script when WooCommerce registration is disabled with login lightbox.
+
+FIXED: Added missing "Edit with UX Builder" links for supported post types.
+FIXED: CSS string in Contact Form 7 presets tab.
+FIXED: Don't open the video lightbox in UX Builder.
+FIXED: Fixed accessibility and structure of product swatches and quick view button.
+FIXED: Fixed accessibility issues with SVG icons and lightbox buttons.
+FIXED: Fixed cookie notice focus and keyboard accessibility.
+FIXED: Incorrect default color and style for header button 2.
+FIXED: jQuery deprecations.
+FIXED: Login popup template in DOM if account element is not added to the header.
+FIXED: Menu items misorientation from the Advanced Editor Tools plugin.
+FIXED: PHP 8.4 notice, implicitly marking parameter as nullable is deprecated.
+FIXED: PHP notice: Automatic conversion of false to array is deprecated, in the setup wizard.
+FIXED: PHP notice: Trying to access array offset on value of type bool on menu icon that does not exist anymore.
+FIXED: Prevented slides in grid column from stacking before the slider behavior is fully loaded.
+FIXED: Product item price styling in mini cart dropdown when quantity is enabled.
+FIXED: Slider non-visible focusable children (accessibility).
+FIXED: Swatches: now reset if the default variation (set in backend) is not in stock.
+FIXED: Add array initialization on tabs and panes to prevent implode() errors in tabs.
+FIXED: Variation form reset variations button for swatches by keydown.
+FIXED: Accordion content with masonry not properly laid out.
+FIXED: Duplicated <main> element on 404 page.
+
+CHANGED: Deprecated global Flatsome.cookie in favor of Flatsome.Cookies JS function.
+CHANGED: Deprecated ux_builder_page_row_actions() in favor of ux_builder_row_actions().
+CHANGED: flatsome-cookie-notice.js file location from /inc/extensions/flatsome-cookie-notice/ to assets/js/extensions/.
+CHANGED: flatsome-live-search.js file location from /inc/extensions/flatsome-live-search/ to assets/js/extensions/.
+CHANGED: Updated button, icon, and navigation markup to use ARIA attribute methods.
+CHANGED: Updated login/register form headings from h3 to h2 for better semantic structure.
+CHANGED: Updated various elements to use new color and icon systems for consistency (accessibility).
+
+DEV: Added flatsome-header-unsticky event.
+DEV: Added flatsome_ajax_search_products_by_sku_search_meta_query_args filter.
+
+Note: Accessibility improvements provided by the theme do not cover accessibility in the WordPress content management system and WooCommerce as a whole. Multiple variables, such as e.g., choice of colors, plugins, or custom code, can significantly impact frontend design and accessibility.
+
 --- 3.19.15 ---
 NEW: WooCommerce 10.0 compatibility.
 

@@ -67,6 +67,9 @@ class Flatsome_Upgrade {
 		'3.19.0' => array(
 			'update_3190',
 		),
+		'3.20.0' => array(
+			'update_3200',
+		),
 	);
 
 	/**
@@ -80,13 +83,13 @@ class Flatsome_Upgrade {
 	 * Check Flatsome version and run the updater if required.
 	 */
 	public function check_version() {
-		$theme                 = wp_get_theme( get_template() );
 		$this->db_version      = get_theme_mod( 'flatsome_db_version', '3.0.0' );
-		$this->running_version = $theme->version;
+		$this->running_version = flatsome()->version();
 
 		// If current version is new.
 		if ( version_compare( $this->db_version, $this->running_version, '<' ) ) {
 			$this->update();
+			Flatsome_Cache::clear( [ 'third_party' => true ] );
 		}
 	}
 
@@ -325,6 +328,17 @@ class Flatsome_Upgrade {
 		}
 		if ( get_theme_mod( 'swatches_box_color_selected' ) === Flatsome_Default::COLOR_SECONDARY ) {
 			set_theme_mod( 'swatches_box_color_selected', '' );
+		}
+	}
+
+	/**
+	 * Performs upgrades to Flatsome 3.20.0
+	 */
+	private function update_3200() {
+		// Replace old lightbox multi gallery option with separate lightbox galleries options.
+		if ( get_theme_mod( 'flatsome_lightbox_multi_gallery', 0 ) ) {
+			set_theme_mod( 'flatsome_separate_lightbox_galleries', [ 'gallery' ] );
+			remove_theme_mod( 'flatsome_lightbox_multi_gallery' );
 		}
 	}
 
