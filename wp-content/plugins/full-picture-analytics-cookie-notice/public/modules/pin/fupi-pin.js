@@ -43,6 +43,7 @@
 		}
 
 		fp.loaded.push( 'pin' );
+		if ( fp.main.debug ) console.log('[FP] Pinterest loaded');
 		FP.runFn( 'FP.fns.load_pin_footer' );
 	}
 

@@ -27,9 +27,13 @@
     
     $wp_nonce           = wp_create_nonce( 'wp_rest' );
     
-    // FIX to prevent double sanitizing settings (double-encoding HTML entities which makes scripts unusable) in Custom Scripts & Reports modules
+    // FIX to prevent double sanitizing settings (double-encoding HTML entities which makes scripts unusable) in General settings (meta tags), Custom Scripts and Reports modules
     // https://core.trac.wordpress.org/ticket/21989)
     
+    if ( $module_id == 'main' ) {
+        if ( $main_opts === false ) add_option('fupi_main', array());
+    }
+
     if ( $module_id == 'cscr' ) {
         $fupi_cscr = get_option('fupi_cscr');
         if ( $fupi_cscr === false ) add_option('fupi_cscr', array());

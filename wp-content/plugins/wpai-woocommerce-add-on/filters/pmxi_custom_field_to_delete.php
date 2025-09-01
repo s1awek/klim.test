@@ -27,10 +27,17 @@ function pmwi_pmxi_custom_field_to_delete($field_to_delete, $pid, $post_type, $o
         $custom_fields_handled_internally = wpai_woocommerce_add_on\XmlImportWooCommerceService::$custom_fields_handled_internally;
         if(isset($custom_fields_handled_internally[$post_type]) && array_key_exists($cur_meta_key, $custom_fields_handled_internally[$post_type])) {
             $internal_field = $custom_fields_handled_internally[$post_type][$cur_meta_key];
-            if(isset($options[$internal_field[0]]) && $options[$internal_field[0]] && isset($options[$internal_field[1]]) && $options[$internal_field[1]]) {
-                return true;
+
+            // Special handling for _product_attributes when using specific attribute logic
+            if ($cur_meta_key == '_product_attributes' && isset($options['update_attributes_logic']) && in_array($options['update_attributes_logic'], ['all_except', 'only'])) {
+                // For "all_except" and "only" modes, we need to let the existing logic below handle this
+                // Don't return early here, let it fall through to the existing attribute logic
             } else {
-                return false;
+                if(isset($options[$internal_field[0]]) && $options[$internal_field[0]] && isset($options[$internal_field[1]]) && $options[$internal_field[1]]) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
     }

@@ -7,16 +7,6 @@ $priv_policy_url = get_privacy_policy_url();
 $priv_policy_url_text = ( empty( $priv_policy_url ) ? '<p style="color: red;">' . sprintf( esc_html__( 'Please make sure that your privacy policy page is published and set %1$son this page%2$s page.', 'full-picture-analytics-cookie-notice' ), '<a href="/wp-admin/options-privacy.php" target="_blank">', '</a>' ) . '</p>' : '' );
 $current_theme = wp_get_theme();
 $is_oceanWP_theme = $current_theme->get( 'Name' ) == 'OceanWP';
-// $install_id_text = '';
-// if ( fupi_fs()->can_use_premium_code__premium_only() ) {
-// 	$install_id_text = '<p>' . sprintf( esc_html__( 'Provide this Install ID %1$s during registration to be able to save 500 proofs/day for free until August 31, 2025.', 'full-picture-analytics-cookie-notice'), '<code>' . fupi_fs()->get_site()->id . '</code>' ) . '</p>';
-// 	if ( isset( $this->tools['geo'] ) ) {
-// 		$field_disabled = '';
-// 		$must_have_html = '';
-// 	} else {
-// 		$must_have_html = '<div class="fupi_must_have_info">' . esc_html__( 'Requires', 'full-picture-analytics-cookie-notice' ) . ': <span class="fupi_req">Geolocation module</span></div>';
-// 	}
-// };
 // CONSENT BANNER FIELDS
 $cook_fields = array(array(
     'type'          => 'select',
@@ -49,14 +39,6 @@ $cook_fields = array_merge( $cook_fields, array(
         'after field'   => $theme_compat_notice,
         'under field'   => '<p>' . esc_html__( 'You must save changes before you can start customizing.', 'full-picture-analytics-cookie-notice' ) . '</p>',
     ),
-    // array(
-    // 	'type'	 			=> 'toggle',
-    // 	'label' 			=> esc_html__( 'Ask visitors for consent again, when new tracking tools get enabled or when privacy policy is updated', 'full-picture-analytics-cookie-notice' ),
-    // 	'field_id' 			=> 'ask_for_consent_again',
-    // 	'option_arr_id'		=> $option_arr_id,
-    // 	'popup2'			=> '<p class="fupi_warning_text">' . esc_html__('Attention. WP Full Picture is not aware of what tools the GTM installs. When new tools get installed inside GTM\'s container, visitors will not be asked for consent again.','full-picture-analytics-cookie-notice').'</p>',
-    // 	'under field' 		=> '<p>' . esc_html__( 'Highly recommended. Required in most countries.', 'full-picture-analytics-cookie-notice' ) . '</p>' . $priv_policy_url_text,
-    // ),
     array(
         'type'          => 'page_search',
         'field_id'      => 'hide_on_pages',
@@ -76,6 +58,14 @@ $cook_fields = array_merge( $cook_fields, array(
         'under field'   => esc_html__( 'Leave empty to use the default .fp_show_cookie_notice. Alternatively, you can enable a toggle icon in the styling options above.', 'full-picture-analytics-cookie-notice' ),
         'popup'         => '<p>' . esc_html__( 'We recommend that you point at a link or a button in your privacy policy. This is required in most countries that require consent banners.', 'full-picture-analytics-cookie-notice' ) . '</p>',
     ),
+    array(
+        'type'          => 'toggle',
+        'label'         => esc_html__( 'Do NOT ask visitors for consent again', 'full-picture-analytics-cookie-notice' ),
+        'field_id'      => 'dont_ask_again',
+        'option_arr_id' => $option_arr_id,
+        'after field'   => esc_html__( 'Breaks GDPR. Best used on dev sites.', 'full-picture-analytics-cookie-notice' ),
+        'popup3'        => '<p>' . esc_html__( 'When you enable this setting, visitors who already consented, will not be asked for consent every time you enable new tracking tools or change your privacy policy. This will break GDPR, so we recommend to use it only on development sites or while setting up tracking.', 'full-picture-analytics-cookie-notice' ) . '</p>',
+    )
 ) );
 // SCRIPT BLOCKING
 $scr_fields = array(

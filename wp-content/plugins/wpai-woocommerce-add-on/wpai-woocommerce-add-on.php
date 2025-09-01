@@ -3,7 +3,7 @@
 Plugin Name: WP All Import - WooCommerce Import Add-On Pro
 Plugin URI: http://www.wpallimport.com/
 Description: Import to WooCommerce. Adds a section to WP All Import that looks just like WooCommerce. Requires WP All Import.
-Version: 4.0.4
+Version: 4.0.5
 Author: Soflyy
 WC tested up to: 8.0
 */
@@ -20,7 +20,7 @@ if ( is_plugin_active('woocommerce-xml-csv-product-import/plugin.php') ) {
 }
 else {
 
-  define('PMWI_VERSION', '4.0.4');
+  define('PMWI_VERSION', '4.0.5');
 
 	define('PMWI_EDITION', 'paid');
 
@@ -664,6 +664,9 @@ EOT;
 				'single_product_featured' => '',
 				'is_product_visibility' => 'visible',
 				'single_product_visibility' => '',
+				// Set defaults for product matching
+				'duplicate_indicator' => 'custom field',
+				'custom_duplicate_name' => '_sku',
 				'single_product_sku' => '',
 				'single_product_global_unique_id' => '',
 				'single_product_url' => '',

@@ -80,16 +80,7 @@ array_push( $other_settings,
 		),
 		'popup'				=> '<p>' . esc_html__( 'The method you choose here will be used to send data from the visitors\'s browser to your server. This is used for server-side tracking and for sending visitor consents.', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<p>' . esc_html__( 'Rest API is generally faster and less resource-intensive.', 'full-picture-analytics-cookie-notice' ) . '</p>',
-	),
-		array(
-			'type'	 			=> 'toggle',
-			'label' 			=> esc_html__( 'Check if the data was sent from your domain (beta)', 'full-picture-analytics-cookie-notice' ),
-			'field_id' 			=> 'verify_permissions',
-			'class'				=> 'fupi_sub fuipi_disabled fupi_restpi_opts fupi_cond_val_rest',
-			'option_arr_id'		=> $option_arr_id,
-			'popup3'			=> '<p>' . esc_html__('This makes sure that all calls to your server originate from your domain.', 'full-picture-analytics-cookie-notice') . '</p>
-			<p class="fupi_warning_text">' . esc_html__('This setting is in beta. It will be enabled by default if no users report errors until 31 August 2025. If you find an error, please report it to us.', 'full-picture-analytics-cookie-notice') . '</p>',
-		)
+	)
 );
 
 // SECTIONS
@@ -195,28 +186,23 @@ $sections = array(
 				'label' 			=> esc_html__( 'Defer non-critical scripts', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'async_scripts',
 				'option_arr_id'		=> $option_arr_id,
-				'popup2'		 	=> '<p>'. esc_html__('Slightly improves page-loading speed.', 'full-picture-analytics-cookie-notice') . '</p>
-				<p class="fupi_warning_text">'. esc_html__('Do not defer WP FP\'s scripts using a different plugin or solution. Not all WP FP\'s scripts can be safely deferred.', 'full-picture-analytics-cookie-notice') . '</p>' 
+				'popup2'		 	=> '<p class="fupi_warning_text">'. esc_html__('Do not defer WP FP\'s scripts using a different plugin or solution. Not all WP FP\'s scripts can be safely deferred.', 'full-picture-analytics-cookie-notice') . '</p>' 
 			),
 			array(
 				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__('Save main JS functions in a file (beta)', 'full-picture-analytics-cookie-notice'),
+				'label' 			=> esc_html__('Save main JS functions in a file', 'full-picture-analytics-cookie-notice'),
 				'field_id' 			=> 'save_settings_file',
 				'option_arr_id'		=> $option_arr_id,
-				'popup2'			=> '<p>'. esc_html__('If you enable this option, WP FP will save some of its main JavaScript functions in a file, instead of printing them directly in the HTML.', 'full-picture-analytics-cookie-notice') . '</p>
-				<p>'. esc_html__('This is done to slightly improve performance and avoid issues with some caching configurations.', 'full-picture-analytics-cookie-notice') . '</p>
-				<p>'. esc_html__('The files will be placed in a folder at "wp-content/uploads/sites(for WP Multisite)/site_number(for WP Multisite)/wpfp/js/"', 'full-picture-analytics-cookie-notice') . '</p>
-				<p class="fupi_warning_text">'. sprintf( esc_html__('This feature is in beta. Please report issues in %1$sthe support forum%2$s.', 'full-picture-analytics-cookie-notice'),'<a href="https://wordpress.org/support/plugin/full-picture-analytics-cookie-notice/" target="_blank">', '</a>' ). '</p>',
+				'popup'				=> '<p>'. esc_html__('If you enable this option, WP FP will save some of its main JavaScript functions in a file, instead of printing them directly in the HTML.', 'full-picture-analytics-cookie-notice') . '</p>',
 			),
 			array(
 				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__('Save Custom Scripts in files (beta)', 'full-picture-analytics-cookie-notice'),
+				'label' 			=> esc_html__('Save Custom Scripts in a file (beta)', 'full-picture-analytics-cookie-notice'),
 				'field_id' 			=> 'save_cscr_file',
 				'option_arr_id'		=> $option_arr_id,
-				'popup2'			=> '<p>'. esc_html__('If you enable this option, WP FP will put scripts from the Custom Scripts module in files, instead of printing them directly in the HTML.', 'full-picture-analytics-cookie-notice') . '</p>
-				<p>'. esc_html__('This is done to slightly improve performance and avoid issues with some caching configurations.', 'full-picture-analytics-cookie-notice') . '</p>
-				<p>'. esc_html__('The files will be placed in a folder at "wp-content/uploads/sites(for WP Multisite)/site_number(for WP Multisite)/wpfp/js/"', 'full-picture-analytics-cookie-notice') . '</p>
-				<p class="fupi_warning_text">'. sprintf( esc_html__('This feature is in beta. Please report issues in %1$sthe support forum%2$s.', 'full-picture-analytics-cookie-notice'),'<a href="https://wordpress.org/support/plugin/full-picture-analytics-cookie-notice/" target="_blank">', '</a>' ). '</p>',
+				'popup3'			=> '<p>'. esc_html__('If you enable this option, WP FP will save scripts from the Custom Scripts module in a file, instead of printing them directly in the HTML.', 'full-picture-analytics-cookie-notice') . '</p>
+				<p class="fupi_warning_text">'. sprintf( esc_html__('Attention. All scripts in a file will be wrapped in a function. This means that all variables that should be accessible via "window" object, will not be accessible this way unless you change them from e.g. "var variable_name" to "window.variable_name".', 'full-picture-analytics-cookie-notice'),'<a href="https://wordpress.org/support/plugin/full-picture-analytics-cookie-notice/" target="_blank">', '</a>' ). '</p>
+				<p>'. sprintf( esc_html__('This feature is in beta. Please report issues in %1$sthe support forum%2$s.', 'full-picture-analytics-cookie-notice'),'<a href="https://wordpress.org/support/plugin/full-picture-analytics-cookie-notice/" target="_blank">', '</a>' ). '</p>',
 			),
 		),
 	),

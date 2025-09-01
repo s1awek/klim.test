@@ -53,6 +53,7 @@
 
 		// LOAD FOOTER SCRIPTS
 		fp.loaded.push('hotj');
+		if ( fp.main.debug ) console.log('[FP] Hotjar loaded');
 		FP.runFn( 'FP.fns.load_hotj_footer' );
 	}
 

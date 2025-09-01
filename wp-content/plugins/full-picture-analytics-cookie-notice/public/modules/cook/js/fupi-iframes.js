@@ -132,7 +132,7 @@
         if ( ! src ) return;
 
         let privacy_url     = wrap.dataset.privacy || fp.notice.privacy_url || false,
-            descr_text      = fp.notice.iframe_caption_txt,
+            descr_text      = fupi_iframe_texts.iframe_caption_txt,
             aspect          = getIframeAspect( wrap, iframe_data ),
             vid_domain      = get_domain_from_url( src );
             placeholder     = wrap.dataset.placeholder || wrap.dataset.image || getIframeThumbSrc( wrap, iframe_data, src, vid_domain ) || fp.notice.iframe_img,
@@ -146,7 +146,7 @@
         descr_text = src_name ? descr_text.replace(/\[\[.*?\]\]/, src_name ) : descr_text.replace('[[', '').replace(']]', '');
 
         // ALL TOGETHER
-        let output = '<div class="fupi_iframe_placeholder" style="padding-bottom: ' + aspect + '; ' + placeholder_img + ' background-size: cover; background-position: center;"><div class="fupi_iframe_content"><div class="fupi_inner"><p class="fupi_iframe_descr">' + descr_text + '</p><p class="fupi_iframe_btn_wrap"><button type="button" class="fupi_iframe_consent_btn" data-vid_domain="' + vid_domain + '">' + fp.notice.iframe_btn_text + '</button></p></div></div></div>';
+        let output = '<div class="fupi_iframe_placeholder" style="padding-bottom: ' + aspect + '; ' + placeholder_img + ' background-size: cover; background-position: center;"><div class="fupi_iframe_content"><div class="fupi_inner"><p class="fupi_iframe_descr">' + descr_text + '</p><p class="fupi_iframe_btn_wrap"><button type="button" class="fupi_iframe_consent_btn" data-vid_domain="' + vid_domain + '">' + fupi_iframe_texts.iframe_btn_text + '</button></p></div></div></div>';
 
         wrap.insertAdjacentHTML( 'afterbegin', output );
     };
@@ -189,7 +189,7 @@
             iframesTrigger = setTimeout( processIframes, 100 );
         } else {
             clearTimeout( iframesTrigger );
-            iframesTrigger = setTimeout( processIframes, 100 );
+            iframesTrigger = setTimeout( processIframes, 100 ); 
         }
     }
     

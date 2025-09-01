@@ -12,7 +12,7 @@ $sections = array(
 		'fields' => array(
             array(
 				'type'	 			=> 'text',
-				'label' 			=> esc_html__( 'Google Tag Gateway measurement path (beta)', 'full-picture-analytics-cookie-notice' ),
+				'label' 			=> esc_html__( 'Google Tag Gateway measurement path', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'custom_gateway',
                 'must_have'         => 'pro',
 				'option_arr_id'		=> $option_arr_id,
@@ -20,11 +20,10 @@ $sections = array(
 				'placeholder'		=> esc_html__( '/unique_address', 'full-picture-analytics-cookie-notice'),
 				'popup2'	        => '<p>' . esc_html__( 'Google Tag Gateway masks Google\'s tracking scripts to look as if they were loaded from your own domain. As a result, you get:', 'full-picture-analytics-cookie-notice') . '</p>
                 <ol>
-                    <li>' . sprintf( esc_html__( '%1$sMore data:%2$s tracking scripts loaded from your own domain are rarely blocked by ad blockers,', 'full-picture-analytics-cookie-notice'), '<strong>', '</strong>' ) . '</li>
+                    <li>' . sprintf( esc_html__( '%1$sMore data:%2$s This should increase the number of tracked users by up to 5 percent, since scripts loaded this way are less likely to be blocked by ad blockers.', 'full-picture-analytics-cookie-notice'), '<strong>', '</strong>' ) . '</li>
                     <li>' . sprintf( esc_html__( '%1$sBetter ad performance:%2$s you are tracking more conversions, leading to better campaign results.', 'full-picture-analytics-cookie-notice'), '<strong>', '</strong>' ) . '</li>
                 </ol>
-                <p class="fupi_warning_text">' . esc_html__( 'At the moment Google Tag Gateway can only be used with websites proxied by Cloudflare.', 'full-picture-analytics-cookie-notice') . ' <a href="https://wpfullpicture.com/support/documentation/how-to-enable-google-tag-gateway/" target="_blank">' . esc_html__( 'Learn how to set it up', 'full-picture-analytics-cookie-notice') . '</a></p>
-                <p class="fupi_warning_text">' . esc_html__( 'This function is in beta. If you experience issues, please let us know.', 'full-picture-analytics-cookie-notice') . '</p>',
+                <p class="fupi_warning_text">' . esc_html__( 'At the moment Google Tag Gateway can only be used with websites proxied by Cloudflare.', 'full-picture-analytics-cookie-notice') . ' <a href="https://wpfullpicture.com/support/documentation/how-to-enable-google-tag-gateway/" target="_blank">' . esc_html__( 'Learn how to set it up', 'full-picture-analytics-cookie-notice') . '</a></p>',
 			),
             array(
                 'type'	 			=> 'toggle',

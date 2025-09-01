@@ -139,6 +139,7 @@
 
 	function after_linkd_loads(){
 		fp.loaded.push('linkd');
+		if ( fp.main.debug ) console.log('[FP] LinkedIn loaded');
 		linkd_standard_events();
 		if ( fp.loaded.includes('woo') ) linkd_woo_events();
 	}

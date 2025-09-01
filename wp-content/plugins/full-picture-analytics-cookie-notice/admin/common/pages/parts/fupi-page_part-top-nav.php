@@ -22,7 +22,7 @@
                 
             <a class="fupi_top_nav_link" href="' . $support_href . '" target="_blank">' . esc_html__('Support', 'full-picture-analytics-cookie-notice') . '</a>
             
-            <a class="fupi_top_nav_link" href="https://wpfullpicture.com/release/wp-full-picture-update-9-0/" target="_blank">' . esc_html__('What\'s new in v9', 'full-picture-analytics-cookie-notice') . '</a>';
+            <a class="fupi_top_nav_link" href="https://wpfullpicture.com/release/wp-full-picture-update-9-1-1/" target="_blank">' . esc_html__('What\'s new in v9.1', 'full-picture-analytics-cookie-notice') . '</a>';
         
         // MODULES TOGGLE BTN
 

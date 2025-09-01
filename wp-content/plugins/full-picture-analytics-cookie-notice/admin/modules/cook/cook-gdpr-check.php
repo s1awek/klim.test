@@ -8,7 +8,6 @@ $this->data['cook'] = [
     'module_name' => esc_attr__( 'Consent Banner', 'full-picture-analytics-cookie-notice' ),
     'setup'       => [['ok', esc_attr__( 'Google Consent Mode v2 and Microsoft UET Consent Mode are activate and work according to the consent banner settings.', 'full-picture-analytics-cookie-notice' )]],
 ];
-// texts to use in various places
 if ( !empty( $this->cook ) ) {
     if ( !empty( $this->tools['geo'] ) ) {
         if ( !empty( $this->cook['mode'] ) ) {
@@ -37,6 +36,10 @@ if ( !empty( $this->cook ) ) {
         } else {
             $this->data['cook']['setup'][] = ['ok', esc_html__( 'Usually, between 20% and 30% of website visitors decline tracking. Analytics tools which require tracking consents will not track those people. Other tools will work normally.', 'full-picture-analytics-cookie-notice' )];
         }
+    }
+    // Do NOT ask again when modules or PP change
+    if ( isset( $this->cook['dont_ask_again'] ) ) {
+        $this->data['cook']['setup'][] = ['alert', esc_html__( 'Visitors are not asked for consent when the privacy policy text changes and/or when new tracking modules are enabled. This function breaks GDPR and needs to be disabled on production sites.', 'full-picture-analytics-cookie-notice' )];
     }
 }
 // Privacy policy page

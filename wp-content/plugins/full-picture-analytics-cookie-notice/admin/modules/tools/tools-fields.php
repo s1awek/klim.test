@@ -123,7 +123,7 @@ $tools_fields = array(
         'option_arr_id' => $option_arr_id,
         'tags'          => 'stats nocook proxy woo',
         'el_data_name'  => 'Matomo (basic)',
-        'popup'         => '<p>' . esc_html__( 'This module lets you install Matomo on your website. It supports Matomo on-premise and cloud versions.', 'full-picture-analytics-cookie-notice' ) . '</p>
+        'popup3'        => $module_removal_info . '<p>' . esc_html__( 'This module lets you install Matomo on your website. It supports Matomo on-premise and cloud versions.', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<p>' . esc_html__( 'Matomo is a powerful Google Analytics alternative. It is similar to Google Analytics UA but it is slightly easier to use. Matomo can import GA UA\'s data and it can work as its replacement.', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<p>' . sprintf( esc_html__( '%1$sLearn more about this module%2$s', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/module/matomo/" class="button-primary">', '</a>' ) . '</p>
 			<p>' . sprintf( esc_html__( '%1$sVisit Matomo website%2$s', 'full-picture-analytics-cookie-notice' ), '<a href="https://matomo.org" class="button-secondary">', '</a>' ) . '</p>',
@@ -379,12 +379,12 @@ $extensions_fields = array(
     ),
     array(
         'type'          => 'toggle',
-        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/adv_triggers_ico.png" aria-hidden="true">' . esc_html__( 'Advanced Triggers', 'full-picture-analytics-cookie-notice' ) . '</div>',
+        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/adv_triggers_ico.png" aria-hidden="true">' . esc_html__( 'Advanced Triggers + Visitor Scoring', 'full-picture-analytics-cookie-notice' ) . '</div>',
         'field_id'      => 'atrig',
         'option_arr_id' => $option_arr_id,
         'class'         => 'fupi_do_not_hide',
         'must_have'     => 'pro_round',
-        'popup'         => '<p>' . esc_html__( 'Here you can define custom events and set up visitor scoring rules. You can use it for:', 'full-picture-analytics-cookie-notice' ) . '</p>
+        'popup'         => '<p>' . esc_html__( 'Here you can define triggers for custom events and set up visitor scoring rules. You can use it for:', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<ol>
 				<li>' . esc_html__( 'measuring the quality of traffic sources and ad campaigns,', 'full-picture-analytics-cookie-notice' ) . '</li>
 				<li>' . esc_html__( 'counting how many users are on different stages of customer journeys,', 'full-picture-analytics-cookie-notice' ) . '</li>

@@ -59,6 +59,7 @@
 		if ( send_pageview ) plausible( 'pageview', {'props': props} );
 
 		fp.loaded.push( 'pla' );
+		if ( fp.main.debug ) console.log('[FP] Plausible loaded');
 		FP.runFn( 'FP.fns.load_pla_footer' );
 	};
 

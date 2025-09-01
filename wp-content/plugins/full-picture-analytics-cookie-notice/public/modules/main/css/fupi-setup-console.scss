@@ -38,6 +38,7 @@
     box-shadow: 3px 0 10px 0 rgba(0, 0, 0, 0.2);
     transform: translateX(100%);// makes it visible
     border: 0 !important;
+    line-height: 1 !important;
     img{
         width: 28px;
         height: 30px;
@@ -60,6 +61,9 @@
     position: relative;
     border-radius: 0 10px 10px 0;
     transform: translateX(100%);// makes it visible
+    p{
+        margin: 1em 0 !important;
+    }
     &.fupi_trackable{
         #fupi_console_step1,
         #fupi_start_test{

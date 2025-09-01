@@ -76,6 +76,7 @@ fp.notice.vars = {};
 		temp_script.remove();
 
 		fp.loaded.push( scr_id );
+		if ( fp.main.debug ) console.log("[FP] 3rd party script loaded: " + scr_id);
 	};
 
 	FP.getRandomStr = ()=>{
@@ -360,12 +361,15 @@ fp.notice.vars = {};
 
 				// ask for consent again
 
-				if ( fp.notice.priv_policy_update ) {
-					if ( ! cookies.pp_pub || cookies.pp_pub != fp.notice.priv_policy_update ) changed = true;
-				}
-				
-				if ( fp.tools ){
-					if ( ! cookies.tools || ! fp.tools.every( id => cookies.tools.includes(id) ) ) changed = true;
+				if ( ! fp.notice.dont_ask_again ) {
+
+					if ( fp.notice.priv_policy_update ) {
+						if ( ! cookies.pp_pub || cookies.pp_pub != fp.notice.priv_policy_update ) changed = true;
+					}
+					
+					if ( fp.tools ){
+						if ( ! cookies.tools || ! fp.tools.every( id => cookies.tools.includes(id) ) ) changed = true;
+					}
 				}
 		
 				if ( changed ) {

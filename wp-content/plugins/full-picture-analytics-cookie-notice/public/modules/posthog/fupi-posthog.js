@@ -18,6 +18,7 @@
 		posthog.init(fp.posthog.api_key,{api_host:'https://' + locale + '.posthog.com'})
         
 		fp.loaded.push('posthog');
+		if ( fp.main.debug ) console.log('[FP] Posthog loaded');
 	}
 
 })(window);

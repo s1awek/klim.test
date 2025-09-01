@@ -95,6 +95,7 @@ FP.fns.load_gtm = () => {
 
 	// mark as loaded
 	fp.loaded.push('gtm');
+	if ( fp.main.debug ) console.log('[FP] GTM loaded');
 	FP.runFn( 'FP.fns.load_gotm_footer' );
 }
 

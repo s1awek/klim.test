@@ -185,6 +185,7 @@
 		
 		// LOAD FOOTER SCRIPTS
 		fp.loaded.push('mato');
+		if ( fp.main.debug ) console.log('[FP] Matomo loaded');
 		FP.runFn( 'FP.fns.load_mato_footer' );
 	}
 

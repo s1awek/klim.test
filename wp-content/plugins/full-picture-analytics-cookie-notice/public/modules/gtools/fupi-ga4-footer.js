@@ -7,7 +7,7 @@ FP.fns.send_ga4_evt = ( nr, evt_name, data )=>{
 	// trim the name to max 40 chars
 	evt_name = evt_name.substring(0, 40);
 	gtag( 'event', evt_name, data);
-	if ( fp.main.debug ) console.log('[FP] GA #' + nr + ' event: ' + evt_name, data);
+	if ( fp.main.debug ) console.log('[FP] GA4 #' + nr + ' event: ' + evt_name, data);
 };
 
 FP.fns.ga4_woo_events = ()=>{
@@ -102,7 +102,7 @@ FP.fns.ga4_woo_events = ()=>{
 			};
 				
 			gtag( 'event', 'view_item_list', payload_o );
-			if ( fp.main.debug ) console.log( '[FP] GA event view_item_list:', payload_o );
+			if ( fp.main.debug ) console.log( '[FP] GA4 event view_item_list:', payload_o );
 		};
 
 		if ( single_arr.length > 0 ) {
@@ -115,7 +115,7 @@ FP.fns.ga4_woo_events = ()=>{
 			};
 
 			gtag( 'event', 'view_item', payload_o );
-			if ( fp.main.debug ) console.log( '[FP] GA event view_item:', payload_o );
+			if ( fp.main.debug ) console.log( '[FP] GA4 event view_item:', payload_o );
 		}
 	};
 
@@ -150,7 +150,7 @@ FP.fns.ga4_woo_events = ()=>{
 		};
 
 		gtag('event', 'view_item', payload_o);
-		if (fp.main.debug) console.log('[FP] GA view_item event:', payload_o);
+		if (fp.main.debug) console.log('[FP] GA4 view_item event:', payload_o);
 	}
 
 	FP.addAction( ['woo_variant_view'], woo_variant_view );
@@ -195,7 +195,7 @@ FP.fns.ga4_woo_events = ()=>{
 		};
 
 		if ( typeof gtag !== 'undefined' ) gtag( 'event', event_name, payload_o );
-		if ( fp.main.debug ) console.log( '[FP] GA ' + event_name + ' event: ', payload_o );
+		if ( fp.main.debug ) console.log( '[FP] GA4 ' + event_name + ' event: ', payload_o );
 	}
 
 	FP.addAction( ['woo_teaser_click'], data => {
@@ -213,8 +213,6 @@ FP.fns.ga4_woo_events = ()=>{
 	FP.addAction( ['woo_remove_from_cart'], data => {
 		track_items( data, 'remove_from_cart' );
 	} );
-
-	
 
 	// TRACK CHECKOUT
 	// TRACK ORDER
@@ -262,7 +260,7 @@ FP.fns.ga4_woo_events = ()=>{
 		}
 		
 		gtag( 'event', event_name, payload_o );
-		if ( fp.main.debug ) console.log( '[FP] GA ' + event_name + ' event: ', payload_o );
+		if ( fp.main.debug ) console.log( '[FP] GA4 ' + event_name + ' event: ', payload_o );
 	}
 
 	// track order
@@ -270,7 +268,7 @@ FP.fns.ga4_woo_events = ()=>{
 		if ( ! fp.main.is_pro || ! ( fp.ga41.server_side && fp.ga41.adv_orders ) ) {
 			track_cart('order');
 		} else {
-			if ( fp.main.debug ) console.log( '[FP] GA purchase event is tracked by the server-side script' );
+			if ( fp.main.debug ) console.log( '[FP] GA4 purchase event is tracked by the server-side script' );
 		}
 	};
 

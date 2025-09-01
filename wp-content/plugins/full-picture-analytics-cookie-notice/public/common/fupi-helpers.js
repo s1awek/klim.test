@@ -568,7 +568,9 @@
                     FP.loadScript( scr_id );
                 } else {
                     let attr_o = getAttributesFromStr(attr_s);
-                    FP.getScript( url, ()=>{fp.loaded.push( scr_id ) }, attr_o, type );        
+                    FP.getScript( url, ()=>{
+                        fp.loaded.push( scr_id );
+                    }, attr_o, type );        
                 }
             }
 		} )
@@ -613,7 +615,7 @@
 
             fpdata.doc_in_focus = false;
             FP.stopActivityTimer();
-            if ( fp.actions.close ) FP.doActions('page_in_blur');
+            if ( fp.actions.page_in_blur ) FP.doActions('page_in_blur');
             fpdata.activity.current = 0;
         }
     }

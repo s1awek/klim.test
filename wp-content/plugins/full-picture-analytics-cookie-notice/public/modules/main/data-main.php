@@ -22,7 +22,7 @@ if ( ! empty( $user ) ) {
 $fp['main'] = [
 	'track_current_user' 		=> $this->track_current_user, // later also modified by URL parameter in head-js.php
 	'is_pro'					=> fupi_fs()->can_use_premium_code(),
-	'uploads_url'				=> trailingslashit( wp_upload_dir()['baseurl'] ),
+	// 'uploads_url'				=> trailingslashit( wp_upload_dir()['baseurl'] ),
 	'is_customizer' 			=> is_customize_preview(),
 	'debug' 					=> isset( $this->main['debug'] ),
 	'url' 						=> FUPI_URL,

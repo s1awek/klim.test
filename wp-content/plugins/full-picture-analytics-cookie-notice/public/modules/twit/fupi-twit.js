@@ -30,6 +30,7 @@
 		twq('config', fp.twit.id);
 
 		fp.loaded.push('twit');
+		if ( fp.main.debug ) console.log('[FP] Twitter loaded');
 		FP.runFn( 'FP.fns.load_twit_footer' );
 	}
 

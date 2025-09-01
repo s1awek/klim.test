@@ -36,6 +36,7 @@
 		
 		use_server ? simpleServer() : simplePixel();
 		fp.loaded.push('simpl');
+		if ( fp.main.debug ) console.log('[FP] Simple Analytics loaded');
 	}
 
 })(window);

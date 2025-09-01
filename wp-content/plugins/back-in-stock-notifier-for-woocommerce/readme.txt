@@ -1,11 +1,11 @@
 === Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro ===
 Contributors: codewoogeek, propluginslab
 Tags: email, notification, outofstock, waitlist, stock
-Donate link: https://codewoogeek.online/product-category/back-in-stock-notifier/
+Donate link: https://donate.stripe.com/cNi28r1PXfcY1kQawmaMU00
 Requires at least: 4.7
 Tested up to: 6.8.2
 Requires PHP: 7.4
-Stable tag: 6.0.5
+Stable tag: 6.0.9.1
 License: GPL-3.0+
 License URI: [https://www.gnu.org/licenses/gpl-3.0.txt](https://www.gnu.org/licenses/gpl-3.0.txt)
 
@@ -13,7 +13,7 @@ Notify subscribers automatically when products are restocked. Supports Simple, V
 
 == Description ==
 
-[<strong>Live Demo</strong>](https://demo.codewoogeek.online/back-in-stock-notifier-for-woocommerce/)
+[<strong>Live Demo</strong>](https://demo.propluginslab.com/back-in-stock-notifier-for-woocommerce/)
 
 <strong>Back In Stock Notifier</strong> is a WooCommerce Waitlist Pro Plugin that displays the Email Subscription form on the frontend when a product is Out of Stock. When a Product comes Back in Stock, this plugin notifies the subscribers by email in the background process. Many of the existing plugins loop through the subscribers to send mail, so there is a high chance of failure or timeouts. This plugin is designed to overcome this problem by sending emails using a background process, ensuring it does not fail until the completion of the loop, thus converting your subscribers into customers.
 
@@ -71,86 +71,86 @@ We continue to support this plugin based on our paid extensions. Anyone can affo
 
 <strong>Listed Extensions</strong> are not <strong>mandatory to use</strong>, but <strong>we recommend</strong> buying all these extensions. 
 <ol>
- <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/wpml/"><strong>WPML - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-    <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/unsubscribe/"><strong>Unsubscribe - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-    <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/doubleoptin/"><strong>Double Opt-In - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-    <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/ban-emails/"><strong>Ban Emails - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-    <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/export-csv/"><strong>Export CSV - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-    <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/custom-css/"><strong>Custom CSS - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-    <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/mailchimp/"><strong>Mailchimp - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-    <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/track-sales/"><strong>Track Sales - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-    <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/polylang/"><strong>Polylang - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-    <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/import-csv/"><strong>Import CSV - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-    <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/edit-subscribers/"><strong>Edit Subscribers - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-    <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/twilio-sms/"><strong>Twilio SMS - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-    <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/klaviyo/"><strong>Klaviyo - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-    <li><a href="https://codewoogeek.online/shop/back-in-stock-notifier/active-campaign/"><strong>ActiveCampaign - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
-	<li><a href="https://codewoogeek.online/shop/back-in-stock-notifier-bundle-add-ons/"><strong>Bundle Add-ons(All Add-ons with discounted price) - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+ <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/wpml/"><strong>WPML - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+    <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/unsubscribe/"><strong>Unsubscribe - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+    <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/doubleoptin/"><strong>Double Opt-In - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+    <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/ban-emails/"><strong>Ban Emails - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+    <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/export-csv/"><strong>Export CSV - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+    <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/custom-css/"><strong>Custom CSS - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+    <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/mailchimp/"><strong>Mailchimp - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+    <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/track-sales/"><strong>Track Sales - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+    <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/polylang/"><strong>Polylang - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+    <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/import-csv/"><strong>Import CSV - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+    <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/edit-subscribers/"><strong>Edit Subscribers - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+    <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/twilio-sms/"><strong>Twilio SMS - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+    <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/klaviyo/"><strong>Klaviyo - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+    <li><a href="https://propluginslab.com/shop/back-in-stock-notifier/active-campaign/"><strong>ActiveCampaign - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
+	<li><a href="https://propluginslab.com/shop/back-in-stock-notifier-bundle-add-ons/"><strong>Bundle Add-ons(All Add-ons with discounted price) - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong></a></li>
     
-<li><a href="https://codewoogeek.online/product-category/back-in-stock-notifier/"><strong>and more coming soon</strong></a></li>
+<li><a href="https://propluginslab.com/product-category/back-in-stock-notifier/"><strong>and more coming soon</strong></a></li>
 </ol>
 &nbsp;
 
-[<strong>WPML - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/wpml/)
+[<strong>WPML - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/wpml/)
 
 This Addon is based on WPML, for sending an email to your subscribed users based on their language, which has more potential than sending it in the site language. If you are already using WPML, then you already know the advantages. After activation, this plugin will register <strong>admin_texts_cwginstocksettings </strong>for string translation. Then we pick the subscriber's current language, check the translated text available for that language, and finally, we mail it to the corresponding user. This Addon is necessary when you want to make use of WPML.
 
-[<strong>Unsubscribe - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/unsubscribe/)
+[<strong>Unsubscribe - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/unsubscribe/)
 
 If you subscribed wrongly to the product/someone wrongly subscribed to the product without your notice, using this addon, that user can unsubscribe from the list at any time. For all members (guests as well), the Success Subscriber email will have an unsubscribe link (using our shortcode). For members, they can unsubscribe from their my account at any time, which lists their subscribed lists.
 
-[<strong>Double Opt-In - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/doubleoptin/)
+[<strong>Double Opt-In - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/doubleoptin/)
 
 If you subscribed wrongly to the product/someone wrongly subscribed to the product without your notice, using this addon, that user will receive an email to confirm the subscription. If they confirm, it will be considered as a confirmed subscription. If they ignore it, the pending list will be deleted automatically after X days. For all members (guests as well).
 
-[<strong>Ban Emails - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/ban-emails/)
+[<strong>Ban Emails - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/ban-emails/)
 
 This Add-on adds great value to the core and blocks disposable email domains/public email domains, as well as specific email addresses. Websites like mailinator, etc., allow the creation of email and subscription to the product, so this will give one more check with email addresses to avoid fake domains being subscribed.
 
-[<strong>Export CSV - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/export-csv/)
+[<strong>Export CSV - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/export-csv/)
 
 Export your subscriber lists to CSV data, which can be used for your records or for promotional emails, newsletter subscriptions, etc. As soon as the plugin is active, an Export CSV button will appear above the list table of Subscribers, and clicking the button will export the CSV data.
 
-[<strong>Custom CSS - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/custom-css/)
+[<strong>Custom CSS - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/custom-css/)
 
 Everyone wants to customize their subscriber form, and they want an easy method to design it. Using this Addon, we designed the settings to customize the subscriber form with options like Color, Size, and Custom CSS. This Addon will be very helpful to others without having to customize CSS files.
 
-[<strong>Mailchimp - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/mailchimp/)
+[<strong>Mailchimp - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/mailchimp/)
 
 What if you want to sync your subscriber lists with Mailchimp? Using this add-on, you can configure it and rest assured, as we automatically fetch the subscribers (new/old) and sync them to Mailchimp in the background process.
 
-[<strong>Track Sales - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/track-sales/)
+[<strong>Track Sales - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/track-sales/)
 
 Track Sales is an add-on for Back In Stock Notifier. Using this Addon, you can track the subscribers who purchase a product through our back in stock email.
 
-[<strong>Polylang - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/polylang/)
+[<strong>Polylang - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/polylang/)
 
 Polylang is an add-on for Back In Stock Notifier, which supports sending emails (both success subscription and back in stock email) based on the user's chosen language.
 
-[<strong>Import CSV - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/import-csv/)
+[<strong>Import CSV - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/import-csv/)
 
 The Import CSV add-on is for the Back In Stock Notifier plugin. Using this add-on, you can import subscribers via a CSV file. This add-on will be helpful when you want
 
  to move/clone subscribers from other platforms to our platform. For a streamlined import, we highly suggest importing 500 entries at a time for a single CSV file.
 
-[<strong>Edit Subscribers - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/edit-subscribers/)
+[<strong>Edit Subscribers - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/edit-subscribers/)
 
 Edit Subscribers is an add-on for Back In Stock Notifier. Using this add-on, the admin can edit already subscribed user entries without any hassle. Let's say you found that entries of subscriptions contain wrong information that you want to correct. With this add-on, you can easily achieve that.
 
 
-[<strong>Twilio SMS - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/twilio-sms/)
+[<strong>Twilio SMS - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/twilio-sms/)
 
 The Twilio SMS Add-On for the Back in Stock Notifier for WooCommerce plugin enables you to send automated SMS alerts to customers when items they're interested in return to stock. By integrating Twilio SMS functionality, this add-on helps you engage customers with timely updates and capture missed sales opportunities.
 
-[<strong> Klaviyo - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/klaviyo/)
+[<strong> Klaviyo - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/klaviyo/)
 
 The Klaviyo Add-on will helpful to sync subscribers from Back InStock Notifier to Klaviyo
 
-[<strong> ActiveCampaign - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier/active-campaign/)
+[<strong> ActiveCampaign - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier/active-campaign/)
 
 The ActiveCampaign Add-on will helpful to sync subscribers from Back InStock Notifier to ActiveCampaign
 
-[<strong>Bundle Add-ons (All 14 Add-ons with a discounted price) + Future any New Add-ons - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://codewoogeek.online/shop/back-in-stock-notifier-bundle-add-ons/)
+[<strong>Bundle Add-ons (All 14 Add-ons with a discounted price) + Future any New Add-ons - Back In Stock Notifier for WooCommerce | WooCommerce Waitlist Pro</strong>](https://propluginslab.com/shop/back-in-stock-notifier-bundle-add-ons/)
 
 Some people need a few add-ons, and some people need all add-ons. For them, we created bundle add-ons with a discounted price for all fourteen add-ons + any new add-ons.
 
@@ -240,7 +240,7 @@ We created documentation for the REST API, which you can check here [https://doc
 
 = How to contact your support? =
 
-You can contact us via the support Forum of WordPress or by creating a support ticket from our site [https://codewoogeek.online/](https://codewoogeek.online/)
+You can contact us via the support Forum of WordPress or by creating a support ticket from our site [https://propluginslab.com/](https://propluginslab.com/)
 
 
 == Screenshots ==
@@ -264,6 +264,26 @@ You can contact us via the support Forum of WordPress or by creating a support t
 
 
 == Changelog ==
+= 6.0.9.1 2025-08-27 =
+* Tweak: Added Checkbox option to Turn Auto Purge Cache for W3Total Cache when Product Stock Status Change in Troubleshoot Settings
+* Tweak: POT file updated.
+
+= 6.0.9 2025-08-25 =
+* New: Built-in support to automatically purge the corresponding product cache in W3 Total Cache when stock status changes.
+* Tweak: Third-party cron recurrence is now customizable.
+* Tweak: POT file updated.
+
+= 6.0.8 2025-08-21 =
+* Tweak: Added e.stopPropagation() in the subscribe button click handler to prevent event bubbling into the WooCommerce cart form.
+
+= 6.0.7 2025-08-15 =
+* Tweak: URL updated
+* Tweak: Tested upto WooCommerce v10.1.0
+
+= 6.0.6 2025-08-07 =
+* Tweak: Added logging for deleted subscription entries.
+* Fix: Resolved issue where REST API status updates triggered subscription success emails for all statuses.
+
 = 6.0.5 2025-07-23 =
 * Fix: Fatal error related to Bulk Variations Grid compatibility
 * Tweak: Displayed "Product Deleted" info in list table instead of leaving it blank

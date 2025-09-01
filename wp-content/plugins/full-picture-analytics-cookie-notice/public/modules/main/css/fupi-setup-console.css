@@ -41,6 +41,7 @@
   -webkit-transform: translateX(100%);
           transform: translateX(100%);
   border: 0 !important;
+  line-height: 1 !important;
 }
 #fupi_console_fixed_btn img {
   width: 28px;
@@ -63,6 +64,9 @@
   border-radius: 0 10px 10px 0;
   -webkit-transform: translateX(100%);
           transform: translateX(100%);
+}
+#fupi_console p {
+  margin: 1em 0 !important;
 }
 #fupi_console.fupi_trackable #fupi_console_step1,
 #fupi_console.fupi_trackable #fupi_start_test {

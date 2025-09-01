@@ -79,7 +79,7 @@ class Fupi_WOO_public {
         //
         // teasers in woocommerce/handpicked-products
         // teasers in woocommerce/product-best-sellers
-        // teasers in woocommerce/product-new << this one is also used in the cart block and causes problems!
+        // teasers in woocommerce/product-new << also used in the cart block
         // teasers in woocommerce/product-on-sale
         // teasers in woocommerce/product-top-rated
         add_filter(
@@ -100,7 +100,7 @@ class Fupi_WOO_public {
             2
         );
         //
-        // CLASSIC & BLOCKS
+        // CLASSIC & BLOCKS (Blocks in a classic)
         //
         // single product - ok
         add_action( 'woocommerce_after_add_to_cart_button', array($this, 'fupi_woo_prod_data'), 50 );
@@ -145,6 +145,7 @@ class Fupi_WOO_public {
         $fp['woo']['teaser_wrapper_sel'] = ( !empty( $this->settings['teaser_wrapper_sel'] ) ? esc_attr( $this->settings['teaser_wrapper_sel'] ) : false );
         $fp['woo']['variable_tracking_method'] = $this->variable_tracking_method;
         $fp['woo']['track_variant_views'] = isset( $this->settings['track_variant_views'] );
+        $fp['woo']['order_stats'] = isset( $this->settings['order_stats'] );
         $fp['woo']['incl_tax_in_price'] = isset( $this->settings['incl_tax_in_price'] );
         $fp['woo']['incl_shipping_in_total'] = isset( $this->settings['incl_shipping_in_total'] );
         $fp['woo']['sku_is_id'] = isset( $this->settings['sku_is_id'] );
@@ -611,6 +612,7 @@ class Fupi_WOO_public {
     }
 
     // BLOCK CART/MINI-CART
+    // SOME BLOCKS
     // FSE PRODUCT ARCHIVES
     // RELATED PRODUCTS (ON SINGLE)
     public function fupi_woo_block_render_block_mod( $block_content, $block_settings ) {
@@ -618,6 +620,7 @@ class Fupi_WOO_public {
             return $block_content;
         }
         // FSE product archives and related products on single product page
+        // !! 9.1.0 - can also be added to single products
         if ( $block_settings['blockName'] == 'woocommerce/product-button' ) {
             global $product;
             if ( !empty( $product ) ) {

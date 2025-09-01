@@ -362,7 +362,7 @@
         'type' => 'ext',
     ],
     [ 
-        'name' => 'Advanced Triggers',
+        'name' => 'Advanced Triggers + Visitor Scoring',
         'id' => 'atrig', 
         'is_avail' => fupi_fs()->can_use_premium_code(), 
         'is_premium' => true, 

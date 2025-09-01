@@ -15,6 +15,8 @@ if ( ! class_exists( 'CWG_Instock_Troubleshoot' ) ) {
 			add_action( 'trashed_post', array( $this, 'check_deleted_product' ) );
 			add_action( 'woocommerce_before_delete_product_variation', array( $this, 'check_deleted_variation' ) );
 			add_action( 'cwgbis_trash_subscriber', array( $this, 'trash_subscriber_function' ) );
+			// Hook to settings update
+			add_action( 'update_option_cwginstocksettings', array( $this, 'maybe_update_third_party_cron' ), 10, 2 );
 		}
 
 		public function add_settings_field() {
@@ -23,7 +25,8 @@ if ( ! class_exists( 'CWG_Instock_Troubleshoot' ) ) {
 			add_settings_field( 'cwg_instock_enable_troubleshoot', __( 'Enable if Subscribe Form Layout Problem/Input Field Overlap', 'back-in-stock-notifier-for-woocommerce' ), array( $this, 'enable_troubleshoot' ), 'cwginstocknotifier_settings', 'cwginstock_section_troubleshoot' );
 			add_settings_field( 'cwg_instock_enable_button_troubleshoot', __( 'Additional Class Name for Subscribe Button(seperated by commas)', 'back-in-stock-notifier-for-woocommerce' ), array( $this, 'enable_button_for_class' ), 'cwginstocknotifier_settings', 'cwginstock_section_troubleshoot' );
 			add_settings_field( 'cwg_instock_hide_subscribecount', __( 'Hide Subscriber Count(Admin Side)', 'back-in-stock-notifier-for-woocommerce' ), array( $this, 'hide_subscribercount' ), 'cwginstocknotifier_settings', 'cwginstock_section_troubleshoot' );
-			add_settings_field( 'cwg_instock_stock_updade_from_thirdparty', __( 'Enable this option if you have updated the stock from a third-party inventory plugin', 'back-in-stock-notifier-for-woocommerce' ), array( $this, 'update_stock_third_party' ), 'cwginstocknotifier_settings', 'cwginstock_section_troubleshoot' );
+			add_settings_field( 'cwg_instock_stock_update_from_thirdparty', __( 'Enable this option if you have updated the stock from a third-party inventory plugin', 'back-in-stock-notifier-for-woocommerce' ), array( $this, 'update_stock_third_party' ), 'cwginstocknotifier_settings', 'cwginstock_section_troubleshoot' );
+			add_settings_field( 'cwg_instock_stock_update_recurrence', __( 'Third-Party Stock Update Cron Recurrence', 'back-in-stock-notifier-for-woocommerce' ), array( $this, 'third_party_cron_recurrence' ), 'cwginstocknotifier_settings', 'cwginstock_section_troubleshoot' );
 			add_settings_field( 'cwg_instock_remove_view_subscriber_count', __( 'Remove View Subscribers Link in Product List Table(Admin Dashboard -> Products)', 'back-in-stock-notifier-for-woocommerce' ), array( $this, 'remove_view_subscriber_count_producttable' ), 'cwginstocknotifier_settings', 'cwginstock_section_troubleshoot' );
 			add_settings_field( 'cwg_instock_trigger_mail_any_variation', __( 'Trigger mail to variable product subscribers when any other variation of that product is back in stock', 'back-in-stock-notifier-for-woocommerce' ), array( $this, 'trigger_any_variation_variable_backinstock' ), 'cwginstocknotifier_settings', 'cwginstock_section_troubleshoot' );
 			add_settings_field( 'cwg_instock_override_form_from_theme', __( 'Force load Template from Plugin - This option ignores the template override from theme', 'back-in-stock-notifier-for-woocommerce' ), array( $this, 'load_template_from_plugin' ), 'cwginstocknotifier_settings', 'cwginstock_section_troubleshoot' );
@@ -33,6 +36,24 @@ if ( ! class_exists( 'CWG_Instock_Troubleshoot' ) ) {
 			add_settings_field( 'cwg_instock_stop_email_staging_domain', __( 'Enter your staging site starting domain', 'back-in-stock-notifier-for-woocommerce' ), array( $this, 'stop_sending_email_staging_domain' ), 'cwginstocknotifier_settings', 'cwginstock_section_troubleshoot' );
 			add_settings_field( 'cwg_instock_disable_prefill_data', __( 'Disable Prefilled Data for Logged-in Users', 'back-in-stock-notifier-for-woocommerce' ), array( $this, 'stop_prefilled_data' ), 'cwginstocknotifier_settings', 'cwginstock_section_troubleshoot' );
 			add_settings_field( 'cwg_instock_enable_delete_on_product_delete', __( 'Trash Subscribers upon Product Deletion', 'back-in-stock-notifier-for-woocommerce' ), array( $this, 'enable_delete_on_product_delete' ), 'cwginstocknotifier_settings', 'cwginstock_section_troubleshoot' );
+			//add settings field for auto purge w3total cache of corresponding product upon stock status update
+			add_settings_field(
+				'cwg_instock_auto_purge_w3tc',
+				__( 'Auto Purge W3 Total Cache on Stock Status Update', 'back-in-stock-notifier-for-woocommerce' ),
+				array( $this, 'auto_purge_w3tc_field' ),
+				'cwginstocknotifier_settings',
+				'cwginstock_section_troubleshoot'
+			);
+		}
+
+		public function auto_purge_w3tc_field() {
+			$options = get_option( 'cwginstocksettings' );
+			?>
+			<input type='checkbox' name='cwginstocksettings[auto_purge_w3tc]' <?php isset( $options['auto_purge_w3tc'] ) ? checked( $options['auto_purge_w3tc'], 1 ) : ''; ?> value="1" />
+			<p><i>
+					<?php esc_html_e( 'Select this option to automatically purge the W3 Total Cache of the corresponding product page when its stock status is updated', 'back-in-stock-notifier-for-woocommerce' ); ?>
+				</i></p>
+			<?php
 		}
 
 		public function troubleshoot_settings_heading() {
@@ -85,9 +106,60 @@ if ( ! class_exists( 'CWG_Instock_Troubleshoot' ) ) {
 		public function update_stock_third_party() {
 			$options = get_option( 'cwginstocksettings' );
 			?>
-			<input type='checkbox' name='cwginstocksettings[update_stock_third_party]' <?php isset( $options['update_stock_third_party'] ) ? checked( $options['update_stock_third_party'], 1 ) : ''; ?> value="1" />
+			<input class='cwg_thirdparty_stock_update' type='checkbox' name='cwginstocksettings[update_stock_third_party]' <?php isset( $options['update_stock_third_party'] ) ? checked( $options['update_stock_third_party'], 1 ) : ''; ?>
+				value="1" />
 			<?php
 		}
+
+		public function third_party_cron_recurrence() {
+			$options = get_option( 'cwginstocksettings' );
+			$selected = isset( $options['third_party_cron_recurrence'] ) ? $options['third_party_cron_recurrence'] : 'every_5_minutes';
+			?>
+			<select class='cwg_third_party_recurrence' name="cwginstocksettings[third_party_cron_recurrence]">
+				<option value="every_5_minutes" <?php selected( $selected, 'every_5_minutes' ); ?>>
+					<?php esc_html_e( 'Every 5 Minutes', 'back-in-stock-notifier-for-woocommerce' ); ?>
+				</option>
+				<option value="every_12_hours" <?php selected( $selected, 'every_12_hours' ); ?>>
+					<?php esc_html_e( 'Every 12 Hours', 'back-in-stock-notifier-for-woocommerce' ); ?>
+				</option>
+				<option value="every_day" <?php selected( $selected, 'every_day' ); ?>>
+					<?php esc_html_e( 'Every Day', 'back-in-stock-notifier-for-woocommerce' ); ?>
+				</option>
+			</select>
+			<p><i>
+					<?php esc_html_e( 'Select how often to run the third-party stock update cron job.', 'back-in-stock-notifier-for-woocommerce' ); ?>
+				</i></p>
+			<?php
+		}
+
+		public function get_third_party_cron_interval_seconds( $recurrence ) {
+
+			switch ( $recurrence ) {
+				case 'every_5_minutes':
+					return 5 * MINUTE_IN_SECONDS;
+				case 'every_12_hours':
+					return 12 * HOUR_IN_SECONDS;
+				case 'every_day':
+					return DAY_IN_SECONDS;
+				default:
+					return 5 * MINUTE_IN_SECONDS;
+			}
+		}
+
+		public function maybe_update_third_party_cron( $old_value, $new_value ) {
+			$old_recurrence = isset( $old_value['third_party_cron_recurrence'] ) ? $old_value['third_party_cron_recurrence'] : 'every_5_minutes';
+			$new_recurrence = isset( $new_value['third_party_cron_recurrence'] ) ? $new_value['third_party_cron_recurrence'] : 'every_5_minutes';
+
+			if ( $old_recurrence !== $new_recurrence ) {
+				// Recurrence has changed, so update the scheduled action
+				$time_to_set = $this->get_third_party_cron_interval_seconds( $new_recurrence );
+				as_unschedule_all_actions( 'cwginstock_third_party' );
+				if ( ! as_next_scheduled_action( 'cwginstock_third_party' ) ) {
+					as_schedule_recurring_action( time(), $time_to_set, 'cwginstock_third_party' );
+				}
+			}
+		}
+
 
 		public function remove_view_subscriber_count_producttable() {
 			$options = get_option( 'cwginstocksettings' );
@@ -146,7 +218,7 @@ if ( ! class_exists( 'CWG_Instock_Troubleshoot' ) ) {
 		}
 
 		public function stop_sending_email_staging_domain() {
-			$options         = get_option( 'cwginstocksettings' );
+			$options = get_option( 'cwginstocksettings' );
 			$staging_domains = isset( $options['staging_domains'] ) ? $options['staging_domains'] : '';
 			?>
 			<textarea class="staging_domains" name="cwginstocksettings[staging_domains]" rows="4"
@@ -177,8 +249,8 @@ if ( ! class_exists( 'CWG_Instock_Troubleshoot' ) ) {
 			$options = get_option( 'cwginstocksettings' );
 			if ( isset( $options['enable_delete_on_product_delete'] ) && 1 == $options['enable_delete_on_product_delete'] ) {
 				$variation_id = 0;
-				$cwg_api      = new CWG_Instock_API( $product_id, $variation_id );
-				$subscribers  = $cwg_api->get_list_of_subscribers( 'AND' );
+				$cwg_api = new CWG_Instock_API( $product_id, $variation_id );
+				$subscribers = $cwg_api->get_list_of_subscribers( 'AND' );
 
 				if ( ! empty( $subscribers ) ) {
 					$logger = new CWG_Instock_Logger( 'info', 'Simple Product ID: ' . $product_id . ' - Found Subscribers: ' . wp_json_encode( $subscribers ) );
@@ -197,7 +269,7 @@ if ( ! class_exists( 'CWG_Instock_Troubleshoot' ) ) {
 			}
 		}
 		public function check_deleted_variation( $variation_id ) {
-			$options                          = get_option( 'cwginstocksettings' );
+			$options = get_option( 'cwginstocksettings' );
 			$delete_on_product_delete_enabled = isset( $options['enable_delete_on_product_delete'] ) && 1 == $options['enable_delete_on_product_delete'];
 			if ( $delete_on_product_delete_enabled ) {
 
@@ -205,7 +277,7 @@ if ( ! class_exists( 'CWG_Instock_Troubleshoot' ) ) {
 				if ( $variation ) {
 					$parent_id = $variation->get_parent_id();
 
-					$cwg_api     = new CWG_Instock_API( $parent_id, $variation_id );
+					$cwg_api = new CWG_Instock_API( $parent_id, $variation_id );
 					$subscribers = $cwg_api->get_list_of_subscribers( 'AND' );
 					if ( ! empty( $subscribers ) ) {
 						$logger = new CWG_Instock_Logger( 'info', 'Variable Product ID: ' . $parent_id . ' Variation ID: ' . $variation_id . ' - Found Subscribers: ' . wp_json_encode( $subscribers ) );

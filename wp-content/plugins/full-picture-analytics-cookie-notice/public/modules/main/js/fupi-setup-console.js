@@ -40,7 +40,7 @@
     
     if ( reset_btns ) reset_btns.forEach( btn => {
         btn.addEventListener('click', ()=>{
-            FP.setCookie('fp_track_me', 1 ); // enable tests
+            FP.setCookie('fp_track_me', 1, 0, 360 ); // enable tests
             FP.deleteCookie('fp_cookie');
             FP.deleteCookie('fp_country');
             window.location.reload(); // reload window

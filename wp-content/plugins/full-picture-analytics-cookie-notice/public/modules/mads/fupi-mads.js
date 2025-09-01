@@ -22,6 +22,7 @@
 		
 		// LOAD FOOTER SCRIPTS
 		fp.loaded.push('mads');
+		if ( fp.main.debug ) console.log('[FP] MS Ads loaded');
 		FP.runFn( 'FP.fns.load_mads_footer' );
 	}
 
