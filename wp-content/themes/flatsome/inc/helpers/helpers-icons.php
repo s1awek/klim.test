@@ -1,4 +1,9 @@
 <?php
+/**
+ * Icon helper functions.
+ *
+ * @package Flatsome
+ */
 
 /**
  * Get theme icon by classname.
@@ -11,19 +16,30 @@
  */
 function get_flatsome_icon( $name, $size = null, $atts = null ) {
 	$default_atts = array(
-		'class' => esc_attr( $name ),
+		'class'       => [],
+		'aria-hidden' => 'true',
 	);
 
 	if ( $size ) {
 		$default_atts['style'] = 'font-size:' . esc_attr( $size ) . ';';
 	}
 
-	$atts      = wp_parse_args( $atts, $default_atts );
+	$atts = wp_parse_args( $atts, $default_atts );
+
+	if ( ! is_array( $atts['class'] ) ) {
+		$atts['class'] = $atts['class'] ? [ $atts['class'] ] : [];
+	}
+
+	$atts['class'][] = esc_attr( $name );
+
 	$icon_html = '<i ' . flatsome_html_atts( $atts ) . '></i>';
 
 	return apply_filters( 'flatsome_icon', $icon_html, $name, $size, $atts );
 }
 
+/**
+ * Add Flatsome icons CSS.
+ */
 function flatsome_add_icons_css() {
 	$theme     = wp_get_theme( get_template() );
 	$version   = $theme->get( 'Version' );

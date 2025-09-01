@@ -13,7 +13,7 @@
  * @see              https://docs.woocommerce.com/document/template-structure/
  * @package          WooCommerce\Templates
  * @version          3.6.0
- * @flatsome-version 3.16.0
+ * @flatsome-version 3.20.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -34,7 +34,17 @@ echo flatsome_get_rating_html( $product->get_average_rating() ); // phpcs:ignore
 if ( $rating_count > 0 ) :
 	if ( get_theme_mod( 'product_box_review_count' ) ) :
 		if ( comments_open() ) :
-			echo apply_filters( 'flatsome_loop_review_count_html', '<span class="review-count is-small op-7">(' . esc_html( $review_count ) . ')</span>', $product ); // phpcs:ignore WordPress.Security.EscapeOutput
+			$span_atts = array(
+				'class' => 'review-count is-small op-8',
+				/* translators: %s: number of reviews */
+				'aria-label' => esc_attr( sprintf( _n( '%s customer review', '%s customer reviews', $review_count, 'woocommerce' ), $review_count ) ),
+			);
+			$review_count_html = sprintf(
+				'<span %1$s>(%2$s)</span>',
+				flatsome_html_atts( $span_atts ),
+				esc_html( $review_count )
+			);
+			echo apply_filters( 'flatsome_loop_review_count_html', $review_count_html, $product ); // phpcs:ignore WordPress.Security.EscapeOutput
 		endif;
 	endif;
 endif;

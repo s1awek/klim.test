@@ -39,6 +39,9 @@ jQuery(document).ready(function ($) {
             onSearchComplete: function () {
                 $('.submit-button').removeClass('loading');
             },
+            onSearchError: function(query, jqXHR, textStatus, errorThrown) {
+              $('.submit-button').removeClass('loading');
+            },
             beforeRender: function (container) {
                 $(container).removeAttr('style');
             },
@@ -50,29 +53,28 @@ jQuery(document).ready(function ($) {
                     if(suggestion.price) html += '<span class="search-price">'+suggestion.price+'<span>';
 
                     return html;
-                }
-        });
-
-          if( search_categories.length ){
-                var searchForm = $(this).find('.search-field').devbridgeAutocomplete();
-
-                search_categories.on( 'change', function( e ){
-
-                    if( search_categories.val() != '' ) {
-                        searchForm.setOptions({
-                            serviceUrl:  flatsomeVars.ajaxurl + '?action=flatsome_ajax_search_products&product_cat=' + search_categories.val()
-                        });
-                    } else{
-                        searchForm.setOptions({
-                            serviceUrl:  flatsomeVars.ajaxurl + '?action=flatsome_ajax_search_products'
-                        });
-                    }
-
-                    // update suggestions
-                    searchForm.hide();
-                    searchForm.onValueChange();
-                });
             }
+          });
+
+          if (search_categories.length) {
+            var searchForm = $(this).find('.search-field').devbridgeAutocomplete();
+
+            search_categories.on('change', function (e) {
+              let newUrl = serviceUrl;
+
+              if (search_categories.val() !== '') {
+                newUrl += '&product_cat=' + search_categories.val();
+              }
+
+              searchForm.setOptions({
+                serviceUrl: newUrl
+              });
+
+              // update suggestions
+              searchForm.hide();
+              searchForm.onValueChange();
+            });
+          }
      });
 
 

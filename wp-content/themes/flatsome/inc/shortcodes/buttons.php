@@ -5,6 +5,7 @@
  */
 function button_shortcode( $atts, $content = null ) {
 	extract( shortcode_atts( array(
+		'as'          => '', // Internal use only.
 		'text'        => '',
 		'style'       => '',
 		'color'       => 'primary',
@@ -49,8 +50,17 @@ function button_shortcode( $atts, $content = null ) {
 	}
 
 	$attributes = array();
-	$icon_left  = $icon && $icon_pos == 'left' ? get_flatsome_icon( $icon, null, array( 'aria-hidden' => 'true' ) ) : '';
-	$icon_right = $icon && $icon_pos !== 'left' ? get_flatsome_icon( $icon, null, array( 'aria-hidden' => 'true' ) ) : '';
+	$icon_left  = $icon && $icon_pos == 'left' ? get_flatsome_icon( $icon ) : '';
+	$icon_right = $icon && $icon_pos !== 'left' ? get_flatsome_icon( $icon ) : '';
+
+	if ( $as === 'button' ) {
+		$link               = null;
+		$target             = null;
+		$rel                = null;
+		$attributes['type'] = 'button';
+	} else {
+		$as = 'a';
+	}
 
 	// Add Button Classes.
 	$classes   = array();
@@ -161,13 +171,28 @@ add_shortcode( 'facebook_login_button', 'facebook_login_shortcode' );
  * Phone button
  */
 function ux_phone( $atts, $content = null ) {
-	extract( shortcode_atts( array(
+	$atts = shortcode_atts( array(
 		'number'  => '+000 000 000',
 		'tooltip' => '',
 		'border'  => '2px',
-	), $atts ) );
+	), $atts );
 
-	return do_shortcode( '<div class="header-button">[button style="outline" class="circle" icon="icon-phone" color=" " icon_pos="left" text="' . $number . '" link="tel:' . $number . '" tooltip="' . $tooltip . '" border="' . $border . '"]</div>' );
+	ob_start();
+
+	echo '<div class="header-button">';
+	echo flatsome_apply_shortcode( 'button', array(
+		'style'    => 'outline',
+		'class'    => 'circle',
+		'icon'     => 'icon-phone',
+		'icon_pos' => 'left',
+		'text'     => $atts['number'],
+		'link'     => 'tel:' . $atts['number'],
+		'tooltip'  => $atts['tooltip'],
+		'border'   => $atts['border'],
+	) );
+	echo '</div>';
+
+	return ob_get_clean();
 }
 
 add_shortcode( 'phone', 'ux_phone' );
@@ -177,16 +202,30 @@ add_shortcode( 'phone', 'ux_phone' );
  * Header button
  */
 function ux_header_button( $atts, $content = null ) {
-	extract( shortcode_atts( array(
+	$atts = shortcode_atts( array(
 		'text'    => 'Order Now',
 		'link'    => '',
 		'tooltip' => '',
 		'border'  => '2px',
 		'target'  => '_self',
 
-	), $atts ) );
+	), $atts );
 
-	return do_shortcode( '<div class="header-button">[button style="outline" class="circle" color=" " text="' . $text . '" link="' . $link . '" target="' . $target . '" tooltip="' . $tooltip . '" border="' . $border . '"]</div>' );
+	ob_start();
+
+	echo '<div class="header-button">';
+	echo flatsome_apply_shortcode( 'button', array(
+		'style'   => 'outline',
+		'class'   => 'circle',
+		'text'    => $atts['text'],
+		'link'    => $atts['link'],
+		'target'  => $atts['target'],
+		'tooltip' => $atts['tooltip'],
+		'border'  => $atts['border'],
+	) );
+	echo '</div>';
+
+	return ob_get_clean();
 }
 
 add_shortcode( 'header_button', 'ux_header_button' );
@@ -197,11 +236,27 @@ function ux_video_button( $atts, $content = null ) {
 		'video' => 'https://www.youtube.com/watch?v=f3Hh_qSkpaA',
 		'size'  => '',
 	), $atts ) );
+
+	$wrapper_atts = array(
+		'class' => 'video-button-wrapper',
+	);
+
 	if ( $size ) {
-		$size = 'style="font-size:' . esc_attr( $size ) . '%"';
+		$wrapper_atts['style'] = 'font-size:' . esc_attr( $size ) . '%';
 	}
 
-	return '<div class="video-button-wrapper" ' . $size . '><a href="' . esc_url( $video ) . '" class="button open-video icon circle is-outline is-xlarge">' . get_flatsome_icon( 'icon-play', '1.5em' ) . '</a></div>';
+	$link_atts = array(
+		'href'       => esc_url( $video ),
+		'class'      => 'button open-video icon circle is-outline is-xlarge',
+		'role'       => 'button',
+		'aria-label' => esc_attr__( 'Open video in lightbox', 'flatsome' ),
+	);
+
+	return sprintf('<div %s><a %s>%s</a></div>',
+		flatsome_html_atts( $wrapper_atts ),
+		flatsome_html_atts( $link_atts ),
+		get_flatsome_icon( 'icon-play', '1.5em' )
+	);
 }
 
 add_shortcode( 'video_button', 'ux_video_button' );

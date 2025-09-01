@@ -1,14 +1,11 @@
-commit b764a0467c6dfc015ad577019636aaf4054a5a7f
-Merge: 0e4e07d e5c3c9f
-Author: David Anderson <david@updraftplus.com>
-Date:   Tue May 27 20:38:04 2025 +0000
+commit e85ac29af46edbcc20a83f1aa1687a8fd7d8357b
+Author: David Anderson <DavidAnderson684@users.noreply.github.com>
+Date:   Thu Aug 7 16:50:09 2025 +0000
 
-    Merge branch '1894-live-release-1-25-6' into 'master'
-    
-    Resolve "Live release 1.25.6"
-    
-    Closes #1894
-    
-    See merge request team-updraft/updraftplus!2045
+    Increase likelihood of compat for non-MySQL derivatives
 
-branch:
+changes/1764-handling-unsupported-table-column-collation-during-database-restoration.txt
+changes/1800-clear-the-updraft_lock_-entries-from-the-database-and-adjust-the-option-name.txt
+changes/1971-plugin-link-changes.txt
+src/includes/class-filesystem-functions.php
+branch: 1984-incremental-backup-doesn-t-work-for-more-files-entity

@@ -99,15 +99,16 @@ $sections = array(
 					),
 				),
 				'popup'					=> '<p class="fupi_warning_text">' . esc_html__( 'This is intended for advanced users', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . esc_html__( 'Some WordPress plugins add data to your posts, pages, products and categories. With WP Full Picture, you can track this data.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<h3>' . esc_html__( 'Step 1. Find metadata IDs', 'full-picture-analytics-cookie-notice' ) . '</h3>
-					<p>' . esc_html__( 'Do this to view metadata that you can track and find their IDs.', 'full-picture-analytics-cookie-notice' ) . '</p>
+				<p>' . esc_html__( 'Many tracking tools in WP FP let you track data associated with your posts, pages and users, like page types, categories, user roles, etc.', 'full-picture-analytics-cookie-notice' ) . '</p>
+				<p>' . esc_html__( 'Metadata tracking lets you track other data - even data added by other plugins.', 'full-picture-analytics-cookie-notice' ) . '</p>
+				<p>' . esc_html__( 'To track this data, follow these steps:', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<h3>' . esc_html__( 'Step 1. Find IDs of metadata you want to track', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<ol>
 						<li>' . esc_html__( 'Enable "Setup mode" in the "General Settings" page.', 'full-picture-analytics-cookie-notice' ) . '</li>
 						<li>' . esc_html__( 'Visit a page on your website.', 'full-picture-analytics-cookie-notice' ) . '</li>
 						<li>' . esc_html__( 'Open your browser console and type "fp_usermeta", "fp_postmeta" or "fp_termmeta". You need to be logged in as an administrator while doing this.', 'full-picture-analytics-cookie-notice' ) . '</li>
+						<li>' . esc_html__( 'Copy the IDs of the data that you want to track and paste it in the form on this page.', 'full-picture-analytics-cookie-notice' ) . '</li>
 					</ol>
-					<p>' . esc_html__( 'You will see a list of metadata IDs along with associated data. Paste the IDs of the data that you want to track in the form on this page.', 'full-picture-analytics-cookie-notice' ) . '</p>
 					<h3>' . esc_html__( 'Step 2. Set up metadata tracking in your tracking tools', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<p>' . esc_html__( 'To track metadata in your tracking tools, simply look for the "Track metadata" fields in their settings pages and follow instructions you find there.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
@@ -115,6 +116,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__('Use page labels for tracking page types','full-picture-analytics-cookie-notice'),
 				'field_id' 			=> 'page_labels',
+				'must_have'			=> 'pro',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> '<p>' . esc_html__('This will add a "page label" field to page "edit" screens.','full-picture-analytics-cookie-notice') . '</p>
 					<p>' . sprintf( esc_html__('Use it, to label pages according to their type, e.g. landing page, contact page, etc. This information can be sent to tracking and marketing tools for analysis or be used by developers. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/what-is-page-labeling-and-how-to-use-it/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">', '</a>') . '</p>
@@ -130,7 +132,7 @@ $sections = array(
 			),
 			array(
 				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__('Track 404 pages', 'full-picture-analytics-cookie-notice'),
+				'label' 			=> esc_html__('Track locations of broken links', 'full-picture-analytics-cookie-notice'),
 				'field_id' 			=> 'track_404',
 				'el_class'			=> 'fupi_condition',
 				'el_data_target'	=> 'fupi_redirect_404_opt',
@@ -138,7 +140,7 @@ $sections = array(
 				'popup'				=> '<p>' . esc_html__( 'When this is enabled, every time someone tries to visit a non-existent page on your website, WP Full Picture will add extra parameters to the address of the 404 page they visit, like this: ','full-picture-analytics-cookie-notice') . '</p>
 					<p style="font-family: courier; background: #efefef; padding: 5px; word-wrap: break-word;">' . get_bloginfo('url') . '/my_404?broken_link_location=facebook.com&broken_link=abot_us</p>
 					<p>' . esc_html__( 'These parameters contain information which will let you find broken links on your site or other websites and fix them.','full-picture-analytics-cookie-notice') . '</p>
-					<p>' . esc_html__( 'You can view all your broken links in Google Analytics, Matomo or other web analytics tools. Simply search for page views that contain the phrase "broken_link_location" in their URLs.','full-picture-analytics-cookie-notice') . '</p>',
+					<p>' . esc_html__( 'You can view all links containing "broken links location" information in Google Analytics, Matomo and other web analytics tools. Simply search for page views that contain the phrase "broken_link_location" in their URLs.','full-picture-analytics-cookie-notice') . '</p>',
 			),
 				array(
 					'type' 				=> 'text',

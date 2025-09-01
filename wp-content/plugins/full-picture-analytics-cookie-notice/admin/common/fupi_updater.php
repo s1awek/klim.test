@@ -24,6 +24,7 @@ class  Fupi_Updater {
             $this->set_fupi_versions(); // only if backup is older then 9.0
         }
 
+        $this->set_default_options();
         $this->check_fupi_versions();
         
         $options_changed = false;
@@ -56,6 +57,11 @@ class  Fupi_Updater {
 
             if ( $restore_backup ) return $returned_status;
         }
+    }
+
+    private function set_default_options(){
+        $tools_o = get_option( 'fupi_tools' );
+        if ( empty( $tools_o ) ) add_option( 'fupi_tools', [] );
     }
 
     // SAFELY MANIPULATE OPTIONS

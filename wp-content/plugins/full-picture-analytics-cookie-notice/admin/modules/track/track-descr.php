@@ -19,7 +19,7 @@ switch( $section_id ){
 	// TRACKING ACCURACY
 
 	case 'fupi_track_ref':
-		$ret_text = '<p>' . esc_html__( 'These functions can increase the amount and improve the accuracy of tracked data but sometimes they may give unexpected results. Click the "i" icons below for more information.' , 'full-picture-analytics-cookie-notice' ) . '</p>';
+		$ret_text = '<p>' . esc_html__( 'These functions can increase the amount and improve the accuracy of tracked data.' , 'full-picture-analytics-cookie-notice' ) . '</p>';
 	break;
 };
 

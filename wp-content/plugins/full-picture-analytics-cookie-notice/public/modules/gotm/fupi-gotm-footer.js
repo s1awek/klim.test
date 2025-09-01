@@ -290,7 +290,9 @@ FP.fns.gotm_standard_events = function(){
 					'event' : 'fp_outboundLinkClick',
 					'fp_clickedOutboundLink' : fpdata.clicked.link.href,
 					'fp_visitorActivityTime_total' : fpdata.activity.total,
-				} )
+				} );
+
+				if ( fp.main.debug ) console.log( '[FP] GTM event fp_outboundLinkClick. Clicked link: ', fpdata.clicked.link.href );
 			}
 		})
 	}
@@ -306,6 +308,8 @@ FP.fns.gotm_standard_events = function(){
 					'fp_clickedAffiliateLink' : name,
 					'fp_visitorActivityTime_total' : fpdata.activity.total,
 				} );
+
+				if ( fp.main.debug ) console.log( '[FP] GTM event fp_affiliateLinkClick. Clicked link: ', name );
 			}
 		} )
 	}
@@ -322,7 +326,9 @@ FP.fns.gotm_standard_events = function(){
 					'fp_clickedSafeContactLink' :  fpdata.clicked.link.safe_email || fpdata.clicked.link.safe_tel,
 					'fp_clickedContactLinkType' : contact_type + ' click',
 					'fp_visitorActivityTime_total' : fpdata.activity.total,
-				} )
+				} );
+
+				if ( fp.main.debug ) console.log( '[FP] GTM event fp_contactLinkClick. Clicked element: ', fpdata.clicked.link.href );
 			}
 		});
 	}
@@ -337,7 +343,9 @@ FP.fns.gotm_standard_events = function(){
 					'event' : 'fp_fileDownload',
 					'fp_downloadedFile' : filename,
 					'fp_visitorActivityTime_total' : fpdata.activity.total,
-				} )
+				} );
+
+				if ( fp.main.debug ) console.log( '[FP] GTM event fp_fileDownload. File: ', filename );
 			}
 		})
 	}
@@ -351,7 +359,9 @@ FP.fns.gotm_standard_events = function(){
 					'event' : 'fp_anchorClick',
 					'fp_clickedAnchorLink' : fpdata.clicked.link.href,
 					'fp_visitorActivityTime_total' : fpdata.activity.total,
-				} )
+				} );
+
+				if ( fp.main.debug ) console.log( '[FP] GTM event fp_anchorClick. Anchor: ', fpdata.clicked.link.href );
 			}
 		})
 	}
@@ -371,7 +381,9 @@ FP.fns.gotm_standard_events = function(){
 					window[fp.gtm.datalayer].push( {
 						'fp_scrollDepth' : reachedPoint,
 						'fp_visitorActivityTime_total' : fpdata.activity.total,
-					} )
+					} );
+
+					if ( fp.main.debug ) console.log( '[FP] GTM event fp_scrollDepth. Reached depth: ', reachedPoint );
 				}
 			}
 		} );
@@ -387,7 +399,9 @@ FP.fns.gotm_standard_events = function(){
 				'event' : 'fp_elementView',
 				'fp_viewedElement' : el.dataset['gtm_view'],
 				'fp_visitorActivityTime_total' : fpdata.activity.total,
-			} )
+			} );
+
+			if ( fp.main.debug ) console.log( '[FP] GTM event fp_elementView. Viewed element: ', el.dataset['gtm_view'] );
 		};
 		
 		FP.intersectionObserver( newly_added_els, fp.gtm.track_views, 'gtm', send_el_view_evt, true );
@@ -407,7 +421,9 @@ FP.fns.gotm_standard_events = function(){
 				'event' : 'fp_virtualPageview',
 				'fp_virtualPageviewURL' : location.host + location.pathname,
 				'fp_visitorActivityTime_total' : fpdata.activity.total,
-			} )
+			} );
+
+			if ( fp.main.debug ) console.log( '[FP] GTM event fp_virtualPageview' );
 		})
 	}
 
@@ -422,6 +438,8 @@ FP.fns.gotm_standard_events = function(){
 					'fp_submittedForm' : name,
 					'fp_visitorActivityTime_total' : fpdata.activity.total,
 				} );
+
+				if ( fp.main.debug ) console.log( '[FP] GTM event fp_formSubmit. Form: ', name );
 			}
 		})
 	}
@@ -432,9 +450,11 @@ FP.fns.gotm_standard_events = function(){
 		FP.addAction( ['page_in_blur'], function(){
 			window[fp.gtm.datalayer].push( {
 				'event' : 'windowVisibilityChange',
-				'fp_pageInFocus' : fpdata.doc_in_focus,
+				'fp_pageInFocus' : false,
 				'fp_visitorActivityTime_total' : fpdata.activity.total,
 			} );
+			
+			if ( fp.main.debug ) console.log( '[FP] GTM event windowVisibilityChange. Page out of focus. Total user activity time: ', fpdata.activity.total );
 		})
 	}
 	
@@ -449,7 +469,9 @@ FP.fns.gotm_standard_events = function(){
 					'event' : 'fp_elementClick',
 					'fp_clickedElement' : name,
 					'fp_visitorActivityTime_total' : fpdata.activity.total,
-				} )
+				} );
+
+				if ( fp.main.debug ) console.log( '[FP] GTM event fp_elementClick. Clicked element: ', name );
 			}
 		})
 	}

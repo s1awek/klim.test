@@ -3,20 +3,26 @@
  * Back to top.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.16.0
+ * @flatsome-version 3.20.0
  */
 
-$classes   = array( 'back-to-top', 'button', 'icon', 'invert', 'plain', 'fixed', 'bottom', 'z-1', 'is-outline', 'round' );
-$classes[] = get_theme_mod( 'back_to_top_position' ) === 'left' ? 'left' : '';
-$classes[] = get_theme_mod( 'back_to_top_mobile' ) ? '' : 'hide-for-medium';
+$classes   = [ 'back-to-top', 'button', 'icon', 'invert', 'plain', 'fixed', 'bottom', 'z-1', 'is-outline' ];
 $shape     = get_theme_mod( 'back_to_top_shape', 'circle' );
+$classes[] = $shape === 'circle' ? 'circle' : 'round';
 
-if ( $shape === 'circle' ) {
-	$classes[] = 'circle';
-	$classes   = array_diff( $classes, array( 'round' ) );
+if ( get_theme_mod( 'back_to_top_position' ) === 'left' ) {
+	$classes[] = 'left';
 }
 
-$classes = implode( ' ', array_filter( $classes ) );
-?>
+if ( ! get_theme_mod( 'back_to_top_mobile' ) ) {
+	$classes[] = 'hide-for-medium';
+}
 
-<a href="#top" class="<?php echo $classes; ?>" id="top-link" aria-label="<?php esc_attr_e('Go to top', 'flatsome' ); ?>"><?php echo get_flatsome_icon( 'icon-angle-up' ); ?></a>
+printf( '<button type="button" %s>%s</button>',
+	flatsome_html_atts( [
+		'id'         => 'top-link',
+		'class'      => $classes,
+		'aria-label' => esc_attr__( 'Go to top', 'flatsome' ),
+	] ),
+	get_flatsome_icon( 'icon-angle-up' )
+);

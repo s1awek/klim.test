@@ -3,7 +3,7 @@
  * Cart sidebar element.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.18.7
+ * @flatsome-version 3.20.0
  */
 
 if ( is_woocommerce_activated() && flatsome_is_wc_cart_available() ) {
@@ -23,10 +23,10 @@ if ( is_woocommerce_activated() && flatsome_is_wc_cart_available() ) {
 	}
 ?>
 <li class="menu-item cart-item has-icon has-child">
-	<a href="<?php echo esc_url( wc_get_cart_url() ); ?>" title="<?php _e( 'Cart', 'woocommerce' ); ?>" class="header-cart-link">
+	<a href="<?php echo esc_url( wc_get_cart_url() ); ?>" class="header-cart-link" title="<?php esc_attr_e( 'Cart', 'woocommerce' ); ?>" aria-label="<?php esc_attr_e( 'View cart', 'woocommerce' ); ?>">
 		<?php if ( $cart_total || $cart_title ) { ?>
 		<span class="header-cart-title">
-			<?php if ( $cart_title ) { _e( 'Cart', 'woocommerce' ); } ?>
+			<?php if ( $cart_title ) { esc_html_e( 'Cart', 'woocommerce' ); } ?>
 			<?php /* divider */ if ( $cart_total && $cart_title ) { ?>/<?php } ?>
 			<?php if ( $cart_total ) { ?>
 				<span class="cart-price"><?php echo WC()->cart->get_cart_subtotal(); ?></span>
@@ -41,7 +41,7 @@ if ( is_woocommerce_activated() && flatsome_is_wc_cart_available() ) {
 			<div id="cart-popup">
 				<div class="cart-popup-inner inner-padding">
 						<div class="cart-popup-title text-center">
-								<span class="heading-font uppercase"><?php _e('Cart', 'woocommerce'); ?></span>
+								<span class="heading-font uppercase"><?php esc_html_e( 'Cart', 'woocommerce' ); ?></span>
 								<div class="is-divider"></div>
 						</div>
 						<div class="widget_shopping_cart">

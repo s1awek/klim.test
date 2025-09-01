@@ -3,7 +3,7 @@
  * Custom languages dropdown for sidebar.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.16.0
+ * @flatsome-version 3.20.0
  */
 
 $current_lang = 'Languages';
@@ -15,7 +15,7 @@ if ( function_exists( 'pll_the_languages' ) ) {
 	$languages = pll_the_languages( array( 'raw' => 1 ) );
 	foreach ( $languages as $lang ) {
 		if ( $lang['current_lang'] ) {
-			$flag         = '<i class="image-icon"><img src="' . $lang['flag'] . '" alt="' . $lang['name'] . '"/></i>';
+			$flag         = '<i aria-hidden="true" class="image-icon"><img src="' . $lang['flag'] . '" alt="' . $lang['name'] . '"/></i>';
 			$current_lang = $lang['name'];
 		}
 	}
@@ -23,7 +23,7 @@ if ( function_exists( 'pll_the_languages' ) ) {
 	$languages = icl_get_languages();
 	foreach ( $languages as $lang ) {
 		if ( $lang['active'] ) {
-			$flag         = '<i class="image-icon"><img src="' . $lang['country_flag_url'] . '" alt="' . $lang['native_name'] . '"/></i>';
+			$flag         = '<i aria-hidden="true" class="image-icon"><img src="' . $lang['country_flag_url'] . '" alt="' . $lang['native_name'] . '"/></i>';
 			$current_lang = $lang['native_name'];
 		}
 	}
@@ -40,12 +40,12 @@ if ( function_exists( 'pll_the_languages' ) ) {
 		if ( $languages && function_exists( 'pll_the_languages' ) ) {
 			foreach ( $languages as $lang ) {
 				if ( $lang['current_lang'] ) $current = 'class="active"';
-				echo '<li><a href="' . $lang['url'] . '" hreflang="' . $lang['slug'] . '"><i class="icon-image"><img src="' . $lang['flag'] . '" alt="' . $lang['name'] . '"/></i> ' . $lang['name'] . '</a></li>';
+				echo '<li><a href="' . $lang['url'] . '" hreflang="' . $lang['slug'] . '"><i aria-hidden="true" class="icon-image"><img src="' . $lang['flag'] . '" alt="' . $lang['name'] . '"/></i> ' . $lang['name'] . '</a></li>';
 			}
 		} elseif ( $languages && function_exists( 'icl_get_languages' ) ) {
 			foreach ( $languages as $lang ) {
 				$current = '';
-				echo '<li><a href="' . $lang['url'] . '" hreflang="' . $lang['language_code'] . '"><i class="icon-image"><img src="' . $lang['country_flag_url'] . '" alt="' . $lang['native_name'] . '"/></i> ' . $lang['native_name'] . '</a></li>';
+				echo '<li><a href="' . $lang['url'] . '" hreflang="' . $lang['language_code'] . '"><i aria-hidden="true" class="icon-image"><img src="' . $lang['country_flag_url'] . '" alt="' . $lang['native_name'] . '"/></i> ' . $lang['native_name'] . '</a></li>';
 			}
 		}
 		if ( ! function_exists( 'pll_the_languages' ) && ! function_exists( 'icl_get_languages' ) ) {

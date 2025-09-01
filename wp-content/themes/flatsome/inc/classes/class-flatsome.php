@@ -56,6 +56,7 @@ final class Flatsome {
 			Flatsome\WooCommerce\MiniCart::get_instance();
 			Flatsome\WooCommerce\Shipping::get_instance();
 			Flatsome\WooCommerce\BuyNow::get_instance();
+			Flatsome\WooCommerce\Brands::get_instance();
 		}
 	}
 

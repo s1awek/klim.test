@@ -59,6 +59,7 @@ function ux_gallery($atts) {
       $classes_box = array('box','has-hover','gallery-box');
       $classes_image = array('box-image');
       $classes_text = array('box-text');
+      $is_multi_gallery = flatsome_is_multi_gallery( 'gallery' );
 
       // Create Grid
       if($type == 'grid'){
@@ -111,9 +112,7 @@ function ux_gallery($atts) {
             array( 'attribute' => 'padding', 'value' => $text_padding ),
       );
 
-	if ( $is_multi_gallery = get_theme_mod( 'flatsome_lightbox_multi_gallery' ) ) {
-		$classes[] = 'lightbox-multi-gallery';
-	}
+	if ( $is_multi_gallery ) $classes[] = 'lightbox-multi-gallery';
 
       // Repeater options
       $repeater['id'] = $_id;
@@ -207,7 +206,7 @@ function ux_gallery($atts) {
                 <?php if($has_video) { ?>
                     <div class="absolute no-click x50 y50 md-x50 md-y50 lg-x50 lg-y50 text-shadow-2">
                         <div class="overlay-icon">
-                            <i class="icon-play"></i>
+                            <?php echo get_flatsome_icon( 'icon-play' ); ?>
                         </div>
                     </div>
                 <?php } ?>

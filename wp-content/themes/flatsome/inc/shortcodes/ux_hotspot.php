@@ -63,24 +63,58 @@ function ux_hotspot( $atts, $content = null ) {
 	if ( $type == 'product' && ! get_theme_mod( 'disable_quick_view' ) ) {
 		wp_enqueue_script( 'wc-add-to-cart-variation' );
 	}
+
+	$icon_html = get_flatsome_icon( 'icon-' . esc_attr( $icon ) );
 	?>
 	<div class="<?php echo esc_attr( $classes ); ?> dark">
 		<div data-animate="<?php echo esc_attr( $animate ); ?>">
-			<?php if ( $type == 'text' ) { ?>
-				<a href="<?php echo esc_url( $link ); ?>" class="<?php echo esc_attr( $classes_inner ); ?>" title="<?php echo esc_attr( $text ); ?>" <?php echo get_shortcode_inline_css( $css_args ); ?>>
-					<i class="icon-<?php echo esc_attr( $icon ); ?>"></i>
+			<?php
+			if ( $type == 'text' ) :
+				$link_atts = array(
+					'href'       => esc_url( $link ),
+					'class'      => esc_attr( $classes_inner ),
+					'title'      => esc_attr( $text ),
+					'aria-label' => esc_attr( $text ),
+				);
+				?>
+				<a <?php echo flatsome_html_atts( $link_atts ) . ' ' . get_shortcode_inline_css( $css_args ); ?>>
+					<?php echo $icon_html; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				</a>
-			<?php } else if ( $type == 'product' ) {
-				if ( get_theme_mod( 'disable_quick_view' ) ) : ?>
-					<a href="<?php echo esc_url( get_permalink( $prod_id ) ); ?>" class="<?php echo esc_attr( $classes_inner ); ?>" title="<?php echo esc_attr( get_the_title( $prod_id ) ); ?>" <?php echo get_shortcode_inline_css( $css_args ); ?>>
-						<i class="icon-<?php echo esc_attr( $icon ); ?>"></i>
+				<?php
+			elseif ( $type == 'product' ) :
+				$product_title = get_the_title( $prod_id );
+
+				if ( get_theme_mod( 'disable_quick_view' ) ) :
+					$link_atts     = array(
+						'href'       => esc_url( get_permalink( $prod_id ) ),
+						'class'      => esc_attr( $classes_inner ),
+						'title'      => esc_attr( $product_title ),
+						'aria-label' => esc_attr( $product_title ),
+					);
+					?>
+					<a <?php echo flatsome_html_atts( $link_atts ) . ' ' . get_shortcode_inline_css( $css_args ); ?>>
+						<?php echo $icon_html; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 					</a>
-				<?php else : ?>
-					<a href="#quick-view" class="<?php echo esc_attr( $classes_inner ); ?> quick-view" data-prod="<?php echo esc_attr( $prod_id ); ?>" title="<?php echo esc_attr( get_the_title( $prod_id ) ); ?>" <?php echo get_shortcode_inline_css( $css_args ); ?>>
-						<i class="icon-<?php echo esc_attr( $icon ); ?>"></i>
+					<?php
+				else :
+					$link_atts     = array(
+						'href'          => '#quick-view',
+						'class'         => esc_attr( $classes_inner . ' quick-view' ),
+						'title'         => esc_attr( $product_title ),
+						'data-prod'     => esc_attr( $prod_id ),
+						'role'          => 'button',
+						'aria-label'    => esc_attr( $product_title ),
+						'aria-expanded' => 'false',
+						'aria-haspopup' => 'dialog',
+					);
+					?>
+					<a <?php echo flatsome_html_atts( $link_atts ) . ' ' . get_shortcode_inline_css( $css_args ); ?>>
+						<?php echo $icon_html; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 					</a>
-				<?php endif; ?>
-			<?php } ?>
+					<?php
+				endif;
+			endif;
+			?>
 		</div>
 	</div>
 	<?php

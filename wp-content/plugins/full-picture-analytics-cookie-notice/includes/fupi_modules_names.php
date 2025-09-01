@@ -29,6 +29,6 @@
     'blockscr' => esc_attr__('Tracking tools manager', 'full-picture-analytics-cookie-notice'),
     'woo' => esc_attr__('WooCommerce tracking', 'full-picture-analytics-cookie-notice'),
     'reports' => esc_attr__('Analytics dashboards', 'full-picture-analytics-cookie-notice'),
-    'atrig' => esc_attr__('Advanced triggers', 'full-picture-analytics-cookie-notice'),
+    'atrig' => esc_attr__('Advanced triggers + visitor scoring', 'full-picture-analytics-cookie-notice'),
     'geo' => esc_attr__('Geolocation', 'full-picture-analytics-cookie-notice'),
 ];

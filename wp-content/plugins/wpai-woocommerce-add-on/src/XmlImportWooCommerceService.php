@@ -122,7 +122,7 @@ final class XmlImportWooCommerceService {
 
 			// Bypass the new field handling if the import configuration hasn't yet been updated to use it.
 	        // In that case, retain the previous behavior until it is updated. 
-			if(!($this->getImport()->options['is_using_new_product_import_options'] ?? 0)){
+			if(!($this->getImport()->options['is_using_new_product_import_options'] ?? 0) && $this->getImport()->options['custom_type'] == 'product'){
 				error_log('Bypassing the new field handling for WooCommerce products.');
 				self::$custom_fields_handled_internally['product'] = [];
 			}

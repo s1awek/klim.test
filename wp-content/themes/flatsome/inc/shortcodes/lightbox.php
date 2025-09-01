@@ -34,11 +34,11 @@ function ux_lightbox( $atts, $content = null ) {
 
 				// Auto open lightbox
 				<?php if ( $auto_show == 'always' ) : ?>
-				Flatsome.cookie(cookieId, false)
+				Flatsome.Cookies.set(cookieId, false)
 				<?php endif; ?>
 
 				// Run lightbox if no cookie is set
-				if (Flatsome.cookie(cookieId) !== cookieValue) {
+				if (Flatsome.Cookies.get(cookieId) !== cookieValue) {
 
 					// Ensure closing off canvas
 					setTimeout(function () {
@@ -61,8 +61,7 @@ function ux_lightbox( $atts, $content = null ) {
 						})
 					}, timer)
 
-					// Set cookie
-					Flatsome.cookie(cookieId, cookieValue, 365)
+					Flatsome.Cookies.set(cookieId, cookieValue, { expires: 365 })
 				}
 			})
 		</script>

@@ -3,7 +3,7 @@
  * Wishlist element.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.19.7
+ * @flatsome-version 3.20.0
  */
 
 if ( ! class_exists( 'YITH_WCWL' ) ) {
@@ -32,7 +32,6 @@ if ( $icon_style ) {
 $icon_atts = [
 	'class'           => [
 		'wishlist-icon',
-		'icon-' . $icon,
 	],
 	'data-icon-label' => $has_items ? $count : null,
 ];
@@ -50,9 +49,11 @@ if ( $has_items ) {
 				<?php echo $header_wishlist_label; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				</span>
 			<?php endif; ?>
-			<?php if ( $icon ) : ?>
-				<i <?php echo flatsome_html_atts( $icon_atts ); ?>></i>
-			<?php endif; ?>
+			<?php
+			if ( $icon ) :
+				echo get_flatsome_icon( 'icon-' . $icon, null, $icon_atts );
+			endif;
+			?>
 		</a>
 	<?php if ( $icon_style ) echo '</div>'; ?>
 </li>

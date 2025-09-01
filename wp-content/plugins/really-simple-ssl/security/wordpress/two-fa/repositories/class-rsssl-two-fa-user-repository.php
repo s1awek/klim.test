@@ -94,7 +94,13 @@ class Rsssl_Two_Fa_User_Repository implements Rsssl_Two_Fa_User_Repository_Inter
         $enabledRoles = $params->getEnabledRoles();
         $daysThreshold = $params->getDaysThreshold();
         foreach ($results as $user) {
-            $wpUser    = get_userdata($user->ID);
+            $wpUser = get_userdata($user->ID);
+
+	        // Skip if user data is not available
+	        if (!$wpUser) {
+		        continue;
+	        }
+
             $twoFaUser = $this->factory->createFromWPUser(
                 $wpUser,
                 $forcedRoles,
@@ -118,7 +124,7 @@ class Rsssl_Two_Fa_User_Repository implements Rsssl_Two_Fa_User_Repository_Inter
     public function getForcedTwoFaUsersWithOpenStatus(Rsssl_Two_FA_Data_Parameters $params ): Rsssl_Two_Fa_User_Collection
     {
         $args = $this->queryBuilder->buildQueryArgs($params);
-        $args = $this->queryBuilder->addOpenStatusConditionToArgs($args);
+        $args = $this->queryBuilder->addUnconfigured2FAConditionToArgs($args);
         $args = $this->queryBuilder->addForcedRolesConditionToArgs($args, $params->getForcedRoles());
         $args = $this->queryBuilder->addNearingExpiryCondition($args, $params->getDaysThreshold(), 3);
         return $this->buildUserCollection($args, $params);
@@ -134,7 +140,7 @@ class Rsssl_Two_Fa_User_Repository implements Rsssl_Two_Fa_User_Repository_Inter
     public function getAddedForcedTwoFaUsersWithOpenStatus(Rsssl_Two_FA_Data_Parameters $params, array $changedRoles): Rsssl_Two_Fa_User_Collection
     {
         $args = $this->queryBuilder->buildQueryArgs($params);
-        $args = $this->queryBuilder->addOpenStatusConditionToArgs($args);
+        $args = $this->queryBuilder->addUnconfigured2FAConditionToArgs($args);
         return $this->buildUserCollection($args, $params);
     }
 

@@ -58,6 +58,7 @@
 		
 
 		fp.loaded.push('clar');
+		if ( fp.main.debug ) console.log('[FP] MS Clarity loaded');
 		FP.runFn( 'FP.fns.load_clar_footer' );
 	}
 

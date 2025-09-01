@@ -70,7 +70,7 @@ Flatsome_Option::add_field( 'option', array(
 	'label'       => __( 'Base Color', 'flatsome-admin' ),
 	'description' => __( 'Used for all normal texts.', 'flatsome-admin' ),
 	'section'     => 'colors',
-	'default'     => '#777',
+	'default'     => Flatsome_Default::COLOR_BASE,
 	'transport'   => flatsome_customizer_transport(),
 ) );
 

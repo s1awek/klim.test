@@ -23,6 +23,7 @@
 		if ( fp.cegg.tag_pagetype && fpdata.page_type ) window.CE2.addTag( 'Page type: ' + fpdata.page_type );
 
 		fp.loaded.push( 'cegg' );
+		if ( fp.main.debug ) console.log('[FP] Crazy Egg loaded');
 		FP.runFn( 'FP.fns.load_cegg_footer' );
 	} );
 

@@ -13,7 +13,7 @@
  * @see              https://woocommerce.com/document/template-structure/
  * @package          WooCommerce\Templates
  * @version          9.4.0
- * @flatsome-version 3.19.7
+ * @flatsome-version 3.20.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -42,7 +42,7 @@ if ( $out_of_stock ) $classes[] = 'out-of-stock';
 	<div class="product-small box <?php echo flatsome_product_box_class(); ?>">
 		<div class="box-image">
 			<div class="<?php echo flatsome_product_box_image_class(); ?>">
-				<a href="<?php echo get_the_permalink(); ?>" aria-label="<?php echo esc_attr( $product->get_title() ); ?>">
+				<a href="<?php echo get_the_permalink(); ?>">
 					<?php
 						/**
 						 *

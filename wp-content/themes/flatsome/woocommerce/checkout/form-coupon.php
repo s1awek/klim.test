@@ -40,7 +40,7 @@ if ( ! wc_coupons_enabled() ) { // @codingStandardsIgnoreLine.
 <form class="checkout_coupon woocommerce-form-coupon has-border is-dashed" method="post" style="display:none" id="woocommerce-checkout-form-coupon">
 
 	<div class="coupon">
-		<div class="flex-row medium-flex-wrap">
+		<div class="flex-row medium-flex-wrap gap-half">
 			<div class="flex-col flex-grow">
 				<label for="coupon_code" class="screen-reader-text"><?php esc_html_e( 'Coupon:', 'woocommerce' ); ?></label>
 				<input type="text" name="coupon_code" class="input-text" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" id="coupon_code" value="" />

@@ -13,7 +13,7 @@ class Fupi_MAIN_public {
         $this->tools = get_option('fupi_tools');
 
         add_action( 'wp_head', array( $this, 'fupi_add_meta_tags' ), -5 );
-        add_action( 'init', array( $this, 'add_fpinfo_shortcode' ) );
+        add_action( 'init', array( $this, 'add_fpinfo_shortcode' ) ); // check if it is safe to move it before the "return" above
 
         if ( ! empty( $this->settings['debug'] ) ) {
             add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -80,7 +80,7 @@ class Fupi_MAIN_public {
                     // PANEL 2 - WHEN TESTING IS ENABLED
 
                     $output .= '<div id="fupi_console_step2">
-                        <p>' . esc_html__( 'Testing is enabled. You can be tracked like any other visitor.', 'full-picture-analytics-cookie-notice' ) . '</p>
+                        <p>' . esc_html__( 'Testing is enabled and you are tracked like other visitors. It will deactivate automatically after 6 hours.', 'full-picture-analytics-cookie-notice' ) . '</p>
                         <p>' . esc_html__( 'Open browser console and start browsing your website. You will see there useful information about your tracking tools. Make sure to keep your ad blocker disabled during tests.', 'full-picture-analytics-cookie-notice' ) . ' <a href="https://wpfullpicture.com/support/documentation/debug-mode-features/">' . esc_html__( 'Learn more', 'full-picture-analytics-cookie-notice' ) . ' <span class="dashicons dashicons-external"></span></a></p>
                     </div>';
 

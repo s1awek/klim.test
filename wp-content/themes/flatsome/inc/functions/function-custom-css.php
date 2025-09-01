@@ -10,6 +10,7 @@ ob_start();
 	--fs-color-secondary: <?php echo esc_attr( get_theme_mod( 'color_secondary', Flatsome_Default::COLOR_SECONDARY ) ); ?>;
 	--fs-color-success: <?php echo esc_attr( get_theme_mod( 'color_success', Flatsome_Default::COLOR_SUCCESS ) ); ?>;
 	--fs-color-alert: <?php echo esc_attr( get_theme_mod( 'color_alert', Flatsome_Default::COLOR_ALERT ) ); ?>;
+	--fs-color-base: <?php echo esc_attr( get_theme_mod( 'color_texts', Flatsome_Default::COLOR_BASE ) ); ?>;
 	--fs-experimental-link-color: <?php echo esc_attr( get_theme_mod( 'color_links' ) ?: Flatsome_Default::LINK_COLOR ); ?>;
 	--fs-experimental-link-color-hover: <?php echo esc_attr( get_theme_mod( 'color_links_hover' ) ?: Flatsome_Default::LINK_COLOR_HOVER ); ?>;
 }
@@ -195,10 +196,6 @@ if($header_height_mobile){ ?>
 <?php } ?>
 
 <?php
-	if(get_theme_mod('color_texts')){
-		echo 'body{color: '.get_theme_mod('color_texts').'}';
-	}
-
 	if(get_theme_mod('type_headings_color')){
 	  echo 'h1,h2,h3,h4,h5,h6,.heading-font{color: '.get_theme_mod('type_headings_color').';}';
 	}
@@ -578,6 +575,7 @@ echo '.page-title-small + main .product-container > .row{padding-top:0;}';
 
 <?php if ( get_theme_mod( 'header_nav_vertical_fly_out_nav_color_hover' ) ) { ?>
 .header-vertical-menu__fly-out .nav-vertical-fly-out > li.menu-item > a:hover,
+.header-vertical-menu__fly-out .nav-vertical-fly-out > li.menu-item.active > a,
 .header-vertical-menu__fly-out .nav-vertical-fly-out > li.menu-item.current-dropdown > a {
 	color: <?php echo get_theme_mod( 'header_nav_vertical_fly_out_nav_color_hover' ); ?>;
 }
@@ -585,6 +583,7 @@ echo '.page-title-small + main .product-container > .row{padding-top:0;}';
 
 <?php if ( get_theme_mod( 'header_nav_vertical_fly_out_nav_bg_color_hover' ) ) { ?>
 .header-vertical-menu__fly-out .nav-vertical-fly-out > li.menu-item > a:hover,
+.header-vertical-menu__fly-out .nav-vertical-fly-out > li.menu-item.active > a,
 .header-vertical-menu__fly-out .nav-vertical-fly-out > li.menu-item.current-dropdown > a {
 	background-color: <?php echo get_theme_mod( 'header_nav_vertical_fly_out_nav_bg_color_hover' ); ?>;
 }

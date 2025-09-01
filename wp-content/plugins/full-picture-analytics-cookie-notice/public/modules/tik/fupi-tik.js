@@ -22,6 +22,7 @@
 		}(window, document, 'ttq');
 
 		fp.loaded.push('tik');
+		if ( fp.main.debug ) console.log('[FP] TikTok loaded');
 		FP.runFn( 'FP.fns.load_tik_footer' );
 	}
 

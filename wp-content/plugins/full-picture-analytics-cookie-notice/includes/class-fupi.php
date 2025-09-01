@@ -159,13 +159,6 @@ class Fupi {
             // AJAX for non-logged-in users
             $this->loader->add_action( 'wp_ajax_fupi_ajax', $plugin_public, 'fupi_ajax_hooks' );
         } else {
-            // Register CORS for Rest API
-            $this->loader->add_action(
-                'rest_api_init',
-                $plugin_public,
-                'fupi_add_CORS_support',
-                5
-            );
             // Add a Rest API endpoint
             $this->loader->add_action( 'rest_api_init', $plugin_public, 'fupi_rest_hooks' );
         }

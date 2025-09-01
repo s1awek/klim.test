@@ -22,7 +22,7 @@ class StringToArray extends Transformer {
    * @param  array  $container
    * @return array
    */
-  public function transform( $string, array $container = null ) {
+  public function transform( $string, ?array $container = null ) {
     $prepared = $this->insert_text_shortcodes( $string );
     $items = array();
 

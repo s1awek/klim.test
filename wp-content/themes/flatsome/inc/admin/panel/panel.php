@@ -40,6 +40,7 @@ class Flatsome_Admin {
 		add_submenu_page( 'flatsome-panel', 'Status', 'Status', 'manage_options', 'flatsome-panel-status', array( $this, 'flatsome_panel_status' ) );
 		add_submenu_page( 'flatsome-panel', 'Features', 'Features', 'manage_options', 'flatsome-panel-features', array( $this, 'flatsome_panel_features' ) );
 		add_submenu_page( 'flatsome-panel', 'Change log', 'Change log', 'manage_options', 'flatsome-panel-changelog', array( $this, 'flatsome_panel_changelog' ) );
+		add_submenu_page( 'flatsome-panel', 'License', 'License', 'manage_options', 'flatsome-panel-license', array( $this, 'flatsome_panel_license' ) );
 		add_submenu_page( 'flatsome-panel', '', 'Theme Options', 'manage_options', 'customize.php' );
 	}
 
@@ -122,6 +123,61 @@ class Flatsome_Admin {
 			</div>
 		</div>
 		<?php
+	}
+
+	public function flatsome_panel_license() {
+		?>
+		<div class="flatsome-panel">
+			<div class="wrap about-wrap">
+				<?php require get_template_directory() . '/inc/admin/panel/sections/top.php'; ?>
+				<?php require get_template_directory() . '/inc/admin/panel/sections/tab-license.php'; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render content from txt files used in panels.
+	 *
+	 * @param array $filenames Filename(s) to include.
+	 *
+	 * @return void
+	 */
+	public static function render_panel_txt_content( array $filenames ): void {
+		// Include the WP Filesystem API for reading safely txt files used in panels.
+		global $wp_filesystem;
+		if ( ! function_exists( 'WP_Filesystem' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+		WP_Filesystem();
+
+		$content = '';
+
+		if ( is_array( $filenames ) ) {
+			foreach ( $filenames as $file ) {
+				$file = get_template_directory() . '/' . $file;
+				if ( $wp_filesystem->exists( $file ) ) {
+					$file_content = $wp_filesystem->get_contents( $file );
+					$content     .= '<div class="inner-panel">';
+					$content     .= '<pre class="panel-tab-content-pre">';
+					$content     .= esc_html( $file_content );
+					$content     .= '</pre>';
+					$content     .= '</div>';
+				}
+			}
+		}
+
+		echo wp_kses(
+			$content,
+			array(
+				'div' => array(
+					'class' => array(),
+				),
+				'pre' => array(
+					'class' => array(),
+				),
+			)
+		);
 	}
 }
 

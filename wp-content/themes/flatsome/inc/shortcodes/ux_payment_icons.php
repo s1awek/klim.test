@@ -11,7 +11,8 @@ function ux_payment_icons( $atts ) {
 		'visibility' => '',
 	), $atts ) );
 
-	$classes = array( 'payment-icons', 'inline-block' );
+	$classes   = array( 'payment-icons', 'inline-block' );
+	$is_custom = ! empty( $custom );
 
 	if ( $class ) $classes[] = $class;
 
@@ -19,16 +20,24 @@ function ux_payment_icons( $atts ) {
 
 	$classes = implode( ' ', $classes );
 
-	$link_atts = array(
-		'target' => $target,
-		'rel'    => array( $rel ),
+	$element_atts = array(
+		'class'      => $classes,
+		'role'       => $is_custom ? null : 'group',
+		'aria-label' => $is_custom || $link ? null : esc_attr__( 'Payment icons', 'flatsome' ),
 	);
 
-	$link_start = $link ? '<a href="' . esc_url( $link ) . '"' . flatsome_parse_target_rel( $link_atts ) . '>' : '';
+	$link_atts = array(
+		'href'       => esc_url( $link ),
+		'target'     => esc_attr( $target ),
+		'rel'        => esc_attr( $rel ),
+		'aria-label' => $is_custom ? null : esc_attr__( 'Payment icons', 'flatsome' ), // Use image alt on custom.
+	);
+
+	$link_start = $link ? '<a ' . flatsome_html_atts( $link_atts ) . '>' : '';
 	$link_end   = $link ? '</a>' : '';
 
 	// Get custom icons if set.
-	if ( ! empty( $custom ) ) {
+	if ( $is_custom ) {
 		return do_shortcode( '<div class="' . esc_attr( $classes ) . '">' . $link_start . flatsome_get_image( $custom ) . $link_end . '</div>' );
 	} elseif ( empty( $icons ) ) {
 		return false;
@@ -42,17 +51,21 @@ function ux_payment_icons( $atts ) {
 
 	ob_start();
 
-	echo '<div class="' . esc_attr( $classes ) . '">';
-	echo $link_start; // phpcs:disable WordPress.XSS.EscapeOutput.OutputNotEscaped
+	echo '<div ' . flatsome_html_atts( $element_atts ) . '>';
+	echo $link_start; // phpcs:disable WordPress.Security.EscapeOutput
 	foreach ( $icons as $key => $value ) {
-		echo '<div class="payment-icon">';
+		$icon_atts = array(
+			'class' => 'payment-icon',
+		);
+		echo '<div ' . flatsome_html_atts( $icon_atts ) . '>';
 		if ( array_key_exists( $value, $payment_icons ) ) {
-			echo get_template_part( 'assets/img/payment-icons/icon', $value . '.svg' );
+			echo Flatsome_Icon::get_payment_icon( $value );
+			echo '<span class="screen-reader-text">' . esc_html( $payment_icons[ $value ] ) . '</span>';
 		}
 		echo '</div>';
 	}
+	echo $link_end; // phpcs:disable WordPress.Security.EscapeOutput
 	echo '</div>';
-	echo $link_end; // phpcs:disable WordPress.XSS.EscapeOutput.OutputNotEscaped
 
 	$content = ob_get_contents();
 	ob_end_clean();

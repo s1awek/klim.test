@@ -4,10 +4,12 @@ class Fupi_PROOFREC_public {
 
     private $settings;
     private $tools;
-    private $iframeblock_enabled = false;
 
     public function __construct(){
         $this->settings = get_option('fupi_proofrec');
+        
+        if ( empty ( $this->settings ) ) $this->settings = [];
+        
         $this->add_actions_and_filters();
     }
 

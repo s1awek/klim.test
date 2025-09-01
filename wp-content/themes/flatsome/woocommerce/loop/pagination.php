@@ -13,7 +13,7 @@
  * @see              https://woocommerce.com/document/template-structure/
  * @package          WooCommerce\Templates
  * @version          9.3.0
- * @flatsome-version 3.19.6
+ * @flatsome-version 3.20.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -40,8 +40,8 @@ if ( $total <= 1 ) {
 					'add_args'  => false,
 					'current'   => max( 1, $current ),
 					'total'     => $total,
-					'prev_text' => '<i class="icon-angle-left"></i>',
-					'next_text' => '<i class="icon-angle-right"></i>',
+					'prev_text' => get_flatsome_icon( 'icon-angle-left' ),
+					'next_text' => get_flatsome_icon( 'icon-angle-right' ),
 					'type'      => 'array',
 					'end_size'  => 3,
 					'mid_size'  => 3,

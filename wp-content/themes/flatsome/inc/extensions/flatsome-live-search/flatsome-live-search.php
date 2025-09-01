@@ -1,10 +1,13 @@
 <?php
 
 function flatsome_live_search_script() {
-	global $extensions_uri;
-	$theme   = wp_get_theme( get_template() );
-	$version = $theme->get( 'Version' );
-	wp_enqueue_script( 'flatsome-live-search', $extensions_uri . '/flatsome-live-search/flatsome-live-search.js', false, $version, true );
+	wp_enqueue_script(
+		'flatsome-live-search',
+		get_template_directory_uri() . '/assets/js/extensions/flatsome-live-search.js',
+		[ 'jquery' ],
+		flatsome()->version(),
+		true
+	);
 }
 
 add_action( 'wp_enqueue_scripts', 'flatsome_live_search_script' );
@@ -19,7 +22,7 @@ add_action( 'wp_enqueue_scripts', 'flatsome_live_search_script' );
 function flatsome_ajax_search_posts( $args ) {
 	$defaults = $args;
 
-	$args['s']         = apply_filters( 'flatsome_ajax_search_query', $_REQUEST['query'] );
+	$args['s']         = apply_filters( 'flatsome_ajax_search_query', $args['s'] );
 	$args['post_type'] = apply_filters( 'flatsome_ajax_search_post_type', array( 'post', 'page' ) );
 
 	$search_query   = http_build_query( $args );
@@ -52,20 +55,20 @@ function flatsome_ajax_search_get_products( $search_type, array $args ) {
 
 	switch ( $search_type ) {
 		case 'product':
-			$args['s'] = apply_filters( 'flatsome_ajax_search_products_search_query', $_REQUEST['query'] );
+			$args['s'] = apply_filters( 'flatsome_ajax_search_products_search_query', $args['s'] );
 			break;
 		case 'tag':
 			$args['s']           = '';
-			$args['product_tag'] = apply_filters( 'flatsome_ajax_search_products_by_tag_search_query', $_REQUEST['query'] );
+			$args['product_tag'] = apply_filters( 'flatsome_ajax_search_products_by_tag_search_query', $args['s'] );
 			break;
 		case 'sku':
-			$query                = apply_filters( 'flatsome_ajax_search_products_by_sku_search_query', $_REQUEST['query'] );
+			$query                = apply_filters( 'flatsome_ajax_search_products_by_sku_search_query', $args['s'] );
 			$args['s']            = '';
 			$args['post_type']    = array( 'product', 'product_variation' );
-			$args['meta_query'][] = array(
+			$args['meta_query'][] = apply_filters( 'flatsome_ajax_search_products_by_sku_search_meta_query_args', array(
 				'key'   => '_sku',
 				'value' => $query,
-			);
+			), $query );
 			break;
 	}
 
@@ -129,8 +132,14 @@ function flatsome_ajax_search_query_by_category( $args ) {
  * Search AJAX handler.
  */
 function flatsome_ajax_search() {
+	if ( ! isset( $_REQUEST['query'] ) ) {
+		wp_send_json_error( [
+			'message' => 'No search query provided',
+		] );
+	}
+
 	// The string from search text field.
-	$query        = apply_filters( 'flatsome_ajax_search_query', $_REQUEST['query'] );
+	$query        = apply_filters( 'flatsome_ajax_search_query', sanitize_text_field( wp_unslash( $_REQUEST['query'] ) ) );
 	$wc_activated = is_woocommerce_activated();
 	$products     = array();
 	$posts        = array();

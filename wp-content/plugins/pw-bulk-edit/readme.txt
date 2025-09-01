@@ -5,7 +5,7 @@ Tags: woocommerce, bulk edit, products, prices, batch
 Requires at least: 4.5
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 2.135
+Stable tag: 2.136
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -83,6 +83,9 @@ You're in control of your WooCommerce product catalog with the power of PW WooCo
 
 == Changelog ==
 
+= 2.136 =
+* Compatibility with WooCommerce 10.1.
+
 = 2.135 =
 * This version fixes a reported security issue with the plugin. It is recommended that all users upgrade to this latest version.
 
@@ -110,16 +113,13 @@ You're in control of your WooCommerce product catalog with the power of PW WooCo
 = 2.127 =
 * Performance improvements.
 
-= 2.126 =
-* Compatibility with WordPress 6.6 and WooCommerce 9.1. Added requirement for WooCommerce plugin to be installed.
-
 = Previous versions =
 * See changelog.txt
 
 == Upgrade Notice ==
 
-= 2.135 =
-* This version fixes a reported security issue with the plugin. It is recommended that all users upgrade to this latest version.
+= 2.136 =
+* Compatibility with WooCommerce 10.1.
 
 == Frequently Asked Questions ==
 

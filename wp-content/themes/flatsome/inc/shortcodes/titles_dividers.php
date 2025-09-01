@@ -71,7 +71,7 @@ function title_shortcode( $atts, $content = null ){
     $css_args_title[] = array( 'attribute' => 'color', 'value' => $color);
   }
 
-  return '<div class="' . esc_attr( $classes ) . '" ' . get_shortcode_inline_css($css_args) . '><'. $tag_name . ' class="section-title section-title-' . esc_attr( $style ) . '"><b></b><span class="section-title-main" '.get_shortcode_inline_css($css_args_title).'>' . $icon . wp_kses_post( $text ) . $small_text . '</span><b></b>' . $link_output . '</' . $tag_name . '></div>';
+  return '<div class="' . esc_attr( $classes ) . '" ' . get_shortcode_inline_css($css_args) . '><'. $tag_name . ' class="section-title section-title-' . esc_attr( $style ) . '"><b aria-hidden="true"></b><span class="section-title-main" '.get_shortcode_inline_css($css_args_title).'>' . $icon . wp_kses_post( $text ) . $small_text . '</span><b aria-hidden="true"></b>' . $link_output . '</' . $tag_name . '></div>';
 }
 add_shortcode('title', 'title_shortcode');
 

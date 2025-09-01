@@ -239,12 +239,12 @@ final class Flatsome_Relay {
 			case 'prev-next':
 				?>
 				<button class="ux-relay__button ux-relay__nav-button ux-relay__nav-button--prev" data-flatsome-dir="prev" disabled aria-label="<?php esc_attr_e( 'Previous', 'flatsome' ); ?>">
-					<svg class="ux-relay__button-icon" viewBox="0 0 100 100">
+					<svg aria-hidden="true" class="ux-relay__button-icon" viewBox="0 0 100 100">
 						<path d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z"></path>
 					</svg>
 				</button>
 				<button class="ux-relay__button ux-relay__nav-button ux-relay__nav-button--next" data-flatsome-dir="next" aria-label="<?php esc_attr_e( 'Next', 'flatsome' ); ?>">
-					<svg class="ux-relay__button-icon" viewBox="0 0 100 100">
+					<svg aria-hidden="true" class="ux-relay__button-icon" viewBox="0 0 100 100">
 						<path d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z" transform="translate(100, 100) rotate(180)"></path>
 					</svg>
 				</button>

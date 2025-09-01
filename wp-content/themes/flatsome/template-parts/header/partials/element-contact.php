@@ -3,13 +3,12 @@
  * Contact element.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.19.9
+ * @flatsome-version 3.20.0
  */
 
 ?>
 <li class="header-contact-wrapper">
 	<?php
-		$class = '';
 		$icon_size = get_theme_mod( 'contact_icon_size', '16px' );
 		$class_link = 'tooltip';
 		$nav = 'nav-divided nav-uppercase';
@@ -19,9 +18,9 @@
 			$label = false;
 		}
 	?>
-	<ul id="header-contact" class="nav <?php echo $nav; ?> header-contact">
+	<ul id="header-contact" class="nav medium-nav-center <?php echo $nav; ?> header-contact">
 		<?php if ( get_theme_mod( 'contact_location', '' ) ) { ?>
-			<li class="<?php echo $class; ?>">
+			<li>
 			  <a target="_blank" rel="noopener" href="https://maps.google.com/?q=<?php echo get_theme_mod( 'contact_location', '' ); ?>" title="<?php echo get_theme_mod( 'contact_location', '' ); ?>" class="<?php echo $class_link;?>">
 			  	 <?php echo get_flatsome_icon('icon-map-pin-fill',$icon_size); ?>
 			     <span>
@@ -40,7 +39,7 @@
 			<?php
 			 $contact_email = get_theme_mod('contact_email','youremail@gmail.com');
 			 if($contact_email){ ?>
-			<li class="<?php echo $class; ?>">
+			<li>
 			  <a href="mailto:<?php echo $contact_email; ?>" class="<?php echo $class_link;?>" title="<?php echo  $contact_email; ?>">
 				  <?php echo get_flatsome_icon('icon-envelop',$icon_size); ?>
 			       <span>
@@ -61,7 +60,7 @@
 			if($contact_hours){
 				$contact_hours_details = get_theme_mod( 'contact_hours_details', '' );
 			?>
-			<li class="<?php echo $class; ?>">
+			<li>
 			  <a href="#" onclick="event.preventDefault()" class="<?php echo $class_link;?>" title="<?php echo $contact_hours; ?><?php if($contact_hours_details) echo ' | '.$contact_hours_details; ?> ">
 			  	   <?php echo get_flatsome_icon('icon-clock',$icon_size); ?>
 			        <span><?php if($label) echo $contact_hours; ?></span>
@@ -70,7 +69,7 @@
 			<?php } ?>
 
 			<?php if ( get_theme_mod( 'contact_phone', '+47 900 99 000' ) ) { ?>
-			<li class="<?php echo $class; ?>">
+			<li>
 			  <a href="tel:<?php echo get_theme_mod( 'contact_phone', '+47 900 99 000' ); ?>" class="<?php echo $class_link;?>" title="<?php echo get_theme_mod( 'contact_phone', '+47 900 99 000' ); ?>">
 			     <?php echo get_flatsome_icon('icon-phone',$icon_size); ?>
 			      <span><?php if($label) echo get_theme_mod( 'contact_phone', '+47 900 99 000' ); ?></span>

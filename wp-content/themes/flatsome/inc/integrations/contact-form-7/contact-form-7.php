@@ -2,13 +2,10 @@
 
 
 function flatsome_contact_form_presets($args){
- 	?>	
-    <style>.metabox-holder .dev-cta{display:none!important;}</style>
-
+ 	?>
     <div class="metabox-holder">
-    <p style="font-size: 1.5em; background-color: rgba(0, 130, 0, 0.09); padding:15px;">
+    <p style="font-size: 1.5em; background-color: rgba(0, 130, 0, 0.09); padding-bottom:15px;">
       Copy and paste a form preset into the 'Form' tab.
-      <a href="#">Learn more here..</a>
     </p>
 
     <!-- Contact form -->

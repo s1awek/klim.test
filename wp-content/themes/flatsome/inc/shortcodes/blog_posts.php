@@ -280,7 +280,7 @@ while ( $recentPosts->have_posts() ) : $recentPosts->the_post();
   						<?php if($post_icon && get_post_format()) { ?>
   							<div class="absolute no-click x50 y50 md-x50 md-y50 lg-x50 lg-y50">
   				            	<div class="overlay-icon">
-  				                    <i class="icon-play"></i>
+  				                    <?php echo get_flatsome_icon( 'icon-play' ); ?>
   				                </div>
   				            </div>
   						<?php } ?>

@@ -45,6 +45,9 @@ function ux_tabgroup( $params, $content = null, $tag = '' ) {
 
 	if( is_array( $GLOBALS['tabs'] )){
 
+		$tabs  = array();
+		$panes = array();
+
 		foreach( $GLOBALS['tabs'] as $key => $tab ){
 			if ( ! empty( $tab['anchor'] ) ) {
 				$id = flatsome_to_dashed( $tab['anchor'] );

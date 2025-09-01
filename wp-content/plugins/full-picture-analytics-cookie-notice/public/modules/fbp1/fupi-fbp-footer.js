@@ -145,7 +145,6 @@ FP.fns.fbp_woo_events = () => {
 
 		FP.track_fbp_evt( false, event_name, false, payload_o );
 	}
-
 	
 	// track order
 	// unless we already do it through server with advanced order tracking

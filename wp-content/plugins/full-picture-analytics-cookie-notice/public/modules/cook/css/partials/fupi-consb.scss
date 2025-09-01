@@ -150,10 +150,10 @@ html.fupi_blur_out:not(.fupi_infobox) body{
 	}
 }
 
-.fupi_privacy_url:focus-visible {
-    outline: 0;
-	text-decoration: underline;
-}
+// .fupi_privacy_url:focus-visible {
+//     outline: 0;
+// 	text-decoration: underline;
+// }
 
 @media screen and (max-width: 959px) {
 	#fupi_cookie_notice{

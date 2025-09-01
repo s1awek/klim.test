@@ -13,7 +13,7 @@
  * @see              https://woocommerce.com/document/template-structure/
  * @package          WooCommerce\Templates
  * @version          9.9.0
- * @flatsome-version 3.19.13
+ * @flatsome-version 3.20.0
  *
  * @flatsome-parallel-template {
  * form-login-lightbox-left-panel.php
@@ -39,7 +39,7 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 
 			<div class="account-login-inner">
 
-				<h3 class="uppercase"><?php esc_html_e( 'Login', 'woocommerce' ); ?></h3>
+				<h2 class="uppercase h3"><?php esc_html_e( 'Login', 'woocommerce' ); ?></h2>
 
 				<form class="woocommerce-form woocommerce-form-login login" method="post" novalidate>
 
@@ -80,7 +80,7 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 
 			<div class="account-register-inner">
 
-				<h3 class="uppercase"><?php esc_html_e( 'Register', 'woocommerce' ); ?></h3>
+				<h2 class="uppercase h3"><?php esc_html_e( 'Register', 'woocommerce' ); ?></h2>
 
 				<form method="post" class="woocommerce-form woocommerce-form-register register" <?php do_action( 'woocommerce_register_form_tag' ); ?> >
 

@@ -62,6 +62,7 @@
 		
 		
 		fp.loaded.push( 'insp' );
+		if ( fp.main.debug ) console.log('[FP] Inspectlet loaded');
 		FP.runFn( 'FP.fns.load_insp_footer' );
 	}
 

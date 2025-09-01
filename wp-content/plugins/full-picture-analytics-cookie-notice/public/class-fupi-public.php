@@ -224,85 +224,8 @@ class Fupi_Public {
         register_rest_route( 'fupi/v1', '/sender', [
             'methods'             => 'POST',
             'callback'            => [$this, 'fupi_process_server_calls'],
-            'permission_callback' => [$this, 'verify_same_domain_request'],
+            'permission_callback' => '__return_true',
         ] );
-    }
-
-    // Restricts REST API writes to same-domain only (uses origin/referrer/page url).
-    public function verify_same_domain_request() {
-        if ( empty( $this->main['verify_permissions'] ) ) {
-            return true;
-        }
-        $site_domain = $this->get_site_domain();
-        $referer = ( isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '' );
-        $origin = ( isset( $_SERVER['HTTP_ORIGIN'] ) ? $_SERVER['HTTP_ORIGIN'] : '' );
-        $data = json_decode( file_get_contents( 'php://input' ), true );
-        $page_url = ( isset( $data['extra_data']['page_url'] ) ? $data['extra_data']['page_url'] : '' );
-        if ( $this->is_same_domain( $referer, $site_domain ) || $this->is_same_domain( $origin, $site_domain ) || $this->is_same_domain( $page_url, $site_domain ) ) {
-            return true;
-        }
-        return new WP_Error('rest_forbidden', 'WP FP data can only be submitted from the same domain.', array(
-            'status' => 403,
-        ));
-    }
-
-    public function get_site_domain() {
-        $site_url = get_site_url();
-        $parsed_url = parse_url( $site_url );
-        return ( isset( $parsed_url['host'] ) ? $parsed_url['host'] : '' );
-    }
-
-    // Checks if the URL is the given domain or a subdomain of it.
-    public function is_same_domain( $url, $domain ) {
-        if ( empty( $url ) || empty( $domain ) ) {
-            return false;
-        }
-        $parsed_url = parse_url( $url );
-        $url_host = ( isset( $parsed_url['host'] ) ? $parsed_url['host'] : '' );
-        if ( empty( $url_host ) ) {
-            return false;
-        }
-        $domain = preg_replace( '/^www\\./i', '', $domain );
-        $url_host = preg_replace( '/^www\\./i', '', $url_host );
-        if ( $url_host === $domain ) {
-            return true;
-        }
-        $domain_pattern = '/\\.' . preg_quote( $domain, '/' ) . '$/i';
-        if ( preg_match( $domain_pattern, $url_host ) ) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Adds CORS support for REST endpoints (same-domain only).
-     */
-    public function fupi_add_CORS_support() {
-        add_filter(
-            'rest_pre_serve_request',
-            function (
-                $served,
-                $result,
-                $request,
-                $server
-            ) {
-                $site_domain = $this->get_site_domain();
-                $origin = ( isset( $_SERVER['HTTP_ORIGIN'] ) ? $_SERVER['HTTP_ORIGIN'] : '' );
-                if ( !empty( $origin ) && $this->is_same_domain( $origin, $site_domain ) ) {
-                    header( 'Access-Control-Allow-Origin: ' . $origin );
-                    header( 'Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS' );
-                    header( 'Access-Control-Allow-Credentials: true' );
-                    header( 'Access-Control-Allow-Headers: Authorization, Content-Type, X-Requested-With' );
-                }
-                if ( 'OPTIONS' === $_SERVER['REQUEST_METHOD'] ) {
-                    status_header( 200 );
-                    exit;
-                }
-                return $served;
-            },
-            10,
-            4
-        );
     }
 
     // AJAX HOOKS
@@ -366,7 +289,7 @@ class Fupi_Public {
         }
         // Copy HTML
         $orig_html = $html;
-        if ( !empty( $this->tools['cook'] ) ) {
+        if ( !empty( $this->tools['cook'] ) && !empty( $this->cook ) ) {
             // SCRIPTS BLOCKER
             $blockscr_enabled = !empty( $this->cook['scrblk_auto_rules'] ) || !empty( $this->cook['control_other_tools'] ) && !empty( $this->cook['scrblk_manual_rules'] );
             if ( !empty( $blockscr_enabled ) ) {

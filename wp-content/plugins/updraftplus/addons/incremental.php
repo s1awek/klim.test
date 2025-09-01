@@ -53,7 +53,7 @@ class UpdraftPlus_Addons_Incremental {
 	 * @return string      - the premium backup link
 	 */
 	public function incremental_backup_link($link) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Unused parameter is present because the method is used as a WP filter.
-		return '<p><a href="#" id="updraftplus_incremental_backup_link" onclick="updraft_backup_dialog_open(\'incremental\'); return false;" data-incremental="1">' . __('Add changed files (incremental backup) ...', ' updraftplus ') . '</a></p>';
+		return '<p><a href="#" id="updraftplus_incremental_backup_link" onclick="updraft_backup_dialog_open(\'incremental\'); return false;" data-incremental="1">' . __('Add changed files (incremental backup) ...', 'updraftplus') . '</a></p>';
 	}
 
 	/**

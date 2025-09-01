@@ -45,10 +45,23 @@ if ( ! $isWizard  or ! empty(PMXI_Plugin::$session->deligate) and PMXI_Plugin::$
 $post_type = $post['custom_type'];
 if (!empty($post['custom_type'])){
 	$custom_type = get_post_type_object( $post['custom_type'] );
-	if ($post['custom_type'] == 'product') {
-		$cpt_name = 'WooCommerce products';
-	} else {
-		$cpt_name = ( ! empty($custom_type)) ? strtolower($custom_type->label) : '';
+	switch($post['custom_type']) {
+		case 'product':
+			$cpt_name = 'WooCommerce products';
+			break;
+		case 'shop_coupon':
+			$cpt_name = 'WooCommerce coupons';
+			break;
+		case 'shop_order':
+			$cpt_name = 'WooCommerce orders';
+			break;
+		default:
+			if (in_array($post['custom_type'], ['post', 'page'])) {
+				$cpt_name = 'WordPress ' . strtolower($custom_type->label);
+			} else {
+				$cpt_name = ( ! empty($custom_type)) ? strtolower($custom_type->label) : '';
+			}
+			break;
 	}
 }
 else{
@@ -70,7 +83,7 @@ else{
     <input type="checkbox" id="is_not_keep_former_posts" name="is_keep_former_posts" value="no" <?php echo "yes" != $post['is_keep_former_posts'] ? 'checked="checked"': '' ?> class="switcher" />
     <label for="is_not_keep_former_posts"><?php printf(__('Update existing %s with changed data in your file', 'wpai_woocommerce_addon_plugin'), $cpt_name); ?></label>
 	<?php if ( $isWizard and "new" == $post['wizard_type'] and empty(PMXI_Plugin::$session->deligate)): ?>
-        <a href="#help" class="wpallimport-help" style="position: relative; top: -2px;" title="<?php _e('These options will only be used if you run this import again later. All data is imported the first time you run an import.<br/><br/>Note that WP All Import will only update/remove posts created by this import. If you want to match to posts that already exist on this site, use Existing Items in Step 1.', 'wpai_woocommerce_addon_plugin') ?>">?</a>
+        <a href="#help" class="wpallimport-help" style="position: relative; top: -2px;" title="<?php printf(__('These options will only be used if you run this import again later. All data is imported the first time you run an import.<br/><br/>Note that WP All Import will only update/remove %s created by this import. If you want to match to %s that already exist on this site, select \'Search for and update all %s on this site\' above.', 'wpai_woocommerce_addon_plugin'), $cpt_name, $cpt_name, $cpt_name) ?>">?</a>
 	<?php endif; ?>
     <div class="switcher-target-is_not_keep_former_posts" style="padding-left:20px;">
 

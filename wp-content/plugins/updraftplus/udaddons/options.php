@@ -385,8 +385,6 @@ class UpdraftPlusAddOns_Options2 {
 ENDHERE;
 		}
 
-		echo '<h3 style="clear:left; margin-top: 10px;">'.esc_html__('UpdraftPlus Premium', 'updraftplus').'</h3><div>';
-
 		$addons = $updraftplus_addons2->get_available_addons();
 
 		$this->plugin_update_url = 'update-core.php';
@@ -442,14 +440,16 @@ ENDHERE;
 				}
 			}
 		} else {
-			echo "<em>".esc_html__('An error occurred when trying to retrieve your add-ons.', 'updraftplus')."</em>";
+			$first = "<em>".esc_html__('An error occurred when trying to retrieve your add-ons.', 'updraftplus')."</em>";
 		}
 
-		echo $first.$second.$third;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- contains HTML <a> tags that has inline onclick event
-
-		echo <<<ENDHERE
-		</div>
-ENDHERE;
+		$addon_boxes = $first.$second.$third;
+		// Hide header if no addon box is visible or no error trying to retrieve add-ons.
+		if (!empty($addon_boxes)) {
+			echo '<h3 style="clear:left; margin-top: 10px;">'.esc_html__('UpdraftPlus Premium', 'updraftplus').'</h3><div>';
+			echo $addon_boxes;// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- contains HTML <a> tags that has inline onclick event
+			echo '</div>';
+		}
 
 		if ($this->update_js) {
 		?>
@@ -516,6 +516,7 @@ ENDHERE;
 		}
 
 		if ($installed && ($is_assigned || ($have_all && 'all' != $key))) {
+			if ('all' === $key) return;
 			$blurb = "<p>";
 			$preblurb = "<div style=\"float:right;padding-top:10px;\"><img title=\"".esc_html__('You\'ve got it', 'updraftplus')."\" src=\"$urlbase/$key.png\" width=\"100\" height=\"100\" alt=\"".esc_html__("You've got it", 'updraftplus')."\"></div>";
 			if ('all' != $key) {
@@ -530,6 +531,7 @@ ENDHERE;
 			}
 			$blurb .= "</p>";
 		} else {
+			if ('all' == $key && $is_assigned && false === $unclaimed) return;
 			if ($have_all && 'all' != $key) {
 				$blurb = '<p><strong>'.esc_html__('Available for this site (via your all-addons purchase)', 'updraftplus').' - <a href="'.$this->plugin_update_url.'">'.esc_html__('please follow this link to update the plugin in order to get it', 'updraftplus').'</a></strong></p>';
 				$preblurb = "<div style=\"border: 2px solid #189c5f;padding: 10px;width: 72px;height: 72px;border-radius: 5px;position: relative;background: #1a9c5e0f;\"><img style=\"-webkit-filter: grayscale(100%);filter: grayscale(100%);width: 56px;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);\" src=\"$urlbase/$key.png\"></div>";

@@ -317,6 +317,20 @@ Flatsome_Option::add_field( 'option', array(
 	'default'   => '',
 ) );
 
+Flatsome_Option::add_field( 'option', array(
+	'type'      => 'radio-image',
+	'settings'  => 'category_filter_overlay_position',
+	'label'     => __( 'Filter Overlay Position', 'flatsome-admin' ),
+	'section'   => 'woocommerce_product_catalog',
+	'transport' => flatsome_customizer_transport(),
+	'default'   => 'left',
+	'choices'   => array(
+		'left'   => flatsome_customizer_images_uri() . '/overlay-left.svg',
+		'right'  => flatsome_customizer_images_uri() . '/overlay-right.svg',
+		'center' => flatsome_customizer_images_uri() . '/overlay-center.svg',
+	),
+) );
+
 Flatsome_Option::add_field( '', array(
 	'type'     => 'custom',
 	'settings' => 'custom_title_category_breadcrumbs',
@@ -505,12 +519,35 @@ Flatsome_Option::add_field( 'option', array(
 ) );
 
 Flatsome_Option::add_field( 'option', array(
-	'type'      => 'checkbox',
-	'settings'  => 'product_box_review_count',
-	'transport' => flatsome_customizer_transport(),
-	'label'     => __( 'Show review count', 'flatsome-admin' ),
-	'section'   => 'woocommerce_product_catalog',
-	'default'   => 0,
+	'type'            => 'checkbox',
+	'settings'        => 'product_box_empty_rating',
+	'transport'       => flatsome_customizer_transport(),
+	'label'           => esc_html__( 'Show empty ratings', 'flatsome-admin' ),
+	'section'         => 'woocommerce_product_catalog',
+	'default'         => 0,
+	'active_callback' => array(
+		array(
+			'setting'  => 'product_box_rating',
+			'operator' => '==',
+			'value'    => true,
+		),
+	),
+) );
+
+Flatsome_Option::add_field( 'option', array(
+	'type'            => 'checkbox',
+	'settings'        => 'product_box_review_count',
+	'transport'       => flatsome_customizer_transport(),
+	'label'           => esc_html__( 'Show review count', 'flatsome-admin' ),
+	'section'         => 'woocommerce_product_catalog',
+	'default'         => 0,
+	'active_callback' => array(
+		array(
+			'setting'  => 'product_box_rating',
+			'operator' => '==',
+			'value'    => true,
+		),
+	),
 ) );
 
 Flatsome_Option::add_field( 'option', array(
@@ -793,6 +830,22 @@ if ( get_theme_mod( 'swatches' ) ) :
 			''         => 'Go to product page',
 			'unselect' => 'Unselect swatch',
 		),
+	) );
+
+	Flatsome_Option::add_field( 'option', array(
+		'type'        => 'checkbox',
+		'settings'    => 'swatches_box_out_of_stock_inactive',
+		'label'       => esc_html__( 'Inactive out of stock', 'flatsome' ),
+		'description' => esc_html__( 'Show out of stock items as inactive.', 'flatsome' ),
+		'section'     => 'woocommerce_product_catalog',
+		'active_callback' => array(
+			array(
+				'setting'  => 'swatches_box_attribute',
+				'operator' => '!=',
+				'value'    => '',
+			),
+		),
+		'default'     => 0,
 	) );
 
 	Flatsome_Option::add_field( 'option', array(

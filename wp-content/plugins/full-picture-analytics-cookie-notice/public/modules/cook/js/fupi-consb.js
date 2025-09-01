@@ -1,5 +1,3 @@
-"use strict";
-
 (function() {
 
 	'use strict';
@@ -19,18 +17,6 @@
 		firstTabStop = false,
 		lastTabStop = false,
 		a11y_buttons_ready = false;
-
-	function listCookies() {
-
-		let theCookies = document.cookie.split(';'),
-			cookieNames = [];
-
-		for (var i = 0; i < theCookies.length; i++) {
-			let cookieName = theCookies[i].split('=')[0].trim();
-			cookieNames.push(cookieName);
-		}
-		return cookieNames;
-	};
 
 	function setup_notice(){
 

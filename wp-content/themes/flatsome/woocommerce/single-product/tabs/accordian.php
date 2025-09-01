@@ -5,7 +5,7 @@
  * @author           WooThemes
  * @package          WooCommerce/Templates
  * @version          2.0.0
- * @flatsome-version 3.17.0
+ * @flatsome-version 3.20.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -30,7 +30,7 @@ if ( ! empty( $product_tabs ) ) : ?>
 		<?php $is_open = $key === array_key_first( $product_tabs ) && $product_display !== 'accordian-collapsed'; ?>
 		<div id="accordion-<?php echo esc_attr( $key ) ?>" class="accordion-item">
 			<a id="accordion-<?php echo esc_attr( $key ) ?>-label" class="accordion-title plain<?php echo $is_open ? ' active' : ''; ?>" aria-expanded="<?php echo $is_open ? 'true' : 'false'; ?>" aria-controls="accordion-<?php echo esc_attr( $key ) ?>-content" href="<?php echo esc_url( '#accordion-item-' . $key ); ?>">
-				<button class="toggle" aria-label="<?php echo esc_attr__( 'Toggle', 'flatsome' ); ?>"><i class="icon-angle-down"></i></button>
+				<button class="toggle" aria-label="<?php echo esc_attr__( 'Toggle', 'flatsome' ); ?>"><?php echo get_flatsome_icon( 'icon-angle-down' ); ?></button>
 				<?php echo apply_filters( 'woocommerce_product_' . $key . '_tab_title', $product_tab['title'], $key ); ?>
 			</a>
 			<div id="accordion-<?php echo esc_attr( $key ) ?>-content" class="accordion-inner"<?php echo $is_open ? ' style="display: block;"' : ''; ?> aria-labelledby="accordion-<?php echo esc_attr( $key ) ?>-label">

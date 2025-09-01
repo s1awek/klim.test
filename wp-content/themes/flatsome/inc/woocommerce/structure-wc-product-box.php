@@ -64,8 +64,17 @@ if ( ! function_exists( 'flatsome_woocommerce_get_alt_product_thumbnail' ) ) {
 					continue;
 				}
 				$loop ++;
+				$alt_text = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
+				if ( empty( $alt_text ) ) {
+					/* translators: %s: Product title */
+					$alt_text = sprintf( __( 'Alternative view of %s', 'flatsome' ), $product->get_title() );
+				}
 				echo apply_filters( 'flatsome_woocommerce_get_alt_product_thumbnail',
-					wp_get_attachment_image( $attachment_id, 'woocommerce_thumbnail', false, array( 'class' => $class ) ) );
+					wp_get_attachment_image( $attachment_id, 'woocommerce_thumbnail', false, array(
+						'class'       => $class,
+						'alt'         => $alt_text,
+						'aria-hidden' => 'true',
+					) ) );
 				if ( $loop == 1 ) {
 					break;
 				}
@@ -96,7 +105,7 @@ if ( ! function_exists( 'flatsome_woocommerce_shop_loop_category' ) ) {
 		if ( ! get_theme_mod( 'product_box_category', 1 ) ) {
 			return;
 		} ?>
-		<p class="category uppercase is-smaller no-text-overflow product-cat op-7">
+		<p class="category uppercase is-smaller no-text-overflow product-cat op-8">
 			<?php
 			global $product;
 			$product_cats = wc_get_product_category_list( get_the_ID(), '\n', '', '' );

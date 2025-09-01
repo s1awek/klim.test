@@ -21,6 +21,7 @@ require get_template_directory() . '/inc/classes/class-flatsome.php';
 require get_template_directory() . '/inc/classes/class-flatsome-default.php';
 require get_template_directory() . '/inc/classes/class-flatsome-options.php';
 require get_template_directory() . '/inc/classes/class-flatsome-theme-json.php';
+require get_template_directory() . '/inc/classes/class-flatsome-cache.php';
 require get_template_directory() . '/inc/classes/class-flatsome-upgrade.php';
 require get_template_directory() . '/inc/classes/class-flatsome-base-registration.php';
 require get_template_directory() . '/inc/classes/class-flatsome-wupdates-registration.php';
@@ -28,6 +29,7 @@ require get_template_directory() . '/inc/classes/class-flatsome-registration.php
 require get_template_directory() . '/inc/classes/class-flatsome-envato.php';
 require get_template_directory() . '/inc/classes/class-flatsome-envato-admin.php';
 require get_template_directory() . '/inc/classes/class-flatsome-instagram.php';
+require get_template_directory() . '/inc/classes/class-flatsome-icon.php';
 require get_template_directory() . '/inc/classes/class-flatsome-relay.php';
 require get_template_directory() . '/inc/classes/class-flatsome-shortcode-image-extractor.php';
 require get_template_directory() . '/inc/classes/class-uxthemes-api.php';
@@ -162,6 +164,7 @@ if ( is_woocommerce_activated() ) {
 	require get_template_directory() . '/inc/woocommerce/class-shipping.php';
 	require get_template_directory() . '/inc/woocommerce/class-mini-cart.php';
 	require get_template_directory() . '/inc/woocommerce/class-buy-now.php';
+	require get_template_directory() . '/inc/woocommerce/class-brands.php';
 }
 
 /**

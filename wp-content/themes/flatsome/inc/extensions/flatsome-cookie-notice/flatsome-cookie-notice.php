@@ -14,9 +14,13 @@ defined( 'ABSPATH' ) || exit;
  * Enqueue extensions scripts.
  */
 function flatsome_cookie_notice_scripts() {
-	global $extensions_uri;
-
-	wp_enqueue_script( 'flatsome-cookie-notice', $extensions_uri . '/flatsome-cookie-notice/flatsome-cookie-notice.js', array( 'jquery', 'flatsome-js' ), '3.12.0', true );
+	wp_enqueue_script(
+		'flatsome-cookie-notice',
+		get_template_directory_uri() . '/assets/js/extensions/flatsome-cookie-notice.js',
+		[ 'jquery', 'flatsome-js', 'wp-dom-ready' ],
+		flatsome()->version(),
+		true
+	);
 }
 
 add_action( 'wp_enqueue_scripts', 'flatsome_cookie_notice_scripts' );
@@ -36,9 +40,9 @@ function flatsome_cookie_notice_template() {
 	$text = get_theme_mod( 'cookie_notice_text' );
 	$id   = get_theme_mod( 'privacy_policy_page' );
 	$page = $id ? get_post( $id ) : false;
-	$text = $text ? $text : __( 'This site uses cookies to offer you a better browsing experience. By browsing this website, you agree to our use of cookies.', 'flatsome' );
+	$text = $text ? $text : esc_html__( 'This site uses cookies to offer you a better browsing experience. By browsing this website, you agree to our use of cookies.', 'flatsome' );
 	?>
-	<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+	<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" inert>
 		<div class="flatsome-cookies__inner">
 			<div class="flatsome-cookies__text">
 				<?php echo do_shortcode( $text ); ?>
@@ -57,9 +61,9 @@ function flatsome_cookie_notice_template() {
 				?>
 				<?php
 				echo flatsome_apply_shortcode( 'button', array(
+					'as'    => 'button',
 					'text'  => _x( 'Accept', 'cookie notice', 'flatsome' ),
 					'style' => get_theme_mod( 'cookie_notice_button_style', '' ),
-					'link'  => '#',
 					'color' => 'primary',
 					'class' => 'flatsome-cookies__accept-btn',
 				) );

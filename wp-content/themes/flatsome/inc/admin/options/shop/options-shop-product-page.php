@@ -6,6 +6,7 @@ Flatsome_Option::add_section( 'product-page', array(
 ) );
 
 function flatsome_customizer_shop_product_page_options() {
+
 	Flatsome_Option::add_field( '', array(
 		'type'     => 'custom',
 		'settings' => 'custom_title_product_layout',
@@ -69,6 +70,27 @@ function flatsome_customizer_shop_product_page_options() {
 		'section'  => 'product-page',
 		'default'  => 0,
 	) );
+
+	Flatsome_Option::add_field( 'option', array(
+		'type'            => 'radio-image',
+		'settings'        => 'product_offcanvas_sidebar_position',
+		'label'           => __( 'Off-canvas Sidebar Position', 'flatsome-admin' ),
+		'section'         => 'product-page',
+		'default'         => 'left',
+		'transport'       => flatsome_customizer_transport(),
+		'choices'         => array(
+			'left'   => flatsome_customizer_images_uri() . '/overlay-left.svg',
+			'right'  => flatsome_customizer_images_uri() . '/overlay-right.svg',
+			'center' => flatsome_customizer_images_uri() . '/overlay-center.svg',
+		),
+		'active_callback' => array(
+			array(
+				'setting'  => 'product_offcanvas_sidebar',
+				'operator' => '==',
+				'value'    => 1,
+			),
+		),
+	));
 
 	Flatsome_Option::add_field( 'option', array(
 		'type'            => 'radio-image',

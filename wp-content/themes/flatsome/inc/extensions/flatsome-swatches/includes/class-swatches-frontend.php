@@ -195,8 +195,15 @@ class Swatches_Frontend {
 
 		if ( ! empty( $swatches ) ) {
 			$selector_classes[] = 'hidden';
-			$swatches           = '<div class="' . esc_attr( implode( ' ', $classes ) ) . '" data-attribute_name="attribute_' . esc_attr( $attribute ) . '">' . $swatches . '</div>';
-			$html               = '<div class="' . esc_attr( implode( ' ', $selector_classes ) ) . '">' . $html . '</div>' . $swatches;
+			$swatches_atts      = [
+				'class'               => esc_attr( implode( ' ', $classes ) ),
+				'data-attribute_name' => esc_attr( 'attribute_' . $attribute ),
+				'role'                => 'radiogroup',
+				'aria-labelledby'     => esc_attr( $attribute ),
+			];
+
+			$swatches = '<div ' . flatsome_html_atts( $swatches_atts ) . '>' . $swatches . '</div>';
+			$html     = '<div class="' . esc_attr( implode( ' ', $selector_classes ) ) . '">' . $html . '</div>' . $swatches;
 		}
 
 		return $html;
@@ -213,12 +220,13 @@ class Swatches_Frontend {
 	 * @return string
 	 */
 	public function swatch_html( $html, $term, $type, $args ) {
-		$selected = sanitize_title( $args['selected'] ) == $term->slug ? 'selected' : '';
-		$name     = esc_html( apply_filters( 'woocommerce_variation_option_name', $term->name, $term, $args['attribute'], $args['product'] ) );
-		$img_size = apply_filters( 'flatsome_swatch_image_size', 'woocommerce_gallery_thumbnail', $term );
-		$classes  = array( 'ux-swatch' );
-		$thumb    = '';
-		$tooltip  = '';
+		$selected     = sanitize_title( $args['selected'] ) == $term->slug ? 'selected' : '';
+		$aria_checked = ! empty( $selected ) ? 'true' : 'false';
+		$name         = esc_html( apply_filters( 'woocommerce_variation_option_name', $term->name, $term, $args['attribute'], $args['product'] ) );
+		$img_size     = apply_filters( 'flatsome_swatch_image_size', 'woocommerce_gallery_thumbnail', $term );
+		$classes      = array( 'ux-swatch' );
+		$thumb        = '';
+		$tooltip      = '';
 
 		if ( ! empty( $args['tooltip'] ) ) {
 			$classes[] = 'tooltip';
@@ -250,10 +258,11 @@ class Swatches_Frontend {
 
 				if ( $color['class'] ) $color_classes[] = $color['class'];
 
-				$html = sprintf( '<div class="%s ux-swatch--color swatch-%s %s" data-value="%s" data-name="%s" title="%s"><span class="%s" style="%s"></span><span class="ux-swatch__text">%s</span></div>',
+				$html = sprintf( '<div class="%s ux-swatch--color swatch-%s %s" aria-checked="%s" data-value="%s" data-name="%s" title="%s" role="radio" tabindex="0"><span class="%s" style="%s"></span><span class="ux-swatch__text">%s</span></div>',
 					implode( ' ', $classes ),
 					esc_attr( $term->slug ),
 					$selected,
+					$aria_checked,
 					esc_attr( $term->slug ),
 					$name,
 					esc_attr( $tooltip ),
@@ -273,9 +282,10 @@ class Swatches_Frontend {
 					) );
 				}
 
-				$html = sprintf( '<div class="%s ux-swatch--image %s" data-value="%s" data-name="%s" title="%s">%s<span class="ux-swatch__text">%s</span></div>',
+				$html = sprintf( '<div class="%s ux-swatch--image %s" aria-checked="%s" data-value="%s" data-name="%s" title="%s" role="radio" tabindex="0">%s<span class="ux-swatch__text">%s</span></div>',
 					implode( ' ', $classes ),
 					$selected,
+					$aria_checked,
 					esc_attr( $term->slug ),
 					$name,
 					esc_attr( $tooltip ),
@@ -286,9 +296,10 @@ class Swatches_Frontend {
 
 			case 'variation-image':
 				$html = sprintf(
-					'<div class="%s ux-swatch--image %s" data-value="%s" data-name="%s" title="%s">%s<span class="ux-swatch__text">%s</span></div>',
+					'<div class="%s ux-swatch--image %s" aria-checked="%s" data-value="%s" data-name="%s" title="%s" role="radio" tabindex="0">%s<span class="ux-swatch__text">%s</span></div>',
 					implode( ' ', $classes ),
 					$selected,
+					$aria_checked,
 					esc_attr( $term->slug ),
 					$name,
 					esc_attr( $tooltip ),
@@ -301,9 +312,10 @@ class Swatches_Frontend {
 				$label = get_term_meta( $term->term_id, 'ux_label', true );
 				$label = $label ? $label : $name;
 				$html  = sprintf(
-					'<div class="%s ux-swatch--label %s" data-value="%s" data-name="%s" title="%s"><span class="ux-swatch__text">%s</span></div>',
+					'<div class="%s ux-swatch--label %s" aria-checked="%s" data-value="%s" data-name="%s" title="%s" role="radio" tabindex="0"><span class="ux-swatch__text">%s</span></div>',
 					implode( ' ', $classes ),
 					$selected,
+					$aria_checked,
 					esc_attr( $term->slug ),
 					$name,
 					esc_attr( $tooltip ),
@@ -399,7 +411,8 @@ class Swatches_Frontend {
 			return;
 		}
 
-		$html = '';
+		$html              = '';
+		$mark_oos_inactive = get_theme_mod( 'swatches_box_out_of_stock_inactive', 0 );
 
 		if ( get_theme_mod( 'swatches_box_shape' ) ) {
 			$classes[] = 'ux-swatches--' . get_theme_mod( 'swatches_box_shape' );
@@ -407,7 +420,10 @@ class Swatches_Frontend {
 		if ( get_theme_mod( 'swatches_box_size' ) ) $classes[] = 'ux-swatches--' . get_theme_mod( 'swatches_box_size' );
 
 		// Start ux-swatches.
-		$html .= '<div class="' . implode( ' ', $classes ) . '">';
+		$html .= '<div ' . flatsome_html_atts( [
+			'class' => $classes,
+			'role'  => 'radiogroup',
+		] ) . '>';
 
 		// Order.
 		$terms                = wc_get_product_terms( $product->get_id(), $attribute_name, array( 'fields' => 'slugs' ) );
@@ -432,7 +448,7 @@ class Swatches_Frontend {
 			$term              = get_term_by( 'slug', $key, $attribute_name );
 			$name              = esc_html( apply_filters( 'woocommerce_variation_option_name', $term->name, $term, $attribute_name, $product ) );
 			$img_size          = apply_filters( 'flatsome_swatch_image_size', 'woocommerce_gallery_thumbnail', $term );
-			$data              = array();
+			$swatch_atts       = array();
 			$type_tmp          = $attribute->type;
 			$swatch_inner_html = '';
 
@@ -471,28 +487,39 @@ class Swatches_Frontend {
 			}
 
 			if ( isset( $swatch['image_src'] ) ) {
-				$data['data-image-src']    = $swatch['image_src'];
-				$data['data-image-srcset'] = $swatch['image_srcset'];
-				$data['data-image-sizes']  = $swatch['image_sizes'];
+				$swatch_atts['data-image-src']    = $swatch['image_src'];
+				$swatch_atts['data-image-srcset'] = $swatch['image_srcset'];
+				$swatch_atts['data-image-sizes']  = $swatch['image_sizes'];
 			}
 
 			if ( isset( $swatch['is_in_stock'] ) && ! $swatch['is_in_stock'] ) {
 				$swatch_classes[] = 'out-of-stock';
+				if ( $mark_oos_inactive ) {
+					$swatch_classes[]             = 'disabled';
+					$swatch_atts['aria-disabled'] = 'true';
+				}
 			}
-
-			$data['data-attribute_name'] = 'attribute_' . sanitize_title( $attribute_name );
-			$data['data-value']          = $term->slug;
 
 			if ( $swatch_layout === 'limit' && $swatch_count > $swatch_limit ) {
 				if ( $index >= $swatch_limit ) {
 					$swatch_classes[] = 'ux-swatch--limited hidden';
 				}
 				if ( $index === $swatch_limit ) {
-					$html .= '<span class="ux-swatches__limiter">+' . ( $swatch_count - $swatch_limit ) . '</span>';
+					$remaining_count = $swatch_count - $swatch_limit;
+					/* translators: %d: number of additional options */
+					$html .= '<button type="button" class="ux-swatches__limiter" aria-label="' . esc_attr( sprintf( _n( 'Show %d more option', 'Show %d more options', $remaining_count, 'flatsome' ), $remaining_count ) ) . '" aria-expanded="false">+' . $remaining_count . '</button>';
 				}
 			}
 
-			$html .= '<div class="' . esc_attr( implode( ' ', $swatch_classes ) ) . '" ' . flatsome_html_atts( $data ) . '>' . $swatch_inner_html . '<span class="ux-swatch__text">' . $name . '</span></div>';
+			$swatch_atts['data-attribute_name'] = 'attribute_' . sanitize_title( $attribute_name );
+			$swatch_atts['data-value']          = esc_attr( $term->slug );
+			$swatch_atts['aria-label']          = $name;
+			$swatch_atts['role']                = 'radio';
+			$swatch_atts['aria-checked']        = 'false';
+			$swatch_atts['tabindex']            = '0';
+			$swatch_atts['class']               = $swatch_classes;
+
+			$html .= '<div ' . flatsome_html_atts( $swatch_atts ) . '>' . $swatch_inner_html . '<span class="ux-swatch__text">' . $name . '</span></div>';
 
 			$index ++;
 		}
@@ -556,9 +583,9 @@ class Swatches_Frontend {
 	 */
 	private function get_option_variations( $attribute_name, $available_variations, $option = false ) {
 		$swatches_to_show = array();
-		$all_out_of_stock = true;
+		$stock_status     = array();
 
-		foreach ( $available_variations as $key => $variation ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+		foreach ( $available_variations as $variation ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 			$option_variation = array();
 			$attr_key         = 'attribute_' . sanitize_title( $attribute_name );
 			if ( ! isset( $variation['attributes'][ $attr_key ] ) ) {
@@ -577,10 +604,6 @@ class Swatches_Frontend {
 				);
 			}
 
-			if ( ! $option && $variation['is_in_stock'] ) {
-				$all_out_of_stock = false;
-			}
-
 			// Get only one variation by attribute option value.
 			if ( $option ) {
 				if ( $val != $option ) {
@@ -589,6 +612,15 @@ class Swatches_Frontend {
 					return $option_variation;
 				}
 			} else {
+				if ( ! isset( $stock_status[ $val ] ) ) {
+					$stock_status[ $val ] = false;
+				}
+
+				// If the variation is in stock, set the stock status to true for the relevant attribute.
+				if ( $variation['is_in_stock'] ) {
+					$stock_status[ $val ] = true;
+				}
+
 				// Or get all variations with swatches to show by attribute name.
 				$swatch = $this->get_swatch( $attribute_name, $val );
 
@@ -597,10 +629,11 @@ class Swatches_Frontend {
 					$swatches_to_show[ $val ] = array_merge( $swatch, $option_variation );
 				}
 			}
+		}
 
-			if ( ! $option ) {
-				$swatches_to_show[ $val ]['is_in_stock'] = ! $all_out_of_stock;
-				$all_out_of_stock                        = true;
+		if ( ! $option ) {
+			foreach ( $swatches_to_show as $key => $swatch ) {
+				$swatches_to_show[ $key ]['is_in_stock'] = $stock_status[ $key ];
 			}
 		}
 

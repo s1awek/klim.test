@@ -165,6 +165,7 @@
 		if ( fpdata.page_type == 'Search' ) FP.track_fbp_evt( false, 'Search', false, { 'search_string' : fpdata.search_query } );
 
 		fp.loaded.push( 'fbp' );
+		if ( fp.main.debug ) console.log('[FP] Meta Pixel loaded');
 		FP.runFn( 'FP.fns.load_fbp_footer' );
     }
 	

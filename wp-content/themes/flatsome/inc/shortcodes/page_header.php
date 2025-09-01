@@ -115,7 +115,12 @@ function flatsome_page_header_shortcode($atts) {
    } else if ( $type == 'onpage' ) {
      echo '<ul class="nav ' . esc_attr( $nav_class ) . '"><li class="nav-single-page hidden"></li></ul>';
    } else if ( $type == 'share' ) {
-     echo '<div class="title-share pt-half pb-half">' . do_shortcode( '[share]' ) . '</div>';
+     echo '<div class="title-share pt-half pb-half">';
+	 echo flatsome_apply_shortcode( 'share', array(
+		 'style'   => get_theme_mod( 'social_icons_style', 'outline' ),
+		 'tooltip' => get_theme_mod( 'social_icons_tooltip', 1 ) ? 'true' : 'false',
+	 ) );
+	   echo '</div>';
    }
 
    if ( $align == 'left' ) $content_align = 'right';

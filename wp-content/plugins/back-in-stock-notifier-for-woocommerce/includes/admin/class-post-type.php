@@ -570,7 +570,7 @@ if ( ! class_exists( 'CWG_Instock_Post_Type' ) ) {
 			$action_links = array(
 				'settings' => '<a href="' . esc_url( get_admin_url( null, 'edit.php?post_type=cwginstocknotifier&page=cwg-instock-mailer' ) ) . '">Settings</a>',
 				'add-ons' => '<a href="' . esc_url( get_admin_url( null, 'edit.php?post_type=cwginstocknotifier&page=cwg-instock-extensions' ) ) . '">Add-ons</a>',
-				'support' => '<a href="https://codewoogeek.online" target="_blank">Custom Development and Support</a>',
+				'support' => '<a href="https://propluginslab.com" target="_blank">Custom Development and Support</a>',
 			);
 			return array_merge( $action_links, $links );
 		}
@@ -737,7 +737,9 @@ if ( ! class_exists( 'CWG_Instock_Post_Type' ) ) {
 			}
 		}
 
+
 		public function bulk_send_manual_email( $post_ids ) {
+			$get_email = '';
 			$sent = 0;
 			$failed = 0;
 			$not_exists = 0;
@@ -914,20 +916,20 @@ add_action(
 			add_action(
 				'all_admin_notices',
 				function () {
-				?>
+					?>
 			<div class="notice notice-success cwg_marketing_notice">
 				<p>
 					<strong>Pay Once, Benefit Forever</strong>: All Add-ons Included, No Monthly Commitment - Just $49! <a
-						href="https://codewoogeek.online/shop/back-in-stock-notifier/bundle-add-ons/" target="_blank"><strong>Buy
+						href="https://propluginslab.com/shop/back-in-stock-notifier/bundle-add-ons/" target="_blank"><strong>Buy
 							Now Bundle Add-ons!</strong></a>
 				</p>
 				<p>
-					Your payment isn't just for a product - it's for progress. Buy now, or donate us directly via <a
-						href="https://www.paypal.com/donate/?hosted_button_id=M72YSS7BWF32C" target="_blank">PayPal</a>
+					Your payment isn't just for a product - it's for progress. Buy now, or Support us directly - <a
+						href="https://donate.stripe.com/cNi28r1PXfcY1kQawmaMU00" target="_blank">Donate Now</a>
 				</p>
 			</div>
-			<?php
-			}
+					<?php
+				}
 			);
 		}
 	}

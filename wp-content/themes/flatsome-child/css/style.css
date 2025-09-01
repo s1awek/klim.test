@@ -726,3 +726,22 @@ span.reg-text {
 .cookie-notice-container {
   padding-right: 60px;
 }
+
+
+.header-nav .widget_shopping_cart .cart_list li a.remove {
+  right: 0;
+  z-index: 9999;
+}
+
+.header-nav .widget_shopping_cart ul.product_list_widget li {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-nav .widget_shopping_cart ul.product_list_widget li {
+  padding-right: 10px;
+}
+
+.header-nav .nav-dropdown {
+  min-width: 300px;
+}

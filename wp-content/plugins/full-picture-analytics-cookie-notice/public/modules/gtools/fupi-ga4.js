@@ -1,3 +1,18 @@
+FP.fns.ga4_set_g_ids = function(nr, type, ID) {
+	
+	let ga_ids = FP.readCookie('fp_ga_ids');
+
+	if ( ga_ids ) {
+		ga_ids = JSON.parse( ga_ids );
+	} else {
+		ga_ids = {};
+	}
+	
+	ga_ids['ga4' + nr + '_' + type] = ID;
+	
+	FP.setCookie( 'fp_ga_ids', JSON.stringify(ga_ids) );
+}
+
 FP.fns.load_ga4 = function (nr, wait_for_nr2) {
 
 	var _ga = fp[ 'ga4' + nr ],
@@ -9,7 +24,7 @@ FP.fns.load_ga4 = function (nr, wait_for_nr2) {
 
 	// enable GA's debug mode
 	// @ https://support.google.com/analytics/answer/7201382?hl=en
-	params.debug_mode = fpdata.cookies.ga4_debug;
+	params.debug_mode = !! fpdata.cookies.ga4_debug;
 
 	
 
@@ -89,5 +104,6 @@ FP.fns.load_ga4 = function (nr, wait_for_nr2) {
 	
 
 	fp.loaded.push('ga4' + nr);
+	if ( fp.main.debug ) console.log('[FP] GA4 #' + nr + ' loaded');
 	FP.runFn( 'FP.fns.load_ga4_footer', [nr] );
 };

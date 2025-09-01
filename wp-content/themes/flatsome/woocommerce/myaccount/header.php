@@ -3,7 +3,7 @@
  * Account header.
  *
  * @package          Flatsome/WooCommerce/Templates
- * @flatsome-version 3.16.0
+ * @flatsome-version 3.20.0
  */
 
 $is_facebook_login = is_nextend_facebook_login();
@@ -67,7 +67,7 @@ if ( function_exists( 'wc_get_account_menu_items' ) && get_theme_mod( 'wc_accoun
 						?>
 
 						<a href="<?php echo esc_url( $facebook_url ); ?>" class="button social-button large facebook circle" data-plugin="nsl" data-action="connect" data-redirect="current" data-provider="facebook" data-popupwidth="475" data-popupheight="175">
-							<i class="icon-facebook"></i>
+							<?php echo get_flatsome_icon( 'icon-facebook' ); ?>
 							<span><?php _e( 'Login with <strong>Facebook</strong>', 'flatsome' ); ?></span>
 						</a>
 					<?php } ?>
@@ -77,7 +77,7 @@ if ( function_exists( 'wc_get_account_menu_items' ) && get_theme_mod( 'wc_accoun
 						?>
 
 						<a href="<?php echo esc_url( $google_url ); ?>" class="button social-button large google-plus circle" data-plugin="nsl" data-action="connect" data-redirect="current" data-provider="google" data-popupwidth="600" data-popupheight="600">
-							<i class="icon-google-plus"></i>
+							<?php echo get_flatsome_icon( 'icon-google-plus' ); ?>
 							<span><?php _e( 'Login with <strong>Google</strong>', 'flatsome' ); ?></span>
 						</a>
 					<?php } ?>

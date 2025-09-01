@@ -109,8 +109,9 @@ final class UxThemes_API {
 	 * @return WP_Error
 	 */
 	public function get_error( $error, $context = null, $data = array() ) {
-		$status        = (int) $error->get_error_code();
-		$account_attrs = ' href="' . esc_url_raw( UXTHEMES_ACCOUNT_URL ) . '" target="_blank" rel="noopener"';
+		$status               = (int) $error->get_error_code();
+		$account_attrs        = ' href="' . esc_url_raw( UXTHEMES_ACCOUNT_URL ) . '" target="_blank" rel="noopener"';
+		$reregister_doc_attrs = ' href="' . esc_url_raw( 'https://docs.uxthemes.com/article/417-the-purchase-code-is-already-registered-on-another-site' ) . '" target="_blank" rel="noopener"';
 
 		switch ( $status ) {
 			case 400:
@@ -150,8 +151,8 @@ final class UxThemes_API {
 					// translators: %s: License manager link attributes.
 					return new WP_Error( $status, sprintf( __( 'Your purchase code has been used on too many sites. Please go to <a%s>your account</a> and manage your licenses.', 'flatsome' ), $account_attrs ), $data );
 				}
-				// translators: %s: License manager link attributes.
-				return new WP_Error( $status, sprintf( __( 'The purchase code is already registered on another site. Please go to <a%s>your account</a> and manage your licenses.', 'flatsome' ), $account_attrs ), $data );
+				// translators: %s: Guide document link attributes.
+				return new WP_Error( $status, sprintf( __( 'This purchase code is already registered. Please follow <a%s>this guide</a> to re-register Flatsome.', 'flatsome' ), $reregister_doc_attrs ), $data );
 			case 410:
 				if ( $context === 'register' || $context === 'envato-register' || $context === 'latest-version' ) {
 					return new WP_Error( $status, __( 'Your purchase code has been blocked. Please contact support to resolve the issue.', 'flatsome' ), $data );

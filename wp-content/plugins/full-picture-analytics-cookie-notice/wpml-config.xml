@@ -6,6 +6,7 @@
       <key name="notif_text"/>
       <key name="agree_text"/>
       <key name="ok_text"/>
+      <key name="close_text"/>
       <key name="agree_to_selected_text"/>
       <key name="decline_text"/>
       <key name="cookie_settings_text"/>
@@ -20,9 +21,9 @@
       <key name="necess_text"/>
       <key name="stats_only_text"/>
     </key>
-    <key name="fupi_iframeblock">
-      <key name="caption_txt"/>
-      <key name="btn_text"/>
+    <key name="fupi_cook">
+      <key name="iframe_caption_txt"/>
+      <key name="iframe_btn_text"/>
     </key>
   </admin-texts>
 </wpml-config>

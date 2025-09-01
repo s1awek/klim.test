@@ -67,7 +67,7 @@ function flatsome_register_follow_link( $key, $label, $link_args = array(), $opt
 				'title'      => $follow_text,
 				'aria-label' => $follow_text,
 			),
-			'icon'     => '<i class="icon-' . $key . '"></i>',
+			'icon'     => get_flatsome_icon( 'icon-' . $key ),
 			'priority' => 9999,
 		);
 

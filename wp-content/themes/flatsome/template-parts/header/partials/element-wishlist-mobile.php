@@ -3,7 +3,7 @@
  * Mobile wishlist element.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.19.7
+ * @flatsome-version 3.20.0
  */
 
 if ( ! class_exists( 'YITH_WCWL' ) ) {
@@ -29,7 +29,6 @@ if ( $icon_style ) {
 $icon_atts = [
 	'class'           => [
 		'wishlist-icon',
-		'icon-' . $icon,
 	],
 	'data-icon-label' => $has_items ? $count : null,
 ];
@@ -38,7 +37,7 @@ $icon_atts = [
 <li class="header-wishlist-icon has-icon">
 	<?php if ( $icon_style ) echo '<div class="header-button">'; ?>
 	<a <?php echo flatsome_html_atts( $link_atts ); ?>>
-		<i <?php echo flatsome_html_atts( $icon_atts ); ?>></i>
+		<?php echo get_flatsome_icon( 'icon-' . $icon, null, $icon_atts ); ?>
 	</a>
 	<?php if ( $icon_style ) echo '</div>'; ?>
 </li>

@@ -35,31 +35,35 @@ if ( ! function_exists( 'flatsome_woocommerce_add_notice' ) ) {
 }
 add_action( 'flatsome_after_header', 'flatsome_woocommerce_add_notice', 100 );
 
-function flatsome_my_account_menu_classes($classes){
+function flatsome_my_account_menu_classes( $classes ) {
+	if ( in_array( 'is-active', $classes ) ) {
+		array_push( $classes, 'active' );
+	}
 
-    // Add Active Class
-    if(in_array('is-active', $classes)){
-      array_push($classes, 'active');
-    }
-
-    return $classes;
+	return $classes;
 }
-add_filter('woocommerce_account_menu_item_classes', 'flatsome_my_account_menu_classes');
 
-/* My Account Dashboard overview */
-function flatsome_my_account_dashboard(){
-  wc_get_template( 'myaccount/dashboard-links.php' );
+add_filter( 'woocommerce_account_menu_item_classes', 'flatsome_my_account_menu_classes' );
+
+/**
+ * My Account Dashboard overview
+ */
+function flatsome_my_account_dashboard() {
+	wc_get_template( 'myaccount/dashboard-links.php' );
 }
-add_action('woocommerce_account_dashboard','flatsome_my_account_dashboard');
 
+add_action( 'woocommerce_account_dashboard', 'flatsome_my_account_dashboard' );
 
-// Remove logout from my account menu
+/**
+ * Remove logout from my account menu
+ */
 function flatsome_remove_logout_account_item( $items ) {
-  unset( $items['customer-logout'] );
-  return $items;
-}
-add_filter( 'woocommerce_account_menu_items', 'flatsome_remove_logout_account_item' );
+	unset( $items['customer-logout'] );
 
+	return $items;
+}
+
+add_filter( 'woocommerce_account_menu_items', 'flatsome_remove_logout_account_item' );
 
 /**
  * Conditionally remove WooCommerce styles and/or scripts.
@@ -87,46 +91,45 @@ function flatsome_woocommerce_scripts_styles() {
 add_action( 'wp_enqueue_scripts', 'flatsome_woocommerce_scripts_styles', 98 );
 
 
-// Add Shop  Widgets
+/**
+ * Add shop widgets
+ */
 function flatsome_shop_widgets_init() {
+	register_sidebar( array(
+		'name'          => __( 'Shop Sidebar', 'flatsome' ),
+		'id'            => 'shop-sidebar',
+		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<span class="widget-title shop-sidebar">',
+		'after_title'   => '</span><div class="is-divider small"></div>',
+	) );
 
-  register_sidebar( array(
-    'name'          => __( 'Shop Sidebar', 'flatsome' ),
-    'id'            => 'shop-sidebar',
-    'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-    'after_widget'  => '</aside>',
-    'before_title'  => '<span class="widget-title shop-sidebar">',
-    'after_title'   => '</span><div class="is-divider small"></div>',
-  ) );
-
-  register_sidebar( array(
-    'name'          => __( 'Product Sidebar', 'flatsome' ),
-    'id'            => 'product-sidebar',
-    'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-    'after_widget'  => '</aside>',
-    'before_title'  => '<span class="widget-title shop-sidebar">',
-    'after_title'   => '</span><div class="is-divider small"></div>',
-  ) );
-
-
+	register_sidebar( array(
+		'name'          => __( 'Product Sidebar', 'flatsome' ),
+		'id'            => 'product-sidebar',
+		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<span class="widget-title shop-sidebar">',
+		'after_title'   => '</span><div class="is-divider small"></div>',
+	) );
 }
+
 add_action( 'widgets_init', 'flatsome_shop_widgets_init' );
 
-
-
-/* Modify define(name, value)ault Shop Breadcrumbs */
+/**
+ * Modify default Shop Breadcrumbs
+ */
 function flatsome_woocommerce_breadcrumbs() {
+	$home = ( get_theme_mod( 'breadcrumb_home', 1 ) ) ? _x( 'Home', 'breadcrumb', 'woocommerce' ) : false;
 
-    $home = (get_theme_mod('breadcrumb_home',1)) ? _x( 'Home', 'breadcrumb', 'woocommerce' ) : false;
-
-    return array(
-        'delimiter'   => '&#47;',
-        'wrap_before' => '<nav class="woocommerce-breadcrumb breadcrumbs '.get_theme_mod('breadcrumb_case', 'uppercase').'">',
-        'wrap_after'  => '</nav>',
-        'before'      => '',
-        'after'       => '',
-        'home'        => $home
-    );
+	return array(
+		'delimiter'   => '&#47;',
+		'wrap_before' => '<nav class="woocommerce-breadcrumb breadcrumbs ' . get_theme_mod( 'breadcrumb_case', 'uppercase' ) . '" aria-label="Breadcrumb">',
+		'wrap_after'  => '</nav>',
+		'before'      => '',
+		'after'       => '',
+		'home'        => $home,
+	);
 }
 
 add_filter( 'woocommerce_breadcrumb_defaults', 'flatsome_woocommerce_breadcrumbs' );
@@ -138,16 +141,20 @@ add_filter( 'woocommerce_breadcrumb_defaults', 'flatsome_woocommerce_breadcrumbs
  */
 add_action( 'flatsome_breadcrumb' , 'woocommerce_breadcrumb', 20 );
 
-/* Update cart price */
+/**
+ * Update cart price.
+ */
 function flatsome_header_add_to_cart_fragment( $fragments ) {
-  ob_start();
-  ?> <span class="cart-price"><?php echo WC()->cart->get_cart_subtotal(); ?></span><?php
-  $fragments['.cart-price'] = ob_get_clean();
+	ob_start();
+	?> <span class="cart-price"><?php echo WC()->cart->get_cart_subtotal(); ?></span><?php
+	$fragments['.cart-price'] = ob_get_clean();
 
-  return $fragments;
+	return $fragments;
 
 }
-add_filter('woocommerce_add_to_cart_fragments', 'flatsome_header_add_to_cart_fragment');
+
+add_filter( 'woocommerce_add_to_cart_fragments', 'flatsome_header_add_to_cart_fragment' );
+
 
 if ( ! function_exists( 'flatsome_header_add_to_cart_fragment_count' ) ) {
 	/**
@@ -187,9 +194,7 @@ if ( ! function_exists( 'flatsome_header_add_to_cart_fragment_count_label' ) ) {
 
 		$icon = get_theme_mod( 'cart_icon', 'basket' );
 		ob_start();
-		?>
-		<i class="icon-shopping-<?php echo $icon; ?>" data-icon-label="<?php echo WC()->cart->get_cart_contents_count(); ?>">
-		<?php
+		echo get_flatsome_icon( 'icon-shopping-' . $icon, null, array( 'data-icon-label' => WC()->cart->get_cart_contents_count() ) );
 		$fragments[ '.cart-item i.icon-shopping-' . $icon ] = ob_get_clean();
 
 		return $fragments;
@@ -226,39 +231,41 @@ if ( ! function_exists( 'flatsome_header_add_to_cart_custom_icon_fragment_count_
 }
 add_filter( 'woocommerce_add_to_cart_fragments', 'flatsome_header_add_to_cart_custom_icon_fragment_count_label' );
 
-// Add Pages and blog posts to top of search results if set.
-function flatsome_pages_in_search_results(){
-    if(!is_search() || !get_theme_mod('search_result', 1)) return;
-    global $post;
-    ?>
-    <?php if( get_search_query() ) : ?>
-    <?php
-      /**
-       * Include pages and posts in search
-       */
-      query_posts( array( 'post_type' => array( 'post'), 's' => get_search_query() ) );
+/**
+ * Add Pages and blog posts to top of search results if set.
+ */
+function flatsome_pages_in_search_results() {
+	if ( ! is_search() || ! get_theme_mod( 'search_result', 1 ) ) return;
+	global $post;
+	?>
+	<?php if ( get_search_query() ) : ?>
+		<?php
+		/**
+		 * Include pages and posts in search
+		 */
+		query_posts( array( 'post_type' => array( 'post' ), 's' => get_search_query() ) );
 
-      $posts = array();
-      while ( have_posts() ) : the_post();
-        array_push($posts, $post->ID);
-      endwhile;
+		$posts = array();
+		while ( have_posts() ) : the_post();
+			array_push( $posts, $post->ID );
+		endwhile;
 
-      wp_reset_query();
+		wp_reset_query();
 
-      // Get pages
-      query_posts( array( 'post_type' => array( 'page'), 's' => get_search_query() ) );
-      $pages = array();
-      while ( have_posts() ) : the_post();
-        $wc_page = false;
-        if($post->post_type == 'page'){
-          foreach (array('shop', 'cart', 'checkout', 'view_order', 'terms') as $wc_page_type) {
-            if( $post->ID == wc_get_page_id($wc_page_type) ) $wc_page = true;
-          }
-        }
-        if( !$wc_page ) array_push($pages, $post->ID);
-      endwhile;
+		// Get pages.
+		query_posts( array( 'post_type' => array( 'page' ), 's' => get_search_query() ) );
+		$pages = array();
+		while ( have_posts() ) : the_post();
+			$wc_page = false;
+			if ( $post->post_type == 'page' ) {
+				foreach ( array( 'shop', 'cart', 'checkout', 'view_order', 'terms' ) as $wc_page_type ) {
+					if ( $post->ID == wc_get_page_id( $wc_page_type ) ) $wc_page = true;
+				}
+			}
+			if ( ! $wc_page ) array_push( $pages, $post->ID );
+		endwhile;
 
-      wp_reset_query();
+		wp_reset_query();
 
 		if ( ! empty( $posts ) ) {
 			echo '<hr/><h4 class="uppercase">' . esc_html__( 'Posts found', 'flatsome' ) . '</h4>';
@@ -285,11 +292,12 @@ function flatsome_pages_in_search_results(){
 			) );
 		}
 		?>
-    <?php endif; ?>
+	<?php endif; ?>
 
-    <?php
+	<?php
 }
-add_action('woocommerce_after_main_content','flatsome_pages_in_search_results', 10);
+
+add_action( 'woocommerce_after_main_content', 'flatsome_pages_in_search_results' );
 
 /**
  * Filters the WooCommerce sale flash.
@@ -399,8 +407,10 @@ function flatsome_percentage_set_cache( $post_id, $bubble_content ) {
 	update_post_meta( $post_id, '_flatsome_product_percentage', $bubble_content );
 }
 
-// Process custom formatting. Keep mod value double check
-// to process % for default parameter (See sprintf()).
+/**
+ * Process custom formatting. Keep mod value double check
+ * to process % for default parameter (See sprintf()).
+ */
 function flatsome_percentage_format( $value ) {
 	$formatting = get_theme_mod( 'sale_bubble_percentage_formatting' );
 	$formatting = $formatting ? $formatting : '-{value}%';
@@ -408,7 +418,9 @@ function flatsome_percentage_format( $value ) {
 	return str_replace( '{value}', $value, $formatting );
 }
 
-// Clear cached percentage whenever a product or variation is saved.
+/**
+ * Clear cached percentage whenever a product or variation is saved.
+ */
 function flatsome_percentage_clear( $object ) {
 	if ( ! get_theme_mod( 'sale_bubble_percentage' ) ) return;
 
@@ -418,9 +430,12 @@ function flatsome_percentage_clear( $object ) {
 
 	delete_post_meta( $post_id, '_flatsome_product_percentage' );
 }
+
 add_action( 'woocommerce_before_product_object_save', 'flatsome_percentage_clear' );
 
-// Clear all cached percentages when disabling bubble percentage.
+/**
+ * Clear all cached percentages when disabling bubble percentage.
+ */
 function flatsome_percentage_clear_all( $value, $old_value ) {
 	if ( ! $value && $old_value ) {
 		delete_metadata( 'post', null, '_flatsome_product_percentage', '', true );
@@ -428,50 +443,70 @@ function flatsome_percentage_clear_all( $value, $old_value ) {
 
 	return $value;
 }
+
 add_filter( 'pre_set_theme_mod_sale_bubble_percentage', 'flatsome_percentage_clear_all', 10, 2 );
 
-// Account login style
-function flatsome_account_login_lightbox(){
-  // Show Login Lightbox if selected
-  if ( !is_user_logged_in() && get_theme_mod('account_login_style','lightbox') == 'lightbox' && !is_checkout() && !is_account_page() ) {
-    $is_facebook_login = is_nextend_facebook_login();
-    $is_google_login = is_nextend_google_login();
-    $layout = get_theme_mod( 'account_login_lightbox_layout' );
+/**
+ * Account login style
+ */
+function flatsome_account_login_lightbox() {
+	global $flatsome_header_account_add_lightbox_template;
 
-	if ( empty( $layout ) && 'no' === get_option( 'woocommerce_registration_generate_password' ) ) {
+	if (
+		is_user_logged_in()
+		|| get_theme_mod( 'account_login_style', 'lightbox' ) !== 'lightbox'
+		|| is_checkout()
+		|| is_account_page()
+		|| empty( $flatsome_header_account_add_lightbox_template )
+	) {
+		return;
+	}
+
+	$is_facebook_login    = is_nextend_facebook_login();
+	$is_google_login      = is_nextend_google_login();
+	$layout               = get_theme_mod( 'account_login_lightbox_layout' );
+	$registration_enabled = get_option( 'woocommerce_enable_myaccount_registration' ) === 'yes';
+
+	if ( empty( $layout ) && $registration_enabled && 'no' === get_option( 'woocommerce_registration_generate_password' ) ) {
 		wp_enqueue_script( 'wc-password-strength-meter' );
 	}
 
-    ?>
-    <div id="login-form-popup" class="lightbox-content mfp-hide">
-      <?php if(get_theme_mod('social_login_pos','top') == 'top' && ($is_facebook_login || $is_google_login)) wc_get_template('myaccount/header.php'); ?>
-      	<div class="woocommerce">
-      		<?php wc_get_template_part('myaccount/form-login', $layout ); ?>
+	?>
+	<div id="login-form-popup" class="lightbox-content mfp-hide">
+		<?php if ( get_theme_mod( 'social_login_pos', 'top' ) == 'top' && ( $is_facebook_login || $is_google_login ) ) wc_get_template( 'myaccount/header.php' ); ?>
+		<div class="woocommerce">
+			<?php wc_get_template_part( 'myaccount/form-login', $layout ); ?>
 		</div>
-      	<?php if(get_theme_mod('social_login_pos','top') == 'bottom' && ($is_facebook_login || $is_google_login)) wc_get_template('myaccount/header.php'); ?>
-    </div>
-  <?php }
+		<?php if ( get_theme_mod( 'social_login_pos', 'top' ) == 'bottom' && ( $is_facebook_login || $is_google_login ) ) wc_get_template( 'myaccount/header.php' ); ?>
+	</div>
+	<?php
 }
-add_action('wp_footer', 'flatsome_account_login_lightbox', 10);
 
-// Payment icons to footer
-function flatsome_footer_payment_icons(){
-  $icons = get_theme_mod('payment_icons_placement');
-  if(is_array($icons) && !in_array('footer', $icons)) return;
-  echo do_shortcode('[ux_payment_icons]');
+add_action( 'wp_footer', 'flatsome_account_login_lightbox' );
+
+/**
+ * Payment icons to footer
+ */
+function flatsome_footer_payment_icons() {
+	$icons = get_theme_mod( 'payment_icons_placement' );
+	if ( is_array( $icons ) && ! in_array( 'footer', $icons ) ) return;
+	echo do_shortcode( '[ux_payment_icons]' );
 }
-add_action('flatsome_absolute_footer_secondary','flatsome_footer_payment_icons', 10);
 
+add_action( 'flatsome_absolute_footer_secondary', 'flatsome_footer_payment_icons' );
 
-/* Disable reviews globally */
-if(get_theme_mod('disable_reviews')){
-    remove_filter( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_rating', 5 );
-    remove_filter( 'woocommerce_single_product_summary','woocommerce_template_single_rating', 10);
-    add_filter( 'woocommerce_product_tabs', 'wcs_woo_remove_reviews_tab', 98 );
-    function wcs_woo_remove_reviews_tab($tabs) {
-     unset($tabs['reviews']);
-     return $tabs;
-    }
+/**
+ * Disable reviews globally
+ */
+if ( get_theme_mod( 'disable_reviews' ) ) {
+	remove_filter( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_rating', 5 );
+	remove_filter( 'woocommerce_single_product_summary', 'woocommerce_template_single_rating', 10 );
+	add_filter( 'woocommerce_product_tabs', 'wcs_woo_remove_reviews_tab', 98 );
+	function wcs_woo_remove_reviews_tab( $tabs ) {
+		unset( $tabs['reviews'] );
+
+		return $tabs;
+	}
 }
 
 if ( ! function_exists( 'flatsome_wc_get_gallery_image_html' ) ) {
@@ -550,7 +585,9 @@ if ( ! function_exists( 'flatsome_wc_get_gallery_image_html' ) ) {
 	}
 }
 
-/* Move demo store notice to top. */
+/**
+ * Move demo store notice to top.
+ */
 function flatsome_move_store_notice() {
 	if ( ! fl_woocommerce_version_check( '9.9.0' ) ) {
 		if ( get_theme_mod( 'woocommerce_store_notice_top' ) ) {
@@ -559,6 +596,7 @@ function flatsome_move_store_notice() {
 		}
 	}
 }
+
 add_action( 'wp_loaded', 'flatsome_move_store_notice' );
 
 /**
@@ -588,6 +626,7 @@ if ( flatsome_is_mini_cart_reveal() ) {
 	*
 	* @param  string $message    Default WooCommerce added to cart notice.
 	* @param  int    $product_id Product id.
+	*
 	* @return string             The modified message.
 	*/
 	add_filter( 'wc_add_to_cart_message_html', function ( $message ) {
@@ -600,15 +639,26 @@ if ( flatsome_is_mini_cart_reveal() ) {
 /**
  * Get HTML for ratings.
  *
+ *  @param  float $rating         Rating being shown.
+ *  @param  int   $count          Total number of ratings.
+ *  @param  bool  $single_product Whether the rating is being shown on a single product page.
+ *
  * @see wc_get_rating_html()
  */
-function flatsome_get_rating_html( $rating, $count = 0, $single_product = false ) {
+function flatsome_get_rating_html( float $rating, int $count = 0, bool $single_product = false ): string {
 	global $product;
+
+	if ( ! is_a( $product, 'WC_Product' ) ) {
+		return '';
+	}
+
 	$review_count = $product->get_review_count();
 	$label        = sprintf( __( 'Rated %s out of 5', 'woocommerce' ), $rating ); // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
 	$html         = '';
 
-	if ( $rating > 0 ) {
+	$show_empty_rating = get_theme_mod( 'product_box_empty_rating' );
+
+	if ( $rating > 0 || $show_empty_rating ) {
 		if ( $single_product ) {
 			$style = get_theme_mod( 'product_info_review_count_style', 'inline' );
 			// Default to 'simple' when review count visibility is disabled.

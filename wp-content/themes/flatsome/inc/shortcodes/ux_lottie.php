@@ -43,6 +43,7 @@ function flatsome_render_ux_lottie_shortcode( $atts, $content, $tag ) {
 			'margin__md'         => null,
 			'margin__sm'         => null,
 			'link'               => '',
+			'link_aria_label'    => '',
 			'target'             => '_self',
 			'rel'                => '',
 			'class'              => '',
@@ -65,9 +66,10 @@ function flatsome_render_ux_lottie_shortcode( $atts, $content, $tag ) {
 	);
 
 	$link_atts = array(
-		'href'   => esc_url( $atts['link'] ),
-		'target' => esc_attr( $atts['target'] ),
-		'rel'    => esc_attr( $atts['rel'] ),
+		'href'       => esc_url( $atts['link'] ),
+		'target'     => esc_attr( $atts['target'] ),
+ 		'rel'        => esc_attr( $atts['rel'] ),
+		'aria-label' => esc_attr( $atts['link_aria_label'] ),
 	);
 
 	$player_atts = array(

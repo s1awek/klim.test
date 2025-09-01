@@ -27,9 +27,6 @@ class Fupi_compliance_status_checker {
         $this->clean_val        = $clean_val;
         $this->proofrec         = $this->clean_val_id == 'proofrec' && ! empty( $this->clean_val ) ? $this->clean_val : get_option('fupi_proofrec');
         $this->priv_policy_url  = get_privacy_policy_url();
-
-        if ( empty( $this->priv_policy_url ) ) return;
-        
         $this->is_first_reg     = empty( $opts['is_first_reg'] ) ? false : true;
         $this->cdb_key          = ! empty( $opts['cdb_key'] ) ? esc_attr( $opts['cdb_key'] ) : ( empty ( $this->proofrec['cdb_key'] ) ? false : esc_attr( $this->proofrec['cdb_key'] ) );
 
@@ -234,6 +231,11 @@ class Fupi_compliance_status_checker {
     }
 
     public function send_and_return_status(){
+
+        if ( empty( $this->priv_policy_url ) ) {
+            trigger_error('[FP] Privacy policy is not published. Recording consents is disabled.');
+            return;
+        }
         
         $this->format = 'cdb';
         $send_to = $this->get_sending_location(); // either "email" or "cdb'

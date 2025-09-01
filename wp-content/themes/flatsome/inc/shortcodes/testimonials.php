@@ -32,12 +32,22 @@ function flatsome_testimonial($atts, $content = null) {
   if($font_size) $classes[] = 'is-'.$font_size;
   if($image_width) $image_width = 'width: '.intval($image_width).'px';
 
+	$star_width = array(
+		'1' => 25,
+		'2' => 35,
+		'3' => 55,
+		'4' => 75,
+		'5' => 100,
+	);
+
 	$star_row = '';
-	if ($stars == '1'){$star_row = '<div class="star-rating"><span style="width:25%"><strong class="rating"></strong></span></div>';}
-	else if ($stars == '2'){$star_row = '<div class="star-rating"><span style="width:35%"><strong class="rating"></strong></span></div>';}
-	else if ($stars == '3'){$star_row = '<div class="star-rating"><span style="width:55%"><strong class="rating"></strong></span></div>';}
-	else if ($stars == '4'){$star_row = '<div class="star-rating"><span style="width:75%"><strong class="rating"></strong></span></div>';}
-	else if ($stars == '5'){$star_row = '<div class="star-rating"><span style="width:100%"><strong class="rating"></strong></span></div>';}
+	if ( isset( $star_width[ $stars ] ) ) {
+		$star_row = sprintf('<div class="star-rating" role="img" aria-label="%1$s"><span style="width:%2$d%%"><strong class="rating"></strong></span></div>',
+			/* translators: %d is the star rating from 1-5. */
+			esc_attr( sprintf( __( 'Rated %d out of 5', 'flatsome' ), $stars ) ),
+			$star_width[ $stars ],
+		);
+	}
 
   $classes = implode(" ", $classes);
   $classes_img = implode(" ", $classes_img);

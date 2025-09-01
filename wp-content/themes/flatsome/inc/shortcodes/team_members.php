@@ -9,6 +9,7 @@ function flatsome_team_member($atts, $content = null, $tag = ''){
       'name' => '',
       'title' => '',
       'icon_style' => 'outline',
+      'tooltip' => 'true',
       'facebook' => '',
       'instagram' => '',
       'tiktok' => '',
@@ -157,7 +158,7 @@ function flatsome_team_member($atts, $content = null, $tag = ''){
                       <?php echo wp_kses_post( $title ); ?>
                     </span>
                   </h4>
-					<?php if ( count( array_filter( $social_links ) ) > 0 ) echo flatsome_apply_shortcode( 'follow', array_merge( array( 'style' => $icon_style ), $social_links ) );
+					<?php if ( count( array_filter( $social_links ) ) > 0 ) echo flatsome_apply_shortcode( 'follow', array_merge( array( 'style' => $icon_style, 'tooltip' => $tooltip === 'true' ? 'true' : 'false' ), $social_links ) );
 					if($style  !== 'overlay' && $style  !== 'shade') echo do_shortcode($content);
 					?>
                 </div>

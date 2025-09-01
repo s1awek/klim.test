@@ -33,6 +33,16 @@ function flatsome_refresh_shop_partials( WP_Customize_Manager $wp_customize ) {
 	    },
 	) );
 
+	$wp_customize->selective_refresh->add_partial( 'product-filter-button', array(
+		'selector'            => '.product-filter-row',
+		'settings'            => array( 'product_offcanvas_sidebar_position' ),
+		'fallback_refresh'    => false,
+		'container_inclusive' => true,
+		'render_callback'     => function () {
+			wc_get_template_part( 'single-product/filter-button' );
+		},
+	) );
+
 	$wp_customize->selective_refresh->add_partial( 'shop-header', array(
 		'selector'            => '.woocommerce .category-page-title',
 		'fallback_refresh'    => false,
@@ -44,6 +54,7 @@ function flatsome_refresh_shop_partials( WP_Customize_Manager $wp_customize ) {
 			'category_show_catalog_ordering',
 			'breadcrumb_home',
 			'category_filter_text',
+			'category_filter_overlay_position',
 		),
 		'container_inclusive' => true,
 		'render_callback'     => function () {
@@ -54,7 +65,7 @@ function flatsome_refresh_shop_partials( WP_Customize_Manager $wp_customize ) {
 	$wp_customize->selective_refresh->add_partial( 'shop-grid', array(
 	    'selector' => '.category-page-row',
 	    'fallback_refresh' => false,
-	    'settings' => array('sale_bubble_text','category_grid_style','short_description_in_grid','cat_style','category_show_count','sale_bubble_percentage_formatting','new_bubble_auto','add_to_cart_style','add_to_cart_icon','product_box_category','product_box_rating','product_box_review_count','product_hover','bubble_style','sale_bubble','grid_style','category_sidebar','products_pr_page','category_row_count','category_row_count_mobile','category_row_count_tablet','category_shadow','category_shadow_hover','equalize_product_box','disable_quick_view'),
+	    'settings' => array('sale_bubble_text','category_grid_style','short_description_in_grid','cat_style','category_show_count','sale_bubble_percentage_formatting','new_bubble_auto','add_to_cart_style','add_to_cart_icon','product_box_category','product_box_rating','product_box_empty_rating','product_box_review_count','product_hover','bubble_style','sale_bubble','grid_style','category_sidebar','products_pr_page','category_row_count','category_row_count_mobile','category_row_count_tablet','category_shadow','category_shadow_hover','equalize_product_box','disable_quick_view'),
 	    'container_inclusive' => true,
 	    'render_callback' => function() {
 		    wc_get_template_part( 'layouts/category', get_theme_mod( 'category_sidebar', 'left-sidebar' ) );

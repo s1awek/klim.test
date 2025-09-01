@@ -13,7 +13,7 @@
  * @see              https://woocommerce.com/document/template-structure/
  * @package          Flatsome\Templates
  * @version          9.9.0
- * @flatsome-version 3.19.13
+ * @flatsome-version 3.20.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -60,7 +60,7 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 
 			<div class="account-login-inner inner-padding">
 
-				<h3 class="uppercase"><?php esc_html_e( 'Login', 'woocommerce' ); ?></h3>
+				<h2 class="uppercase h3"><?php esc_html_e( 'Login', 'woocommerce' ); ?></h2>
 
 				<form class="woocommerce-form woocommerce-form-login login" method="post" novalidate>
 
@@ -116,7 +116,7 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 
 				<div class="account-register-inner inner-padding relative flex-col flex-grow dark text-center">
 
-					<h3 class="uppercase"><?php esc_html_e( 'Register', 'woocommerce' ); ?></h3>
+					<h2 class="uppercase h3"><?php esc_html_e( 'Register', 'woocommerce' ); ?></h2>
 					<p><?php esc_html_e( "Don't have an account? Register one!", 'flatsome' ); ?></p>
 					<a href="<?php echo esc_url( get_permalink( get_option( 'woocommerce_myaccount_page_id' ) ) ); ?>" class="button white is-outline"><?php esc_html_e( 'Register an Account', 'flatsome' ); ?></a>
 

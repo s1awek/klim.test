@@ -1,9 +1,8 @@
 <?php
 
 $option_arr_id = 'fupi_proofrec';
-$install_id_text = '';
 $storage_location_options = array(
-    'cdb' => esc_html__( 'In the cloud (with free storage for 1000 proofs)', 'full-picture-analytics-cookie-notice' ),
+    'cdb' => esc_html__( 'In the cloud (with initial free storage for 1000 proofs)', 'full-picture-analytics-cookie-notice' ),
 );
 $under_field_storage_location = '<label><input type="radio" disabled>' . esc_html__( 'On my email account (Pro only)', 'full-picture-analytics-cookie-notice' ) . '</label>';
 $under_field_storage_location .= '<p style="margin-top: 10px;">' . sprintf( esc_html__( '%1$sWhat are the differences?%2$s.', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/records-of-consents-in-inbox-vs-the-cloud/">', '</a>' ) . '</p>';
@@ -36,8 +35,8 @@ $sections = array(array(
                         <ol>
                             <li>' . sprintf( esc_html__( 'Make sure your site is set up correctly in the %1$sGDPR setup info%2$s page.', 'full-picture-analytics-cookie-notice' ), '<a href="' . get_admin_url() . 'admin.php?page=full_picture_tools&tab=gdpr_setup_helper">', '</a>' ) . '</li>
                             <li><a href="https://consentsdb.com/">' . esc_html__( 'Create an account at ConsentsDB.com.', 'full-picture-analytics-cookie-notice' ) . '</a></li>
-                            <li>' . esc_html__( 'Add this website to your account.', 'full-picture-analytics-cookie-notice' ) . ' ' . $install_id_text . '</li>
-                            <li>' . esc_html__( 'You will get a secret key. Paste it in the field above and follow the rest of instructions in the ConsentsDB.', 'full-picture-analytics-cookie-notice' ) . '</li>
+                            <li>' . esc_html__( 'Add this website to your account.', 'full-picture-analytics-cookie-notice' ) . '</li>
+                            <li>' . esc_html__( 'When you get a secret key, paste it in the field above and follow the rest of instructions in the ConsentsDB.', 'full-picture-analytics-cookie-notice' ) . '</li>
                         </ol>
                         <p><strong>' . esc_html__( 'Learn more:', 'full-picture-analytics-cookie-notice' ) . '</strong></p>
                         <ol>

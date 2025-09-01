@@ -162,6 +162,14 @@ if ( ! function_exists( 'of_options' ) ) {
 		);
 
 		$of_options[] = array(
+			'name' => 'Disable MediaElement script and css',
+			'type' => 'checkbox',
+			'id'   => 'disable_mejs',
+			'std'  => 0,
+			'desc' => 'Remove MediaElement script and css coming from WordPress. Local hosted videos inserted into your posts will use the native browser player when removed.',
+		);
+
+		$of_options[] = array(
 			'name' => 'Disable jQuery Migrate',
 			'type' => 'checkbox',
 			'id'   => 'jquery_migrate',
@@ -178,7 +186,7 @@ if ( ! function_exists( 'of_options' ) ) {
 		$of_options[] = array(
 			'name' => '',
 			'type' => 'info',
-			'desc' => '<h2 style="font-size:1rem; margin-top: 40px;">AJAX loading<span class="of-tag">Experimental</span></h2><p style="font-size:14px">Fetch content from the server without reloading the whole page. This is an experimental feature and is subject to change. <b>Disable if you experience plugin compatibility issues.</b></p><p><a target="_blank" rel="noopener" href="https://docs.uxthemes.com/article/430-pjax">Learn more</a></p>',
+			'desc' => '<h2 style="font-size:1rem; margin-top: 40px;">AJAX loading<span class="of-tag">Experimental</span></h2><p style="font-size:14px">Fetch content from the server without reloading the whole page. This is an experimental feature and is subject to change. <strong>Disable if you experience plugin compatibility issues.</strong></p><p><a target="_blank" rel="noopener" href="https://docs.uxthemes.com/article/430-pjax">Learn more</a></p>',
 		);
 
 		$of_options[] = array(
@@ -647,7 +655,7 @@ if ( ! function_exists( 'of_options' ) ) {
 				'id'   => 'catalog_mode_header',
 				'std'  => '',
 				'type' => 'textarea',
-				'desc' => "Enter content you want to display instead of Account / Cart. Shortcodes are allowed. For search box enter <b>[search]</b>. For social icons enter: <b>[follow twitter='http://' facebook='http://' email='post@email.com' pinterest='http://']</b>",
+				'desc' => "Enter content you want to display instead of Account / Cart. Shortcodes are allowed. For search box enter <strong>[search]</strong>. For social icons enter: <strong>[follow twitter='http://' facebook='http://' email='post@email.com' pinterest='http://']</strong>",
 			);
 
 			$of_options[] = array(

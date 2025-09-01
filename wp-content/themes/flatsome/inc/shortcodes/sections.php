@@ -131,6 +131,10 @@ function ux_section( $atts, $content = null ) {
 		$classes[] = 'has-hover';
 	}
 
+	if ( $scroll_for_more ) {
+		$classes[] = 'has-scroll-for-more';
+	}
+
 	$classes    = implode( ' ', $classes );
 	$classes_bg = implode( ' ', $classes_bg );
 	?>

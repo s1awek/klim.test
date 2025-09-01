@@ -1,6 +1,8 @@
 <?php
 /**
- * Flatome Panel
+ * Flatsome Admin Panel
+ *
+ * @package flatsome
  */
 ?>
 <?php add_thickbox(); ?>
@@ -27,6 +29,8 @@
     <a href="<?php echo $url.'-features'; ?>" class="nav-tab <?php if($_GET['page'] == 'flatsome-panel-features') echo 'nav-tab-active'; ?>"><?php _e( 'Features', 'flatsome-admin' ); ?></a>
 
     <a href="<?php echo $url.'-changelog'; ?>" class="nav-tab <?php if($_GET['page'] == 'flatsome-panel-changelog') echo 'nav-tab-active'; ?>"><?php _e( 'Change log', 'flatsome-admin' ); ?></a>
+
+	<a href="<?php echo $url.'-license'; ?>" class="nav-tab <?php if($_GET['page'] == 'flatsome-panel-license') echo 'nav-tab-active'; ?>"><?php _e( 'License', 'flatsome-admin' ); ?></a>
 </nav>
 
 <script type="text/javascript">!function(e,t,n){function a(){var e=t.getElementsByTagName("script")[0],n=t.createElement("script");n.type="text/javascript",n.async=!0,n.src="https://beacon-v2.helpscout.net",e.parentNode.insertBefore(n,e)}if(e.Beacon=n=function(t,n,a){e.Beacon.readyQueue.push({method:t,options:n,data:a})},n.readyQueue=[],"complete"===t.readyState)return a();e.attachEvent?e.attachEvent("onload",a):e.addEventListener("load",a,!1)}(window,document,window.Beacon||function(){});</script>

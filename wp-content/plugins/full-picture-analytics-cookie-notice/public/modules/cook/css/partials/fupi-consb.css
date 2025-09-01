@@ -156,11 +156,6 @@ html.fupi_blur_out:not(.fupi_infobox) body > *:not(#fupi_cookie_notice):not(.fup
   overflow-y: auto;
 }
 
-.fupi_privacy_url:focus-visible {
-  outline: 0;
-  text-decoration: underline;
-}
-
 @media screen and (max-width: 959px) {
   #fupi_cookie_notice {
     display: -webkit-box;

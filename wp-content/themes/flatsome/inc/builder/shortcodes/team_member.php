@@ -63,6 +63,11 @@ add_ux_builder_shortcode( 'team_member', array(
                         'small' => array( 'title' => 'Small' ),
                     ),
                 ),
+				'tooltip' => array(
+					'type'    => 'checkbox',
+					'heading' => __( 'Tooltips' ),
+					'default' => 'true',
+				),
                 'facebook' => array( 'type' => 'textfield','heading' => 'Facebook', 'default' => ''),
                 'instagram' => array( 'type' => 'textfield','heading' => 'Instagram', 'default' => ''),
                 'tiktok' => array( 'type' => 'textfield','heading' => 'TikTok', 'default' => ''),

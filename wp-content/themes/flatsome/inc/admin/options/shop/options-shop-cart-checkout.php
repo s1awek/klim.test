@@ -126,6 +126,26 @@ Flatsome_Option::add_field( 'option', array(
 
 Flatsome_Option::add_field( '', array(
 	'type'     => 'custom',
+	'settings' => 'cart_coupon_title',
+	'label'    => '',
+	'section'  => 'cart-checkout',
+	'default'  => '<div class="options-title-divider">Coupon</div>',
+) );
+
+Flatsome_Option::add_field( 'option', array(
+	'type'     => 'select',
+	'settings' => 'cart_coupon_position',
+	'label'    => esc_html__( 'Position', 'flatsome-admin' ),
+	'section'  => 'cart-checkout',
+	'default'  => 'sidebar',
+	'choices'  => array(
+		'sidebar' => esc_html__( 'In Sidebar', 'flatsome-admin' ),
+		'bottom'  => esc_html__( 'Below products', 'flatsome-admin' ),
+	),
+) );
+
+Flatsome_Option::add_field( '', array(
+	'type'     => 'custom',
 	'settings' => 'html_cart_title',
 	'label'    => '',
 	'section'  => 'cart-checkout',

@@ -31,6 +31,13 @@ if ( empty( $this->cook ) ){
 // When fupi_cook has settings
 
 } else {
+
+    // Do NOT ask again when modules or PP change
+    if ( isset( $this->cook['dont_ask_again'] ) ) {
+        $this->data['cook']['setup'][] = [ 'alert', 'Visitors are not asked for consent when the privacy policy text changes and/or when new tracking modules are enabled.' ];
+    } else {
+        $this->data['cook']['setup'][] = [ 'ok', 'Visitors are asked for consent again, when the privacy policy text changes or when tracking modules are enabled.' ];
+    }
     
     // WHEN CONSENT BANNER IS ENABLED, HAS SETTINGS AND USES GEO
 

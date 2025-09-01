@@ -45,6 +45,14 @@ Flatsome_Option::add_field( 'option',  array(
 	),
 ));
 
+Flatsome_Option::add_field( 'option', array(
+	'type'      => 'checkbox',
+	'settings'  => 'social_icons_tooltip',
+	'label'     => __( 'Show tooltips', 'flatsome-admin' ),
+	'section'   => 'share',
+	'transport' => flatsome_customizer_transport(),
+	'default'   => 1,
+));
 
 Flatsome_Option::add_field( 'option',  array(
 		'type'        => 'multicheck',
@@ -114,6 +122,15 @@ Flatsome_Option::add_field( 'option',  array(
 		'fill-round' => $image_url . 'icon-fill-round.svg',
 		'outline-round' => $image_url . 'icon-outline-round.svg',
 	),
+));
+
+Flatsome_Option::add_field( 'option', array(
+	'type'      => 'checkbox',
+	'settings'  => 'follow_tooltip',
+	'label'     => __( 'Show tooltips', 'flatsome-admin' ),
+	'section'   => 'follow',
+	'transport' => flatsome_customizer_transport(),
+	'default'   => 1,
 ));
 
 Flatsome_Option::add_field( 'option',  array(
@@ -305,20 +322,26 @@ function flatsome_refresh_social( WP_Customize_Manager $wp_customize ) {
   }
 
 	  $wp_customize->selective_refresh->add_partial( 'follow_icons', array(
-	    'selector' => '.follow-icons',
-	    'settings' => array('follow_linkedin','follow_flickr','follow_email','follow_phone','follow_style','follow_facebook','follow_x','follow_twitter','follow_threads','follow_instagram','follow_tiktok','follow_rss','follow_vk','follow_youtube','follow_pinterest','follow_snapchat','follow_500px','follow_telegram','follow_twitch','follow_discord'),
+	    'selector' => '.header-social-icons > .follow-icons',
+	    'settings' => array('follow_style','follow_tooltip','follow_linkedin','follow_flickr','follow_email','follow_phone','follow_facebook','follow_x','follow_twitter','follow_threads','follow_instagram','follow_tiktok','follow_rss','follow_vk','follow_youtube','follow_pinterest','follow_snapchat','follow_500px','follow_telegram','follow_twitch','follow_discord'),
 	    'container_inclusive' => true,
 	    'render_callback' => function() {
-			return do_shortcode( '[follow style="' . get_theme_mod( 'follow_style', 'small' ) . '"]' );
+	        return flatsome_apply_shortcode( 'follow', array(
+				'style'    => get_theme_mod( 'follow_style', 'small' ),
+				'tooltip'  => get_theme_mod( 'follow_tooltip', 1 ) ? 'true' : 'false',
+			) );
 	    },
 	) );
 
 	$wp_customize->selective_refresh->add_partial( 'social_icons', array(
 	    'selector' => '.share-icons',
-	    'settings' => array('social_icons','social_icons_style'),
+	    'settings' => array('social_icons','social_icons_style', 'social_icons_tooltip'),
 	    'container_inclusive' => true,
 	    'render_callback' => function() {
-	        return do_shortcode('[share]');
+	        return flatsome_apply_shortcode( 'share', array(
+				'style'   => get_theme_mod( 'social_icons_style', 'outline' ),
+				'tooltip' => get_theme_mod( 'social_icons_tooltip', 1 ) ? 'true' : 'false',
+			) );
 	    },
 	) );
 

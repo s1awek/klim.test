@@ -37,12 +37,15 @@ function flatsome_product_upsell_sidebar(){
 add_action('flatsome_before_product_sidebar','flatsome_product_upsell_sidebar', 1);
 
 /* Add Share to product description */
-if(!function_exists('flatsome_product_share')) {
-  function flatsome_product_share() {
-      echo do_shortcode('[share]');
-  }
+if ( ! function_exists( 'flatsome_product_share' ) ) {
+	function flatsome_product_share() {
+		echo flatsome_apply_shortcode( 'share', array(
+			'style'   => get_theme_mod( 'social_icons_style', 'outline' ),
+			'tooltip' => get_theme_mod( 'social_icons_tooltip', 1 ) ? 'true' : 'false',
+		) );
+	}
 }
-add_action( 'woocommerce_share', 'flatsome_product_share',  10 );
+add_action( 'woocommerce_share', 'flatsome_product_share', 10 );
 
 
 /* Remove Product Description Heading */
@@ -64,49 +67,73 @@ remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_pro
 add_action('flatsome_sale_flash','woocommerce_show_product_sale_flash',10);
 
 
-// Add Product Video Button
-if(!function_exists('flatsome_product_video_button')){
-function flatsome_product_video_button(){
-  global $wc_cpdf;
-       // Add Product Video
-      if($wc_cpdf->get_value(get_the_ID(), '_product_video')){ ?>
-      <a class="button is-outline circle icon button product-video-popup tip-top" href="<?php echo trim( $wc_cpdf->get_value( get_the_ID(), '_product_video' ) ); ?>" title="<?php echo __( 'Video', 'flatsome' ); ?>">
-            <?php echo get_flatsome_icon('icon-play'); ?>
-      </a>
-      <style>
-       <?php
-          // Set product video height
-          $height = '900px';
-              $width = '900px';
-              $iframe_scale = '100%';
-              $custom_size = $wc_cpdf->get_value(get_the_ID(), '_product_video_size');
-              if($custom_size){
-                $split = explode("x", $custom_size);
+if ( ! function_exists( 'flatsome_product_video_button' ) ) {
+	/**
+	 * Add product video button.
+	 *
+	 * @return void
+	 */
+	function flatsome_product_video_button() {
+		global $wc_cpdf;
 
-                $height = $split[0];
-                $width = $split[1];
+		if ( $wc_cpdf->get_value( get_the_ID(), '_product_video' ) ) {
+			printf('<a %s>%s</a>',
+				flatsome_html_atts( [
+					'role'       => 'button',
+					'href'       => esc_url( trim( $wc_cpdf->get_value( get_the_ID(), '_product_video' ) ) ),
+					'class'      => 'button open-video is-outline circle icon button product-video-popup tip-top',
+					'title'      => esc_attr__( 'Video', 'flatsome' ),
+					'aria-label' => esc_attr__( 'Open video in lightbox', 'flatsome' ),
+				] ),
+				get_flatsome_icon( 'icon-play' )
+			);
+			?>
+			<style>
+			<?php
+			// Set product video height.
+			$height       = '900px';
+			$width        = '900px';
+			$iframe_scale = '100%';
+			$custom_size  = $wc_cpdf->get_value( get_the_ID(), '_product_video_size' );
+			if ( $custom_size ) {
+				$split = explode( 'x', $custom_size );
 
-          $iframe_scale = ($width/$height*100).'%';
-              }
-              echo '.has-product-video .mfp-iframe-holder .mfp-content{max-width: '.$width.';}';
-              echo '.has-product-video .mfp-iframe-scaler{padding-top: '.$iframe_scale.'}';
-         ?>
-      </style>
-      <?php }
-  }
+				$height = $split[0];
+				$width  = $split[1];
+
+				$iframe_scale = ( $width / $height * 100 ) . '%';
+			}
+			echo '.has-product-video .mfp-iframe-holder .mfp-content{max-width: ' . $width . ';}';
+			echo '.has-product-video .mfp-iframe-scaler{padding-top: ' . $iframe_scale . ';}';
+			?>
+			</style>
+			<?php
+		}
+	}
 }
-add_action('flatsome_product_image_tools_bottom','flatsome_product_video_button', 1);
 
+add_action( 'flatsome_product_image_tools_bottom', 'flatsome_product_video_button', 1 );
 
-// Product Image Lightbox
-function flatsome_product_lightbox_button(){
-   if(get_theme_mod('product_lightbox', 'default') !== 'disabled') { ?>
-    <a href="#product-zoom" class="zoom-button button is-outline circle icon tooltip hide-for-small" title="<?php echo __( 'Zoom', 'flatsome' ); ?>">
-      <?php echo get_flatsome_icon('icon-expand'); ?>
-    </a>
- <?php }
+/**
+ * Product image lightbox button.
+ */
+function flatsome_product_lightbox_button() {
+	if ( get_theme_mod( 'product_lightbox', 'default' ) === 'disabled' ) {
+		return;
+	}
+	printf('<a %s>%s</a>',
+		flatsome_html_atts( [
+			'role'       => 'button',
+			'href'       => '#product-zoom',
+			'class'      => 'zoom-button button is-outline circle icon tooltip hide-for-small',
+			'title'      => esc_attr__( 'Zoom', 'flatsome' ),
+			'aria-label' => esc_attr__( 'Zoom', 'flatsome' ),
+		] ),
+		get_flatsome_icon( 'icon-expand' )
+	);
 }
-add_action('flatsome_product_image_tools_bottom','flatsome_product_lightbox_button', 2);
+
+add_action( 'flatsome_product_image_tools_bottom', 'flatsome_product_lightbox_button', 2 );
 
 
 // Add Product Body Classes
@@ -300,6 +327,7 @@ function flatsome_sticky_add_to_cart_template() {
 				else :
 					echo $product->get_price_html(); // phpcs:ignore WordPress.Security.EscapeOutput
 					echo flatsome_apply_shortcode( 'button', array(
+						'as'    => 'button',
 						'class' => 'sticky-add-to-cart-select-options-button mb-0 ml-half',
 						'color' => 'secondary',
 						'text'  => $product->is_type( 'variable' ) ? esc_html__( 'Select options', 'flatsome' ) : $product->single_add_to_cart_text(),

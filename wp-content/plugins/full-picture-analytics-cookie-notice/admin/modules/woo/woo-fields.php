@@ -69,6 +69,14 @@ $sections = array(
 					<h3>' . esc_html__('Exception - product variants','full-picture-analytics-cookie-notice') . '</h3>
 					<p>' . esc_html__('If you enabled an option to track views of product variants (see option above), then they will still be tracked after refresh.','full-picture-analytics-cookie-notice') . '</p>',
 			),
+			array(
+				'type' 				=> 'toggle',
+				'label' 			=> esc_html__('Show tracking information on order details pages','full-picture-analytics-cookie-notice'),
+				'must_have'			=> 'pro',
+				'field_id' 			=> 'order_stats',
+				'option_arr_id'		=> $option_arr_id,
+				'popup'				=> '<p>' . sprintf( esc_html__('Enable this function to view %1$sorder tracking information%2$s in the "edit order" pages in the WP admin. Please mind, that not all information will be available for orders that were made before you updated to WP FP 9.1.','full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-understand-information-in-the-woocommerce-tracking-information-box/">', '</a>' ) . '</p>',
+			),
 		),
 	),
 
@@ -81,7 +89,7 @@ $sections = array(
 			array(
 				'type' 				=> 'toggle',
 				'label' 			=> esc_html__('Use Order Attribution only when visitors consent to tracking','full-picture-analytics-cookie-notice'),
-				'must have'			=> 'cook',
+				'must_have'			=> 'cook',
 				'field_id' 			=> 'block_sbjs',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> '<p>' . esc_html__('This will stop WooCommerce from collecting information about the sources of conversions from users who did not agree to tracking statistics.','full-picture-analytics-cookie-notice') . '</p>
@@ -111,6 +119,7 @@ $sections = array(
 				'type' 				=> 'woo_order_statuses',
 				'label' 			=> esc_html__( 'Track order cancellations when they get these statuses', 'full-picture-analytics-cookie-notice' ),
 				'must_have'			=> 'pro',
+				'class'				=> 'fupi_join',
 				'field_id' 			=> 'server_cancel_on_statuses',
 				'default'			=> array( 'wc-cancelled', 'wc-refunded' ),
 				'option_arr_id'		=> $option_arr_id,

@@ -32,7 +32,7 @@ class ArrayToString extends Transformer {
    * @param  array $container
    * @return string
    */
-  public function transform( $array, array $container = null ) {
+  public function transform( $array, ?array $container = null ) {
     $string = '';
 
     foreach ( $array as $item ) {
