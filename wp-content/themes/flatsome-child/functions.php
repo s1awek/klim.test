@@ -936,6 +936,62 @@ function klim_sort_users_by_custom_columns($query)
 }
 add_action('pre_get_users', 'klim_sort_users_by_custom_columns');
 
-add_filter( 'action_scheduler_queue_runner_concurrent_batches', function() {
-	return 10;
-} );
+add_filter('action_scheduler_queue_runner_concurrent_batches', function () {
+    return 10;
+});
+
+// Display returns banner under description inside .product-footer on single product
+add_action('woocommerce_after_single_product_summary', 'klim_show_returns_banner_under_description', 11);
+function klim_show_returns_banner_under_description()
+{
+    if (!is_product()) {
+        return;
+    }
+    echo '<div id="ak_returns_banner_869d5759-03fc-4e2f-8ae3-4547156f82e8">[BANER-WZ]</div>';
+}
+
+// Register My Account endpoint for returns banner
+add_action('init', 'klim_register_returns_account_endpoint');
+function klim_register_returns_account_endpoint()
+{
+    add_rewrite_endpoint('zwroty', EP_ROOT | EP_PAGES);
+}
+
+// Ensure query var exists
+add_filter('query_vars', 'klim_returns_add_query_vars', 0);
+function klim_returns_add_query_vars($vars)
+{
+    $vars[] = 'zwroty';
+    return $vars;
+}
+
+// Flush rewrite rules on theme switch to register the endpoint
+add_action('after_switch_theme', 'klim_returns_flush_rewrite');
+function klim_returns_flush_rewrite()
+{
+    klim_register_returns_account_endpoint();
+    flush_rewrite_rules();
+}
+
+// Add menu item in My Account for logged-in users
+add_filter('woocommerce_account_menu_items', 'klim_add_returns_account_menu_item');
+function klim_add_returns_account_menu_item($items)
+{
+    if (!is_user_logged_in()) {
+        return $items;
+    }
+    $logout = array();
+    if (isset($items['customer-logout'])) {
+        $logout = array('customer-logout' => $items['customer-logout']);
+        unset($items['customer-logout']);
+    }
+    $items['zwroty'] = __('Zwroty', 'flatsome-child');
+    return $items + $logout;
+}
+
+// Render banner content on the custom endpoint
+add_action('woocommerce_account_zwroty_endpoint', 'klim_render_returns_banner_on_account');
+function klim_render_returns_banner_on_account()
+{
+    echo '<div id="ak_returns_banner_869d5759-03fc-4e2f-8ae3-4547156f82e8">[BANER-WZ]</div>';
+}
