@@ -163,6 +163,10 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
             $export_data['total'] = $data_row['total'];
         }
 
+        if ( isset( $data_row['no_post'] ) ) {
+            $export_data['no_post'] = $data_row['no_post'];
+        }
+
         return $export_data;
     }
 
@@ -208,8 +212,8 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
     
 
     public static function get_product_review_statuses() {
-        $product_statuses = array('publish', 'private', 'draft', 'pending', 'future');
-        return apply_filters('wt_iew_allowed_product_review_statuses', array_combine($product_statuses, $product_statuses));
+       $comment_statuses = array('approve' => 'Approved', 'hold' => 'Pending', 'spam' => 'Spam', 'trash' => 'Trash');
+        return apply_filters('wt_iew_allowed_product_review_statuses', $comment_statuses);
     }
 
     public static function get_product_review_sort_columns() {

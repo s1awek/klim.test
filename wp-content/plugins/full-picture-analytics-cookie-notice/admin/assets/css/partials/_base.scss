@@ -119,6 +119,12 @@ div[class*="notice"]{
 	}
 }
 
+.button-medium{ // useful when the button is outside the #fupi_content block
+	font-size: 15px !important;
+    padding: 8px 20px !important;
+    line-height: 1.2em !important;
+}
+
 .fupi_section_descr button.button-secondary{
 	line-height: 1em !important;
 }

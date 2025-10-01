@@ -15,6 +15,7 @@ $sections = array(
 				'label' 			=> esc_html__( 'Google Tag Gateway measurement path', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'custom_gateway',
                 'must_have'         => 'pro',
+                'class'             => 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[custom_gateway]',
 				'placeholder'		=> esc_html__( '/unique_address', 'full-picture-analytics-cookie-notice'),

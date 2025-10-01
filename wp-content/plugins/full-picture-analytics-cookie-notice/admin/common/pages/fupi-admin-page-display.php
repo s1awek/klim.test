@@ -2,6 +2,7 @@
 
     $module_id    	    = sanitize_html_class( $_GET[ 'page' ] );
     $module_id    	    = str_replace( 'full_picture_', '', $module_id );
+    $fupi_versions      = get_option('fupi_versions');
     $active_tab   		= isset( $_GET[ 'tab' ] ) ? sanitize_html_class( $_GET[ 'tab' ] ) : false;
     $consent_id         = ! empty( $_GET[ 'fupi_cons_id' ] ) ? sanitize_key( $_GET[ 'fupi_cons_id' ] ) : false;
     $active_slug        = empty( $active_tab ) ? $module_id : $active_tab;
@@ -9,7 +10,28 @@
     $licence 			= fupi_fs()->can_use_premium_code() ? 'pro' : 'free';
     $current_module_data = [];
     $main_opts          = get_option('fupi_main');
+    $current_user_id    = get_current_user_id();
+
+    // Advanced mode
+
+    // if a user updated from before 9.2, then we enable advanced mode by default
+    // however, this can be overwritten if a user makes a choice using the switcher
+
+    $default_adv_mode = ! empty( $fupi_versions['use_adv_mode'] );
+    $user_adv_mode_meta = get_user_meta( $current_user_id, 'fupi_adv_mode', true ); 
+	$user_adv_mode = $default_adv_mode;
+	
+	if ( ! empty ( $user_adv_mode_meta ) ) {
+		$user_adv_mode = $user_adv_mode_meta == 'yes';
+	}
+
+    $adv_mode_class_suffix    = $user_adv_mode ? 'on' : 'off';
     
+    // show welcome message if fupi_tools is empty
+    $welcome_popup_id = $module_id === 'tools' && ( empty ( $this->tools ) || count( $this->tools ) == 0 ) ? 'fupi_first_steps_popup' : '';
+    
+    // Addons
+
     $addons_data        = apply_filters( 'fupi_register_addon', [] ); // ! ADDON
     $all_modules_data   = array_merge( $this->fupi_modules, $addons_data );
 
@@ -53,34 +75,41 @@
     }
 </style>
 
-<div id="fupi_content" class="wrap <?php echo ' fupi_page_' . $module_id; ?>" data-licence="<?php echo $licence; ?>" data-is_premium_module="<?php echo $is_premium ? 'yes' : 'no'; ?>" data-msurl="<?php echo $multisite_url; ?>" data-page="<?php echo $module_id;?>" data-step="0" data-wp_nonce="<?php echo $wp_nonce; ?>">
+<div id="fupi_content" class="wrap fupi_page_<?php echo $module_id; ?> adv_mode_<?php echo $adv_mode_class_suffix; ?>" data-licence="<?php echo $licence; ?>" data-is_premium_module="<?php echo $is_premium ? 'yes' : 'no'; ?>" data-msurl="<?php echo $multisite_url; ?>" data-page="<?php echo $module_id;?>" data-step="0" data-wp_nonce="<?php echo $wp_nonce; ?>" data-welcome_popup_id="<?php echo $welcome_popup_id?>">
 
     <h1></h1>
     <?php settings_errors();
 
     // GUIDES
     
-    include_once 'parts/fupi-page_part-guides.php'; ?>
+    ?>
+    
+    <div id="fupi_extra_content">
+    
+        <?php include_once 'parts/fupi-page_part-guides.php'; ?>
 
-    <div class="fupi_adv_headline_html_template fupi_tools_integr_section" style="display: none;">
-        <div class="fupi_tools_integr_headline">
-            <div class="fupi_tools_integr_headline_title"><?php esc_html_e( 'Extended integrations','full-picture-analytics-cookie-notice' ) ?></div>
-            <p><?php esc_html_e( 'Extended integrations let you use basic and advanced functions of tracking tools.','full-picture-analytics-cookie-notice' ) ?></p>
-        </div>
-    </div>
+        <?php if ( $module_id == 'tools' ) { ?>
+            <div class="fupi_adv_headline_html_template fupi_tools_integr_section" style="display: none;">
+                <div class="fupi_tools_integr_headline">
+                    <div class="fupi_tools_integr_headline_title"><?php esc_html_e( 'Extended integrations','full-picture-analytics-cookie-notice' ) ?></div>
+                    <p><?php esc_html_e( 'Extended integrations let you use basic and advanced functions of tracking tools.','full-picture-analytics-cookie-notice' ) ?></p>
+                </div>
+            </div>
 
-    <div class="fupi_basic_headline_html_template fupi_tools_integr_section" style="display: none;">
-        <div class="fupi_tools_integr_headline">
-            <div class="fupi_tools_integr_headline_title"><?php esc_html_e( 'Basic integrations','full-picture-analytics-cookie-notice' ) ?></div>
-            <p><?php esc_html_e( 'Basic integrations let you use only basic functions of tracking tools.','full-picture-analytics-cookie-notice' ) ?></p>
-        </div>
-    </div>
+            <div class="fupi_basic_headline_html_template fupi_tools_integr_section" style="display: none;">
+                <div class="fupi_tools_integr_headline">
+                    <div class="fupi_tools_integr_headline_title"><?php esc_html_e( 'Basic integrations','full-picture-analytics-cookie-notice' ) ?></div>
+                    <p><?php esc_html_e( 'Basic integrations let you use only basic functions of tracking tools.','full-picture-analytics-cookie-notice' ) ?></p>
+                </div>
+            </div>
 
-    <div class="fupi_tagman_headline_html_template fupi_tools_integr_section" style="display: none;">
-        <div class="fupi_tools_integr_headline">
-            <div class="fupi_tools_integr_headline_title"><?php esc_html_e( 'Tag Managers','full-picture-analytics-cookie-notice' ) ?></div>
-            <p><?php esc_html_e( 'Tag managers let you install other tracking tools','full-picture-analytics-cookie-notice' ) ?></p>
-        </div>
+            <div class="fupi_tagman_headline_html_template fupi_tools_integr_section" style="display: none;">
+                <div class="fupi_tools_integr_headline">
+                    <div class="fupi_tools_integr_headline_title"><?php esc_html_e( 'Tag Managers','full-picture-analytics-cookie-notice' ) ?></div>
+                    <p><?php esc_html_e( 'Tag managers let you install other tracking tools','full-picture-analytics-cookie-notice' ) ?></p>
+                </div>
+            </div>
+        <?php }; ?>
     </div>
 
     <?php 
@@ -132,8 +161,6 @@
                     // $fupi_main = get_option('fupi_main');
                     
                     if ( defined( 'FUPI_TESTER' ) && FUPI_TESTER == true ) {
-
-                        $fupi_versions = get_option('fupi_versions');
                         
                         echo '<div id="fupi_option_debug_box">
                             <p>Option name: fupi_'. $active_slug .'</p>

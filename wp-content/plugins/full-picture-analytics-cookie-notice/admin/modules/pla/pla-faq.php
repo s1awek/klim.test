@@ -31,7 +31,7 @@
 
         <ol>
             <li>' . esc_html__( 'give descriptive names to actions you want to track,', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__( 'enable Setup Mode in WP FP (in the General Settings) and start a test,', 'full-picture-analytics-cookie-notice' ) . '</li>
+            <li>' . esc_html__( 'enable Setup Helper in the top menu and start a test,', 'full-picture-analytics-cookie-notice' ) . '</li>
             <li>' . esc_html__( 'do all the actions that you\'ve just set up,', 'full-picture-analytics-cookie-notice' ) . '</li>
             <li>' . esc_html__( 'in the Plausible Analytics panel go to the Site Settings page > Goals > Custom Goal / Property and click "Add new",', 'full-picture-analytics-cookie-notice' ) . '</li>
             <li>' . esc_html__( 'you should see there a dropdown field with goal / property names that you entered in the "name" fields of this module.', 'full-picture-analytics-cookie-notice' ) . '</li>

@@ -43,7 +43,7 @@ $sections = array(
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track without waiting for consent', 'full-picture-analytics-cookie-notice' ),
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'field_id' 			=> 'disreg_cookies',
 				'must_have'			=> 'cook',
 				'option_arr_id'		=> $option_arr_id,
@@ -55,7 +55,7 @@ $sections = array(
 				'label' 			=> esc_html__('Only track visitors from specific countries', 'full-picture-analytics-cookie-notice'),
 				'field_id' 			=> 'limit_country',
 				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'must_have'			=> 'pro geo',
 				'is_repeater'		=> false,
 				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
@@ -89,6 +89,7 @@ $sections = array(
 				'type'	 			=> 'text',
 				'label' 			=> esc_html__( 'Track clicks on all email links as conversions', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_email',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'placeholder'		=> esc_html__( 'Conversion ID (required)', 'full-picture-analytics-cookie-notice' ),
 				'popup'				=> '<p>' . esc_html__( 'Enable this function to track clicks on links with email addresses. It will track the part of the email address before the "@" symbol.', 'full-picture-analytics-cookie-notice' ) . '</p>
@@ -99,6 +100,7 @@ $sections = array(
 				'label' 			=> esc_html__( 'Track clicks on all tel. links as conversions', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_tel',
 				'option_arr_id'		=> $option_arr_id,
+				'class'				=> 'fupi_adv',
 				'placeholder'		=> esc_html__( 'Conversion label (required)', 'full-picture-analytics-cookie-notice' ),
 				'popup'				=> '<p>' . esc_html__( 'Enable this function to track clicks on links with phone numbers. It will track the last 5 digits of the number.', 'full-picture-analytics-cookie-notice' ) . '</p>
 					<p>' . esc_html__('This will track clicks in all phone numbers on your website. If you want to track only specific ones, please use the option to "track clicks on page elements [...]" below.', 'full-picture-analytics-cookie-notice' ) . '</p>',
@@ -109,7 +111,7 @@ $sections = array(
 				'field_id' 			=> 'track_affiliate',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'fields'			=> array(
 					array(
@@ -134,7 +136,7 @@ $sections = array(
 				'field_id' 			=> 'track_elems',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<h3>' . esc_html__( 'How to fill in these fields', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<ol>
@@ -169,7 +171,7 @@ $sections = array(
 				'field_id' 			=> 'track_forms',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'There are 4 methods of tracking form. Please choose the one that is best suited for your forms. Otherwise form tracking may not work correctly' , 'full-picture-analytics-cookie-notice' ) . '<p>
 					<p><a class="button-secondary" target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-choose-the-best-way-to-track-form-submissions/">' . esc_html__( 'Choose correct method to track your forms.' , 'full-picture-analytics-cookie-notice' ) . '</a></p>',
@@ -196,7 +198,7 @@ $sections = array(
 				'field_id' 			=> 'track_views',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'This function works only on elements which are present in the HTML at the moment of rendering the page. To track elements added later, enable the "DOM listener" function in the Shared tracking settings > Tracking improvements.', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . esc_html__( 'Elements are treated as "visible" when they are 200px inside the screen (you can change it on the "shared tracking settings" page). Each view is counted once per page view.', 'full-picture-analytics-cookie-notice') . '</p>',

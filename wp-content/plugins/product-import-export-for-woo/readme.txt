@@ -4,7 +4,7 @@ Tags: product export, product import, CSV import export, woocommerce product imp
 Requires at least: 3.0.1
 Tested up to: 6.8.2
 Requires PHP: 5.6
-Stable tag: 2.5.5
+Stable tag: 2.5.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -20,7 +20,7 @@ Inventory updates, syncing products, data filtration, and automatic column mappi
 
 With the latest update, we have integrated ChatGPT API into our plugin. Now, the plugin will automatically generate product descriptions for products with missing descriptions. Thanks to Generative AI!
 
-<strong>To import and export variable products, upgrade to the premium version of <a href="https://www.webtoffee.com/product/product-import-export-woocommerce/">WooCommerce Product Import Export</a></strong>.
+<strong>To import and export variable products, upgrade to the premium version of <a href="https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_readme&utm_medium=product_import_export&utm_campaign=Product_import_export">WooCommerce Product Import Export</a></strong>.
 
 == PRODUCT IMPORT EXPORT FOR WOOCOMMERCE - FREE IMPORT EXPORT PLUGIN ==
 
@@ -61,7 +61,7 @@ With this plugin, you can export and import WooCommerce products to and from a C
 * <strong>Save frequently used import/export configurations</strong> as templates and use the template for future imports and exports.
 * The plugin <strong>stores all the past imports and exports</strong> and <strong>lets you re-run</strong> them when needed.
 * <strong>Easy debugging:</strong> View and download import log for debugging purpose.
-&#9989; Tested OK with WooCommerce 10.0.2
+&#9989; Tested OK with WooCommerce 10.1.2
 
 ###COMPATIBLE PLUGINS###
 
@@ -133,7 +133,7 @@ After entering all details about products in a spreadsheet, you can import produ
 
 ##PRODUCT IMPORT EXPORT PLUGIN FOR WOOCOMMERCE (PRO)##
 
-The <a href="https://www.webtoffee.com/product/product-import-export-woocommerce/">WooCommerce Product Import Export</a> Plugin Pro for WooCommerce is the leading tool for the export and import of WooCommerce products. 
+The <a href="https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_readme&utm_medium=product_import_export&utm_campaign=Product_import_export">WooCommerce Product Import Export</a> Plugin Pro for WooCommerce is the leading tool for the export and import of WooCommerce products. 
 
 
 <blockquote>
@@ -155,7 +155,7 @@ The <a href="https://www.webtoffee.com/product/product-import-export-woocommerce
 &#9989; <a href="https://www.webtoffee.com/product-import-export-plugin-third-party-compatibility/">Compatible with various third-party plugins.</a></li>
 
 
-Please visit <a rel="nofollow" href="https://www.webtoffee.com/product/product-import-export-woocommerce/">Product Import Export Plugin for WooCommerce</a> for more details.
+Please visit <a rel="nofollow" href="https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_readme&utm_medium=product_import_export&utm_campaign=Product_import_export">Product Import Export Plugin for WooCommerce</a> for more details.
 
 </blockquote>
 
@@ -168,6 +168,7 @@ Other useful plugins from WebToffee for migrating WooCommerce/WordPress data:
 &#128312; <a href="https://wordpress.org/plugins/order-import-export-for-woocommerce/">Order/Coupon Import-Export for WooCommerce</a>: Import and export orders and/or coupons from your WooCommerce store using CSV with the plugin.
 &#128312; <a href="https://wordpress.org/plugins/wp-migration-duplicator/">WordPress Backup & Migration</a>: Quickly migrate and backup entire WordPress site or selected files from one location to another. Backup to FTP, Google drive, Amazon S3, or local storage and easily restore them back.
 &#128312; <a href="https://wordpress.org/plugins/webtoffee-product-feed/">WebToffee WooCommerce Product Feed & Sync Manager</a>: Generate WooCommerce product feed for Google, Facebook and Instagram Shops and sync WooCommerce products with Facebook catalog.
+&#128312; <a href="https://www.webtoffee.com/product/gdpr-cookie-consent/?utm_source=free_plugin_readme&utm_medium=product_import_export&utm_campaign=GDPR">GDPR Cookie Consent</a>: This premium WebToffee plugin helps websites stay compliant with GDPR, CCPA, and other privacy laws. It lets you display a fully customizable cookie consent banner, manage cookie categories, record user consents, and set up prior consent for cookies.
 
 = About WebToffee =
 
@@ -235,11 +236,15 @@ Yes, you can import grouped, affiliate/external products in addition to simple p
 
 
 == CHANGELOG ==
+= 2.5.6 2025-09-02 =
+* [Compatibility] - Tested OK with WooCommerce 10.1.2
+* [Improvement] - Enhancements to the import mapping screen.
+
 = 2.5.5 2025-07-18 =
 * [Compatibility] - Tested OK with WordPress 6.8.2
 * [Compatibility] - Tested OK with WooCommerce 10.0.2
 
-= 2.5.4 2025-06-03=
+= 2.5.4 2025-06-03 =
 * [Add] - Popup warning during product export if variable/custom product types are present on the export site.
 * [Fix] - load_text_domain warning resolved to support WordPress 6.7+ compatibility.
 * [Compatibility] - Tested OK with WordPress 6.8
@@ -726,6 +731,6 @@ Yes, you can import grouped, affiliate/external products in addition to simple p
 
 == Upgrade Notice ==
 
-= 2.5.5 =
-* [Compatibility] - Tested OK with WordPress 6.8.2
-* [Compatibility] - Tested OK with WooCommerce 10.0.2
+= 2.5.6 =
+* [Compatibility] - Tested OK with WooCommerce 10.1.2
+* [Improvement] - Enhancements to the import mapping screen.

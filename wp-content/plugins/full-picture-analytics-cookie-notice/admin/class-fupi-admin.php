@@ -31,11 +31,14 @@ class Fupi_Admin {
 
     private $fupi_modules = [];
 
+    private $ver;
+
     public function __construct( $plugin_name, $version ) {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
         $this->versions = get_option( 'fupi_versions' );
         $this->tools = get_option( 'fupi_tools' );
+        $this->ver = get_option( 'fupi_versions' );
         // Enable GTAG module if google ads or analytics are enabled
         if ( !empty( $this->tools['ga41'] ) || !empty( $this->tools['gads'] ) ) {
             $this->tools['gtag'] = true;
@@ -546,6 +549,48 @@ class Fupi_Admin {
         require_once FUPI_PATH . '/admin/common/fupi_updater.php';
         $updater = new Fupi_Updater();
         $updater->run();
+    }
+
+    // UPDATE SETUP HELPER AND EASY MODE IN MAIN SETTINGS WITH AJAX
+    public function fupi_update_main_options_callback() {
+        // Check if the current user is an administrator
+        if ( !current_user_can( 'manage_options' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page.', 'full-picture-analytics-cookie-notice' ) );
+        }
+        check_ajax_referer( 'fupi_update_modes_nonce', 'security' );
+        // Update main
+        if ( $_POST['mode'] === 'setup_mode' ) {
+            $versions_opts = get_option( 'fupi_versions' );
+            if ( empty( $versions_opts ) ) {
+                return;
+            }
+            if ( $_POST['value'] === 'false' ) {
+                // for some reason it is a string
+                if ( isset( $versions_opts['debug'] ) ) {
+                    unset($versions_opts['debug']);
+                    update_option( 'fupi_versions', $versions_opts );
+                    wp_send_json_success( '[FP] Setup helper is disabled' );
+                }
+            } else {
+                if ( !isset( $versions_opts['debug'] ) ) {
+                    $versions_opts['debug'] = '1';
+                    // for some reason it is a string too
+                    update_option( 'fupi_versions', $versions_opts );
+                    require_once FUPI_PATH . '/admin/common/fupi-clear-cache.php';
+                    wp_send_json_success( '[FP] Setup helper is enabled' );
+                }
+            }
+            // save the value of easy mode in user's meta
+        } else {
+            $current_user_id = get_current_user_id();
+            if ( $_POST['value'] === 'true' && $current_user_id > 0 ) {
+                update_user_meta( $current_user_id, 'fupi_adv_mode', 'yes' );
+                wp_send_json_success( '[FP] Advanced settings are enabled for the current user' );
+            } else {
+                update_user_meta( $current_user_id, 'fupi_adv_mode', 'no' );
+                wp_send_json_success( '[FP] Advanced settings are disabled for the current user' );
+            }
+        }
     }
 
     //

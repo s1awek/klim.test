@@ -100,6 +100,8 @@ class Fupi {
         // AJAX USER SEARCH (for the settings field)
         $this->loader->add_action( 'wp_ajax_fupi_search_users', $plugin_admin, 'fupi_search_users_callback' );
         $this->loader->add_action( 'wp_ajax_fupi_search_pages', $plugin_admin, 'fupi_search_pages_callback' );
+        // AJAX UPDATES OF GENERAL SETTINGS
+        $this->loader->add_action( 'wp_ajax_fupi_update_modes', $plugin_admin, 'fupi_update_main_options_callback' );
     }
 
     //
@@ -117,6 +119,17 @@ class Fupi {
             -1
         );
         // includes all the "Get" scripts
+        $this->loader->add_filter(
+            'script_loader_tag',
+            $plugin_public,
+            'add_nodefer_to_fupi_scripts',
+            10,
+            3
+        );
+        $this->loader->add_filter( 'rocket_defer_inline_exclusions', $plugin_public, 'fupi_rocket_exclude_inline_js' );
+        $this->loader->add_filter( 'rocket_exclude_js', $plugin_public, 'fupi_rocket_exclude_js_files' );
+        $this->loader->add_filter( 'rocket_delay_js_exclusions', $plugin_public, 'fupi_rocket_exclude_js_files' );
+        $this->loader->add_filter( 'rocket_exclude_defer_js', $plugin_public, 'fupi_rocket_exclude_js_files' );
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'fupi_enqueue_js_helpers' );
         // LOAD MODULES
         // Load when enabled

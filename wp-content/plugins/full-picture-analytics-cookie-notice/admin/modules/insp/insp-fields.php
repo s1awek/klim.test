@@ -41,7 +41,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Force load', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'force_load',
-				'el_class'			=> 'fupi_condition fupi_condition_reverse',
+				'el_class'			=> 'fupi_condition fupi_condition_reverse fupi_adv',
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
@@ -53,7 +53,7 @@ $sections = array(
 				'field_id' 			=> 'disreg_cookies',
 				'must_have'			=> 'cook',
 				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
 				<p>' . esc_html__( 'Visitors will still be able to turn off tracking by declining tracking / cookies.', 'full-picture-analytics-cookie-notice' ) . '</p>'
 			),
@@ -62,7 +62,7 @@ $sections = array(
 				'label' 			=> esc_html__('Only track visitors from specific countries', 'full-picture-analytics-cookie-notice'),
 				'field_id' 			=> 'limit_country',
 				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'must_have'			=> 'pro geo',
 				'is repeater'		=> false,
 				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
@@ -98,6 +98,7 @@ $sections = array(
 				'field_id' 			=> 'identif_users',
 				'option_arr_id'		=> $option_arr_id,
 				'must_have'			=> 'pro',
+				'class'				=> 'fupi_adv',
 				'el_class'			=> 'fupi_condition',
 				'el_data_target'	=> 'fupi_sub_identif',
 				'popup3'			=> '<p>' . esc_html__( 'User identification is used to associate recordings with people.', 'full-picture-analytics-cookie-notice') . '</p>
@@ -107,7 +108,7 @@ $sections = array(
 				'type'	 			=> 'select',
 				'label' 			=> esc_html__( 'Identify logged-in users by:', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'identif_method',
-				'class'				=> 'fupi_sub fupi_sub_identif fupi_disabled',
+				'class'				=> 'fupi_sub fupi_sub_identif fupi_disabled fupi_adv',
 				'must_have'			=> 'pro',
 				'option_arr_id'		=> $option_arr_id,
 				'options' 			=> array(
@@ -131,6 +132,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Tag with clicks on outbound links', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_outbound',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> esc_html__( 'Tags clicks on all links that lead to other domains. Attention! Affiliate links leading to other sites are also treated as outbound.', 'full-picture-analytics-cookie-notice'),
 			),
@@ -140,7 +142,7 @@ $sections = array(
 				'field_id' 			=> 'tag_affiliate',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'under field'		=> '<p>' . esc_html__( 'In the second field you can also use a placeholder [name]. It will be replaced with the first 20 characters of the text inside the clicked element. Make sure it has any.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 				'fields'			=> array(
@@ -163,6 +165,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Tag with clicks on email and tel. links', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_email_tel',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> '<p>' . esc_html__( 'It will track the last 5 digits of the phone number and the part of the email address before the "@" symbol.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
@@ -171,6 +174,7 @@ $sections = array(
 				'label' 			=> esc_html__( 'Tag with clicks on file download links', 'full-picture-analytics-cookie-notice' ),
 				'placeholder'		=> esc_html__( 'e.g. pdf, doc, docx, xls, xlsx, txt', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_file_downl',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[tag_file_downl]',
 				'popup'				=> esc_html__( 'Enter coma separated list of file formats you want to track', 'full-picture-analytics-cookie-notice'),
@@ -179,6 +183,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Tag with anchor clicks (links leading to elements on the same page)', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_anchor_clicks',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
@@ -187,7 +192,7 @@ $sections = array(
 				'field_id' 			=> 'tag_elems',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<h3>' . esc_html__( 'How to fill in these fields', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<ol>
@@ -222,7 +227,7 @@ $sections = array(
 				'field_id' 			=> 'tag_forms',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'There are 4 methods of tracking form. Please choose the one that is best suited for your forms. Otherwise form tracking may not work correctly' , 'full-picture-analytics-cookie-notice' ) . '<p>
 					<p><a class="button-secondary" target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-choose-the-best-way-to-track-form-submissions/">' . esc_html__( 'Choose correct method to track your forms.' , 'full-picture-analytics-cookie-notice' ) . '</a></p>',
@@ -249,7 +254,7 @@ $sections = array(
 				'field_id' 			=> 'tag_views',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'				=> '<p class="fupi_warning_text">' . esc_html__( 'This function works only on elements which are present in the HTML at the moment of rendering the page. To track elements added later, enable the "DOM listener" function in the Shared tracking settings > Tracking improvements.', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . esc_html__( 'Elements are treated as "visible" when they are 200px inside the screen (you can change it on the "shared tracking settings" page). Each view is counted once per page view.', 'full-picture-analytics-cookie-notice') . '</p>',
@@ -274,30 +279,35 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Tag with user\'s login status and role', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_user_role',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Tag with page type', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_pagetype',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Tag with page author', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_pageauthor',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Tag with referring site', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_referrer',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Tag with UTM campaign parameters', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_utm',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 		),

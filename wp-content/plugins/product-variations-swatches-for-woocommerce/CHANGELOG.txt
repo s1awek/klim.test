@@ -1,3 +1,6 @@
+/** 1.1.13 - 2025.09.12**/
+- Updated: VillaTheme support
+
 /** 1.1.12 - 2025.07.24**/
 - Updated: VillaTheme support
 

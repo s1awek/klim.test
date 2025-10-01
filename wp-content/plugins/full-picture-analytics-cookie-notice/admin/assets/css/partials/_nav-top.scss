@@ -16,12 +16,16 @@
 }
 
     .fupi_top_nav_link{
+        border-width: 0;
         flex: 0 0 auto;
         padding: 10px;
         text-decoration: none;
         color: #000;
         text-align: center;
         font-size: 15px;
+        cursor: pointer;
+        border-radius: 100px;
+        background-color: transparent;
         &:hover, &:focus{
             background-color: #fff;
             color: #222;
@@ -33,12 +37,17 @@
     }
 
     #fupi_top_setup_info{
+        display: flex;
+        gap: 10px 30px;
         align-self: center;
-        margin-right: auto;
         font-size: 15px;
+        margin-right: auto;
         strong{
             text-transform: uppercase;
             font-size: 14px;
+        }
+        .fupi_open_popup_i{
+            margin-left: 0;
         }
     }
 
@@ -54,6 +63,7 @@
         background-color: transparent;
     }
     #fupi_top_nav{
+        border-radius: 18px;
         margin-top: 15px;
         flex: 0 0 100%;
         order: 3;
@@ -82,7 +92,6 @@
             padding: 3px;
         }
             .fupi_top_nav_link{
-                border-radius: 100px;
                 padding: 12px 18px;
             }
 }

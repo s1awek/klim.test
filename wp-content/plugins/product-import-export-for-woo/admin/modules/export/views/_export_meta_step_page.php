@@ -2,8 +2,13 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+
+// Check if banner HTML should be displayed instead of table
+if (isset($meta_mapping_screen_field_val['banner_html']) && !empty($meta_mapping_screen_field_val['banner_html'])) {
+    echo wp_kses_post($meta_mapping_screen_field_val['banner_html']);
+} else {
 ?>
-<table class="wt-iew-mapping-tb wt-iew-exporter-meta-mapping-tb" data-field-type="<?php echo $meta_mapping_screen_field_key; ?>">
+<table class="wt-iew-mapping-tb wt-iew-exporter-meta-mapping-tb" data-field-type="<?php echo esc_attr($meta_mapping_screen_field_key); ?>">
 	<thead>
 		<tr>
     		<th>
@@ -53,4 +58,7 @@ if (!defined('ABSPATH')) {
 		}
 		?>
 	</tbody>
-</table>   
+</table>
+<?php
+}
+?>   

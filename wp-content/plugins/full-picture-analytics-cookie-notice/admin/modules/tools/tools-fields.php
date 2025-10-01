@@ -289,6 +289,7 @@ $tools_fields = array(
         'type'          => 'toggle',
         'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/gtm_fav.png" aria-hidden="true">Google Tag Manager</div>',
         'field_id'      => 'gtm',
+        'class'         => 'fupi_adv',
         'option_arr_id' => $option_arr_id,
         'el_data_name'  => 'GTM',
         'tags'          => 'woo',
@@ -382,7 +383,7 @@ $extensions_fields = array(
         'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/adv_triggers_ico.png" aria-hidden="true">' . esc_html__( 'Advanced Triggers + Visitor Scoring', 'full-picture-analytics-cookie-notice' ) . '</div>',
         'field_id'      => 'atrig',
         'option_arr_id' => $option_arr_id,
-        'class'         => 'fupi_do_not_hide',
+        'class'         => 'fupi_do_not_hide fupi_adv',
         'must_have'     => 'pro_round',
         'popup'         => '<p>' . esc_html__( 'Here you can define triggers for custom events and set up visitor scoring rules. You can use it for:', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<ol>

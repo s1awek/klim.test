@@ -652,6 +652,52 @@ var wt_iew_basic_import=(function( $ ) {
 						}
 					}
 				}
+			/**
+			 * Check if any fields are mapped
+			 * @since 2.5.6
+			 */
+			}else if(this.current_step=='mapping')
+			{
+				if(!this.is_previous_step(step_to_go))
+				{
+					/* Check if any fields are mapped using selectors */
+					var $default_table = $('.wt-iew-importer-default-mapping-tb');
+					var $meta_boxes = $('.meta_mapping_box_con[data-loaded="1"]');
+					
+					var has_mapped_fields = false;
+					
+					/* Check default mapping fields - both checkbox checked AND value selected */
+					$default_table.find('tbody tr').each(function(){
+						var $row = $(this);
+						var is_checked = $row.find('.columns_key').is(':checked');
+						var has_value = $row.find('.columns_val').val().trim() !== '';						
+						
+						if(is_checked && has_value){
+							has_mapped_fields = true;
+							return false; // Break the loop once we find one
+						}
+					});
+					
+					/* Check meta mapping fields only if no default fields are mapped */
+					if(!has_mapped_fields){
+						$meta_boxes.find('.wt-iew-mapping-tb tbody tr').each(function(){
+							var $row = $(this);
+							var is_checked = $row.find('.columns_key').is(':checked');
+							var has_value = $.trim($row.find('.columns_val').val()) !== '';
+							
+							if(is_checked && has_value){
+								has_mapped_fields = true;
+								return false; // Break the loop once we find one
+							}
+						});
+					}
+					
+					if(!has_mapped_fields)
+					{
+						wt_iew_notify_msg.error(wt_iew_import_basic_params.msgs.no_columns_mapped);
+						return false;
+					}
+				}
 			}else if(this.current_step=='advanced')
 			{
 				

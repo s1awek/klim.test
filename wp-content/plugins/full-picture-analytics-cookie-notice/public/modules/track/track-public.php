@@ -7,6 +7,8 @@ class Fupi_TRACK_public {
 
     private $main;
 
+    private $ver;
+
     public function __construct() {
         $this->settings = get_option( 'fupi_track' );
         if ( empty( $this->settings ) ) {
@@ -14,6 +16,7 @@ class Fupi_TRACK_public {
         }
         $this->tools = get_option( 'fupi_tools' );
         $this->main = get_option( 'fupi_main' );
+        $this->ver = get_option( 'fupi_versions' );
         $this->add_filters_and_actions();
     }
 

@@ -538,8 +538,8 @@ class Wt_Import_Export_For_Woo_Basic_Export_Ajax
 
 					),
 				);
-				$link = $link_array[$this->to_export]['link'];
-				$text = $link_array[$this->to_export]['text'];
+				$link = isset($link_array[$this->to_export]['link']) ? esc_url($link_array[$this->to_export]['link']) : '';
+				$text = isset($link_array[$this->to_export]['text']) ? esc_html($link_array[$this->to_export]['text']) : '';
 			
 			ob_start();
 			$this->prepare_step_header_html();

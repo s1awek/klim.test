@@ -1,9 +1,9 @@
 === Export Products, Orders & Customers for WooCommerce ===
-Contributors: wpcodefactory, omardabbas, karzin, anbinder, algoritmika, kousikmukherjeeli
+Contributors: wpcodefactory, omardabbas, karzin, anbinder, kousikmukherjeeli
 Tags: woocommerce, export
 Requires at least: 4.4
 Tested up to: 6.8
-Stable tag: 2.3.1
+Stable tag: 2.3.2
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -59,6 +59,9 @@ When exporting products and/or orders, you can add one additional product and/or
 3. Start by visiting plugin settings at "WPFactory > Export".
 
 == Changelog ==
+
+= 2.3.2 - 24/09/2025 =
+* WC tested up to: 10.2.
 
 = 2.3.1 - 18/04/2025 =
 * Fix - Export Products - Remove empty "Product Attributes" column.

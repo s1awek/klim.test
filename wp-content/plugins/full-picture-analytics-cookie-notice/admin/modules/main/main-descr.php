@@ -8,13 +8,6 @@ $ret_text = '';
 
 switch( $section_id ){
 
-	case 'fupi_main_setupmode':
-		$ret_text = '<div>
-			<p>' . esc_html__( 'Enable setup mode to test the configuration of WP Full Picture and its modules.', 'full-picture-analytics-cookie-notice') . '</p>
-			<button type="button" class="fupi_faux_link fupi_open_popup" data-popup="fupi_debug_info_popup">' . esc_html__( 'Learn how it works', 'full-picture-analytics-cookie-notice') . ' <span class="fupi_open_popup_i">i</span></button>
-		</div>';
-	break;
-
 	// DO NOT TRACK
 
 	case 'fupi_main_no_track':

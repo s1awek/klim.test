@@ -98,7 +98,7 @@ $sections = array(
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track without waiting for consent', 'full-picture-analytics-cookie-notice' ),
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'field_id' 			=> 'disreg_cookies',
 				'must_have'			=> 'cook',
 				'option_arr_id'		=> $option_arr_id,
@@ -111,7 +111,7 @@ $sections = array(
 				'field_id' 			=> 'limit_country',
 				'must_have'			=> 'pro geo',
 				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'is repeater'		=> false,
 				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 				'fields'			=> array(
@@ -170,6 +170,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track clicks on outbound links', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_outbound',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> '<p>' . esc_html__( 'This will track clicks on all the links that lead to other domains. Attention! Affiliate links leading to other sites are also treated as outbound.', 'full-picture-analytics-cookie-notice') . '</p><p>' . esc_html__( 'Tracked as a parameter "url" of the "outbound" event', 'full-picture-analytics-cookie-notice' ) . '</p>'
 			),
@@ -177,7 +178,7 @@ $sections = array(
 					'type'	 			=> 'toggle',
 					'label' 			=> esc_html__( 'Also track with Conversion API', 'full-picture-analytics-cookie-notice' ),
 					'field_id' 			=> 'track_outbound_capi',
-					'class'				=> 'fupi_sub',
+					'class'				=> 'fupi_sub fupi_adv',
 					'must_have'			=> 'pro',
 					'option_arr_id'		=> $option_arr_id,
 					'popup_id'			=> 'fupi_servertrack_info_popup'
@@ -188,7 +189,7 @@ $sections = array(
 				'field_id' 			=> 'track_affiliate',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'fields'			=> array(
 					array(
@@ -212,7 +213,7 @@ $sections = array(
 					'type'	 			=> 'toggle',
 					'label' 			=> esc_html__( 'Also track with Conversion API', 'full-picture-analytics-cookie-notice' ),
 					'field_id' 			=> 'track_affiliate_capi',
-					'class'				=> 'fupi_sub',
+					'class'				=> 'fupi_sub fupi_adv',
 					'must_have'			=> 'pro',
 					'option_arr_id'		=> $option_arr_id,
 					'popup_id'			=> 'fupi_servertrack_info_popup'
@@ -221,6 +222,7 @@ $sections = array(
 				'type'	 			=> 'text',
 				'label' 			=> esc_html__( 'Track clicks on file download links', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_file_downl',
+				'class'				=> 'fupi_adv',
 				'placeholder'		=> 'pdf, doc, docx, xls, xlsx, txt',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[track_file_downl]',
@@ -230,7 +232,7 @@ $sections = array(
 					'type'	 			=> 'toggle',
 					'label' 			=> esc_html__( 'Also track with Conversion API', 'full-picture-analytics-cookie-notice' ),
 					'field_id' 			=> 'track_file_downl_capi',
-					'class'				=> 'fupi_sub',
+					'class'				=> 'fupi_sub fupi_adv',
 					'must_have'			=> 'pro',
 					'option_arr_id'		=> $option_arr_id,
 					'popup_id'			=> 'fupi_servertrack_info_popup'
@@ -239,6 +241,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track clicks on email and tel. links', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_email_tel',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'		 		=> '<p>' . esc_html__( 'It will track the last 5 digits of the phone number and the part of the email address before the "@" symbol.', 'full-picture-analytics-cookie-notice' ) . '</p><p>' . esc_html__( 'Tracked as parameters "target" and "type" of the "Contact" event', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
@@ -246,7 +249,7 @@ $sections = array(
 					'type'	 			=> 'toggle',
 					'label' 			=> esc_html__( 'Also track with Conversion API', 'full-picture-analytics-cookie-notice' ),
 					'field_id' 			=> 'track_email_tel_capi',
-					'class'				=> 'fupi_sub',
+					'class'				=> 'fupi_sub fupi_adv',
 					'must_have'			=> 'pro',
 					'option_arr_id'		=> $option_arr_id,
 					'popup_id'			=> 'fupi_servertrack_info_popup'
@@ -257,7 +260,7 @@ $sections = array(
 				'field_id' 			=> 'track_elems',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'fields'			=> array(
 					array(
@@ -291,7 +294,7 @@ $sections = array(
 					'type'	 			=> 'toggle',
 					'label' 			=> esc_html__( 'Also track with Conversion API', 'full-picture-analytics-cookie-notice' ),
 					'field_id' 			=> 'track_elems_capi',
-					'class'				=> 'fupi_sub',
+					'class'				=> 'fupi_sub fupi_adv',
 					'must_have'			=> 'pro',
 					'option_arr_id'		=> $option_arr_id,
 					'popup_id'			=> 'fupi_servertrack_info_popup',
@@ -302,7 +305,7 @@ $sections = array(
 				'field_id' 			=> 'track_forms',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'fields'			=> array(
 					array(
@@ -328,7 +331,7 @@ $sections = array(
 					'type'	 			=> 'toggle',
 					'label' 			=> esc_html__( 'Also track with Conversion API', 'full-picture-analytics-cookie-notice' ),
 					'field_id' 			=> 'track_forms_capi',
-					'class'				=> 'fupi_sub',
+					'class'				=> 'fupi_sub fupi_adv',
 					'must_have'			=> 'pro',
 					'option_arr_id'		=> $option_arr_id,
 					'popup_id'			=> 'fupi_servertrack_info_popup'
@@ -339,7 +342,7 @@ $sections = array(
 				'field_id' 			=> 'track_views',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'fields'			=> array(
 					array(
@@ -365,7 +368,7 @@ $sections = array(
 					'type'	 			=> 'toggle',
 					'label' 			=> esc_html__( 'Also track with Conversion API', 'full-picture-analytics-cookie-notice' ),
 					'field_id' 			=> 'track_views_capi',
-					'class'				=> 'fupi_sub',
+					'class'				=> 'fupi_sub fupi_adv',
 					'must_have'			=> 'pro',
 					'option_arr_id'		=> $option_arr_id,
 					'popup_id'			=> 'fupi_servertrack_info_popup'
@@ -374,6 +377,7 @@ $sections = array(
 				'type'	 			=> 'text',
 				'label' 			=> esc_html__( 'Track when visitors scroll to:', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_scroll',
+				'class'				=> 'fupi_adv',
 				'placeholder'		=> esc_html__( 'e.g. 25, 50, 75', 'full-picture-analytics-cookie-notice' ),
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[track_scroll]',
@@ -385,7 +389,7 @@ $sections = array(
 					'type'	 			=> 'toggle',
 					'label' 			=> esc_html__( 'Also track with Conversion API', 'full-picture-analytics-cookie-notice' ),
 					'field_id' 			=> 'track_scroll_capi',
-					'class'				=> 'fupi_sub',
+					'class'				=> 'fupi_sub fupi_adv',
 					'must_have'			=> 'pro',
 					'option_arr_id'		=> $option_arr_id,
 					'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'Tracking scroll with server can greatly decrease its performance. It is NOT recommended to enable this function on slow hosting.', 'full-picture-analytics-cookie-notice') . '</p>'
@@ -394,6 +398,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track how long the user was actively engaged with the content', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_engagement',
+				'class'				=> 'fupi_adv',
 				'must_have'			=> 'pro',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> esc_html__( 'Tracked as a parameter "seconds" of the "user engagement time" event', 'full-picture-analytics-cookie-notice' ),
@@ -402,7 +407,7 @@ $sections = array(
 					'type'	 			=> 'toggle',
 					'label' 			=> esc_html__( 'Also track with Conversion API', 'full-picture-analytics-cookie-notice' ),
 					'field_id' 			=> 'track_engagement_capi',
-					'class'				=> 'fupi_sub',
+					'class'				=> 'fupi_sub fupi_adv',
 					'must_have'			=> 'pro',
 					'option_arr_id'		=> $option_arr_id,
 					'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'Tracking engagement time with server will decrease its performance. It is NOT recommended to enable this function on slow hosting.', 'full-picture-analytics-cookie-notice') . '</p>'
@@ -421,7 +426,7 @@ $sections = array(
 				'label' 			=> esc_html__( 'Track when specific conditions are met', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'custom_events',
 				'must_have'			=> 'pro atrig',
-				'class'				=> 'fupi_events_builder fupi_fullwidth_tr',
+				'class'				=> 'fupi_events_builder fupi_fullwidth_tr fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
 				'fields'			=> array(
@@ -474,36 +479,42 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track page type', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_pagetype',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track page title', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_pagetitle',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track archive and page numbers', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_pagenum',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track page language', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'page_lang',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track post and page publish dates', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_pobdate',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track page id', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_pageid',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
@@ -511,6 +522,7 @@ $sections = array(
 				'label' 			=> esc_html__( 'Track post\'s terms (categories, tags, etc.) ', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_terms',
 				'option_arr_id'		=> $option_arr_id,
+				'class'				=> 'fupi_adv',
 				'el_class'			=> 'fupi_condition',
 				'el_data_target'	=> 'fupi_track_terms_opts',
 				'popup'				=> '<p>' . esc_html__('By default WP Full Picture tracks categories, tags and formats of posts and pages. You can enable tracking other terms in the "Shared tracking settings" > "Default settings".','full-picture-analytics-cookie-notice') . '</p>',
@@ -520,7 +532,7 @@ $sections = array(
 					'label' 			=> esc_html__( 'Add taxonomy slug to term name', 'full-picture-analytics-cookie-notice' ),
 					'field_id' 			=> 'add_tax_term_cat',
 					'option_arr_id'		=> $option_arr_id,
-					'class'				=> 'fupi_sub fupi_track_terms_opts fupi_disabled',
+					'class'				=> 'fupi_sub fupi_track_terms_opts fupi_disabled fupi_adv',
 					'popup'				=> '<p>' . esc_html__( 'This will add information about a taxonomy, to the term information sent to Meta, e.g. "european music (tag)"', 'full-picture-analytics-cookie-notice') . '</p>',
 				),
 				array(
@@ -528,25 +540,28 @@ $sections = array(
 					'label' 			=> esc_html__( 'Send term names instead of term slugs', 'full-picture-analytics-cookie-notice' ),
 					'field_id' 			=> 'send_tax_terms_titles',
 					'option_arr_id'		=> $option_arr_id,
-					'class'				=> 'fupi_sub fupi_track_terms_opts fupi_disabled',
+					'class'				=> 'fupi_sub fupi_track_terms_opts fupi_disabled fupi_adv',
 					'popup'				=> '<p>' . esc_html__( 'This will send term names (e.g. The best of european music) instead of term slugs (e.g. eu_music). Doing this is not recommended since term names can sometimes be changed while slugs are changed only on rare occasions.', 'full-picture-analytics-cookie-notice') . '</p>',
 				),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track author\'s display names', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_author',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track searched phrases', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_search',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track user\'s login status and role', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_user_role',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> esc_html__( 'Tracked as a parameter "user_type" of the "PageView" event', 'full-picture-analytics-cookie-notice' ),
 			),
@@ -554,6 +569,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track visitor\'s browser language', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_lang',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> esc_html__( 'Tracked as a parameter "browser_lang" of the "PageView" event', 'full-picture-analytics-cookie-notice' ),
 			),
@@ -562,7 +578,7 @@ $sections = array(
 				'label' 			=> esc_html__( 'Track metadata', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_cf',
 				'must_have'			=> 'pro',
-				'class'				=> 'fupi_metadata_tracker fupi_simple_r3',
+				'class'				=> 'fupi_metadata_tracker fupi_simple_r3 fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
 				'fields'			=> array(

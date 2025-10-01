@@ -33,7 +33,7 @@
 		if ( product_id == variant_id ) {
 
 			// Mark this variant as viewed and return
-			fpdata.woo.viewed_variants.push(variant_id);			
+			fpdata.woo.viewed_variants.push(variant_id);
 			return false;
 		};
 
@@ -122,7 +122,7 @@
 	FP.fns.prepare_teaser_and_single = function(){
 		
 		// Adds classes to products and product teasers and gets their list names
-		prepare_products_with_data_HTML();
+		mark_products_with_type();
 		prepare_allprods_block_teasers();
 		
 		// STOP if page was refreshed
@@ -163,7 +163,7 @@
 		}
 	};
 
-	function prepare_products_with_data_HTML(){
+	function mark_products_with_type(){
 		
 		let prod_data_els = FP.findAll(".fupi_prod_data:not(.fupi_ready)");
 
@@ -171,15 +171,23 @@
 
 			let list_name = 'single',
 				id = script_el.dataset.id,
-				type = script_el.dataset.type,
-				prod_wrap = false;
+				// type = script_el.dataset.type,
+				prod_wrap = false,
+				closest_form_element = script_el.closest("form.cart");
 	
 			script_el.classList.add("fupi_ready");
-	
-			// mark teasers
-			if ( type == 'teaser' ){
-				
+
+			// if is product
+			if ( closest_form_element ) {
+
+				prod_wrap = closest_form_element.parentElement.classList.contains("summary") ? closest_form_element.parentElement : closest_form_element.parentElement.parentElement;
+				prod_wrap.classList.add('fupi_woo_single_product', 'fupi_woo_product');
+
+			// probably is teaser
+			} else {
+
 				let wrapper_selector = 'li';
+
 				if ( fp.woo.teaser_wrapper_sel ) {
 					wrapper_selector += ', ' + fp.woo.teaser_wrapper_sel;
 				}
@@ -188,34 +196,31 @@
 				list_name = get_teaser_list_name( prod_wrap, script_el );
 				prod_wrap.classList.add("fupi_woo_teaser", "fupi_woo_product");
 				
-				let add_to_cart_btns = FP.findAll('.add_to_cart_button, .ajax_add_to_cart', prod_wrap );
+				let btns_and_links = FP.findAll('a, button', prod_wrap );
 				
-				add_to_cart_btns.forEach( btn => {
+				btns_and_links.forEach( btn => {
+
+					if ( btn.classList.contains('single_add_to_cart') ) return;
+					if ( fp.woo.wishlist_btn_sel && btn.classList.contains( fp.woo.wishlist_btn_sel ) ) return;
+
 					let href = btn.getAttribute('href');
-					// check if the product can be purchased from the list (the button redirects to product page when belongs to virtual products)
-					if ( href && href.includes('add-to-cart=') ) btn.classList.add('fupi_add_to_cart_button');
-					// if ( ( href && href.includes('add-to-cart=') ) || btn.classList.contains('wp-block-button__link') ) btn.classList.add('fupi_add_to_cart_button') // ! 9.1
+
+					if ( btn.classList.contains('add_to_cart_button') && ( btn.tagName == 'BUTTON' || ( href && href.includes('add-to-cart=') ) ) ) {
+						btn.classList.add('fupi_add_to_cart_button');
+					}
+
 				} );
 				
-			} else {
-				
-				let prod_form_el = script_el.closest("form.cart");
-
-				if ( prod_form_el ) {
-					prod_wrap = prod_form_el.parentElement.classList.contains("summary") ? prod_form_el.parentElement : prod_form_el.parentElement.parentElement;
-					prod_wrap.classList.add('fupi_woo_single_product', 'fupi_woo_product');
-				};
-			};
+			}
 
 			if ( prod_wrap ) {
 
-				prod_wrap.dataset.fupi_woo_prod_id = script_el.dataset.id;
+				prod_wrap.dataset.fupi_woo_prod_id = id;
 		
 				// save product data in the fpdata.woo.lists
 				fpdata.woo.lists[list_name] = fpdata.woo.lists[list_name] || [];
 				if ( ! fpdata.woo.lists[list_name].includes(id) ) fpdata.woo.lists[list_name].push( id );
 			}
-	
 		});
 	}
 
@@ -307,7 +312,7 @@
 
 		if ( ! FP.hasActions( 'woo_teaser_click' ) ) return;
 
-		let selector = '.fupi_woo_teaser a:not(.add_to_cart_button)' + ( fp.woo.wishlist_btn_sel ? ':not(' + fp.woo.wishlist_btn_sel + ')' : '' );
+		let selector = '.fupi_woo_teaser a:not(.fupi_add_to_cart_button)' + ( fp.woo.wishlist_btn_sel ? ':not(' + fp.woo.wishlist_btn_sel + ')' : '' );
 
 		if ( FP.isClickTarget( selector ) ) {
 			let teaser_data = get_teaser_data();

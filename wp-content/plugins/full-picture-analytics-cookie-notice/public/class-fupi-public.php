@@ -19,6 +19,8 @@ class Fupi_Public {
 
     public $track_current_user;
 
+    private $ver;
+
     private $modules = [];
 
     public function __construct( $plugin_name, $version ) {
@@ -30,6 +32,7 @@ class Fupi_Public {
         $this->cook = get_option( 'fupi_cook' );
         $this->woo = get_option( 'fupi_woo' );
         $this->proofrec = get_option( 'fupi_proofrec' );
+        $this->ver = get_option( 'fupi_versions' );
     }
 
     public function load_module( $moduleName, $is_premium = false ) {
@@ -104,7 +107,7 @@ class Fupi_Public {
         $fp = apply_filters( 'fupi_modify_fp_object', $fp );
         $fpdata = apply_filters( 'fupi_modify_fpdata_object', $fpdata );
         // OUTPUT THE DATA
-        $output = '<!--noptimize--><script id=\'fp_data_js\' type="text/javascript" data-no-optimize="1" nowprocket>
+        $output = '<!--noptimize--><script id=\'fp_data_js\' class="fupi_no_defer" type="text/javascript" data-no-defer="1" data-no-optimize="1" nowprocket>
 			
 			var FP = { \'fns\' : {} },
 				fp = ' . json_encode( $fp ) . ',
@@ -158,6 +161,53 @@ class Fupi_Public {
             true
         );
         // jquery was set as dependancy before 7.2.2
+    }
+
+    /**
+     * Selectively add data-no-defer="1" attribute to specific enqueued scripts and styles
+     */
+    // DEFERRING EXCLUSIONS
+    // Add "Data-no-defer" to file links for Litespeed cache and some compatible plugins
+    function add_nodefer_to_fupi_scripts( $tag, $handle, $src ) {
+        // Check if current script should have no-defer attribute
+        if ( str_contains( $handle, 'fupi-' ) ) {
+            $tag = str_replace( '<script ', '<script data-no-defer="1" ', $tag );
+        }
+        return $tag;
+    }
+
+    // For WP Rocket
+    // exclude inline scripts
+    public function fupi_rocket_exclude_inline_js( $inline_excludes ) {
+        if ( !empty( $this->main['wprocket_compat'] ) ) {
+            if ( !is_array( $inline_excludes ) ) {
+                $inline_excludes = array();
+            }
+            $inline_excludes[] = 'fupi_no_defer';
+        }
+        return $inline_excludes;
+    }
+
+    // exclude script files
+    public function fupi_rocket_exclude_js_files( $excludes ) {
+        if ( !empty( $this->main['wprocket_compat'] ) ) {
+            $excludes[] = 'hooks.js';
+            $excludes[] = 'hooks.min.js';
+            $excludes[] = '/wp-includes/js/jquery/(.*).js';
+            $excludes[] = '/wp-content/plugins/full-picture-analytics-cookie-notice/(.*)';
+            $excludes[] = '/wp-content/plugins/full-picture-premium/(.*)';
+            // standard WP install
+            $excludes[] = '/wp-content/uploads/wpfp/js/head.js';
+            $excludes[] = '/wp-content/uploads/wpfp/js/footer.js';
+            $excludes[] = '/wp-content/uploads/wpfp/js/cscr_head.js';
+            $excludes[] = '/wp-content/uploads/wpfp/js/cscr_footer.js';
+            // multisite install
+            $excludes[] = '/wp-content/uploads/sites/([0-9]?)/wpfp/js/head.js';
+            $excludes[] = '/wp-content/uploads/sites/([0-9]?)/wpfp/js/footer.js';
+            $excludes[] = '/wp-content/uploads/sites/([0-9]?)/wpfp/js/cscr_head.js';
+            $excludes[] = '/wp-content/uploads/sites/([0-9]?)/wpfp/js/cscr_footer.js';
+        }
+        return $excludes;
     }
 
     //

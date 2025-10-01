@@ -43,16 +43,32 @@ class Wt_Import_Export_For_Woo_Basic_Activator_Product {
             {
                 switch_to_blog( $blog_id );
                 self::install_tables();
+				self::update_cross_promo_banner_version(); // Update promotion banner version.
                 restore_current_blog();
             }
         }
         else 
         {
+			self::update_cross_promo_banner_version(); // Update promotion banner version.
             self::install_tables();
         }
 
         add_option('wt_p_iew_is_active', 1);
 	}
+	
+		/**
+	 *	Check and update the cross promotion banner version.
+	 */
+	public static function update_cross_promo_banner_version() {
+		$current_latest = get_option('wbfte_promotion_banner_version');
+
+		if ( false === $current_latest ||  // User is installing the plugin first time.
+			version_compare( $current_latest, WBTE_PIEW_CROSS_PROMO_BANNER_VERSION, '<') // $current_latest is lesser than the installed version in this plugin.
+		) {
+			update_option('wbfte_promotion_banner_version', WBTE_PIEW_CROSS_PROMO_BANNER_VERSION);
+		}
+	}
+
 
 	public static function install_tables()
 	{

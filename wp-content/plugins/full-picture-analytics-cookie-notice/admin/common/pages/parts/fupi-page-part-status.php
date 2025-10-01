@@ -3,15 +3,15 @@
 $descr_start = '<div id="fupi_settings_form">
     <h2>' . esc_html__('GDPR setup info', 'full-picture-analytics-cookie-notice' ) . '</h2>
     <div class="fupi_section_descr fupi_el">
-    <p>' . esc_html__('Instructions on this page will help you comply with GDPR. They automatically update after you change settings in WP Full Picture.', 'full-picture-analytics-cookie-notice' ) . '</p>
-        <p class="fupi_warning_text">' . esc_html__('Attention! Information on this page does not cover all aspects of GDPR compliance. For full compliance, we recommend consulting with a legal professional.', 'full-picture-analytics-cookie-notice' ) . '</p>';
+    <p>' . esc_html__('This page contains your personalised recommendations on how to set up tracking that complies with GDPR. The information automatically updates after you change settings in WP Full Picture.', 'full-picture-analytics-cookie-notice' ) . '</p>
+    <p>' . esc_html__('Attention. This information does not cover other aspects of GDPR nor regulations similar to GDPR from other countries. For full compliance, we recommend consulting with a legal professional.', 'full-picture-analytics-cookie-notice' ) . '</p>';
 
 $legend = '<ol id="fupi_gdpr_helper_legend">
-            <li><span class="dashicons dashicons-lightbulb" style="color:#a7a7a7; font-size: 20px;"></span>' . esc_html__('For your information', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li><span class="dashicons dashicons-flag" style="color:orange; font-size: 20px;"></span>' . esc_html__('Check it', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li><span class="dashicons dashicons-warning" style="color:red; font-size: 20px;"></span>' . esc_html__('Fix it', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li><span class="dashicons dashicons-welcome-write-blog" style="font-size: 20px; color: #6d2974"></span>' . esc_html__('Add to the privacy policy', 'full-picture-analytics-cookie-notice' ) . '</li>
-        </ol>';
+        <li><span class="dashicons dashicons-lightbulb" style="color:#a7a7a7; font-size: 20px;"></span>' . esc_html__('For your information', 'full-picture-analytics-cookie-notice' ) . '</li>
+        <li><span class="dashicons dashicons-flag" style="color:orange; font-size: 20px;"></span>' . esc_html__('Check it', 'full-picture-analytics-cookie-notice' ) . '</li>
+        <li><span class="dashicons dashicons-warning" style="color:red; font-size: 20px;"></span>' . esc_html__('Fix it', 'full-picture-analytics-cookie-notice' ) . '</li>
+        <li><span class="dashicons dashicons-welcome-write-blog" style="font-size: 20px; color: #6d2974"></span>' . esc_html__('Add to the privacy policy', 'full-picture-analytics-cookie-notice' ) . '</li>
+    </ol>';
 
 $descr_end = '</div></div>';
 

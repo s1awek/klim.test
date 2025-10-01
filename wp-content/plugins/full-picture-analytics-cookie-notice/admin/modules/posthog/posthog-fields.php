@@ -51,7 +51,7 @@ $sections = array(
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track without waiting for consent', 'full-picture-analytics-cookie-notice' ),
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'must_have'			=> 'cook',
 				'field_id' 			=> 'disreg_cookies',
 				'option_arr_id'		=> $option_arr_id,
@@ -64,7 +64,7 @@ $sections = array(
 				'field_id' 			=> 'limit_country',
 				'must_have'			=> 'pro geo',
 				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'is repeater'		=> false,
 				'fields'			=> array(
 					array(

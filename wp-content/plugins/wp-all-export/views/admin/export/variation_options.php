@@ -92,7 +92,7 @@ $random = uniqid();
             <div class="wpallexport-free-edition-notice" style="padding: 20px 20px 35px 20px; margin-bottom: 10px;">
                 <p>The WooCommerce Export Package is required to export variations.</p>
                 <p>
-                <a style="margin: 1em 0; font-size:1em !important" class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839955&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=export-variations">
+                <a style="margin: 1em 0; font-size:1em !important" class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839955&discount=welcome-upgrade-169&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=export-variations">
                 Purchase the WooCommerce Export Package</a>
                 </p>
             </div>

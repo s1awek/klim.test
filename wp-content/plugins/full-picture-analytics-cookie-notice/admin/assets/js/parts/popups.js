@@ -1,15 +1,16 @@
 
 (()=>{
 
-	let offscreen = FP.findID('fupi_offscreen'),
+	let fupi_content = FP.findID('fupi_content'),
+		offscreen = FP.findID('fupi_offscreen'),
 		offscreen_content_el = FP.findID('fupi_offscreen_content'),
 		offscreen_close_btn = FP.findID('fupi_offscreen_close_btn'),
-		// offscreen_maximize_btn = FP.findID('fupi_offscreen_maximize_btn'),
 		content_els = FP.findAll('table.form-table .fupi_popup_content:not(.fupi_do_not_create_popup_icon)'),
 		next_popup_btn = FP.findID('fupi_offscreen_next_btn'),
 		prev_popup_btn = FP.findID('fupi_offscreen_prev_btn'),
 		current_popup_index = -1,
-		popup_history = [];
+		popup_history = [],
+		current_popup = false;
 
 	function update_popup_history( btn ) {
 		
@@ -60,25 +61,25 @@
 		}  
 	}
 
-	function add_content_to_popup( btn ) {
+	function add_content_to_popup() {
 
-		offscreen.dataset.content_id = btn.dataset.popup;
+		offscreen.dataset.content_id = current_popup.id;
 
-		let new_content_el = btn.dataset.popup ? FP.findID( btn.dataset.popup ) : btn.nextElementSibling,
-			buttonsHTML = '';
-
-		if ( new_content_el.classList.contains( 'fupi_popup_content' ) ) {
+		if ( current_popup && current_popup.classList.contains( 'fupi_popup_content' ) ) {
 			update_popup_nav_btns();
-			offscreen_content_el.innerHTML = new_content_el.innerHTML + buttonsHTML;
+			offscreen_content_el.innerHTML = current_popup.innerHTML;
 		}
 	}
 
 	function show_popup() {
 		offscreen.classList.add('fupi_active');
+		offscreen.dataset.style = current_popup.dataset.style || '';
 	}
 
 	function hide_popup() {
+
 		offscreen.dataset.content_id = '';
+		offscreen.dataset.style = '';
 		offscreen.classList.remove('fupi_active');
 
 		let youtubeIframe = FP.findFirst('.fupi_video iframe');
@@ -110,13 +111,6 @@
 		});
 	}
 
-	// maximize/minimize popup
-
-	// function maximize_popup () {
-	// 	offscreen.classList.toggle('fupi_maximized');
-	// 	offscreen_maximize_btn.classList.toggle('fupi_maximized');
-	// };
-
 	// start
 
 	create_popup_icons();
@@ -127,17 +121,48 @@
 
 		if ( popup_btn ) {
 
-			if ( offscreen.dataset.content_id != popup_btn.dataset.popup ) {
-				update_popup_history( popup_btn );
-				add_content_to_popup( popup_btn );
+			let popup_id = popup_btn.dataset.popup;
+
+			current_popup = FP.findID( popup_id );
+
+			if ( offscreen.dataset.content_id != popup_id ) {
+				if ( current_popup.dataset.style != 'popup' ) update_popup_history( popup_btn );
+				add_content_to_popup();
 				show_popup();
 			} else { 
-				hide_popup(); 
+				hide_popup();
 			}
 		}
 	})
 
+	// Open popup after a page refresh - from a cookie
+	let cookie_popup_id = FP.readCookie('fupi_admin_open_popup');
+
+	if ( cookie_popup_id ) {
+		current_popup = FP.findID( cookie_popup_id );
+		if ( current_popup ) {
+			add_content_to_popup();
+			show_popup();
+			FP.deleteCookie('fupi_admin_open_popup');
+		}
+	}
+
+	// Open a welcome message if #fupi_content has a welcome_popup_id dataset
+	if ( fupi_content ) {
+		
+		let welcome_popup_id = fupi_content.dataset.welcome_popup_id;
+		
+		if ( welcome_popup_id ) {
+
+			current_popup = FP.findID( welcome_popup_id );
+	
+			if ( current_popup ) {
+				add_content_to_popup();
+				show_popup();
+			}
+		};
+	}
+
 	if ( offscreen_close_btn ) offscreen_close_btn.addEventListener( 'click', hide_popup );
-	// if ( offscreen_maximize_btn ) offscreen_maximize_btn.addEventListener( 'click', maximize_popup );
 
 })();

@@ -4,6 +4,7 @@ class Fupi_MAIN_public {
 
     private $settings;
     private $tools;
+    private $ver;
 
     public function __construct(){
 
@@ -11,11 +12,12 @@ class Fupi_MAIN_public {
         if ( $this->settings === false ) return;
 
         $this->tools = get_option('fupi_tools');
+        $this->ver = get_option('fupi_versions');
 
         add_action( 'wp_head', array( $this, 'fupi_add_meta_tags' ), -5 );
         add_action( 'init', array( $this, 'add_fpinfo_shortcode' ) ); // check if it is safe to move it before the "return" above
 
-        if ( ! empty( $this->settings['debug'] ) ) {
+        if ( ! empty( $this->ver['debug'] ) ) {
             add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
             add_action( 'wp_footer', array( $this, 'fupi_add_setup_console_html' ) );
         }
@@ -68,7 +70,7 @@ class Fupi_MAIN_public {
                     $output .= '<p style="margin-top: 0 !important; font-size: 16px;"><strong>' . esc_html__( 'Test your tracking tools', 'full-picture-analytics-cookie-notice' ) . '</strong> <button type="button" id="fupi_open_intro_btn" class="fupi_i_btn">i</button></p>
 
                     <div id="fupi_console_intro" class="fupi_hidden">
-                        <p>' . sprintf( esc_html__( 'This panel is a part of WP Full Picture plugin. Only administrators can see it and only when the %1$ssetup mode%2$s is active (%3$sdisable it here%4$s)', 'full-picture-analytics-cookie-notice' ), '<strong>', '</strong>', '<a href="' . get_admin_url() . 'admin.php?page=full_picture_main">', '</a>' ) . '</p>
+                        <p>' . esc_html__( 'This panel is a part of WP Full Picture plugin. Only administrators can see it and only when the %1$ssetup helper%2$s is active.', 'full-picture-analytics-cookie-notice' ) . '</p>
                     </div>';
 
                     // PANEL 1 - WHEN TESTING IS DISABLED

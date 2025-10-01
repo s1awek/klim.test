@@ -21,7 +21,7 @@ class  Fupi_Updater {
 
         if ( $restore_backup && count( $backup_data ) > 0 ) {
             $this->get_options_from_backup( $backup_data );
-            $this->set_fupi_versions(); // only if backup is older then 9.0
+            $this->set_fupi_versions(); // only if backup is older than 9.0
         }
 
         $this->set_default_options();
@@ -37,6 +37,7 @@ class  Fupi_Updater {
             $this->update_to_8_5();
             $this->update_to_8_5_1();
             $this->update_to_9_0();
+            $this->update_to_9_2();
         }
         
         if ( $restore_backup || $options_changed ) {
@@ -106,38 +107,55 @@ class  Fupi_Updater {
 
     private function set_fupi_versions(){
 
-        // set version number for backups that do not contain it (older than 9.0)
+        // set version number for backups that do not contain it
+
+        // versions before 8.3.2 do not have fupi_version option at all
         if ( ! isset( $this->o['fupi_versions'] ) ) {
             $this->o['fupi_versions'] = [
                 time(),
                 '8.3.2'
             ];
+        } else {
+
+            // v 9.0.0 had a bug, which set the fupi_versions to false
+            if ( $this->o['fupi_versions'] === false ) {
+                $this->o['fupi_versions'] = [
+                time(),
+                '9.0.0'
+            ];
+            }
         }
     }
 
     private function check_fupi_versions(){
         
-        $this->get_fupi_options( [ 'fupi_versions' ] );
+        $this->get_fupi_options( [ 'fupi_versions', 'fupi_tools' ] );
 
-        // a fresh install
-        if ( count( $this->o['fupi_versions'] ) === 0 ) {
+        // Recognize ver 9.0
+        // it had a bug which saved fupi_versions to false
+        if ( isset( $this->o['fupi_versions'] ) && $this->o['fupi_versions'] === false ){
+            $this->o['fupi_versions'][0] = time();
+            $this->o['fupi_versions'][1] = '9.0.0';
+        }
+
+        // for all other versions
+
+        // is fresh install if the fupi_versions option is an empty array
+        if ( count ( $this->o['fupi_versions'] ) === 0 ) {
 
             // set current time and ver
             $this->o['fupi_versions'][0] = time();
             $this->o['fupi_versions'][1] = FUPI_VERSION;
-            
-            // set prev to current
-            $this->prev_version = FUPI_VERSION;
 
-        // old install
+        // is old install if array is not empty
         } else {
 
-            // get prev
             $this->prev_version = $this->o['fupi_versions'][1];
-
-            // set current
             $this->o['fupi_versions'][1] = FUPI_VERSION;
         }
+
+        // Save changes - must do it here, not later
+        update_option( 'fupi_versions', $this->o['fupi_versions'] );
     }
 
     // SEND PLUGIN SETTINGS FOR THE CONSENTSDB
@@ -311,6 +329,14 @@ class  Fupi_Updater {
 				wp_mail( $email_to, $subject, $content );
             }
         }
+    }
+
+    private function update_to_9_2(){
+
+        if ( version_compare( $this->prev_version, '9.1.10' ) != -1 ) return;
+        
+        $this->get_fupi_options( ['fupi_versions'] );
+        $this->o['fupi_versions']['use_adv_mode'] = true; // this will make sure that users who updated from earlier versions will see advanced settings and not be surprised with the basic ones
     }
 
     private function restore_options_from_backup(){

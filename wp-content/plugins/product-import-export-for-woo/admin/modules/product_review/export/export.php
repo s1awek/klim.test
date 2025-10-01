@@ -75,9 +75,22 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Export {
                     ),
                 ),
             );
-			if($pr_rev_status){
-				$args['post_status'] = $pr_rev_status;
-			}
+
+			if($pr_rev_status) {
+                $status_mapping = array(
+                    'Approved' => 'approve',
+                    'Pending' => 'hold',
+                    'Spam' => 'spam', 
+                    'Trash' => 'trash'
+                );
+
+                $args['status'] = is_array($pr_rev_status) 
+                    ? array_map(function($status) use ($status_mapping) {
+                        return isset($status_mapping[$status]) ? $status_mapping[$status] : $status;
+                    }, $pr_rev_status)
+                    : (isset($status_mapping[$pr_rev_status]) ? $status_mapping[$pr_rev_status] : $pr_rev_status);
+
+            }
             
 //            if($export_reply == ''){ 
 //                $args['hierarchical'] = 'threaded'; // threaded  flat
@@ -141,6 +154,11 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Export {
 
             $return['total'] = $total_records;
             $return['data'] = $data_array;
+
+            if ( 0 === $batch_offset && 0 === $total_records ) {
+                $return['no_post'] = __( 'Nothing to export under the selected criteria. Please check and try adjusting the filters.' );
+            }
+
             return $return;
         }
       

@@ -1,0 +1,24 @@
+.adv_mode_off{
+
+    .fupi_tools_integr_headline{
+        display: none;
+    }
+
+    // hide setup helper switcher
+    #fupi_top_setup_info_setup{
+        display: none;
+    }
+
+    // hide advanced modules and settings
+    tr.fupi_adv,
+    .fupi_adv{
+        display: none !important;
+    }
+
+    // hide side nav links
+    a.fupi_sidenav_item[href*="full_picture_gtag"],
+    a.fupi_sidenav_item[href*="full_picture_gtm"],
+    a.fupi_sidenav_item[href*="full_picture_atrig"]{
+        display: none !important;
+    }
+}

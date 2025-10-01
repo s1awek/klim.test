@@ -4,7 +4,7 @@ Donate link: https://wpfullpicture.com/
 Tags: Consent mode, Analytics, GDPR, GTM, Google Ads
 Requires at least: 5.4.0
 Tested up to: 6.8.2
-Stable tag: 9.1.2
+Stable tag: 9.2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -205,6 +205,28 @@ No. WP Full Picture is focused on tracking and privacy. To generate a product ca
 6. View traffic and marketing reports in the admin panel
 
 == Changelog ==
+
+= 9.2.0 (24-09-2025) =
+
+* [New] [UI] Basic onboarding sequence
+* [New] [UI] Advanced fields are now hidden for new installations (can be shown with a switch in the top menu)
+* [New] [Woo] Added support to new WooCommerce blocks
+* [New] [Woo] [Pro] Added fpdata.user values to order confirmation page with info on the number and value of previous orders from the client
+* [Update] [Caching] Added caching exclusions for LiteSpeed Cache
+* [Update] [Caching] Added caching exclusions for WP Rocket (enabled with a switch in the "General Settings" > "Performance")
+* [Update] [Custom Scripts] Slight improvement of the code that prints inline scripts
+* [Update] [Consent Banner] New default styling
+* [Update] [Consent Banner] New settings for mobile views
+* [Update] [UI] Simplified top menu
+* [Update] Conditional field toggling now works in the repeater field
+* [Update] Improved field clearing in the repeater field
+* [Update] [GTM] [Pro] Updated and moved the custom events tracking script to the head file
+* [Update] Improved error handling for generating the head.js file
+* [Update] [Privacy] The "GDPR setup info" page is slightly expanded
+* [Fix] Version number is now correctly saved in fupi_versions for new installations
+* [Other] You can now enable setup mode right from the top menu
+* [Other] Text updates
+* [Other] Freemius SDK update
 
 = 9.1.2 (02-09-2025) =
 

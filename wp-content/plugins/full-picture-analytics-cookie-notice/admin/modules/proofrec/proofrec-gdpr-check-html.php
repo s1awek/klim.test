@@ -43,7 +43,7 @@ if ( $records_are_enabled ) {
     $this->data['cdb']['pp comments'][] = [ 
         esc_html__('Add to your privacy policy information that WP Full Picture uses the following cookie:', 'full-picture-analytics-cookie-notice'), 
         [ 
-            $t_cook_59 = esc_html__('cdb_id - a necessary cookie. It is saved after visitors make a choice in the consent banner. It stores an identifier of a proof of consent that is saved in a remote database. Does not expire.', 'full-picture-analytics-cookie-notice')
+            $t_cook_59 = esc_html__('cdb_id - a necessary cookie. It is saved after visitors make a choice in the consent banner. It stores an identifier of a proof of consent. It does not expire.', 'full-picture-analytics-cookie-notice')
         ] 
     ];
 

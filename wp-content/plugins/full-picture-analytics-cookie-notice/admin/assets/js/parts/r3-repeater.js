@@ -176,8 +176,9 @@
 
 		section.classList.add('fupi_highlight_req');
 
-		// remove all empties
+		// remove all indicators of filled and empty fields
 		FP.findAll('.field_empty', section).forEach( field => field.classList.remove('field_empty') );
+		FP.findAll( '.field_filled', section ).forEach( field => field.classList.remove('field_filled') );
 
 		// clear values and mark with empties
 		FP.findAll('textarea', section).forEach( area => {
@@ -185,7 +186,7 @@
 			if ( area.classList.contains('fupi_req') ) area.parentElement.classList.add('fupi_empty');
 		} );
 
-		FP.findAll('input[type="text"]', section).forEach( field => {
+		FP.findAll('input[type="text"], input[type="url"]', section).forEach( field => {
 			field.value = '';
 			if ( field.classList.contains('fupi_req') ) field.parentElement.classList.add('fupi_empty');
 		} );
@@ -200,17 +201,20 @@
 			if ( field.classList.contains('fupi_req') ) field.parentElement.classList.add('fupi_empty');
 		} );
 		
+		// these do not get empties
+		FP.findAll('input[type="checkbox"]', section).forEach( box => box.checked = false );
+		FP.findAll('input[type="hidden"]', section).forEach( field => field.value = '' );
+
 		FP.findAll('select', section).forEach( sel => {
 			let option_el = FP.findFirst('option', sel);
 			if ( option_el && option_el.value ) sel.value = option_el.value;
 			
 			if ( sel.classList.contains('fupi_req') ) sel.parentElement.classList.add('fupi_empty');
 		} );
-		
-		// these do not get empties
-		FP.findAll('input[type="checkbox"]', section).forEach( box => box.checked = false );
-		FP.findAll('input[type="hidden"]', section).forEach( field => field.value = '' );
 
+		// unhide hidden elements
+		FP.findAll('.fupi_r3_field.fupi_hidden', section).forEach( field => field.classList.remove('fupi_hidden') );
+		FP.findAll('.fupi_r3_field.fupi_disabled', section).forEach( field => field.classList.remove('fupi_disabled') );
 
 		return section;
 	}

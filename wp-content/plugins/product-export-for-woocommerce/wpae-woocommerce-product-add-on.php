@@ -3,7 +3,7 @@
 Plugin Name: WP All Export - WooCommerce Product Export Add-On
 Plugin URI: https://www.wpallimport.com/
 Description: Drag & drop to export WooCommerce products to any CSV or XML. A paid upgrade is available for premium support, exporting advanced WooCommerce product data, and more.
-Version: 1.0.3
+Version: 1.0.4
 Author: Soflyy
 */
 /**
@@ -24,7 +24,7 @@ define('PMWPE_ROOT_URL', rtrim(plugin_dir_url(__FILE__), '/'));
  */
 define('PMWPE_PREFIX', 'pmwpe_');
 
-define('PMWPE_VERSION', '1.0.3');
+define('PMWPE_VERSION', '1.0.4');
 
 
 define('PMWPE_EDITION', 'free');

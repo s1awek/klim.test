@@ -16,7 +16,7 @@ switch( $section_id ){
 			<img src="' . FUPI_URL . 'admin/assets/img/almost_ico.png" aria-hidden="true"> <p>' . sprintf( esc_html__( '%1$s is not installed', 'full-picture-analytics-cookie-notice' ), 'Google Analytics' ) . '<br><span class="fupi_small">' . esc_html__( 'To install it, please fill in the required field below', 'full-picture-analytics-cookie-notice' ) . '</span>.</p>
 		</div>
 		<div id="fupi_installed_info" class="fupi_installation_status fupi_hidden">
-			<img src="' . FUPI_URL . 'admin/assets/img/success_ico.png" aria-hidden="true"> <p>' . esc_html__( 'Well done! GA 4 is installed', 'full-picture-analytics-cookie-notice' ) . '<br><span class="fupi_small">' . esc_html__( 'The data is sent to an account with measurement ID ', 'full-picture-analytics-cookie-notice' ) . $ga4_id . '</span>.</p>
+			<img src="' . FUPI_URL . 'admin/assets/img/success_ico.png" aria-hidden="true"> <p>' . esc_html__( 'Well done! GA 4 is installed', 'full-picture-analytics-cookie-notice' ) . '<br><span class="fupi_small">' . esc_html__( 'The data is sent to an account with GTAG ID ', 'full-picture-analytics-cookie-notice' ) . $ga4_id . '</span>.</p>
 		</div>' . $how_to_useit;
 	break;
 
@@ -41,7 +41,10 @@ switch( $section_id ){
 	// COMPLEX EVENTS
 	
 	case 'fupi_ga41_atrig':
-		$ret_text = '<p>' . esc_html__( 'Use functions on this page to track complex events, with many conditions, for example, when a visitor from France visits 5 product pages in one session. You can set these conditions in the "Advanced triggers" module.' , 'full-picture-analytics-cookie-notice' ) . '</p>';
+		$ret_text = '<div>
+			<p>' . esc_html__( 'Use functions on this page to track complex events, with many conditions, for example, when a visitor from France visits 5 product pages in one session. You can set these conditions in the "Advanced triggers" module.' , 'full-picture-analytics-cookie-notice' ) . '</p>
+			<p class="fupi_warning_text">' . sprintf( esc_html__( 'The "value" will be sent as a custom parameter "fp_event_value". In order to use it in GA, you need to %1$sregister it as a custom metric%2$s.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/">', '</a>' ) . '</p>
+		</div>';
 	break;
 
 	// PARAMS

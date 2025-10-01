@@ -44,6 +44,13 @@ class WC_Connect_TaxJar_Integration {
 	private $cache_time;
 
 	/**
+	 * Address Validation Cache time.
+	 *
+	 * @var int
+	 */
+	private $address_cache_time;
+
+	/**
 	 * Error cache time.
 	 *
 	 * @var int
@@ -99,6 +106,9 @@ class WC_Connect_TaxJar_Integration {
 
 		// Cache rates for 1 hour.
 		$this->cache_time = HOUR_IN_SECONDS;
+
+		// Cache address validation errors for 1 year.
+		$this->address_cache_time = YEAR_IN_SECONDS;
 
 		// Cache error response for 5 minutes.
 		$this->error_cache_time = MINUTE_IN_SECONDS * 5;
@@ -1177,6 +1187,7 @@ class WC_Connect_TaxJar_Integration {
 		$from_city       = $store_settings['city'];
 		$from_street     = $store_settings['street'];
 		$shipping_amount = is_null( $shipping_amount ) ? 0.0 : $shipping_amount;
+		$items_total     = array_sum( array_column( $line_items, 'unit_price' ) );
 
 		$this->_log( ':::: TaxJar API called ::::' );
 
@@ -1198,8 +1209,12 @@ class WC_Connect_TaxJar_Integration {
 		$body = $this->maybe_apply_taxjar_nexus_addresses_workaround( $body );
 
 		// Either `amount` or `line_items` parameters are required to perform tax calculations.
-		if ( empty( $line_items ) ) {
-			$body['amount'] = 0.0;
+		if (
+			empty( $line_items )
+			|| ( 0 == $items_total
+			&& ! $this->is_tax_display_itemized() )
+		) {
+			$body['amount'] = 0.01;
 		} else {
 			$body['line_items'] = $line_items;
 		}
@@ -1210,7 +1225,7 @@ class WC_Connect_TaxJar_Integration {
 		if ( ! isset( $response ) || ! $response ) {
 			$this->_log( 'Received: none.' );
 
-			return $taxes;
+			return false;
 		}
 
 		// Log the response
@@ -1440,7 +1455,8 @@ class WC_Connect_TaxJar_Integration {
 	public function create_or_update_tax_rate( $jurisdictions, $location, $rate, $tax_class = '', $freight_taxable = 1, $rate_priority = 1, $rate_name = '' ) {
 		// all the states in GB have the same tax rate
 		// prevents from saving a "state" column value for GB
-		$to_state = 'GB' === $location['to_country'] ? '' : $location['to_state'];
+		$to_state      = 'GB' === $location['to_country'] ? '' : $location['to_state'];
+		$rate_priority = absint( $rate_priority );
 
 		/**
 		 * @see https://github.com/Automattic/woocommerce-services/issues/2531
@@ -1488,7 +1504,7 @@ class WC_Connect_TaxJar_Integration {
 			)
 		);
 
-		$wc_rates_ids = array_keys( $wc_rates );
+		$wc_rates_ids = is_array( $wc_rates ) ? array_keys( $wc_rates ) : array();
 		if ( isset( $wc_rates_ids[ $rate_priority - 1 ] ) ) {
 			$wc_rate[ $wc_rates_ids[ $rate_priority - 1 ] ] = $wc_rates[ $wc_rates_ids[ $rate_priority - 1 ] ];
 		} else {
@@ -1587,8 +1603,16 @@ class WC_Connect_TaxJar_Integration {
 	 * @return mixed|WP_Error
 	 */
 	public function smartcalcs_cache_request( $json ) {
-		$cache_key        = 'tj_tax_' . hash( 'md5', $json );
-		$response         = get_transient( $cache_key );
+		$cache_key           = 'tj_tax_' . hash( 'md5', $json );
+		$zip_state_cache_key = false;
+		$request             = json_decode( $json );
+		$to_zip              = isset( $request->to_zip ) ? (string) $request->to_zip : false;
+		$to_state            = isset( $request->to_state ) ? (string) $request->to_state : false;
+		if ( $to_zip && $to_state ) {
+			$zip_state_cache_key = strtolower( 'tj_tax_' . $to_zip . '_' . $to_state );
+			$response            = get_transient( $zip_state_cache_key );
+		}
+		$response         = $response ? $response : get_transient( $cache_key );
 		$response_code    = wp_remote_retrieve_response_code( $response );
 		$save_error_codes = array( 404, 400 );
 
@@ -1596,18 +1620,37 @@ class WC_Connect_TaxJar_Integration {
 		$this->notifier->clear_notices( 'taxjar' );
 
 		if ( false === $response ) {
-			$response      = $this->smartcalcs_request( $json );
-			$response_code = wp_remote_retrieve_response_code( $response );
+			$response                 = $this->smartcalcs_request( $json );
+			$response_code            = wp_remote_retrieve_response_code( $response );
+			$body                     = json_decode( wp_remote_retrieve_body( $response ) );
+			$is_zip_to_state_mismatch = (
+				isset( $body->detail )
+				&& is_string( $body->detail )
+				&& $to_zip
+				&& $to_state
+				&& false !== strpos( $body->detail, 'to_zip ' . $to_zip )
+				&& false !== strpos( $body->detail, 'to_state ' . $to_state )
+			);
+			$transient_set            = false;
 
 			if ( 200 == $response_code ) {
 				set_transient( $cache_key, $response, $this->cache_time );
 			} elseif ( in_array( $response_code, $save_error_codes ) ) {
-				set_transient( $cache_key, $response, $this->error_cache_time );
+				if ( 400 == $response_code
+					&& $is_zip_to_state_mismatch
+					&& $zip_state_cache_key
+				) {
+					$transient_set = set_transient( $zip_state_cache_key, $response, $this->address_cache_time );
+				}
+
+				if ( ! $transient_set ) {
+					set_transient( $cache_key, $response, $this->error_cache_time );
+				}
 			}
 		}
 
 		if ( in_array( $response_code, $save_error_codes ) ) {
-			$this->_log( 'Retrieved the error from the cache.' );
+			$this->_log( 'Retrieved the error from the cache. Received (' . $response['response']['code'] . '): ' . $response['body'] );
 			$this->_error( 'Error retrieving the tax rates. Received (' . $response['response']['code'] . '): ' . $response['body'] );
 			return false;
 		}

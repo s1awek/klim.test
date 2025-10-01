@@ -11,6 +11,8 @@ if (!defined('ABSPATH')) {
 }
 
 if(!class_exists('Wt_Import_Export_For_Woo_Basic_Product')){
+
+#[AllowDynamicProperties]
 class Wt_Import_Export_For_Woo_Basic_Product {
 
     public $module_id = '';
@@ -408,15 +410,61 @@ class Wt_Import_Export_For_Woo_Basic_Product {
         return $colunm;
     }
 
-    public function exporter_alter_mapping_enabled_fields($mapping_enabled_fields, $base, $form_data_mapping_enabled_fields) {
+   public function exporter_alter_mapping_enabled_fields($mapping_enabled_fields, $base, $form_data_mapping_enabled_fields) {
         if ($base == $this->module_base) {
             $mapping_enabled_fields = array();
             $mapping_enabled_fields['taxonomies'] = array(__('Taxonomies (categories/tags/shipping-class)'), 1);
 
             $mapping_enabled_fields['attributes'] = array(__('Attributes'), 1);
+            // $mapping_enabled_fields['meta'] = array(__('Meta (custom fields)'), 0);
+            $mapping_enabled_fields['hidden_meta'] = array(__('Hidden meta'), 0);
 
         }
         return $mapping_enabled_fields;
+    }
+
+        /**
+     * Get upgrade banner HTML for premium features
+     */
+    public function get_upgrade_banner_html() {
+        $icon_url = plugins_url('admin/wt-ds/icons/icons/right-arrow-3.svg', __FILE__);
+
+        return '<div id="product-type-notice" style="margin-top: 10px; display: block; width: 850px; height: auto; top: 210px; left: 117px;">
+    <div class="notice notice-warning" style="width: 92.5%; max-width: 810px; margin-left: 0px; display: inline-flex; padding: 16px 18px 16px 26px; justify-content: flex-end; align-items: center; border-radius: 8px; border: 1px solid #F5F9FF; background-color: #F5F9FF; box-sizing: border-box;">
+        <div style="display: flex; flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; width: 100%;">
+            <!-- Title -->
+            <div style="padding-bottom: 10px; align-self: stretch; color: #2A3646; font-size: 14px; font-family: Inter; font-weight: 600; line-height: 16px; word-wrap: break-word;">
+                ' . __('Upgrade to premium 💎', 'product-import-export-for-woo') . '
+            </div>
+
+            <!-- Description -->
+            <div style="width: 100%; max-width: 679px; padding-bottom: 10px;">
+                <span style="color: #2A3646; font-size: 13px; font-family: Inter; font-weight: 400; ">' . __('We\'ve detected hidden WooCommerce metadata & custom product fields in your store. Unlock full access to export them seamlessly.', 'product-import-export-for-woo') . '</span>
+            </div>
+
+            <!-- Button -->
+                <a href="https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin&utm_medium=export_hidden_meta_tab&utm_campaign=Product_import_export" target="_blank" style="
+                    width: auto;
+                    height: 18px;
+                font-family:  \'Inter\', sans-serif;
+                    font-weight: 600;
+                    font-size: 12px;
+                    line-height: 100%;
+                    color: #2B28E9;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 4px;
+                    gap: 5px;
+                    text-decoration: none;
+                    margin-top: 0px;
+                ">
+                    ' . __('Upgrade now', 'product-import-export-for-woo') . ' <span style="font-size: 14px;">→</span>
+                </a>
+            </div>
+        </div>
+    </div>
+';
     }
 
     
@@ -424,6 +472,12 @@ class Wt_Import_Export_For_Woo_Basic_Product {
         if ($base != $this->module_base) {
             return $fields;
         }
+        
+        // Check if premium plugin is active
+        if ( ! function_exists( 'is_plugin_active' ) ) {
+            include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+        }
+        $is_premium_active = is_plugin_active( 'wt-import-export-for-woo-product/wt-import-export-for-woo-product.php' );
         
         foreach ($fields as $key => $value) {
             switch ($key) {
@@ -454,6 +508,21 @@ class Wt_Import_Export_For_Woo_Basic_Product {
                     
                     break;
 
+
+                case 'hidden_meta':
+                    // Check if premium plugin is active and hidden meta exists
+                    if (!$is_premium_active && $this->has_hidden_meta_keys()) {
+                        // Set banner HTML instead of fields
+                        $fields[$key]['banner_html'] = $this->get_upgrade_banner_html();
+                        $fields[$key]['fields'] = array(); // Clear fields to show banner instead
+                    } else {
+                        // Populate hidden meta fields normally
+                        $found_product_hidden_meta = $this->wt_get_found_product_hidden_meta();
+                        foreach ($found_product_hidden_meta as $meta) {
+                            $fields[$key]['fields']['meta:' . $meta] = 'meta:' . $meta;
+                        }
+                    }
+                    break;
 
                 default:
                     break;
@@ -540,6 +609,57 @@ class Wt_Import_Export_For_Woo_Basic_Product {
 
         $this->found_product_meta = $found_product_meta;
         return $this->found_product_meta;
+    }
+
+        /**
+     * Check if any hidden meta keys exist (for existence check only)
+     * More efficient than wt_get_found_hidden_meta() when only checking existence
+     */
+    public function has_hidden_meta_keys() {
+        if (isset($this->has_hidden_meta_keys)) {
+            return $this->has_hidden_meta_keys;
+        }
+
+        global $wpdb;
+        $csv_columns = self::get_product_post_columns();
+        
+        // Use a more efficient query to check for existence of hidden meta keys in products
+        $product_params = array_merge(array('product', '_%'), array_keys($csv_columns));
+        $product_query = $wpdb->prepare(
+            "SELECT 1 FROM {$wpdb->postmeta} AS pm
+             LEFT JOIN {$wpdb->posts} AS p ON p.ID = pm.post_id
+             WHERE p.post_type = %s
+             AND p.post_status IN ( 'publish', 'private', 'draft', 'pending', 'future' )
+             AND pm.meta_key LIKE %s
+             AND pm.meta_key NOT IN (" . implode(',', array_fill(0, count($csv_columns), '%s')) . ")
+             LIMIT 1",
+            $product_params
+        );
+
+        $product_result = $wpdb->get_var($product_query);
+        
+        if ($product_result !== null) {
+            $this->has_hidden_meta_keys = true;
+            return true;
+        }
+
+        // Check for hidden meta in product variations
+        $variation_params = array_merge( array('product_variation', '_%'), array_keys($csv_columns) );
+        $variation_query = $wpdb->prepare(
+            "SELECT 1 FROM {$wpdb->postmeta} AS pm
+             LEFT JOIN {$wpdb->posts} AS p ON p.ID = pm.post_id
+             WHERE p.post_type = %s
+             AND p.post_status IN ( 'publish', 'private', 'draft', 'pending', 'future' )
+             AND pm.meta_key LIKE %s
+             AND pm.meta_key NOT IN (" . implode(',', array_fill(0, count($csv_columns), '%s')) . ")
+             LIMIT 1",
+            $variation_params
+        );
+
+        $variation_result = $wpdb->get_var($variation_query);
+        
+        $this->has_hidden_meta_keys = $variation_result !== null;
+        return $this->has_hidden_meta_keys;
     }
 
     public function wt_get_found_product_hidden_meta() {

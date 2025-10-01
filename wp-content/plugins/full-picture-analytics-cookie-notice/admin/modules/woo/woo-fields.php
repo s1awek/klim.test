@@ -88,13 +88,13 @@ $sections = array(
 		'fields' => array(
 			array(
 				'type' 				=> 'toggle',
-				'label' 			=> esc_html__('Use Order Attribution only when visitors consent to tracking','full-picture-analytics-cookie-notice'),
+				'label' 			=> esc_html__('Block WooCommerce Order Attribution function until consent','full-picture-analytics-cookie-notice'),
+				'under field'		=> esc_html__('Recommended. Required in 60+ countries, including EU','full-picture-analytics-cookie-notice'),
 				'must_have'			=> 'cook',
 				'field_id' 			=> 'block_sbjs',
 				'option_arr_id'		=> $option_arr_id,
-				'popup'				=> '<p>' . esc_html__('This will stop WooCommerce from collecting information about the sources of conversions from users who did not agree to tracking statistics.','full-picture-analytics-cookie-notice') . '</p>
-				<p>' . esc_html__('Order attribution information is available on your WooCommerce order details pages.','full-picture-analytics-cookie-notice') . '</p>
-				<p>' . sprintf( esc_html__('Alternatively, you can completely disable Order Attribution on %1$sthis page%2$s', 'full-picture-analytics-cookie-notice'), '<a href="/wp-admin/admin.php?page=wc-settings&tab=advanced&section=features" target="_blank">', '</a>' ) . '</p>',
+				'popup2'			=> '<p>' . sprintf( esc_html__('We highly recommend disabling Order Attribution function on %1$sthis page%2$s', 'full-picture-analytics-cookie-notice'), '<a href="/wp-admin/admin.php?page=wc-settings&tab=advanced&section=features" target="_blank">', '</a>' ) . '</p>
+				<p>' . esc_html__('WooComerce uses last-click order attribution model which gives a skewed picture on the effectiveness of traffic sources and ad campaigns. This means, it gives 100% of the credit for the purchase to the last source that drove traffic to your website, omitting the role of other sources.','full-picture-analytics-cookie-notice') . '</p>',
 			),
 		),
 	),
@@ -129,6 +129,8 @@ $sections = array(
 		),
 	),
 
+	// CUSTOM ADJUSTEMENTS
+
 	array(
 		'section_id' => 'fupi_woo_custom',
 		'section_title' => esc_html__( 'Custom adjustments', 'full-picture-analytics-cookie-notice' ),
@@ -138,6 +140,7 @@ $sections = array(
 				'label' 			=> esc_html__( 'CSS selector of "Add to wishlist" button', 'full-picture-analytics-cookie-notice' ),
 				'under field'		=> esc_html__( 'Enter CSS class or ID', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'wishlist_btn_sel',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[wishlist_btn_sel]',
 				'placeholder'		=> esc_html__('e.g. .my-add-to-wishlist', 'full-picture-analytics-cookie-notice' ),
@@ -147,6 +150,7 @@ $sections = array(
 				'type'	 			=> 'text',
 				'label' 			=> esc_html__( 'CSS selectors of custom product teasers', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'teaser_wrapper_sel',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[teaser_wrapper_sel]',
 				'placeholder'		=> esc_html__('e.g. .product', 'full-picture-analytics-cookie-notice' ),
@@ -159,7 +163,7 @@ $sections = array(
 				'type' 				=> 'toggle',
 				'label' 			=> esc_html__('Add "Product brand" field to "edit product" pages','full-picture-analytics-cookie-notice'),
 				'field_id' 			=> 'add_brand_tax',
-				'class'				=> 'fupi_deprecated',
+				'class'				=> 'fupi_deprecated fupi_adv',
 				'el_class'			=> 'fupi_condition fupi_condition_reverse',
 				'el_data_target'	=> 'fupi_add_brand_tax_cond',
 				'option_arr_id'		=> $option_arr_id,
@@ -168,7 +172,7 @@ $sections = array(
 			array(
 				'type' 				=> 'taxonomies select',
 				'label' 			=> esc_html__('Use custom "product brand" taxonomy instead of the default one in WooCommerce','full-picture-analytics-cookie-notice'),
-				'class'				=> 'fupi_join fupi_add_brand_tax_cond fupi_deprecated',
+				'class'				=> 'fupi_join fupi_add_brand_tax_cond fupi_deprecated fupi_adv',
 				'field_id' 			=> 'brand_tax',
 				'option_arr_id'		=> $option_arr_id,
 				'under field'		=> '<p>' . esc_html__('This function will be removed by the end of 2025. Please migrate to standard WooCommerce brands (avail in WooCommerce 9.6+)','full-picture-analytics-cookie-notice') . '</p>',

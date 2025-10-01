@@ -76,12 +76,17 @@ class Wt_Import_Export_For_Woo_Basic_Tags_Export {
                 $total_item_args=$args;
                 $total_item_args['number']=$export_limit; //user given limit
                 $total_item_args['offset']=$current_offset; //user given offset
-                $total_terms = wp_count_terms( $taxonomy_type );
-                $total_records = $total_terms; 
+                $all_terms = get_terms( $total_item_args );
+                $total_records = is_array($all_terms) ? count($all_terms) : 0; 
             }
 
             $return['total'] = $total_records;
             $return['data'] = $data_array;
+
+            if ( 0 === $batch_offset && 0 === $total_records ) {
+                $return['no_post'] = __( 'Nothing to export under the selected criteria. Please check and try adjusting the filters.' );
+            }
+
             return $return;
         }
       

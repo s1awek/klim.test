@@ -393,11 +393,11 @@ class Bootstrap
             'dup-one-click-upgrade-script',
             'dup_one_click_upgrade_script_data',
             array(
-                'nonce_one_click_upgrade'   => wp_create_nonce('duplicator_one_click_upgrade_prepare'),
+                'nonce_generate_connect_oth' => wp_create_nonce('duplicator_generate_connect_oth'),
                 'ajaxurl'                   => admin_url('admin-ajax.php'),
-                'fail_notice_title'         => __('Failed to activate license for this website.', 'duplicator'),
+                'fail_notice_title'         => __('Failed to connect to Duplicator Pro.', 'duplicator'),
                 'fail_notice_message_label' => __('Message: ', 'duplicator'),
-                'fail_notice_suggestion'    => __('Check the license key and try again, if the error persists proceed with manual activation.', 'duplicator'),
+                'fail_notice_suggestion'    => __('Please try again or contact support if the issue persists.', 'duplicator'),
             )
         );
 

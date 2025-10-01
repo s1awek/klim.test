@@ -180,6 +180,74 @@
 	})
 })();
 
+// UPDATE SETUP AND ADV MODES IN FUPI_MAIN WITH AJAX
+
+(() => {
+
+	const advModeCheckbox = FP.findID('adv_mode_checkbox');
+	const setupModeCheckbox = FP.findID('setup_mode_checkbox');
+
+	function alertBeforeChange(e){
+
+		e.stopPropagation();
+		e.preventDefault();
+
+		const value = e.target.checked,
+			adv_mode_alert_text = fupi_adv_mode_alert_text || 'This will reload the page. All unsaved data will be lost. Are you sure?';
+
+		// open alert box with text" Are you sure" and buttons yes and no
+
+		// if the user confirms
+		if ( confirm( adv_mode_alert_text ) ) {
+
+			// send the data to the server and refresh
+			handleChange(e);
+		
+		// if the user cancels
+		} else {
+
+			// do not check the switcher's state
+			e.target.checked = ! value;
+		}
+	}
+
+	function handleChange(e) {
+
+		const mode = e.target.id === 'adv_mode_checkbox' ? 'adv_mode' : 'setup_mode';
+		const value = e.target.checked;
+		const data = new FormData();
+
+		data.append('action', 'fupi_update_modes');
+		data.append('mode', mode);
+		data.append('value', value);
+		data.append('security', fupi_setup_mode_nonce);
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then(response => response.json())
+		.then(response => {
+			console.log(response.data);
+
+			if ( mode == 'adv_mode' ) {
+				
+				// remember which popup to open after the reload
+				let popup_id_to_open = value ? 'fupi_popup_adv_mode_intro' : 'fupi_popup_easy_mode_intro';
+				FP.setCookie('fupi_admin_open_popup', popup_id_to_open );
+
+				// reload the page
+				document.location.reload();
+			}
+		});
+	}
+
+	if (advModeCheckbox) advModeCheckbox.addEventListener('change', alertBeforeChange  );
+	if (setupModeCheckbox) setupModeCheckbox.addEventListener('change', handleChange);
+
+})();
+
 // ENABLE SELCT2 FIELSDS THAT ARE NOT IN A REPEATER
 
 jQuery( document ).ready( function($) {

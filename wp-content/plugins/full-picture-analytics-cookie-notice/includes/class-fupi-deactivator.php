@@ -60,6 +60,7 @@ class Fupi_Deactivator {
 
 				// customizer
 				remove_theme_mod( 'fupi_notice_bg_color' );
+				remove_theme_mod( 'fupi_cookie_notice_btns_gaps' );
 				remove_theme_mod( 'fupi_notice_h_color' );
 				remove_theme_mod( 'fupi_notice_text_color' );
 				remove_theme_mod( 'fupi_notice_cta_color' );
@@ -76,10 +77,14 @@ class Fupi_Deactivator {
 				remove_theme_mod( 'fupi_cookie_notice' );
 				remove_theme_mod( 'fupi_cookie_notice_size' );
 				remove_theme_mod( 'fupi_notice_round_corners' );
+				remove_theme_mod( 'fupi_notice_btn_round_corners' );
 				remove_theme_mod( 'fupi_cookie_notice_heading_tag' );
 				remove_theme_mod( 'fupi_cookie_notice_h_font_size' );
+				remove_theme_mod( 'fupi_cookie_notice_h_font_size_mobile' );
 				remove_theme_mod( 'fupi_cookie_notice_p_font_size' );
+				remove_theme_mod( 'fupi_cookie_notice_p_font_size_mobile' );
 				remove_theme_mod( 'fupi_cookie_notice_button_font_size' );
+				remove_theme_mod( 'fupi_cookie_notice_button_font_size_mobile' );
 				remove_theme_mod( 'fupi_notice_necessary_switch_color' );
 				remove_theme_mod( 'fupi_toggler_bg_color' );
 				remove_theme_mod( 'fupi_custom_toggler_img' );

@@ -122,11 +122,7 @@ class Fupi_CSCR_public {
             // // trigger condition end ";
             //     }
             // OUTPUT
-            $cond_js = "if ( FP.isAllowedToLoad_basic( '{$scr_id}', {$force_load}, {$permissions_s}, {$geo} ) ) {\r\n                FP.loadScript('{$scr_id}');\r\n            } else {\r\n                fp.blocked_scripts.push( [ false, 'empty', '{$scr_id}', {$force_load}, {$permissions_s}, {$geo} ] );\r\n            }";
-            $output .= "<!--noptimize-->\r\n            <script id='{$scr_id}_temp' type='text/plain' data-no-optimize=\"1\" nowprocket>\r\n                fp.loaded.push('{$scr_id}');\r\n                if ( fp.main.debug ) console.log('[FP] Custom script loaded: {$cscr_title} ');\r\n                " . $atrig_start . "\r\n\r\n                // Script start\r\n                " . html_entity_decode( $script_data['scr'], ENT_QUOTES ) . "\r\n                // Script end\r\n                " . $atrig_end . '
-            </script>
-            <script class="fupi_cscr" data-no-optimize="1" nowprocket>' . $cond_js . '</script>
-            <!--/noptimize-->';
+            $output .= "<!--noptimize-->\r\n            <script id='{$scr_id}_temp' class='fupi_no_defer' type='text/plain' data-no-optimize=\"1\" nowprocket>\r\n                fp.loaded.push('{$scr_id}');\r\n                if ( fp.main.debug ) console.log('[FP] Custom script loaded: {$cscr_title} ');\r\n                " . $atrig_start . "\r\n\r\n                // Script start\r\n                " . html_entity_decode( $script_data['scr'], ENT_QUOTES ) . "\r\n                // Script end\r\n                " . $atrig_end . "\r\n            </script>\r\n            <script class='fupi_cscr fupi_no_defer' data-no-optimize='1' nowprocket>\r\n                if ( FP.isAllowedToLoad_basic( '{$scr_id}', {$force_load}, {$permissions_s}, {$geo} ) ) {\r\n                    FP.loadScript('{$scr_id}');\r\n                } else {\r\n                    fp.blocked_scripts.push( [ false, 'empty', '{$scr_id}', {$force_load}, {$permissions_s}, {$geo} ] );\r\n                }\r\n            </script>\r\n            <!--/noptimize-->";
         }
         return $output;
     }

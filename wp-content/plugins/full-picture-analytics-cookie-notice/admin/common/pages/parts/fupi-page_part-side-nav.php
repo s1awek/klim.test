@@ -61,10 +61,13 @@ class Fupi_Build_Side_Nav {
     }
 
     private function sort_modules_by_type(){
+        
         $sorted_modules = [];
+        
         foreach( $this->modules_data as $module ){
             $sorted_modules[$module['type']][] = $module;
         }
+
         $this->sorted_modules = $sorted_modules;
     }
 
@@ -187,6 +190,14 @@ class Fupi_Build_Side_Nav {
 
     private function add_extra_html(){
 
+        // $this->menu_html .= '<div class="fupi_sidenav_section">
+        //     <h3 class="fupi_sidenav_item fupi_sidenav_section_title">' . esc_html__('Guides & Discussions', 'full-picture-analytics-cookie-notice') . '</h3>
+            
+        //     <a class="fupi_sidenav_item" href="https://www.facebook.com/groups/onlinegrowthtools" target="_blank"><span class="dashicons dashicons-facebook"></span><span class="fupi_sidenav_title">' . esc_html__('Facebook group', 'full-picture-analytics-cookie-notice') . '</span></a>
+            
+        //     <a class="fupi_sidenav_item " href="https://www.youtube.com/channel/UCHyy-PD_OIV_kebY9HPyPOQ" target="_blank"><span class="dashicons dashicons-youtube"></span><span class="fupi_sidenav_title">' . esc_html__('Youtube channel', 'full-picture-analytics-cookie-notice') . '</span></a>    
+        // </div>';
+
         if ( fupi_fs()->is_not_paying() ) {
             $this->extra_html .= '<div id="fupi_sidenav_banner">
                 <div id="fupi_sidenav_banner_unlock_icon"><span class="dashicons dashicons-unlock"></span></div>
@@ -195,13 +206,6 @@ class Fupi_Build_Side_Nav {
                 <a href="https://wpfullpicture.com/free-vs-pro/" style="color: lightblue; text-align: center; display: block;">' . esc_html__('Compare Free and PRO', 'full-picture-analytics-cookie-notice') . '</a>
             </div>';
         }
-
-        $this->extra_html .= '<div id="fupi_sidenav_social_links">
-            <h3>' . esc_html__('Visit our new channels', 'full-picture-analytics-cookie-notice') . '</h3>
-            <a href="https://www.facebook.com/groups/onlinegrowthtools" target="_blank"><span class="dashicons dashicons-facebook"></span><span class="fupi_link_text">' . esc_html__('GrowthTools Facebook group', 'full-picture-analytics-cookie-notice') . '</span></a>
-            <a href="https://www.youtube.com/channel/UCHyy-PD_OIV_kebY9HPyPOQ" target="_blank"><span class="dashicons dashicons-youtube"></span><span class="fupi_link_text">' . esc_html__('GrowthTools YouTube channel', 'full-picture-analytics-cookie-notice') . '</span></a>
-        </div>';
-
     }
 
     private function output_all_html(){

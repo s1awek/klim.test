@@ -4,6 +4,7 @@ if (!defined('WPINC')) {
     exit;
 }
 
+#[AllowDynamicProperties]
 class Wt_Import_Export_For_Woo_Basic_Tags_Import {
 
     public $parent_module = null;

@@ -165,7 +165,11 @@ switch ( $recipe['type'] ) {
                 }
                 // (optional) start a wrapper around a group of fields
                 if ( isset( $field_recipe['start_sub_section'] ) ) {
-                    echo '<div class="fupi_r3_fields_group">';
+                    if ( !empty( $field_recipe['class'] ) && str_contains( $field_recipe['class'], 'fupi_adv_group' ) ) {
+                        echo '<div class="fupi_r3_fields_group fupi_adv">';
+                    } else {
+                        echo '<div class="fupi_r3_fields_group">';
+                    }
                 }
                 echo '<div class="fupi_r3_field fupi_field_type_' . $f_type . ' fupi_field_' . $f_id . '_wrap ' . $class . '">';
                 if ( !empty( $f_label ) && $f_type != 'checkbox' ) {

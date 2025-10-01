@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Product Variations Swatches for WooCommerce\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-12 01:36+0000\n"
+"POT-Creation-Date: 2025-09-12 06:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -35,7 +35,7 @@ msgstr ""
 msgid "*Important: "
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:88
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:92
 msgid "<p>WooCommerce Product Variations Swatches will work better with:</p>"
 msgstr ""
 
@@ -47,8 +47,8 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:53
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:76
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:57
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:80
 msgid "Activate"
 msgstr ""
 
@@ -307,10 +307,10 @@ msgstr ""
 msgid "Display type"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:153
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:156
 msgid ""
-"Easily set unlimited images or MP4/WebM videos for each WC product variation "
-"and display them when the customer selects"
+"Easily set unlimited images or videos for each WC product variation and "
+"display them when the customer selects"
 msgstr ""
 
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:411
@@ -518,21 +518,21 @@ msgstr ""
 msgid "Import Settings"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:68
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:72
 msgid "Install"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:148
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:151
 msgid ""
 "is currently inactive, external images added by this plugin(Post/product "
 "featured image, product gallery images...) will no longer work properly."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:159
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:162
 msgid "is currently inactive, the variation gallery setting will not be set."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:157
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:160
 msgid "is what you need."
 msgstr ""
 
@@ -552,10 +552,10 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:156
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:159
 msgid ""
-"Looking for a plugin that lets you add unlimited images or MP4/WebM videos "
-"to each WooCommerce product variation?"
+"Looking for a plugin that lets you add unlimited images or videos to each "
+"WooCommerce product variation?"
 msgstr ""
 
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1054
@@ -582,7 +582,7 @@ msgstr ""
 msgid "Names can not be empty."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:143
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:147
 msgid "Need to save your server storage?"
 msgstr ""
 
@@ -739,11 +739,8 @@ msgstr ""
 msgid "Save all settings of the attribute taxonomies on this page?"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:140
-msgid ""
-"Save storage by using external image URLs. This plugin is required if you "
-"want to use external URLs(Temu cdn image URLs) for product featured image, "
-"gallery images and variation image."
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:144
+msgid "Save storage by using external image URLs"
 msgstr ""
 
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/setting-global-attrs.php:218
@@ -1034,19 +1031,11 @@ msgid ""
 "attribute/variation image(Only use for Image/Variation image type)"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:145
-msgid ""
-"When this plugin is active, \"Use external links for images\" option will be "
-"available in the TMDS plugin settings/Product which allows to use original "
-"Temu product image URLs for featured image, gallery images and variation "
-"image of imported Temu products."
-msgstr ""
-
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:428
 msgid "Width"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:144
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:148
 msgid "will help you solve the problem by using external image URLs."
 msgstr ""
 

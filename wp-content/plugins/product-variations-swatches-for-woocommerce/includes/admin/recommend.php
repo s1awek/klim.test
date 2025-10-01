@@ -14,6 +14,10 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Recommend {
 
 
 	public function admin_enqueue_scripts() {
+		$page = isset( $_REQUEST['page'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) : '';
+		if (strpos( $page , 'woocommerce-product-variations-swatches' ) !== 0 ){
+			return;
+		}
 		$prefix = 'swatches';
 		$dismiss_nonce = isset( $_REQUEST[$prefix.'_dismiss_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST[$prefix.'_dismiss_nonce'] ) ) : '';
 		if ( wp_verify_nonce( $dismiss_nonce,  $prefix.'_dismiss_nonce' ) && ! get_option( $this->dismiss ) ) {
@@ -137,12 +141,11 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Recommend {
 				'exmage-wp-image-links' => [
 					'slug' => 'exmage-wp-image-links',
 					'name' => 'EXMAGE – WordPress Image Links',
-					'desc' => esc_html__( 'Save storage by using external image URLs. This plugin is required if you want to use external URLs(Temu cdn image URLs) for product featured image, gallery images and variation image.',
+					'desc' => esc_html__( 'Save storage by using external image URLs',
 						'product-variations-swatches-for-woocommerce' ),
-					'message_not_install' => sprintf( "%s <strong>EXMAGE – WordPress Image Links</strong> %s </br> %s",
+					'message_not_install' => sprintf( "%s <strong>EXMAGE – WordPress Image Links</strong> %s </br>",
 						esc_html__( 'Need to save your server storage?', 'product-variations-swatches-for-woocommerce' ),
-						esc_html__( 'will help you solve the problem by using external image URLs.', 'product-variations-swatches-for-woocommerce' ),
-						esc_html__( 'When this plugin is active, "Use external links for images" option will be available in the TMDS plugin settings/Product which allows to use original Temu product image URLs for featured image, gallery images and variation image of imported Temu products.', 'product-variations-swatches-for-woocommerce' )
+						esc_html__( 'will help you solve the problem by using external image URLs.', 'product-variations-swatches-for-woocommerce' )
 					),
 					'message_not_active'  => sprintf( "<strong>EXMAGE – WordPress Image Links</strong> %s",
 						esc_html__( 'is currently inactive, external images added by this plugin(Post/product featured image, product gallery images...) will no longer work properly.', 'product-variations-swatches-for-woocommerce' ) ),
@@ -150,10 +153,10 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Recommend {
 				'vargal-additional-variation-gallery-for-woo'=>[
 					'slug' => 'vargal-additional-variation-gallery-for-woo',
 					'name' => 'VARGAL – Additional Variation Gallery for Woo',
-					'desc' => esc_html__( 'Easily set unlimited images or MP4/WebM videos for each WC product variation and display them when the customer selects',
+					'desc' => esc_html__( 'Easily set unlimited images or videos for each WC product variation and display them when the customer selects',
 						'product-variations-swatches-for-woocommerce' ),
 					'message_not_install' => sprintf( "%s <strong>VARGAL – Additional Variation Gallery for Woo</strong> %s",
-						esc_html__( 'Looking for a plugin that lets you add unlimited images or MP4/WebM videos to each WooCommerce product variation?', 'product-variations-swatches-for-woocommerce' ),
+						esc_html__( 'Looking for a plugin that lets you add unlimited images or videos to each WooCommerce product variation?', 'product-variations-swatches-for-woocommerce' ),
 						esc_html__( 'is what you need.', 'product-variations-swatches-for-woocommerce' ) ),
 					'message_not_active'  => sprintf( "<strong>VARGAL</strong> %s",
 						esc_html__( 'is currently inactive, the variation gallery setting will not be set.', 'product-variations-swatches-for-woocommerce' ) ),

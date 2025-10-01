@@ -2,7 +2,7 @@
 
 #fupi_offscreen{
 	box-sizing: border-box;
-	transition: .2s all;
+	// transition: .2s all;
 	position: fixed;
 	transform: translateX(400px);
 	opacity: 0;
@@ -10,13 +10,11 @@
 	right: 0;
 	width: 400px;
 	max-width: 100vw;
-	overflow-y: auto;
 	height: 100vh;
 	height: calc(100vh - 32px);
-	z-index: 10;
+	z-index: 10001;
 	border: 0;
-	background: #fff;
-	padding: 0 20px 20px;
+	border-radius: 20px 0 0 20px;
 	box-shadow: 0 0 30px rgba(0,0,0,0.1);
 	&.fupi_active{
 		transform: translateX(0);
@@ -24,30 +22,108 @@
 	}
 }
 
-#fupi_offscreen_close_btn{
-	padding: 10px;
-	position: absolute;
-	left: 13px;
-	top: 13px;
-	z-index: 12;
-	background-color: transparent;
-	border: 0;
-	cursor: pointer;
-	transition: .2s all;
-	font-size: 20px;
-	line-height: 1;
+	#fupi_offscreen_content_wrap{
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: #fff;
+	}
+
+		#fupi_offscreen_close_btn{
+			padding: 10px;
+			position: absolute;
+			left: 13px;
+			top: 13px;
+			z-index: 12;
+			background-color: transparent;
+			border: 0;
+			cursor: pointer;
+			transition: .2s all;
+			font-size: 20px;
+			line-height: 1;
+		}
+
+		#fupi_offscreen_content{
+			margin: 0 auto;
+			max-width: 800px;
+			font-size: 16px;
+			line-height: 1.5em;
+			padding: 20px 20px 40px;
+			& *:not(.dashicons):not(.button):not(.button-secondary):not(.button-primary) {
+				font-size: 16px;
+				line-height: 1.5em;
+			}
+			h3{
+				font-size: 20px !important;
+			}
+		}
+
+		#fupi_offscreen_feedback_link{
+			text-align: center;
+			font-size: 16px;
+			margin: 40px auto 0;
+		}
+
+#fupi_offscreen[data-style="popup"]{
+	height: 100vh;
+	width: 100vw;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	box-shadow: none;
+	border-radius: 0;
+	#fupi_offscreen_nav{
+		display: none;
+	}
+	#fupi_offscreen_overlay{
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(135,180,212,.2);
+		z-index: 1;
+	}
+	#fupi_offscreen_content_wrap{
+		z-index: 2;
+		top: 40px;
+		box-shadow: 0 0 30px rgba(0,0,0,0.1);
+		width: 800px;
+		max-width: 90vw;
+		max-height: calc(100vh - 96px);
+		align-self: center;
+		justify-self: center;
+		border-radius: 20px;
+		overflow-y: auto;
+	}
+		#fupi_offscreen_close_btn{
+			left: auto;
+			right: 0;
+			top: 0;
+		}
+		#fupi_offscreen_content{
+			padding: 40px;
+		}
+		#fupi_offscreen_feedback_link{
+			display: none;
+		}
 }
 
 @media screen and ( max-width: 1099px ){
 	#fupi_offscreen{
 		top: 0;
-		padding-top: 40px;
-		height: 100vh;
 	}
 		#fupi_offscreen_close_btn{
-			top: 50px;
 			left: auto;
-			right: 13px;
+			right: 0;
+			top: 0px;
+		}
+		#fupi_offscreen_content{
+			padding: 20px 20px 40px;
 		}
 }
 
@@ -66,20 +142,6 @@
 			opacity: .5;
 		}
 	}
-
-#fupi_offscreen_content{
-	margin: 55px auto 0;
-	max-width: 800px;
-	font-size: 16px;
-	line-height: 1.5em;
-	& *:not(.dashicons):not(.button):not(.button-secondary):not(.button-primary) {
-		font-size: 16px;
-		line-height: 1.5em;
-	}
-	h3{
-		font-size: 20px !important;
-	}
-}
 
 .fupi_video { // responsive video wrapper
 	position: relative;

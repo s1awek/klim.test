@@ -1,23 +1,23 @@
-=== Product Export for Woocommerce to CSV, Excel, XML, and the Google Merchant Center ===
+=== Product Export for WooCommerce — Export Products from CSV, Excel, and XML ===
 Contributors: soflyy, wpallimport
-Tags: export, product, woocommerce, csv, excel, xml, product export, export product, export products, export woocommerce, woocommerce product export, google merchant center
+Tags: product export, export products, woocommerce product export, export woocommerce products, CSV export
 Requires at least: 5.0
-Tested up to: 6.6
+Tested up to: 6.8
 License: GPLv2 or later
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 
-Export WooCommerce products to CSV, Excel, or XML files, as well as to the Google Merchant Center. Run your WooCommerce product export on demand or on a schedule.
+Export WooCommerce products to CSV, Excel, XML, or the Google Merchant Center. Run your product export on demand or on a schedule.
 
 == Description ==
 
-Export products to CSV, Excel, or XML files with the WooCommerce Product Export Add-On for [WP All Export](https://wordpress.org/plugins/wp-all-export/).
+Export products to CSV, Excel, Google Sheets, or XML files with the WooCommerce Product Export Add-On for [WP All Export](https://wordpress.org/plugins/wp-all-export/).
 
 Select your product export columns, then rearrange, combine, or rename them as needed. Add any columns, including those created by 3rd-party plugins or add-ons. You can even create custom columns by using our embedded functions.
 
 Apply flexible filters to limit your export to the exact products that you want.
 
-Bulk edit your products or migrate them from one site to another with just a few clicks using a combination of  WP All Export and [WP All Import](https://wordpress.org/plugins/wp-all-import/).
+Bulk edit your products or migrate them from one site to another with just a few clicks using a combination of WP All Export and [WP All Import](https://wordpress.org/plugins/wp-all-import/).
 
 Schedule your product export to run automatically, then use Zapier to integrate your export file with any of 1000s of external applications.
 
@@ -49,9 +49,11 @@ There is no need to compromise here. You can filter your product export in whate
 
 By default, our plugin exports products to a CSV file format.
 
-But you can just as easily export products to Excel using either the .xls or .xlsx formats.
+But you can just as easily export products to Excel using either the .XLS or .XLSX formats.
 
 If you prefer XML, you can build everything from the simplest to the most complex XML feed imaginable.
+
+You can also easily export your product data to Google Sheets for collaborative editing and analysis. 
 
 = Export Products to the Google Merchant Center =
 
@@ -67,7 +69,7 @@ Even better, if Google modifies its requirements in any way, we immediately upda
 
 Bulk editing WooCommerce products is a common task. Sometimes, you need to alter many product prices or modify product descriptions as part of a sales promotion.
 
-Whatever your reason, we make bulk editing products painless. Just export your products, edit them in a spreadsheet using features like search-and-replace, copy-and-paste, etc., then import everything back into WooCommerce using WP All Import.
+Whatever your reason, we make bulk editing products painless. Just export your products, edit them in a spreadsheet like Excel or Google Sheets using features like search-and-replace, copy-and-paste, etc., then import everything back into WooCommerce using [WP All Import](https://wordpress.org/plugins/wp-all-import/).
 
 What makes this so painless is that WP All Import is aware of the export settings, which allows it to automatically configure the import process. No muss, no fuss, just a quick, highly efficient editing process.
 
@@ -109,7 +111,7 @@ With the free version of WooCommerce Product Export, you can:
 
 With the premium version of WooCommerce Product Export, you get all the free features plus:
 
-* Export product data directly to Excel (.xls and .xlsx)
+* Export product data directly to Excel (.XLS and .XLSX)
 
 * Build custom XML feeds for your product exports, no matter how complex
 
@@ -121,7 +123,7 @@ With the premium version of WooCommerce Product Export, you get all the free fea
 
 * Schedule your product export
 
-* Integrate your product export with external applications via Zapier
+* Integrate your product export with Google Sheets and other external applications via Zapier
 
 * Modify your product export data using custom PHP functions
 
@@ -131,9 +133,7 @@ With the premium version of WooCommerce Product Export, you get all the free fea
 
 [Upgrade to the Pro edition of WP All Export](http://www.wpallimport.com/upgrade-to-wp-all-export-pro/) for premium support.
 
-Our team of support specialists has answered many thousands of support requests over more than a dozen years. Whatever your product export goals, we’ll help you achieve them.
-
-Email: support@wpallimport.com
+You can submit the [support form on our website](https://www.wpallimport.com/support/) or email us at [support@wpallimport.com](mailto:support@wpallimport.com). While we try to assist users of our free version, please note that support is not guaranteed and will depend on our capacity. For premium support, purchase [WP All Export Pro](https://www.wpallimport.com/upgrade-to-wp-all-export-pro/?utm_source=dotorg&utm_medium=readme&utm_campaign=premium-support).
 
 = Related Plugins =
 
@@ -176,6 +176,14 @@ Either: -
 3. Choose the export columns.
 4. Change the Export Type to Feed › Simple XML Feed.
 5. Run the export and download the export file.
+
+= Can I export WooCommerce products to Google Sheets? =
+
+1. Go to All Export › New Export.
+2. Select WooCommerce Products as the export post type.
+3. Choose your export columns.
+4. Run the export.
+5. Connect to Google Sheets using Zapier.
 
 = How do I export WooCommerce products to the Google Merchant Center? =
 
@@ -264,13 +272,13 @@ Yes. By installing the [WordPress Multilingual Plugin (WPML)](https://wordpress.
 = How do I bulk edit WooCommerce products? =
 
 1. Export the products that you wish to edit.
-2. Edit the export file in your favorite spreadsheet.
+2. Edit your export file in a spreadsheet software like Excel or Google Sheets.
 3. Import the modified file back into WooCommerce.
 4. Verify that the changes were correctly applied.
 
 = How do I print a WooCommerce product list? =
 
-The fastet way to print a WooCommerce product list is to go to Products > All Products and click Control+P from your browser. Just click the Print button to print your WooCommerce product list. If you want to control layout, styling, or manipulate the list data in any way, export your products to a spreadsheet and print from there.
+The fastest way to print a WooCommerce product list is to go to Products > All Products and click Control+P from your browser. Just click the Print button to print your WooCommerce product list. If you want to control layout, styling, or manipulate the list data in any way, export your products to a spreadsheet and print from there.
 
 = How often is WooCommerce Product Export updated? =
 
@@ -298,6 +306,9 @@ The free version of WooCommerce Product Export is supported through the WordPres
 14. WooCommerce Export Products Confirm and Run
 
 == Changelog ==
+
+= 1.0.4 =
+* improvement: UI updates
 
 = 1.0.3 =
 * improvement: update upgrade links

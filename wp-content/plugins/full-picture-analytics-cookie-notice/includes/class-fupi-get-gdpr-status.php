@@ -701,6 +701,9 @@ class Fupi_compliance_status_checker {
             'opt-setup' => [
                 [
                     esc_attr__( 'Make sure that you do not use Google reCaptcha. It does not comply with GDPR and there is no known method of making it comply with it. Replace it with a GDPR compliant solution like Cloudflare Turnstile (free and paid) or Friendly Captcha (paid for commercial use). Attention. You may read online, that there are ways to make Google reCaptcha compatible with GDPR. This is not true. The proposed solution of conditionally loading reCaptcha\'s scripts prevents access to content if visitors do not agree to tracking, which is against GDPR.', 'full-picture-analytics-cookie-notice' )
+                ],
+                [
+                    esc_attr__( 'Add a checkbox to forms on your website. It should come with text "I agree to the [Privacy Policy](link-to-your-policy) and consent to [Your Company Name] using the data from this form to [Purpose]." or similar. The checkbox cannot be pre-checked.', 'full-picture-analytics-cookie-notice' )
                 ]
             ],
             'tracked_extra_data' => [],

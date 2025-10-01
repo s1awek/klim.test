@@ -1,5 +1,5 @@
 <?php
-
+/*
 // Uses "$updated_settings_id" variable, like 'cook' or 'ga41' - must be set in the calling function
 
 $output = ''; // the variable $output is also used in the head-js
@@ -35,4 +35,4 @@ if ( ! file_exists( $index_file_path ) ) {
     file_put_contents( $index_file_path, $index_file_content );
 };
 
-if ( isset( $this->main['debug'] ) ) trigger_error('[FP] Generated head.js file');
+if ( isset( $this->ver['debug'] ) ) trigger_error('[FP] Generated head.js file');*/

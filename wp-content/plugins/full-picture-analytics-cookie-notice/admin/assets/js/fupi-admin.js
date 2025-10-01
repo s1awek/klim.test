@@ -30,26 +30,77 @@
 
 	let fupi_settings_form 	= FP.findID('fupi_settings_form'),
 		fupi_admin_page 	= FP.getUrlParamByName('page'),
-		headlines 			= FP.findAll( '#fupi_settings_form h2' );
-		sub_items_added		= false;
+		headlines 			= FP.findAll( '#fupi_settings_form h2' ),
+		hidden_h2			= [],
+		visible_h2			= [],
+		sub_items_added		= false,
+		is_easy_mode		= !! FP.findFirst('#fupi_content.adv_mode_off');
 
-	function add_sub_items(){
+	function mark_all_h2_as_fupi_el(){
+		headlines.forEach( h2 => h2.classList.add('fupi_el'));
+	}
 
-		if ( headlines.length < 2 ) return;
+	function get_next_table_el( h2 ){
 
-		let current_page_el = FP.findFirst('.fupi_sidenav_item.fupi_current'),
-			output = '<div id="fupi_sidenav_sub">',
-			active_tab = fupi_settings_form.dataset.activetab;
+		let nextEl = h2.nextElementSibling;
+
+		if ( nextEl ) {
+
+			if ( nextEl.tagName == 'TABLE' ) {
+				return nextEl;
+			} else {
+				let nextNextEl = nextEl.nextElementSibling;
+				if ( nextNextEl && nextNextEl.tagName == 'TABLE' ) return nextNextEl;
+			}
+		}
+
+		return false;
+	}
+
+	function check_if_show( h2 ){
+
+		if ( ! is_easy_mode ) return true;
+
+		let table_el = get_next_table_el(h2);
+
+		if ( table_el ) {
+			if ( table_el.querySelectorAll('tr:not(.fupi_adv)').length > 0 ) return true;
+		} else {
+			return true;
+		}
+
+		return false;
+	}
+
+	function add_submenu_items(){
 		
-		headlines.forEach( ( headline, i ) => {
+		let current_page_el = FP.findFirst('.fupi_sidenav_item.fupi_current'),
+			output = '<div id="fupi_sidenav_sub">';
+		
+		headlines.forEach( ( h2, i ) => {
 			
-			let h_txt = headline.innerText,
-				current_class = i == 0  ? 'active' : '';
+			let show = check_if_show( h2 );
+
+			if ( ! show ) {
+				h2.style.display = 'none';
+				hidden_h2.push(h2);
+				return;
+			};
+
+			visible_h2.push(h2);
+
+			let h_txt = h2.innerText,
+				current_class = i == 0  ? 'active' : '',
+				active_tab = fupi_settings_form.dataset.activetab;
 			
 			output += '<button type="button" data-target="hook_' + active_tab + '_' + i + '" class="fupi_sidenav_sub_item ' + current_class + '"><span>' + h_txt + '</span></button>';
-			headline.setAttribute( 'id', 'hook_' + active_tab + '_' + i );
-			headline.classList.add( 'fupi_hook', 'fupi_el');
+
+			// add hook to section
+			h2.setAttribute( 'id', 'hook_' + active_tab + '_' + i );
 		});
+
+		// Add submenu items only if there is more than 1 section
+		if ( visible_h2.length <= 1 ) return;
 
 		// current_page_el.insertAdjacentHTML('beforebegin', '<button id="fupi_toggle_hidden_menu_items"><span class="dashicons dashicons-menu-alt"></span><span class="fupi_srt">Menu</span></button>');
 		current_page_el.insertAdjacentHTML('beforeend', output + '</div>');
@@ -57,40 +108,6 @@
 
 		sub_items_added = true;
 	}
-	/*
-	function hide_not_active_menu_items(){
-
-		// get all sidenav sections
-		let sections = FP.findAll('.fupi_sidenav_section');
-
-		// hide menu elements that do not have current (active) menu items
-		sections.forEach( section => {
-			
-			let current_page_link = FP.findFirst( '.fupi_current', section );
-			
-			if ( ! current_page_link ) {
-				section.style.display = 'none';
-				section.classList.add('fupi_hideable_menu_element');
-			} else {
-				// hide all menu items within this section which are not current or are marked with alt style
-				let $not_active_menu_items = jQuery('.fupi_sidenav_item:not(.fupi_current):not(.fupi_alt_style)');
-				$not_active_menu_items.hide().addClass('fupi_hideable_menu_element');
-			}
-		});
-
-		// add event to toggle button
-		FP.findID( 'fupi_toggle_hidden_menu_items' ).addEventListener( 'click', () => {
-
-			// jQuery - get all elements with class fupi_hideable_menu_element
-			let $hidden_elements = jQuery('#fupi_nav_col .fupi_hideable_menu_element');
- 
-			// Use jQuery to animate showing all hidden sections
-			$hidden_elements.slideToggle( 300 );
-
-			// Use jQuery to slide hide element with id fupi_toggle_hidden_menu_items
-			jQuery('#fupi_toggle_hidden_menu_items').slideToggle( 300 );
-		});
-	}*/
 
 	function remove_highlight_from_active_menu_item(){
 		let active_menu_link = FP.findFirst('#fupi_nav_col .fupi_sidenav_sub_item.active');
@@ -99,11 +116,10 @@
 
 	function enable_sections_toggle(){
 
-		// headlines = FP.findAll('#fupi_settings_form h2');
 		let fupi_nav_col_links = FP.findAll('#fupi_nav_col .fupi_sidenav_sub_item');
 
 		// make 1st section visible & unhide form
-		if ( headlines.length > 1 ) show_section( headlines[0].id ); // show first section
+		if ( visible_h2.length > 1 ) show_section( headlines[0].id ); // show first section
 
 		// add events to links that add a target to url & show sections
 		if ( fupi_nav_col_links.length > 1 ) {
@@ -159,12 +175,41 @@
 		}
 	}
 
-	if ( fupi_admin_page && fupi_settings_form) {
+	function hide_all_section_elements(){
+		FP.findAll( '.fupi_el, .form-table' ).forEach( element => element.classList.add('fupi_hidden'));
+	}
+
+	function show_the_only_visible_section(){
+		
+		let h2 = FP.findFirst('h2[id*="hook_track_"]'),
+			nextEl = h2.nextElementSibling;
+
+		h2.classList.remove('fupi_hidden');
+
+		if ( nextEl && nextEl.classList.contains('fupi_section_descr') ) {
+			
+			nextEl.classList.remove('fupi_hidden');
+
+			let nextNextEl = nextEl.nextElementSibling;
+			if ( nextNextEl && nextNextEl.tagName == 'TABLE' ) {
+				nextNextEl.classList.remove('fupi_hidden');
+			}
+		}
+	}
+
+	if ( headlines.length > 1 && fupi_admin_page && fupi_settings_form ) {
 		
 		if ( fupi_admin_page != 'full_picture_tools' ){
-			add_sub_items();
-			//if ( sub_items_added ) hide_not_active_menu_items();
-			enable_sections_toggle();
+
+			mark_all_h2_as_fupi_el();
+			hide_all_section_elements();
+			add_submenu_items();
+
+			if ( visible_h2.length > 1 ) {
+				enable_sections_toggle();
+			} else {
+				show_the_only_visible_section();
+			}
 		}
 
 		show_last_viewed_section();
@@ -220,25 +265,27 @@
 	// toggle fields that can be conditionally toggled
 
 	let condition_fields = FP.findAll( '.fupi_condition' );
+	
+	// sync after pageload
 
-	if ( condition_fields.length > 0 ) {
+	condition_fields.forEach( field => {
+		sync_settings( field );
+	});
+	
+	function get_cond_field(e){
+		if ( e.target.classList.contains('fupi_condition') ){
+			sync_settings(e.target);
+		}
+	}
 
-		condition_fields.forEach( field => {
+	// after click
+	document.onclick = (e) => { get_cond_field( e ); };
 
-			// after pageload
-			sync_settings( field );
+	// on key up
+	document.onkeyup = (e) => { get_cond_field( e ); }
 
-			// after click
-			field.onclick = (e) => { sync_settings( field ); };
-
-			// on key up
-			field.onkeyup = (e) => { sync_settings( field ); }
-
-			// on change
-			field.onchange = (e) => { sync_settings( field ); }
-		})
-	};
-
+	// on change
+	document.onchange = (e) => { get_cond_field( e ); }
 
 	function sync_settings( field ) {
 
@@ -651,8 +698,9 @@
 
 		section.classList.add('fupi_highlight_req');
 
-		// remove all empties
+		// remove all indicators of filled and empty fields
 		FP.findAll('.field_empty', section).forEach( field => field.classList.remove('field_empty') );
+		FP.findAll( '.field_filled', section ).forEach( field => field.classList.remove('field_filled') );
 
 		// clear values and mark with empties
 		FP.findAll('textarea', section).forEach( area => {
@@ -660,7 +708,7 @@
 			if ( area.classList.contains('fupi_req') ) area.parentElement.classList.add('fupi_empty');
 		} );
 
-		FP.findAll('input[type="text"]', section).forEach( field => {
+		FP.findAll('input[type="text"], input[type="url"]', section).forEach( field => {
 			field.value = '';
 			if ( field.classList.contains('fupi_req') ) field.parentElement.classList.add('fupi_empty');
 		} );
@@ -675,17 +723,20 @@
 			if ( field.classList.contains('fupi_req') ) field.parentElement.classList.add('fupi_empty');
 		} );
 		
+		// these do not get empties
+		FP.findAll('input[type="checkbox"]', section).forEach( box => box.checked = false );
+		FP.findAll('input[type="hidden"]', section).forEach( field => field.value = '' );
+
 		FP.findAll('select', section).forEach( sel => {
 			let option_el = FP.findFirst('option', sel);
 			if ( option_el && option_el.value ) sel.value = option_el.value;
 			
 			if ( sel.classList.contains('fupi_req') ) sel.parentElement.classList.add('fupi_empty');
 		} );
-		
-		// these do not get empties
-		FP.findAll('input[type="checkbox"]', section).forEach( box => box.checked = false );
-		FP.findAll('input[type="hidden"]', section).forEach( field => field.value = '' );
 
+		// unhide hidden elements
+		FP.findAll('.fupi_r3_field.fupi_hidden', section).forEach( field => field.classList.remove('fupi_hidden') );
+		FP.findAll('.fupi_r3_field.fupi_disabled', section).forEach( field => field.classList.remove('fupi_disabled') );
 
 		return section;
 	}
@@ -1004,15 +1055,16 @@
 
 (()=>{
 
-	let offscreen = FP.findID('fupi_offscreen'),
+	let fupi_content = FP.findID('fupi_content'),
+		offscreen = FP.findID('fupi_offscreen'),
 		offscreen_content_el = FP.findID('fupi_offscreen_content'),
 		offscreen_close_btn = FP.findID('fupi_offscreen_close_btn'),
-		// offscreen_maximize_btn = FP.findID('fupi_offscreen_maximize_btn'),
 		content_els = FP.findAll('table.form-table .fupi_popup_content:not(.fupi_do_not_create_popup_icon)'),
 		next_popup_btn = FP.findID('fupi_offscreen_next_btn'),
 		prev_popup_btn = FP.findID('fupi_offscreen_prev_btn'),
 		current_popup_index = -1,
-		popup_history = [];
+		popup_history = [],
+		current_popup = false;
 
 	function update_popup_history( btn ) {
 		
@@ -1063,25 +1115,25 @@
 		}  
 	}
 
-	function add_content_to_popup( btn ) {
+	function add_content_to_popup() {
 
-		offscreen.dataset.content_id = btn.dataset.popup;
+		offscreen.dataset.content_id = current_popup.id;
 
-		let new_content_el = btn.dataset.popup ? FP.findID( btn.dataset.popup ) : btn.nextElementSibling,
-			buttonsHTML = '';
-
-		if ( new_content_el.classList.contains( 'fupi_popup_content' ) ) {
+		if ( current_popup && current_popup.classList.contains( 'fupi_popup_content' ) ) {
 			update_popup_nav_btns();
-			offscreen_content_el.innerHTML = new_content_el.innerHTML + buttonsHTML;
+			offscreen_content_el.innerHTML = current_popup.innerHTML;
 		}
 	}
 
 	function show_popup() {
 		offscreen.classList.add('fupi_active');
+		offscreen.dataset.style = current_popup.dataset.style || '';
 	}
 
 	function hide_popup() {
+
 		offscreen.dataset.content_id = '';
+		offscreen.dataset.style = '';
 		offscreen.classList.remove('fupi_active');
 
 		let youtubeIframe = FP.findFirst('.fupi_video iframe');
@@ -1113,13 +1165,6 @@
 		});
 	}
 
-	// maximize/minimize popup
-
-	// function maximize_popup () {
-	// 	offscreen.classList.toggle('fupi_maximized');
-	// 	offscreen_maximize_btn.classList.toggle('fupi_maximized');
-	// };
-
 	// start
 
 	create_popup_icons();
@@ -1130,18 +1175,49 @@
 
 		if ( popup_btn ) {
 
-			if ( offscreen.dataset.content_id != popup_btn.dataset.popup ) {
-				update_popup_history( popup_btn );
-				add_content_to_popup( popup_btn );
+			let popup_id = popup_btn.dataset.popup;
+
+			current_popup = FP.findID( popup_id );
+
+			if ( offscreen.dataset.content_id != popup_id ) {
+				if ( current_popup.dataset.style != 'popup' ) update_popup_history( popup_btn );
+				add_content_to_popup();
 				show_popup();
 			} else { 
-				hide_popup(); 
+				hide_popup();
 			}
 		}
 	})
 
+	// Open popup after a page refresh - from a cookie
+	let cookie_popup_id = FP.readCookie('fupi_admin_open_popup');
+
+	if ( cookie_popup_id ) {
+		current_popup = FP.findID( cookie_popup_id );
+		if ( current_popup ) {
+			add_content_to_popup();
+			show_popup();
+			FP.deleteCookie('fupi_admin_open_popup');
+		}
+	}
+
+	// Open a welcome message if #fupi_content has a welcome_popup_id dataset
+	if ( fupi_content ) {
+		
+		let welcome_popup_id = fupi_content.dataset.welcome_popup_id;
+		
+		if ( welcome_popup_id ) {
+
+			current_popup = FP.findID( welcome_popup_id );
+	
+			if ( current_popup ) {
+				add_content_to_popup();
+				show_popup();
+			}
+		};
+	}
+
 	if ( offscreen_close_btn ) offscreen_close_btn.addEventListener( 'click', hide_popup );
-	// if ( offscreen_maximize_btn ) offscreen_maximize_btn.addEventListener( 'click', maximize_popup );
 
 })();
 
@@ -1420,6 +1496,74 @@
 		show_random_slide( slide_dots, slides );
 		change_slide_on_click( slider, slide_dots, slides );
 	})
+})();
+
+// UPDATE SETUP AND ADV MODES IN FUPI_MAIN WITH AJAX
+
+(() => {
+
+	const advModeCheckbox = FP.findID('adv_mode_checkbox');
+	const setupModeCheckbox = FP.findID('setup_mode_checkbox');
+
+	function alertBeforeChange(e){
+
+		e.stopPropagation();
+		e.preventDefault();
+
+		const value = e.target.checked,
+			adv_mode_alert_text = fupi_adv_mode_alert_text || 'This will reload the page. All unsaved data will be lost. Are you sure?';
+
+		// open alert box with text" Are you sure" and buttons yes and no
+
+		// if the user confirms
+		if ( confirm( adv_mode_alert_text ) ) {
+
+			// send the data to the server and refresh
+			handleChange(e);
+		
+		// if the user cancels
+		} else {
+
+			// do not check the switcher's state
+			e.target.checked = ! value;
+		}
+	}
+
+	function handleChange(e) {
+
+		const mode = e.target.id === 'adv_mode_checkbox' ? 'adv_mode' : 'setup_mode';
+		const value = e.target.checked;
+		const data = new FormData();
+
+		data.append('action', 'fupi_update_modes');
+		data.append('mode', mode);
+		data.append('value', value);
+		data.append('security', fupi_setup_mode_nonce);
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then(response => response.json())
+		.then(response => {
+			console.log(response.data);
+
+			if ( mode == 'adv_mode' ) {
+				
+				// remember which popup to open after the reload
+				let popup_id_to_open = value ? 'fupi_popup_adv_mode_intro' : 'fupi_popup_easy_mode_intro';
+				FP.setCookie('fupi_admin_open_popup', popup_id_to_open );
+
+				// reload the page
+				document.location.reload();
+			}
+		});
+	}
+
+	if (advModeCheckbox) advModeCheckbox.addEventListener('change', alertBeforeChange  );
+	if (setupModeCheckbox) setupModeCheckbox.addEventListener('change', handleChange);
+
 })();
 
 // ENABLE SELCT2 FIELSDS THAT ARE NOT IN A REPEATER

@@ -40,16 +40,27 @@
 
 input:checked + .fupi_switch_slider,
 .fupi_switch_slider.fupi_active {
-  background-color: #368aae;
+	background-color: #368aae;
 }
 
 input:focus + .fupi_switch_slider {
-  box-shadow: 0 0 1px #368aae;
+	box-shadow: 0 0 1px #368aae;
+}
+
+#fupi_top_setup_info{
+	input:checked + .fupi_switch_slider,
+	.fupi_switch_slider.fupi_active {
+		background-color: #6b99ad;
+	}
+
+	input:focus + .fupi_switch_slider {
+		box-shadow: 0 0 1px #6b99ad;
+	}
 }
 
 input:checked + .fupi_switch_slider:before,
 .fupi_active.fupi_switch_slider:before {
-  transform: translateX(18px);
+  	transform: translateX(18px);
 }
 
 tr.fupi_hide_fields{

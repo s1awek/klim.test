@@ -5,9 +5,12 @@ class Fupi_SIMPL_public {
 
     private $main;
 
+    private $ver;
+
     public function __construct() {
         $this->settings = get_option( 'fupi_simpl' );
         $this->main = get_option( 'fupi_main' );
+        $this->ver = get_option( 'fupi_versions' );
         $this->add_actions_and_filters();
     }
 

@@ -41,7 +41,7 @@ $sections = array(
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track without waiting for consent', 'full-picture-analytics-cookie-notice' ),
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'must_have'			=> 'cook',
 				'field_id' 			=> 'disreg_cookies',
 				'option_arr_id'		=> $option_arr_id,
@@ -54,7 +54,7 @@ $sections = array(
 				'field_id' 			=> 'limit_country',
 				'must_have'			=> 'pro geo',
 				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'is_repeater'		=> false,
 				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 				'fields'			=> array(
@@ -87,6 +87,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track clicks on email and tel. links', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_email_tel',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'When this option is enabled, all clicks on email and phone links will be tracked and sent to TikTok. However, due to TikToks tracking limitations, the event will NOT contain information WHICH link was clicked.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
@@ -94,6 +95,7 @@ $sections = array(
 				'type'	 			=> 'text',
 				'label' 			=> esc_html__( 'Track clicks on file download links', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_file_downl',
+				'class'				=> 'fupi_adv',
 				'placeholder'		=> 'pdf, doc, docx, xls, xlsx, txt',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[track_file_downl]',
@@ -106,7 +108,7 @@ $sections = array(
 				'field_id' 			=> 'track_elems',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<h3>' . esc_html__( 'How to fill in these fields', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<ol>
@@ -144,7 +146,7 @@ $sections = array(
 				'field_id' 			=> 'track_forms',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'There are 4 methods of tracking form. Please choose the one that is best suited for your forms. Otherwise form tracking may not work correctly' , 'full-picture-analytics-cookie-notice' ) . '<p>
 					<p><a class="button-secondary" target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-choose-the-best-way-to-track-form-submissions/">' . esc_html__( 'Choose correct method to track your forms.' , 'full-picture-analytics-cookie-notice' ) . '</a></p>

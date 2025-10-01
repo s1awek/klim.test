@@ -4,25 +4,27 @@
 	// toggle fields that can be conditionally toggled
 
 	let condition_fields = FP.findAll( '.fupi_condition' );
+	
+	// sync after pageload
 
-	if ( condition_fields.length > 0 ) {
+	condition_fields.forEach( field => {
+		sync_settings( field );
+	});
+	
+	function get_cond_field(e){
+		if ( e.target.classList.contains('fupi_condition') ){
+			sync_settings(e.target);
+		}
+	}
 
-		condition_fields.forEach( field => {
+	// after click
+	document.onclick = (e) => { get_cond_field( e ); };
 
-			// after pageload
-			sync_settings( field );
+	// on key up
+	document.onkeyup = (e) => { get_cond_field( e ); }
 
-			// after click
-			field.onclick = (e) => { sync_settings( field ); };
-
-			// on key up
-			field.onkeyup = (e) => { sync_settings( field ); }
-
-			// on change
-			field.onchange = (e) => { sync_settings( field ); }
-		})
-	};
-
+	// on change
+	document.onchange = (e) => { get_cond_field( e ); }
 
 	function sync_settings( field ) {
 

@@ -166,6 +166,13 @@ html.fupi_blur_out:not(.fupi_infobox) body{
 			border-bottom-left-radius: 0 !important;
 			border-bottom-width: 0 !important;
 		}
+		.fupi_headline{		
+			font-size: var(--fupi-notice-h-size-mobile);
+		}
+	}
+
+	.fupi_cookietype_descr{
+		font-size: var(--fupi-notice-p-size-mobile);
 	}
 }
 
@@ -412,6 +419,14 @@ html.fupi_blur_out:not(.fupi_infobox) body{
 	}
 }
 
+@media screen and (max-width: 959px) {
+	.fupi_buttons{
+		button{
+			font-size: var(--fupi-notice-btn-txt-size-mobile);
+		}
+	}
+}
+
 	#fupi_agree_to_all_cookies_btn,
 	#fupi_agree_to_selected_cookies_btn{
 		flex: 3 0 auto;
@@ -421,7 +436,7 @@ html.fupi_blur_out:not(.fupi_infobox) body{
 	&[data-btn_config="default"]{
 		#fupi_agree_to_all_cookies_btn,
 		#fupi_agree_to_selected_cookies_btn{
-			width: 80%;
+			width: 90%;
 		}
 	}
 	//&[data-btn_config="config_1"]{} // no changes here
@@ -469,7 +484,7 @@ html.fupi_blur_out:not(.fupi_infobox) body{
 		.fupi_buttons{
 			margin-top: 10px;
 			button{
-				margin: 9px;
+				margin: 8px;
 			}
 		}
 		.fupi_cookietype_descr{
@@ -494,7 +509,7 @@ html.fupi_blur_out:not(.fupi_infobox) body{
 		.fupi_buttons{
 			margin-top: 10px;
 			button{
-				margin: 7px;
+				margin: 6px;
 			}
 		}
 		.fupi_cookietype_descr{
@@ -519,7 +534,7 @@ html.fupi_blur_out:not(.fupi_infobox) body{
 		.fupi_buttons{
 			margin-top: 8px;
 			button{
-				margin: 5px;
+				margin: 4px;
 			}
 		}
 		.fupi_cookietype_descr{
@@ -608,6 +623,39 @@ html.fupi_blur_out:not(.fupi_infobox) body{
 						padding-right: 20px;
 					}
 				}
+			}
+		}
+	}
+}
+
+// GAPS BETWEEN BUTTONS
+
+#fupi_cookie_notice{
+	&[data-btn_gaps="spacious"]{
+		.fupi_buttons{
+			button{
+				margin: 10px;
+			}
+		}
+	}
+	&[data-btn_gaps="medium"]{
+		.fupi_buttons{
+			button{
+				margin: 8px;
+			}
+		}
+	}
+	&[data-btn_gaps="compact"]{
+		.fupi_buttons{
+			button{
+				margin: 6px;
+			}
+		}
+	}
+	&[data-btn_gaps="supercompact"]{
+		.fupi_buttons{
+			button{
+				margin: 4px;
 			}
 		}
 	}

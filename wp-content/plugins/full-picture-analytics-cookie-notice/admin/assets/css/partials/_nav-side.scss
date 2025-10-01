@@ -46,11 +46,12 @@
 		float: left;
 	}
 	.dashicons{
-		font-size: 20px;
+		font-size: 20px !important;
 		margin-right: 15px;
 		vertical-align: middle;
 		line-height: 20px;
 		color: #0f8fc2;
+		float: left;
 	}
 	.fupi_sidenav_title{
 		max-width: calc(100% - 30px);
@@ -128,7 +129,6 @@
 // SIDE NAV BANNERS
 //
 
-#fupi_sidenav_social_links,
 #fupi_sidenav_banner{
 	padding: 30px 20px 20px;
 	margin: 60px 0 0 0;
@@ -179,39 +179,6 @@
 			height: 30px;
 		}
 	}
-
-// SOCIAL LINKS BANNER
-
-#fupi_sidenav_social_links{
-	padding-top: 20px;
-	a{
-		display: block;
-		color: lightblue;
-		font-size: 14px;
-		line-height: 1.2em;
-		padding: 10px 0;
-		text-decoration: none;
-		display: flex;
-		gap: 10px;
-		align-items: center;
-		.fupi_link_text{
-			display: inline-block;
-		}
-		.dashicons{
-			font-size: 20px;
-			color: #fff;
-		}
-		&:hover{
-			.fupi_link_text{
-				text-decoration: underline;
-			}
-		}
-	}
-}
-
-#fupi_sidenav_banner + #fupi_sidenav_social_links{
-	margin-top: 20px;
-}
 
 // Feature slider
 /*

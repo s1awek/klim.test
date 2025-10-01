@@ -416,13 +416,21 @@
 		} );
 	} );
 
-	// STYLE
+	// PADDINGS
 
 	wp.customize( 'fupi_cookie_notice[paddings]', value => {
 		value.bind( function( newval ) {
 			$( '#fupi_cookie_notice' ).attr( 'data-paddings', newval);
 		} );
 	} );
+
+	// BUTTONS GAPS
+
+	wp.customize( 'fupi_cookie_notice_btns_gaps', value => {
+        value.bind( function( newval ) {
+			$( '#fupi_cookie_notice' ).attr( 'data-btn_gaps', newval);
+        } );
+    } );
 
 	// HIDE STUFF
 	// fupi_cookie_notice[hide]
@@ -656,17 +664,38 @@
         } );
     } );
 
+	wp.customize( 'fupi_cookie_notice_h_font_size_mobile', value => {
+        value.bind( function( size ) {
+			let size_val = size && size > 0 ? size + 'px' : '17px';
+			document.body.style.setProperty('--fupi-notice-h-size-mobile', size_val);
+        } );
+    } );
+
 	wp.customize( 'fupi_cookie_notice_p_font_size', value => {
         value.bind( function( size ) {
-			let size_val = size && size > 0 ? size + 'px' : '15px';
+			let size_val = size && size > 0 ? size + 'px' : '16px';
 			document.body.style.setProperty('--fupi-notice-p-size', size_val);
+        } );
+    } );
+
+	wp.customize( 'fupi_cookie_notice_p_font_size_mobile', value => {
+        value.bind( function( size ) {
+			let size_val = size && size > 0 ? size + 'px' : '14px';
+			document.body.style.setProperty('--fupi-notice-p-size-mobile', size_val);
         } );
     } );
 
 	wp.customize( 'fupi_cookie_notice_button_font_size', value => {
         value.bind( function( size ) {
-			let size_val = size && size > 0 ? size + 'px' : '15px';
+			let size_val = size && size > 0 ? size + 'px' : '16px';
 			document.body.style.setProperty('--fupi-notice-btn-txt-size', size_val);
+        } );
+    } );
+
+	wp.customize( 'fupi_cookie_notice_button_font_size_mobile', value => {
+        value.bind( function( size ) {
+			let size_val = size && size > 0 ? size + 'px' : '14px';
+			document.body.style.setProperty('--fupi-notice-btn-txt-size-mobile', size_val);
         } );
     } );
 

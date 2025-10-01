@@ -116,9 +116,9 @@ $panel_bg_color = ( !empty( $panel_bg_color_val ) ? esc_attr( $panel_bg_color_va
 // Panel round corners
 $panel_round_corners_val = get_theme_mod( 'fupi_notice_round_corners' );
 if ( isset( $panel_round_corners_val ) ) {
-    $panel_round_corners = ( empty( $panel_round_corners_val ) ? '0px' : esc_attr( $panel_round_corners_val ) . 'px' );
+    $panel_round_corners = ( empty( $panel_round_corners_val ) ? '16px' : esc_attr( $panel_round_corners_val ) . 'px' );
 } else {
-    $panel_round_corners = '4px';
+    $panel_round_corners = '16px';
 }
 // Panel border color
 $panel_border_color_val = get_theme_mod( 'fupi_notice_border_color' );
@@ -130,6 +130,13 @@ if ( isset( $h_size_val ) ) {
 } else {
     $h_size = '20px';
 }
+// H size - mobile
+$h_size_mobile_val = get_theme_mod( 'fupi_cookie_notice_h_font_size_mobile' );
+if ( isset( $h_size_mobile_val ) ) {
+    $h_size_mobile = ( empty( $h_size_mobile_val ) ? '20px' : esc_attr( $h_size_mobile_val ) . 'px' );
+} else {
+    $h_size_mobile = '20px';
+}
 // H color
 $h_color_val = get_theme_mod( 'fupi_notice_h_color' );
 $h_color = ( !empty( $h_color_val ) ? esc_attr( $h_color_val ) : '#333' );
@@ -140,9 +147,20 @@ if ( isset( $p_size_val ) ) {
 } else {
     $p_size = '16px';
 }
+// P size - mobile
+$p_size_val_mobile = get_theme_mod( 'fupi_cookie_notice_p_font_size_mobile' );
+if ( isset( $p_size_val_mobile ) ) {
+    $p_size_mobile = ( empty( $p_size_val_mobile ) ? '14px' : esc_attr( $p_size_val_mobile ) . 'px' );
+} else {
+    $p_size_mobile = '14px';
+}
 // P color
 $p_color_val = get_theme_mod( 'fupi_notice_text_color' );
 $p_color = ( !empty( $p_color_val ) ? esc_attr( $p_color_val ) : '#555' );
+// BUTTON GAPS
+$btn_gaps_theme_mod = get_theme_mod( 'fupi_cookie_notice_btns_gaps' );
+$btn_gaps_val = ( !empty( $btn_gaps_theme_mod ) ? $btn_gaps_theme_mod : $notice_paddings );
+$btn_gaps = ( !empty( $btn_gaps_val ) ? esc_attr( $btn_gaps_val ) : 'spacious' );
 // POPUP MAX WIDTH
 $popup_max_width_val = get_theme_mod( 'fupi_notice_popup_width' );
 if ( isset( $popup_max_width_val ) ) {
@@ -153,9 +171,9 @@ if ( isset( $popup_max_width_val ) ) {
 // Btn round corners
 $btn_round_corners_val = get_theme_mod( 'fupi_notice_btn_round_corners' );
 if ( isset( $btn_round_corners_val ) ) {
-    $btn_round_corners = ( empty( $btn_round_corners_val ) ? '0px' : esc_attr( $btn_round_corners_val ) . 'px' );
+    $btn_round_corners = ( empty( $btn_round_corners_val ) ? '8px' : esc_attr( $btn_round_corners_val ) . 'px' );
 } else {
-    $btn_round_corners = '2px';
+    $btn_round_corners = '8px';
 }
 // Btn size
 $btn_size_val = get_theme_mod( 'fupi_cookie_notice_size' );
@@ -167,6 +185,13 @@ if ( isset( $btn_txt_size_val ) ) {
     $btn_txt_size = ( empty( $btn_txt_size_val ) ? '16px' : esc_attr( $btn_txt_size_val ) . 'px' );
 } else {
     $btn_txt_size = '16px';
+}
+// Btn txt size - mobile
+$btn_txt_size_val_mobile = get_theme_mod( 'fupi_cookie_notice_button_font_size' );
+if ( isset( $btn_txt_size_val_mobile ) ) {
+    $btn_txt_size_mobile = ( empty( $btn_txt_size_val_mobile ) ? '14px' : esc_attr( $btn_txt_size_val_mobile ) . 'px' );
+} else {
+    $btn_txt_size_mobile = '14px';
 }
 // Btn text color
 $btn_txt_color_val = get_theme_mod( 'fupi_notice_btn_txt_color' );
@@ -188,10 +213,10 @@ $cta_txt_color_hover_val = get_theme_mod( 'fupi_notice_cta_txt_color_hover' );
 $cta_txt_color_hover = ( !empty( $cta_txt_color_hover_val ) ? esc_attr( $cta_txt_color_hover_val ) : '#fff' );
 // CTA bg color
 $cta_bg_color_val = get_theme_mod( 'fupi_notice_cta_color' );
-$cta_bg_color = ( !empty( $cta_bg_color_val ) ? esc_attr( $cta_bg_color_val ) : '#249dc1' );
+$cta_bg_color = ( !empty( $cta_bg_color_val ) ? esc_attr( $cta_bg_color_val ) : '#222' );
 // CTA bg color (hover)
 $cta_bg_color_hover_val = get_theme_mod( 'fupi_notice_cta_color_hover' );
-$cta_bg_color_hover = ( !empty( $cta_bg_color_hover_val ) ? esc_attr( $cta_bg_color_hover_val ) : '#3ca9d8' );
+$cta_bg_color_hover = ( !empty( $cta_bg_color_hover_val ) ? esc_attr( $cta_bg_color_hover_val ) : '#555' );
 // Slider color
 $slider_color_val = get_theme_mod( 'fupi_notice_switch_color' );
 $slider_color = ( !empty( $slider_color_val ) ? esc_attr( $slider_color_val ) : '#249dc1' );
@@ -209,11 +234,15 @@ echo "\n" . '<style id="fupi_cookie_css">
 		--fupi-notice-panel-border-width: ' . $panel_border_width . ';
 		--fupi-notice-panel-border-color: ' . $panel_border_color . '; 
 		--fupi-notice-txt-color: ' . $p_color . ';
+		--fupi-notice-btn-gaps: ' . $btn_gaps . ';
 		--fupi-notice-p-size: ' . $p_size . ';
+		--fupi-notice-p-size-mobile: ' . $p_size_mobile . ';
 		--fupi-notice-h-color: ' . $h_color . ';
 		--fupi-notice-h-size: ' . $h_size . ';
+		--fupi-notice-h-size-mobile: ' . $h_size_mobile . ';
 		--fupi-notice-btn-round-corners:  ' . $btn_round_corners . ';
 		--fupi-notice-btn-txt-size: ' . $btn_txt_size . ';
+		--fupi-notice-btn-txt-size-mobile: ' . $btn_txt_size_mobile . ';
 		--fupi-notice-btn-bg-color: ' . $btn_bg_color . ';
 		--fupi-notice-btn-bg-color-hover: ' . $btn_hover_color . ';
 		--fupi-notice-btn-text-color: ' . $btn_txt_color . ';
@@ -278,7 +307,7 @@ $tag = ( !empty( $tag_val ) ? esc_attr( $tag_val ) : 'p' );
 $notif_headline = ( !empty( $current_texts['notif_h'] ) ? '<' . $tag . ' id="fupi_main_headline" class="fupi_headline">' . $current_texts['notif_h'] . '</' . $tag . '>' : '' );
 // GENERATE HTML
 echo '<!-- WP Full Picture - Consent Banner & Analytics - START -->
-<aside id="fupi_cookie_notice" class="fupi_hidden ' . $overlay_class . ' fupi_notice_btn_' . $btn_size . '" style="display: none;" data-position="' . $notice_position . '" data-position_inform="' . $notice_position_inform . '" data-paddings="' . $notice_paddings . '" data-btn_config="' . $btn_config . '" data-headlinetag="' . $tag . '">
+<aside id="fupi_cookie_notice" class="fupi_hidden ' . $overlay_class . ' fupi_notice_btn_' . $btn_size . '" style="display: none;" data-position="' . $notice_position . '" data-position_inform="' . $notice_position_inform . '" data-paddings="' . $notice_paddings . '" data-btn_gaps="' . $btn_gaps . '" data-btn_config="' . $btn_config . '" data-headlinetag="' . $tag . '">
 	<div id="fupi_welcome_panel" class="fupi_panel fupi_hidden" role="dialog" aria-label="' . esc_attr__( 'Consent banner', 'full-picture-analytics-cookie-notice' ) . '" aria-modal="true" aria-describedby="fupi_main_descr">
 		<div class="fupi_inner">
 			<div class="fupi_content">' . $notif_headline . '

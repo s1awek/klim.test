@@ -6,19 +6,19 @@ $status = 'ok';
 // levels: ok > warning > alert
 $this->data['cook'] = [
     'module_name' => esc_attr__( 'Consent Banner', 'full-picture-analytics-cookie-notice' ),
-    'setup'       => [['ok', esc_attr__( 'Google Consent Mode v2 and Microsoft UET Consent Mode are activate and work according to the consent banner settings.', 'full-picture-analytics-cookie-notice' )]],
+    'setup'       => [['ok', esc_attr__( 'The consent banner controls loading of all tracking tools installed with WP Full Picture\'s modules (except Google Tag Manager, which requires extra setup). You do not need to set it up in any other way.', 'full-picture-analytics-cookie-notice' )], ['ok', esc_attr__( 'Google Consent Mode v2 and Microsoft UET Consent Mode are activate. This means that the consent banner controls how Google Analytics, Ads and Microsoft Advertising track visitors - even if these tools are installed with other plugins.', 'full-picture-analytics-cookie-notice' )]],
 ];
 if ( !empty( $this->cook ) ) {
     if ( !empty( $this->tools['geo'] ) ) {
         if ( !empty( $this->cook['mode'] ) ) {
             switch ( $this->cook['mode'] ) {
                 case 'optout':
+                    $this->data['cook']['setup'][0] = ['warning', esc_html__( 'Your banner works in opt-out mode, which is illegal in 60+ countries (including the EU). Make sure that your site is only visited from countries where it is legal. Otherwise switch to opt-in mode or one of automatic modes (change modes depending on the visitor\'s location).', 'full-picture-analytics-cookie-notice' )];
+                    break;
                 case 'notify':
-                    // $status = 'alert';
-                    $this->data['cook']['setup'][0] = ['alert', esc_html__( 'Change the consent banner mode to Opt-in or one of automatic modes.', 'full-picture-analytics-cookie-notice' )];
+                    $this->data['cook']['setup'][0] = ['warning', esc_html__( 'Your banner only informs visitors about tracking - without giving them a way to prevent it. This is illegal in 60+ countries (including the EU). Make sure that your site is only visited from countries where it is legal. Otherwise switch to opt-in mode or one of automatic modes (change modes depending on the visitor\'s location).', 'full-picture-analytics-cookie-notice' )];
                     break;
                 case 'manual':
-                    // if ( $status != 'alert' ) $status = 'warning';
                     $this->data['cook']['setup'][0] = ['warning', sprintf( esc_html__( 'Consent banner is set to work in manual mode. Make sure that it uses Opt-in mode in %1$sall countries that require it%2$s', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/countries-that-require-opt-in-or-opt-out-to-cookies/">', '</a>' )];
                     break;
                 default:
@@ -30,11 +30,19 @@ if ( !empty( $this->cook ) ) {
         }
         // when geo is disabled, the mode is set in the setting "enable_scripts_after"
     } else {
-        if ( isset( $this->cook['enable_scripts_after'] ) && ($this->cook['enable_scripts_after'] === 'optout' || $this->cook['enable_scripts_after'] === 'notify') ) {
-            // $status = 'alert';
-            $this->data['cook']['setup'][0] = ['alert', esc_html__( 'Change the consent banner mode to Opt-in or one of automatic modes.', 'full-picture-analytics-cookie-notice' )];
+        $optin_info_text = esc_html__( 'Usually, between 20% and 30% of website visitors decline tracking. Analytics tools which require tracking consents will not track those people. Other tools will work normally.', 'full-picture-analytics-cookie-notice' );
+        if ( isset( $this->cook['enable_scripts_after'] ) ) {
+            if ( $this->cook['enable_scripts_after'] === 'optout' ) {
+                $this->data['cook']['setup'][0] = ['warning', esc_html__( 'Your banner works in opt-out mode, which is illegal in 60+ countries (including the EU). Make sure that your site is only visited from countries where it is legal. Otherwise switch to opt-in mode or one of automatic modes (change modes depending on the visitor\'s location).', 'full-picture-analytics-cookie-notice' )];
+            } else {
+                if ( $this->cook['enable_scripts_after'] === 'notify' ) {
+                    $this->data['cook']['setup'][0] = ['warning', esc_html__( 'Your banner works in opt-out mode, which is illegal in 60+ countries (including the EU). Make sure that your site is only visited from countries where it is legal. Otherwise switch to opt-in mode or one of automatic modes (change modes depending on the visitor\'s location).', 'full-picture-analytics-cookie-notice' )];
+                } else {
+                    $this->data['cook']['setup'][] = ['ok', $optin_info_text];
+                }
+            }
         } else {
-            $this->data['cook']['setup'][] = ['ok', esc_html__( 'Usually, between 20% and 30% of website visitors decline tracking. Analytics tools which require tracking consents will not track those people. Other tools will work normally.', 'full-picture-analytics-cookie-notice' )];
+            $this->data['cook']['setup'][] = ['ok', $optin_info_text];
         }
     }
     // Do NOT ask again when modules or PP change

@@ -36,6 +36,20 @@ if (!class_exists('WT_ProdImpExp_Uninstall_Feedback')) :
                             <?php _e('We do not collect any personal data when you submit this form. It\'s your feedback that we value.', 'product-import-export-for-woo'); ?>
                             <a href="https://www.webtoffee.com/privacy-policy/" target="_blank"><?php _e('Privacy Policy', 'product-import-export-for-woo'); ?></a>
                         </div>
+
+                        <br>
+                        <label>
+                        <input type="checkbox" id="wt_wfproductimpexp_contact_me_checkbox" name="wt_wfproductimpexp_contact_me_checkbox" value="1">
+                        <?php esc_html_e("Webtoffee can contact me about this feedback.", "product-import-export-for-woo"); ?>
+                        </label>
+                        <div id="wt_wfproductimpexp_email_field_wrap" style="display:none; margin-top:10px;">
+                            <label for="wt_wfproductimpexp_contact_email" style="font-weight:bold;"><?php esc_html_e("Enter your email address.", "product-import-export-for-woo"); ?></label>
+                            <br>
+                            <input type="email" id="wt_wfproductimpexp_contact_email" name="wt_wfproductimpexp_contact_email" class="input-text" style="width:75%; height: 40px; padding:2px; margin-top:10px; border-radius:5px; border:2px solid #2874ba;" placeholder="<?php esc_attr_e("Enter email address", "product-import-export-for-woo"); ?>">
+                            <div id="wt_wfproductimpexp_email_error" style="color:red; display:none; font-size:12px; margin-top:5px;"></div>
+                        </div>
+                        <br><br>
+
                     </div>
                     <div class="pipe-modal-footer">
                         <a href="#" class="dont-bother-me"><?php _e('I rather wouldn\'t say', 'product-import-export-for-woo'); ?></a>
@@ -167,12 +181,40 @@ if (!class_exists('WT_ProdImpExp_Uninstall_Feedback')) :
                             }
                         });
 
+                        modal.on('change', '#wt_wfproductimpexp_contact_me_checkbox', function (e) {
+                            if ($(this).is(':checked')) {
+                                $('#wt_wfproductimpexp_email_field_wrap').slideDown();
+                            } else {
+                                $('#wt_wfproductimpexp_email_field_wrap').slideUp();
+                                $('#wt_wfproductimpexp_contact_email').val('');
+                                $('#wt_wfproductimpexp_email_error').hide();
+                            }
+                        });
+
                         modal.on('click', 'button.pipe-model-submit', function (e) {
                             e.preventDefault();
                             var button = $(this);
                             if (button.hasClass('disabled')) {
                                 return;
                             }
+
+                            // Email validation
+                            var emailCheckbox = $('#wt_wfproductimpexp_contact_me_checkbox');
+                            var emailField = $('#wt_wfproductimpexp_contact_email');
+                            var emailError = $('#wt_wfproductimpexp_email_error');
+                            emailError.hide();
+                            if (emailCheckbox.is(':checked')) {
+                                var emailVal = emailField.val();
+                                var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                if (!emailVal || !emailPattern.test(emailVal)) {
+                                    emailError.text('<?php echo esc_js(__('Please enter a valid email address.', 'product-import-export-for-woo')); ?>').show();
+                                    emailField.focus();
+                                    return;
+                                }
+                            }
+
+
+
                             var $radio = $('input[type="radio"]:checked', modal);
                             var $selected_reason = $radio.parents('li:first'),
                                     $input = $selected_reason.find('textarea, input[type="text"]');
@@ -183,7 +225,9 @@ if (!class_exists('WT_ProdImpExp_Uninstall_Feedback')) :
                                 data: {
                                     action: 'pipe_submit_uninstall_reason',
                                     reason_id: (0 === $radio.length) ? 'none' : $radio.val(),
-                                    reason_info: (0 !== $input.length) ? $input.val().trim() : ''
+                                    reason_info: (0 !== $input.length) ? $input.val().trim() : '',
+                                    user_email: $('#wt_wfproductimpexp_contact_me_checkbox').is(':checked') ? $('#wt_wfproductimpexp_contact_email').val() : ''
+
                                 },
                                 beforeSend: function () {
                                     button.addClass('disabled');
@@ -216,9 +260,9 @@ if (!class_exists('WT_ProdImpExp_Uninstall_Feedback')) :
                 'auth' => 'wfpipe_uninstall_1234#',
                 'date' => gmdate("M d, Y h:i:s A"),
                 'url' => '',
-                'user_email' => '',
-                'reason_info' => isset($_REQUEST['reason_info']) ? trim(stripslashes($_REQUEST['reason_info'])) : '',
-                'software' => $_SERVER['SERVER_SOFTWARE'],
+                'user_email' => isset($_POST['user_email']) ? sanitize_email( wp_unslash( $_POST['user_email'] ) ) : '',
+                'reason_info' => isset($_REQUEST['reason_info']) ? sanitize_textarea_field( wp_unslash( $_REQUEST['reason_info'] ) ) : '',
+                'software' => isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : '',
                 'php_version' => phpversion(),
                 'mysql_version' => $wpdb->db_version(),
                 'wp_version' => get_bloginfo('version'),

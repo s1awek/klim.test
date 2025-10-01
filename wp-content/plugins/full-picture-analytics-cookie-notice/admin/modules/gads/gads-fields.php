@@ -54,7 +54,7 @@ $sections = array(
 				'label' 			=> esc_html__('Only track visitors from specific countries', 'full-picture-analytics-cookie-notice'),
 				'field_id' 			=> 'limit_country',
 				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'must_have'			=> 'pro geo',
 				'is repeater'		=> false,
 				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
@@ -111,6 +111,7 @@ $sections = array(
 				'type'	 			=> 'text',
 				'label' 			=> esc_html__( 'Track clicks on all email links as conversions', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_email',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'placeholder'		=> esc_html__( 'Conversion label (required)', 'full-picture-analytics-cookie-notice' ),
 				'popup'				=> '<p>' . esc_html__('This will track clicks in all email links on your website. If you want to track only specific links, please use the option to "track clicks on page elements [...]" below.', 'full-picture-analytics-cookie-notice' ) . '</p>',
@@ -119,6 +120,7 @@ $sections = array(
 				'type'	 			=> 'text',
 				'label' 			=> esc_html__( 'Track clicks on all tel. links as conversions', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_tel',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'placeholder'		=> esc_html__( 'Conversion label (required)', 'full-picture-analytics-cookie-notice' ),
 				'popup'				=> '<p>' . esc_html__('This will track clicks in all telephone links on your website. If you want to track only specific links, please use the option to "track clicks on page elements [...]" below.', 'full-picture-analytics-cookie-notice' ) . '</p>',
@@ -129,7 +131,7 @@ $sections = array(
 				'field_id' 			=> 'track_affiliate',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'fields'			=> array(
 					array(
@@ -154,7 +156,7 @@ $sections = array(
 				'field_id' 			=> 'track_elems',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<h3>' . esc_html__( 'How to fill in these fields', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<ol>
@@ -188,7 +190,7 @@ $sections = array(
 				'field_id' 			=> 'track_forms',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'There are 4 methods of tracking form. Please choose the one that is best suited for your forms. Otherwise form tracking may not work correctly' , 'full-picture-analytics-cookie-notice' ) . '<p>
 					<p><a class="button-secondary" target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-choose-the-best-way-to-track-form-submissions/">' . esc_html__( 'Choose correct method to track your forms.' , 'full-picture-analytics-cookie-notice' ) . '</a></p>',
@@ -215,7 +217,7 @@ $sections = array(
 				'field_id' 			=> 'track_views',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'This function works only on elements which are present in the HTML at the moment of rendering the page. To track elements added later, enable the "DOM listener" function in the Shared tracking settings > Tracking improvements.', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . esc_html__( 'Elements are treated as "visible" when they are 200px inside the screen (you can change it on the "shared tracking settings" page). Each view is counted once per page view.', 'full-picture-analytics-cookie-notice') . '</p>',
@@ -249,7 +251,7 @@ $adv_triggers_section = array(
 				'type'	 			=> 'r3',
 				'label' 			=> esc_html__( 'Track conversions when specific conditions are met', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'custom_events',
-				'class'				=> 'fupi_events_builder fupi_fullwidth_tr',
+				'class'				=> 'fupi_adv fupi_events_builder fupi_fullwidth_tr',
 				'must_have'			=> 'pro atrig',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
@@ -304,7 +306,7 @@ $woo_section = array(
 				'must_have'			=> 'woo',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[woo_conv_id]',
-				'popup2'			=> '<p>' . esc_html__( 'Conversion event will be sent with cart value and IDs of the purchased items.', 'full-picture-analytics-cookie-notice') . '</p>
+				'popup'				=> '<p>' . esc_html__( 'Conversion event will be sent with cart value and IDs of the purchased items.', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . sprintf ( esc_html__( 'To get the conversion label, please follow this %1$sshort video tutorial%2$s.', 'full-picture-analytics-cookie-notice') , '<a href="https://wpfullpicture.com/support/documentation/how-to-get-google-ads-tag-id-conversion-id/">', '</a>' ) . '</p>',
 			),
 			array(
@@ -315,7 +317,7 @@ $woo_section = array(
 				'must_have'			=> 'woo',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[woo_checkout_conv_id]',
-				'popup2'			=> '<p>' . esc_html__( 'Conversion event will be sent with cart value and IDs of the purchased items.', 'full-picture-analytics-cookie-notice') . '</p>
+				'popup'				=> '<p>' . esc_html__( 'Conversion event will be sent with cart value and IDs of the purchased items.', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . esc_html__('Attention. By default, this event will be sent every time the user visits the checkout page - even if it happens multiple times in one session (except page refreshes). You can disable it by setting this conversion as a single-time conversion in the Google Ads panel (while registering a new conversion type).', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . sprintf ( esc_html__( 'To get the conversion label, please follow this %1$sshort video tutorial%2$s.', 'full-picture-analytics-cookie-notice') , '<a href="https://wpfullpicture.com/support/documentation/how-to-get-google-ads-tag-id-conversion-id/">', '</a>' ) . '</p>',
 			),
@@ -327,7 +329,7 @@ $woo_section = array(
 				'must_have'			=> 'woo',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[woo_add_to_cart_conv_id]',
-				'popup2'			=> '<p>' . esc_html__( 'Conversion event will be sent with the IDs of the items added to cart and their total value.', 'full-picture-analytics-cookie-notice') . '</p>
+				'popup'				=> '<p>' . esc_html__( 'Conversion event will be sent with the IDs of the items added to cart and their total value.', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . sprintf ( esc_html__( 'To get the conversion label, please follow this %1$sshort video tutorial%2$s.', 'full-picture-analytics-cookie-notice') , '<a href="https://wpfullpicture.com/support/documentation/how-to-get-google-ads-tag-id-conversion-id/">', '</a>' ) . '</p>',
 			),
 			array(

@@ -59,6 +59,7 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
                     Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - " . $msg);
                     $success++;
                 } else {
+
                     $this->import_results[$row] = array('row'=>$row, 'message'=>$result->get_error_message(), 'status'=>false, 'status_msg' => __( 'Failed/Skipped' ), 'post_id'=>'', 'post_link' => array( 'title' => __( 'Untitled' ), 'edit_url' => false ) );
                     Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - Prosessing failed. Reason: " . $result->get_error_message());
                     $failed++;
@@ -150,18 +151,32 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
             $related_data['parent'] = $pid;
         }
 		
-		if( '' !== $slug ){
-			$chk = $wpdb->get_row($wpdb->prepare("SELECT t.term_id, t.slug FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_id = t.term_id WHERE t.slug = %s and tt.taxonomy = %s ORDER BY t.term_id", rawurlencode($slug), $tax_type), ARRAY_A);
-		}
-		if( '' !== $term_id ){
-			$chk = $wpdb->get_row($wpdb->prepare("SELECT t.term_id, t.slug FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_id = t.term_id WHERE t.term_id = %d and tt.taxonomy = %s ORDER BY t.term_id", $term_id, $tax_type), ARRAY_A);
-		}
-		
         $tid = '';
-        $status = array();
-        if (isset($chk['term_id']))
-            $tid = $chk['term_id'];
 
+        // Check by term_id.
+        if ( '' !== $term_id ) {
+            $chk_term_id = $wpdb->get_results($wpdb->prepare("SELECT t.term_id, t.slug FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_id = t.term_id WHERE t.term_id = %d and tt.taxonomy = %s ORDER BY t.term_id", $term_id, $tax_type), ARRAY_A);
+            if ( ! empty($chk_term_id[0]['term_id']) ) {
+                $tid = $chk_term_id[0]['term_id'];
+
+            // Check by original term_id in termmeta.
+            } else {
+                $chk_meta = $wpdb->get_results($wpdb->prepare("SELECT term_id FROM $wpdb->termmeta WHERE meta_key = %s and meta_value = %d ORDER BY meta_key,meta_id", $term_meta_tbl_key, $term_id), ARRAY_A);
+                if ( ! empty($chk_meta[0]['term_id']) ) {
+                    $tid = $chk_meta[0]['term_id'];
+                }
+            }
+        }
+
+        // Check by slug if term_id check didn't find anything.
+        if ( '' !== $slug && '' === $tid ) {
+            $chk_slug = $wpdb->get_row($wpdb->prepare("SELECT t.term_id, t.slug FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_id = t.term_id WHERE t.slug = %s and tt.taxonomy = %s ORDER BY t.term_id", rawurlencode($slug), $tax_type), ARRAY_A);
+            if ( ! empty($chk_slug['term_id']) ) {
+                $tid = $chk_slug['term_id'];
+            }
+        }
+
+        $status = array();
         if ($taxonomy_type == 'product_tag' || $taxonomy_type == 'product_cat') {
 
             if ($tid == '') {

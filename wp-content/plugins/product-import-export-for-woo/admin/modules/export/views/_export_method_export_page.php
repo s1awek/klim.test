@@ -97,13 +97,17 @@ if (!defined('ABSPATH')) {
 		</tr>
 		<?php if(!empty($this->mapping_enabled_fields)):?>
         <tr class="wt-iew-export-method-options wt-iew-export-method-options-quick">
-            <th style="width:150px; text-align:left; vertical-align:top;"><label><?php _e('Include fields from the respective groups');?></label></th>
+            <th style="width:150px; text-align:left; vertical-align:top;"><label><?php esc_html_e('Include additional fields');?></label></th>
             <td colspan="2" style="width:75%;">
                 <?php
                 foreach($this->mapping_enabled_fields as $mapping_enabled_field_key=>$mapping_enabled_field)
                 {
                     $mapping_enabled_field=(!is_array($mapping_enabled_field) ? array($mapping_enabled_field, 0) : $mapping_enabled_field);
                     
+                    if ( 'hidden_meta' === $mapping_enabled_field_key ) {
+                         continue;
+                    }
+
                     if($this->rerun_id>0) /* check this is a rerun request */
                     {
                         if(in_array($mapping_enabled_field_key, $form_data_mapping_enabled))
@@ -122,7 +126,7 @@ if (!defined('ABSPATH')) {
                     <?php
                 }
                 ?>
-                <span class="wt-iew_form_help"><?php _e('Enabling any of these ensures that all the fields from the respective groups are included in your export.');?></span>
+                <span class="wt-iew_form_help"><?php esc_html_e('By default, only basic fields are exported to the CSV file. Enable Attributes to include all product attributes, or enable Taxonomies to export all the fields from the taxonomies group.');?></span>
             </td>
         </tr>
 		<?php endif; ?>

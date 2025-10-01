@@ -498,6 +498,24 @@ $wp_customize->add_control( 'fupi_cookie_notice[paddings]', array(
         'supercompact' => esc_html__( 'Super compact', 'full-picture-analytics-cookie-notice' ),
     ),
 ) );
+// Gaps between buttons
+$wp_customize->add_setting( 'fupi_cookie_notice_btns_gaps', array(
+    'sanitize_callback' => 'sanitize_key',
+    'transport'         => 'postMessage',
+    'default'           => 'default',
+) );
+$wp_customize->add_control( 'fupi_cookie_notice_btns_gaps', array(
+    'label'   => esc_html__( 'Spaces between buttons', 'full-picture-analytics-cookie-notice' ),
+    'section' => 'fupi_notice_design',
+    'type'    => 'select',
+    'choices' => array(
+        'default'      => esc_html__( 'Same as paddings', 'full-picture-analytics-cookie-notice' ),
+        'spacious'     => esc_html__( 'Spacious', 'full-picture-analytics-cookie-notice' ),
+        'medium'       => esc_html__( 'Medium', 'full-picture-analytics-cookie-notice' ),
+        'compact'      => esc_html__( 'Compact', 'full-picture-analytics-cookie-notice' ),
+        'supercompact' => esc_html__( 'Super compact', 'full-picture-analytics-cookie-notice' ),
+    ),
+) );
 // BTN ORDER
 $wp_customize->add_setting( 'fupi_cookie_notice[btn_config]', array(
     'type'              => 'option',
@@ -618,7 +636,7 @@ $wp_customize->add_control( new WP_Customize_Color_Control($wp_customize, 'fupi_
 $wp_customize->add_setting( 'fupi_notice_cta_color', array(
     'sanitize_callback' => 'sanitize_hex_color',
     'transport'         => 'postMessage',
-    'default'           => '#249dc1',
+    'default'           => '#222',
 ) );
 $wp_customize->add_control( new WP_Customize_Color_Control($wp_customize, 'fupi_notice_cta_color', array(
     'label'   => esc_html__( 'Call-to-action Button Color', 'full-picture-analytics-cookie-notice' ),
@@ -628,7 +646,7 @@ $wp_customize->add_control( new WP_Customize_Color_Control($wp_customize, 'fupi_
 $wp_customize->add_setting( 'fupi_notice_cta_color_hover', array(
     'sanitize_callback' => 'sanitize_hex_color',
     'transport'         => 'postMessage',
-    'default'           => '#3ca9d8',
+    'default'           => '#555',
 ) );
 $wp_customize->add_control( new WP_Customize_Color_Control($wp_customize, 'fupi_notice_cta_color_hover', array(
     'label'   => esc_html__( 'Call-to-action Button Color (Hover)', 'full-picture-analytics-cookie-notice' ),
@@ -786,6 +804,21 @@ $wp_customize->add_control( 'fupi_cookie_notice_h_font_size', array(
         'min' => 0,
     ),
 ) );
+// H FONT SIZE - MOBILE
+$wp_customize->add_setting( 'fupi_cookie_notice_h_font_size_mobile', array(
+    'sanitize_callback' => 'sanitize_key',
+    'transport'         => 'postMessage',
+    'default'           => 17,
+) );
+$wp_customize->add_control( 'fupi_cookie_notice_h_font_size_mobile', array(
+    'label'       => esc_html__( 'Heading font size on mobile devices (in px)', 'full-picture-analytics-cookie-notice' ),
+    'description' => esc_html__( 'Default: 17px', 'full-picture-analytics-cookie-notice' ),
+    'section'     => 'fupi_notice_typogr',
+    'type'        => 'number',
+    'input_attrs' => array(
+        'min' => 0,
+    ),
+) );
 // P FONT SIZE
 $wp_customize->add_setting( 'fupi_cookie_notice_p_font_size', array(
     'sanitize_callback' => 'sanitize_key',
@@ -801,6 +834,21 @@ $wp_customize->add_control( 'fupi_cookie_notice_p_font_size', array(
         'min' => 0,
     ),
 ) );
+// P FONT SIZE - MOBILE
+$wp_customize->add_setting( 'fupi_cookie_notice_p_font_size_mobile', array(
+    'sanitize_callback' => 'sanitize_key',
+    'transport'         => 'postMessage',
+    'default'           => 14,
+) );
+$wp_customize->add_control( 'fupi_cookie_notice_p_font_size_mobile', array(
+    'label'       => esc_html__( 'Paragraph font size on mobile devices (in px)', 'full-picture-analytics-cookie-notice' ),
+    'description' => esc_html__( 'Default: 14px', 'full-picture-analytics-cookie-notice' ),
+    'section'     => 'fupi_notice_typogr',
+    'type'        => 'number',
+    'input_attrs' => array(
+        'min' => 0,
+    ),
+) );
 // BUTTON FONT SIZE
 $wp_customize->add_setting( 'fupi_cookie_notice_button_font_size', array(
     'sanitize_callback' => 'sanitize_key',
@@ -810,6 +858,21 @@ $wp_customize->add_setting( 'fupi_cookie_notice_button_font_size', array(
 $wp_customize->add_control( 'fupi_cookie_notice_button_font_size', array(
     'label'       => esc_html__( 'Button font size (in px)', 'full-picture-analytics-cookie-notice' ),
     'description' => esc_html__( 'Default: 16px', 'full-picture-analytics-cookie-notice' ),
+    'section'     => 'fupi_notice_typogr',
+    'type'        => 'number',
+    'input_attrs' => array(
+        'min' => 0,
+    ),
+) );
+// BUTTON FONT SIZE - MOBILE
+$wp_customize->add_setting( 'fupi_cookie_notice_button_font_size_mobile', array(
+    'sanitize_callback' => 'sanitize_key',
+    'transport'         => 'postMessage',
+    'default'           => 14,
+) );
+$wp_customize->add_control( 'fupi_cookie_notice_button_font_size_mobile', array(
+    'label'       => esc_html__( 'Button font size on mobile devices (in px)', 'full-picture-analytics-cookie-notice' ),
+    'description' => esc_html__( 'Default: 14px', 'full-picture-analytics-cookie-notice' ),
     'section'     => 'fupi_notice_typogr',
     'type'        => 'number',
     'input_attrs' => array(

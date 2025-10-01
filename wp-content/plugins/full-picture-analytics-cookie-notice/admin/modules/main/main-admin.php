@@ -76,8 +76,17 @@ class Fupi_MAIN_admin {
 
             include_once FUPI_PATH . '/admin/common/generate-files.php';
             $generator = new Fupi_Generate_Files();
+			
+            if ( $generate_head_js ) {
 
-            if ( $generate_head_js ) $generator->make_head_js_file( 'main', $clean_data );
+				$generation_status = $generator->make_head_js_file( 'main', $clean_data );
+
+				if ( $generation_status == 'error' ) {
+					if ( ! empty( $this->ver['debug'] ) ) trigger_error('[FP] Error saving main WP FP scripts in a file. The option has been turned off. Please check your server file permissions and try again.');
+					unset( $clean_data['debug'] );
+				}
+			}
+
             if ( $generate_cscr ) $generator->make_cscr_js_files( false );
         }
 
@@ -128,6 +137,7 @@ class Fupi_MAIN_admin {
 		$banner_style_mods = array(
 			'fupi_notice_bg_color',
 			'fupi_notice_h_color',
+			'fupi_cookie_notice_btns_gaps',
 			'fupi_notice_text_color',
 			'fupi_notice_cta_color',
 			'fupi_notice_cta_txt_color',
@@ -144,8 +154,11 @@ class Fupi_MAIN_admin {
 			'fupi_notice_round_corners',
 			'fupi_cookie_notice_heading_tag',
 			'fupi_cookie_notice_h_font_size',
+			'fupi_cookie_notice_h_font_size_mobile',
 			'fupi_cookie_notice_p_font_size',
+			'fupi_cookie_notice_p_font_size_mobile',
 			'fupi_cookie_notice_button_font_size',
+			'fupi_cookie_notice_button_font_size_mobile',
 			'fupi_notice_necessary_switch_color',
 			'fupi_toggler_bg_color',
 			'fupi_custom_toggler_img',

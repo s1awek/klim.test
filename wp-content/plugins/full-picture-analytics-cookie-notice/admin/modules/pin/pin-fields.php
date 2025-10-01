@@ -44,7 +44,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track without waiting for consent', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'disreg_cookies',
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'must_have'			=> 'cook',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
@@ -55,7 +55,7 @@ $sections = array(
 				'label' 			=> esc_html__('Only track visitors from specific countries', 'full-picture-analytics-cookie-notice'),
 				'field_id' 			=> 'limit_country',
 				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'must_have'			=> 'pro geo',
 				'is_repeater'		=> false,
 				'popup'				=> sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '<br><br>' . esc_html__('If visitor\'s country is not recognized, Pinterest tag will load normally. Location is checked using the method chosen in the Geolocation settings.', 'full-picture-analytics-cookie-notice' ),
@@ -106,6 +106,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track search', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_search',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> esc_html__( 'Tracks phrases that visitors search on your site (works with standard WP search and WooCommerce product search).', 'full-picture-analytics-cookie-notice')
 			),

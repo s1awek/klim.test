@@ -15,7 +15,7 @@
         <ol>
             <li>' . esc_html__('If you have geolocation enabled, make sure that your script is set to load in the country you are in.', 'full-picture-analytics-cookie-notice' ) . '</li>
             <li>' . esc_html__('Turn off your ad blocker (if you have any)', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__('Enable the setup mode in the general settings', 'full-picture-analytics-cookie-notice' ) . '</li>
+            <li>' . esc_html__('Enable the setup helper in the top menu', 'full-picture-analytics-cookie-notice' ) . '</li>
             <li>' . esc_html__('Visit your website', 'full-picture-analytics-cookie-notice' ) . '</li>
             <li>' . esc_html__('Open browser console (click the right mouse button anywhere on the page > Choose "Inspect element" > Click "Console" tab in the popup).', 'full-picture-analytics-cookie-notice' ) . '</li>
             <li>' . esc_html__('The console log will be filled with information about loaded scripts.', 'full-picture-analytics-cookie-notice' ) . '</li>

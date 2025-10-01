@@ -163,6 +163,10 @@ class Wt_Import_Export_For_Woo_Basic_Product_Categories {
             $export_data['total'] = $data_row['total'];
         }
 
+        if ( isset( $data_row['no_post'] ) ) {
+            $export_data['no_post'] = $data_row['no_post'];
+        }
+
         return $export_data;
     }
 

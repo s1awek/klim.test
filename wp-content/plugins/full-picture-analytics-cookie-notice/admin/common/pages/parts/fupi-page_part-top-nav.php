@@ -3,26 +3,17 @@
 //
 // TOP NAV
 // ?>
+    <script>
+        let fupi_adv_mode_alert_text = '<?php echo esc_js( __( 'This will reload the page. All unsaved data will be lost. Are you sure?', 'full-picture-analytics-cookie-notice' ) ); ?>';
+    </script>
     <div id="fupi_top_nav" class="top_menu_section"><?php 
-
-        if ( fupi_fs()->is_not_paying() ) {
-            $support_href = 'https://wordpress.org/support/plugin/full-picture-analytics-cookie-notice/';
-        } else {
-            $support_href = 'https://wpfullpicture.com/contact/?utm_source=fp_admin&utm_medium=fp_link';
-        };
         
         // FIRST STEPS / GDPR HELPER / DOCS / SUPPORT
-
+//<a class="fupi_top_nav_link" href="https://wpfullpicture.com/support/documentation/first-steps-in-full-picture/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">' . esc_html__('First steps', 'full-picture-analytics-cookie-notice') . '</a>
         $top_nav = '
-            <a class="fupi_top_nav_link" href="https://wpfullpicture.com/support/documentation/first-steps-in-full-picture/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">' . esc_html__('First steps', 'full-picture-analytics-cookie-notice') . '</a>
+            <button type="button" class="fupi_top_nav_link fupi_open_popup" data-popup="fupi_first_steps_2_popup">' . esc_html__('Recommendations', 'full-picture-analytics-cookie-notice') . '</button>
 
-            <a class="fupi_top_nav_link" href="https://wpfullpicture.com/support/documentation/troubleshooting/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">' . esc_html__('Solutions to problems', 'full-picture-analytics-cookie-notice') . '</a>
-            
-            <a class="fupi_top_nav_link" href="https://wpfullpicture.com/support/documentation/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">' . esc_html__('Documentation', 'full-picture-analytics-cookie-notice') . '</a>
-                
-            <a class="fupi_top_nav_link" href="' . $support_href . '" target="_blank">' . esc_html__('Support', 'full-picture-analytics-cookie-notice') . '</a>
-            
-            <a class="fupi_top_nav_link" href="https://wpfullpicture.com/release/wp-full-picture-update-9-1-1/" target="_blank">' . esc_html__('What\'s new in v9.1', 'full-picture-analytics-cookie-notice') . '</a>';
+            <button type="button" class="fupi_top_nav_link fupi_open_popup" data-popup="fupi_help_links_popup">' . esc_html__('Help', 'full-picture-analytics-cookie-notice') . '</button>';
         
         // MODULES TOGGLE BTN
 
@@ -33,12 +24,45 @@
     <?php
 
     //
-    // SETUP MODE INFO
+    // SETUP HELPER
     //
 
-    $debug_info_text = empty ( $main_opts['debug'] ) ? sprintf( esc_html__( 'Setup mode is %1$sdisabled%2$s', 'full-picture-analytics-cookie-notice' ), '<strong>', '</strong>' ) : sprintf( esc_html__( 'Setup mode is %1$sactive%2$s', 'full-picture-analytics-cookie-notice' ), '<strong>', '</strong>' );
+    // check for meta value "fupi_easy_mode" in current user\'s meta
 
-    echo '<div id="fupi_top_setup_info">' . $debug_info_text . '<button type="button" class="fupi_open_popup fupi_open_popup_i " data-popup="fupi_debug_info_popup">i</button></div>';
+    if ( ! $user_adv_mode ) {
+        $adv_mode_checked = '';
+    } else {
+        $adv_mode_checked = 'checked="checked"';
+    }
+
+    if ( empty ( $this->ver['debug'] ) ) {
+        $setup_mode_checked = '';
+    } else {
+        $setup_mode_checked = 'checked="checked"';
+    }
+
+    echo '<div id="fupi_top_setup_info">
+        
+        <script> let fupi_setup_mode_nonce ="' . wp_create_nonce( 'fupi_update_modes_nonce' ) . '";</script>
+        
+        <div id="fupi_top_setup_info_adv">
+            ' . sprintf( esc_html__( 'Show advanced settings', 'full-picture-analytics-cookie-notice' ), '<strong>', '</strong>' ) . '
+            <label class="fupi_switch">
+                <input type="checkbox" id="adv_mode_checkbox" value="1" ' . $adv_mode_checked . '>
+                <span class="fupi_switch_slider"></span>
+            </label>
+            <button type="button" class="fupi_open_popup fupi_open_popup_i " data-popup="fupi_easy_mode_info_popup">i</button>
+        </div>
+
+        <div id="fupi_top_setup_info_setup">
+            ' . sprintf( esc_html__( 'Setup helper', 'full-picture-analytics-cookie-notice' ), '<strong>', '</strong>' ) . '
+            <label class="fupi_switch">
+                <input type="checkbox" id="setup_mode_checkbox" value="1" ' . $setup_mode_checked . '>
+                <span class="fupi_switch_slider"></span>
+            </label>
+            <button type="button" class="fupi_open_popup fupi_open_popup_i " data-popup="fupi_setup_mode_info_popup">i</button>
+        </div>
+    </div>';
 
     //
     // ACCOUNT / GET PRO NAV
@@ -61,6 +85,5 @@
 
     if ( ! empty( $pro_nav ) ) {
         echo '<div id="fupi_pro_nav" class="top_menu_section">' . $pro_nav . '</div>';
-    }
-    ?>
+    }; ?>
 </div>

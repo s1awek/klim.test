@@ -9,7 +9,7 @@ $this->data['iframeblock'] = [
         ]
     ],
     'pp comments' => [ 
-        esc_html__('Add information in your privacy policy that your website loads content from other sources and what happens with their data after they gree to tracking. You can link to their privacy policies.', 'full-picture-analytics-cookie-notice') 
+        esc_html__('Add information in your privacy policy that your website loads content from other sources and what happens with their data after they agree to tracking. You can link to their privacy policies.', 'full-picture-analytics-cookie-notice') 
     ]
 ];
 

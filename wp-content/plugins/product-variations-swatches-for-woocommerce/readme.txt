@@ -9,7 +9,7 @@ Stable tag: trunk
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Elegant Color, Image, and Button Swatches for WooCommerce product attributes – Elevate Product Variations and Delight Your Customers.
+Showcase variations and impress your customers with beautiful swatches such as color, button, image, and more.
 
 == Description ==
 
@@ -236,6 +236,9 @@ If you use WPML to translate attributes, you only need configure attribute image
 2. Swatches on single product page
 
 == Changelog ==
+/** 1.1.13 - 2025.09.12**/
+- Updated: VillaTheme support
+
 /** 1.1.12 - 2025.07.24**/
 - Updated: VillaTheme support
 

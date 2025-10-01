@@ -46,7 +46,7 @@ $sections = array(
 				'label' 			=> esc_html__( 'Track without waiting for consent', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'disreg_cookies',
 				'must_have'			=> 'cook',
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
 				<p>' . esc_html__( 'Visitors will still be able to turn off tracking by declining tracking / cookies.', 'full-picture-analytics-cookie-notice' ) . '</p>'
@@ -57,7 +57,7 @@ $sections = array(
 				'field_id' 			=> 'limit_country',
 				'must_have'			=> 'pro geo',
 				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'must_have'			=> 'pro geo',
 				'is_repeater'		=> false,
 				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
@@ -91,6 +91,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Data supression', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'data_suppression',
+				'class'				=> 'fupi_adv',
 				'el_class'			=> 'fupi_condition fupi_condition_reverse',
 				'el_data_target'	=> 'fupi_hotj_priv',
 				'option_arr_id'		=> $option_arr_id,
@@ -112,7 +113,7 @@ $sections = array(
 				'field_id' 			=> 'identif_users',
 				'must_have'			=> 'pro',
 				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_hotj_priv',
+				'class'				=> 'fupi_hotj_priv fupi_adv',
 				'popup2'			=> '<p>' . esc_html__( 'With user identification you will be able to target specific users with polls, widgets and easily search their session recordings in the Hotjar panel.', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . esc_html__( 'Identification is done with User ID (for logged-in users) or Hotjar ID (for other visitors)', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . esc_html__( 'To be able to identify users you need to:', 'full-picture-analytics-cookie-notice') . '</p>
@@ -124,18 +125,18 @@ $sections = array(
 						<li>' . esc_html__( 'Set up options in the "User attributes" section', 'full-picture-analytics-cookie-notice') . '</li>
 					</ol>',
 			),
-			array(
-				'type'	 			=> 'multi checkbox',
-				'label' 			=> esc_html__( 'Associate users with:', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'user_attr',
-				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_sub fupi_hotj_priv',
-				'must_have'			=> 'pro',
-				'options' 			=> array(
-					'role' => esc_html__( 'User role', 'full-picture-analytics-cookie-notice' ),
-					'email'	=> esc_html__( 'User email', 'full-picture-analytics-cookie-notice' ),
+				array(
+					'type'	 			=> 'multi checkbox',
+					'label' 			=> esc_html__( 'Associate users with:', 'full-picture-analytics-cookie-notice' ),
+					'field_id' 			=> 'user_attr',
+					'option_arr_id'		=> $option_arr_id,
+					'class'				=> 'fupi_sub fupi_hotj_priv fupi_adv',
+					'must_have'			=> 'pro',
+					'options' 			=> array(
+						'role' => esc_html__( 'User role', 'full-picture-analytics-cookie-notice' ),
+						'email'	=> esc_html__( 'User email', 'full-picture-analytics-cookie-notice' ),
+					),
 				),
-			),
 		),
 	),
 
@@ -149,6 +150,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track clicks on outbound links', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_outbound',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> esc_html__( 'Tracks clicks on all links that lead to other domains. Affiliate links leading to other sites are also treated as outbound. Attention! This WILL greatly increase the number of events associated with your site!', 'full-picture-analytics-cookie-notice'),
 			),
@@ -158,7 +160,7 @@ $sections = array(
 				'field_id' 			=> 'tag_affiliate',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup'				=> '<p>' . esc_html__( 'In the second field you can also use a placeholder [name]. It will be replaced with the first 20 characters of the text inside the clicked element. Make sure it has any.', 'full-picture-analytics-cookie-notice' ) . '</p>
 					<p>' . esc_html__( 'Attention! Depending on the number of affiliate links you are using, this may greatly increase the number of events associated with your site!', 'full-picture-analytics-cookie-notice') . '</p>',
@@ -182,6 +184,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track clicks on email and tel. links', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_email_tel',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> '<p>' . esc_html__( 'It will track the last 5 digits of the phone number and the part of the email address before the "@" symbol.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
@@ -189,6 +192,7 @@ $sections = array(
 				'type'	 			=> 'text',
 				'label' 			=> esc_html__( 'Track clicks on file download links', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_file_downl',
+				'class'				=> 'fupi_adv',
 				'placeholder'		=> esc_html__('e.g. pdf, doc, docx, xls, xlsx, txt', 'full-picture-analytics-cookie-notice'),
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[tag_file_downl]',
@@ -198,6 +202,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track anchor clicks (links leading to elements on the same page)', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_anchor_clicks',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> esc_html__( 'Enable this to track clicks in links that lead to different sections on the same page. Attention! If you use many anchors this may greatly increase the number of events associated with your site!', 'full-picture-analytics-cookie-notice'),
 			),
@@ -207,7 +212,7 @@ $sections = array(
 				'field_id' 			=> 'tag_elems',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<h3>' . esc_html__( 'How to fill in these fields', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<ol>
@@ -242,7 +247,7 @@ $sections = array(
 				'field_id' 			=> 'tag_forms',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'There are 4 methods of tracking form. Please choose the one that is best suited for your forms. Otherwise form tracking may not work correctly' , 'full-picture-analytics-cookie-notice' ) . '<p>
 					<p><a class="button-secondary" target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-choose-the-best-way-to-track-form-submissions/">' . esc_html__( 'Choose correct method to track your forms.' , 'full-picture-analytics-cookie-notice' ) . '</a></p>',
@@ -269,7 +274,7 @@ $sections = array(
 				'field_id' 			=> 'tag_views',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'This function works only on elements which are present in the HTML at the moment of rendering the page. To track elements added later, enable the "DOM listener" function in the Shared tracking settings > Tracking improvements.', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . esc_html__( 'Elements are treated as "visible" when they are 200px inside the screen (you can change it on the "shared tracking settings" page). Each view is counted once per page view.', 'full-picture-analytics-cookie-notice') . '</p>',
@@ -294,18 +299,21 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track user\'s login status and role', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_user_role',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track page type', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_pagetype',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track page author', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_pageauthor',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 			),
 			array(
@@ -313,6 +321,7 @@ $sections = array(
 				'label' 			=> esc_html__( 'Track UTM campaign parameters', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tag_utm',
 				'option_arr_id'		=> $option_arr_id,
+				'class'				=> 'fupi_adv',
 				'popup'				=> esc_html__( 'Attention! If you conduct many advertising campaigns this may greatly increase the number of events associated with your site!', 'full-picture-analytics-cookie-notice'),
 			),
 		),
@@ -322,7 +331,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_hotj_ecomm',
-		'section_title' => esc_html__( 'WooCommerce tracking', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'WooCommerce tagging', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',
@@ -332,7 +341,7 @@ $sections = array(
 				'el_class'			=> 'fupi_condition',
 				'el_data_target'	=> 'tag_woo_purchases_cond',
 				'option_arr_id'		=> $option_arr_id,
-				'under field'		=> esc_html__( 'When enabled, WP Full Picture will send to Hotjar "Woo purchase" event', 'full-picture-analytics-cookie-notice'),
+				'under field'		=> esc_html__( 'When enabled, WP Full Picture will tag a recording with a "Woo purchase" event', 'full-picture-analytics-cookie-notice'),
 			),
 				array(
 					'type'	 			=> 'multi checkbox',
@@ -357,7 +366,7 @@ $sections = array(
 				'el_class'			=> 'fupi_condition',
 				'el_data_target'	=> 'tag_woo_checkouts_cond',
 				'option_arr_id'		=> $option_arr_id,
-				'under field'		=> esc_html__( 'When enabled, WP Full Picture will send to Hotjar "Woo checkout" event', 'full-picture-analytics-cookie-notice'),
+				'under field'		=> esc_html__( 'When enabled, WP Full Picture tag a recording with a "Woo checkout" event', 'full-picture-analytics-cookie-notice'),
 			),
 				array(
 					'type'	 			=> 'multi checkbox',
@@ -380,7 +389,7 @@ $sections = array(
 				'el_class'			=> 'fupi_condition',
 				'el_data_target'	=> 'tag_woo_addtocart_cond',
 				'option_arr_id'		=> $option_arr_id,
-				'under field'		=> esc_html__( 'When enabled, WP Full Picture will send to Hotjar "Woo add to cart" event', 'full-picture-analytics-cookie-notice'),
+				'under field'		=> esc_html__( 'When enabled, WP Full Picture tag a recording with a "Woo add to cart" event', 'full-picture-analytics-cookie-notice'),
 			),
 				array(
 					'type'	 			=> 'multi checkbox',
@@ -403,7 +412,7 @@ $sections = array(
 				'el_class'			=> 'fupi_condition',
 				'el_data_target'	=> 'tag_woo_removefromcart_cond',
 				'option_arr_id'		=> $option_arr_id,
-				'under field'		=> esc_html__( 'When enabled, WP Full Picture will send to Hotjar "Woo remove from cart" taeventg', 'full-picture-analytics-cookie-notice'),
+				'under field'		=> esc_html__( 'When enabled, WP Full Picture tag a recording with a "Woo remove from cart" tag', 'full-picture-analytics-cookie-notice'),
 			),
 				array(
 					'type'	 			=> 'multi checkbox',
@@ -426,7 +435,7 @@ $sections = array(
 				'el_class'			=> 'fupi_condition',
 				'el_data_target'	=> 'tag_woo_addtowishlist_cond',
 				'option_arr_id'		=> $option_arr_id,
-				'under field'		=> esc_html__( 'When enabled, WP Full Picture will send to Hotjar "Woo add to wishlist" event', 'full-picture-analytics-cookie-notice'),
+				'under field'		=> esc_html__( 'When enabled, WP Full Picture will tag a recording with a "Woo add to wishlist" event', 'full-picture-analytics-cookie-notice'),
 			),
 				array(
 					'type'	 			=> 'multi checkbox',

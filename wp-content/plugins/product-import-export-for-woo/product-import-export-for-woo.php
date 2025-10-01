@@ -5,12 +5,12 @@
   Description: Import and Export Products From and To your WooCommerce Store.
   Author: WebToffee
   Author URI: https://www.webtoffee.com/product/product-import-export-woocommerce/
-  Version: 2.5.5
+  Version: 2.5.6
   License:           GPLv3
   License URI:       https://www.gnu.org/licenses/gpl-3.0.html
   Text Domain: product-import-export-for-woo
   Domain Path: /languages
-  WC tested up to: 10.0.2
+  WC tested up to: 10.1.2
   Requires at least: 3.0
   Requires PHP: 5.6
  */
@@ -41,12 +41,19 @@ if ( !defined( 'WT_IEW_DEBUG_BASIC' ) ) {
 if ( !defined( 'WT_IEW_DEBUG_BASIC_TROUBLESHOOT' ) ) {
 	define( 'WT_IEW_DEBUG_BASIC_TROUBLESHOOT', 'https://www.webtoffee.com/finding-php-error-logs/' );
 }
+
+if ( ! defined( 'WBTE_PIEW_CROSS_PROMO_BANNER_VERSION' ) ) {
+    // This constant must be unique for each plugin. Update this value when updating to a new banner.
+    define ( 'WBTE_PIEW_CROSS_PROMO_BANNER_VERSION', '1.0.0' );
+}
+
+
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WT_P_IEW_VERSION', '2.5.5' );
+define( 'WT_P_IEW_VERSION', '2.5.6' );
 
 /**
  * The code that runs during plugin activation.
@@ -380,12 +387,4 @@ function wt_product_imp_exp_basic_check_and_convert_to_json() {
 }
 add_action('admin_init', 'wt_product_imp_exp_basic_check_and_convert_to_json');
 
-/**
- * @since 2.5.1 Class includes helper functions for product cta banner
- */ 
-require_once plugin_dir_path( __FILE__ ) . 'admin/banner/class-wtier-cta-banner.php';
-/**
- * @since 2.5.1 Class includes helper functions for coupon cta banner
- */
-require_once plugin_dir_path( __FILE__ ) . 'admin/banner/class-wtier-coupon-cta-banner.php';
 

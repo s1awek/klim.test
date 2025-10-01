@@ -103,12 +103,12 @@ function pmxe_wp_ajax_wpae_filtering(){
 	?>
     <div class="wpallexport-free-edition-notice" id="migrate-orders-notice" style="padding: 20px; margin-bottom: 10px; display: none;">
         <p><?php esc_html_e('The WooCoommerce Export Package is Required to Migrate Orders.', 'wp_all_export_plugin');?></p><br/>
-        <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839955&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-orders"><?php esc_html_e('Purchase the WooCommerce Export Package', 'wp_all_export_plugin');?></a>
+        <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839955&discount=welcome-upgrade-169&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-orders"><?php esc_html_e('Purchase the WooCommerce Export Package', 'wp_all_export_plugin');?></a>
     </div>
 
     <div class="wpallexport-free-edition-notice" id="migrate-products-notice" style="padding: 20px; margin-bottom: 10px; display: none;">
         <p><?php esc_html_e('The WooCoommerce Export Package is Required to Migrate Products.', 'wp_all_export_plugin');?></p><br/>
-        <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839955&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-products"><?php esc_html_e('Purchase the WooCommerce Export Package', 'wp_all_export_plugin');?></a>
+        <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839955&discount=welcome-upgrade-169&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-products"><?php esc_html_e('Purchase the WooCommerce Export Package', 'wp_all_export_plugin');?></a>
     </div>
 
 
@@ -129,7 +129,7 @@ function pmxe_wp_ajax_wpae_filtering(){
         ?>
 
         <div class="wpallexport-free-edition-notice" id="migrate-users-notice" style="padding: 20px; margin-bottom: 10px; display: none;">
-            <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839967&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-users"><?php esc_html_e('Upgrade to the Pro edition of WP All Export to Migrate Users', 'wp_all_export_plugin');?></a>
+            <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839967&discount=welcome-upgrade-99&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-users"><?php esc_html_e('Upgrade to the Pro edition of WP All Export to Migrate Users', 'wp_all_export_plugin');?></a>
             <p><?php esc_html_e('If you already own it, remove the free edition and install the Pro edition.', 'wp_all_export_plugin');?></p>
         </div>
 

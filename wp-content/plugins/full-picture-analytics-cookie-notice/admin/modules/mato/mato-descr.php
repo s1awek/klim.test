@@ -67,8 +67,7 @@ switch( $section_id ){
 
 		if ( empty( $no_woo_descr_text ) ) {
 
-			$ret_text = '<p>' . esc_html__( 'To automatically track WooCommerce events, you need to enable Ecommerce in Matomo.', 'full-picture-analytics-cookie-notice') . '</p>
-				<p style="text-align: center;"><button type="button" class="button-secondary fupi_open_popup" data-popup="fupi_enable_ecomm_popup">' . esc_html__( 'Learn how to do it', 'full-picture-analytics-cookie-notice') . '</button></p>
+			$ret_text = '<p>' . esc_html__( 'To automatically track WooCommerce events, you need to enable e-commerce functions in Matomo.', 'full-picture-analytics-cookie-notice') . ' <button type="button" class="fupi_faux_link fupi_open_popup" data-popup="fupi_enable_ecomm_popup">' . esc_html__( 'Learn how to do it', 'full-picture-analytics-cookie-notice') . '</button></p>
 				<p>' . esc_html__( 'After you do this, WP FP will track and send to Matomo these events:', 'full-picture-analytics-cookie-notice') . '</p>
 				<ol class="fupi_checked_list">
 					<li>' . esc_html__( 'purchase (as an internal and separate event)', 'full-picture-analytics-cookie-notice') . '</li>
@@ -76,8 +75,8 @@ switch( $section_id ){
 					<li>' . esc_html__( 'add to cart (as an internal and separate event)', 'full-picture-analytics-cookie-notice') . '</li>
 					<li>' . esc_html__( 'remove from cart (as an internal and separate event)', 'full-picture-analytics-cookie-notice') . '</li>
 				</ol>
-				<p>' . esc_html__( 'Internal events are used by Matomo to create default Ecommerce reports and are sent with product information, e.g. what products were purchased or added to cart. These events cannot be used for creating goals or in custom reports.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . esc_html__( 'Separate events do not come with extra data but can be used as goals and in custom reports.', 'full-picture-analytics-cookie-notice' ) . '</p>
+				<p>' . sprintf( esc_html__( '%1$sInternal events%2$s are used by Matomo to create default e-commerce reports and are sent with product information, e.g. what products were purchased or added to cart. These events cannot be used for creating goals or in custom reports.', 'full-picture-analytics-cookie-notice' ), '<strong>', '</strong>' ) . '</p>
+				<p>' . sprintf( esc_html__( '%1$sSeparate events%2$s do not come with extra data but can be used as goals and in custom reports.', 'full-picture-analytics-cookie-notice' ), '<strong>', '</strong>' ) . '</p>
 				<p class="fupi_woo_reqs_info"><strong>' . esc_html__( 'Attention.', 'full-picture-analytics-cookie-notice' ) . '</strong> ' . sprintf( esc_html__( 'WP Full Picture can track stores that use %1$sstandard Woocommerce hooks and HTML%2$s. If your store uses plugins that don\'t use them, tracking may not work.', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/woocommerce-tracking-requirements/">', '</a>' ) . ' <a href="https://wpfullpicture.com/support/documentation/debug-mode-features/">' . esc_html__( 'Learn how to test it', 'full-picture-analytics-cookie-notice' ) . '</a>.</p>';
 
 		} else {

@@ -5,6 +5,7 @@ class Fupi_Generate_Files {
     private $tools;
     private $main;
     private $cook;
+	private $ver;
 
 	// $options can have the following keys:
 	// - folder
@@ -16,6 +17,7 @@ class Fupi_Generate_Files {
 		$this->tools = get_option( 'fupi_tools' );
     	$this->main = get_option( 'fupi_main' );
     	$this->cook = get_option( 'fupi_cook' );
+		$this->ver = get_option( 'fupi_versions' );
 	}
 
 	public function make_file( $options ){
@@ -38,8 +40,8 @@ class Fupi_Generate_Files {
 
 		$result = file_put_contents( $file_path, $options['file_content'] );
 
-		if ( $result === false && ! empty( $this->main['debug'] ) ) {
-			trigger_error('[FP] Error generating ' . $file_path . ' file');
+		if ( $result === false ) {
+			if ( ! empty( $this->ver['debug'] ) ) trigger_error('[FP] Error generating ' . $file_path . ' file');
 			return 'error';
 		};
 
@@ -56,7 +58,7 @@ class Fupi_Generate_Files {
 			file_put_contents( $index_file_path, $index_file_content );
 		};
 
-		if ( ! empty( $this->main['debug'] ) ) trigger_error('[FP] Generated ' . $options['file_name'] . '.' . $options['file_format'] . ' file');
+		if ( ! empty( $this->ver['debug'] ) ) trigger_error('[FP] Generated ' . $options['file_name'] . '.' . $options['file_format'] . ' file');
 
 		return $file_path;
 
@@ -88,10 +90,7 @@ class Fupi_Generate_Files {
 		// combine head and helpers JS
 		$result = file_put_contents( $head_js_file_path, $output );
 
-		if ( $result === false && ! empty( $this->main['debug'] ) ) {
-			trigger_error('[FP] Error generating head.js file');
-			// return 'error';
-		};
+		if ( $result === false ) return 'error';
 
 		// check if index.php file is in the same folder
 		$index_file_path = $js_folder_path . '/index.php';
@@ -105,7 +104,9 @@ class Fupi_Generate_Files {
 			file_put_contents( $index_file_path, $index_file_content );
 		};
 
-		if ( ! empty( $this->main['debug'] ) ) trigger_error('[FP] Generated head.js file');
+		if ( ! empty( $this->ver['debug'] ) ) trigger_error('[FP] Generated head.js file');
+
+		return true;
 	}
 
 	// GENERATE CSCR FILES

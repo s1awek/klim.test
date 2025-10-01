@@ -951,7 +951,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 					$css .= '.vi-wpvs-variation-wrap.vi-wpvs-variation-wrap-' . $id . ' .vi-wpvs-option-wrap.vi-wpvs-option-wrap-selected{';
 					$css .= 'transform: perspective(1px)  scale(' . $selected_scale . ') translateZ(0);';
 					$css .= 'backface-visibility: hidden;';
-					$css .= 'transform-style: preserve-3d;';
+					$css .= 'transform-style: flat;';
 					$css .= '-webkit-font-smoothing: antialiased !important;';
 					$css .= '-moz-osx-font-smoothing: grayscale !important;';
 					$css .= 'will-change: transform;';
@@ -1006,7 +1006,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 					$css .= '.vi-wpvs-variation-wrap.vi-wpvs-variation-wrap-' . $id . ' .vi-wpvs-option-wrap.vi-wpvs-option-wrap-hover{';
 					$css .= 'transform: perspective(1px)  scale(' . $hover_scale . ') translateZ(0);';
 					$css .= 'backface-visibility: hidden;';
-					$css .= 'transform-style: preserve-3d;';
+					$css .= 'transform-style: flat;';
 					$css .= '-webkit-font-smoothing: antialiased !important;';
 					$css .= '-moz-osx-font-smoothing: grayscale !important;';
 					$css .= 'will-change: transform;';

@@ -93,6 +93,8 @@ FP.fns.load_gtm = () => {
 	// send basic data
 	window[fp.gtm.datalayer].push(data_o);
 
+	
+
 	// mark as loaded
 	fp.loaded.push('gtm');
 	if ( fp.main.debug ) console.log('[FP] GTM loaded');

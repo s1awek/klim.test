@@ -50,6 +50,7 @@ array_push( $other_settings,
 		'type'	 			=> 'select',
 		'label' 			=> esc_html__( 'Bot detection list', 'full-picture-analytics-cookie-notice' ),
 		'field_id' 			=> 'bot_list',
+		'class'				=> 'fupi_adv',
 		'option_arr_id'		=> $option_arr_id,
 		'label_for' 		=> $option_arr_id . '[bot_list]',
 		'options'				=> array(
@@ -70,6 +71,7 @@ array_push( $other_settings,
 		'type'	 			=> 'select',
 		'label' 			=> esc_html__( 'Method of communication with the server', 'full-picture-analytics-cookie-notice' ),
 		'field_id' 			=> 'server_method',
+		'class'				=> 'fupi_adv',
 		'el_class'			=> 'fupi_condition',
 		'el_data_target'	=> 'fupi_restpi_opts',
 		'option_arr_id'		=> $option_arr_id,
@@ -86,21 +88,6 @@ array_push( $other_settings,
 // SECTIONS
 
 $sections = array(
-
-	// SETUP MODE
-	
-	array(
-		'section_id' => 'fupi_main_setupmode',
-		'section_title' => esc_html__( 'Setup mode', 'full-picture-analytics-cookie-notice' ),
-		'fields' => array(
-			array(
-				'type' 				=> 'toggle',
-				'label' 			=> esc_html__( 'Setup mode', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'debug',
-				'option_arr_id'		=> $option_arr_id,
-			),
-		)
-	),
 
 	// TRACKING EXCLUSIONS
 	
@@ -137,7 +124,7 @@ $sections = array(
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[disable_for_roles]',
 				'default'			=> 'administrator',
-				'under field'		=> esc_html__( 'Site administrators are never tracked. To make them "trackable", please enable "setup mode" in the previous tab of these settigngs.', 'full-picture-analytics-cookie-notice' ),
+				'under field'		=> esc_html__( 'Site administrators are never tracked. To make them temporarily trackable, please enable the Setup Helper in the top menu and enable testing in the front-end of your site.', 'full-picture-analytics-cookie-notice' ),
 			),
 		)
 	),
@@ -185,6 +172,7 @@ $sections = array(
 				'type' 				=> 'toggle',
 				'label' 			=> esc_html__( 'Defer non-critical scripts', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'async_scripts',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup2'		 	=> '<p class="fupi_warning_text">'. esc_html__('Do not defer WP FP\'s scripts using a different plugin or solution. Not all WP FP\'s scripts can be safely deferred.', 'full-picture-analytics-cookie-notice') . '</p>' 
 			),
@@ -192,6 +180,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__('Save main JS functions in a file', 'full-picture-analytics-cookie-notice'),
 				'field_id' 			=> 'save_settings_file',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> '<p>'. esc_html__('If you enable this option, WP FP will save some of its main JavaScript functions in a file, instead of printing them directly in the HTML.', 'full-picture-analytics-cookie-notice') . '</p>',
 			),
@@ -199,10 +188,19 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__('Save Custom Scripts in a file (beta)', 'full-picture-analytics-cookie-notice'),
 				'field_id' 			=> 'save_cscr_file',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p>'. esc_html__('If you enable this option, WP FP will save scripts from the Custom Scripts module in a file, instead of printing them directly in the HTML.', 'full-picture-analytics-cookie-notice') . '</p>
 				<p class="fupi_warning_text">'. sprintf( esc_html__('Attention. All scripts in a file will be wrapped in a function. This means that all variables that should be accessible via "window" object, will not be accessible this way unless you change them from e.g. "var variable_name" to "window.variable_name".', 'full-picture-analytics-cookie-notice'),'<a href="https://wordpress.org/support/plugin/full-picture-analytics-cookie-notice/" target="_blank">', '</a>' ). '</p>
 				<p>'. sprintf( esc_html__('This feature is in beta. Please report issues in %1$sthe support forum%2$s.', 'full-picture-analytics-cookie-notice'),'<a href="https://wordpress.org/support/plugin/full-picture-analytics-cookie-notice/" target="_blank">', '</a>' ). '</p>',
+			),
+			array(
+				'type' 				=> 'toggle',
+				'label' 			=> esc_html__( 'Enable WP Rocket compatibility settings', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'wprocket_compat',
+				'class'				=> 'fupi_adv',
+				'option_arr_id'		=> $option_arr_id,
+				'popup2'		 	=> '<p>'. sprintf( esc_html__('Some WP Rocket\'s caching settings break WP Full Picture and require manual exclusions (%1$slearn more%2$s). Enable this setting, so that we do it for you.', 'full-picture-analytics-cookie-notice'), '', '') . '</p>',
 			),
 		),
 	),

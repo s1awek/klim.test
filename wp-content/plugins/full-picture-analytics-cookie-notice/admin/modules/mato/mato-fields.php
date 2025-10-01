@@ -63,7 +63,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track without waiting for consent', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'disreg_cookies',
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'must_have'			=> 'cook',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p>' . esc_html__( 'This setting does not have any effect if "Privacy mode" is enabled.', 'full-picture-analytics-cookie-notice' ) . '</p>
@@ -75,7 +75,7 @@ $sections = array(
 				'label' 			=> esc_html__('Only track visitors from specific countries', 'full-picture-analytics-cookie-notice'),
 				'field_id' 			=> 'limit_country',
 				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_load_opts',
+				'class'				=> 'fupi_load_opts fupi_adv',
 				'must_have'			=> 'pro geo',
 				'is repeater'		=> false,
 				'fields'			=> array(
@@ -147,7 +147,7 @@ $sections = array(
 		'fields' => 		array(
 			array( // ok
 				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Accurately measure the time users spend on each page', 'full-picture-analytics-cookie-notice' ),
+				'label' 			=> esc_html__( 'Measure the time users spend on each page', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'enable_hearbeat',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> '<p>' . esc_html__( 'When this feature is enabled, Matomo will count the actual time spent in the visit, as long as the user is actively viewing the page (i.e. when the tab is active and in focus). The time of visitor\'s engagement is sent to Matomo after:', 'full-picture-analytics-cookie-notice') . '</p>
@@ -156,12 +156,13 @@ $sections = array(
 					<li>' . esc_html__( 'navigating to another page within the same tab.', 'full-picture-analytics-cookie-notice') . '</li>
 					<li>' . esc_html__( 'closing the tab.', 'full-picture-analytics-cookie-notice') . '</li>
 				</ol>
-				<p>' . esc_html__( 'Attention! This feature does not use WP FUll Picture\'s method of tracking visitor\'s engagement time because Matomo does not have a built in feature to calculate metrics.', 'full-picture-analytics-cookie-notice') . '</p>',
+				<p>' . esc_html__( 'This feature uses Matomo\'s system for calculating user activity time. It does not use WP Full Picture\'s own function.', 'full-picture-analytics-cookie-notice') . '</p>',
 			),
 			array( // ok
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track clicks on email and tel. links', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_email_tel',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> '<p>' . esc_html__( 'It will track the last 5 digits of the phone number and the part of the email address before the "@" symbol.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
@@ -171,7 +172,7 @@ $sections = array(
 				'field_id' 			=> 'track_affiliate',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'fields'			=> array(
 					array(
@@ -196,7 +197,7 @@ $sections = array(
 				'field_id' 			=> 'track_elems',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'popup2'			=> '<h3>' . esc_html__( 'How to fill in these fields', 'full-picture-analytics-cookie-notice' ) . '</h3>
 					<ol>
@@ -231,7 +232,7 @@ $sections = array(
 				'field_id' 			=> 'track_forms',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'fields'			=> array(
 					array(
@@ -258,7 +259,7 @@ $sections = array(
 				'field_id' 			=> 'track_views',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
-				'class'				=> 'fupi_simple_r3',
+				'class'				=> 'fupi_simple_r3 fupi_adv',
 				'btns_class'		=> 'fupi_push_right',
 				'fields'			=> array(
 					array(
@@ -286,6 +287,7 @@ $sections = array(
 				'placeholder'		=> esc_html__( 'e.g. 25, 50, 75', 'full-picture-analytics-cookie-notice' ),
 				'after field'		=> esc_html__( '% of page height', 'full-picture-analytics-cookie-notice'),
 				'field_id' 			=> 'track_scroll',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[track_scroll]',
 				'under field'		=> esc_html__( 'Separate multiple values with comas. Do not use "%" symbol.', 'full-picture-analytics-cookie-notice'),
@@ -294,6 +296,7 @@ $sections = array(
 				'type'	 			=> 'text',
 				'label' 			=> esc_html__( 'Change what file downloads Matomo should track', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_downl_file_formats',
+				'class'				=> 'fupi_adv',
 				'placeholder'		=> esc_html__('e.g. pdf, doc, docx, xls, xlsx, txt', 'full-picture-analytics-cookie-notice'),
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[track_downl_file_formats]',
@@ -314,7 +317,7 @@ $sections = array(
 				'label' 			=> esc_html__( 'Track when specific conditions are met', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'custom_events',
 				'must_have'			=> 'pro atrig',
-				'class'				=> 'fupi_events_builder fupi_fullwidth_tr',
+				'class'				=> 'fupi_events_builder fupi_fullwidth_tr fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'is_repeater'		=> true,
 				'fields'			=> array(
@@ -368,6 +371,7 @@ $sections = array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track unmodified page titles', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'clean_page_title',
+				'class'				=> 'fupi_adv',
 				'el_class'			=> 'fupi_condition',
 				'el_data_target'	=> 'fupi_page_title_cond',
 				'option_arr_id'		=> $option_arr_id,
@@ -379,12 +383,13 @@ $sections = array(
 				'field_id' 			=> 'seo_title_dimens',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[seo_title_dimens]',
-				'class'				=> 'fupi_sub fupi_page_title_cond fupi_disabled',
+				'class'				=> 'fupi_adv fupi_sub fupi_page_title_cond fupi_disabled',
 				'popup'				=> esc_html__( 'SEO titles will be tracked in a separate dimension, which makes their analysis simpler. Enter the index number of the custom dimension (with "Action" scope). 0 or empty to disable.', 'full-picture-analytics-cookie-notice'),
 			),
 			array( // ok
 				'type'	 			=> 'number',
 				'label' 			=> esc_html__( 'Track page IDs', 'full-picture-analytics-cookie-notice' ),
+				'class'				=> 'fupi_adv',
 				'field_id' 			=> 'page_id_dimens',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[page_id_dimens]',
@@ -393,6 +398,7 @@ $sections = array(
 			array( // ok
 				'type'	 			=> 'number',
 				'label' 			=> esc_html__( 'Track page types', 'full-picture-analytics-cookie-notice' ),
+				'class'				=> 'fupi_adv',
 				'field_id' 			=> 'page_type_dimens',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[page_type_dimens]',
@@ -401,6 +407,7 @@ $sections = array(
 			array( // ok
 				'type'	 			=> 'number',
 				'label' 			=> esc_html__( 'Track author\'s display names', 'full-picture-analytics-cookie-notice' ),
+				'class'				=> 'fupi_adv',
 				'field_id' 			=> 'author_dimens',
 				'must_have'			=> 'field|fupi_track|show_author_id|exists|Enable_tracking_authors_IDs_in_Shared_Tracking_Settings',
 				'option_arr_id'		=> $option_arr_id,
@@ -412,6 +419,7 @@ $sections = array(
 				'type'	 			=> 'number',
 				'label' 			=> esc_html__( 'Track authors IDs', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'author_id_dimens',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[author_id_dimens]',
 				'popup'				=> esc_html__( 'Enter the index number of the custom dimension (with "Action" scope). 0 or empty to disable.', 'full-picture-analytics-cookie-notice'),
@@ -420,6 +428,7 @@ $sections = array(
 				'type'	 			=> 'number',
 				'label' 			=> esc_html__( 'Track user\'s login status and role', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'user_role_dimens',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[user_role_dimens]',
 				'popup'				=> esc_html__( 'Enter the index number of the custom dimension (with "Visit" scope). 0 or empty to disable.', 'full-picture-analytics-cookie-notice'),
@@ -428,6 +437,7 @@ $sections = array(
 				'type'	 			=> 'number',
 				'label' 			=> esc_html__( 'Track page language', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'page_lang_dimens',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[page_lang_dimens]',
 				'popup'				=> esc_html__( 'Enter the index number of the custom dimension (with "Action" scope). 0 or empty to disable.', 'full-picture-analytics-cookie-notice'),
@@ -436,6 +446,7 @@ $sections = array(
 				'type'	 			=> 'number',
 				'label' 			=> esc_html__( 'Track post\'s terms (categories, tags, etc.) ', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'tax_terms_dimens',
+				'class'				=> 'fupi_adv',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[tax_terms_dimens]',
 				'el_class'			=> 'fupi_condition',
@@ -447,7 +458,7 @@ $sections = array(
 					'label' 			=> esc_html__( 'Add taxonomy slug to term name', 'full-picture-analytics-cookie-notice' ),
 					'field_id' 			=> 'add_tax_term_cat',
 					'option_arr_id'		=> $option_arr_id,
-					'class'				=> 'fupi_sub fupi_tax_terms_opts fupi_disabled',
+					'class'				=> 'fupi_adv fupi_sub fupi_tax_terms_opts fupi_disabled',
 					'popup'				=> esc_html__('Enable to see which taxonomy a given term belongs to. Term data in your GA reports will be then displayd like e.g. "term1 (category), term2 (tag)"' ,'full-picture-analytics-cookie-notice' ),
 				),
 				array( // ok
@@ -455,14 +466,14 @@ $sections = array(
 					'label' 			=> esc_html__( 'Track term names instead of term slugs', 'full-picture-analytics-cookie-notice' ),
 					'field_id' 			=> 'send_tax_terms_titles',
 					'option_arr_id'		=> $option_arr_id,
-					'class'				=> 'fupi_sub fupi_tax_terms_opts fupi_disabled',
+					'class'				=> 'fupi_adv fupi_sub fupi_tax_terms_opts fupi_disabled',
 					'under field'		=> esc_html__('Send term titles (e.g. product category) instead of their slugs (e.g. product_category). Enabling this feature is not recommended since term names are changed more often then slugs.', 'full-picture-analytics-cookie-notice'),
 				),
 			array(
 				'type'	 			=> 'r3',
 				'label' 			=> esc_html__( 'Track metadata', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_cf',
-				'class'				=> 'fupi_metadata_tracker fupi_simple_r3',
+				'class'				=> 'fupi_adv fupi_metadata_tracker fupi_simple_r3',
 				'el_class'			=> 'fupi_ga_cf_ids',
 				'must_have'			=> 'pro',
 				'option_arr_id'		=> $option_arr_id,

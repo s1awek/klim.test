@@ -457,7 +457,6 @@ FP.fns.gotm_standard_events = function(){
 			if ( fp.main.debug ) console.log( '[FP] GTM event windowVisibilityChange. Page out of focus. Total user activity time: ', fpdata.activity.total );
 		})
 	}
-	
 
 	// TRACK SPECIFIC ELEMENTS
 

@@ -133,77 +133,115 @@ class Wt_Import_Export_For_Woo_Basic_Common_Helper
      * @return mixed Unserialized data (only int, string, bool, array)
      */
     public static function wt_unserialize_safe($data) {
-
-        if( empty($data) ) {
+        if ( empty( $data ) ) {
             return false;
-        } 
-        $offset = 0;
+        }
     
-        // Recursive function to handle different types.
-        $unserialize_value = function(&$offset) use ($data, &$unserialize_value) {
+        $offset = 0;
+        $references = array();
+    
+        $unserialize_value = function (&$offset) use ($data, &$unserialize_value, &$references) {
+            if ( ! isset( $data[$offset] ) ) {
+                return false;
+            }
+    
             $type = $data[$offset];
             $offset++;
     
             switch ($type) {
-                case 's': // String.
-                    preg_match('/:(\d+):"/', $data, $matches, 0, $offset);
-                    $length = (int) $matches[1];
+                case 's': // String
+                    if (!preg_match('/:(\d+):"/', $data, $matches, 0, $offset)) return false;
+                    $length = (int)$matches[1];
                     $offset += strlen($matches[0]);
                     $value = substr($data, $offset, $length);
-                    $offset += $length + 2; // Skip closing quotes and semicolon.
+                    $offset += $length + 2;
+                    $references[] = $value;
                     return $value;
     
-                case 'i': // Integer.
-                    preg_match('/:(-?\d+);/', $data, $matches, 0, $offset);
+                case 'U': // Unicode string (like string)
+                    if (!preg_match('/:(\d+):"/', $data, $matches, 0, $offset)) return false;
+                    $length = (int)$matches[1];
                     $offset += strlen($matches[0]);
-                    return (int) $matches[1];
+                    $value = mb_substr($data, $offset, $length, 'UTF-8');
+                    $offset += $length + 2;
+                    $references[] = $value;
+                    return $value;
     
-                case 'd': // Float/Double.
-                    preg_match('/:(-?\d+(\.\d+)?);/', $data, $matches, 0, $offset);
+                case 'i': // Integer
+                    if (!preg_match('/:(-?\d+);/', $data, $matches, 0, $offset)) return false;
                     $offset += strlen($matches[0]);
-                    return (float) $matches[1];
+                    $value = (int)$matches[1];
+                    $references[] = $value;
+                    return $value;
     
-                case 'b': // Boolean.
-                    preg_match('/:(\d);/', $data, $matches, 0, $offset);
+                case 'd': // Double
+                    if (!preg_match('/:(-?\d+(\.\d+)?);/', $data, $matches, 0, $offset)) return false;
                     $offset += strlen($matches[0]);
-                    return (bool) $matches[1];
+                    $value = (float)$matches[1];
+                    $references[] = $value;
+                    return $value;
     
-                case 'N': // NULL.
-                    $offset += 1; // Move past ';'.
-                    return false;
-    
-                case 'a': // Array.
-                    preg_match('/:(\d+):{/', $data, $matches, 0, $offset);
-                    $num_elements = (int) $matches[1];
+                case 'b': // Boolean
+                    if (!preg_match('/:(\d);/', $data, $matches, 0, $offset)) return false;
                     $offset += strlen($matches[0]);
+                    $value = (bool)$matches[1];
+                    $references[] = $value;
+                    return $value;
     
+                case 'N': // NULL
+                    $offset += 1;
+                    $references[] = null;
+                    return null;
+    
+                case 'a': // Array
+                    if (!preg_match('/:(\d+):{/', $data, $matches, 0, $offset)) return false;
+                    $num_elements = (int)$matches[1];
+                    $offset += strlen($matches[0]);
                     $result = array();
+                    $references[] = &$result;
+    
                     for ($i = 0; $i < $num_elements; $i++) {
                         $key = $unserialize_value($offset);
                         $value = $unserialize_value($offset);
                         $result[$key] = $value;
                     }
     
-                    $offset++; // Move past closing '}'.
+                    $offset++; // Skip '}'
                     return $result;
     
-                case 'O': // Object (Convert to Array).
-                    preg_match('/:(\d+):"([^"]+)":(\d+):{/', $data, $matches, 0, $offset);
-                    $num_properties = (int) $matches[3];
+                case 'O': // Object (as array)
+                    if (!preg_match('/:(\d+):"([^"]+)":(\d+):{/', $data, $matches, 0, $offset)) return false;
+                    $num_properties = (int)$matches[3];
                     $offset += strlen($matches[0]);
-    
                     $result = array();
+                    $references[] = &$result;
+    
                     for ($i = 0; $i < $num_properties; $i++) {
                         $key = $unserialize_value($offset);
                         $value = $unserialize_value($offset);
                         $result[$key] = $value;
                     }
     
-                    $offset++; // Move past closing '}'.
-                    return $result; // Object converted into an array.
+                    $offset++; // Skip '}'
+                    return $result;
+    
+                case 'r': // Reference
+                    if (!preg_match('/:(\d+);/', $data, $matches, 0, $offset)) return false;
+                    $offset += strlen($matches[0]);
+                    $ref_id = (int)$matches[1] - 1;
+                    return $references[$ref_id] ?? null;
+    
+                case 'R': // Object reference (rare)
+                    if (!preg_match('/:(\d+);/', $data, $matches, 0, $offset)) return false;
+                    $offset += strlen($matches[0]);
+                    $ref_id = (int)$matches[1] - 1;
+                    return $references[$ref_id] ?? null;
+    
+                case 'C': // Custom-serialized object => UNSAFE
+                    // Skip entirely — executing unserialize() on custom class is unsafe
+                    return false;
     
                 default:
-                    // Skip unsupported type.
                     return false;
             }
         };
