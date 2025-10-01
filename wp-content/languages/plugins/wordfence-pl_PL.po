@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Wordfence Security &#8211; Firewall, Malware Scan, and Login Security - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-09-14 13:14:12+0000\n"
+"PO-Revision-Date: 2025-09-23 12:56:00+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -36,6 +36,47 @@ msgstr "Optymalizacja zapory sieciowej aplikacji internetowej Wordfence może ni
 #: views/waf/waf-install.php:68
 msgid "Firewall optimization is not currently supported on NGINX Unit"
 msgstr "Optymalizacja zapory nie jest obecnie obsługiwana przez serwery NGINX"
+
+#: lib/wordfenceClass.php:7543
+msgid "Wordfence Alert"
+msgstr "Alarm Wordfence"
+
+#. translators: %d maximum alerts per hour
+#: lib/wordfenceClass.php:9317
+msgid "The rate limit for alert emails of %d alert(s) per hour from Wordfence has been reached. No alerts will be sent for the remainer of the hour."
+msgstr "Osiągnięto limit wysyłania alertów e-mailem z Wordfence, wynoszący %d alertów na godzinę. Przez pozostałą część godziny nie będą wysyłane żadne alerty."
+
+#. translators: %d: maximum alerts per hour
+#: lib/wordfenceClass.php:7546
+msgid "Wordfence is configured to send no more than %d alert(s) each hour. That limit has been reached and no further emails will be sent this hour."
+msgstr "Wordfence jest skonfigurowany tak, aby wysyłać nie więcej niż %d alertów na godzinę. Limit ten został osiągnięty i w tej godzinie nie będą wysyłane żadne dalsze wiadomości e-mail."
+
+#: lib/wordfenceClass.php:7545
+msgid "Email Limit Reached"
+msgstr "Osiągnięto limit e-maili"
+
+#: lib/wfScanEngine.php:2029
+msgid "The Wordfence Assistant plugin is currently installed. It should only be retained during use and should be removed once it's no longer needed."
+msgstr "Wtyczka Wordfence Assistant jest zainstalowana. Powinna być zachowana tylko na czas użytkowania i należy ją usunąć, gdy nie będzie już potrzebna."
+
+#: lib/wfScanEngine.php:2028
+msgid "Wordfence Assistant is currently installed and is not needed unless instructed by Wordfence support"
+msgstr "Asystent Wordfence jest zainstalowany, a nie jest potrzebny, chyba że inaczej poinstruuje cię dział pomocy technicznej Wordfence"
+
+#. translators: WordPress username.
+#: lib/wfScanEngine.php:1654
+msgid "Skipping password scan for non-admin user %s with bcrypt password"
+msgstr "Pomijanie skanowania hasła dla użytkownika %s, który nie jest administratorem, z hasłem bcrypt"
+
+#: lib/wfDiagnostic.php:134
+msgid "Connecting back to this site via IPv6 (Not required; this may not be an issue on some sites. <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"wfhelp\"><span class=\"wfhelpextra\">Click here to learn whether this is an issue</span></a>)"
+msgstr "Nawiązywanie ponownego połączenia z tą witryną przez IPv6 (nie jest wymagane; w niektórych witrynach może to nie stanowić problemu. <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"wfhelp\"><span class=\"wfhelpextra\">Kliknij tutaj, aby dowiedzieć się, czy stanowi to problem</span></a>)"
+
+#. translators: %s: License type
+#: lib/menu_dashboard.php:120 lib/menu_dashboard.php:179
+#: lib/menu_dashboard_options.php:164 lib/menu_dashboard_options.php:221
+msgid "%s License Expiring"
+msgstr "Licencja %s wygasa"
 
 #: views/onboarding/registration-prompt.php:115
 msgid "This key may already be used on several sites. To avoid scan scheduling issues and other problems, you should get a new key or remove it from the other sites."

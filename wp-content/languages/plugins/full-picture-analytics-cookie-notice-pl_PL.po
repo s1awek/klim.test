@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - All-in-1 Analytics and Consent Banner &#8211; WP Full Picture - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-09-01 15:50:10+0000\n"
+"PO-Revision-Date: 2025-09-17 13:20:38+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -41,7 +41,7 @@ msgstr "Pokaż informacje o śledzeniu na stronach szczegółów zamówienia"
 
 #: admin/modules/woo/woo-admin.php:90
 msgid "Point of Sale system"
-msgstr "systemu punktów sprzedaży"
+msgstr "System sprzedaży detalicznej"
 
 #: admin/modules/woo/woo-admin.php:89
 msgid "subscription renewal"
@@ -49,7 +49,7 @@ msgstr "odnowienia płatności"
 
 #: admin/modules/woo/woo-admin.php:88
 msgid "CSV import"
-msgstr "importu CSV"
+msgstr "Importuj CSV"
 
 #: admin/modules/woo/woo-admin.php:87
 msgid "REST API integration"
@@ -57,7 +57,7 @@ msgstr "REST API"
 
 #: admin/modules/woo/woo-admin.php:86
 msgid "WP admin panel"
-msgstr "panelu administracyjnego WP"
+msgstr "Panel administracyjny WP"
 
 #: admin/modules/woo/woo-admin.php:85
 msgid "store-api (block checkout or integration with a different tool)"
@@ -619,6 +619,10 @@ msgstr "Spowoduje to wyświetlenie linku na dole banera zgody. Po kliknięciu ot
 msgid "Detailed setup guide"
 msgstr "Szczegółowa instrukcja konfiguracji"
 
+#: admin/modules/proofrec/proofrec-fields.php:39
+msgid "When you get a secret key, paste it in the field above and follow the rest of instructions in the ConsentsDB."
+msgstr "Po otrzymaniu klucza prywatnego wklej go w polu powyżej i postępuj zgodnie z pozostałymi instrukcjami w ConsentsDB."
+
 #: admin/modules/proofrec/proofrec-fields.php:38
 msgid "Add this website to your account."
 msgstr "Dodaj tę witrynę do swojego konta."
@@ -638,6 +642,10 @@ msgstr "%1$sJakie są różnice?%2$s."
 #: admin/modules/proofrec/proofrec-fields.php:7
 msgid "On my email account (Pro only)"
 msgstr "Na moim koncie e-mail (tylko Pro)"
+
+#: admin/modules/proofrec/proofrec-fields.php:5
+msgid "In the cloud (with initial free storage for 1000 proofs)"
+msgstr "W chmurze (z początkową bezpłatną przestrzenią dyskową na 1000 kopii)"
 
 #: admin/modules/proofrec/proofrec-descr.php:12
 msgid "Keeping records of consents is required by GDPR, protects against potential fines, enables audit trails, and helps demonstrate responsible data handling practices."
