@@ -3,7 +3,7 @@
  * Contact element.
  *
  * @package          Flatsome\Templates
- * @flatsome-version 3.20.0
+ * @flatsome-version 3.20.2
  */
 
 ?>
@@ -78,7 +78,7 @@
 			<?php } ?>
 
 			<?php if ( get_theme_mod( 'contact_whatsapp', '' ) ) { ?>
-				<li class="<?php echo esc_attr( $class ); ?>">
+				<li>
 					<a href="<?php echo esc_url( 'https://wa.me/' . get_theme_mod( 'contact_whatsapp', '' ) ); ?>" class="<?php echo esc_attr( $class_link ); ?>" title="<?php echo esc_attr( get_theme_mod( 'contact_whatsapp', '' ) ); ?>" target="_blank" rel="noopener">
 						<?php echo get_flatsome_icon( 'icon-whatsapp', $icon_size ); ?>
 						<span>

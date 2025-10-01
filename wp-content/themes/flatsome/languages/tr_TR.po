@@ -1216,7 +1216,7 @@ msgstr "Flatsome kayıtlı"
 
 #: inc/functions/function-site-health.php:34
 msgid "Register Flatsome to receive updates."
-msgstr "Güncellemeleri almak için Flatsome&apos; u kaydedin."
+msgstr "Güncellemeleri almak için Flatsome&#39; u kaydedin."
 
 #: inc/functions/function-site-health.php:40
 msgid "Flatsome is not registered"
@@ -1250,26 +1250,26 @@ msgstr[1] "%s Yorum"
 #: inc/shortcodes/follow.php:127
 #: inc/shortcodes/follow.php:128
 msgid "Follow on Facebook"
-msgstr "Facebook&apos; ta takip et"
+msgstr "Facebook&#39; ta takip et"
 
 #: inc/shortcodes/follow.php:141
 #: inc/shortcodes/follow.php:142
 msgid "Follow on Instagram"
-msgstr "Instagram&apos; da takip et"
+msgstr "Instagram&#39; da takip et"
 
 #: inc/shortcodes/follow.php:155
 #: inc/shortcodes/follow.php:156
 msgid "Follow on TikTok"
-msgstr "TikTok&apos; ta takip et"
+msgstr "TikTok&#39; ta takip et"
 
 #: inc/shortcodes/follow.php:172
 #: inc/shortcodes/follow.php:173
 msgid "Follow on SnapChat"
-msgstr "Snapchat&apos; te takip et"
+msgstr "Snapchat&#39; te takip et"
 
 #: inc/shortcodes/follow.php:179
 msgid "Point the SnapChat camera at this to add us to SnapChat."
-msgstr "Bizi SnapChat&apos; e eklemek için bunu kameranıza okutun."
+msgstr "Bizi SnapChat&#39; e eklemek için bunu kameranıza okutun."
 
 #: inc/shortcodes/follow.php:191
 #: inc/shortcodes/follow.php:192
@@ -1279,7 +1279,7 @@ msgstr "X&#39; te takip et"
 #: inc/shortcodes/follow.php:205
 #: inc/shortcodes/follow.php:206
 msgid "Follow on Twitter"
-msgstr "Twitter&apos; da takip et"
+msgstr "Twitter&#39; da takip et"
 
 #: inc/shortcodes/follow.php:219
 #: inc/shortcodes/follow.php:220
@@ -1299,22 +1299,22 @@ msgstr "Bizi arayın"
 #: inc/shortcodes/follow.php:261
 #: inc/shortcodes/follow.php:262
 msgid "Follow on Pinterest"
-msgstr "Pinterest&apos; te takip et"
+msgstr "Pinterest&#39; te takip et"
 
 #: inc/shortcodes/follow.php:275
 #: inc/shortcodes/follow.php:276
 msgid "Subscribe to RSS"
-msgstr "RSS&apos; e abone ol"
+msgstr "RSS&#39; e abone ol"
 
 #: inc/shortcodes/follow.php:289
 #: inc/shortcodes/follow.php:290
 msgid "Follow on LinkedIn"
-msgstr "Linkedin&apos; de takip et"
+msgstr "Linkedin&#39; de takip et"
 
 #: inc/shortcodes/follow.php:303
 #: inc/shortcodes/follow.php:304
 msgid "Follow on YouTube"
-msgstr "YouTube&apos; da takip et"
+msgstr "YouTube&#39; da takip et"
 
 #: inc/shortcodes/follow.php:317
 #: inc/shortcodes/follow.php:318
@@ -1324,27 +1324,27 @@ msgstr "Flickr"
 #: inc/shortcodes/follow.php:331
 #: inc/shortcodes/follow.php:332
 msgid "Follow on 500px"
-msgstr "500px&apos; te takip et"
+msgstr "500px&#39; te takip et"
 
 #: inc/shortcodes/follow.php:345
 #: inc/shortcodes/follow.php:346
 msgid "Follow on VKontakte"
-msgstr "VKontakte&apos; de takip et"
+msgstr "VKontakte&#39; de takip et"
 
 #: inc/shortcodes/follow.php:359
 #: inc/shortcodes/follow.php:360
 msgid "Follow on Telegram"
-msgstr "Telegram&apos; da takip et"
+msgstr "Telegram&#39; da takip et"
 
 #: inc/shortcodes/follow.php:373
 #: inc/shortcodes/follow.php:374
 msgid "Follow on Twitch"
-msgstr "Twitch&apos; te takip et"
+msgstr "Twitch&#39; te takip et"
 
 #: inc/shortcodes/follow.php:387
 #: inc/shortcodes/follow.php:388
 msgid "Follow on Discord"
-msgstr "Discord&apos; da takip et"
+msgstr "Discord&#39; da takip et"
 
 #: inc/shortcodes/portfolio.php:146
 #: woocommerce/product-searchform.php:39
@@ -1358,12 +1358,12 @@ msgstr "Daha fazlası için aşağı kaydırın"
 #: inc/shortcodes/share.php:96
 #: inc/shortcodes/share.php:97
 msgid "Share on WhatsApp"
-msgstr "WhatsApp&apos; ta paylaş"
+msgstr "WhatsApp&#39; ta paylaş"
 
 #: inc/shortcodes/share.php:111
 #: inc/shortcodes/share.php:112
 msgid "Share on Facebook"
-msgstr "Facebook&apos; ta paylaş"
+msgstr "Facebook&#39; ta paylaş"
 
 #: inc/shortcodes/share.php:125
 #: inc/shortcodes/share.php:126
@@ -1373,7 +1373,7 @@ msgstr "X&#39; te paylaş"
 #: inc/shortcodes/share.php:139
 #: inc/shortcodes/share.php:140
 msgid "Share on Twitter"
-msgstr "Twitter&apos; da paylaş"
+msgstr "Twitter&#39; da paylaş"
 
 #: inc/shortcodes/share.php:155
 #: inc/shortcodes/share.php:156
@@ -1393,27 +1393,27 @@ msgstr "Arkadaşına e-posta ile gönder"
 #: inc/shortcodes/share.php:189
 #: inc/shortcodes/share.php:190
 msgid "Pin on Pinterest"
-msgstr "Pinterest&apos; te pinle"
+msgstr "Pinterest&#39; te pinle"
 
 #: inc/shortcodes/share.php:203
 #: inc/shortcodes/share.php:204
 msgid "Share on VKontakte"
-msgstr "VKontakte&apos; de paylaş"
+msgstr "VKontakte&#39; de paylaş"
 
 #: inc/shortcodes/share.php:217
 #: inc/shortcodes/share.php:218
 msgid "Share on LinkedIn"
-msgstr "Linkedin&apos; de paylaş"
+msgstr "Linkedin&#39; de paylaş"
 
 #: inc/shortcodes/share.php:231
 #: inc/shortcodes/share.php:232
 msgid "Share on Tumblr"
-msgstr "Tumblr&apos; da paylaş"
+msgstr "Tumblr&#39; da paylaş"
 
 #: inc/shortcodes/share.php:245
 #: inc/shortcodes/share.php:246
 msgid "Share on Telegram"
-msgstr "Telegram&apos; da paylaş"
+msgstr "Telegram&#39; da paylaş"
 
 #: inc/shortcodes/ux_instagram_feed.php:52
 msgid "Please select an Instagram account"

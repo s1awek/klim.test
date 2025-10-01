@@ -1,3 +1,11 @@
+--- 3.20.2 ---
+NEW: WooCommerce 10.2 compatibility.
+
+FIXED: PHP Warning undefined variable $class in contact element.
+FIXED: Turkish translation improved entities for escaping.
+FIXED: WooCommerce layered dropdown filtering in off-canvas sidebar.
+FIXED: Accordion toggle icon size in a widget.
+
 --- 3.20.1 ---
 FIXED: Prevent PHP error when WooCommerce brands is disabled by code.
 
