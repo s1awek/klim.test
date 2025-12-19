@@ -401,46 +401,6 @@
 	mode_select.addEventListener('change', toggle_manual_fields )
 
 })();
-
-(()=>{
-
-	// Google Ads - Show conversion ID field if GTAG is combined
-	
-	let gtag_field = FP.findID('fupi_gads[id]'),
-		conv_id_field = FP.findID('fupi_gads[id2]');
-
-	if ( ! gtag_field || ! conv_id_field ) return;
-
-	// after pageload
-	toggle_convid_field( gtag_field );
-
-	// after click
-	gtag_field.onclick = (e) => { toggle_convid_field(); };
-
-	// on key up
-	gtag_field.onkeyup = (e) => { toggle_convid_field(); }
-
-	// on change
-	gtag_field.onchange = (e) => { toggle_convid_field(); }
-
-	function toggle_convid_field() {
-
-		let row = conv_id_field.closest('tr');
-
-		if ( gtag_field.value.length > 2 && gtag_field.value.indexOf('GT-') == 0 ) {
-			
-			row.classList.remove( 'fupi_hidden', 'fupi_disabled' );
-			conv_id_field.disabled = false;
-			
-		} else {
-
-			row.classList.add( 'fupi_hidden', 'fupi_disabled' );
-			conv_id_field.disabled = true;
-
-		}
-	}
-
-})();
 (() => {
 
 	// Change the styling of the modules' table to grid
@@ -1001,7 +961,7 @@
 
 	function modify_specific_fields(){
 
-		// FOR SELECTING ADVANCED TRIGGERS ON A MODULE'S PAGE
+		// FOR SELECTING CUSTOM TRIGGERS ON A MODULE'S PAGE
 		let trigger_selects = FP.findAll('.fupi_events_builder select[name*="atrig_id"]');
 		
 		hide_already_selected_atrig_selects( trigger_selects );
@@ -1249,26 +1209,8 @@
 
 (()=>{
 
-    // clear sections that contain not existing (expired) trigger
-
-    let builder_sections = FP.findAll('.fupi_events_builder .fupi_r3_section');
-
-    builder_sections.forEach( section => {
-        
-        let atrig_select = FP.findFirst( '.fupi_field_type_atrig_select select', section );
-
-        if ( ! atrig_select.value ){
-            let minus_button = FP.findFirst( '.fupi_btn_remove', section );
-            if ( minus_button ) minus_button.click();
-        }
-    } );
-
-})();
-
-(()=>{
-
     // Used in Custom Scripts module
-    // Mark sections which contain scripts that can no longer trigger because they were triggered by advanced triggers that have been removed
+    // Mark sections which contain scripts that can no longer trigger because they were triggered by custom triggers that have been removed
 
     let atrig_selectors = FP.findAll('.fupi_r3_scr .fupi_field_atrig_id_wrap select');
 
@@ -1301,7 +1243,25 @@
 
 (()=>{
 
-    // clear sections that contain not existing (expired) custom meta
+    // CUSTOM EVENTS BUILDER - clear sections that contain not existing (expired) trigger
+
+    let builder_sections = FP.findAll('.fupi_events_builder .fupi_r3_section');
+
+    builder_sections.forEach( section => {
+        
+        let atrig_select = FP.findFirst( '.fupi_field_type_atrig_select select', section );
+
+        if ( atrig_select && ! atrig_select.value ){
+            let minus_button = FP.findFirst( '.fupi_btn_remove', section );
+            if ( minus_button ) minus_button.click();
+        }
+    } );
+
+})();
+
+(()=>{
+
+    // CUSTOM META BUILDER - clear sections that contain not existing (expired) custom meta
 
     let builder_sections = FP.findAll('.fupi_metadata_tracker .fupi_r3_section');
 
@@ -1561,8 +1521,18 @@
 		});
 	}
 
+	function toggleNotifAndSave(e){
+		
+		handleChange(e);
+		
+		let notif_bar = FP.findID('setup_helper_notif_bar'),
+			show_notice = notif_bar && e.target.checked;
+
+		notif_bar.style.display = show_notice ? '' : 'none';
+	}
+
 	if (advModeCheckbox) advModeCheckbox.addEventListener('change', alertBeforeChange  );
-	if (setupModeCheckbox) setupModeCheckbox.addEventListener('change', handleChange);
+	if (setupModeCheckbox) setupModeCheckbox.addEventListener('change', toggleNotifAndSave);
 
 })();
 
@@ -2198,7 +2168,7 @@ jQuery( document ).ready( function($) {
 })(jQuery);
 
 jQuery(document).ready(function() {
-    jQuery('#fupi_nav_col, #fupi_side_menu').theiaStickySidebar({
+    jQuery('#fupi_nav_col').theiaStickySidebar({
         additionalMarginTop: 50,
         additionalMarginBottom : 50,
         minWidth: 1100

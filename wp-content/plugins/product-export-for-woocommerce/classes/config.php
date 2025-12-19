@@ -1,7 +1,13 @@
 <?php
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Class to load config files
- * 
+ *
  * @author Max Tsiplyakov <makstsiplyakov@gmail.com>
  */
 class PMWPE_Config implements IteratorAggregate {

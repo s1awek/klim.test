@@ -411,7 +411,15 @@ foreach( $this->footer_rows as $row ) {
         )
     ) );
 
-    // Border Bottom Color.
+    // Border Top Color.
+    $wp_customize->add_setting(
+        'global_sydney_footer_row__' . $row['id'] . '_border_top_color',
+        array(
+            'default'           => '',
+            'sanitize_callback' => 'wp_kses_post',
+            'transport'         => 'postMessage'
+        )
+    );
     $wp_customize->add_setting(
         'sydney_footer_row__' . $row['id'] . '_border_top_color',
         array(
@@ -427,6 +435,10 @@ foreach( $this->footer_rows as $row ) {
             array(
                 'label'         	=> esc_html__( 'Border Top Color', 'sydney' ),
                 'section'       	=> $row['section'],
+                'settings'       => array(
+                    'global'  => 'global_sydney_footer_row__' . $row['id'] . '_border_top_color',
+                    'setting' => 'sydney_footer_row__' . $row['id'] . '_border_top_color',
+                ),
                 'priority'			=> 36
             )
         )

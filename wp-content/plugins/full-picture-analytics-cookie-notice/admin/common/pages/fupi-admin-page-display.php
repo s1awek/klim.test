@@ -124,13 +124,6 @@
         ?>        
 
         <div id="fupi_main_col">
-
-            <?php
-            /*<div id="fupi_help">
-                <button type="button" id="fupi_help_btn" class="fupi_open_popup" data-popup="fupi_main_checklist_popup"><?php esc_html_e('Guides & Help' ,'full-picture-analytics-cookie-notice' ); ?> <span>i</span></button>
-            </div>*/ 
-            ?>
-    
             <?php 
             
             // Show GDPR setup helper or standard content
@@ -157,8 +150,6 @@
                     <?php 
 
                     // DEBUG DATA
-                    
-                    // $fupi_main = get_option('fupi_main');
                     
                     if ( defined( 'FUPI_TESTER' ) && FUPI_TESTER == true ) {
                         

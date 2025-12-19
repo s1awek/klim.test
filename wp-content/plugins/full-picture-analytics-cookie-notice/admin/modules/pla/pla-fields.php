@@ -104,7 +104,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_pla_events_2',
-		'section_title' => esc_html__( 'Tracking simple events', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Simple events', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'text',
@@ -320,7 +320,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_pla_cond',
-		'section_title' => esc_html__( 'Tracking complex events', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Custom events', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'r3',
@@ -378,7 +378,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_pla_wpdata',
-		'section_title' => esc_html__( 'Tracking pageview properties', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Properties of the pageview event', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',

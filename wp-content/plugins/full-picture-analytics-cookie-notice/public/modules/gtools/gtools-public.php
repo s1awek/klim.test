@@ -82,68 +82,26 @@ class Fupi_GTOOLS_public {
             $head_args['strategy'] = 'defer';
             $footer_args['strategy'] = 'defer';
         }
-        // GA4
-        if ( $this->ga41_enabled ) {
-            $footer_req_ga4 = ( $is_woo_enabled ? array(
-                'fupi-helpers-js',
-                'fupi-helpers-footer-js',
-                'fupi-ga4-head-js',
-                'fupi-woo-js'
-            ) : array('fupi-helpers-js', 'fupi-helpers-footer-js', 'fupi-ga4-head-js') );
+        // GTG
+        if ( $this->ga41_enabled || $this->gads_enabled ) {
+            $footer_req_gtg = ( $is_woo_enabled ? array('fupi-helpers-js', 'fupi-helpers-footer-js', 'fupi-woo-js') : array('fupi-helpers-js', 'fupi-helpers-footer-js') );
             /* ^ */
             wp_enqueue_script(
-                'fupi-ga4-head-js',
-                FUPI_URL . 'public/modules/gtools/fupi-ga4.js',
+                'fupi-gtg-head-js',
+                FUPI_URL . 'public/modules/gtools/fupi-gtg.js',
                 array('fupi-helpers-js'),
                 FUPI_VERSION,
                 $head_args
             );
             /* _ */
             wp_enqueue_script(
-                'fupi-ga4-footer-js',
-                FUPI_URL . 'public/modules/gtools/fupi-ga4-footer.js',
-                $footer_req_ga4,
+                'fupi-gtg-footer-js',
+                FUPI_URL . 'public/modules/gtools/fupi-gtg-footer.js',
+                $footer_req_gtg,
                 FUPI_VERSION,
                 $footer_args
             );
-            array_push( $reqs, 'fupi-ga4-head-js' );
         }
-        // GADS
-        if ( $this->gads_enabled ) {
-            $footer_req_gads = ( $is_woo_enabled ? array(
-                'fupi-helpers-js',
-                'fupi-helpers-footer-js',
-                'fupi-gads-head-js',
-                'fupi-woo-js'
-            ) : array('fupi-helpers-js', 'fupi-helpers-footer-js', 'fupi-gads-head-js') );
-            /* ^ */
-            wp_enqueue_script(
-                'fupi-gads-head-js',
-                FUPI_URL . 'public/modules/gtools/fupi-gads.js',
-                array('fupi-helpers-js'),
-                FUPI_VERSION,
-                $head_args
-            );
-            /* _ */
-            wp_enqueue_script(
-                'fupi-gads-footer-js',
-                FUPI_URL . 'public/modules/gtools/fupi-gads-footer.js',
-                $footer_req_gads,
-                FUPI_VERSION,
-                $footer_args
-            );
-            array_push( $reqs, 'fupi-gads-head-js' );
-        }
-        // GTAG
-        /* ^ */
-        wp_enqueue_script(
-            'fupi-gtg-head-js',
-            FUPI_URL . 'public/modules/gtools/fupi-gtg.js',
-            $reqs,
-            FUPI_VERSION,
-            $head_args
-        );
-        // the gtg must be spelled like this! Litespeed cache will NOT combine files with "gtag" in its name
     }
 
     public function add_data_to_fp_object( $fp ) {

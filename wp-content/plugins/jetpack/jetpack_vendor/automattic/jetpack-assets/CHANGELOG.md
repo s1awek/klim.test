@@ -5,14 +5,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.3.14] - 2025-12-01
+### Changed
+- Update package dependencies. [#46143]
+
+## [4.3.13] - 2025-11-17
+### Changed
+- Update package dependencies. [#45915] [#45958]
+
+## [4.3.12] - 2025-11-10
+### Changed
+- Tests: Ensure PHP 8.5 compatibility. [#45769]
+- Update package dependencies. [#45756]
+
+### Fixed
+- Tests: Improve compatibility with PHP 8.5. [#45771]
+
+## [4.3.11] - 2025-10-28
+### Changed
+- Update dependencies. [#42554]
+
+## [4.3.10] - 2025-10-02
+### Changed
+- Update dependencies. [#42554]
+
+## [4.3.9] - 2025-09-22
+### Changed
+- Update dependencies. [#42554]
+
+## [4.3.8] - 2025-09-19
+### Changed
+- Update package dependencies. [#45173] [#45229]
+
+## [4.3.7] - 2025-09-15
+### Changed
+- Internal updates.
+
+## [4.3.6] - 2025-09-08
+### Changed
+- Update package dependencies. [#45027]
+
 ## [4.3.5] - 2025-08-18
 ### Changed
 - Update dependencies. [#42554]
 
 ## [4.3.4] - 2025-08-13
 ### Changed
-- Update package dependencies. [#44701]
-- Update package dependencies. [#44725]
+- Update package dependencies. [#44701] [#44725]
 
 ## [4.3.3] - 2025-08-11
 ### Changed
@@ -705,6 +744,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Statically access asset tools
 
+[4.3.14]: https://github.com/Automattic/jetpack-assets/compare/v4.3.13...v4.3.14
+[4.3.13]: https://github.com/Automattic/jetpack-assets/compare/v4.3.12...v4.3.13
+[4.3.12]: https://github.com/Automattic/jetpack-assets/compare/v4.3.11...v4.3.12
+[4.3.11]: https://github.com/Automattic/jetpack-assets/compare/v4.3.10...v4.3.11
+[4.3.10]: https://github.com/Automattic/jetpack-assets/compare/v4.3.9...v4.3.10
+[4.3.9]: https://github.com/Automattic/jetpack-assets/compare/v4.3.8...v4.3.9
+[4.3.8]: https://github.com/Automattic/jetpack-assets/compare/v4.3.7...v4.3.8
+[4.3.7]: https://github.com/Automattic/jetpack-assets/compare/v4.3.6...v4.3.7
+[4.3.6]: https://github.com/Automattic/jetpack-assets/compare/v4.3.5...v4.3.6
 [4.3.5]: https://github.com/Automattic/jetpack-assets/compare/v4.3.4...v4.3.5
 [4.3.4]: https://github.com/Automattic/jetpack-assets/compare/v4.3.3...v4.3.4
 [4.3.3]: https://github.com/Automattic/jetpack-assets/compare/v4.3.2...v4.3.3

@@ -38,6 +38,25 @@ if ( ! empty( $input ) ) foreach( $input as $key => $value ) {
 					}
 				};
 				break;
+			case 'custom_events':
+
+				$clean_val = [];
+
+				if ( is_array( $value ) ){
+
+					foreach( $value as $i => $section ){
+						// Require both atrig_id and tag_name
+						if ( empty( $section['atrig_id'] ) || empty( $section['tag_name'] ) ) continue;
+						
+						$clean_val[$i]['atrig_id'] = sanitize_key( $section['atrig_id'] );
+						$clean_val[$i]['tag_name'] = trim( sanitize_text_field( $section['tag_name'] ) );
+						
+						// Sanitize repeat option (default to 'no' if not set)
+						$clean_val[$i]['repeat'] = isset( $section['repeat'] ) && $section['repeat'] === 'yes' ? 'yes' : 'no';
+					}
+				};
+				break;
+
 
 			case 'id':
 			case 'tag_file_downl':

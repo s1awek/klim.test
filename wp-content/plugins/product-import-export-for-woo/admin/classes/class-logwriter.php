@@ -23,6 +23,7 @@ class Wt_Import_Export_For_Woo_Basic_Logwriter extends Wt_Import_Export_For_Woo_
 	{
 		self::$file_path=$file_path;
 		self::$mode=$mode;
+		//phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		self::$file_pointer=@fopen($file_path, $mode);
 	}
 	public static function write_row($text, $is_writing_finished=false)
@@ -31,6 +32,7 @@ class Wt_Import_Export_For_Woo_Basic_Logwriter extends Wt_Import_Export_For_Woo_
 		{
 			return;
 		}
+		//phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
 		@fwrite(self::$file_pointer, $text.PHP_EOL);
 		if($is_writing_finished)
 		{
@@ -41,6 +43,7 @@ class Wt_Import_Export_For_Woo_Basic_Logwriter extends Wt_Import_Export_For_Woo_
 	{
 		if(self::$file_pointer!=null)
 		{
+			//phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 			fclose(self::$file_pointer);
 		}
 	}

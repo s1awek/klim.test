@@ -172,7 +172,7 @@
 		
 		payload['consentBannerMode'] = fp.notice.mode;
 		payload['previousConsents'] = prev_consents;
-		payload['geolocatedCountry'] = fp.geo && fpdata.country ? fpdata.country : 'Geolocation disabled';
+		payload['geolocatedCountry'] = fp.main.geo && fpdata.country ? fpdata.country : 'Geolocation disabled';
 		payload['cdbID'] = fp.notice.cdb_id;
 		payload['timestamp'] = fp.notice.consent_time;
 

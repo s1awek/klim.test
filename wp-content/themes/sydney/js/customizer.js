@@ -518,10 +518,10 @@
 		} );
 	} );	
 
-	var $maxWidth = {
+	var $logoSize = {
 		"site_logo_size": ".site-logo"
 	};
-	$.each($maxWidth, function (option, selector) {
+	$.each($logoSize, function (option, selector) {
 		$.each($devices, function (device, mediaSize) {
 			wp.customize(option + '_' + device, function (value) {
 			value.bind(function (to) {
@@ -722,14 +722,21 @@
 		// Boxed content
 		wp.customize( value + '_boxed_content', function( val ) {
 			val.bind( function( to ) {
+				var $target;
+				if ( 'page' === value ) {
+					$target = $( '.page .content-inner' );
+				} else {
+					$target = $( '.single-' + value + ' .content-inner' );
+				}
+				
 				if ( 'unboxed' === to ) {
-					$( '.content-inner' ).css( {
+					$target.css( {
 						'padding': 0,
 						'background': 'transparent',
 						'box-shadow': 'none',
 					} );
 				} else {
-					$( '.content-inner' ).css( {
+					$target.css( {
 						'padding': 60,
 						'background': '#fff',
 						'box-shadow': '0 0 15px 0 rgba(0,0,0,0.05)',
@@ -746,6 +753,28 @@
 					$( '.single-' + value ).find( '.content-area' ).removeClass( 'sidebar-left sidebar-right' ).addClass( to );
 				}
 			} );
+		} );
+	} );
+
+	// Archive boxed content (applies to all archives: blog, CPT archives, taxonomies, etc.)
+	wp.customize( 'blog_archive_boxed_content', function( val ) {
+		val.bind( function( to ) {
+			// Check if we're on any archive page
+			if ( $('body').hasClass('blog') || $('body').hasClass('archive') || $('body').hasClass('home') ) {
+				if ( 'unboxed' === to ) {
+					$( '.content-inner' ).css( {
+						'padding': 0,
+						'background': 'transparent',
+						'box-shadow': 'none',
+					} );
+				} else {
+					$( '.content-inner' ).css( {
+						'padding': 60,
+						'background': '#fff',
+						'box-shadow': '0 0 15px 0 rgba(0,0,0,0.05)',
+					} );
+				}
+			}
 		} );
 	} );
 
@@ -1081,11 +1110,11 @@
 			if ( 'container-fluid' === to ) {
 				$( '.main-header > .container' ).removeClass( 'container' ).addClass( 'container-fluid' );
 				$( '.bottom-header-row > .container' ).removeClass( 'container' ).addClass( 'container-fluid' );
-				$( '.shfb-row-wrapper > .container' ).removeClass( 'container' ).addClass( 'container-fluid' );
+				$( '.shfb-header .shfb-row-wrapper > div' ).removeClass( 'container' ).addClass( 'container-fluid' );
 			} else {
 				$( '.main-header > .container-fluid' ).removeClass( 'container-fluid' ).addClass( 'container' );
 				$( '.bottom-header-row > .container-fluid' ).removeClass( 'container-fluid' ).addClass( 'container' );
-				$( '.shfb-row-wrapper > .container-fluid' ).removeClass( 'container-fluid' ).addClass( 'container' );
+				$( '.shfb-header .shfb-row-wrapper > div' ).removeClass( 'container-fluid' ).addClass( 'container' );
 			}
 		} );
 	} );	
@@ -1123,6 +1152,21 @@
 			}
 		} );
 	} );	
+
+	//enable_sticky_mobile_header_hb (Header Footer Builder)
+	wp.customize( 'enable_sticky_mobile_header_hb', function( val ) {
+
+		var sticky_header_type = wp.customize.instance( 'sticky_header_type' ).get();
+		var sticky_row = wp.customize.instance( 'sydney_section_hb_wrapper__header_builder_sticky_row' ).get();
+
+		val.bind( function( to ) {
+			if ( true === to ) {
+				$( '.shfb-mobile' ).addClass( 'has-sticky-header sticky-' + sticky_header_type + ' sticky-row-' + sticky_row );
+			} else {
+				$( '.shfb-mobile' ).removeClass( 'has-sticky-header sticky-always sticky-scrolltop sticky-row-all sticky-row-main-header-row sticky-row-below-header-row' );
+			}
+		} );
+	} );
 
 	var $header_components = ['header_components_l1','header_components_l3left','header_components_l3right','header_components_l4top','header_components_l4bottom','header_components_l5topleft','header_components_l5topright','header_components_l5bottom','social_profiles_header_layouts_6_7'];
 	$.each( $header_components, function( index, value ) {
@@ -1377,10 +1421,10 @@
 		val.bind( function( to ) {
 			if ( 'container' === to ) {
 				$( '#sidebar-footer > div' ).removeClass( 'container-fluid' ).addClass( 'container' );
-				$( '.shfb-row-wrapper > div' ).removeClass( 'container' ).addClass( 'container-fluid' );
+				$( '.shfb-footer .shfb-row-wrapper > div' ).removeClass( 'container-fluid' ).addClass( 'container' );
 			} else {
 				$( '#sidebar-footer > div' ).removeClass( 'container' ).addClass( 'container-fluid' );
-				$( '.shfb-row-wrapper > div' ).removeClass( 'container-fluid' ).addClass( 'container' );
+				$( '.shfb-footer .shfb-row-wrapper > div' ).removeClass( 'container' ).addClass( 'container-fluid' );
 			}
 		} );
 	} );

@@ -22,8 +22,8 @@ if (!defined('ABSPATH')) {
 	        	if($btnv['type']=='button')
 	        	{
 	        		?>
-	        		<button class="button <?php echo $button_standard_class; ?> wt_iew_export_action_btn <?php echo $css_class; ?>" data-action-type="<?php echo $action_type; ?>" data-action="<?php echo $btnv['key'];?>" type="submit">
-			        	<?php echo $btnv['text'];?>    		
+	        		<button class="button <?php echo esc_attr($button_standard_class); ?> wt_iew_export_action_btn <?php echo esc_attr($css_class); ?>" data-action-type="<?php echo esc_attr($action_type); ?>" data-action="<?php echo esc_attr($btnv['key']);?>" type="submit">
+			        	<?php echo wp_kses_post($btnv['text']);?>    		
 			        </button>
 	        		<?php
 
@@ -32,17 +32,17 @@ if (!defined('ABSPATH')) {
 	        	{
 	        		$btn_arr=(isset($btnv['items']) && is_array($btnv['items']) ? $btnv['items'] : array());
 	        		?>
-					<button type="button" class="button button-primary wt_iew_drp_menu <?php echo $css_class; ?>" data-target="wt_iew_<?php echo $btnk; ?>_drp">
-						<?php echo $btnv['text'];?> <span class="dashicons dashicons-arrow-down" style="line-height: 28px;"></span>
+					<button type="button" class="button button-primary wt_iew_drp_menu <?php echo esc_attr($css_class); ?>" data-target="wt_iew_<?php echo esc_attr($btnk); ?>_drp">
+						<?php echo wp_kses_post($btnv['text']);?> <span class="dashicons dashicons-arrow-down" style="line-height: 28px;"></span>
 					</button>
-					<ul class="wt_iew_dropdown <?php echo $css_class; ?>" data-id="wt_iew_<?php echo $btnk; ?>_drp">
+					<ul class="wt_iew_dropdown <?php echo esc_attr($css_class); ?>" data-id="wt_iew_<?php echo esc_attr($btnk); ?>_drp">
 						<?php
 						foreach($btn_arr as $btnkk => $btnvv)
 						{
 							$field_attr=(isset($btnvv['field_attr']) ? $btnvv['field_attr'] : '');
 							$action_type=(isset($btnvv['action_type']) ? $btnvv['action_type'] : 'non-step');
 							?>
-							<li class="wt_iew_export_action_btn" data-action-type="<?php echo $action_type; ?>"  data-action="<?php echo $btnvv['key'];?>" <?php echo $field_attr;?> ><?php echo $btnvv['text'];?></li>
+							<li class="wt_iew_export_action_btn" data-action-type="<?php echo esc_attr($action_type); ?>"  data-action="<?php echo esc_attr($btnvv['key']);?>" <?php echo esc_attr($field_attr);?> ><?php echo wp_kses_post($btnvv['text']);?></li>
 							<?php
 						}
 						?>
@@ -52,8 +52,8 @@ if (!defined('ABSPATH')) {
 	        	elseif($btnv['type']=='hidden_button')
 	        	{
 	        		?>
-	        		<button style="display:none;" class="button button-primary wt_iew_export_action_btn <?php echo $css_class; ?>" data-action-type="<?php echo $action_type; ?>" data-action="<?php echo $btnv['key'];?>" type="submit">
-			        	<?php echo $btnv['text'];?>    		
+	        		<button style="display:none;" class="button button-primary wt_iew_export_action_btn <?php echo esc_attr($css_class); ?>" data-action-type="<?php echo esc_attr($action_type); ?>" data-action="<?php echo esc_attr($btnv['key']);?>" type="submit">
+			        	<?php echo wp_kses_post($btnv['text']);?>    		
 			        </button>
 	        		<?php
 
@@ -61,7 +61,7 @@ if (!defined('ABSPATH')) {
 	        	elseif($btnv['type']=='text')
 	        	{
 	        	?>
-	        		<span style="line-height:40px; font-weight:bold;" class="<?php echo $css_class; ?>"><?php echo $btnv['text'];?></span>
+	        		<span style="line-height:40px; font-weight:bold;" class="<?php echo esc_attr($css_class); ?>"><?php echo wp_kses_post($btnv['text']);?></span>
 	        	<?php
 	        	}
 				$count++;

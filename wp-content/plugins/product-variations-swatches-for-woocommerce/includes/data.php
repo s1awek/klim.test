@@ -239,7 +239,9 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_DATA {
 			'check_swatches_settings'         => '',
 			'variation_threshold_single_page' => '30',
 			'single_attr_title'               => 1,
-			'single_attr_selected'            => 0,
+			'single_attr_selected'            => 1,
+			'single_attr_selected_separator'            => ':',
+			'single_attr_selected_color'            => '',
 		);
 		$this->params        = apply_filters( 'vi_woo_product_variation_swatches_params', wp_parse_args( $vi_wpvs_settings, $this->default ) );
 	}

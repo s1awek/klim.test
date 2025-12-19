@@ -154,7 +154,7 @@ if (!class_exists('WT_P_IEW_CTA_Banner_Default_Page')) {
                             type: 'POST',
                             data: {
                                 action: 'wt_p_iew_dismiss_cta_banner_default_page',
-                                nonce: '<?php echo wp_create_nonce( 'wt_p_iew_dismiss_cta_banner_default_page' ); ?>'
+                                nonce: '<?php echo esc_js(wp_create_nonce( 'wt_p_iew_dismiss_cta_banner_default_page' )); ?>'
                             },
                             dataType: 'json',
                             success: function(response) {

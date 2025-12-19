@@ -24,6 +24,16 @@ class Fupi_TOOLS_admin {
         add_filter( 'fupi_tools_get_page_descr', array( $this, 'get_page_descr' ), 10, 2 );
     }
 
+    private function pp_ok(){
+            
+        if ( ! empty( $this->cook['pp_id'] ) ) {
+            $pp_id = (int) $this->cook['pp_id'];
+            return get_post_status( $pp_id ) == 'publish';
+        }
+
+        return false;
+    }
+
     public function register_module_settings(){
         register_setting( 'fupi_tools', 'fupi_tools', array( 'sanitize_callback' => array( $this, 'sanitize_fields' ) ) );
     }
@@ -68,7 +78,7 @@ class Fupi_TOOLS_admin {
 
          // UPDATE TRACKING INFO IN CDB / EMAIL
 
-        if ( ! empty ( $clean_data['cook'] ) && ! empty ( $clean_data['proofrec'] ) && ! empty ( get_privacy_policy_url() ) ) {
+        if ( ! empty ( $clean_data['cook'] ) && ! empty ( $clean_data['proofrec'] ) && $this->pp_ok() ) {
             include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
             $gdpr_checker = new Fupi_compliance_status_checker( 'tools', $clean_data );
             $gdpr_checker->send_and_return_status();
@@ -91,10 +101,10 @@ class Fupi_TOOLS_admin {
 			if ( $cook_was_enabled !== $cook_is_enabled ) $generate_head = true;
 
 			// regenerate if the geolocation module was enabled or disabled
-			$geo_was_enabled = isset( $this->tools['geo'] );
-			$geo_is_enabled = isset( $clean_data['geo'] );
+			// $geo_was_enabled = isset( $this->tools['geo'] );
+			// $geo_is_enabled = isset( $clean_data['geo'] );
 
-			if ( $geo_was_enabled !== $geo_is_enabled ) $generate_head = true;
+			// if ( $geo_was_enabled !== $geo_is_enabled ) $generate_head = true;
 		}
 
 		// Generate CSCR files

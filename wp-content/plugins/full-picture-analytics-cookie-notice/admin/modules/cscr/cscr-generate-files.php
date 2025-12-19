@@ -51,7 +51,7 @@ class Fupi_generate_cscr_files {
         $force_load = ( empty( $script_data['force_load'] ) ? 'false' : 'true' );
         // GET geo requirements
         $geo = 0;
-        // CREATE an optional advanced trigger wrapper
+        // CREATE an optional custom trigger wrapper
         $atrig_start = '';
         $atrig_end = '';
         // if ( $atrig_id ) {

@@ -104,7 +104,7 @@
         let geo_method = geo[0],
             geo_countries = geo[1];
 
-        if ( fp.geo && geo_method && geo_countries ) { // we check fp.geo to prevent situations when user disabled geo but didn't save new tools settings
+        if ( fp.main.geo && geo_method && geo_countries ) { // we check fp.geo to prevent situations when user disabled geo but didn't save new tools settings
         
             if ( fp.ready ) {
                 return geo_method == 'incl' ? geo_countries.includes( fpdata.country ) : ! geo_countries.includes( fpdata.country );
@@ -117,7 +117,7 @@
 
     function shouldScriptLoadHere( id ){
 
-        if ( fp.geo && fp[id].limit_country ) { // we check fp.geo to prevent situations when user disabled geo but didn't save new tools settings
+        if ( fp.main.geo && fp[id].limit_country ) { // we check fp.main.geo to prevent situations when user disabled geo but didn't save new tools settings
             
             if ( fp.ready ) {
 
@@ -656,6 +656,15 @@
         fpdata.submitted_form = { 'element' : target };
 		FP.doActions( 'form_submit' );
     }
+
+    // ON FIELD BLUR
+    document.addEventListener('blur', function(e) {
+        // Check if the blurred element is a form field
+        if ( e.target.matches('input, textarea, select') ) {
+            fpdata.last_form_field = e.target;
+            FP.doActions( 'form_field_blur' );
+        }
+    }, true);
 
     // ON DOM LOADED
 	document.addEventListener( 'DOMContentLoaded', ()=>{

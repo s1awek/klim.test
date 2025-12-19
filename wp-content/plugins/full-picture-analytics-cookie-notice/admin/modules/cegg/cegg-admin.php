@@ -24,6 +24,16 @@ class Fupi_CEGG_admin {
         add_filter( 'fupi_cegg_get_page_descr', array( $this, 'get_page_descr' ), 10, 2 );
     }
 
+    private function pp_ok(){
+            
+        if ( ! empty( $this->cook['pp_id'] ) ) {
+            $pp_id = (int) $this->cook['pp_id'];
+            return get_post_status( $pp_id ) == 'publish';
+        }
+
+        return false;
+    }
+
     public function add_fields_settings( $sections ){
         include_once 'cegg-fields.php';
         return $sections;
@@ -39,7 +49,7 @@ class Fupi_CEGG_admin {
 
         if ( apply_filters( 'fupi_updating_many_options', false ) ) return $clean_data;
         
-        if ( ! empty ( $this->tools['proofrec'] ) && ! empty ( $this->tools['cook'] ) && ! empty ( get_privacy_policy_url() ) ) {
+        if ( ! empty ( $this->tools['proofrec'] ) && ! empty ( $this->tools['cook'] ) && $this->pp_ok() ) {
             include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
             $gdpr_checker = new Fupi_compliance_status_checker( 'cegg', $clean_data );
             $gdpr_checker->send_and_return_status();

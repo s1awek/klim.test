@@ -1,25 +1,7 @@
 (()=>{
 
-    // clear sections that contain not existing (expired) trigger
-
-    let builder_sections = FP.findAll('.fupi_events_builder .fupi_r3_section');
-
-    builder_sections.forEach( section => {
-        
-        let atrig_select = FP.findFirst( '.fupi_field_type_atrig_select select', section );
-
-        if ( ! atrig_select.value ){
-            let minus_button = FP.findFirst( '.fupi_btn_remove', section );
-            if ( minus_button ) minus_button.click();
-        }
-    } );
-
-})();
-
-(()=>{
-
     // Used in Custom Scripts module
-    // Mark sections which contain scripts that can no longer trigger because they were triggered by advanced triggers that have been removed
+    // Mark sections which contain scripts that can no longer trigger because they were triggered by custom triggers that have been removed
 
     let atrig_selectors = FP.findAll('.fupi_r3_scr .fupi_field_atrig_id_wrap select');
 
@@ -52,7 +34,25 @@
 
 (()=>{
 
-    // clear sections that contain not existing (expired) custom meta
+    // CUSTOM EVENTS BUILDER - clear sections that contain not existing (expired) trigger
+
+    let builder_sections = FP.findAll('.fupi_events_builder .fupi_r3_section');
+
+    builder_sections.forEach( section => {
+        
+        let atrig_select = FP.findFirst( '.fupi_field_type_atrig_select select', section );
+
+        if ( atrig_select && ! atrig_select.value ){
+            let minus_button = FP.findFirst( '.fupi_btn_remove', section );
+            if ( minus_button ) minus_button.click();
+        }
+    } );
+
+})();
+
+(()=>{
+
+    // CUSTOM META BUILDER - clear sections that contain not existing (expired) custom meta
 
     let builder_sections = FP.findAll('.fupi_metadata_tracker .fupi_r3_section');
 

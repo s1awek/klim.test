@@ -2,6 +2,11 @@
 
 namespace Pmwpe\Common\Bootstrap;
 
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Autoloader
 {
 

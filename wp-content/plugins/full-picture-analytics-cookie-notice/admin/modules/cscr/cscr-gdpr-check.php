@@ -3,6 +3,14 @@
 $module_info = $this->get_module_info( 'cscr' );
 $this->set_basic_module_info( 'cscr', $module_info );
 
+$this->data['cscr']['top comments'] = [
+    esc_attr__( 'Do you use code snippets to install analytics and marketing tools, live chats, CRM tools, newsletter plugins and other tools that can track your visitors? They need to be blocked until visitors consent to their use in the consent banner.', 'full-picture-analytics-cookie-notice'),
+];
+
+$this->data['cscr']['pre-setup'][] = [ 
+    esc_html__('Move JavaScript snippets that install any tools that track your visitors to the "Custom scripts" module.', 'full-picture-analytics-cookie-notice')
+];
+
 $found_issues = false;
 
 if ( ! empty( $this->tools['cscr'] ) ) {
@@ -64,10 +72,4 @@ if ( ! empty( $this->tools['cscr'] ) ) {
             ]
         ];
     }
-}
-
-if ( ! $found_issues ) {
-    $this->data['cscr']['pre-setup'][] = [ 
-        esc_html__('Did you use JavaScript snippets to install any tools that track your visitors? Move these snippets to the "Custom scripts" module. This way, the consent banner will be able to load them according to provided consents.', 'full-picture-analytics-cookie-notice')
-    ];
 }

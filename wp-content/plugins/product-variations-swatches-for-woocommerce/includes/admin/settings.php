@@ -58,15 +58,17 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Settings {
 					?>
                     <div class="vi-ui vi-ui-main top tabular attached menu">
                         <a class="item active"
-                           data-tab="general"><?php esc_html_e( 'General Settings', 'product-variations-swatches-for-woocommerce' ); ?></a>
-                        <a class="item"
                            data-tab="swatches_profile"><?php esc_html_e( 'Swatches Profile', 'product-variations-swatches-for-woocommerce' ); ?></a>
+                        <a class="item"
+                           data-tab="general"><?php esc_html_e( 'General', 'product-variations-swatches-for-woocommerce' ); ?></a>
+                        <a class="item"
+                           data-tab="single_page"><?php esc_html_e( 'Swatches on Single Product page', 'product-variations-swatches-for-woocommerce' ); ?></a>
                         <a class="item"
                            data-tab="product_list"><?php esc_html_e( 'Swatches on Product List', 'product-variations-swatches-for-woocommerce' ); ?></a>
                         <a class="item"
                            data-tab="custom_attrs"><?php esc_html_e( 'Custom Attributes', 'product-variations-swatches-for-woocommerce' ); ?></a>
                     </div>
-                    <div class="vi-ui bottom attached tab segment active" data-tab="general">
+                    <div class="vi-ui bottom attached tab segment" data-tab="general">
                         <table class="form-table">
                             <tbody>
                             <tr>
@@ -98,7 +100,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Settings {
 						                            <?php echo wp_kses_post(__( 'This is used if an attribute is not config yet or no rules are applied</strong></a>', 'product-variations-swatches-for-woocommerce') ); ?>
                                                 </p>
                                             </div>
-                                            <div class="field">
+                                            <div class="field vi-wpvs-attribute_profile_default-wrap<?php echo esc_attr($attribute_display_default !== 'none'?'':' vi-wpvs-hidden')?>">
                                                 <select name="attribute_profile_default" id="vi-wpvs-attribute_profile_default"
                                                         class="vi-ui fluid dropdown vi-wpvs-attribute_profile_default">
 						                            <?php
@@ -171,6 +173,49 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Settings {
                                     </div>
                                 </td>
                             </tr>
+                            <tr>
+                                <th>
+                                    <label>
+										<?php esc_html_e( 'Blur out backorders', 'product-variations-swatches-for-woocommerce' ) ?>
+                                    </label>
+                                </th>
+                                <td>
+                                    <a class="vi-ui button" href="https://1.envato.market/bd0ek"
+                                       target="_blank"><?php esc_html_e( 'Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label>
+										<?php esc_html_e( 'Prioritize first attribute', 'product-variations-swatches-for-woocommerce' ) ?>
+                                    </label>
+                                </th>
+                                <td>
+                                    <a class="vi-ui button" href="https://1.envato.market/bd0ek"
+                                       target="_blank"><?php esc_html_e( 'Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
+                                    <p class="description"><?php esc_html_e( 'For products that have more than 1 attribute, when selecting a value of the first attribute but the current combination is not available, select this value anyway and change selections of other attributes instead', 'product-variations-swatches-for-woocommerce' ); ?>                                    </p>
+                                    <p class="description">
+                                        <strong><?php esc_html_e( '*Important: ', 'product-variations-swatches-for-woocommerce' ); ?></strong><?php esc_html_e( 'To make out-of-stock items clickable, you have to turn off "Disable \'out of stock\' variation items" option', 'product-variations-swatches-for-woocommerce' ); ?>
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="vi-wpvs-custom_css">
+										<?php esc_html_e( 'Custom css', 'product-variations-swatches-for-woocommerce' ) ?>
+                                    </label>
+                                </th>
+                                <td>
+                                    <a class="vi-ui button" href="https://1.envato.market/bd0ek"
+                                       target="_blank"><?php esc_html_e( 'Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="vi-ui bottom attached tab segment" data-tab="single_page">
+                        <table class="form-table">
+                            <tbody>
                             <tr>
                                 <th>
                                     <label for="vi-wpvs-variation_threshold_single_page">
@@ -248,16 +293,38 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Settings {
                                     </label>
                                 </th>
                                 <td>
-                                    <div class="vi-ui toggle checkbox">
-                                        <input type="hidden" name="single_attr_selected"
-                                               class="vi-wpvs-single_attr_selected"
-                                               value="<?php echo esc_attr( $single_attr_selected ); ?>">
-                                        <input type="checkbox" id="vi-wpvs-single_attr_selected-checkbox"
-                                               class="vi-wpvs-single_attr_selected-checkbox" <?php checked( $single_attr_selected, '1' ); ?>><label>
+                                    <div class="field">
+                                        <div class="vi-ui toggle checkbox">
+                                            <input type="hidden" name="single_attr_selected"
+                                                   class="vi-wpvs-single_attr_selected"
+                                                   value="<?php echo esc_attr( $single_attr_selected ); ?>">
+                                            <input type="checkbox" id="vi-wpvs-single_attr_selected-checkbox"
+                                                   class="vi-wpvs-single_attr_selected-checkbox" <?php checked( $single_attr_selected, '1' ); ?>>
+                                            <label></label>
+                                        </div>
+                                        <p class="description">
+                                            <?php esc_html_e( 'Display the selected item beside attribute title on single product page', 'product-variations-swatches-for-woocommerce' ); ?>
+                                        </p>
                                     </div>
-                                    <p class="description">
-			                            <?php esc_html_e( 'Display the selected item beside attribute title on single product page', 'product-variations-swatches-for-woocommerce' ); ?>
-                                    </p>
+                                    <div class="equal width fields vi-wpvs-single_attr_selected-enable">
+                                        <div class="field">
+                                            <input type="text" name="single_attr_selected_separator"
+                                                   value="<?php echo esc_attr( $this->settings->get_params('single_attr_selected_separator') ); ?>"
+                                                   class="viwpvs-single_attr_selected_separator" >
+                                            <p class="description">
+                                                <?php esc_html_e( 'Separator', 'product-variations-swatches-for-woocommerce' ); ?>
+                                            </p>
+                                        </div>
+                                        <div class="field">
+                                            <input type="text"
+                                                   class="vi-wpvs-color vi-wpvs-single_attr_selected_color"
+                                                   name="single_attr_selected_color"
+                                                   value="<?php echo esc_attr( $this->settings->get_params('single_attr_selected_color')  ) ?>">
+                                            <p class="description">
+                                                <?php esc_html_e( 'Color', 'product-variations-swatches-for-woocommerce' ); ?>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -285,47 +352,10 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Settings {
                                     </p>
                                 </td>
                             </tr>
-                            <tr>
-                                <th>
-                                    <label>
-										<?php esc_html_e( 'Blur out backorders', 'product-variations-swatches-for-woocommerce' ) ?>
-                                    </label>
-                                </th>
-                                <td>
-                                    <a class="vi-ui button" href="https://1.envato.market/bd0ek"
-                                       target="_blank"><?php esc_html_e( 'Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>
-										<?php esc_html_e( 'Prioritize first attribute', 'product-variations-swatches-for-woocommerce' ) ?>
-                                    </label>
-                                </th>
-                                <td>
-                                    <a class="vi-ui button" href="https://1.envato.market/bd0ek"
-                                       target="_blank"><?php esc_html_e( 'Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
-                                    <p class="description"><?php esc_html_e( 'For products that have more than 1 attribute, when selecting a value of the first attribute but the current combination is not available, select this value anyway and change selections of other attributes instead', 'product-variations-swatches-for-woocommerce' ); ?>                                    </p>
-                                    <p class="description">
-                                        <strong><?php esc_html_e( '*Important: ', 'product-variations-swatches-for-woocommerce' ); ?></strong><?php esc_html_e( 'To make out-of-stock items clickable, you have to turn off "Disable \'out of stock\' variation items" option', 'product-variations-swatches-for-woocommerce' ); ?>
-                                    </p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label for="vi-wpvs-custom_css">
-										<?php esc_html_e( 'Custom css', 'product-variations-swatches-for-woocommerce' ) ?>
-                                    </label>
-                                </th>
-                                <td>
-                                    <a class="vi-ui button" href="https://1.envato.market/bd0ek"
-                                       target="_blank"><?php esc_html_e( 'Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
-                                </td>
-                            </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="vi-ui bottom attached tab segment" data-tab="swatches_profile">
+                    <div class="vi-ui bottom attached tab segment active" data-tab="swatches_profile">
 						<?php
 						if ( $count_ids ) {
 							for ( $i = 0; $i < $count_ids; $i ++ ) {
@@ -451,42 +481,6 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Settings {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="equal width fields">
-                                            <div class="field">
-                                                <label>
-			                                        <?php esc_html_e( 'Attribute image size', 'product-variations-swatches-for-woocommerce' ); ?>
-                                                </label>
-                                                <a class="vi-ui button" href="https://1.envato.market/bd0ek"
-                                                   target="_blank"><?php esc_html_e( 'Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
-                                            </div>
-                                            <div class="field">
-                                                <label>
-			                                        <?php esc_html_e( 'Change the size of attribute items on', 'product-variations-swatches-for-woocommerce' ); ?>
-                                                </label>
-                                                <div class="equal width fields">
-                                                    <div class="field">
-                                                        <a class="vi-ui button" href="https://1.envato.market/bd0ek"
-                                                           target="_blank"><?php esc_html_e( 'Product list - Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
-                                                    </div>
-                                                    <div class="field">
-                                                        <div class="vi-ui right labeled fluid input">
-                                                            <div class="vi-ui label vi-wpvs-right-input-label">
-						                                        <?php esc_html_e( 'Mobile', 'product-variations-swatches-for-woocommerce' ) ?>
-                                                            </div>
-                                                            <input type="number"
-                                                                   name="attribute_reduce_size_mobile[]"
-                                                                   min="30"
-                                                                   max="100"
-                                                                   class="vi-wpvs-attribute_reduce_size_mobile"
-                                                                   value="<?php echo esc_attr( $attribute_reduce_size_mobile ); ?>">
-                                                            <div class="vi-ui label">
-						                                        <?php esc_html_e( '%', 'product-variations-swatches-for-woocommerce' ); ?>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="field">
                                             <div class="equal width fields">
                                                 <div class="field">
@@ -578,6 +572,53 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Settings {
                                                         </option>
                                                     </select>
                                                     <p class="description"><?php esc_html_e( 'This function does not work for products whose number of variations is greater than the "Ajax variation threshold"', 'product-variations-swatches-for-woocommerce' ); ?></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="equal width fields">
+                                            <div class="field">
+                                                <div class="equal width fields">
+                                                    <div class="field">
+                                                        <label>
+                                                            <?php esc_html_e( 'Show selected attribute item', 'product-variations-swatches-for-woocommerce' ); ?>
+                                                        </label>
+                                                        <a class="vi-ui button" href="https://1.envato.market/bd0ek" target="_blank">
+                                                            <?php esc_html_e( 'Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
+                                                    </div>
+                                                    <div class="field">
+                                                        <label>
+                                                            <?php esc_html_e( 'Attribute image size', 'product-variations-swatches-for-woocommerce' ); ?>
+                                                        </label>
+                                                        <a class="vi-ui button" href="https://1.envato.market/bd0ek" target="_blank">
+                                                            <?php esc_html_e( 'Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label>
+                                                    <?php esc_html_e( 'Change the size of attribute items on', 'product-variations-swatches-for-woocommerce' ); ?>
+                                                </label>
+                                                <div class="equal width fields">
+                                                    <div class="field">
+                                                        <div class="vi-ui right labeled fluid input">
+                                                            <div class="vi-ui label vi-wpvs-right-input-label">
+                                                                <?php esc_html_e( 'Mobile', 'product-variations-swatches-for-woocommerce' ) ?>
+                                                            </div>
+                                                            <input type="number"
+                                                                   name="attribute_reduce_size_mobile[]"
+                                                                   min="30"
+                                                                   max="100"
+                                                                   class="vi-wpvs-attribute_reduce_size_mobile"
+                                                                   value="<?php echo esc_attr( $attribute_reduce_size_mobile ); ?>">
+                                                            <div class="vi-ui label">
+                                                                <?php esc_html_e( '%', 'product-variations-swatches-for-woocommerce' ); ?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="field">
+                                                        <a class="vi-ui button" href="https://1.envato.market/bd0ek"
+                                                           target="_blank"><?php esc_html_e( 'Product list - Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -895,30 +936,16 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Settings {
                             <tbody>
                             <tr valign="top">
                                 <th>
-                                    <label>
+                                    <a target="_blank" href="https://demo.villatheme.com/woocommerce-product-variations-swatches/shop/">
 										<?php esc_html_e( 'Preview', 'product-variations-swatches-for-woocommerce' ); ?>
-                                    </label>
+                                    </a>
                                 </th>
                                 <td>
                                     <div class="field viwpvs-product_list-preview">
-                                        <div class="equal width fields">
-                                            <div class="field">
-                                                <a href="https://1.envato.market/bd0ek" target="_blank">
-                                                    <img loading="lazy" src="https://docs.villatheme.com/wp-content/uploads/2020/03/chon-attribute-2.gif" alt="product-list-redirect.gif">
-                                                </a>
-                                                <label>
-		                                            <?php esc_html_e( 'Choose variation by attribute on the Product List', 'product-variations-swatches-for-woocommerce' ); ?>
-                                                </label>
-                                            </div>
-                                            <div class="field">
-                                                <a href="https://1.envato.market/bd0ek" target="_blank">
-                                                    <img loading="lazy" src="https://docs.villatheme.com/wp-content/uploads/2020/03/add-to-cart-2.gif" alt="product-list-atc.gif">
-                                                </a>
-                                                <label>
-		                                            <?php esc_html_e( 'Choose variation and add to cart on the Product List', 'product-variations-swatches-for-woocommerce' ); ?>
-                                                </label>
-                                            </div>
-                                        </div>
+                                        <iframe width="560" height="315" src="https://www.youtube.com/embed/Swy8rCnZtRQ?si=-WMYei826ADkBKGT&amp;start=29"
+                                                title="YouTube video player" frameborder="0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                                     </div>
                                 </td>
                             </tr>
@@ -1280,6 +1307,8 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Settings {
 				'variation_threshold_single_page',
 				'single_attr_title',
 				'single_attr_selected',
+				'single_attr_selected_separator',
+				'single_attr_selected_color',
 			);
 			$args       = array();
 			foreach ( $map_args_1 as $item ) {
@@ -1342,31 +1371,31 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Settings {
 //			}
 			wp_dequeue_style( 'eopa-admin-css' );
 			/*Stylesheet*/
-			wp_enqueue_style( 'semantic-ui-accordion', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'accordion.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-button', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'button.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-checkbox', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'checkbox.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-dropdown', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'dropdown.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-form', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'form.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-header', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'header.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-icon', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'icon.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-input', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'input.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-label', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'label.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-menu', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'menu.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-message', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'message.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-popup', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'popup.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-segment', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'segment.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'transition', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'transition.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-tab', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'tab.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-accordion', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'accordion.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-button', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'button.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-checkbox', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'checkbox.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-dropdown', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'dropdown.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-form', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'form.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-header', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'header.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-icon', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'icon.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-input', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'input.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-label', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'label.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-menu', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'menu.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-message', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'message.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-popup', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'popup.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-segment', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'segment.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-transition', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'transition.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-tab', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'tab.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
 			wp_enqueue_style( 'product-variations-swatches-for-woocommerce-admin-css', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'admin-settings.css', array(), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
 			wp_enqueue_style( 'product-variations-swatches-for-woocommerce-admin-minicolors', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'minicolors.css', array(), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
 			wp_enqueue_script( 'jquery-ui-sortable' );
-			wp_enqueue_script( 'semantic-ui-accordion', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'accordion.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
-			wp_enqueue_script( 'semantic-ui-address', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'address.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
-			wp_enqueue_script( 'semantic-ui-checkbox', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'checkbox.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
-			wp_enqueue_script( 'semantic-ui-dropdown', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'dropdown.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
-			wp_enqueue_script( 'semantic-ui-form', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'form.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
-			wp_enqueue_script( 'semantic-ui-tab', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'tab.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
-			wp_enqueue_script( 'transition', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'transition.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-semantic-ui-accordion', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'accordion.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-semantic-ui-address', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'address.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-semantic-ui-checkbox', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'checkbox.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-semantic-ui-dropdown', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'dropdown.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-semantic-ui-form', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'form.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-semantic-ui-tab', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'tab.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-transition', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'transition.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
 			wp_enqueue_script( 'product-variations-swatches-for-woocommerce-admin-js', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'admin-settings.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
 			wp_enqueue_script( 'product-variations-swatches-for-woocommerce-admin-minicolors', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'minicolors.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
 			wp_localize_script( 'product-variations-swatches-for-woocommerce-admin-js', 'vi_wpvs_admin_settings', array(

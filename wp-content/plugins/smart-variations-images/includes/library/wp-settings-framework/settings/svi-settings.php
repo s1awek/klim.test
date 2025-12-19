@@ -175,121 +175,165 @@ function wpsfsvi_svi_options_tab_main_variations() {
 }
 
 function wpsfsvi_svi_options_tab_main_loopvariations() {
-    $fields = [];
+    $fields = array(
+        array(
+            'id'       => 'filter_attribute',
+            'type'     => 'toggle',
+            'title'    => __( 'Enable Filter Attribute Image Swapping', 'wc_svi' ),
+            'subtitle' => __( 'Showcase variation images based on applied filters', 'wc_svi' ),
+            'desc'     => __( 'When enabled, this option will display the <b>first image</b> of each matching <u>SVI Variations Gallery</u> on the product loop pages (e.g., Shop or Archive pages) based on the applied filters (such as color or size). You can enable/disable specific galleries from being displayed by checking the appropriate <u>SVI Variations Gallery</u> settings on the product edit page.', 'wc_svi' ),
+            'show_if'  => array(array(
+                'field' => 'main_section_global_default',
+                'value' => array('1'),
+            )),
+            'default'  => false,
+        ),
+        array(
+            'id'       => 'filter_attribute_cut',
+            'type'     => 'select',
+            'title'    => __( 'Filter Attribute Split Layout Type', 'wc_svi' ),
+            'subtitle' => __( 'Choose the layout style for displaying multiple variation images', 'wc_svi' ),
+            'desc'     => __( 'Select how multiple variation images should be displayed when a filter matches more than one variation on the Shop/Archive page. <b>Diagonal</b>: Images are split diagonally from bottom-left to top-right. <b>Vertical</b>: Images are stacked vertically. <b>Horizontal</b>: Images are arranged side by side horizontally. Default: Diagonal.', 'wc_svi' ),
+            'show_if'  => array(array(
+                'field' => 'main_section_loopvariations_filter_attribute',
+                'value' => array('1'),
+            )),
+            'choices'  => array(
+                'diagonal'   => 'Diagonal',
+                'vertical'   => 'Vertical',
+                'horizontal' => 'Horizontal',
+            ),
+            'default'  => 'diagonal',
+            'class'    => 'svisubfield',
+        ),
+        array(
+            'id'       => 'filter_attribute_animation',
+            'type'     => ( svi_fs()->can_use_premium_code__premium_only() ? 'toggle' : 'custom' ),
+            'title'    => __( 'Enable Filter Attribute Animation', 'wc_svi' ) . (( svi_fs()->can_use_premium_code__premium_only() ? '' : SMART_SVI_PROVS )),
+            'subtitle' => __( 'Add sliding animation on hover', 'wc_svi' ),
+            'desc'     => ( svi_fs()->can_use_premium_code__premium_only() ? __( 'When enabled, this option adds a sliding animation effect on hover for the Filter Attribute Split Layout (Diagonal, Vertical, Horizontal). The hovered image will expand, and the other images will slide to the remaining space.', 'wc_svi' ) : __( 'This is a premium feature. When enabled, it adds a sliding animation effect on hover for the Filter Attribute Split Layout (Diagonal, Vertical, Horizontal). Upgrade to PRO to unlock this feature. <a href="/wp-admin/admin.php?page=woocommerce_svi-pricing" target="_blank">Upgrade here</a>.', 'wc_svi' ) ),
+            'output'   => ( svi_fs()->can_use_premium_code__premium_only() ? null : 'wpsfsvisvi_info' ),
+            'style'    => ( svi_fs()->can_use_premium_code__premium_only() ? null : 'warning' ),
+            'show_if'  => array(array(
+                'field' => 'main_section_loopvariations_filter_attribute',
+                'value' => array('1'),
+            )),
+            'default'  => false,
+            'class'    => 'svisubfield',
+        ),
+        array(
+            'id'       => 'loop_showcase',
+            'type'     => 'toggle',
+            'title'    => __( 'Showcase Variations', 'wc_svi' ),
+            'subtitle' => __( 'Showcase your variations on the product loop page', 'wc_svi' ),
+            'desc'     => __( 'Activating this option will showcase the <b>first image</b> of each of your <u>SVI Variations Gallery</u> under each product on the Product loop pages.<br>You may enable/disable specific galleries from being displayed by checking the proper <u>SVI Variations Gallery</u> on the product.', 'wc_svi' ),
+            'show_if'  => array(array(
+                'field' => 'main_section_global_default',
+                'value' => array('1'),
+            )),
+            'default'  => false,
+        ),
+        array(
+            'id'      => 'loop_showcase_limit',
+            'type'    => wpsfsvi_svi_pass( 'n' ),
+            'title'   => __( 'Visible galleries ', 'wc_svi' ),
+            'desc'    => __( 'Define a limit of galleries to be displayed p/product, 0 = all', 'wc_svi' ),
+            'show_if' => array(array(array(
+                'field' => 'main_section_loopvariations_loop_showcase',
+                'value' => array('1'),
+            ), array(
+                'field' => 'main_section_global_default',
+                'value' => array('1'),
+            ))),
+            'default' => '0',
+        ),
+        array(
+            'id'       => 'loop_showcase_position',
+            'title'    => __( 'Showcase Position', 'wc_svi' ),
+            'subtitle' => __( 'Adjust the position of the showcase in the product loop.', 'wc_svi' ),
+            'desc'     => __( 'WooCommerce has hooks set in place to allow users to customize the positions of certain elements, if your theme has this hooks in place you may adjust the position.', 'wc_svi' ),
+            'type'     => wpsfsvi_svi_pass( 's' ),
+            'choices'  => array(
+                'woocommerce_before_shop_loop_item'       => 'Display before product loop item',
+                'woocommerce_before_shop_loop_item_title' => 'Display before product title',
+                'woocommerce_shop_loop_item_title'        => 'Display next to product title',
+                'woocommerce_after_shop_loop_item_title'  => 'Display after product title',
+                'woocommerce_after_shop_loop_item'        => 'Display after product loop item',
+            ),
+            'show_if'  => array(array(array(
+                'field' => 'main_section_loopvariations_loop_showcase',
+                'value' => array('1'),
+            ), array(
+                'field' => 'main_section_global_default',
+                'value' => array('1'),
+            ))),
+            'default'  => 'woocommerce_before_shop_loop_item_title',
+        ),
+        array(
+            'id'      => 'loop_showcase_position_priority',
+            'type'    => wpsfsvi_svi_pass( 'n' ),
+            'title'   => __( 'Showcase Position Priority', 'wc_svi' ),
+            'desc'    => __( 'Used to specify the order in which the Showcase Position action will be executed. Lower numbers correspond with earlier execution, and functions with the same priority are executed in the order in which they were added to the action. Default value: 10', 'wc_svi' ),
+            'show_if' => array(array(array(
+                'field' => 'main_section_loopvariations_loop_showcase',
+                'value' => array('1'),
+            ), array(
+                'field' => 'main_section_global_default',
+                'value' => array('1'),
+            ))),
+            'default' => '10',
+        ),
+        array(
+            'id'      => 'loop_showcase_wrapper_el',
+            'type'    => wpsfsvi_svi_pass( 'tx' ),
+            'title'   => __( 'Specify Product Wrapper', 'wc_svi' ),
+            'desc'    => __( 'Used to specify the element that is wrapping the product on the loop page. By default, it is set to find the closest ".product", but just in case your theme doesn\'t have the class present, this option will allow you to define the target. You can specify, for example, any element (div, li), classes (.product), or both (div.product).', 'wc_svi' ),
+            'show_if' => array(array(array(
+                'field' => 'main_section_loopvariations_loop_showcase',
+                'value' => array('1'),
+            ), array(
+                'field' => 'main_section_global_default',
+                'value' => array('1'),
+            ))),
+            'default' => '.product',
+        ),
+        array(
+            'id'      => 'loop_showcase_wrapper_el_img',
+            'type'    => wpsfsvi_svi_pass( 'tx' ),
+            'title'   => __( 'Specify Product Wrapper Image', 'wc_svi' ),
+            'desc'    => __( 'Used to specify the element that is wrapping the product image on the loop page. By default, it is set to find the first image, but just in case the first image is not the product image, this option will allow you to define the target. You can specify, for example, any element (img, div), classes (.attachment-woocommerce_thumbnail), or both (img.attachment-woocommerce_thumbnail).', 'wc_svi' ),
+            'show_if' => array(array(array(
+                'field' => 'main_section_loopvariations_loop_showcase',
+                'value' => array('1'),
+            ), array(
+                'field' => 'main_section_global_default',
+                'value' => array('1'),
+            ))),
+            'default' => 'img',
+        ),
+        array(
+            'title'   => __( 'Showcase Image Size Loaded', 'wc_svi' ),
+            'desc'    => __( 'Select the image size you want loaded from the available registered image sizes on your site.', 'wc_svi' ),
+            'id'      => 'showcase_imagesize',
+            'type'    => 'select',
+            'choices' => svi_get_image_sizes(),
+            'show_if' => array(array(array(
+                'field' => 'main_section_loopvariations_loop_showcase',
+                'value' => array('1'),
+            ), array(
+                'field' => 'main_section_global_default',
+                'value' => array('1'),
+            ))),
+            'default' => 'shop_thumbnail',
+        )
+    );
     return array(
         'section_title'       => __( 'WooCommerce Shop Page / Archive', 'wc_svi' ),
         'tab_id'              => 'main',
         'section_id'          => 'section_loopvariations',
-        'section_description' => 'A Product Archive/Shop page is a WooCommerce page that display the list of products.<br>The following options will interact with this page.',
+        'section_description' => 'A Product Archive/Shop page is a WooCommerce page that displays the list of products.<br>The following options will interact with this page.',
         'section_order'       => 10,
-        'fields'              => array(
-            array(
-                'id'       => 'loop_showcase',
-                'type'     => 'toggle',
-                'title'    => __( 'Showcase Variations', 'wc_svi' ),
-                'subtitle' => __( 'Showcase your variations on the product loop page', 'wc_svi' ),
-                'desc'     => __( 'Activating this option will showcase the <b>first image</b> of each of your <u>SVI Variations Gallery</u> under each product on the Product loop pages.<br>You may enable/disable specific galleries from being displayed by checking the proper <u>SVI Variations Gallery</u> on the product.', 'wc_svi' ),
-                'show_if'  => array(array(
-                    'field' => 'main_section_global_default',
-                    'value' => array('1'),
-                )),
-                'default'  => false,
-            ),
-            array(
-                'id'      => 'loop_showcase_limit',
-                'type'    => wpsfsvi_svi_pass( 'n' ),
-                'title'   => __( 'Visible galleries ', 'wc_svi' ),
-                'desc'    => __( 'Define a limit of galleries to be displayed p/product, 0 = all', 'wc_svi' ),
-                'show_if' => array(array(array(
-                    'field' => 'main_section_loopvariations_loop_showcase',
-                    'value' => array('1'),
-                ), array(
-                    'field' => 'main_section_global_default',
-                    'value' => array('1'),
-                ))),
-                'default' => '0',
-            ),
-            array(
-                'id'       => 'loop_showcase_position',
-                'title'    => __( 'Showcase Position', 'wc_svi' ),
-                'subtitle' => __( 'Adjust the position of the showcase in the product loop.', 'wc_svi' ),
-                'desc'     => __( 'WooCommerce has hooks set in place to allow users to customize the positions of certain elements, if your theme has this hooks in place you may adjust the position.', 'wc_svi' ),
-                'type'     => wpsfsvi_svi_pass( 's' ),
-                'choices'  => array(
-                    'woocommerce_before_shop_loop_item'       => 'Display before product loop item',
-                    'woocommerce_before_shop_loop_item_title' => 'Display before product title',
-                    'woocommerce_shop_loop_item_title'        => 'Display next to product title',
-                    'woocommerce_after_shop_loop_item_title'  => 'Display after product title',
-                    'woocommerce_after_shop_loop_item'        => 'Display after product loop item',
-                ),
-                'show_if'  => array(array(array(
-                    'field' => 'main_section_loopvariations_loop_showcase',
-                    'value' => array('1'),
-                ), array(
-                    'field' => 'main_section_global_default',
-                    'value' => array('1'),
-                ))),
-                'default'  => 'woocommerce_before_shop_loop_item_title',
-            ),
-            array(
-                'id'      => 'loop_showcase_position_priority',
-                'type'    => wpsfsvi_svi_pass( 'n' ),
-                'title'   => __( 'Showcase Postion Priority', 'wc_svi' ),
-                'desc'    => __( 'Used to specify the order in which the Showcase Postion action will be executed. Lower numbers correspond with earlier execution, and functions with the same priority are executed in the order in which they were added to the action.
-                Default value: 10', 'wc_svi' ),
-                'show_if' => array(array(array(
-                    'field' => 'main_section_loopvariations_loop_showcase',
-                    'value' => array('1'),
-                ), array(
-                    'field' => 'main_section_global_default',
-                    'value' => array('1'),
-                ))),
-                'default' => '10',
-            ),
-            array(
-                'id'      => 'loop_showcase_wrapper_el',
-                'type'    => wpsfsvi_svi_pass( 'tx' ),
-                'title'   => __( 'Specify Product Wrapper', 'wc_svi' ),
-                'desc'    => __( 'Used to specify the element that if wrapping the product on the loop page. By default is set to find the closest ".product" but just in case your theme doesnt have the class present this option will allow you to define the target. You can specify for example any element (div,li), classes (.product) or both (div.product).', 'wc_svi' ),
-                'show_if' => array(array(array(
-                    'field' => 'main_section_loopvariations_loop_showcase',
-                    'value' => array('1'),
-                ), array(
-                    'field' => 'main_section_global_default',
-                    'value' => array('1'),
-                ))),
-                'default' => '.product',
-            ),
-            array(
-                'id'      => 'loop_showcase_wrapper_el_img',
-                'type'    => wpsfsvi_svi_pass( 'tx' ),
-                'title'   => __( 'Specify Product Wrapper Image', 'wc_svi' ),
-                'desc'    => __( 'Used to specify the element that if wrapping the product image on the loop page. By default is set to find the first image but just in case the first image is not the product image this option will allow you to define the target. You can specify for example any element (img,div), classes (.attachment-woocommerce_thumbnail) or both (img.attachment-woocommerce_thumbnail).', 'wc_svi' ),
-                'show_if' => array(array(array(
-                    'field' => 'main_section_loopvariations_loop_showcase',
-                    'value' => array('1'),
-                ), array(
-                    'field' => 'main_section_global_default',
-                    'value' => array('1'),
-                ))),
-                'default' => 'img',
-            ),
-            array(
-                'title'   => __( 'Showcase Image Size Loaded', 'wc_svi' ),
-                'desc'    => __( 'Select the image size you want loaded from the available registered image sizes on your site.', 'wc_svi' ),
-                'id'      => 'showcase_imagesize',
-                'type'    => 'select',
-                'choices' => svi_get_image_sizes(),
-                'show_if' => array(array(array(
-                    'field' => 'main_section_loopvariations_loop_showcase',
-                    'value' => array('1'),
-                ), array(
-                    'field' => 'main_section_global_default',
-                    'value' => array('1'),
-                ))),
-                'default' => 'shop_thumbnail',
-            )
-        ),
+        'fields'              => $fields,
     );
 }
 

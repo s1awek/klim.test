@@ -806,7 +806,9 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 			wp_enqueue_style( 'vi-wpvs-frontend-style', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'frontend-style.min.css', array(), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
 			wp_enqueue_script( 'vi-wpvs-frontend-script', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'frontend-script.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
 		}
-		$args_localize = array();
+		$args_localize = array(
+                'single_attr_selected_separator'            => $this->settings->get_params( 'single_attr_selected_separator' )
+        );
 		if ( class_exists( 'WJECF_WC_Discounts' ) ) {
 			$args_localize['wjecf_wc_discounts'] = true;
 			$args_localize['is_checkout']        = is_checkout();
@@ -815,10 +817,13 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 
 		$this->settings = VI_WOO_PRODUCT_VARIATIONS_SWATCHES_DATA::get_instance();
 		$ids            = $this->settings->get_params( 'ids' );
-		if ( $ids && is_array( $ids ) && $count_ids = count( $ids ) ) {
-			$css = '';
-			for ( $i = 0; $i < $count_ids; $i ++ ) {
-				$id                   = $ids[ $i ];
+		if ( !empty( $ids ) && is_array( $ids )) {
+            $single_attr_selected_color           = $this->settings->get_params( 'single_attr_selected_color' );
+            $css = '';
+            if ($single_attr_selected_color){
+                $css .= '.vi-wpvs-label-selected.vi-wpvs-label-selected-title{color:'.$single_attr_selected_color.'}';
+            }
+            foreach ( $ids as $i => $id ) {
 				$reduce_mobile        = $this->settings->get_current_setting( 'attribute_reduce_size_mobile', $i );
 				$attribute_height     = $this->settings->get_current_setting( 'attribute_height', $i );
 				$attribute_width      = $this->settings->get_current_setting( 'attribute_width', $i );
@@ -1219,7 +1224,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 					$css .= '}';
 				}
 			}
-			wp_add_inline_style( 'vi-wpvs-frontend-style', $css );
+            wp_add_inline_style( 'vi-wpvs-frontend-style', $css );
 		}
 	}
 

@@ -5,12 +5,19 @@ class Fupi_COOK_public {
 
     private $tools;
 
+    private $main;
+
+    private $pp_url = false;
+
+    private $pp_update_date = false;
+
     public function __construct() {
         $this->settings = get_option( 'fupi_cook' );
         if ( $this->settings === false ) {
             $this->settings = [];
         }
         $this->tools = get_option( 'fupi_tools' );
+        $this->main = get_option( 'fupi_main' );
         $this->add_actions_and_filters();
     }
 
@@ -56,20 +63,28 @@ class Fupi_COOK_public {
         echo '<script id="fupi_iframe_texts">let fupi_iframe_texts = ' . json_encode( $iframe_texts ) . ';</script>';
     }
 
+    private function get_pp_data() {
+        if ( !empty( $this->settings['pp_id'] ) ) {
+            $pp_id = (int) $this->settings['pp_id'];
+            $pp_post = get_post( $pp_id );
+            if ( !empty( $pp_post ) && isset( $pp_post->post_status ) && $pp_post->post_status === 'publish' ) {
+                $this->pp_update_date = get_post_modified_time(
+                    'U',
+                    false,
+                    $pp_id,
+                    false
+                );
+                $this->pp_url = get_permalink( $pp_post );
+            }
+        }
+        return null;
+    }
+
     public function add_data_to_fp_object( $fp ) {
         // GET DATA FROM THE CUSTOMIZER
         $notice_data = get_option( 'fupi_cookie_notice' );
         // from customizer
-        $priv_policy_url = get_privacy_policy_url();
-        // returns empty string if page is not published
-        $priv_policy_id = get_option( 'wp_page_for_privacy_policy' );
-        // gives ID event when the page is not published
-        $privacy_policy_update_date = ( !empty( $priv_policy_url ) ? get_post_modified_time(
-            'U',
-            false,
-            $priv_policy_id,
-            false
-        ) : null );
+        $this->get_pp_data();
         // check if the banner should be hidden on the current page
         $hide_on_this_page = is_privacy_policy();
         if ( !$hide_on_this_page ) {
@@ -111,14 +126,14 @@ class Fupi_COOK_public {
         $new_settings = [
             'enabled'              => true,
             'display_notice'       => !$hide_on_this_page,
-            'priv_policy_update'   => $privacy_policy_update_date,
+            'priv_policy_update'   => $this->pp_update_date,
             'blur_page'            => !empty( $notice_data ) && !empty( $notice_data['blur_page'] ),
             'scroll_lock'          => !empty( $notice_data ) && !empty( $notice_data['scroll_lock'] ),
             'hidden'               => ( isset( $notice_data['hide'] ) ? $notice_data['hide'] : [] ),
             'shown'                => ( isset( $notice_data['show'] ) ? $notice_data['show'] : [] ),
             'preselected_switches' => ( isset( $notice_data['switches_on'] ) ? $notice_data['switches_on'] : [] ),
             'optin_switches'       => !empty( $notice_data['optin_switches'] ),
-            'privacy_url'          => get_privacy_policy_url(),
+            'privacy_url'          => $this->pp_url,
         ];
         $notice_settings = array_merge( $new_settings, $mod_settings );
         // ADD TO FP OBJECT

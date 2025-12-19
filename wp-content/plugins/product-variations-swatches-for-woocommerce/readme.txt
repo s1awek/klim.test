@@ -236,6 +236,10 @@ If you use WPML to translate attributes, you only need configure attribute image
 2. Swatches on single product page
 
 == Changelog ==
+/**1.1.14 - 2025.11.22**/
+- Added: Option to set the separator and color for the selected attribute label
+- Updated: Compatibility with PHP 8.2 and WC 10.3
+
 /** 1.1.13 - 2025.09.12**/
 - Updated: VillaTheme support
 

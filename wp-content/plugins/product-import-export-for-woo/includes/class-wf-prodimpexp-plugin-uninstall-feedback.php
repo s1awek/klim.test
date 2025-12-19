@@ -22,19 +22,19 @@ if (!class_exists('WT_ProdImpExp_Uninstall_Feedback')) :
             <div class="pipe-modal" id="pipe-pipe-modal">
                 <div class="pipe-modal-wrap">
                     <div class="pipe-modal-header">
-                        <h3><?php _e('If you have a moment, please let us know why you are deactivating:', 'product-import-export-for-woo'); ?></h3>
+                        <h3><?php esc_html_e('If you have a moment, please let us know why you are deactivating:', 'product-import-export-for-woo'); ?></h3>
                     </div>
                     <div class="pipe-modal-body">
                         <ul class="reasons">
                             <?php foreach ($reasons as $reason) { ?>
                                 <li data-type="<?php echo esc_attr($reason['type']); ?>" data-placeholder="<?php echo esc_attr($reason['placeholder']); ?>">
-                                    <label><input type="radio" name="selected-reason" value="<?php echo $reason['id']; ?>"> <?php echo $reason['text']; ?></label>
+                                    <label><input type="radio" name="selected-reason" value="<?php echo esc_attr($reason['id']); ?>"> <?php echo esc_html($reason['text']); ?></label>
                                 </li>
                             <?php } ?>
                         </ul>
                         <div class="wt-uninstall-feedback-privacy-policy">
-                            <?php _e('We do not collect any personal data when you submit this form. It\'s your feedback that we value.', 'product-import-export-for-woo'); ?>
-                            <a href="https://www.webtoffee.com/privacy-policy/" target="_blank"><?php _e('Privacy Policy', 'product-import-export-for-woo'); ?></a>
+                            <?php esc_html_e('We do not collect any personal data when you submit this form. It\'s your feedback that we value.', 'product-import-export-for-woo'); ?>
+                            <a href="https://www.webtoffee.com/privacy-policy/" target="_blank"><?php esc_html_e('Privacy Policy', 'product-import-export-for-woo'); ?></a>
                         </div>
 
                         <br>
@@ -52,12 +52,12 @@ if (!class_exists('WT_ProdImpExp_Uninstall_Feedback')) :
 
                     </div>
                     <div class="pipe-modal-footer">
-                        <a href="#" class="dont-bother-me"><?php _e('I rather wouldn\'t say', 'product-import-export-for-woo'); ?></a>
+                        <a href="#" class="dont-bother-me"><?php esc_html_e('I rather wouldn\'t say', 'product-import-export-for-woo'); ?></a>
                         <a class="button-primary" href="https://wordpress.org/support/plugin/product-import-export-for-woo/" target="_blank">
                         <span class="dashicons dashicons-external" style="margin-top:3px;"></span>
-                        <?php _e('Get support', 'product-import-export-for-woo'); ?></a>
-                        <button class="button-primary pipe-model-submit"><?php _e('Submit & Deactivate', 'product-import-export-for-woo'); ?></button>
-                        <button class="button-secondary pipe-model-cancel"><?php _e('Cancel', 'product-import-export-for-woo'); ?></button>
+                        <?php esc_html_e('Get support', 'product-import-export-for-woo'); ?></a>
+                        <button class="button-primary pipe-model-submit"><?php esc_html_e('Submit & Deactivate', 'product-import-export-for-woo'); ?></button>
+                        <button class="button-secondary pipe-model-cancel"><?php esc_html_e('Cancel', 'product-import-export-for-woo'); ?></button>
                     </div>
                 </div>
             </div>
@@ -160,11 +160,11 @@ if (!class_exists('WT_ProdImpExp_Uninstall_Feedback')) :
                                 var reasonInputHtml = '';                                  
                             if ('reviewhtml' === inputType) {
                                 if($('.reviewlink').length == 0){
-                                    reasonInputHtml = '<div class="reviewlink"><a href="#" target="_blank" class="review-and-deactivate"><?php _e('Deactivate and leave a review', 'product-import-export-for-woo'); ?> <span class="xa-pipe-rating-link"> &#9733;&#9733;&#9733;&#9733;&#9733; </span></a></div>';
+                                    reasonInputHtml = '<div class="reviewlink"><a href="#" target="_blank" class="review-and-deactivate"><?php esc_html_e('Deactivate and leave a review', 'product-import-export-for-woo'); ?> <span class="xa-pipe-rating-link"> &#9733;&#9733;&#9733;&#9733;&#9733; </span></a></div>';
                                 }
                             }else if('supportlink' === inputType){
 							    if($('.supportlink').length == 0){
-                                    reasonInputHtml = '<div class="supportlink"><?php _e('Please go through the', 'product-import-export-for-woo'); ?><a href="#" target="_blank" class="doc-and-support-doc"> <?php _e('documentation', 'product-import-export-for-woo'); ?></a> <?php _e('or contact us via', 'product-import-export-for-woo'); ?><a href="#" target="_blank" class="doc-and-support-forum"> <?php _e('support', 'product-import-export-for-woo'); ?></a></div>';
+                                    reasonInputHtml = '<div class="supportlink"><?php esc_html_e('Please go through the', 'product-import-export-for-woo'); ?><a href="#" target="_blank" class="doc-and-support-doc"> <?php esc_html_e('documentation', 'product-import-export-for-woo'); ?></a> <?php esc_html_e('or contact us via', 'product-import-export-for-woo'); ?><a href="#" target="_blank" class="doc-and-support-forum"> <?php esc_html_e('support', 'product-import-export-for-woo'); ?></a></div>';
                                 }
 							}else {
                                 if($('.reviewlink').length){
@@ -224,6 +224,7 @@ if (!class_exists('WT_ProdImpExp_Uninstall_Feedback')) :
                                 type: 'POST',
                                 data: {
                                     action: 'pipe_submit_uninstall_reason',
+                                    _wpnonce: '<?php echo esc_js(wp_create_nonce('productimport_submit_uninstall_reason')); ?>',
                                     reason_id: (0 === $radio.length) ? 'none' : $radio.val(),
                                     reason_info: (0 !== $input.length) ? $input.val().trim() : '',
                                     user_email: $('#wt_wfproductimpexp_contact_me_checkbox').is(':checked') ? $('#wt_wfproductimpexp_contact_email').val() : ''
@@ -248,6 +249,11 @@ if (!class_exists('WT_ProdImpExp_Uninstall_Feedback')) :
 
             global $wpdb;
 
+            // Verify nonce for security
+            if ( ! check_ajax_referer( 'productimport_submit_uninstall_reason', '_wpnonce', false ) || ! current_user_can('manage_options') ) {
+                wp_send_json_error();
+            }
+
             if (!isset($_POST['reason_id'])) {
                 wp_send_json_error();
             }
@@ -255,14 +261,14 @@ if (!class_exists('WT_ProdImpExp_Uninstall_Feedback')) :
 
 
             $data = array(
-                'reason_id' => sanitize_text_field($_POST['reason_id']),
+                'reason_id' => sanitize_text_field( wp_unslash( $_POST['reason_id'] ) ),
                 'plugin' => "wfpipe",
                 'auth' => 'wfpipe_uninstall_1234#',
                 'date' => gmdate("M d, Y h:i:s A"),
                 'url' => '',
                 'user_email' => isset($_POST['user_email']) ? sanitize_email( wp_unslash( $_POST['user_email'] ) ) : '',
                 'reason_info' => isset($_REQUEST['reason_info']) ? sanitize_textarea_field( wp_unslash( $_REQUEST['reason_info'] ) ) : '',
-                'software' => isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : '',
+                'software' => isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : '',
                 'php_version' => phpversion(),
                 'mysql_version' => $wpdb->db_version(),
                 'wp_version' => get_bloginfo('version'),

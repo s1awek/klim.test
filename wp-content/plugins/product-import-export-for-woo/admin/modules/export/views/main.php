@@ -34,7 +34,7 @@ Wt_Iew_IE_Basic_Helper::debug_panel($this->module_base);
 	{
 		?>
 		<div class="wt_iew_warn wt_iew_rerun_warn">
-			<?php _e('Unable to handle Re-Run request.');?>
+			<?php esc_html_e('Unable to handle Re-Run request.', 'product-import-export-for-woo');?>
 		</div>
 		<?php
 	}
@@ -46,8 +46,8 @@ Wt_Iew_IE_Basic_Helper::debug_panel($this->module_base);
 	<div class="wt-advt-banner-cover" style="position:relative;display:none;">
 	<div class="wt-advt-banner" style="display:none;position: absolute; margin-top: 150px; left:25%;color:#FFF;width:375px;height:150px;background: #3199F0;padding: 20px; text-align: center">
 		<p class="wt-advt-close" style="float:right;margin-top: 0px !important;line-height: 0;"><a style="color:#FFF;" href="javascript:void(0)" onclick='wt_iew_basic_export.hide_export_ad_box();'>X</a></p>
-		<h3 style="color:#fff;"><?php _e( 'All variable products from your site is not included in the CSV!' ); ?></h3>
-		<p><?php _e( 'Free version only supports simple, grouped, and external/affiliate product types. Variable product type support is a '); ?><a target="_blank" style="color:#FFF;" href="https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_revamp&utm_medium=basic_revamp_variation&utm_campaign=Product_Import_Export"><?php _e( 'premium feature' ); ?></a>.
+		<h3 style="color:#fff;"><?php esc_html_e( 'All variable products from your site is not included in the CSV!', 'product-import-export-for-woo' ); ?></h3>
+		<p><?php esc_html_e( 'Free version only supports simple, grouped, and external/affiliate product types. Variable product type support is a ', 'product-import-export-for-woo' ); ?><a target="_blank" style="color:#FFF;" href="https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_revamp&utm_medium=basic_revamp_variation&utm_campaign=Product_Import_Export"><?php esc_html_e( 'premium feature', 'product-import-export-for-woo' ); ?></a>.
 		</p>
 	</div>
 	</div>
@@ -56,13 +56,13 @@ Wt_Iew_IE_Basic_Helper::debug_panel($this->module_base);
 	
 	<div class="wt-something-went-wrong" style="position:relative;display:none;">		
 		<div class="wt-something-went-wrong-wrap">			
-			<p class="wt_iew_popup_close" style="float:right;margin-top: -15px !important;margin-right: -15px !important;line-height: 0;"><a href="javascript:void(0)"><img src="<?php echo WT_P_IEW_PLUGIN_URL.'/assets/images/wt-close-button.png';?>"/></a></p>
-			<img src="<?php echo WT_P_IEW_PLUGIN_URL.'/assets/images/wt-error-icon.png';?>"/>
-			<h3><?php esc_html_e('Something went wrong'); ?></h3>
-			<p style="color:#000;text-align: left;"><?php esc_html_e('We are unable to complete your request.Try reducing the import batch count to 5 or less and increasing the Maximum execution time in the'); ?><a target="_blank" href="<?php echo admin_url('admin.php?page=wt_import_export_for_woo_basic') ?>"><?php esc_html_e('General settings'); ?></a>.</p>
-			<p style="color:#000;text-align: left;"><?php esc_html_e(' If not resolved, contact the');?> <a target="_blank" href="https://www.webtoffee.com/contact/"><?php esc_html_e('support team'); ?></a> <?php esc_html_e('with the');?> <a target="_blank" href="<?php echo admin_url('admin.php?page=wc-status&tab=logs') ?>"><?php esc_html_e('WooCommerce fatal error log'); ?></a>, <?php esc_html_e('if any'); ?>.</p>
+			<p class="wt_iew_popup_close" style="float:right;margin-top: -15px !important;margin-right: -15px !important;line-height: 0;"><a href="javascript:void(0)"><img src="<?php echo esc_url(WT_P_IEW_PLUGIN_URL.'/assets/images/wt-close-button.png');?>"/></a></p>
+			<img src="<?php echo esc_url(WT_P_IEW_PLUGIN_URL.'/assets/images/wt-error-icon.png');?>"/>
+			<h3><?php esc_html_e('Something went wrong', 'product-import-export-for-woo'); ?></h3>
+			<p style="color:#000;text-align: left;"><?php esc_html_e('We are unable to complete your request.Try reducing the import batch count to 5 or less and increasing the Maximum execution time in the', 'product-import-export-for-woo'); ?> <a target="_blank" href="<?php echo esc_url(admin_url('admin.php?page=wt_import_export_for_woo_basic')); ?>"><?php esc_html_e('General settings', 'product-import-export-for-woo'); ?></a>.</p>
+			<p style="color:#000;text-align: left;"><?php esc_html_e(' If not resolved, contact the', 'product-import-export-for-woo');?> <a target="_blank" href="https://www.webtoffee.com/contact/"><?php esc_html_e('support team', 'product-import-export-for-woo'); ?></a> <?php esc_html_e('with the', 'product-import-export-for-woo');?> <a target="_blank" href="<?php echo esc_url(admin_url('admin.php?page=wc-status&tab=logs')); ?>"><?php esc_html_e('WooCommerce fatal error log', 'product-import-export-for-woo'); ?></a>, <?php esc_html_e('if any', 'product-import-export-for-woo'); ?>.</p>
 			<br/>
-			<a href="javascript:void(0)" onclick='wt_iew_basic_export.refresh_export_page();' class="button button-primary"><?php esc_html_e('Try again'); ?></a>
+			<a href="javascript:void(0)" onclick='wt_iew_basic_export.refresh_export_page();' class="button button-primary"><?php esc_html_e('Try again', 'product-import-export-for-woo'); ?></a>
 		</div>
 	</div>	
 	
@@ -71,7 +71,7 @@ Wt_Iew_IE_Basic_Helper::debug_panel($this->module_base);
 	foreach($this->steps as $stepk=>$stepv)
 	{
 		?>
-		<div class="wt_iew_export_step wt_iew_export_step_<?php echo $stepk;?>" data-loaded="0"></div>
+		<div class="wt_iew_export_step wt_iew_export_step_<?php echo esc_attr($stepk);?>" data-loaded="0"></div>
 		<?php
 	}
 	?>	

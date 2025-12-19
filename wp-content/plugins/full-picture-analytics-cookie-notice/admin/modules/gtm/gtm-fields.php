@@ -22,11 +22,11 @@ $sections = array(
 			),	
 			array(
 				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Protect dataLayer', 'full-picture-analytics-cookie-notice' ),
+				'label' 			=> esc_html__( 'Rename dataLayer', 'full-picture-analytics-cookie-notice' ),
+				'after field'		=> esc_html__( 'Recommended in most situations', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'datalayer',
 				'option_arr_id'		=> $option_arr_id,
-				'popup2'				=> '<p>' . esc_html__( 'Enable dataLayer protection if you installed Google Analytics or Ads outside GTM and see unexpected tracking data.', 'full-picture-analytics-cookie-notice') . '</p>
-				<p class="fupi_warning_text">' . esc_html__( 'This setting forces GTM to use a separate dataLayer which will not be filled with events tracked by GA and GAds. However, you will also not be able to use GTM to extend the GA and GAds installed outside GTM.', 'full-picture-analytics-cookie-notice') . '</p>'
+				'popup2'				=> '<p>' . esc_html__( 'Google Analytics, Ads and Tag Manager use the same datalayer which may lead to duplicate events. Enable this option to rename the dataLayer that GTM uses to fupi_datalayer and prevent it.', 'full-picture-analytics-cookie-notice') . '</p>'
 			),
 		),
 	),
@@ -42,7 +42,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_gtm_events',
-		'section_title' => esc_html__( 'Tracking simple events', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Simple events', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',
@@ -216,7 +216,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_gtm_atrig',
-		'section_title' => esc_html__( 'Tracking complex events', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Custom events', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'r3',
@@ -231,7 +231,7 @@ $sections = array(
 						'label'				=> esc_html__( 'When this happens', 'full-picture-analytics-cookie-notice' ),
 						'type' 				=> 'atrig_select',
 						'field_id'			=> 'atrig_id',
-						'class'		=> 'fupi_col_30',
+						'class'				=> 'fupi_col_50',
 						'required'			=> true,
 						'format'			=> 'key'
 					),
@@ -240,7 +240,7 @@ $sections = array(
 						'label' 			=> esc_html__( '...for...', 'full-picture-analytics-cookie-notice' ),
 						'field_id' 			=> 'repeat',
 						'option_arr_id'		=> $option_arr_id,
-						'class'		=> 'fupi_col_15',
+						'class'				=> 'fupi_col_20',
 						'options'			=> array(
 							'no'				=> esc_html__( 'The first time', 'full-picture-analytics-cookie-notice' ),
 							'yes'				=> esc_html__( 'Every time', 'full-picture-analytics-cookie-notice' ),
@@ -253,14 +253,41 @@ $sections = array(
 						'field_id'			=> 'evt_name',
 						'el_class'			=> 'fupi_events_builder_evt',
 						'required'			=> true,
-						'class'		=> 'fupi_col_20',
+						'class'				=> 'fupi_col_30',
 					),
 					array(
-						'type'				=> 'number',
-						'label'				=> esc_html__( 'Value (optional)', 'full-picture-analytics-cookie-notice' ),
-						'field_id'			=> 'evt_val',
-						'required'			=> true,
-						'class'		=> 'fupi_col_20',
+						'type'				=> 'r3',
+						'label'				=> esc_html__( 'Event parameters (optional)', 'full-picture-analytics-cookie-notice' ),
+						'field_id'			=> 'params',
+                        'is_repeater'		=> true,
+						'class'		        => 'fupi_col_100 fupi_simple_r3',
+						'fields'			=> array(
+                            array(
+                                'placeholder'		=> esc_html__( 'Parameter name', 'full-picture-analytics-cookie-notice' ),
+                                'type'				=> 'text',
+                                'field_id'			=> 'name',
+                                'class'		        => 'fupi_col_30',
+                            ),
+							array(
+								'type'	 			=> 'select',
+								'field_id' 			=> 'type',
+								'option_arr_id'		=> $option_arr_id,
+								'class'				=> 'fupi_col_20',
+								'options'			=> array(
+									''					=> esc_html__( 'Value type', 'full-picture-analytics-cookie-notice' ),
+									'string'			=> esc_html__( 'Text', 'full-picture-analytics-cookie-notice' ),
+									'number'			=> esc_html__( 'Number', 'full-picture-analytics-cookie-notice' ),
+									'bool'				=> esc_html__( 'true/false', 'full-picture-analytics-cookie-notice' ),
+									'path'			=> esc_html__( 'Path to a JS value', 'full-picture-analytics-cookie-notice' ),
+								),
+							),
+							array(
+                                'placeholder'		=> esc_html__( 'Parameter value', 'full-picture-analytics-cookie-notice' ),
+                                'type'				=> 'text',
+                                'field_id'			=> 'val',
+                                'class'		        => 'fupi_col_30',
+                            ),
+						)
 					),
 				),
 			)
@@ -271,7 +298,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_gtm_wpdata',
-		'section_title' => esc_html__( 'Tracking WP data', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Event parameters', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',

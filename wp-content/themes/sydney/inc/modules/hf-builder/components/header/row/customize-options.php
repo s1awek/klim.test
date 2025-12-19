@@ -71,6 +71,7 @@ foreach( $this->header_rows as $row ) {
                 ) ),
                 'controls_design'		=> wp_json_encode( array( 
                     '#customize-control-sydney_header_row__' . $row['id'] . '_background_color',
+                    '#customize-control-sydney_header_row__' . $row['id'] . '_transparent_background_color',
                     '#customize-control-sydney_header_row__' . $row['id'] . '_divider2',
                     '#customize-control-sydney_header_row__' . $row['id'] . '_background_image',
                     '#customize-control-sydney_header_row__' . $row['id'] . '_background_size',
@@ -329,6 +330,40 @@ foreach( $this->header_rows as $row ) {
         )
     );
 
+    // Transparent Header Background Color
+    $wp_customize->add_setting(
+        'global_sydney_header_row__' . $row['id'] . '_transparent_background_color',
+        array(
+            'default'           => '',
+            'sanitize_callback' => 'wp_kses_post',
+            'transport'         => 'postMessage'
+        )
+    );
+    $wp_customize->add_setting(
+        'sydney_header_row__' . $row['id'] . '_transparent_background_color',
+        array(
+            'default'           => '',
+            'sanitize_callback' => 'sydney_sanitize_hex_rgba',
+            'transport'         => 'postMessage'
+        )
+    );
+    $wp_customize->add_control(
+        new Sydney_Alpha_Color(
+            $wp_customize,
+            'sydney_header_row__' . $row['id'] . '_transparent_background_color',
+            array(
+                'label'         	=> esc_html__( 'Background Color (transparent mode)', 'sydney' ),
+                'section'       	=> $row['section'],
+                'settings'       => array(
+                    'global'  => 'global_sydney_header_row__' . $row['id'] . '_transparent_background_color',
+                    'setting' => 'sydney_header_row__' . $row['id'] . '_transparent_background_color',
+                ),
+                'active_callback' => 'sydney_callback_transparent_header',
+                'priority'			=> 32
+            )
+        )
+    );
+
     // Background Image
     $wp_customize->add_setting( 
         'sydney_header_row__' . $row['id'] . '_background_image',
@@ -447,6 +482,14 @@ foreach( $this->header_rows as $row ) {
 
     // Border Bottom Color.
     $wp_customize->add_setting(
+        'global_sydney_header_row__' . $row['id'] . '_border_bottom_color',
+        array(
+            'default'           => '',
+            'sanitize_callback' => 'wp_kses_post',
+            'transport'         => 'postMessage'
+        )
+    );
+    $wp_customize->add_setting(
         'sydney_header_row__' . $row['id'] . '_border_bottom_color',
         array(
             'default'           => '#EAEAEA',
@@ -461,6 +504,10 @@ foreach( $this->header_rows as $row ) {
             array(
                 'label'         	=> esc_html__( 'Border Bottom Color', 'sydney' ),
                 'section'       	=> $row['section'],
+                'settings'       => array(
+                    'global'  => 'global_sydney_header_row__' . $row['id'] . '_border_bottom_color',
+                    'setting' => 'sydney_header_row__' . $row['id'] . '_border_bottom_color',
+                ),
                 'priority'			=> 36
             )
         )
@@ -596,6 +643,14 @@ foreach( $this->header_rows as $row ) {
 
     // Sticky Header - Background.
     $wp_customize->add_setting(
+        'global_sydney_header_row__' . $row['id'] . '_sticky_background_color',
+        array(
+            'default'           => '',
+            'sanitize_callback' => 'wp_kses_post',
+            'transport'         => 'postMessage'
+        )
+    );
+    $wp_customize->add_setting(
         'sydney_header_row__' . $row['id'] . '_sticky_background_color',
         array(
             'default'           => '',
@@ -610,6 +665,10 @@ foreach( $this->header_rows as $row ) {
             array(
                 'label'         	=> esc_html__( 'Background Color', 'sydney' ),
                 'section'       	=> $row['section'],
+                'settings'       => array(
+                    'global'  => 'global_sydney_header_row__' . $row['id'] . '_sticky_background_color',
+                    'setting' => 'sydney_header_row__' . $row['id'] . '_sticky_background_color',
+                ),
                 'active_callback'   => 'sydney_callback_sticky_header',
                 'priority'			=> 39
             )
@@ -617,6 +676,14 @@ foreach( $this->header_rows as $row ) {
     );
 
     // Sticky Header - Border Bottom Color.
+    $wp_customize->add_setting(
+        'global_sydney_header_row__' . $row['id'] . '_sticky_border_bottom_color',
+        array(
+            'default'           => '',
+            'sanitize_callback' => 'wp_kses_post',
+            'transport'         => 'postMessage'
+        )
+    );
     $wp_customize->add_setting(
         'sydney_header_row__' . $row['id'] . '_sticky_border_bottom_color',
         array(
@@ -632,6 +699,10 @@ foreach( $this->header_rows as $row ) {
             array(
                 'label'         	=> esc_html__( 'Border Bottom Color', 'sydney' ),
                 'section'       	=> $row['section'],
+                'settings'       => array(
+                    'global'  => 'global_sydney_header_row__' . $row['id'] . '_sticky_border_bottom_color',
+                    'setting' => 'sydney_header_row__' . $row['id'] . '_sticky_border_bottom_color',
+                ),
                 'active_callback'   => 'sydney_callback_sticky_header',
                 'priority'			=> 40
             )

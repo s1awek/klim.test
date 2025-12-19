@@ -5,6 +5,8 @@ class Fupi_WOO_admin {
 
     private $main;
 
+    private $cook;
+
     private $tools;
 
     private $proofrec;
@@ -14,6 +16,7 @@ class Fupi_WOO_admin {
     public function __construct() {
         $this->settings = get_option( 'fupi_woo' );
         $this->main = get_option( 'fupi_main' );
+        $this->cook = get_option( 'fupi_cook' );
         $this->tools = get_option( 'fupi_tools' );
         $this->proofrec = get_option( 'fupi_proofrec' );
         $this->add_actions_and_filters();
@@ -41,6 +44,14 @@ class Fupi_WOO_admin {
         );
     }
 
+    private function pp_ok() {
+        if ( !empty( $this->cook['pp_id'] ) ) {
+            $pp_id = (int) $this->cook['pp_id'];
+            return get_post_status( $pp_id ) == 'publish';
+        }
+        return false;
+    }
+
     public function add_fields_settings( $sections ) {
         include_once 'woo-fields.php';
         return $sections;
@@ -57,7 +68,7 @@ class Fupi_WOO_admin {
         if ( apply_filters( 'fupi_updating_many_options', false ) ) {
             return $clean_data;
         }
-        if ( !empty( $this->tools['cook'] ) && !empty( $this->tools['proofrec'] ) && !empty( get_privacy_policy_url() ) ) {
+        if ( !empty( $this->tools['cook'] ) && !empty( $this->tools['proofrec'] ) && $this->pp_ok() ) {
             include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
             $gdpr_checker = new Fupi_compliance_status_checker('woo', $clean_data);
             $gdpr_checker->send_and_return_status();

@@ -35,22 +35,19 @@ switch( $section_id ){
 	// EVENTS
 
 	case 'fupi_ga41_events':
-		$ret_text = '<p>' . esc_html__('Use functions on this page to track simple events, like clicking a button or submitting a form.', 'full-picture-analytics-cookie-notice' ) . ' ' . esc_html__( 'You can send them to GA as either separate events (every action gets a unique event - easy) or single events with parameters that identify actions (advanced).', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__('Use simple events to track clicks, form submissions and others events.', 'full-picture-analytics-cookie-notice' ) . ' ' . esc_html__( 'You can send them to GA as either separate events (every action gets a unique event - easy) or single events with parameters that identify actions (advanced).', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
-	// COMPLEX EVENTS
+	// CUSTOM EVENTS
 	
-	case 'fupi_ga41_atrig':
-		$ret_text = '<div>
-			<p>' . esc_html__( 'Use functions on this page to track complex events, with many conditions, for example, when a visitor from France visits 5 product pages in one session. You can set these conditions in the "Advanced triggers" module.' , 'full-picture-analytics-cookie-notice' ) . '</p>
-			<p class="fupi_warning_text">' . sprintf( esc_html__( 'The "value" will be sent as a custom parameter "fp_event_value". In order to use it in GA, you need to %1$sregister it as a custom metric%2$s.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/">', '</a>' ) . '</p>
-		</div>';
+	case 'fupi_ga41_custom_events':
+		$ret_text = '<p>' . sprintf( esc_html__( 'Here you can set up custom events. Trigger them with %1$scustom triggers%2$s and add %3$soptional parameters%2$s.' , 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-advanced-triggers/" target="_blank">', '</a>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-parameters/" target="_blank">' ) . ' ' . sprintf( esc_html__( 'Attention. You need to %1$sregister parameters in GA dashboard%2$s to view them in reports.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/" target="_blank">', '</a>' ) . '</p>';
 	break;
 
 	// PARAMS
 	
 	case 'fupi_ga41_wpdata':
-		$ret_text = '<p>' . esc_html__( 'Event parameters give context to events.', 'full-picture-analytics-cookie-notice') . ' <span class="fupi_warning_text">' . sprintf( esc_html__( 'In order to see them in GA, you need to %1$sregistered them as custom dimensions%2$s.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/">', '</a>' ) . '</span></p>';
+		$ret_text = '<p>' . esc_html__( 'These parameters will be sent with all events, including the initial pageview event and custom events.', 'full-picture-analytics-cookie-notice') . ' ' . sprintf( esc_html__( 'In order to see them in reports, you need to %1$sregistered them in GA%2$s.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/">', '</a>' ) . '</p>';
 	break;
 
 	// E-COMMERCE

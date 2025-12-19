@@ -62,7 +62,6 @@ class WCPM {
             wp_unschedule_event( $timestamp, 'pmw_tracking_accuracy_analysis' );
         } );
         Deprecated_Filters::load_deprecated_filters();
-        Environment::third_party_plugin_tweaks_on_plugins_loaded();
         if ( Environment::is_woocommerce_active() ) {
             add_action( 'before_woocommerce_init', [__CLASS__, 'declare_woocommerce_compatibilities'] );
             add_action(

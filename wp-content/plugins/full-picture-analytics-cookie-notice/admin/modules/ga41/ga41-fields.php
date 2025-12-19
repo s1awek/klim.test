@@ -2,6 +2,10 @@
 
 $option_arr_id = 'fupi_ga41';
 $ga41_data = get_option('fupi_ga41');
+$gads_data = get_option('fupi_gads');
+
+$is_gads_installed = ! empty( $this->tools['gads'] );
+$gads_gtag_id = $is_gads_installed && ! empty( $gads_data['id'] ) ? $gads_data['id'] : false;
 
 $sections = array(
 
@@ -19,10 +23,20 @@ $sections = array(
 				'required'			=> true,
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[id]',
-				'placeholder'		=> esc_html__( 'G-0000000 or GT-0000000', 'full-picture-analytics-cookie-notice'),
-				'under field'		=> '<p>' . sprintf( esc_html__( '%1$sLearn where to find it%2$s', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-install-google-analytics-4/">', '</a>') . '</p>
-					<p>' . esc_html__( 'Tip. If the installation check in GA panel fails, enable "Force load" in the "Loading" section. Disable it after the check.', 'full-picture-analytics-cookie-notice') . '</p>',
+				'placeholder'		=> 'XX-0000000',
+				'under field'		=> '<p>' . sprintf( esc_html__( '%1$sHow to get GTAG ID and Measurement ID and install Google Analytics%2$s', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-install-google-analytics-4/">', '</a>') . '</p>',
 			),
+				array(
+					'type'	 			=> 'text',
+					'label' 			=> esc_html__( 'Measurement ID', 'full-picture-analytics-cookie-notice' ),
+					'field_id' 			=> 'id2',
+					'class'				=> 'fupi_join',
+					'required'			=> true,
+					'option_arr_id'		=> $option_arr_id,
+					'label_for' 		=> $option_arr_id . '[id]',
+					'placeholder'		=> 'XX-0000000',
+					'under field'		=> '<p>' . esc_html__( 'Provide Measurement ID if it is different from GTAG ID.', 'full-picture-analytics-cookie-notice') . '</p>',
+				),
 			array(
 				'type' 				=> 'toggle',
 				'label' 			=> esc_html__( 'Avoid conflicts with other Google Analytics installations', 'full-picture-analytics-cookie-notice' ),
@@ -48,7 +62,7 @@ $sections = array(
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . sprintf( esc_html__( 'This will load the tracking script for all website visitors, including administrators, bots, excluded users, people browsing from excluded locations and people that didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
+				<p>' . sprintf( esc_html__( 'This will load the tracking script for administrators, bots, excluded users, people browsing from excluded locations and people who didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
 			),
 			array(
 				'type'	 			=> 'r3',
@@ -83,7 +97,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_ga41_basic',
-		'section_title' => esc_html__( 'Data collection settings', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Data collection', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',
@@ -118,7 +132,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_ga41_events',
-		'section_title' => esc_html__( 'Tracking simple events', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Simple events', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'radio',
@@ -406,8 +420,8 @@ $sections = array(
 	// CUSTOM EVENTS
 
 	array(
-		'section_id' => 'fupi_ga41_atrig',
-		'section_title' => esc_html__( 'Tracking complex events', 'full-picture-analytics-cookie-notice' ),
+		'section_id' => 'fupi_ga41_custom_events',
+		'section_title' => esc_html__( 'Custom events', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'r3',
@@ -422,7 +436,7 @@ $sections = array(
 						'label'				=> esc_html__( 'When this happens', 'full-picture-analytics-cookie-notice' ),
 						'type' 				=> 'atrig_select',
 						'field_id'			=> 'atrig_id',
-						'class'				=> 'fupi_col_30',
+						'class'				=> 'fupi_col_50',
 						'required'			=> true,
 						'format'			=> 'key'
 					),
@@ -431,7 +445,7 @@ $sections = array(
 						'label' 			=> esc_html__( '...for...', 'full-picture-analytics-cookie-notice' ),
 						'field_id' 			=> 'repeat',
 						'option_arr_id'		=> $option_arr_id,
-						'class'				=> 'fupi_col_15',
+						'class'				=> 'fupi_col_20',
 						'options'			=> array(
 							'no'				=> esc_html__( 'The first time', 'full-picture-analytics-cookie-notice' ),
 							'yes'				=> esc_html__( 'Every time', 'full-picture-analytics-cookie-notice' ),
@@ -444,14 +458,41 @@ $sections = array(
 						'field_id'			=> 'evt_name',
 						'el_class'			=> 'fupi_events_builder_evt',
 						'required'			=> true,
-						'class'				=> 'fupi_col_20',
+						'class'				=> 'fupi_col_30_grow',
 					),
 					array(
-						'type'				=> 'number',
-						'label'				=> esc_html__( 'Value (optional)', 'full-picture-analytics-cookie-notice' ),
-						'field_id'			=> 'evt_val',
-						'required'			=> true,
-						'class'				=> 'fupi_col_20',
+						'type'				=> 'r3',
+						'label'				=> esc_html__( 'Event parameters (optional)', 'full-picture-analytics-cookie-notice' ),
+						'field_id'			=> 'params',
+                        'is_repeater'		=> true,
+						'class'		        => 'fupi_col_100 fupi_simple_r3',
+						'fields'			=> array(
+                            array(
+                                'placeholder'		=> esc_html__( 'Parameter name', 'full-picture-analytics-cookie-notice' ),
+                                'type'				=> 'text',
+                                'field_id'			=> 'name',
+                                'class'		        => 'fupi_col_30',
+                            ),
+							array(
+								'type'	 			=> 'select',
+								'field_id' 			=> 'type',
+								'option_arr_id'		=> $option_arr_id,
+								'class'				=> 'fupi_col_20',
+								'options'			=> array(
+									''					=> esc_html__( 'Value type', 'full-picture-analytics-cookie-notice' ),
+									'string'			=> esc_html__( 'Text', 'full-picture-analytics-cookie-notice' ),
+									'number'			=> esc_html__( 'Number', 'full-picture-analytics-cookie-notice' ),
+									'bool'				=> esc_html__( 'true/false', 'full-picture-analytics-cookie-notice' ),
+									'path'			=> esc_html__( 'Path to a JS value', 'full-picture-analytics-cookie-notice' ),
+								),
+							),
+							array(
+                                'placeholder'		=> esc_html__( 'Parameter value', 'full-picture-analytics-cookie-notice' ),
+                                'type'				=> 'text',
+                                'field_id'			=> 'val',
+                                'class'		        => 'fupi_col_30',
+                            ),
+						)
 					),
 				),
 			)
@@ -462,7 +503,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_ga41_wpdata',
-		'section_title' => esc_html__( 'Tracking event parameters', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Event parameters', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'text',
@@ -657,31 +698,62 @@ $sections = array(
 				'type'	 			=> 'text',
 				'label' 			=> esc_html__( 'Measurement Protocol API secret key', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'mp_secret_key',
+				'class'				=> 'fupi_adv',
 				'must_have'			=> 'pro woo',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[mp_secret_key]',
 				'under field'		=> sprintf( esc_html__( 'Measurement Protocol is only used for WooCommerce Status-Based Order Tracking (see below). %1$sLearn where to find the MP key%2$s', 'full-picture-analytics-cookie-notice'), '<button type="button" class="fupi_faux_link fupi_open_popup" data-popup="fupi_mpapi_key_popup">', '</button>'),
 			),
-			array(
-				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Status-Based Order Tracking with Measurement Protocol', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'adv_orders',
-				'class'				=> 'fupi_sub',
-				'must_have'			=> 'pro woo', // field|fupi_ga41|mp_secret_key|exists|' . esc_html__("Measurement_Protocol_Secret_Key")
-				'option_arr_id'		=> $option_arr_id,
-				'popup2'			=> '
-					<p>' . esc_html__( 'Status-Based Order Tracking is an alternative method of tracking purchases. Instead of tracking them on order confirmation pages, orders are tracked when their status changes.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p>' . esc_html__( 'This method of tracking is recommended for stores that use payment gateways, which do not redirect back to the order confirmation page.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p>' . sprintf( esc_html__( 'In addition, SBOT allows for tracking returns and cancellations. (requires a %1$scustom "refunds" report %2$s).', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-make-a-refunds-report-in-google-analytics-4/">', '</a>' ) . '</p>
-					<h3>' . esc_html__( 'Other information', 'full-picture-analytics-cookie-notice' ) . '</h3>
-					<ol>
-						<li>' . esc_html__( 'Orders will be tracked when they get a status that is set in "WooCommerce Tracking" page > "Status-Based Order Tracking" section.', 'full-picture-analytics-cookie-notice' ) . '</li>
-						<li>' . esc_html__( 'Purchases are attributed to users and sessions just like with standard tracking.', 'full-picture-analytics-cookie-notice' ) . '</li>
-						<li>' . esc_html__( 'SBOT does not track orders added manually in the WooCommerce admin panel, since they cannot be attributed to any website users.', 'full-picture-analytics-cookie-notice' ) . '</li>
-						<li class="fupi_warning_text">' . esc_html__( 'Partial refunds are not tracked. Only full refunds are tracked when the order status changes to "Refunded".', 'full-picture-analytics-cookie-notice' ) . '</li>
-						<li class="fupi_warning_text">' . esc_html__( 'Most purchases tracked with SBOT will not be visible in the "realtime view" reports in GA. Google can process server-side purchase events for up to 48 hours.', 'full-picture-analytics-cookie-notice' ) . '</li>
-					</ol>',
-			),
+				array(
+					'type'	 			=> 'toggle',
+					'label' 			=> esc_html__( 'Status-Based Order Tracking with Measurement Protocol', 'full-picture-analytics-cookie-notice' ),
+					'field_id' 			=> 'adv_orders',
+					'class'				=> 'fupi_sub',
+					'must_have'			=> 'pro woo', // field|fupi_ga41|mp_secret_key|exists|' . esc_html__("Measurement_Protocol_Secret_Key")
+					'option_arr_id'		=> $option_arr_id,
+					'popup2'			=> '
+						<p>' . sprintf( esc_html__( 'Status-Based Order Tracking is an alternative method of tracking purchases. It tracks orders, refunds and cancellations. You can learn how it works %1$son this page%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/what-you-need-to-know-about-status-based-order-tracking/">', '</a>' ) . '</p>
+						<p class="fupi_warning_text">' . esc_html__( 'Attention. Google Analytics has an important limitation. Google Analytics is not able to track orders if it receives "purchase" event that is older than 3 days.', 'full-picture-analytics-cookie-notice' ) . '</p>',
+				),
+				array(
+					'type'	 			=> 'r3',
+					'label' 			=> esc_html__( 'Custom metadata for purchase event', 'full-picture-analytics-cookie-notice' ),
+					'field_id' 			=> 'purchase_custom_meta',
+					'must_have'			=> 'pro',
+					'class'				=> 'fupi_sub fupi_adv fupi_metadata_tracker fupi_fullwidth_tr',
+					'option_arr_id'		=> $option_arr_id,
+					'is_repeater'		=> true,
+					'popup2'			=> '<p>' . esc_html__( 'This setting lets you add custom metadata to your purchase event. The data will be sent only server-side, with the Status-Based Order Tracking.', 'full-picture-analytics-cookie-notice' ) . '</p>
+						<p>' . sprintf( esc_html__( 'Remember, that you need to register this data as a custom dimension, to see it in the Google Analytics reports.', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-definitions-in-google-analytics-4/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
+					'fields'			=> array(
+						array(
+							'type'				=> 'text',
+							'placeholder'		=> esc_html__( 'Metadata key' , 'full-picture-analytics-cookie-notice' ),
+							'field_id'			=> 'key',
+							'required'			=> true,
+							'class'				=> 'fupi_col_30',
+						),
+						array(
+							'type'				=> 'select',
+							'field_id'			=> 'type',
+							'options'			=> array(
+								'string'			=> esc_html__('Text','full-picture-analytics-cookie-notice'),
+								'int'				=> esc_html__('Integer','full-picture-analytics-cookie-notice'),
+								'float'				=> esc_html__('Number with decimals','full-picture-analytics-cookie-notice'),
+								'bool'				=> esc_html__('True/False','full-picture-analytics-cookie-notice'),
+							),
+							'class'				=> 'fupi_col_20',
+						),
+						array(
+							'type'				=> 'text',
+							'placeholder'		=> esc_html__( 'parameter_name' , 'full-picture-analytics-cookie-notice' ),
+							'field_id'			=> 'dimname',
+							'required'			=> true,
+							'format' 			=> 'key',
+							'class'				=> 'fupi_col_30',
+						),
+					),
+				)
 		),
 	)
 );

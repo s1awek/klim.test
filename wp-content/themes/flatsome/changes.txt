@@ -1,3 +1,14 @@
+--- 3.20.4 ---
+NEW: WordPress 6.9 compatibility.
+NEW: WooCommerce 10.4 compatibility.
+
+FIXED: Swatches: Missing placeholder images in admin edit attributes.
+
+UPDATED: Google Fonts list.
+
+--- 3.20.3 ---
+NEW: WooCommerce 10.3 compatibility.
+
 --- 3.20.2 ---
 NEW: WooCommerce 10.2 compatibility.
 

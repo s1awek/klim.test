@@ -3,7 +3,6 @@
 namespace SweetCode\Pixel_Manager\Admin\Opportunities\Free;
 
 use SweetCode\Pixel_Manager\Admin\Documentation;
-use SweetCode\Pixel_Manager\Admin\Environment;
 use SweetCode\Pixel_Manager\Admin\Opportunities\Opportunity;
 use SweetCode\Pixel_Manager\Options;
 
@@ -18,17 +17,16 @@ class Google_Gtag_Gateway_For_Advertisers extends Opportunity {
 
 	public static function available() {
 
+		// Temporarily disabled - we don't want to recommend this in the current release
+		return false;
+
 		// Google tag gateway for advertisers must be disabled
 		if (Options::get_google_tag_gateway_measurement_path()) {
 			return false;
 		}
 
-		// Return false if not behind Cloudflare
-		// For now, we only push it to Cloudflare users
-		// because for all other users it's much more challenging to set up
-		if (!Environment::is_server_behind_cloudflare()) {
-			return false;
-		}
+		// Since 1.53.0, the built-in proxy makes the Google Tag Gateway available to everyone
+		// No Cloudflare or other external infrastructure required
 
 		return true;
 	}

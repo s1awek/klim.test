@@ -20,9 +20,11 @@ class Fupi_fpinfo_generator {
         $this->include_modules_datafile();
         $this->check_every_module();
         $this->get_extra_tools_data();
-        $this->get_blockscr_data();
-        $this->get_iframe_data();
-        // $this->check_cdb();
+        
+        if ( ! empty( $this->tools['cook'] ) ) {
+            $this->get_blockscr_data();
+            $this->get_iframe_data();
+        }
     }
 
     private function include_modules_datafile() {
@@ -37,17 +39,6 @@ class Fupi_fpinfo_generator {
 
         return false; // module info not found
     }
-
-    // private function check_cdb(){
-
-    //     if ( ! in_array( 'cook', $this->tools ) ) return;
-
-    //     $cook_opts = get_option('fupi_cook');
-
-    //     if ( ! empty ( $cook_opts ) && ! empty ( $cook_opts['cdb_key'] ) ) {
-    //         $this->data[] = [ 'ConsentsDB', 'Paste URL here'];
-    //     }
-    // }
 
     private function check_every_module(){
         
@@ -66,11 +57,34 @@ class Fupi_fpinfo_generator {
                 case 'gtm':
                     $this->get_module_data( $module_info );
                 break;
+                case 'proofrec':
+                    $this->get_proofrec_data( $module_info );
+                break;
                 default:
                     if ( $module_info['type'] == 'integr' && isset( $module_info['pp'] ) ) $this->get_module_data( $module_info );
                 break;
             }
         }
+    }
+
+    private function pp_ok(){
+            
+        if ( ! empty ( $this->tools['cook'] ) && ! empty( $this->cook['pp_id'] ) ) {
+            $pp_id = (int) $this->cook['pp_id'];
+            return get_post_status( $pp_id ) == 'publish';
+        }
+
+        return false;
+    }
+
+    private function get_proofrec_data(){
+
+        $proofrec = get_option('fupi_proofrec');
+
+        if ( ! empty( $proofrec['cdb_key'] ) && $this->pp_ok() ) {
+            $this->data[ 'ConsentsDB' ] = false;
+        }
+
     }
 
     private function get_module_data( $module_info ){
@@ -196,8 +210,6 @@ class Fupi_fpinfo_generator {
     }
 
     public function output(){
-        
-        if ( count( $this->data ) == 0 ) return '';
 
         $output = '<ol class="fupi_privacy fupi_display_as_' . esc_attr( $this->format ) . '">';
 		
@@ -211,6 +223,8 @@ class Fupi_fpinfo_generator {
 
             $output .= $li;
 		};
+
+        $output .= '<li style="text-transform: capitalize;">WP Full Picture</li>';
         
 		return $output . '</ol>';
 	}

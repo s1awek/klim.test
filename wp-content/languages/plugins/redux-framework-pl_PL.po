@@ -2,14 +2,22 @@
 # This file is distributed under the same license as the Plugins - Redux Framework - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-07-08 17:24:14+0000\n"
+"PO-Revision-Date: 2025-11-10 15:59:50+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.1\n"
+"X-Generator: GlotPress/4.0.3\n"
 "Language: pl\n"
 "Project-Id-Version: Plugins - Redux Framework - Stable (latest release)\n"
+
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:769
+msgid "X square"
+msgstr "X w kwadracie"
+
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:758
+msgid "X"
+msgstr "X"
 
 #: sample/sections/slider-spinner/spinner.php:24
 msgid "JQuery UI spinner description. Min:20, max: 100, step:20, default value: 100"
@@ -25,12 +33,12 @@ msgstr "Wyjście:"
 msgid "The %1$s plugin requires PHP version %2$s or higher. This site is running PHP version %3$s. The theme/plugin that relies on Redux will not run properly without a PHP update. <a href=\"%4$s\">Learn about updating PHP</a>."
 msgstr "Wtyczka %1$s wymaga wersji PHP %2$s lub nowszej. Ta strona korzysta z wersji PHP %3$s. Motyw/wtyczka, która opiera się na Redux, nie będzie działać poprawnie bez aktualizacji PHP. <a href=\"%4$s\">Dowiedz się więcej o aktualizacji PHP</a>."
 
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:579
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:590
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:583
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:594
 msgid "File permission error. Local file could not be installed."
 msgstr "Błąd uprawnień pliku. Nie można zainstalować pliku lokalnego."
 
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:347
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:351
 msgid "File system failure. Could not delete temp dir."
 msgstr "Awaria systemu plików. Nie można usunąć katalogu tymczasowego."
 
@@ -61,7 +69,7 @@ msgid "Import unsuccessful! Malformed JSON data detected."
 msgstr "Import nieudany! Wykryto nieprawidłowe dane JSON."
 
 #. translators: %s = font extension.
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:778
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:782
 msgid "The font converter does not support %s fonts."
 msgstr "Konwerter kroju pisma nie obsługuje krojów pisma %s."
 
@@ -250,40 +258,40 @@ msgstr "Dodaj krój pisma"
 msgid "Error"
 msgstr "Błąd"
 
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:954
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:963
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:958
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:967
 msgid "Font Control"
 msgstr "Kontrola kroju pisma"
 
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:783
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:787
 msgid "ZIP error. Your font could not be converted at this time. Please try again later."
 msgstr "Błąd ZIP. Twój krój pisma nie może być w tej chwili przekonwertowany. Spróbuj ponownie później."
 
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:722
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:726
 msgid "Your font could not be converted at this time. Please try again later."
 msgstr "Twój krój pisma nie może zostać przekonwertowany w tym momencie. Spróbuj ponownie później."
 
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:670
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:674
 msgid "No valid font file was found."
 msgstr "Nie znaleziono prawidłowego pliku kroju pisma."
 
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:614
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:618
 msgid "Unidentified error."
 msgstr "Niezidentyfikowany błąd."
 
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:606
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:610
 msgid "File type not recognized."
 msgstr "Nie rozpoznano rodzaju pliku."
 
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:516
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:520
 msgid "Unzipping failed."
 msgstr "Rozpakowanie nie powiodło się."
 
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:472
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:476
 msgid "Attachment does not exist."
 msgstr "Załącznik nie istnieje."
 
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:357
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:361
 msgid "Unable to delete font file(s)."
 msgstr "Nie można usunąć pliku(ów) kroju pisma."
 
@@ -365,12 +373,12 @@ msgstr "Wpisz swój adres"
 msgid "Your Google Fonts are out of date. To update them, please click one of the following:"
 msgstr "Twoje kroje pisma Google są nieaktualne. Aby je zaktualizować, kliknij jedną z poniższych opcji:"
 
-#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:304
+#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:306
 msgid "Confirm"
 msgstr "Potwierdź"
 
-#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:96
-#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:113
+#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:98
+#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:115
 msgid "Create Widget Area"
 msgstr "Utwórz obszar widżetu"
 
@@ -387,339 +395,331 @@ msgstr "Społecznościowe"
 msgid "Display social media links"
 msgstr "Wyświetlaj odnośniki mediów społecznościowych"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:841
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:923
 msgid "YouTube square"
 msgstr "Kwadrat YouTube"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:831
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:912
 msgid "YouTube play"
 msgstr "Odtwórz YouTube"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:821
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:901
 msgid "YouTube"
 msgstr "YouTube"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:811
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:890
 msgid "Yelp"
 msgstr "Yelp"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:801
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:879
 msgid "Yahoo"
 msgstr "Yahoo"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:791
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:868
 msgid "Xing square"
 msgstr "Kwadrat Xing"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:781
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:857
 msgid "Xing"
 msgstr "Xing"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:771
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:846
 msgid "WordPress"
 msgstr "WordPress"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:761
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:835
 msgid "Windows"
 msgstr "Windows"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:751
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:824
 msgid "Weixin"
 msgstr "Weixin"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:741
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:813
 msgid "Weibo"
 msgstr "Weibo"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:731
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:802
 msgid "VK"
 msgstr "VK"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:721
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:791
 msgid "Vine"
 msgstr "Vine"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:711
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:780
 msgid "Vimeo square"
 msgstr "Kwadrat Vimeo"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:701
-msgid "Twitter square"
-msgstr "Kwadrat Twitter"
-
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:691
-msgid "Twitter"
-msgstr "X (Twitter)"
-
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:681
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:747
 msgid "Tumblr square"
 msgstr "Kwadrat Tumblr"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:671
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:736
 msgid "Tumblr"
 msgstr "Tumblr"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:661
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:725
 msgid "Trello"
 msgstr "Trello"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:651
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:714
 msgid "Tencent Weibo"
 msgstr "Tencent Weibo"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:641
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:703
 msgid "Stumble Upon circle"
 msgstr "Stumble Upon w okręgu"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:631
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:692
 msgid "Stumble Upon"
 msgstr "Stumble Upon"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:621
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:681
 msgid "Steam square"
 msgstr "Kwadrat Steam"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:611
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:670
 msgid "Steam"
 msgstr "Steam"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:601
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:659
 msgid "Stack Overflow"
 msgstr "Stack Overflow"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:591
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:648
 msgid "Stack Exchange"
 msgstr "Stack Exchange"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:581
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:637
 msgid "Spotify"
 msgstr "Spotify"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:571
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:626
 msgid "Sound Cloud"
 msgstr "Sound Cloud"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:561
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:615
 msgid "Slack"
 msgstr "Slack"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:551
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:604
 msgid "Skype"
 msgstr "Skype"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:541
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:593
 msgid "Share square"
 msgstr "Kwadrat Share"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:531
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:582
 msgid "Share alt"
 msgstr "Share alt"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:521
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:571
 msgid "Ren Ren"
 msgstr "Ren Ren"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:511
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:560
 msgid "Reddit square"
 msgstr "Kwadrat Reddit"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:501
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:549
 msgid "Reddit"
 msgstr "Reddit"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:491
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:538
 msgid "Rebel"
 msgstr "Rebel"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:481
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:527
 msgid "QQ"
 msgstr "QQ"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:471
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:516
 msgid "Pinterest square"
 msgstr "Kwadrat Pinterest"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:461
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:505
 msgid "Pinterest"
 msgstr "Pinterest"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:451
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:494
 msgid "Pied Piper alt"
 msgstr "Pied Piper alt"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:441
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:483
 msgid "Pied Piper"
 msgstr "Pied Piper"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:431
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:472
 msgid "Page Lines"
 msgstr "Page Lines"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:421
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:461
 msgid "OpenID"
 msgstr "OpenID"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:411
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:450
 msgid "MaxCDN"
 msgstr "MaxCDN"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:401
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:439
 msgid "Linux"
 msgstr "Linux"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:391
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:428
 msgid "LinkedIn square"
 msgstr "Kwadrat LinkedIn"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:381
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:417
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:371
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:406
 msgid "JS Fiddle"
 msgstr "JS Fiddle"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:361
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:395
 msgid "Joomla"
 msgstr "Joomla"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:351
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:384
 msgid "Instagram"
 msgstr "Instagram"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:341
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:373
 msgid "HTML5"
 msgstr "HTML5"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:331
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:362
 msgid "Hacker News"
 msgstr "Hacker News"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:321
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:351
 msgid "Google Plus square"
 msgstr "Kwadrat Google Plus"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:311
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:340
 msgid "Google Plus"
 msgstr "Google Plus"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:301
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:329
 msgid "Google"
 msgstr "Google"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:291
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:318
 msgid "git tip"
 msgstr "git tip"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:281
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:307
 msgid "github square"
 msgstr "Kwadrat Github"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:271
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:296
 msgid "github alt"
 msgstr "Github alt"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:261
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:285
 msgid "github"
 msgstr "Github"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:251
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:274
 msgid "git square"
 msgstr "Kwadrat Git"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:241
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:263
 msgid "git"
 msgstr "Git"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:231
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:252
 msgid "FourSquare"
 msgstr "FourSquare"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:221
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:241
 msgid "Flickr"
 msgstr "Flickr"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:211
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:230
 msgid "Facebook square"
 msgstr "Kwadrat Facebook"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:201
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:219
 msgid "Facebook"
 msgstr "Facebook"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:191
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:208
 msgid "Empire"
 msgstr "Empire"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:181
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:197
 msgid "Drupal"
 msgstr "Drupal"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:171
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:186
 msgid "Dropbox"
 msgstr "Dropbox"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:161
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:175
 msgid "Dribbble"
 msgstr "Dribbble"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:151
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:164
 msgid "Digg"
 msgstr "Digg"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:141
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:153
 msgid "Deviantart"
 msgstr "Deviantart"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:131
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:142
 msgid "Delicious"
 msgstr "Delicious"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:121
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:131
 msgid "CSS3"
 msgstr "CSS3"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:111
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:120
 msgid "CodePen"
 msgstr "CodePen"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:101
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:109
 msgid "Bitcoin"
 msgstr "Bitcoin"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:91
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:98
 msgid "Bitbucket square"
 msgstr "Kwadrat Bitbucket"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:81
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:87
 msgid "Bitbucket"
 msgstr "Bitbucket"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:71
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:76
 msgid "behance square"
 msgstr "Kwadrat Behance"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:61
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:65
 msgid "behance"
 msgstr "behance"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:50
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:53
 msgid "Apple"
 msgstr "Apple"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:40
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:42
 msgid "Android"
 msgstr "Android"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:30
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:31
 msgid "ADN"
 msgstr "ADN"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/class-redux-social-profiles.php:229
+#: redux-core/inc/extensions/social_profiles/social_profiles/class-redux-social-profiles.php:232
 msgid "Enabled"
 msgstr "Włączone"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/class-redux-social-profiles.php:183
+#: redux-core/inc/extensions/social_profiles/social_profiles/class-redux-social-profiles.php:185
 msgid "Link URL"
 msgstr "Adres URL odnośnika"
 
@@ -818,7 +818,7 @@ msgstr "Dodaj"
 msgid "Search for field(s)"
 msgstr "Wyszukaj pole(a)"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/class-redux-social-profiles.php:239
+#: redux-core/inc/extensions/social_profiles/social_profiles/class-redux-social-profiles.php:242
 msgid "Reset"
 msgstr "Resetuj"
 
@@ -1431,8 +1431,8 @@ msgstr "Selektor daty / czasu"
 msgid "Custom Fonts Typography"
 msgstr "Niestandardowe kroje pisma typograficzne"
 
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:275
-#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:333
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:279
+#: redux-core/inc/extensions/custom_fonts/class-redux-extension-custom-fonts.php:337
 #: sample/sections/extensions/custom-fonts.php:16
 msgid "Custom Fonts"
 msgstr "Niestandardowe kroje pisma"
@@ -1737,27 +1737,27 @@ msgstr "Podstawowy wymagany przykład"
 msgid "Raw Field <code>full_width</code> set to <code>false</code>"
 msgstr "Surowe pole <code>full_width</code> ustawione na <code>false</code>"
 
-#: sample/sample-config.php:729
+#: sample/sample-config.php:731
 msgid "Testing filter hook!"
 msgstr "Testuję hak filtracyjny!"
 
-#: sample/sample-config.php:581
+#: sample/sample-config.php:583
 msgid "Opt 3"
 msgstr "Opcja 3"
 
-#: sample/sample-config.php:580
+#: sample/sample-config.php:582
 msgid "Opt 2"
 msgstr "Opcja 2"
 
-#: sample/sample-config.php:579
+#: sample/sample-config.php:581
 msgid "Opt 1"
 msgstr "Opcja 1"
 
-#: sample/sample-config.php:568
+#: sample/sample-config.php:570
 msgid "This Section should be visible only in Customizer"
 msgstr "Ta sekcja powinna być widoczna tylko w Konfiguratorze"
 
-#: sample/sample-config.php:504
+#: sample/sample-config.php:506
 msgid "Disabling"
 msgstr "Wyłączanie"
 
@@ -2004,7 +2004,7 @@ msgstr "Jeśli przesyłasz do repozytorium motywów WordPress.org, to jest"
 msgid "RECOMMENDED"
 msgstr "ZALECANE"
 
-#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1532
+#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1534
 #: redux-core/inc/extensions/taxonomy/class-redux-extension-taxonomy.php:1149
 #: redux-core/inc/extensions/users/class-redux-extension-users.php:1143
 msgid "warnings(s) were found!"
@@ -2390,11 +2390,6 @@ msgstr "Obecnie używasz wersji Redux Framework "
 msgid "The %1$s extension requires Redux Framework version %2$s or higher."
 msgstr "Rozszerzenie %1$s wymaga wersji %2$s lub nowszej Redux Framework."
 
-#. translators: 1: Redux, 2: Link to plugin review
-#: redux-core/inc/classes/class-redux-args.php:265
-msgid "Enjoyed %1$s? Please leave us a %2$s rating. We really appreciate your support!"
-msgstr "Podobało Ci się %1$s? Proszę zostaw nam ocenę %2$s. Naprawdę doceniamy Twoje wsparcie!"
-
 #: redux-core/inc/classes/class-redux-args.php:147
 msgid "Bold 700 Italic"
 msgstr "Pogrubiona 700 kursywa"
@@ -2435,7 +2430,7 @@ msgstr "został uruchomiony przed hakiem %s i został opóźniony w celu unikni�
 msgid "Warning, Premature Initialization"
 msgstr "Ostrzeżenie, przedwczesna inicjalizacja"
 
-#: redux-core/framework.php:404 redux-core/framework.php:413
+#: redux-core/framework.php:405 redux-core/framework.php:414
 msgid "Cheatin&#8217; eh?"
 msgstr "Oszustwo, co?"
 
@@ -2460,11 +2455,11 @@ msgstr "Informacje debugowania specyficzne dla Redux Framework."
 msgid "The Redux upload directory"
 msgstr "Katalog do przesłania Redux"
 
-#: class-redux-framework-plugin.php:438
+#: class-redux-framework-plugin.php:439
 msgid "What is this?"
 msgstr "Co to jest?"
 
-#: class-redux-framework-plugin.php:88
+#: class-redux-framework-plugin.php:89
 msgid "Redux Framework version 4 is activated but not loaded. Redux Framework version 3 is still installed and activated.  Please deactivate Redux Framework version 3."
 msgstr "Redux Framework w wersji 4 jest włączony, ale nie wczytany. Redux Framework w wersji 3 jest nadal zainstalowany i włączony. Proszę wyłączyć Redux Framework w wersji 3."
 
@@ -2473,7 +2468,7 @@ msgstr "Redux Framework w wersji 4 jest włączony, ale nie wczytany. Redux Fram
 msgid "Build better sites in WordPress fast!"
 msgstr "Szybko twórz lepsze strony w WordPressie!"
 
-#: redux-core/inc/classes/class-redux-args.php:266
+#: redux-core/inc/classes/class-redux-args.php:268
 #: redux-core/inc/welcome/class-redux-welcome.php:104
 msgid "Redux"
 msgstr "Redux"
@@ -2490,7 +2485,7 @@ msgstr "Skupienie"
 msgid "Select Color"
 msgstr "Wybierz kolor"
 
-#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:305
+#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:307
 #: redux-core/inc/fields/color_rgba/class-redux-color-rgba.php:43
 msgid "Cancel"
 msgstr "Anuluj"
@@ -2513,27 +2508,27 @@ msgstr "Zespół Redux"
 msgid "https://wordpress.org/plugins/redux-framework"
 msgstr "https://wordpress.org/plugins/redux-framework"
 
-#: sample/sample-config.php:692
+#: sample/sample-config.php:694
 msgid "This is a section created by adding a filter to the sections array. Can be used by child themes to add/remove sections from the options."
 msgstr "Jest to sekcja utworzona przez dodanie filtra do tablicy sekcji. Może być używana przez motywy potomne do dodawania/usuwania sekcji z opcji."
 
-#: sample/sample-config.php:691
+#: sample/sample-config.php:693
 msgid "Section via hook"
 msgstr "Sekcja przez hak"
 
-#: sample/sample-config.php:576
+#: sample/sample-config.php:578
 msgid "The field desc is NOT visible in customizer."
 msgstr "Opis pola NIE jest widoczny w konfiguratorze."
 
-#: sample/sample-config.php:575
+#: sample/sample-config.php:577
 msgid "The subtitle is NOT visible in customizer"
 msgstr "Podtytuł NIE jest widoczny w konfiguratorze"
 
-#: sample/sample-config.php:574
+#: sample/sample-config.php:576
 msgid "Customizer Only Option"
 msgstr "Tylko opcja konfigurator"
 
-#: sample/sample-config.php:567
+#: sample/sample-config.php:569
 msgid "Customizer Only"
 msgstr "Tylko konfigurator"
 
@@ -2696,7 +2691,7 @@ msgstr "Wywołanie zwrotne pola niestandardowego"
 msgid "Callback"
 msgstr "Wywołanie zwrotne"
 
-#: sample/sample-config.php:482
+#: sample/sample-config.php:484
 msgid "Advanced Features"
 msgstr "Funkcje zaawansowane"
 
@@ -2722,7 +2717,7 @@ msgstr "Opcja daty"
 msgid "Date"
 msgstr "Data"
 
-#: sample/sample-config.php:468
+#: sample/sample-config.php:470
 msgid "Additional Types"
 msgstr "Dodatkowe rodzaje"
 
@@ -2810,7 +2805,7 @@ msgstr "Przykład 1 pokazu slajdów"
 msgid "Slider"
 msgstr "Pokaz slajdów"
 
-#: sample/sample-config.php:452
+#: sample/sample-config.php:454
 msgid "Slider / Spinner"
 msgstr "Pokaz slajdów / prządka"
 
@@ -2959,7 +2954,7 @@ msgstr "Wybierz opcję"
 msgid "Select"
 msgstr "Wybierz"
 
-#: sample/sample-config.php:438
+#: sample/sample-config.php:440
 msgid "Select Fields"
 msgstr "Wybierz pola"
 
@@ -3031,7 +3026,7 @@ msgstr "Opcja zestawu przycisków"
 msgid "Button Set"
 msgstr "Zestaw przycisków"
 
-#: sample/sample-config.php:425
+#: sample/sample-config.php:427
 msgid "Switch / Button Set"
 msgstr "Przełącz / zestaw przycisków"
 
@@ -3130,7 +3125,7 @@ msgstr "Odstęp do menu sekcji widoczny po lewej (po tym bloku sekcji) to podzia
 msgid "Divide"
 msgstr "Podział"
 
-#: sample/sample-config.php:402
+#: sample/sample-config.php:404
 msgid "Presentation Fields"
 msgstr "Pola prezentacji"
 
@@ -3244,7 +3239,7 @@ msgstr "Utwórz nową galerię, wybierając istniejące obrazki lub przesyłają
 msgid "Gallery"
 msgstr "Galeria"
 
-#: sample/sample-config.php:387
+#: sample/sample-config.php:389
 msgid "Media Uploads"
 msgstr "Przesyłanie mediów"
 
@@ -3305,12 +3300,12 @@ msgstr "Tło ciała z obrazkiem, kolorem, itp."
 msgid "Body Background"
 msgstr "Tło ciała"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/class-redux-social-profiles.php:260
+#: redux-core/inc/extensions/social_profiles/social_profiles/class-redux-social-profiles.php:263
 #: sample/sections/design-fields/background.php:15
 msgid "Background"
 msgstr "Tło"
 
-#: sample/sample-config.php:371
+#: sample/sample-config.php:373
 msgid "Design Fields"
 msgstr "Pola projektowe"
 
@@ -3371,7 +3366,7 @@ msgstr "Kolor tytułu witryny"
 msgid "Color"
 msgstr "Kolor"
 
-#: sample/sample-config.php:354
+#: sample/sample-config.php:356
 msgid "Color Selection"
 msgstr "Wybór koloru"
 
@@ -3428,7 +3423,7 @@ msgstr "Edytor"
 msgid "WordPress Editor"
 msgstr "Edytor WordPress"
 
-#: sample/sample-config.php:340
+#: sample/sample-config.php:342
 msgid "Editors"
 msgstr "Redaktorzy"
 
@@ -3613,7 +3608,7 @@ msgstr "Opcja pola wyboru"
 msgid "Checkbox"
 msgstr "Pole wyboru"
 
-#: sample/sample-config.php:322
+#: sample/sample-config.php:324
 msgid "These are really basic fields!"
 msgstr "To są naprawdę podstawowe pola!"
 
@@ -3653,7 +3648,7 @@ msgid "Text Field"
 msgstr "Pole tekstowe"
 
 #: sample/barebones-config.php:297 sample/barebones-config.php:316
-#: sample/sample-config.php:520
+#: sample/sample-config.php:522
 #: sample/sections/additional-types/date-time-picker.php:17
 #: sample/sections/additional-types/date.php:17
 #: sample/sections/additional-types/raw.php:24
@@ -3709,7 +3704,7 @@ msgstr "Pole tekstowe"
 msgid "For full documentation on this field, visit: "
 msgstr "Aby uzyskać pełną dokumentację na ten temat, przejdź na: "
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/class-redux-social-profiles.php:246
+#: redux-core/inc/extensions/social_profiles/social_profiles/class-redux-social-profiles.php:249
 #: sample/barebones-config.php:296 sample/sections/basic-fields/text.php:15
 msgid "Text"
 msgstr "Tekst"
@@ -3719,7 +3714,7 @@ msgid "Basic fields as subsections."
 msgstr "Pola podstawowe jako podsekcje."
 
 #: sample/barebones-config.php:287 sample/metaboxes.php:28
-#: sample/sample-config.php:320
+#: sample/sample-config.php:322
 msgid "Basic Fields"
 msgstr "Pola podstawowe"
 
@@ -3743,38 +3738,38 @@ msgstr "Pole podstawowe bez podsekcji."
 msgid "Basic Field"
 msgstr "Pole podstawowe"
 
-#: sample/barebones-config.php:240 sample/sample-config.php:304
+#: sample/barebones-config.php:240 sample/sample-config.php:306
 msgid "This is the sidebar content, HTML is allowed."
 msgstr "To jest treść panelu bocznego, dozwolony jest kod HTML."
 
-#: sample/barebones-config.php:232 sample/sample-config.php:297
+#: sample/barebones-config.php:232 sample/sample-config.php:299
 msgid "Theme Information 2"
 msgstr "Informacje motywu 2"
 
 #: sample/barebones-config.php:227 sample/barebones-config.php:233
-#: sample/sample-config.php:293 sample/sample-config.php:298
+#: sample/sample-config.php:295 sample/sample-config.php:300
 msgid "This is the tab content, HTML is allowed."
 msgstr "To jest treść karty, dozwolony jest kod HTML."
 
-#: sample/barebones-config.php:226 sample/sample-config.php:292
+#: sample/barebones-config.php:226 sample/sample-config.php:294
 msgid "Theme Information 1"
 msgstr "Informacje motywu 1"
 
-#: sample/barebones-config.php:211 sample/sample-config.php:278
+#: sample/barebones-config.php:211 sample/sample-config.php:280
 msgid "This text is displayed below the options panel. It isn't required, but more info is always better! The footer_text field accepts all HTML."
 msgstr "Ten tekst jest wyświetlany poniżej panelu opcji. Nie jest wymagany, ale więcej informacji jest zawsze lepsze! Pole footer_text akceptuje wszystkie HTML."
 
-#: sample/barebones-config.php:207 sample/sample-config.php:274
+#: sample/barebones-config.php:207 sample/sample-config.php:276
 msgid "This text is displayed above the options panel. It isn't required, but more info is always better! The intro_text field accepts all HTML."
 msgstr "Ten tekst jest wyświetlany nad panelem opcji. Nie jest wymagany, ale więcej informacji jest zawsze lepsze! Pole intro_text akceptuje cały HTML."
 
 #. translators:  Panel opt_name.
-#: sample/sample-config.php:272
+#: sample/sample-config.php:274
 msgid "Did you know that Redux sets a global variable for you? To access any of your saved options from within your code you can use your global variable: $%1$s"
 msgstr "Czy wiesz, że Redux ustawia dla Ciebie zmienną globalną? Aby uzyskać dostęp do dowolnej z zapisanych opcji z poziomu kodu, możesz użyć zmiennej globalnej: $%1$s"
 
-#: sample/barebones-config.php:160 sample/sample-config.php:230
-#: sample/sample-config.php:549
+#: sample/barebones-config.php:160 sample/sample-config.php:232
+#: sample/sample-config.php:551
 msgid "Documentation"
 msgstr "Dokumentacja"
 
@@ -3783,15 +3778,15 @@ msgstr "Dokumentacja"
 msgid "Sample Options"
 msgstr "Opcje próbek"
 
-#: class-redux-framework-plugin.php:344
+#: class-redux-framework-plugin.php:345
 msgid "Click here to activate the sample config file."
 msgstr "Kliknij tutal aby aktywować przykładowy plik konfiguracji."
 
-#: class-redux-framework-plugin.php:344
+#: class-redux-framework-plugin.php:345
 msgid "Redux Framework has an embedded demo."
 msgstr "Redux Framework zawiera wbudowane demo."
 
-#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1226
+#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1228
 #: redux-core/inc/extensions/taxonomy/class-redux-extension-taxonomy.php:868
 #: redux-core/inc/extensions/users/class-redux-extension-users.php:860
 #: redux-core/templates/panel/header-stickybar.tpl.php:16
@@ -3838,7 +3833,7 @@ msgstr "Resetuj Sekcję"
 msgid "Save Changes"
 msgstr "Zapisz Zmiany"
 
-#: sample/barebones-config.php:166 sample/sample-config.php:236
+#: sample/barebones-config.php:166 sample/sample-config.php:238
 msgid "Support"
 msgstr "Pomoc techniczna"
 
@@ -3852,8 +3847,8 @@ msgstr "Dodatki"
 msgid "Version"
 msgstr "Wersja"
 
-#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:105
-#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:106
+#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:107
+#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:108
 msgid "Name"
 msgstr "Nazwa"
 
@@ -3914,7 +3909,7 @@ msgstr "Znaleziono niebezpieczne ciągi znaków w Twoim kodzie CSS i zostały on
 msgid "You must provide a comma separated list of numerical values for this option."
 msgstr "Dla tej opcji musisz podać listę wartości numerycznych oddzielonych przecinkami."
 
-#: sample/sample-config.php:516
+#: sample/sample-config.php:518
 msgid "Redux Extensions"
 msgstr "Rozszerzenia Redux"
 
@@ -4062,7 +4057,7 @@ msgstr "Dodaj %s"
 #: redux-core/inc/extensions/repeater/repeater/class-redux-repeater.php:169
 #: redux-core/inc/extensions/repeater/repeater/class-redux-repeater.php:221
 #: redux-core/inc/extensions/repeater/repeater/class-redux-repeater.php:395
-#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:303
+#: redux-core/inc/extensions/widget_areas/class-redux-widget-areas.php:305
 #: redux-core/inc/fields/slides/class-redux-slides.php:215
 #: redux-core/inc/fields/slides/class-redux-slides.php:351
 msgid "Delete"
@@ -4312,15 +4307,15 @@ msgstr "Personalizujesz"
 msgid "Press return or enter to open this panel"
 msgstr "Wciśnij return lub enter, aby otworzyć panel"
 
-#: redux-core/inc/extensions/customizer/class-redux-extension-customizer.php:749
+#: redux-core/inc/extensions/customizer/class-redux-extension-customizer.php:750
 msgid "Your current options will be replaced with the values of this preset.  Would you like to proceed?"
 msgstr "Twoje aktualne opcje zostaną zastąpione tymi ustawieniami. Czy chcesz kontynuować?"
 
-#: redux-core/inc/extensions/customizer/class-redux-extension-customizer.php:748
+#: redux-core/inc/extensions/customizer/class-redux-extension-customizer.php:749
 msgid "Are you sure?  Resetting will lose all custom values."
 msgstr "Jesteś pewien? Utracisz wszystkie własne ustawienia."
 
-#: redux-core/inc/extensions/customizer/class-redux-extension-customizer.php:747
+#: redux-core/inc/extensions/customizer/class-redux-extension-customizer.php:748
 msgid "You have changes that are not saved.  Would you like to save them now?"
 msgstr "Posiadasz zmiany, które nie są zapisane. Czy chciałbyś je teraz zapisać?"
 
@@ -4377,9 +4372,9 @@ msgstr "Wyłącz"
 msgid "Enable"
 msgstr "Włącz"
 
-#: redux-core/inc/classes/class-redux-args.php:273
-#: redux-core/inc/classes/class-redux-args.php:277
-#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:994
+#: redux-core/inc/classes/class-redux-args.php:275
+#: redux-core/inc/classes/class-redux-args.php:279
+#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:996
 msgid "Options"
 msgstr "Opcje"
 
@@ -4389,15 +4384,15 @@ msgid "Redux Framework"
 msgstr "Redux Framework"
 
 #: redux-core/inc/classes/class-redux-panel.php:275
-#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1221
+#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1223
 #: redux-core/inc/extensions/taxonomy/class-redux-extension-taxonomy.php:863
 #: redux-core/inc/extensions/users/class-redux-extension-users.php:855
 msgid "warning(s) were found!"
 msgstr "wystąpiło co najmniej jedno ostrzeżenie!"
 
 #: redux-core/inc/classes/class-redux-panel.php:260
-#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1217
-#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1526
+#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1219
+#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1528
 #: redux-core/inc/extensions/taxonomy/class-redux-extension-taxonomy.php:859
 #: redux-core/inc/extensions/taxonomy/class-redux-extension-taxonomy.php:1143
 #: redux-core/inc/extensions/users/class-redux-extension-users.php:851
@@ -4406,7 +4401,7 @@ msgid "error(s) were found!"
 msgstr "wystąpił co najmniej jeden błąd!"
 
 #: redux-core/inc/classes/class-redux-panel.php:246
-#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1213
+#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1215
 #: redux-core/inc/extensions/taxonomy/class-redux-extension-taxonomy.php:855
 #: redux-core/inc/extensions/users/class-redux-extension-users.php:847
 msgid "Settings have changed, you should save them!"
@@ -4425,7 +4420,7 @@ msgid "All Defaults Restored!"
 msgstr "Wszystkie domyślne wartości zostały przywrócone!"
 
 #: redux-core/inc/classes/class-redux-panel.php:156
-#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1209
+#: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1211
 #: redux-core/inc/extensions/taxonomy/class-redux-extension-taxonomy.php:851
 #: redux-core/inc/extensions/users/class-redux-extension-users.php:843
 msgid "Settings Imported!"

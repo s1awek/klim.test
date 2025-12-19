@@ -4,10 +4,10 @@ Tags: tax, vat, gst, woocommerce, payment
 Requires PHP: 7.4
 Requires at least: 6.7
 Requires Plugins: woocommerce
-Tested up to: 6.8
-WC requires at least: 10.0
-WC tested up to: 10.2
-Stable tag: 3.1.1
+Tested up to: 6.9
+WC requires at least: 10.2
+WC tested up to: 10.4
+Stable tag: 3.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,34 @@ This plugin relies on the following external services:
 2. Checking on the health of WooCommerce Tax
 
 == Changelog ==
+
+= 3.3.0 - 2025-12-11 =
+* Add   - Add default nexus address.
+* Add   - Add woocommerce_taxjar_nexus_address filter.
+* Add   - Jurisdiction information to generated US tax rate names to improve tax analytics accuracy.
+* Tweak - Change default Retail Delivery Fee for Colorado to 28c.
+* Tweak - WordPress 6.9 and WooCommerce 10.4 Compatibility.
+
+= 3.2.3 - 2025-11-17 =
+* Fix   - Resolved issue where shipping features loaded despite the site being set to tax-only mode.
+
+= 3.2.2 - 2025-11-10 =
+* Add   - Allow round tax at subtotal level, instead of rounding per line.
+* Add   - Allow calculating taxes for VAT countries without providing ZIP.
+* Fix   - Taxes were incorrectly calculated using the store’s base address for Ohio.
+* Fix   - Display TaxJar error notices only after taxes are calculated.
+* Tweak - Log detection of potential incorrect California tax nexus in successful TaxJar API and cached responses.
+
+= 3.2.1 - 2025-11-03 =
+* Fix   - Exclude shipping-related admin components when shipping functionality is disabled.
+
+= 3.2.0 - 2025-10-14 =
+* Fix   - No tax calculated for multi-word state/counties.
+* Fix   - Incorrect tax rate saved in Woo Tax Table when Cart total is 0.
+* Fix   - Compatibility issue with plugins and themes that use woocommerce_find_rates filter.
+* Tweak - Update tax rate and tax nexus links.
+* Tweak - Unify tax rate saving to always save itemized tax rates.
+* Tweak - WooCommerce 10.3 Compatibility.
 
 = 3.1.1 - 2025-09-29 =
 * Fix   - Incorrect tax rate saved in Woo Tax Table when Cart total is 0.

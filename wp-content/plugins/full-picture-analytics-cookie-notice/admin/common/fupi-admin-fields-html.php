@@ -58,9 +58,13 @@ if ( !empty( $recipe['must_have'] ) ) {
             // check for missing privacy policy
         } else {
             if ( $must_have == 'privacy_policy' ) {
-                $priv_policy_url = get_privacy_policy_url();
-                if ( empty( $priv_policy_url ) ) {
-                    $must_have_parts[] = esc_html__( 'Website Privacy Policy', 'full-picture-analytics-cookie-notice' );
+                $pp_is_ok = false;
+                if ( !empty( $this->cook['pp_id'] ) ) {
+                    $pp_id = (int) $this->cook['pp_id'];
+                    $pp_is_ok = get_post_status( $pp_id ) == 'publish';
+                }
+                if ( !$pp_is_ok ) {
+                    $must_have_parts[] = esc_html__( 'Save Privacy Policy page ID in the Consent Banner settings', 'full-picture-analytics-cookie-notice' );
                 }
                 // check for missing admin capabilities
             } else {
@@ -69,39 +73,45 @@ if ( !empty( $recipe['must_have'] ) ) {
                     if ( !$is_admin ) {
                         $must_have_parts[] = esc_html__( 'Administrator role', 'full-picture-analytics-cookie-notice' );
                     }
-                    // check for disabled woo module or woo plugin
                 } else {
-                    if ( $must_have == 'woo' ) {
-                        if ( !$this->is_woo_enabled ) {
-                            $must_have_parts[] = esc_html__( 'WooCommerce Tracking module', 'full-picture-analytics-cookie-notice' );
+                    if ( $must_have == 'geo' ) {
+                        if ( empty( $this->main['geo'] ) ) {
+                            $must_have_parts[] = esc_html__( 'Geolocation in the General Settings', 'full-picture-analytics-cookie-notice' );
                         }
+                        // check for disabled woo module or woo plugin
                     } else {
-                        if ( str_starts_with( $must_have, 'field' ) ) {
-                            $field_params_a = explode( '|', $must_have );
-                            if ( count( $field_params_a ) == 5 ) {
-                                $other_opt_name = $field_params_a[1];
-                                $other_field_id = $field_params_a[2];
-                                $expected_field_val = $field_params_a[3];
-                                $must_have_text = str_replace( '"', '', $field_params_a[4] );
-                                $must_have_text = str_replace( '_', ' ', $must_have_text );
-                                $other_option_data = get_option( $other_opt_name );
-                                if ( empty( $other_option_data ) || empty( $other_option_data[$other_field_id] ) ) {
-                                    $must_have_parts[] = $must_have_text;
-                                } else {
-                                    $field_value = $other_option_data[$other_field_id];
-                                    $value_matches = $expected_field_val == 'exists' || $expected_field_val == $field_value;
-                                    if ( !$value_matches ) {
+                        if ( $must_have == 'woo' ) {
+                            if ( !$this->is_woo_enabled ) {
+                                $must_have_parts[] = esc_html__( 'WooCommerce Tracking module', 'full-picture-analytics-cookie-notice' );
+                            }
+                        } else {
+                            if ( str_starts_with( $must_have, 'field' ) ) {
+                                $field_params_a = explode( '|', $must_have );
+                                if ( count( $field_params_a ) == 5 ) {
+                                    $other_opt_name = $field_params_a[1];
+                                    $other_field_id = $field_params_a[2];
+                                    $expected_field_val = $field_params_a[3];
+                                    $must_have_text = str_replace( '"', '', $field_params_a[4] );
+                                    $must_have_text = str_replace( '_', ' ', $must_have_text );
+                                    $other_option_data = get_option( $other_opt_name );
+                                    if ( empty( $other_option_data ) || empty( $other_option_data[$other_field_id] ) ) {
                                         $must_have_parts[] = $must_have_text;
+                                    } else {
+                                        $field_value = $other_option_data[$other_field_id];
+                                        $value_matches = $expected_field_val == 'exists' || $expected_field_val == $field_value;
+                                        if ( !$value_matches ) {
+                                            $must_have_parts[] = $must_have_text;
+                                        }
                                     }
                                 }
-                            }
-                            // check for missing modules
-                        } else {
-                            if ( !isset( $this->tools[$must_have] ) ) {
-                                foreach ( $fupi_modules as $module ) {
-                                    if ( $module['id'] == $must_have ) {
-                                        $must_have_parts[] = esc_html__( 'Module', 'full-picture-analytics-cookie-notice' ) . ' "' . $fupi_modules_names[$module['id']] . '"';
-                                        break;
+                                // check for missing modules
+                            } else {
+                                if ( !isset( $this->tools[$must_have] ) ) {
+                                    foreach ( $fupi_modules as $module ) {
+                                        if ( $module['id'] == $must_have ) {
+                                            $must_have_parts[] = esc_html__( 'Module', 'full-picture-analytics-cookie-notice' ) . ' "' . $fupi_modules_names[$module['id']] . '"';
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -550,11 +560,11 @@ switch ( $recipe['type'] ) {
     // =======
     case 'atrig_select':
         $atrig_opts = get_option( 'fupi_atrig' );
-        $default_option_text = ( !empty( $recipe['default_option_text'] ) ? esc_attr( $recipe['default_option_text'] ) : esc_attr__( 'Select advanced trigger', 'full-picture-analytics-cookie-notice' ) );
+        $default_option_text = ( !empty( $recipe['default_option_text'] ) ? esc_attr( $recipe['default_option_text'] ) : esc_attr__( 'Select a custom trigger', 'full-picture-analytics-cookie-notice' ) );
         $options_markup = '<option value=\'\'>' . $default_option_text . '</option>';
         $selected_trigger_active = false;
         if ( !empty( $atrig_opts ) ) {
-            // add advanced triggers options
+            // add custom triggers options
             if ( !empty( $atrig_opts['triggers'] ) && count( $atrig_opts['triggers'] ) > 0 ) {
                 foreach ( $atrig_opts['triggers'] as $trigger ) {
                     $selected = selected( $saved_value, $trigger['id'], false );

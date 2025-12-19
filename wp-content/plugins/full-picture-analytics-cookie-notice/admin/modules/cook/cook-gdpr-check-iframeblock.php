@@ -2,10 +2,13 @@
 
 $this->data['iframeblock'] = [ 
     'module_name' => esc_html__('Content from other websites', 'full-picture-analytics-cookie-notice'),
+    'top comments' => [
+        esc_attr__( 'Content from other sites, like YouTube videos or Google Maps, can track your visitors. Make sure it loads after visitor\'s consents.', 'full-picture-analytics-cookie-notice'),
+    ],
     'setup' => [
         [ 
             'warning',
-            esc_html__('Load YouTube videos, Google Maps and other embedded content after visitors agree to it. You can set it up in the Consent Banner module > Control iframes.', 'full-picture-analytics-cookie-notice')
+            sprintf( esc_html__('Go to the Consent Banner module > Control iframes and set up blocking content embedded from other sites. It will display an image placeholder until visitors agree to being tracked. %1$sSee how it works and learn more%2$s', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-iframes-manager-works-and-how-to-set-it-up/">', '</a>' )
         ]
     ],
     'pp comments' => [ 

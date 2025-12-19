@@ -6,15 +6,25 @@ use SweetCode\Pixel_Manager\Admin\Environment;
 use SweetCode\Pixel_Manager\Admin\LTV;
 use SweetCode\Pixel_Manager\Admin\Validations;
 use SweetCode\Pixel_Manager\Data\GA4_Data_API;
-use SweetCode\Pixel_Manager\Database;
+use SweetCode\Pixel_Manager\Pixels\ABTasty\AB_Tasty;
+use SweetCode\Pixel_Manager\Pixels\Core\Pixel_Registry;
 use SweetCode\Pixel_Manager\Pixels\Facebook\Facebook_CAPI;
 use SweetCode\Pixel_Manager\Pixels\Google\Google_MP_GA4;
 use SweetCode\Pixel_Manager\Pixels\Google\Google_Helpers;
+use SweetCode\Pixel_Manager\Pixels\Google\GTG_Proxy;
+use SweetCode\Pixel_Manager\Pixels\Google\GTG_Config;
+use SweetCode\Pixel_Manager\Pixels\Optimizely\Optimizely;
+use SweetCode\Pixel_Manager\Pixels\TikTok\TikTok_EAPI;
+use SweetCode\Pixel_Manager\Pixels\Pinterest\Pinterest_APIC;
+use SweetCode\Pixel_Manager\Pixels\Snapchat\Snapchat_CAPI;
+use SweetCode\Pixel_Manager\Pixels\Reddit\Reddit_CAPI;
+use SweetCode\Pixel_Manager\Pixels\VWO\VWO;
 use SweetCode\Pixel_Manager\Geolocation;
 use SweetCode\Pixel_Manager\Helpers;
 use SweetCode\Pixel_Manager\Logger;
 use SweetCode\Pixel_Manager\Options;
 use SweetCode\Pixel_Manager\Product;
+use SweetCode\Pixel_Manager\Server_Event_Processor;
 use SweetCode\Pixel_Manager\Shop;
 use WP_Error;
 defined( 'ABSPATH' ) || exit;
@@ -51,6 +61,18 @@ class Pixel_Manager {
             }
         }, 10 );
         /**
+         * Initialize Google Tag Gateway Proxy
+         *
+         * This enables proxying Google Tag requests through WordPress
+         * to Google's First-Party Servers (FPS).
+         * Only active when a measurement path is configured.
+         *
+         * @since 1.53.0
+         */
+        if ( Options::get_google_tag_gateway_measurement_path() ) {
+            GTG_Proxy::init();
+        }
+        /**
          * Inject PMW snippets in head
          */
         // Prepare Litespeed ESI injection
@@ -81,6 +103,51 @@ class Pixel_Manager {
                 $this->inject_data_layer();
             }
         } );
+        /**
+         * Initialize all pixels
+         */
+        /**
+         * Load pixel descriptor infrastructure
+         * 
+         * This enables the unified pixel registry system that supports both
+         * server-side adapters and browser-side descriptors.
+         */
+        require_once __DIR__ . '/core/interface-pixel-descriptor.php';
+        require_once __DIR__ . '/core/abstract-pixel-descriptor.php';
+        require_once __DIR__ . '/core/class-pixel-registry.php';
+        /**
+         * Load all pixel descriptors
+         * 
+         * Each descriptor auto-registers with the Pixel_Registry on instantiation.
+         * The autoloader handles file loading - we just trigger it via class_exists().
+         * 
+         * When adding a new pixel descriptor, add its class name to the array below.
+         */
+        $descriptors = [
+            // Google pixels
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Google\\Google_Ads_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Google\\GA4_Descriptor',
+            // Marketing pixels
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Bing_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Twitter_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\LinkedIn_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\AdRoll_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Outbrain_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Taboola_Descriptor',
+            // Statistics pixels
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Hotjar_Descriptor',
+            // Optimization pixels
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\VWO_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Optimizely_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\AB_Tasty_Descriptor',
+        ];
+        foreach ( $descriptors as $descriptor_class ) {
+            class_exists( $descriptor_class );
+        }
+        /**
+         * Allow third-party plugins to register custom pixel descriptors
+         */
+        Pixel_Registry::init_third_party_pixels();
         add_action( 'wp_head', function () {
             $this->inject_pmw_closing();
         } );
@@ -364,6 +431,19 @@ class Pixel_Manager {
         // If it does, add the products from the transient to $products
         if ( get_transient( 'pmw_products_for_datalayer_' . $data['page_id'] ) ) {
             $products_in_transient = get_transient( 'pmw_products_for_datalayer_' . $data['page_id'] );
+            // Filter out products that no longer exist or are not published
+            $products_in_transient = array_filter( $products_in_transient, function ( $product_data ) {
+                // Skip if no product ID
+                if ( !isset( $product_data['id'] ) ) {
+                    return false;
+                }
+                $product = wc_get_product( $product_data['id'] );
+                // Remove if product doesn't exist or is not published
+                if ( Product::is_not_wc_product( $product ) || 'publish' !== $product->get_status() ) {
+                    return false;
+                }
+                return true;
+            } );
             // Merge the associative arrays with nested arrays $products and $products_in_transient preserving the keys
             $products = array_replace_recursive( $products, $products_in_transient );
         }
@@ -437,15 +517,16 @@ class Pixel_Manager {
         return true;
     }
 
-    public static function pmw_store_ipv6_in_server_session() {
+    public static function pmw_store_client_ip_in_server_session() {
         $_post = Helpers::get_input_vars( INPUT_POST );
-        // return error if the ipv6 field is not set
-        if ( !isset( $_post['data']['ipv6'] ) ) {
-            wp_send_json_error( 'No IPv6 address provided' );
+        // return error if the ip field is not set
+        if ( !isset( $_post['data']['ip'] ) ) {
+            wp_send_json_error( 'No IP address provided' );
         }
-        // return error if the ipv6 field is not a valid IPv6 address
-        if ( !Helpers::is_valid_ipv6_address( $_post['data']['ipv6'] ) ) {
-            wp_send_json_error( 'Invalid IPv6 address' );
+        $ip = sanitize_text_field( $_post['data']['ip'] );
+        // return error if the ip field is not a valid IP address (IPv4 or IPv6)
+        if ( !filter_var( $ip, FILTER_VALIDATE_IP ) ) {
+            wp_send_json_error( 'Invalid IP address' );
         }
         // If WooCommerce is not active, return error
         if ( !Environment::is_woocommerce_active() ) {
@@ -459,11 +540,11 @@ class Pixel_Manager {
         if ( !WC()->session ) {
             wp_send_json_error( 'WooCommerce session not available' );
         }
-        // Set the IPv6 address in the WooCommerce session
-        WC()->session->set( 'client_ipv6', $_post['data']['ipv6'] );
+        // Set the client IP address in the WooCommerce session
+        WC()->session->set( 'client_ip', $ip );
         wp_send_json_success( [
-            'ipv6'    => $_post['data']['ipv6'],
-            'message' => 'IPv6 address stored in server session',
+            'ip'      => $ip,
+            'message' => 'Client IP address stored in server session',
         ] );
     }
 
@@ -811,8 +892,19 @@ class Pixel_Manager {
                 'id_type' => Google_Helpers::get_ga_id_type(),
             ];
         }
-        $data['tag_id'] = Google_Helpers::get_google_tag_id();
+        $data['tag_id'] = Google_Helpers::get_google_tag_id_information()['active'];
+        $data['tag_id_suppressed'] = Google_Helpers::get_google_tag_id_information()['suppressed'];
         $data['tag_gateway']['measurement_path'] = Options::get_google_tag_gateway_measurement_path();
+        // Always include proxy_url for automatic fallback detection
+        // JavaScript will detect if WordPress fallback is being used and switch to direct proxy URL
+        $isolated_url = GTG_Proxy::get_isolated_proxy_url();
+        if ( $isolated_url ) {
+            $data['tag_gateway']['proxy_url'] = $isolated_url;
+        }
+        // Include server-detected GTG handler for frontend to use without extra requests
+        if ( Options::get_google_tag_gateway_measurement_path() ) {
+            $data['tag_gateway']['handler'] = GTG_Config::get_handler();
+        }
         $data['tcf_support'] = Options::is_google_tcf_support_active();
         $data['consent_mode'] = [
             'is_active'          => Options::is_google_consent_mode_active(),
@@ -895,6 +987,12 @@ class Pixel_Manager {
     private function get_hotjar_pixel_data() {
         return [
             'site_id' => Options::get_hotjar_site_id(),
+        ];
+    }
+
+    private static function get_contentsquare_pixel_data() {
+        return [
+            'tag_id' => Options::get_contentsquare_tag_id(),
         ];
     }
 
@@ -1036,28 +1134,30 @@ class Pixel_Manager {
         $data = [];
         if ( $order ) {
             $data['order'] = [
-                'id'               => (int) $order->get_id(),
-                'number'           => (string) $order->get_order_number(),
-                'key'              => (string) $order->get_order_key(),
-                'affiliation'      => (string) get_bloginfo( 'name' ),
-                'currency'         => (string) Shop::get_order_currency( $order ),
-                'value'            => [
+                'id'                 => (int) $order->get_id(),
+                'number'             => (string) $order->get_order_number(),
+                'key'                => (string) $order->get_order_key(),
+                'affiliation'        => (string) get_bloginfo( 'name' ),
+                'currency'           => (string) Shop::get_order_currency( $order ),
+                'value'              => [
                     'marketing' => Shop::get_order_value_total_marketing( $order, true ),
                     'total'     => Shop::get_order_value_total_statistics( $order ),
                     'subtotal'  => Shop::get_order_value_subtotal_statistics( $order ),
                 ],
-                'discount'         => (float) $order->get_total_discount(),
-                'tax'              => (float) $order->get_total_tax(),
-                'shipping'         => (float) $order->get_shipping_total(),
-                'coupon'           => implode( ',', $order->get_coupon_codes() ),
-                'aw_merchant_id'   => ( Options::get_google_ads_merchant_id() ? Options::get_google_ads_merchant_id() : '' ),
-                'aw_feed_country'  => (string) Geolocation::get_visitor_country(),
-                'aw_feed_language' => Google_Helpers::get_gmc_language(),
-                'new_customer'     => Shop::is_new_customer( $order ),
-                'quantity'         => (int) count( Product::pmw_get_order_items( $order ) ),
-                'items'            => Product::get_front_end_order_items( $order ),
-                'customer_id'      => $order->get_customer_id(),
-                'user_id'          => $order->get_user_id(),
+                'discount'           => (float) $order->get_total_discount(),
+                'tax'                => (float) $order->get_total_tax(),
+                'shipping'           => (float) $order->get_shipping_total(),
+                'coupon'             => implode( ',', $order->get_coupon_codes() ),
+                'aw_merchant_id'     => ( Options::get_google_ads_merchant_id() ? Options::get_google_ads_merchant_id() : '' ),
+                'aw_feed_country'    => (string) Geolocation::get_visitor_country(),
+                'aw_feed_language'   => Google_Helpers::get_gmc_language(),
+                'new_customer'       => Shop::is_new_customer( $order ),
+                'quantity'           => (int) count( Product::pmw_get_order_items( $order ) ),
+                'items'              => Product::get_front_end_order_items( $order ),
+                'customer_id'        => $order->get_customer_id(),
+                'user_id'            => $order->get_user_id(),
+                'payment_type'       => (string) $order->get_payment_method(),
+                'payment_type_title' => (string) $order->get_payment_method_title(),
             ];
             // Filter to add custom order parameters
             $custom_parameters = Shop::get_custom_order_parameters( $order );
@@ -1241,11 +1341,15 @@ class Pixel_Manager {
         $products = [];
         foreach ( $product_ids as $key => $product_id ) {
             // validate if a valid product ID has been passed in the array
-            if ( !ctype_digit( $product_id ) ) {
+            if ( !ctype_digit( (string) $product_id ) ) {
                 continue;
             }
             $product = wc_get_product( $product_id );
             if ( Product::is_not_wc_product( $product ) ) {
+                continue;
+            }
+            // Only expose published products
+            if ( 'publish' !== $product->get_status() ) {
                 continue;
             }
             $products[$product_id] = Product::get_product_details_for_datalayer( $product );
@@ -1291,7 +1395,7 @@ class Pixel_Manager {
         $pmw_dependencies = ['jquery', 'wp-hooks'];
         wp_enqueue_script(
             'wpm',
-            PMW_PLUGIN_DIR_PATH . 'js/public/wpm-public.p1.min.js',
+            PMW_PLUGIN_DIR_PATH . 'js/public/free/wpm-public.p1.min.js',
             $pmw_dependencies,
             PMW_CURRENT_VERSION,
             $this->move_pmw_script_to_footer()
@@ -1445,9 +1549,10 @@ class Pixel_Manager {
             'page_id'                    => get_the_ID(),
             'exclude_domains'            => apply_filters( 'pmw_exclude_domains_from_tracking', [] ),
             'server_2_server'            => [
-                'active'             => Options::server_2_server_enabled(),
-                'ip_exclude_list'    => apply_filters( 'pmw_exclude_ips_from_server_2_server_events', [] ),
-                'pageview_event_s2s' => [
+                'active'                      => Options::server_2_server_enabled(),
+                'user_agent_exclude_patterns' => apply_filters( 'pmw_exclude_user_agents_from_server_2_server_events', [] ),
+                'ip_exclude_list'             => apply_filters( 'pmw_exclude_ips_from_server_2_server_events', [] ),
+                'pageview_event_s2s'          => [
                     'is_active' => Options::is_pageview_events_s2s_active() && Options::server_2_server_enabled(),
                     'pixels'    => Options::pixels_that_require_s2s_pageview_events(),
                 ],
@@ -1456,11 +1561,60 @@ class Pixel_Manager {
                 'explicit_consent' => Options::is_consent_management_explicit_consent_active(),
             ],
             'lazy_load_pmw'              => Options::is_lazy_load_pmw_active(),
+            'chunk_base_path'            => self::get_chunk_base_path(),
+            'modules'                    => self::get_modules_config(),
         ];
         if ( Options::are_restricted_consent_regions_set() ) {
             $data['consent_management']['restricted_regions'] = Options::get_restricted_consent_regions();
         }
         return $data;
+    }
+
+    /**
+     * Retrieves the configuration for optional JavaScript modules.
+     *
+     * This method centralizes the configuration for dynamically loaded JavaScript chunks
+     * that can be toggled on/off by the user. Each module corresponds to a webpack chunk
+     * that will only be loaded if its flag is true.
+     *
+     * When adding a new toggleable module:
+     * 1. Add a default option in Options::get_default_options() under general->modules
+     * 2. Add a helper method in Options class (e.g., should_load_module_name())
+     * 3. Add the flag here in get_modules_config()
+     * 4. Add conditional loading in main.js based on wpmDataLayer.general.modules.module_name
+     * 5. Add admin UI toggle in Admin::add_section_advanced_subsection_general()
+     *
+     * @return array Associative array of module names and their enabled/disabled status.
+     * @since 1.51.0
+     */
+    private static function get_modules_config() {
+        return [
+            'load_deprecated_functions' => Options::should_load_deprecated_functions(),
+        ];
+    }
+
+    /**
+     * Retrieves the base path for the chunk files based on the plugin distribution type.
+     * Determines whether the plugin is a free or pro distribution and returns the
+     * corresponding directory path.
+     *
+     * For local development, you can override this by defining PMW_HANDLE_AS_FREE_VERSION
+     * or PMW_HANDLE_AS_PRO_VERSION in wp-config.php
+     *
+     * @return string The base path for chunk files, either in the 'free' or 'pro' folder.
+     *
+     * @since 1.51.1
+     */
+    private static function get_chunk_base_path() {
+        // Allow handling as free version via constant (useful for local testing)
+        if ( defined( 'PMW_HANDLE_AS_FREE_VERSION' ) && PMW_HANDLE_AS_FREE_VERSION ) {
+            $version = 'free';
+        } elseif ( defined( 'PMW_HANDLE_AS_PRO_VERSION' ) && PMW_HANDLE_AS_PRO_VERSION ) {
+            $version = 'pro';
+        } else {
+            $version = ( Helpers::is_free_plugin_distribution() ? 'free' : 'pro' );
+        }
+        return PMW_PLUGIN_DIR_PATH . 'js/public/' . $version . '/';
     }
 
 }

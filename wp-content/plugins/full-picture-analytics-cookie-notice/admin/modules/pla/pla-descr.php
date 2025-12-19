@@ -27,7 +27,7 @@ switch( $section_id ){
 	
 	case 'fupi_pla_cond':
 		$ret_text = '<div>
-			<p>' . esc_html__( 'Use functions on this page to track complex events, with many conditions, for example, when a visitor from France visits 5 product pages in one session. You can set these conditions in the "Advanced triggers" module.' , 'full-picture-analytics-cookie-notice' ) . '</p>
+			<p>' . esc_html__( 'Here you can set up custom events, with many conditions, for example, when a visitor from France visits 5 product pages in one session. You can set these conditions in the "Custom triggers" module.' , 'full-picture-analytics-cookie-notice' ) . '</p>
 			<p>' . esc_html__( 'Plausible lets you track these events in two ways - with or without properties.' , 'full-picture-analytics-cookie-notice' ) . '</p>' . $links_to_popups . '
 		</div>';
 	break;

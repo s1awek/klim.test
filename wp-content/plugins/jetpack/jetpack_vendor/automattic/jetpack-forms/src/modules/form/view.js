@@ -5,13 +5,14 @@ import {
 	getContext,
 	store,
 	getConfig,
+	getElement,
 	withSyncEvent as originalWithSyncEvent,
 } from '@wordpress/interactivity';
 /*
  * Internal dependencies
  */
-import { validateField, isEmptyValue } from '../../contact-form/js/validate-helper';
-import { focusNextInput, dispatchSubmitEvent, submitForm } from './shared';
+import { validateField, isEmptyValue } from '../../contact-form/js/validate-helper.js';
+import { focusNextInput, submitForm } from './shared.ts';
 
 const withSyncEvent =
 	originalWithSyncEvent ||
@@ -51,6 +52,7 @@ const setSubmissionData = ( data = [] ) => {
 	context.formattedSubmissionData = data.map( item => ( {
 		label: maybeAddColonToLabel( item.label ),
 		value: maybeTransformValue( item.value ),
+		images: getImages( item.value ),
 	} ) );
 };
 
@@ -63,6 +65,10 @@ const registerField = (
 	extra = null
 ) => {
 	const context = getContext();
+
+	if ( ! context.fields ) {
+		context.fields = {};
+	}
 
 	if ( ! context.fields[ fieldId ] ) {
 		context.fields[ fieldId ] = {
@@ -98,17 +104,70 @@ const maybeAddColonToLabel = label => {
 	if ( ! formattedLabel ) {
 		return null;
 	}
-
-	return formattedLabel.endsWith( '?' ) ? formattedLabel : formattedLabel.replace( /:$/, '' ) + ':';
+	// Special case for the Terms consent field block which has a period at the end of the text.
+	return formattedLabel.endsWith( '?' )
+		? formattedLabel
+		: formattedLabel.replace( /[.:]$/, '' ) + ':';
 };
 
 const maybeTransformValue = value => {
+	// For image select fields, we want to show the perceived values, as the choices can be shuffled.
+	if ( value?.type === 'image-select' ) {
+		return value.choices
+			.map( choice => {
+				let transformedValue = choice.perceived;
+
+				if ( choice.showLabels && choice.label != null && choice.label !== '' ) {
+					transformedValue += ' - ' + choice.label;
+				}
+
+				return transformedValue;
+			} )
+			.join( ', ' );
+	}
+
 	// For file upload fields, we want to show the file name and size
 	if ( value?.name && value?.size ) {
 		return value.name + ' (' + value.size + ')';
 	}
 
 	return value;
+};
+
+const getImages = value => {
+	if ( value?.type === 'image-select' ) {
+		return value.choices.map( choice => choice.image?.src );
+	}
+
+	return null;
+};
+
+const toggleImageOptionInput = ( input, optionElement ) => {
+	if ( input ) {
+		input.focus();
+
+		if ( input.type === 'checkbox' ) {
+			input.checked = ! input.checked;
+			optionElement.classList.toggle( 'is-checked', input.checked );
+		} else if ( input.type === 'radio' ) {
+			input.checked = true;
+
+			// Find all image options in the same fieldset and toggle the checked class
+			const fieldset = optionElement.closest( '.jetpack-fieldset-image-options__wrapper' );
+
+			if ( fieldset ) {
+				const imageOptions = fieldset.querySelectorAll( '.jetpack-input-image-option' );
+
+				imageOptions.forEach( imageOption => {
+					const imageOptionInput = imageOption.querySelector( 'input' );
+					imageOption.classList.toggle( 'is-checked', imageOptionInput.id === input.id );
+				} );
+			}
+		}
+
+		// Dispatch change event to trigger any change handlers
+		input.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+	}
 };
 
 const { state, actions } = store( NAMESPACE, {
@@ -122,6 +181,11 @@ const { state, actions } = store( NAMESPACE, {
 			// Don't show is_required untill the user first tries to submit the form.
 			if ( ! context.showErrors && field.error && field.error === 'is_required' ) {
 				return false;
+			}
+
+			// For single input forms, show submission errors in the field error div
+			if ( context.isSingleInputForm && context.submissionError ) {
+				return true;
 			}
 
 			return ( context.showErrors || field.showFieldError ) && field.error && field.error !== 'yes';
@@ -173,6 +237,11 @@ const { state, actions } = store( NAMESPACE, {
 			const context = getContext();
 			const fieldId = context.fieldId;
 			const field = context.fields[ fieldId ] || {};
+
+			// For single input forms, show submission errors in the field error div
+			if ( context.isSingleInputForm && context.submissionError ) {
+				return context.submissionError;
+			}
 
 			if ( ! ( context.showErrors || field.showFieldError ) || ! field.error ) {
 				return '';
@@ -304,6 +373,32 @@ const { state, actions } = store( NAMESPACE, {
 			actions.updateField( fieldId, newValues );
 		},
 
+		onKeyDownImageOption: event => {
+			if ( event.key === 'Enter' || event.key === ' ' ) {
+				event.preventDefault();
+				actions.onImageOptionClick( event );
+			}
+
+			// If the key is any letter from a to z, we toggle that image option
+			if ( /^[a-z]$/i.test( event.key ) ) {
+				const fieldset = event.target.closest( '.jetpack-fieldset-image-options__wrapper' );
+				const labelCode = document.evaluate(
+					`.//div[contains(@class, "jetpack-input-image-option__label-code") and contains(text(), "${ event.key.toUpperCase() }")]`,
+					fieldset,
+					null,
+					XPathResult.FIRST_ORDERED_NODE_TYPE,
+					null
+				).singleNodeValue;
+
+				if ( labelCode ) {
+					const optionElement = labelCode.closest( '.jetpack-input-image-option' );
+					const input = optionElement.querySelector( '.jetpack-input-image-option__input' );
+
+					toggleImageOptionInput( input, optionElement );
+				}
+			}
+		},
+
 		onImageOptionClick: event => {
 			// Find the block container
 			let target = event.target;
@@ -316,29 +411,7 @@ const { state, actions } = store( NAMESPACE, {
 				// Find the input inside this container
 				const input = target.querySelector( '.jetpack-input-image-option__input' );
 
-				if ( input ) {
-					if ( input.type === 'checkbox' ) {
-						input.checked = ! input.checked;
-						target.classList.toggle( 'is-checked', input.checked );
-					} else if ( input.type === 'radio' ) {
-						input.checked = true;
-
-						// Find all image options in the same fieldset and toggle the checked class
-						const fieldset = target.closest( '.jetpack-fieldset-image-options__wrapper' );
-
-						if ( fieldset ) {
-							const imageOptions = fieldset.querySelectorAll( '.jetpack-input-image-option' );
-
-							imageOptions.forEach( imageOption => {
-								const imageOptionInput = imageOption.querySelector( 'input' );
-								imageOption.classList.toggle( 'is-checked', imageOptionInput.id === input.id );
-							} );
-						}
-					}
-
-					// Dispatch change event to trigger any change handlers
-					input.dispatchEvent( new Event( 'change', { bubbles: true } ) );
-				}
+				toggleImageOptionInput( input, target );
 			}
 		},
 
@@ -435,19 +508,6 @@ const { state, actions } = store( NAMESPACE, {
 			}
 		} ),
 
-		onKeyDownTextarea: withSyncEvent( event => {
-			if ( ! ( event.key === 'Enter' && event.shiftKey ) ) {
-				return;
-			}
-			// Prevent the default behavior of adding a new line.
-			event.preventDefault();
-			event.stopPropagation();
-
-			const context = getContext();
-
-			dispatchSubmitEvent( context.formHash );
-		} ),
-
 		scrollIntoView: withSyncEvent( event => {
 			const context = getContext();
 
@@ -516,6 +576,39 @@ const { state, actions } = store( NAMESPACE, {
 				wrapperElement?.scrollIntoView( { behavior: 'smooth' } );
 				context.hasClickedBack = false;
 			}
+		},
+
+		setImageOptionCheckColor() {
+			const { ref } = getElement();
+
+			if ( ! ref ) {
+				return;
+			}
+
+			const color = window.getComputedStyle( ref ).color;
+			const inverseColor = window.jetpackForms.getInverseReadableColor( color );
+			const style = ref.getAttribute( 'style' ) ?? '';
+
+			ref.setAttribute(
+				'style',
+				style + `--jetpack-input-image-option--check-color: ${ inverseColor }`
+			);
+		},
+
+		setImageOptionOutlineColor() {
+			const { ref } = getElement();
+
+			if ( ! ref ) {
+				return;
+			}
+
+			const { borderColor } = window.getComputedStyle( ref );
+			const style = ref.getAttribute( 'style' ) ?? '';
+
+			ref.setAttribute(
+				'style',
+				style + `--jetpack-input-image-option--outline-color: ${ borderColor }`
+			);
 		},
 	},
 } );

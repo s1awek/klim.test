@@ -49,7 +49,7 @@ if ( ! class_exists( 'Sydney_Style_Book' ) ) :
             $buttons_radius = get_theme_mod( 'buttons_radius', 3 );
             $custom .= ".sydney-style-book-section-content .roll-button { border-radius:" . intval( $buttons_radius ) . "px;}" . "\n";
 
-            $custom .= Sydney_Custom_CSS::get_font_sizes_css( 'button_font_size_desktop', $defaults = array( 'desktop' => 13, 'tablet' => 13, 'mobile' => 13 ), '.sydney-style-book-section-content .roll-button' );
+            $custom .= Sydney_Custom_CSS::get_font_sizes_css( 'button_font_size', $defaults = array( 'desktop' => 13, 'tablet' => 13, 'mobile' => 13 ), '.sydney-style-book-section-content .roll-button' );
             $button_text_transform = get_theme_mod( 'button_text_transform', 'uppercase' );
             $custom .= ".sydney-style-book-section-content .roll-button { text-transform:" . esc_attr( $button_text_transform ) . ";}" . "\n";
 

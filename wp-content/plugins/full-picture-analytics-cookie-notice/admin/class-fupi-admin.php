@@ -15,7 +15,6 @@ class Fupi_Admin {
 
     private $cook_enabled;
 
-    // private $geo_enabled;
     private $cook;
 
     private $user_cap;
@@ -48,11 +47,9 @@ class Fupi_Admin {
         $this->main = get_option( 'fupi_main' );
         $this->proofrec = get_option( 'fupi_proofrec' );
         $this->cook_enabled = !empty( $this->tools ) && isset( $this->tools['cook'] );
-        // $this->geo_enabled 					= ! empty( $this->tools ) && isset ( $this->tools['geo'] );
         $this->cook = get_option( 'fupi_cook' );
         $this->user_cap = 'manage_options';
         $this->is_woo_enabled = false;
-        // $this->sync_run						= false;
         $this->get_modules_data();
         // Test to see if WooCommerce is active (including network activated).
         // https://woocommerce.com/document/create-a-plugin/#section-1
@@ -486,6 +483,7 @@ class Fupi_Admin {
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fupi-notices.php';
         $fupi_notices = new \FUPI\FUPI_Notices();
         // USED IDS:
+        // !! MUST BE SMALL CAPS
         // fupi_fth_nosupport_notice
         // fupi_fth_delete_notice
         // fupi_pla_featureremoval_notice
@@ -503,6 +501,7 @@ class Fupi_Admin {
         // fupi_gtm_v2_deprecation
         // fupi_gtm_v2_deprecation_2
         // fupi_uses_oceanwp_theme
+        // fupi_bf_2025
         // if ( is_multisite() ){
         // 	$plugins_page_url = network_home_url() . 'wp-admin/network/plugins.php';
         // } else {
@@ -527,6 +526,7 @@ class Fupi_Admin {
         if ( $this->cook_enabled && $theme->get( 'Name' ) == 'OceanWP' ) {
             $fupi_notices->add(
                 'fupi_uses_oceanwp_theme',
+                // !! MUST BE SMALL CAPS
                 '',
                 sprintf( esc_html__( 'WP Full Picture plugin has detected that you are using OceanWP theme. This theme breaks the controls for styling Consent Banner in the WordPress theme customizer. %1$sLearn what to do about it%2$s.', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-go-around-the-incompatibility-issues-with-oceanwp-theme/" target="_blank">', '</a>' ),
                 array(
@@ -534,6 +534,26 @@ class Fupi_Admin {
                     'scope' => 'user',
                 )
             );
+        }
+        if ( fupi_fs()->is_not_paying() ) {
+            // Black Friday notification
+            // date range: October 31, 2025 to November 30, 2025
+            $start_date = strtotime( '2025-10-31 00:00:00' );
+            $end_date = strtotime( '2025-11-30 23:59:59' );
+            $current_time = current_time( 'timestamp' );
+            // Check if current date is within the range
+            if ( $current_time >= $start_date && $current_time <= $end_date ) {
+                $fupi_notices->add(
+                    'fupi_bf_2025',
+                    // !! MUST BE SMALL CAPS
+                    '',
+                    sprintf( esc_html__( 'There is no point in waiting. Get Black Friday deal for WP Full Picture Pro right now. %1$sSee Black Friday Pricing%2$s', 'full-picture-analytics-cookie-notice' ), '<a class="button-primary" href="https://wpfullpicture.com/pricing" target="_blank">', '</a>' ),
+                    array(
+                        'type'  => 'info',
+                        'scope' => 'user',
+                    )
+                );
+            }
         }
         // init
         $fupi_notices->boot();

@@ -2,6 +2,10 @@
 
 namespace Pmwpe\App\Service;
 
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class WooCommerceVersion
 {

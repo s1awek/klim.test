@@ -1,7 +1,13 @@
 <?php
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Incapsulates behavior for list of database records
- * 
+ *
  * @author Max Tsiplyakov <makstsiplyakov@gmail.com>
  */
 class PMWPE_Model_List extends PMXE_Model {
@@ -79,6 +85,7 @@ class PMWPE_Model_List extends PMXE_Model {
 		} else {
 			$sql = "SELECT $this->what $sql";
 		}
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- SQL is safely constructed above with buildWhere() from parent class
 		$result = $this->wpdb->get_results($sql, ARRAY_A);
 		if (is_array($result)) {
 			foreach ($result as $i => $row) {
@@ -113,6 +120,7 @@ class PMWPE_Model_List extends PMXE_Model {
 		if ( ! is_null($field)) {
 			$sql .= " WHERE " . $this->buildWhere($field, $value);
 		}
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- SQL is safely constructed above with buildWhere() from parent class
 		return intval($this->wpdb->get_var($sql));
 	}
 	
@@ -133,7 +141,7 @@ class PMWPE_Model_List extends PMXE_Model {
 	public function convertRecords($elementClass = NULL, $includeFields = NULL) {
 		! is_null($elementClass) or $elementClass = preg_replace('%List$%', 'Record', get_class($this));
 		if ( ! is_subclass_of($elementClass, PMWPE_Plugin::PREFIX . 'Model_Record')) {
-			throw new Exception("Provideded class name $elementClass must be a subclass of " . PMWPE_Plugin::PREFIX . 'Model_Record');
+			throw new Exception(esc_html("Provided class name $elementClass must be a subclass of " . PMWPE_Plugin::PREFIX . 'Model_Record'));
 		}
 		$records = $this->exchangeArray(array());
 		foreach ($records as $r) {

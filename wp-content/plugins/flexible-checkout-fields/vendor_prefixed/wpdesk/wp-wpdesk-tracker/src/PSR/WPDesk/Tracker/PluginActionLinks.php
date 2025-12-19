@@ -61,7 +61,7 @@ class PluginActionLinks implements Hookable
         $tracker_consent = new \FcfVendor\WPDesk_Tracker_Persistence_Consent();
         $plugin_links = [];
         if (!$tracker_consent->is_active()) {
-            $opt_in_link = admin_url('admin.php?page=wpdesk_tracker_' . $this->plugin_slug);
+            $opt_in_link = wp_nonce_url(admin_url('admin.php?page=wpdesk_tracker_' . $this->plugin_slug), OptInPage::WPDESK_TRACKER_ACTION, OptInPage::WPDESK_TRACKER_NONCE);
             if (is_string($this->shop_url) && strlen($this->shop_url) > 0) {
                 $opt_in_link = add_query_arg('shop_url', $this->shop_url, $opt_in_link);
             }

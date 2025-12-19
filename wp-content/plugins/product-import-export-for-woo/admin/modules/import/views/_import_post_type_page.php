@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
 }
 ?>
 <div class="wt_iew_import_main">
-	<p><?php echo $this->step_description; ?></p>
+	<p><?php echo esc_html($this->step_description); ?></p>
 	<div class="wt_iew_post-type-cards">
 		<?php
 		foreach ($post_types as $key => $value) {
@@ -120,8 +120,8 @@ if (!defined('ABSPATH')) {
 	<div class="wt_iew_suite_banner">
 		<div class="wt_iew_suite_banner_border"></div>
 		<p style="font-size: 13px; font-weight: 400; margin-top: -61px;margin-left: 13px; padding: 10px 10px;">
-			<strong><?php _e('💡 Did You Know?'); ?></strong> <?php _e('You can now get an all-in-one bundled solution to import and export WooCommerce products, orders, users, and more with premium exclusive features. Get'); ?>
-			<a href="<?php echo esc_url("https://www.webtoffee.com/product/woocommerce-import-export-suite/?utm_source=free_plugin_data_type&utm_medium=basic_revamp&utm_campaign=Import_Export_Suite" . WT_P_IEW_VERSION); ?>" style="color: blue;" target="_blank"><?php _e('Import Export Suite for WooCommerce.'); ?></a>
+			<strong><?php esc_html_e('💡 Did You Know?', 'product-import-export-for-woo'); ?></strong> <?php esc_html_e('You can now get an all-in-one bundled solution to import and export WooCommerce products, orders, users, and more with premium exclusive features. Get', 'product-import-export-for-woo'); ?>
+			<a href="<?php echo esc_url("https://www.webtoffee.com/product/woocommerce-import-export-suite/?utm_source=free_plugin_data_type&utm_medium=basic_revamp&utm_campaign=Import_Export_Suite" . WT_P_IEW_VERSION); ?>" style="color: blue;" target="_blank"><?php esc_html_e('Import Export Suite for WooCommerce.', 'product-import-export-for-woo'); ?></a>
 		</p>
 	</div>
 </div>

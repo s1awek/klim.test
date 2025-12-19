@@ -3,8 +3,8 @@
 /**
  * Plugin Name:       WP Full Picture
  * Plugin URI:        https://wpfullpicture.com/
- * Description:       Install Google Analytics, GTM, Meta pixel and other tools. Display a GDPR-compliant consent banner with consent mode.
- * Version:           9.2.0.1
+ * Description:       Install the best tracking tools and manage tracking consents with one plugin. Google Analytics, GTM, Meta pixel, WooCommerce and more.
+ * Version:           9.4.2
  * Requires at least: 5.4
  * Requires PHP:      7.4
  * Author:            Krzysztof Planeta
@@ -20,7 +20,7 @@ if ( !defined( 'ABSPATH' ) ) {
 if ( function_exists( 'fupi_fs' ) ) {
     fupi_fs()->set_basename( false, __FILE__ );
 } else {
-    define( 'FUPI_VERSION', '9.2.0.1' );
+    define( 'FUPI_VERSION', '9.4.2' );
     define( 'FUPI_URL', plugin_dir_url( __FILE__ ) );
     define( 'FUPI_PATH', __DIR__ );
     // DO NOT REMOVE THIS IF, IT IS ESSENTIAL FOR THE `function_exists` CALL ABOVE TO PROPERLY WORK.

@@ -90,6 +90,22 @@ class UpdraftPlus_Addon_LockAdmin {
 		return $this->opts;
 	}
 
+	/**
+	 * Get standard session length options
+	 *
+	 * @return array Session length options with values and labels
+	 */
+	public function get_session_length_options() {
+		return array(
+			'3600' => __('1 hour', 'updraftplus'),
+			'10800' => sprintf(__('%s hours', 'updraftplus'), 3),
+			'86400' => sprintf(__('%s hours', 'updraftplus'), 24),
+			'604800' => __('1 week', 'updraftplus'),
+			'2419200' => sprintf(__('%s weeks', 'updraftplus'), 4),
+			'31449600' => sprintf(__('%s weeks', 'updraftplus'), 52)
+		);
+	}
+
 	private function get_opts() {
 		$this->opts = UpdraftPlus_Options::get_updraft_option('updraft_adminlocking');
 		if (!is_array($this->opts)) $this->opts = array();
@@ -191,14 +207,7 @@ class UpdraftPlus_Addon_LockAdmin {
 
 					$updraftplus_admin->settings_debugrow('<label for="updraft_unlockadmin_password">'.esc_html__('Password', 'updraftplus').'</label>:', '<input type="text" id="updraft_unlockadmin_password" name="updraft_unlockadmin_password" value="'.esc_attr($this->opts['password']).'" style="width:230px;">');
 
-					$session_lengths = array(
-						'3600' => __('1 hour', 'updraftplus'),
-						'10800' => sprintf(__('%s hours', 'updraftplus'), 3),
-						'86400' => sprintf(__('%s hours', 'updraftplus'), 24),
-						'604800' => __('1 week', 'updraftplus'),
-						'2419200' => sprintf(__('%s weeks', 'updraftplus'), 4),
-						'31449600' => sprintf(__('%s weeks', 'updraftplus'), 52)
-					);
+					$session_lengths = $this->get_session_length_options();
 
 					$session_options = '';
 					foreach ($session_lengths as $length => $text) {

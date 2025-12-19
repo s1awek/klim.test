@@ -11,13 +11,19 @@ class Fupi_PROOFREC_send {
 
     // HELPERS
     private function get_privacy_policy_data() {
-        $pp_id = get_option( 'wp_page_for_privacy_policy' );
-        $pp_post = get_post( $pp_id );
-        $modified_date = get_post_field( 'post_modified', $pp_id );
-        $pp_content = $pp_post->post_content;
-        $pp_content = apply_filters( 'the_content', $pp_content );
-        $pp_content = do_shortcode( $pp_content );
-        return [$pp_content, $modified_date];
+        $cook = get_option( 'fupi_cook' );
+        if ( !empty( $cook['pp_id'] ) ) {
+            $pp_id = (int) $cook['pp_id'];
+            $pp_post = get_post( $pp_id );
+            if ( !empty( $pp_post ) && isset( $pp_post->post_status ) && $pp_post->post_status === 'publish' ) {
+                $modified_date = get_post_field( 'post_modified', $pp_id );
+                $pp_content = $pp_post->post_content;
+                $pp_content = apply_filters( 'the_content', $pp_content );
+                $pp_content = do_shortcode( $pp_content );
+                return [$pp_content, $modified_date];
+            }
+        }
+        return false;
     }
 
     private function get_pp_md5( $pp_content ) {
@@ -67,6 +73,7 @@ class Fupi_PROOFREC_send {
         $server_output = curl_exec( $ch );
         curl_close( $ch );
         $serverReponseObject = json_decode( $server_output );
+        trigger_error( '[FP] Tracking configuration data sent to CDB' );
         return $serverReponseObject;
     }
 
@@ -95,6 +102,9 @@ class Fupi_PROOFREC_send {
 
     public function send_privacy_policy_to_cdb( $cdb_key = false, $return = false, $only_send_when_pp_changed = true ) {
         $privacy_policy_data = $this->get_privacy_policy_data();
+        if ( empty( $privacy_policy_data ) ) {
+            return false;
+        }
         $pp_md5_data = $this->get_pp_md5( $privacy_policy_data[0] );
         $pp_md5_changed = $pp_md5_data[0];
         //  Check if MD5 has changed (this is not checked if the PP is being sent for the first time)
@@ -111,6 +121,7 @@ class Fupi_PROOFREC_send {
             ],
             $cdb_key
         );
+        trigger_error( '[FP] Privacy policy sent to CDB' );
         if ( $return ) {
             return $response;
         }
@@ -149,6 +160,8 @@ class Fupi_PROOFREC_send {
             if ( !$mail_sent ) {
                 trigger_error( "[FP] There was an error sending email with configuration backup" );
                 return false;
+            } else {
+                trigger_error( '[FP] Tracking configuration data sent to email address' );
             }
             return true;
         }
@@ -158,6 +171,9 @@ class Fupi_PROOFREC_send {
     public function send_privacy_policy_to_email( $email_address, $only_send_when_pp_changed = true ) {
         // Get data
         $pp_data = $this->get_privacy_policy_data();
+        if ( empty( $pp_data ) ) {
+            return false;
+        }
         $pp_content = $pp_data[0];
         $modified_date = $pp_data[1];
         $pp_md5_data = $this->get_pp_md5( $pp_content );
@@ -182,7 +198,7 @@ class Fupi_PROOFREC_send {
             // Content
             $headers = array('Content-Type: text/plain; charset=UTF-8');
             $subject = sprintf( esc_html__( '[Do not delete] Privacy policy from %1$s', 'full-picture-analytics-cookie-notice' ), $site_name );
-            $body = sprintf( esc_html__( "This is an automatic message, sent by WP Full Picture plugin version %1\$s. You are getting this message because privacy policy on your site has been updated.\n\nDo not delete this email. It holds a copy of your policy that was current at the time of collecting tracking consents.\n\nPrivacy Policy ID: %2\$s", 'full-picture-analytics-cookie-notice' ), FUPI_VERSION, $pp_md5 );
+            $body = sprintf( esc_html__( "This is an automatic message, sent by WP Full Picture plugin version %1\$s. You are getting this message because privacy policy on your site has been updated or you started collecting consents.\n\nDo not delete this email. It holds a copy of your policy that was current at the time of collecting tracking consents.\n\nPrivacy Policy ID: %2\$s", 'full-picture-analytics-cookie-notice' ), FUPI_VERSION, $pp_md5 );
             $body .= sprintf( esc_html__( "\n\nLearn how to find consents and combine them with privacy policy and tracking configuration data: %s.", 'full-picture-analytics-cookie-notice' ), 'https://wpfullpicture.com/support/documentation/how-to-find-visitors-consents-stored-in-emails/' );
             $attachments = array($file_path);
             // Send email
@@ -198,6 +214,8 @@ class Fupi_PROOFREC_send {
             if ( !$mail_sent ) {
                 trigger_error( "[FP] There was an error sending email with privacy policy backup" );
                 return false;
+            } else {
+                trigger_error( '[FP] Privacy policy sent to email address' );
             }
             return true;
         }

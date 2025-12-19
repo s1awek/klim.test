@@ -813,7 +813,7 @@ if (!class_exists('UpdraftPlus_Addons_Migrator_RemoteSend')) {
 				 */
 				function updraft_migrate_go_backup() {
 					var site_id = jQuery('#updraft_remotesites_selector').val();
-					var entities = <?php echo wp_json_encode($updraftplus->get_backupable_file_entities());?>;
+					var entities = <?php echo function_exists('wp_json_encode') ? wp_json_encode($updraftplus->get_backupable_file_entities()) : json_encode($updraftplus->get_backupable_file_entities());?>;
 					var onlythisfileentity = '';
 					for (var entity_key in entities) {
 						if (jQuery('#remotesend_updraft_include_'+entity_key).is(':checked')) {

@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: YITH WCWL\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/yith-woocommerce-"
 "wishlist\n"
-"POT-Creation-Date: 2025-08-07T13:20:34+00:00\n"
+"POT-Creation-Date: 2025-11-18T14:57:58+00:00\n"
 "PO-Revision-Date: 2020-10-16 14:06+0200\n"
 "Last-Translator: Valentyn Zubenko <valentyn.zubenko@gmail.com>\n"
 "Language-Team: Your Inspiration Themes <support@yithemes.com>\n"
@@ -162,19 +162,19 @@ msgstr ""
 msgid "Wishlist Page"
 msgstr "Мои закладки на  %s"
 
-#: includes/admin/class-yith-wcwl-admin.php:99
+#: includes/admin/class-yith-wcwl-admin.php:98
 msgctxt "[Admin] Delete wishlist from panel confirmation modal"
 msgid "Confirm delete"
 msgstr ""
 
 #. translators: %s is the name of the wishlist
-#: includes/admin/class-yith-wcwl-admin.php:101
+#: includes/admin/class-yith-wcwl-admin.php:100
 #, php-format
 msgctxt "[Admin] Delete wishlist from panel confirmation modal"
 msgid "Are you sure you want to delete %s?"
 msgstr ""
 
-#: includes/admin/class-yith-wcwl-admin.php:102
+#: includes/admin/class-yith-wcwl-admin.php:101
 msgctxt "[Admin] Delete wishlist from panel confirmation modal"
 msgid "Delete"
 msgstr ""
@@ -278,8 +278,8 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: includes/class-yith-wcwl-ajax-handler.php:201
-#: includes/class-yith-wcwl-ajax-handler.php:250
+#: includes/class-yith-wcwl-ajax-handler.php:209
+#: includes/class-yith-wcwl-ajax-handler.php:264
 msgid "Product successfully removed."
 msgstr "Продукт успешно удален из избранного"
 
@@ -537,17 +537,21 @@ msgctxt ""
 msgid "(Was %2$s when added  in list)"
 msgstr ""
 
-#: includes/class-yith-wcwl-wishlists.php:277
+#: includes/class-yith-wcwl-wishlists.php:47
+msgid "There was an error while processing your request; please, try later"
+msgstr ""
+
+#: includes/class-yith-wcwl-wishlists.php:290
 msgid "The item cannot be added to this wishlist"
 msgstr ""
 
-#: includes/class-yith-wcwl-wishlists.php:281
-#: includes/class-yith-wcwl-wishlists.php:287
+#: includes/class-yith-wcwl-wishlists.php:294
+#: includes/class-yith-wcwl-wishlists.php:300
 msgid "An error occurred while adding the products to the wishlist."
 msgstr ""
 
-#: includes/class-yith-wcwl-wishlists.php:387
-#: includes/class-yith-wcwl-wishlists.php:413
+#: includes/class-yith-wcwl-wishlists.php:400
+#: includes/class-yith-wcwl-wishlists.php:426
 msgid "Error. Unable to remove the product from the wishlist."
 msgstr "Ошибка. Невозможно удалить продукт из избранного."
 

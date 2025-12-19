@@ -34,19 +34,26 @@ switch( $section_id ){
 	// SIMPLE EVENTS
 
 	case 'fupi_fbp1_events':
-		$ret_text = '<p>' . esc_html__('Use functions on this page to track simple events, like clicking a button or submitting a form.', 'full-picture-analytics-cookie-notice' ) . '</p>';
+		$ret_text = '<p>' . esc_html__('Use simple events to track clicks, form submissions and others events.', 'full-picture-analytics-cookie-notice' ) . '</p>';
 	break;
 
 	// COMPLEX EVENTS
 
 	case 'fupi_fbp1_atrig':
-		$ret_text = '<p>' . esc_html__( 'Use functions on this page to track complex events, with many conditions, for example, when a visitor from France visits 5 product pages in one session. You can set these conditions in the "Advanced triggers" module.' , 'full-picture-analytics-cookie-notice' ) . '</p>';
+		$ret_text = '<p>' . sprintf( 
+			esc_html__( 'Here you can set up sending custom events of two types - %4$sstandard Meta events%2$s and %5$sfully custom events%2$s. Trigger them with %1$scustom triggers%2$s and add %3$soptional parameters%2$s.' , 'full-picture-analytics-cookie-notice' ), 
+			'<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-advanced-triggers/" target="_blank">', 
+			'</a>',
+			'<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-parameters/" target="_blank">',
+			'<a href="https://developers.facebook.com/docs/meta-pixel/reference" target="_blank">',
+			'<a href="https://www.facebook.com/business/help/964258670337005?id=1205376682832142" target="_blank">' 
+		) . '</p>';
 	break;
 
 	// PARAMETERS TRACKING
 
 	case 'fupi_fbp1_wpdata':
-		$ret_text = '<p>' . esc_html__( 'Use event parameters to add context to tracked events. You can use them later to better define custom audiences.', 'full-picture-analytics-cookie-notice' ) . '</p>';
+		$ret_text = '<p>' . esc_html__( 'These parameters will be sent with all events, including the initial pageview event and custom events.', 'full-picture-analytics-cookie-notice' ) . '</p>';
 	break;
 
 	// E-COMMERCE

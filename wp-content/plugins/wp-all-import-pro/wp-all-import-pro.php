@@ -3,7 +3,7 @@
 Plugin Name: WP All Import Pro
 Plugin URI: http://www.wpallimport.com/
 Description: The most powerful solution for importing XML and CSV files to WordPress. Import to Posts, Pages, and Custom Post Types. Support for imports that run on a schedule, ability to update existing imports, and much more.
-Version: 4.11.7
+Version: 5.0.3
 Requires PHP: 7.4
 Author: Soflyy
 */
@@ -26,8 +26,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
     /**
      *
      */
-    define('PMXI_VERSION', '4.11.7');
-
+    define('PMXI_VERSION', '5.0.3');
     /**
      *
      */
@@ -438,8 +437,32 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
          */
         public function init() {
 			$this->load_plugin_textdomain();
-            self::$is_php_allowed = apply_filters('wp_all_import_is_php_allowed', TRUE);
+            self::$is_php_allowed = apply_filters('wp_all_import_is_php_allowed', self::wpai_determine_php_allowed());
 		}
+
+        /**
+         * Determine if PHP execution should be allowed based on WordPress security constants.
+         *
+         * Only restricts PHP execution when BOTH DISALLOW_FILE_EDIT and DISALLOW_FILE_MODS are set to true.
+         * This is the only configuration that creates a true security boundary where the plugin would
+         * grant NEW code execution capabilities that don't already exist.
+         *
+         * @return bool True if PHP execution is allowed, false otherwise.
+         */
+        public static function wpai_determine_php_allowed() {
+            // Only restrict if BOTH security constants are set
+            // This is the only configuration that creates a true security boundary
+            if (defined('DISALLOW_FILE_EDIT') && DISALLOW_FILE_EDIT &&
+                defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS) {
+                return false;
+            }
+
+            // Otherwise allow - user has other code execution vectors anyway
+            // - If only DISALLOW_FILE_EDIT is set: admin can still install plugins (file manager, code snippets, etc.)
+            // - If only DISALLOW_FILE_MODS is set: admin can still edit theme/plugin files directly
+            // - If neither is set: admin has full code execution capabilities
+            return true;
+        }
 
         /**
          * @param $message
@@ -718,6 +741,12 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
                 }
                 $options['is_delete_attachments'] = !$options['is_keep_attachments'];
                 $options['is_delete_imgs'] = !$options['is_keep_imgs'];
+            }
+            if ( version_compare($version, '5.0.2-beta-1.1') < 0 ) {
+                // Disable Gutenberg block conversion for existing imports (backward compatibility).
+                if ( ! array_key_exists( 'is_convert_to_blocks', $options ) ) {
+                    $options['is_convert_to_blocks'] = 0;
+                }
             }
 		}
 
@@ -1296,7 +1325,8 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 				'failed',
 				'failed_on',
 				'settings_update_on',
-				'last_activity'
+				'last_activity',
+				'is_preview'
 			);
 
 			// Check if field exists
@@ -1344,6 +1374,9 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 							break;
 						case 'last_activity':
 							$wpdb->query("ALTER TABLE {$table} ADD `last_activity` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';");
+							break;
+						case 'is_preview':
+							$wpdb->query("ALTER TABLE {$table} ADD `is_preview` BOOL NOT NULL DEFAULT 0;");
 							break;
 
 						default:
@@ -1566,6 +1599,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 				'name' => '',
 				'is_keep_linebreaks' => 1,
 				'is_leave_html' => 0,
+				'is_convert_to_blocks' => 1,
 				'fix_characters' => 0,
 				'pid_xpath' => '',
 				'slug_xpath' => '',

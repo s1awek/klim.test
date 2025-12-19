@@ -36,7 +36,14 @@ const sendPmwNotificationDetails = input => {
 				}
 
 				if (input.type === "dismiss_opportunity") {
-					input.element.appendTo(".pmw-opportunity-dismissed")
+					// Get the opportunity card (parent .pmw wrapper containing .opportunity-card)
+					const opportunityCard = input.element.closest(".pmw")
+					// Move the entire card to the dismissed section
+					opportunityCard.appendTo("#pmw-dismissed-opportunities")
+					// Remove the dismiss button from the card
+					input.element.closest(".opportunity-card-button-link").remove()
+					// Add the dismissed class to the card
+					opportunityCard.find(".opportunity-card").addClass("dismissed")
 				}
 
 				if (input.type === "dismiss_notification") {

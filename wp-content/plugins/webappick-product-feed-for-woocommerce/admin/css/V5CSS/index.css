@@ -943,6 +943,10 @@ input[type="checkbox"]:focus,
   z-index: 10;
 }
 
+.ctx-z-20 {
+  z-index: 20;
+}
+
 .ctx-z-50 {
   z-index: 50;
 }
@@ -1001,6 +1005,11 @@ input[type="checkbox"]:focus,
   margin-right: auto !important;
 }
 
+.ctx-mx-1 {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
 .ctx-mx-2 {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
@@ -1054,6 +1063,10 @@ input[type="checkbox"]:focus,
   margin-top: 1rem !important;
 }
 
+.-ctx-mb-2 {
+  margin-bottom: -0.5rem;
+}
+
 .-ctx-ml-2 {
   margin-left: -0.5rem;
 }
@@ -1064,6 +1077,14 @@ input[type="checkbox"]:focus,
 
 .-ctx-mt-1 {
   margin-top: -0.25rem;
+}
+
+.-ctx-mt-2 {
+  margin-top: -0.5rem;
+}
+
+.-ctx-mt-3 {
+  margin-top: -0.75rem;
 }
 
 .-ctx-mt-5 {
@@ -1391,6 +1412,10 @@ input[type="checkbox"]:focus,
   height: 100%;
 }
 
+.ctx-h-px {
+  height: 1px;
+}
+
 .ctx-max-h-60 {
   max-height: 15rem;
 }
@@ -1509,6 +1534,10 @@ input[type="checkbox"]:focus,
 
 .ctx-w-\[140\] {
   width: 140;
+}
+
+.ctx-w-\[252px\] {
+  width: 252px;
 }
 
 .ctx-w-\[43\%\] {
@@ -1941,6 +1970,10 @@ input[type="checkbox"]:focus,
   gap: 1.5rem;
 }
 
+.ctx-gap-\[14px\] {
+  gap: 14px;
+}
+
 .ctx-gap-x-1 {
   -webkit-column-gap: 0.25rem;
      -moz-column-gap: 0.25rem;
@@ -2033,6 +2066,11 @@ input[type="checkbox"]:focus,
   border-color: rgb(229 231 235 / var(--tw-divide-opacity));
 }
 
+.ctx-self-stretch {
+  -ms-flex-item-align: stretch;
+      align-self: stretch;
+}
+
 .ctx-overflow-auto {
   overflow: auto;
 }
@@ -2089,6 +2127,10 @@ input[type="checkbox"]:focus,
 
 .ctx-rounded {
   border-radius: 0.25rem;
+}
+
+.ctx-rounded-2xl {
+  border-radius: 1rem;
 }
 
 .ctx-rounded-3xl {
@@ -2317,6 +2359,11 @@ input[type="checkbox"]:focus,
 .ctx-bg-\[\#F0F0F1\] {
   --tw-bg-opacity: 1;
   background-color: rgb(240 240 241 / var(--tw-bg-opacity));
+}
+
+.ctx-bg-\[\#F1D259\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 210 89 / var(--tw-bg-opacity));
 }
 
 .ctx-bg-\[\#F92187\] {
@@ -2737,6 +2784,11 @@ input[type="checkbox"]:focus,
   padding-bottom: 1px;
 }
 
+.ctx-py-\[22px\] {
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+
 .\!ctx-pl-2 {
   padding-left: 0.5rem !important;
 }
@@ -2931,6 +2983,11 @@ input[type="checkbox"]:focus,
   line-height: 2rem;
 }
 
+.ctx-text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
 .ctx-text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
@@ -2976,6 +3033,10 @@ input[type="checkbox"]:focus,
   font-size: 22px;
 }
 
+.ctx-text-\[32px\] {
+  font-size: 32px;
+}
+
 .ctx-text-\[8px\] {
   font-size: 8px;
 }
@@ -3019,6 +3080,10 @@ input[type="checkbox"]:focus,
 
 .ctx-font-bold {
   font-weight: 700;
+}
+
+.ctx-font-extrabold {
+  font-weight: 800;
 }
 
 .ctx-font-medium {
@@ -3110,14 +3175,29 @@ input[type="checkbox"]:focus,
   color: rgb(54 117 225 / var(--tw-text-opacity));
 }
 
+.ctx-text-\[\#51D9FF\] {
+  --tw-text-opacity: 1;
+  color: rgb(81 217 255 / var(--tw-text-opacity));
+}
+
 .ctx-text-\[\#A4286A\] {
   --tw-text-opacity: 1;
   color: rgb(164 40 106 / var(--tw-text-opacity));
 }
 
+.ctx-text-\[\#FFDA6C\] {
+  --tw-text-opacity: 1;
+  color: rgb(255 218 108 / var(--tw-text-opacity));
+}
+
 .ctx-text-\[\#ef657b\] {
   --tw-text-opacity: 1;
   color: rgb(239 101 123 / var(--tw-text-opacity));
+}
+
+.ctx-text-\[\#f1d259\] {
+  --tw-text-opacity: 1;
+  color: rgb(241 210 89 / var(--tw-text-opacity));
 }
 
 .ctx-text-black {
@@ -3285,6 +3365,12 @@ input[type="checkbox"]:focus,
 .ctx-shadow-\[0_3\.105px_0_0_\#E13639\] {
   --tw-shadow: 0 3.105px 0 0 #E13639;
   --tw-shadow-colored: 0 3.105px 0 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.ctx-shadow-\[0_3\.907px_3\.907px_0_rgba\(0\,0\,0\,0\.05\)\,1\.953px_1\.953px_0_0\.977px_\#FFD0E6\] {
+  --tw-shadow: 0 3.907px 3.907px 0 rgba(0,0,0,0.05),1.953px 1.953px 0 0.977px #FFD0E6;
+  --tw-shadow-colored: 0 3.907px 3.907px 0 var(--tw-shadow-color), 1.953px 1.953px 0 0.977px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
@@ -3609,6 +3695,11 @@ img {
 .hover\:ctx-bg-\[\#f2ae01\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(242 174 1 / var(--tw-bg-opacity));
+}
+
+.hover\:ctx-bg-\[\#f859a3\]:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 89 163 / var(--tw-bg-opacity));
 }
 
 .hover\:ctx-bg-gray-200:hover {

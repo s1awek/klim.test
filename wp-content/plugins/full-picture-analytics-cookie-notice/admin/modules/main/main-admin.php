@@ -8,10 +8,12 @@ class Fupi_MAIN_admin {
 	private $proofrec;
 
     public function __construct(){
+
         $this->settings = get_option('fupi_main');
         $this->tools = get_option('fupi_tools');
         $this->cook = get_option('fupi_cook');	
 		$this->proofrec = get_option('fupi_proofrec');
+
         $this->add_actions_and_filters();
     }
 
@@ -30,6 +32,16 @@ class Fupi_MAIN_admin {
 		add_action('admin_post_wpfp_download_backup', array( $this, 'fupi_download_settings_backup') );
     }
 
+	private function pp_ok(){
+            
+        if ( ! empty( $this->cook['pp_id'] ) ) {
+            $pp_id = (int) $this->cook['pp_id'];
+            return get_post_status( $pp_id ) == 'publish';
+        }
+
+        return false;
+    }
+
     public function add_fields_settings( $sections ){
         include_once 'main-fields.php';
         return $sections;
@@ -45,10 +57,9 @@ class Fupi_MAIN_admin {
 
 		if ( apply_filters( 'fupi_updating_many_options', false ) ) return $clean_data;
 
-
         // UPDATE CDB
 
-        if ( ! empty ( $this->tools['cook'] ) && ! empty ( $this->tools['proofrec'] ) && ! empty ( get_privacy_policy_url() ) ) {
+        if ( ! empty ( $this->tools['cook'] ) && ! empty ( $this->tools['proofrec'] ) && $this->pp_ok() ) {
 
 			include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
 			$gdpr_checker = new Fupi_compliance_status_checker( 'main', $clean_data );
@@ -57,12 +68,15 @@ class Fupi_MAIN_admin {
 
         // GENERATE FILES
 		
-		// Generate HEAD js
+		// Generate HEAD js if it was just enabled or if the geolocation method has changed
 
 		$main_file_gen_is_enabled = ! empty( $clean_data['save_settings_file'] );
 		$main_file_gen_was_enabled = ! empty( $this->settings['save_settings_file' ] );
+
+		$new_geo_method = ! empty( $clean_data['geo'] ) ? $clean_data['geo'] : false;
+		$old_geo_method = ! empty( $this->settings['geo' ] ) ? $this->settings['geo' ] : false;
 		
-		$generate_head_js = $main_file_gen_is_enabled && ! $main_file_gen_was_enabled;
+		$generate_head_js = $main_file_gen_is_enabled && ( ! $main_file_gen_was_enabled || ( $new_geo_method != $old_geo_method ) );
 
 		// Generate CSCR files
 		

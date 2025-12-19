@@ -1,7 +1,13 @@
 <?php
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Helper class which defnes a namespace for some commonly used functions
- * 
+ *
  * @author Max Tsiplyakov <makstsiplyakov@gmail.com>
  */
 class PMWPE_Helper {

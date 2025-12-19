@@ -297,15 +297,18 @@ if ( ! class_exists( 'WC_Connect_Help_View' ) ) {
 				)
 			);
 
-			do_action(
-				'enqueue_wc_connect_script',
-				'wc-connect-admin-test-print',
-				array(
-					'isShippingLoaded' => $this->is_shipping_loaded(),
-					'storeOptions'     => $this->service_settings_store->get_store_options(),
-					'paperSize'        => $this->service_settings_store->get_preferred_paper_size(),
-				)
-			);
+			// Shipping related.
+			if ( WC_Connect_Loader::should_load_shipping_features() ) {
+				do_action(
+					'enqueue_wc_connect_script',
+					'wc-connect-admin-test-print',
+					array(
+						'isShippingLoaded' => $this->is_shipping_loaded(),
+						'storeOptions'     => $this->service_settings_store->get_store_options(),
+						'paperSize'        => $this->service_settings_store->get_preferred_paper_size(),
+					)
+				);
+			}
 		}
 
 		/**

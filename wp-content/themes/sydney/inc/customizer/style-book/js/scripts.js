@@ -8,15 +8,21 @@
             e.preventDefault();
             var $styleBook = $( '.sydney-style-book' );
 
-            if ( $styleBook.length ) {
-                $styleBook.remove();
+            if ( $styleBook.length && $styleBook.is(':visible') ) {
+                // Hide instead of removing to preserve state
+                $styleBook.hide();
+            } else if ( $styleBook.length ) {
+                // Show existing Style Book to preserve live preview state
+                $styleBook.show();
             } else {
+                // Create Style Book only if it doesn't exist
                 var template = wp.template( 'sydney-style-book' );
                 $( 'body' ).append( template );
+                $styleBook = $( '.sydney-style-book' );
                 
-                //Close button
+                //Close button - use hide instead of remove
                 $( '.sydney-style-book-close' ).on( 'click', function() {
-                    $( '.sydney-style-book' ).remove();
+                    $styleBook.hide();
                 } );
             }
         } );
@@ -62,6 +68,64 @@
             } );
         });
     } );
+
+    //Button top/bottom padding
+    var buttonTopBottomPadding = {
+        'button_top_bottom_padding_desktop': 'desktop',
+        'button_top_bottom_padding_tablet': 'tablet',
+        'button_top_bottom_padding_mobile': 'mobile'
+    };
+    $.each( buttonTopBottomPadding, function( option ) {
+        wp.customize(option, function( value ) {
+            value.bind( function( newval ) {
+                $( '.sydney-style-book .roll-button' ).css( 'padding-top', newval + 'px' );
+                $( '.sydney-style-book .roll-button' ).css( 'padding-bottom', newval + 'px' );
+            } );
+        });
+    } );
+
+    //Button left/right padding
+    var buttonLeftRightPadding = {
+        'button_left_right_padding_desktop': 'desktop',
+        'button_left_right_padding_tablet': 'tablet',
+        'button_left_right_padding_mobile': 'mobile'
+    };
+    $.each( buttonLeftRightPadding, function( option ) {
+        wp.customize(option, function( value ) {
+            value.bind( function( newval ) {
+                $( '.sydney-style-book .roll-button' ).css( 'padding-left', newval + 'px' );
+                $( '.sydney-style-book .roll-button' ).css( 'padding-right', newval + 'px' );
+            } );
+        });
+    } );
+
+    //Button radius
+    wp.customize('buttons_radius', function( value ) {
+        value.bind( function( newval ) {
+            $( '.sydney-style-book .roll-button' ).css( 'border-radius', newval + 'px' );
+        } );
+    });
+
+    //Button font size
+    var buttonFontSize = {
+        'button_font_size_desktop': 'desktop',
+        'button_font_size_tablet': 'tablet',
+        'button_font_size_mobile': 'mobile'
+    };
+    $.each( buttonFontSize, function( option ) {
+        wp.customize(option, function( value ) {
+            value.bind( function( newval ) {
+                $( '.sydney-style-book .roll-button' ).css( 'font-size', newval + 'px' );
+            } );
+        });
+    } );
+
+    //Button text transform
+    wp.customize('button_text_transform', function( value ) {
+        value.bind( function( newval ) {
+            $( '.sydney-style-book .roll-button' ).css( 'text-transform', newval );
+        } );
+    });
 
     //Heading typography
 	wp.customize( 'sydney_headings_font', function( value ) {

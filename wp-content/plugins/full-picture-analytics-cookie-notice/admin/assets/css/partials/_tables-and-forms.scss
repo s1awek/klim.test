@@ -115,7 +115,8 @@
     	border-radius: 0 4px 4px 0;
 	}
 
-tr.fupi_required{
+tr.fupi_required,
+tr.fupi_require_on_cond{
 	th{
 		position: relative;
 		label{
@@ -200,6 +201,8 @@ tr.fupi_deprecated{
 #fupi_main{
 	max-width: 480px;
 	margin: 0 auto;
+	border-radius: 20px;
+	background-color: #fff;
 }
 
 #fupi_main_col{
@@ -282,6 +285,26 @@ tr.fupi_deprecated{
 				}
 			}
 		}
+
+		tr:not(.fupi_sub) {
+			border-radius: 6px;
+		}
+
+		tr:not(.fupi_sub):not(:has(+ tr.fupi_sub)) {
+			border-radius: 6px;
+		}
+
+		tr:not(.fupi_sub):has(+ tr.fupi_sub:not(.fupi_hidden)) {
+			border-radius: 6px 6px 0 0;
+		}
+
+		tr.fupi_sub:not(:has(+ tr.fupi_sub)) {
+			border-radius: 0 0 6px 6px;
+		}
+
+		tr.fupi_sub:has(+ tr.fupi_sub) {
+			border-radius: 0;
+		}
 	}
 }
 
@@ -326,7 +349,6 @@ tr.fupi_ext_options{
 					display: inline-block;
 					padding: 0px 5px;
 					font-size: 11px;
-					// border-radius: 4px;
 					margin-top: 5px;
 					margin-left: 5px;
 					line-height: 1.5;
@@ -505,12 +527,6 @@ tr.fupi_disabled{
 			display: none;
 		}
 	}
-}
-
-// JOINED OPTIONS
-
-.fupi_join{
-	margin-top: -30px;
 }
 
 // SUB OPTIONS

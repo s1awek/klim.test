@@ -25,28 +25,38 @@ class Wt_Import_Export_For_Woo_Basic_Log
 	*/
 	public static function get_file_path($file_name="")
 	{
-		if(!is_dir(self::$log_dir))
-        {
-            if(!mkdir(self::$log_dir, 0700))
-            {
-            	return false;
-            }else
-            {
-            	$files_to_create=array('.htaccess' => 'deny from all', 'index.php'=>'<?php // Silence is golden');
-		        foreach($files_to_create as $file=>$file_content)
-		        {
-		        	if(!file_exists(self::$log_dir.'/'.$file))
-			        {
-			            $fh=@fopen(self::$log_dir.'/'.$file, "w");
-			            if(is_resource($fh))
-			            {
-			                fwrite($fh, $file_content);
-			                fclose($fh);
-			            }
-			        }
-		        } 
-            }
-        }
+		global $wp_filesystem;
+		
+		// Initialize WP_Filesystem
+		if (!function_exists('WP_Filesystem')) {
+			require_once(ABSPATH . 'wp-admin/includes/file.php');
+		}
+		WP_Filesystem();
+		
+		// Create directory using WP_Filesystem
+		if (!$wp_filesystem->is_dir(self::$log_dir)) {
+			if (!$wp_filesystem->mkdir(self::$log_dir, FS_CHMOD_DIR)) {
+				return false;
+			}
+		}
+		
+		// Ensure proper permissions and add index.php for security
+		$wp_filesystem->chmod(self::$log_dir, FS_CHMOD_DIR);
+		
+		// Add security files to prevent directory listing and direct access
+		$security_files = array(
+			'index.php' => '<?php' . PHP_EOL . '// Silence is golden',
+			'.htaccess' => 'deny from all'
+		);
+		
+		foreach ($security_files as $file => $content) {
+			if (!$wp_filesystem->exists(self::$log_dir . '/' . $file)) {
+				$wp_filesystem->put_contents(
+					self::$log_dir . '/' . $file,
+					$content
+				);
+			}
+		}
         return self::$log_dir.'/'.$file_name;
 	}
 
@@ -72,8 +82,8 @@ class Wt_Import_Export_For_Woo_Basic_Log
 				$file_time=strtotime($file_date_time_arr[0]);
 				if($file_time) //file time exists
 				{
-					$today=strtotime(date('Y-m-d'));
-					$file_time=strtotime(date('Y-m-d', $file_time));
+					$today = strtotime( gmdate('Y-m-d') );
+					$file_time = strtotime( gmdate('Y-m-d', $file_time) );
 					if($today==$file_time) //file exists with the current day
 					{
 						return $value;
@@ -96,7 +106,7 @@ class Wt_Import_Export_For_Woo_Basic_Log
 			$arr[]='schedule';
 		}
 		$arr[]=$action_type;
-		$arr[]=date('Y-m-d h i s A'); /* if changing this format please consider `check_log_exists_for_entry` method */
+		$arr[] = gmdate('Y-m-d h i s A'); /* if changing this format please consider `check_log_exists_for_entry` method */
 
 		$arr=array_filter($arr);
 		return implode("_", $arr).'.log';

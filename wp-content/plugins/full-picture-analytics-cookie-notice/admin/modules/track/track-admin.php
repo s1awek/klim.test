@@ -4,11 +4,13 @@ class Fupi_TRACK_admin {
 
     private $settings;
     private $tools;
+    private $cook;
     private $proofrec;
 
     public function __construct(){
         $this->settings = get_option('fupi_track');
         $this->tools = get_option('fupi_tools');
+        $this->cook = get_option('fupi_cook');
         $this->proofrec = get_option('fupi_proofrec');
         $this->add_actions_and_filters();
     }
@@ -17,6 +19,16 @@ class Fupi_TRACK_admin {
         add_action( 'fupi_register_setting_track', array( $this, 'register_module_settings' ) );
         add_filter( 'fupi_track_add_fields_settings', array( $this, 'add_fields_settings' ), 10, 1 );
         add_filter( 'fupi_track_get_page_descr', array( $this, 'get_page_descr' ), 10, 2 );
+    }
+
+    private function pp_ok(){
+            
+        if ( ! empty( $this->cook['pp_id'] ) ) {
+            $pp_id = (int) $this->cook['pp_id'];
+            return get_post_status( $pp_id ) == 'publish';
+        }
+
+        return false;
     }
 
     public function add_fields_settings( $sections ){
@@ -34,7 +46,7 @@ class Fupi_TRACK_admin {
         
         if ( apply_filters( 'fupi_updating_many_options', false ) ) return $clean_data;
 
-        if ( ! empty ( $this->tools['cook'] ) && ! empty ( $this->tools['proofrec'] ) && ! empty ( get_privacy_policy_url() ) ) {
+        if ( ! empty ( $this->tools['cook'] ) && ! empty ( $this->tools['proofrec'] ) && $this->pp_ok() ) {
 			include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
 			$gdpr_checker = new Fupi_compliance_status_checker( 'track', $clean_data );
             $gdpr_checker->send_and_return_status();

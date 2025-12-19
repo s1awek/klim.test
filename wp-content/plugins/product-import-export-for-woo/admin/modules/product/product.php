@@ -25,6 +25,7 @@ class Wt_Import_Export_For_Woo_Basic_Product {
     private $exporter = null;
     private $product_categories = null;
     private $product_tags = null;
+    private $product_brands = null;
     private $product_taxonomies = array();
     private $all_meta_keys = array();
     private $product_attributes = array();
@@ -46,7 +47,7 @@ class Wt_Import_Export_For_Woo_Basic_Product {
         {
             include_once(ABSPATH.'wp-admin/includes/plugin.php');
         }
-        if(!is_plugin_active('woocommerce/woocommerce.php'))
+        if ( ! class_exists( 'WooCommerce' ) )
         {
             return;
         }
@@ -94,7 +95,7 @@ class Wt_Import_Export_For_Woo_Basic_Product {
             ?>
             <script type="text/javascript">
                 jQuery(document).ready(function ($) {
-                    var $downloadProducts = $('<option>').val('wt_ier_download_products').text('<?php _e('Export to CSV') ?>');
+                    var $downloadProducts = $('<option>').val('wt_ier_download_products').text('<?php esc_html_e('Export to CSV', 'product-import-export-for-woo') ?>');
                     $('select[name^="action"]').append($downloadProducts);
                 });
             </script>
@@ -144,7 +145,7 @@ class Wt_Import_Export_For_Woo_Basic_Product {
     {
         if($this->module_base==$base)
         {
-            $steps['advanced']['description']=__('Use advanced options from below to decide updates to existing products, batch import count. You can also save the template file for future imports.');
+            $steps['advanced']['description']=__('Use advanced options from below to decide updates to existing products, batch import count. You can also save the template file for future imports.', 'product-import-export-for-woo');
         }
         return $steps;
     }
@@ -157,7 +158,7 @@ class Wt_Import_Export_For_Woo_Basic_Product {
         if(0 == $batch_offset){                        
             $memory = size_format(wt_let_to_num_basic(ini_get('memory_limit')));
             $wp_memory = size_format(wt_let_to_num_basic(WP_MEMORY_LIMIT));                      
-            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->module_base, 'import', '---[ New import started at '.date('Y-m-d H:i:s').' ] PHP Memory: ' . $memory . ', WP Memory: ' . $wp_memory);
+            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->module_base, 'import', '---[ New import started at '.gmdate('Y-m-d H:i:s').' ] PHP Memory: ' . $memory . ', WP Memory: ' . $wp_memory);
         }
         
         include plugin_dir_path(__FILE__) . 'import/import.php';
@@ -166,7 +167,7 @@ class Wt_Import_Export_For_Woo_Basic_Product {
         $response = $import->prepare_data_to_import($import_data,$form_data,$batch_offset,$is_last_batch);
         
         if($is_last_batch){
-            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->module_base, 'import', '---[ Import ended at '.date('Y-m-d H:i:s').']---');
+            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->module_base, 'import', '---[ Import ended at '.gmdate('Y-m-d H:i:s').']---');
         }
         return $response;
     }
@@ -300,7 +301,10 @@ class Wt_Import_Export_For_Woo_Basic_Product {
             return $this->product_categories;
         }
         $out = array();
-        $product_categories = get_terms('product_cat', array('hide_empty' => false) );
+        $product_categories = get_terms(array(
+            'taxonomy' => 'product_cat',
+            'hide_empty' => false
+        ));
         if ( ! is_wp_error( $product_categories ) ) {
             $version = get_bloginfo('version');
             foreach ( $product_categories as $category ) {
@@ -321,6 +325,76 @@ class Wt_Import_Export_For_Woo_Basic_Product {
         return $out;
     }
 
+     /**
+     * Get product brands
+     * @return array $brands 
+     */
+    private function get_product_brands() {
+        if ( ! is_null( $this->product_brands ) ) {
+            return $this->product_brands;
+        }
+        $out = array();
+        
+        // Default brand taxonomy
+        $default_taxonomy = array('product_brand');
+        
+        // Get additional brand taxonomies from filter
+        $additional_taxonomies = apply_filters('wt_iew_product_brand_taxonomies', array());
+        
+        // Combine default with additional taxonomies
+        $brand_taxonomies = array_merge($default_taxonomy, $additional_taxonomies);
+
+        $version = get_bloginfo('version');
+        
+        // Process each taxonomy with safety checks
+        foreach ($brand_taxonomies as $taxonomy) {
+            // Validate taxonomy name
+            if ( empty( $taxonomy ) || ! is_string( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
+                continue;
+            }
+            
+            try {
+                $brands = get_terms($taxonomy);
+                if ( is_wp_error( $brands ) || empty( $brands ) || ! is_array( $brands ) ) {
+                    continue;
+                }
+                
+                foreach ( $brands as $brand ) {
+                    // Skip invalid or incomplete brand terms
+                    if ( ! is_object( $brand ) || ! isset( $brand->term_id ) || empty( $brand->slug ) || empty( $brand->name ) ) {
+                        continue;
+                    }
+                    
+                    // Prefix with taxonomy name to avoid conflicts between taxonomies
+                    $key = $taxonomy . ':' . $brand->slug;
+                    
+                    // Show hierarchy like categories if WordPress version is 4.8 or higher
+                    if ( version_compare( $version, '4.8', '<' ) ) {
+                        // WordPress version is less than 4.8 - show simple name
+                        $out[$key] = $brand->name;
+                    } else {
+                        // WordPress version is 4.8 or higher - show hierarchy
+                        $parents_list = $this->get_safe_term_parents_list( $brand->term_id, $taxonomy );
+                        if ( ! empty( $parents_list ) ) {
+                            $out[$key] = $parents_list;
+                        } else {
+                            $out[$key] = $brand->name;
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                // Log error for debugging but continue processing other taxonomies
+                continue;
+            } catch (Error $e) {
+                // Catch fatal errors
+                continue;
+            }
+        }
+        
+        $this->product_brands = $out;
+        return $out;
+    }
+
     /**
      * Safely get term parents list without using get_term_parents_list which can cause WP_Error issues
      * @param int $term_id Term ID
@@ -331,29 +405,70 @@ class Wt_Import_Export_For_Woo_Basic_Product {
      */
     private function get_safe_term_parents_list($term_id, $taxonomy) {
         try {
-            $term = get_term( $term_id, $taxonomy );
-            if ( is_wp_error( $term ) || ! $term ) {
+            // Validate inputs
+            if ( empty( $term_id ) || ! is_numeric( $term_id ) || empty( $taxonomy ) || ! is_string( $taxonomy ) ) {
+                return '';
+            }
+            
+            // Check if taxonomy exists
+            if ( ! taxonomy_exists( $taxonomy ) ) {
+                return '';
+            }
+            
+            // Get the term with safety checks
+            $term = get_term($term_id, $taxonomy);
+            if ( is_wp_error( $term ) || ! $term  || empty( $term->name ) ) {
                 return '';
             }
 
-            $parents = get_ancestors( $term_id, $taxonomy, 'taxonomy' );
-            if ( empty( $parents ) ) {
+            // Get ancestors with safety checks
+            $parents = get_ancestors($term_id, $taxonomy, 'taxonomy');
+            if ( is_wp_error( $parents ) || empty( $parents ) || ! is_array( $parents ) ) {
+                // No parents, return just the term name
+                return $term->name;
+            }
+
+            // Validate parents array contains only numeric IDs
+            $valid_parents = array();
+            foreach ( $parents as $parent_id ) {
+                if ( ! empty( $parent_id ) && is_numeric( $parent_id ) && $parent_id > 0 ) {
+                    $valid_parents[] = intval($parent_id);
+                }
+            }
+            
+            if ( empty( $valid_parents ) ) {
                 return $term->name;
             }
 
             // Add current term to the beginning
-            array_unshift( $parents, $term_id );
+            array_unshift( $valid_parents, intval( $term_id ) );
             
             $parent_names = array();
-            foreach ( array_reverse( $parents ) as $parent_id ) {
-                $parent = get_term( $parent_id, $taxonomy );
-                if ( ! is_wp_error( $parent ) && $parent ) {
+            $processed_ids = array(); // Prevent duplicate processing
+            
+            foreach ( array_reverse( $valid_parents ) as $parent_id ) {
+                // Prevent processing the same ID twice
+                if ( in_array( $parent_id, $processed_ids ) ) {
+                    continue;
+                }
+                $processed_ids[] = $parent_id;
+                
+                // Get parent term with safety checks
+                $parent = get_term($parent_id, $taxonomy);
+                if ( ! is_wp_error( $parent ) && $parent && ! empty( $parent->name ) ) {
                     $parent_names[] = $parent->name;
                 }
             }
 
+            // Return hierarchy or just the term name if no valid parents found
+            if ( empty( $parent_names ) ) {
+                return $term->name;
+            }
+            
             return implode( ' -> ', $parent_names );
-        } catch ( Exception $e ) {
+        } catch (Exception $e) {
+            return '';
+        } catch (Error $e) {
             return '';
         }
     }
@@ -413,11 +528,11 @@ class Wt_Import_Export_For_Woo_Basic_Product {
    public function exporter_alter_mapping_enabled_fields($mapping_enabled_fields, $base, $form_data_mapping_enabled_fields) {
         if ($base == $this->module_base) {
             $mapping_enabled_fields = array();
-            $mapping_enabled_fields['taxonomies'] = array(__('Taxonomies (categories/tags/shipping-class)'), 1);
+            $mapping_enabled_fields['taxonomies'] = array(__('Taxonomies (categories/tags/shipping-class)', 'product-import-export-for-woo'), 1);
 
-            $mapping_enabled_fields['attributes'] = array(__('Attributes'), 1);
+            $mapping_enabled_fields['attributes'] = array(__('Attributes', 'product-import-export-for-woo'), 1);
             // $mapping_enabled_fields['meta'] = array(__('Meta (custom fields)'), 0);
-            $mapping_enabled_fields['hidden_meta'] = array(__('Hidden meta'), 0);
+            $mapping_enabled_fields['hidden_meta'] = array(__('Hidden meta', 'product-import-export-for-woo'), 0);
 
         }
         return $mapping_enabled_fields;
@@ -625,7 +740,8 @@ class Wt_Import_Export_For_Woo_Basic_Product {
         
         // Use a more efficient query to check for existence of hidden meta keys in products
         $product_params = array_merge(array('product', '_%'), array_keys($csv_columns));
-        $product_query = $wpdb->prepare(
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $product_result = $wpdb->get_var( $wpdb->prepare(
             "SELECT 1 FROM {$wpdb->postmeta} AS pm
              LEFT JOIN {$wpdb->posts} AS p ON p.ID = pm.post_id
              WHERE p.post_type = %s
@@ -634,9 +750,8 @@ class Wt_Import_Export_For_Woo_Basic_Product {
              AND pm.meta_key NOT IN (" . implode(',', array_fill(0, count($csv_columns), '%s')) . ")
              LIMIT 1",
             $product_params
-        );
+        ));
 
-        $product_result = $wpdb->get_var($product_query);
         
         if ($product_result !== null) {
             $this->has_hidden_meta_keys = true;
@@ -645,7 +760,8 @@ class Wt_Import_Export_For_Woo_Basic_Product {
 
         // Check for hidden meta in product variations
         $variation_params = array_merge( array('product_variation', '_%'), array_keys($csv_columns) );
-        $variation_query = $wpdb->prepare(
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $variation_result = $wpdb->get_var( $wpdb->prepare(
             "SELECT 1 FROM {$wpdb->postmeta} AS pm
              LEFT JOIN {$wpdb->posts} AS p ON p.ID = pm.post_id
              WHERE p.post_type = %s
@@ -654,9 +770,8 @@ class Wt_Import_Export_For_Woo_Basic_Product {
              AND pm.meta_key NOT IN (" . implode(',', array_fill(0, count($csv_columns), '%s')) . ")
              LIMIT 1",
             $variation_params
-        );
+        ));
 
-        $variation_result = $wpdb->get_var($variation_query);
         
         $this->has_hidden_meta_keys = $variation_result !== null;
         return $this->has_hidden_meta_keys;
@@ -724,6 +839,7 @@ class Wt_Import_Export_For_Woo_Basic_Product {
     public static function get_all_metakeys($post_type = 'product') {
         global $wpdb;
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $meta = $wpdb->get_col($wpdb->prepare(
                         "SELECT DISTINCT pm.meta_key
             FROM {$wpdb->postmeta} AS pm
@@ -780,6 +896,7 @@ class Wt_Import_Export_For_Woo_Basic_Product {
 
         global $wpdb;
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $results = $wpdb->get_col($wpdb->prepare(
                         "SELECT DISTINCT pm.meta_value
             FROM {$wpdb->postmeta} AS pm
@@ -851,24 +968,24 @@ class Wt_Import_Export_For_Woo_Basic_Product {
 			'tr_html' => '<tr id="header_empty_row"><th></th><td></td></tr>'
 		);
         $out['skip_new'] = array(
-            'label' => __("Skip import of new products"),
+            'label' => __("Skip import of new products", 'product-import-export-for-woo'),
             'type' => 'radio',
             'radio_fields' => array(
-                '0' => __('No'),
-				'1' => __('Yes')
+                '0' => __('No', 'product-import-export-for-woo'),
+				'1' => __('Yes', 'product-import-export-for-woo')
             ),
             'value' => '0',
 			'merge_right' => true,
             'field_name' => 'skip_new',
             'help_text_conditional'=>array(
                 array(
-                    'help_text'=> __('This option will not import the new products from the input file.'),
+                    'help_text'=> __('This option will not import the new products from the input file.', 'product-import-export-for-woo'),
                     'condition'=>array(
                         array('field'=>'wt_iew_skip_new', 'value'=>1)
                     )
                 ),
                 array(
-                    'help_text'=> __('This option will import the new products from the input file.'),
+                    'help_text'=> __('This option will import the new products from the input file.', 'product-import-export-for-woo'),
                     'condition'=>array(
                         array('field'=>'wt_iew_skip_new', 'value'=>0)
                     )
@@ -881,11 +998,11 @@ class Wt_Import_Export_For_Woo_Basic_Product {
         );    
         
         $out['merge_with'] = array(
-            'label' => __("Match products by their"),
+            'label' => __("Match products by their", 'product-import-export-for-woo'),
             'type' => 'radio',
             'radio_fields' => array(
-                'id' => __('ID'),
-                'sku' => __('SKU'),             
+                'id' => __('ID', 'product-import-export-for-woo'),
+                'sku' => __('SKU', 'product-import-export-for-woo'),             
             ),
             'value' => 'id',
 			'merge_right' => true,
@@ -893,13 +1010,13 @@ class Wt_Import_Export_For_Woo_Basic_Product {
             //'help_text' => __('The products are either looked up based on their ID or SKU as per the selection.'),
             'help_text_conditional'=>array(
                 array(
-                    'help_text'=> __('To look up the product on the basis of ID.'),
+                    'help_text'=> __('To look up the product on the basis of ID.', 'product-import-export-for-woo'),
                     'condition'=>array(
                         array('field'=>'wt_iew_merge_with', 'value'=>'id'),
                     )
                 ),
                 array(
-                    'help_text'=> __('To look up the product on the basis of SKU.<br/><br/><b>Note:</b> If the ID of a product in the input file is different from that of the product ID in site, then match products by SKU. If in case, the product has no SKU, it will be imported as a new item even if the file contains the correct ID.'),
+                    'help_text'=> __('To look up the product on the basis of SKU.<br/><br/><b>Note:</b> If the ID of a product in the input file is different from that of the product ID in site, then match products by SKU. If in case, the product has no SKU, it will be imported as a new item even if the file contains the correct ID.', 'product-import-export-for-woo'),
                     'condition'=>array(
                         array('field'=>'wt_iew_merge_with', 'value'=>'sku'),
                     )
@@ -908,23 +1025,23 @@ class Wt_Import_Export_For_Woo_Basic_Product {
         );
         
         $out['found_action_merge'] = array(
-            'label' => __("If product exists in the store"),
+            'label' => __("If product exists in the store", 'product-import-export-for-woo'),
             'type' => 'radio',
             'radio_fields' => array(
-                'skip' => __('Skip'),
-                'update' => __('Update'),                
+                'skip' => __('Skip', 'product-import-export-for-woo'),
+                'update' => __('Update', 'product-import-export-for-woo'),                
             ),
             'value' => 'skip',
             'field_name' => 'found_action',
             'help_text_conditional'=>array(
                 array(
-                    'help_text'=> __('This option will not update the existing products.'),
+                    'help_text'=> __('This option will not update the existing products.', 'product-import-export-for-woo'),
                     'condition'=>array(
                         array('field'=>'wt_iew_found_action', 'value'=>'skip')
                     )
                 ),
                 array(
-                    'help_text'=> __('This option will update the existing products as per the data from the input file.'),
+                    'help_text'=> __('This option will update the existing products as per the data from the input file.', 'product-import-export-for-woo'),
                     'condition'=>array(
                         array('field'=>'wt_iew_found_action', 'value'=>'update')
                     )
@@ -937,15 +1054,15 @@ class Wt_Import_Export_For_Woo_Basic_Product {
         );       
         
         $out['merge_empty_cells'] = array(
-            'label' => __("Update even if empty values"),
+            'label' => __("Update even if empty values", 'product-import-export-for-woo'),
             'type' => 'radio',
             'radio_fields' => array(
-                '1' => __('Yes'),
-                '0' => __('No')
+                '1' => __('Yes', 'product-import-export-for-woo'),
+                '0' => __('No', 'product-import-export-for-woo')
             ),
             'value' => '0',
             'field_name' => 'merge_empty_cells',
-            'help_text' => __('Updates the product data respectively even if some of the columns in the input file contains empty value.'),
+            'help_text' => __('Updates the product data respectively even if some of the columns in the input file contains empty value.', 'product-import-export-for-woo'),
             'form_toggler'=>array(
                 'type'=>'child',
                 'id'=>'wt_iew_found_action',
@@ -970,72 +1087,83 @@ class Wt_Import_Export_For_Woo_Basic_Product {
         }
 
         /* altering help text of default fields */
-	$fields['limit']['label']=__('Total number of products to export'); 
-	$fields['limit']['help_text']=__('Exports specified number of products. e.g. Entering 500 with a skip count of 10 will export products from 11th to 510th position.');
-	$fields['offset']['label']=__('Skip first <i>n</i> products');
-	$fields['offset']['help_text']=__('Skips specified number of products from the beginning of the database. e.g. Enter 10 to skip first 10 products from export.');
+	$fields['limit']['label']=__('Total number of products to export', 'product-import-export-for-woo'); 
+	$fields['limit']['help_text']=__('Exports specified number of products. e.g. Entering 500 with a skip count of 10 will export products from 11th to 510th position.', 'product-import-export-for-woo');
+	$fields['offset']['label']=__('Skip first <i>n</i> products', 'product-import-export-for-woo');
+	$fields['offset']['help_text']=__('Skips specified number of products from the beginning of the database. e.g. Enter 10 to skip first 10 products from export.', 'product-import-export-for-woo');
 
         
         $fields['product'] = array(
-            'label' => __( 'Products' ),
-            'placeholder' => __( 'All products' ),
+            'label' => __( 'Products', 'product-import-export-for-woo' ),
+            'placeholder' => __( 'All products', 'product-import-export-for-woo' ),
             'attr' => array('data-exclude_type' => 'variable,variation'),
             'field_name' => 'product',
             'sele_vals' => array(),
-            'help_text' => __( 'Export specific products. Key in the product names to export multiple products.' ),
+            'help_text' => __( 'Export specific products. Key in the product names to export multiple products.', 'product-import-export-for-woo' ),
             'type' => 'multi_select',
             'css_class' => 'wc-product-search',
             'validation_rule' => array('type'=>'text_arr')
         );
         $fields['stock_status'] = array(
-            'label' => __('Stock status'),
-            'placeholder' => __('All status'),
+            'label' => __('Stock status', 'product-import-export-for-woo'),
+            'placeholder' => __('All status', 'product-import-export-for-woo'),
             'field_name' => 'stock_status',
-            'sele_vals' => array( '' => __( 'All status' ), 'instock' => __( 'In Stock' ), 'outofstock' => __( 'Out of Stock' ), 'onbackorder' => __( 'On backorder' ) ),
-            'help_text' => __( 'Export products based on stock status.' ),
+            'sele_vals' => array( '' => __( 'All status', 'product-import-export-for-woo' ), 'instock' => __( 'In Stock', 'product-import-export-for-woo' ), 'outofstock' => __( 'Out of Stock', 'product-import-export-for-woo' ), 'onbackorder' => __( 'On backorder', 'product-import-export-for-woo' ) ),
+            'help_text' => __( 'Export products based on stock status.', 'product-import-export-for-woo' ),
             'type' => 'select',
             'validation_rule' => array('type'=>'text_arr')
         );        
         $fields['exclude_product'] = array(
-            'label' => __( 'Exclude products' ),
-            'placeholder' => __( 'Exclude products' ),
+            'label' => __( 'Exclude products', 'product-import-export-for-woo' ),
+            'placeholder' => __( 'Exclude products', 'product-import-export-for-woo' ),
             'attr' => array('data-exclude_type' => 'variable,variation'),
             'field_name' => 'exclude_product',
             'sele_vals' => array(),
-            'help_text' => __( 'Use this if you need to exclude a specific or multiple products from your export list.' ),
+            'help_text' => __( 'Use this if you need to exclude a specific or multiple products from your export list.', 'product-import-export-for-woo' ),
             'type' => 'multi_select',
             'css_class' => 'wc-product-search',
             'validation_rule' => array('type'=>'text_arr')
         );
 
         $fields['product_categories'] = array(
-            'label' => __( 'Product categories' ),
-            'placeholder' => __( 'Any category' ),
+            'label' => __( 'Product categories', 'product-import-export-for-woo' ),
+            'placeholder' => __( 'Any category', 'product-import-export-for-woo' ),
             'field_name' => 'product_categories',
             'sele_vals' => $this->get_product_categories(),
-            'help_text' => __( 'Export products belonging to a particular or from multiple categories. Just select the respective categories.' ),
+            'help_text' => __( 'Export products belonging to a particular or from multiple categories. Just select the respective categories.', 'product-import-export-for-woo' ),
             'type' => 'multi_select',
             'css_class' => 'wc-enhanced-select',
             'validation_rule' => array('type'=>'sanitize_title_with_dashes_arr')
         );
 
         $fields['product_tags'] = array(
-            'label' => __( 'Product tags' ),
-            'placeholder' => __( 'Any tag' ),
+            'label' => __( 'Product tags', 'product-import-export-for-woo' ),
+            'placeholder' => __( 'Any tag', 'product-import-export-for-woo' ),
             'field_name' => 'product_tags',
             'sele_vals' => $this->get_product_tags(),
-            'help_text' => __( 'Enter the product tags to export only the respective products that have been tagged accordingly.' ),
+            'help_text' => __( 'Enter the product tags to export only the respective products that have been tagged accordingly.', 'product-import-export-for-woo' ),
             'type' => 'multi_select',
             'css_class' => 'wc-enhanced-select',
             'validation_rule' => array('type'=>'sanitize_title_with_dashes_arr')
         );
 
         $fields['product_status'] = array(
-            'label' => __( 'Product status' ),
-            'placeholder' => __( 'Any status' ),
+            'label' => __( 'Product status', 'product-import-export-for-woo' ),
+            'placeholder' => __( 'Any status', 'product-import-export-for-woo' ),
             'field_name' => 'product_status',
             'sele_vals' => self::get_product_statuses(),
-            'help_text' => __( 'Filter products by their status.' ),
+            'help_text' => __( 'Filter products by their status.', 'product-import-export-for-woo' ),
+            'type' => 'multi_select',
+            'css_class' => 'wc-enhanced-select',
+            'validation_rule' => array('type'=>'text_arr')
+        );
+
+        $fields['product_brand'] = array(
+            'label' => __( 'Product brand', 'product-import-export-for-woo' ),
+            'placeholder' => __( 'Any brand', 'product-import-export-for-woo' ),
+            'field_name' => 'product_brand',
+            'sele_vals' => $this->get_product_brands(),
+            'help_text' => __( 'Enter the product brands to export only the respective products that have been branded accordingly.', 'product-import-export-for-woo' ),
             'type' => 'multi_select',
             'css_class' => 'wc-enhanced-select',
             'validation_rule' => array('type'=>'text_arr')
@@ -1071,12 +1199,13 @@ class Wt_Import_Export_For_Woo_Basic_Product {
 
     public static function wt_get_product_id_by_sku($sku) {
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $post_exists_sku = $wpdb->get_var($wpdb->prepare("
 	    		SELECT $wpdb->posts.ID
 	    		FROM $wpdb->posts
 	    		LEFT JOIN $wpdb->postmeta ON ( $wpdb->posts.ID = $wpdb->postmeta.post_id )
 	    		WHERE $wpdb->posts.post_status IN ( 'publish', 'private', 'draft', 'pending', 'future' )
-	    		AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
+	    		AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = %s
 	    		", $sku));
         if ($post_exists_sku) {
             return $post_exists_sku;

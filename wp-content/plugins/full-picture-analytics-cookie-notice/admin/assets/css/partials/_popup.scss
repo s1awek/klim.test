@@ -29,6 +29,8 @@
 		left: 0;
 		right: 0;
 		background: #fff;
+		overflow-y: auto;
+		border-radius: 20px 0 0 20px;
 	}
 
 		#fupi_offscreen_close_btn{
@@ -89,6 +91,7 @@
 		z-index: 1;
 	}
 	#fupi_offscreen_content_wrap{
+		overflow-y: auto;
 		z-index: 2;
 		top: 40px;
 		box-shadow: 0 0 30px rgba(0,0,0,0.1);
@@ -162,5 +165,33 @@
 	.fupi_small_btn.button-secondary{
 		max-height: auto;
 		line-height: inherit;
+	}
+}
+
+// TO DO LISTS (GUIDES AND HELP)
+
+.fupi_to_do_list{
+	li{
+		margin-bottom: 10px;
+	}
+	a {
+		text-decoration: none;
+		&:hover{
+			text-decoration: underline;
+		}
+		.dashicons{
+			font-size: 20px !important;
+			width: 20px;
+			height: 20px;
+			margin-right: 7px;
+			position: relative;
+			top: -2px;
+		}
+		.dashicons-youtube{
+			color: red;
+		}
+		.dashicons-facebook{
+			color: #1877F2;
+		}
 	}
 }

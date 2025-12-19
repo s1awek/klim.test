@@ -392,6 +392,27 @@ a.advanced-section-link {
     color: #2271b1;
 }
 
+.pmw .opportunity-card-top-impact-level.impact-high,
+.pmw .notification-card-top-impact-level.impact-high {
+    background: #fde8e8;
+    border-color: #f56565;
+    color: #c53030;
+}
+
+.pmw .opportunity-card-top-impact-level.impact-medium,
+.pmw .notification-card-top-impact-level.impact-medium {
+    background: #fef3c7;
+    border-color: #f6ad55;
+    color: #c05621;
+}
+
+.pmw .opportunity-card-top-impact-level.impact-low,
+.pmw .notification-card-top-impact-level.impact-low {
+    background: #e6fffa;
+    border-color: #48bb78;
+    color: #276749;
+}
+
 .pmw .opportunity-card-middle,
 .pmw .notification-card-middle {
     margin-top: 10px;
@@ -636,4 +657,176 @@ a.advanced-section-link {
     padding: 0 8px;
     line-height: 2;
     min-height: 30px;
+}
+
+/* Chatbot Widget Button */
+#pmw-chatbot-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9998;
+}
+
+.pmw-chatbot-toggle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.pmw-chatbot-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.pmw-chatbot-toggle:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+.pmw-chatbot-toggle svg {
+    width: 28px;
+    height: 28px;
+}
+
+/* Chatbot Side Panel */
+.pmw-chatbot-panel {
+    position: fixed;
+    top: 32px; /* Height of WordPress admin bar */
+    right: -450px;
+    width: 450px;
+    height: calc(100vh - 32px); /* Subtract admin bar height */
+    background: white;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Push content to the left when panel is open */
+body.pmw-chatbot-open #wpcontent,
+body.pmw-chatbot-open #wpfooter {
+    margin-right: 450px;
+    transition: margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Adjust for mobile admin bar (46px) */
+@media screen and (max-width: 782px) {
+    .pmw-chatbot-panel {
+        top: 46px;
+        height: calc(100vh - 46px);
+    }
+    
+    /* On mobile, don't push content, just overlay */
+    body.pmw-chatbot-open #wpcontent,
+    body.pmw-chatbot-open #wpfooter {
+        margin-right: 0;
+    }
+}
+
+.pmw-chatbot-panel.pmw-chatbot-panel-open {
+    right: 0;
+}
+
+.pmw-chatbot-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e5e7eb;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.pmw-chatbot-panel-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+}
+
+.pmw-chatbot-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    color: white;
+}
+
+.pmw-chatbot-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.pmw-chatbot-close:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+.pmw-chatbot-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+.pmw-chatbot-panel-content {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.pmw-chatbot-panel-content iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Hide widget on mobile devices */
+@media (max-width: 768px) {
+    .pmw-chatbot-panel {
+        width: 100%;
+        right: -100%;
+    }
+}
+
+/* Notification badge for opportunities tab */
+.nav-tab-wrapper .nav-tab {
+    position: relative;
+}
+
+.pmw-tab-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    display: inline-block;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 18px;
+    text-align: center;
+    color: #fff;
+    background-color: #d63638;
+    border-radius: 9px;
+    box-sizing: border-box;
+}
+
+/* Notification badge styling for admin menu - inherits from awaiting-mod but ensures consistent styling */
+.pmw-menu-badge {
+    /* Uses WordPress's awaiting-mod base styles */
+    /* Additional styling if needed */
 }

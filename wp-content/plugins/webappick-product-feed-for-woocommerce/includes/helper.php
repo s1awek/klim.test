@@ -291,7 +291,7 @@ if ( ! function_exists( 'woo_feed_black_friday_notice' ) ) {
 	 */
 	function woo_feed_black_friday_notice() {
 		$user_id = get_current_user_id();
-		if ( ! get_user_meta( $user_id, 'woo_feed_black_friday_notice_2024_dismissed' ) ) {
+		if ( ! get_user_meta( $user_id, 'woo_feed_blackfriday_notice_2025_dismissed' ) ) {
 			ob_start();
 			?>
             <script type="text/javascript">
@@ -311,7 +311,7 @@ if ( ! function_exists( 'woo_feed_black_friday_notice' ) ) {
                     });
                 })(jQuery)
             </script>
-            <a  target="_blank" href="https://webappick.com/plugin/woocommerce-product-feed-pro/?utm_source=CTX+Feed&utm_medium=BFCM_Banner&utm_campaign=BFCM_24&utm_id=2024"
+            <a  target="_blank" href="https://webappick.com/plugin/woocommerce-product-feed-pro/?utm_source=black-friday-25&utm_medium=ORG&utm_campaign=black-friday-25&utm_id=25"
                 class="notice woo-feed-ctx-black-friday-notice is-dismissible"
                 style="background: url(<?php echo esc_url(WOO_FEED_PLUGIN_URL) . 'admin/images/ctx-feed-black-friday-banner-free.png'; ?>) no-repeat top center;">
                 <input type="hidden" id="woo_feed_to_ctx_feed_nonce"
@@ -352,7 +352,7 @@ if ( ! function_exists( 'woo_feed_halloween_notice' ) ) {
 	 */
 	function woo_feed_halloween_notice() {
 		$user_id = get_current_user_id();
-		if ( ! get_user_meta( $user_id, 'woo_feed_halloween_notice_2024_dismissed' ) ) {
+		if ( ! get_user_meta( $user_id, 'woo_feed_halloween_notice_2025_dismissed' ) ) {
 			ob_start();
 			?>
 			<script type="text/javascript">
@@ -373,9 +373,9 @@ if ( ! function_exists( 'woo_feed_halloween_notice' ) ) {
 					});
 				})(jQuery)
 			</script>
-			<a target="_blank" href="https://webappick.com/plugin/woocommerce-product-feed-pro/?utm_source=CTX+Feed&utm_medium=HW_Banner&utm_campaign=HW_24&utm_id=2024"
+			<a target="_blank" href="https://webappick.com/discount-deal/?utm_source=halloween_25&utm_medium=wp_free&utm_campaign=halloween_25"
 			   class="notice woo-feed-ctx-halloween-notice is-dismissible"
-			   style="background: url(<?php echo esc_url(WOO_FEED_PLUGIN_URL) . 'admin/images/woo_feed_halloween_notice.png'; ?>) no-repeat top center;">
+			   style="background: url(<?php echo esc_url(WOO_FEED_PLUGIN_URL) . 'admin/images/woo_feed_halloween_notice.gif'; ?>) no-repeat top center;">
 				<input type="hidden" id="woo_feed_to_ctx_feed_halloween_nonce"
 					   value="<?php echo esc_attr(wp_create_nonce( 'woo-feed-to-ctx-feed-halloween-nonce' )); ?>">
 			</a>
@@ -436,7 +436,7 @@ if ( ! function_exists( 'woo_feed_christmas_notice' ) ) {
 	 */
 	function woo_feed_christmas_notice() {
 		$user_id = get_current_user_id();
-		if ( ! get_user_meta( $user_id, 'woo_feed_christmas_notice_2024_dismissed' ) ) {
+		if ( ! get_user_meta( $user_id, 'woo_feed_christmas_notice_2025_dismissed' ) ) {
 			ob_start();
 			?>
 			<script type="text/javascript">
@@ -457,9 +457,9 @@ if ( ! function_exists( 'woo_feed_christmas_notice' ) ) {
 					});
 				})(jQuery)
 			</script>
-			<a  target="_blank" href="https://webappick.com/plugin/woocommerce-product-feed-pro/?utm_source=CTX+Feed+Plugin&utm_medium=HH_banner&utm_campaign=HH_24&utm_id=2024"
+			<a  target="_blank" href="https://webappick.com/discount-deal/?utm_source=Floating-Holiday&utm_medium=free-to-pro&utm_campaign=H-Holiday&utm_id=1"
 				class="notice woo-feed-ctx-startup-notice is-dismissible"
-				style="background: url(<?php echo esc_url(WOO_FEED_PLUGIN_URL) . 'admin/images/woo_feed_christmass_banner_2024.png'; ?>) no-repeat top center;">
+				style="background: url(<?php echo esc_url(WOO_FEED_PLUGIN_URL) . 'admin/images/woo_feed_christmass_banner.png'; ?>) no-repeat top center;">
 				<input type="hidden" id="woo_feed_to_ctx_feed_nonce"
 					   value="<?php echo esc_attr(wp_create_nonce( 'woo-feed-to-ctx-feed-notice' )); ?>">
 			</a>
@@ -3613,7 +3613,7 @@ if ( ! function_exists( 'woo_feed_save_black_friday_notice' ) ) {
 		if ( isset( $_REQUEST['_wp_ajax_nonce'] ) && wp_verify_nonce( wp_unslash( $_REQUEST['_wp_ajax_nonce'] ), 'woo-feed-to-ctx-feed-notice' ) ) { //phpcs:ignore
 			$user_id = get_current_user_id();
 			if ( isset( $_REQUEST['clicked'] ) ) {
-				$updated_user_meta = add_user_meta( $user_id, 'woo_feed_black_friday_notice_2024_dismissed', 'true', true );
+				$updated_user_meta = add_user_meta( $user_id, 'woo_feed_blackfriday_notice_2025_dismissed', 'true', true );
 
 				if ( $updated_user_meta ) {
 					wp_send_json_success( esc_html__( 'User meta updated successfully.', 'woo-feed' ) );
@@ -3643,7 +3643,7 @@ if ( ! function_exists( 'woo_feed_save_halloween_notice' ) ) {
 		if ( isset( $_REQUEST['_wp_ajax_nonce'] ) && wp_verify_nonce( wp_unslash( $_REQUEST['_wp_ajax_nonce'] ), 'woo-feed-to-ctx-feed-halloween-nonce' ) ) { //phpcs:ignore
 			$user_id = get_current_user_id();
 			if ( isset( $_REQUEST['clicked'] ) ) {
-				$updated_user_meta = add_user_meta( $user_id, 'woo_feed_halloween_notice_2024_dismissed', 'true', true );
+				$updated_user_meta = add_user_meta( $user_id, 'woo_feed_halloween_notice_2025_dismissed', 'true', true );
 
 				if ( $updated_user_meta ) {
 					wp_send_json_success( esc_html__( 'User meta updated successfully.', 'woo-feed' ) );
@@ -3673,9 +3673,10 @@ if ( ! function_exists( 'woo_feed_save_christmas_notice' ) ) {
 		if ( isset( $_REQUEST['_wp_ajax_nonce'] ) && wp_verify_nonce( wp_unslash( $_REQUEST['_wp_ajax_nonce'] ), 'woo-feed-to-ctx-feed-notice' ) ) { //phpcs:ignore
 			$user_id = get_current_user_id();
 			if ( isset( $_REQUEST['clicked'] ) ) {
-				$updated_user_meta = add_user_meta( $user_id, 'woo_feed_christmas_notice_2024_dismissed', 'true', true );
+				$updated_user_meta = add_user_meta( $user_id, 'woo_feed_christmas_notice_2025_dismissed', 'true', true );
 
 				if ( $updated_user_meta ) {
+                    delete_user_meta( $user_id, 'woo_feed_christmas_notice_2024_dismissed', '' );
 					wp_send_json_success( esc_html__( 'User meta updated successfully.', 'woo-feed' ) );
 				} else {
 					wp_send_json_error( esc_html__( 'Something is wrong.', 'woo-feed' ) );
@@ -6223,21 +6224,41 @@ if ( ! function_exists( 'woo_feed_wcml_save_currency' ) ) {
 }
 
 if ( ! function_exists( 'woo_feed_plugin_installing' ) ) {
-    function woo_feed_plugin_installing() {
+    function woo_feed_plugin_installing()
+    {
         // Handle AJAX request here
         // For example, get data from request
-        check_ajax_referer( 'woo-feed-our-plugins-nonce', 'nonce' );
+        check_ajax_referer('woo-feed-our-plugins-nonce', 'nonce');
 
-        $plugin_slug = isset( $_POST['data'] ) ? sanitize_text_field( $_POST['data'] )  : '';
+        if ( ! current_user_can( 'manage_options' ) ) {
+            $response = array(
+                'status' => 401,
+                'result' => 'Unauthorized'
+            );
+            // Send JSON response
+            wp_send_json($response);
+
+            // Don't forget to exit
+            wp_die();
+        }
+
+        $plugin_slug = isset($_POST['data']) ? sanitize_text_field($_POST['data']) : '';
 
         $result = woo_feed_install_and_activate_plugin($plugin_slug);
 
         // Process data
         // Example response
-        $response = array(
-            'status' => 200,
-            'result' => $result
-        );
+        if ($result == 'failed') {
+            $response = array(
+                'status' => 403,
+                'result' => $result
+            );
+        } else {
+            $response = array(
+                'status' => 200,
+                'result' => $result
+            );
+        }
 
         // Send JSON response
         wp_send_json($response);
@@ -6252,6 +6273,11 @@ add_action('wp_ajax_woo_feed_plugin_installing', 'woo_feed_plugin_installing');
 if ( ! function_exists( 'woo_feed_install_and_activate_plugin' ) ) {
     function woo_feed_install_and_activate_plugin($plugin_slug)
     {
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return "failed";
+        }
+
         // Include necessary WordPress files
         require_once ABSPATH . 'wp-admin/includes/plugin.php';
         require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';

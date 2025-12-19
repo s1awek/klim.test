@@ -3,7 +3,7 @@
 $descr_start = '<div id="fupi_settings_form">
     <h2>' . esc_html__('GDPR setup info', 'full-picture-analytics-cookie-notice' ) . '</h2>
     <div class="fupi_section_descr fupi_el">
-    <p>' . esc_html__('This page contains your personalised recommendations on how to set up tracking that complies with GDPR. The information automatically updates after you change settings in WP Full Picture.', 'full-picture-analytics-cookie-notice' ) . '</p>
+    <p>' . sprintf( esc_html__('Here are your personalised recommendations on how to set up tracking that complies with GDPR. They automatically update when you change settings in WP Full Picture. We recommend you use this info after you %1$sread this guide%2$s.', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-track-users-according-to-gdpr-and-other-privacy-regulations/" target="_blank">', '</a>' ) . '</p>
     <p>' . esc_html__('Attention. This information does not cover other aspects of GDPR nor regulations similar to GDPR from other countries. For full compliance, we recommend consulting with a legal professional.', 'full-picture-analytics-cookie-notice' ) . '</p>';
 
 $legend = '<ol id="fupi_gdpr_helper_legend">

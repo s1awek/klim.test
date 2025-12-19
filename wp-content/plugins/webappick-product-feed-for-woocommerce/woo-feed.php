@@ -10,7 +10,7 @@
  * Plugin Name:       CTX Feed
  * Plugin URI:        https://webappick.com/
  * Description:       Easily generate woocommerce product feed for any marketing channel like Google Shopping(Merchant), Facebook Remarketing, Bing, eBay & more. Support 100+ Merchants.
- * Version:           6.5.84
+ * Version:           6.6.14
  * Author:            WebAppick
  * Author URI:        https://webappick.com/
  * License:           GPL v2
@@ -26,7 +26,7 @@
  *
  * WC Requirement & Test
  * WC requires at least: 3.3
- * WC tested up to: 10.0.2
+ * WC tested up to: 10.3
  */
 
 use CTXFeed\V5\API\RestController;
@@ -222,6 +222,10 @@ if ( ! function_exists( 'run_woo_feed' ) ) {
 		add_action( 'plugins_loaded', array( $plugin, 'run' ), PHP_INT_MAX );
 		add_action( 'admin_notices', 'wooFeed_Admin_Notices' );
 
+        if( isset($_GET['page'] )  && preg_match( '/^webappick\W+/', $_GET['page'] )  ) {
+            add_action( 'admin_notices', 'woo_feed_christmas_notice' );
+        }
+
         //HPOS compatibility
         if( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
             add_action( 'before_woocommerce_init', function () {
@@ -230,13 +234,7 @@ if ( ! function_exists( 'run_woo_feed' ) ) {
                 }
             } );
         }
-
-		//WooFeedWebAppickAPI::getInstance();
-        add_action('init', function() {
-            // Instantiate classes or run initialization code here
-            WooFeedWebAppickAPI::getInstance();
-        });
-
+		WooFeedWebAppickAPI::getInstance();
 	}
 
 	run_woo_feed();
@@ -999,4 +997,26 @@ if ( !function_exists( 'init_rest_api' ) ) {
 }
 
 add_action( 'init', 'init_rest_api' );
+
+add_filter('plugin_row_meta', 'woo_feed_add_custom_link', 10, 2);
+function woo_feed_add_custom_link($links, $file) {
+    if ($file == plugin_basename(__FILE__)) {
+        $links[] = '<a href="https://webappick.com/discount-deal/?utm_source=release-Holiday&utm_medium=free-to-pro&utm_campaign=H-Holiday&utm_id=1" target="_blank" class="woo-feed-custom-link"><span >🎊 Happy Holidays sale! - Get 60% OFF Now!</span></a>';
+    }
+    return $links;
+}
+
+add_action( 'admin_head', function() {
+    ?>
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            $('a.toplevel_page_tools_page_webappick-feed-halloween-deal, a[href="admin.php?page=webappick-feed-halloween-deal"]').attr({
+                href: 'https://webappick.com/discount-deal/?utm_source=menu-Holiday&utm_medium=free-to-pro&utm_campaign=H-Holiday&utm_id=1',
+                target: '_blank'
+            });
+        });
+    </script>
+    <?php
+});
+
 // End of file woo-feed.php

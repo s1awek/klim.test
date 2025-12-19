@@ -6,8 +6,7 @@
     
     if ( ! tracking_console || console_toggle_btns.length == 0 ) return;
 
-    let fixed_btn = FP.findID('fupi_console_fixed_btn'),
-        open_intro_btn = FP.findID('fupi_open_intro_btn');
+    let fixed_btn = FP.findID('fupi_console_fixed_btn');
     
     // TOGGLE CONSOLE
     console_toggle_btns.forEach( btn => {
@@ -68,13 +67,6 @@
     end_test_btn.addEventListener('click', ()=>{
         FP.deleteCookie('fp_track_me' ); // disable tests
         window.location.reload(); // reload window
-    });
-
-    // TOGGLE INTRO
-
-    open_intro_btn.addEventListener('click', ()=>{
-        let intro = FP.findID('fupi_console_intro');
-        intro.classList.toggle('fupi_hidden');
     });
     
 })();

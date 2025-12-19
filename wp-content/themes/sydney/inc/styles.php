@@ -221,8 +221,18 @@ if ( !class_exists( 'Sydney_Custom_CSS' ) ) :
                 //Boxed content
                 $boxed = get_theme_mod( $post_type . '_boxed_content', 'unboxed' );
                 if ( $boxed === 'boxed' ) {
-                    $custom .= ".content-inner { padding: 60px; background-color: #fff; box-shadow: 0 0 15px 0 rgba(0,0,0,0.05);}"."\n";
-                    $custom .= "@media only screen and (max-width: 767px) { .content-inner {padding: 20px;} }" . "\n";
+                    $custom .= "body.singular .content-inner { padding: 60px; background-color: #fff; box-shadow: 0 0 15px 0 rgba(0,0,0,0.05);}"."\n";
+                    $custom .= "@media only screen and (max-width: 767px) { body.singular .content-inner {padding: 20px;} }" . "\n";
+                }
+            }
+
+			//Archive boxed content (applies to all archives: blog, CPT archives, taxonomies, etc.)
+			if ( is_archive() || is_home() ) {
+                $boxed = get_theme_mod( 'blog_archive_boxed_content', 'unboxed' );
+                
+                if ( $boxed === 'boxed' ) {
+                    $custom .= "body.archive .content-inner, body.blog .content-inner, body.home .content-inner { padding: 60px; background-color: #fff; box-shadow: 0 0 15px 0 rgba(0,0,0,0.05);}"."\n";
+                    $custom .= "@media only screen and (max-width: 767px) { body.archive .content-inner, body.blog .content-inner, body.home .content-inner {padding: 20px;} }" . "\n";
                 }
             }
         
@@ -494,7 +504,12 @@ if ( !class_exists( 'Sydney_Custom_CSS' ) ) :
 					$custom .= ".sydney-offcanvas-menu {max-width:100%;}" . "\n";
 				}            
 			}
-            $custom .= $this->get_max_height_css( 'site_logo_size', $defaults = array( 'desktop' => 100, 'tablet' => 100, 'mobile' => 100 ), '.site-logo' );      
+			if ( true !== get_theme_mod( 'sydney_use_height_for_logo', false ) ) {
+				$custom .= $this->get_max_height_css( 'site_logo_size', $defaults = array( 'desktop' => 100, 'tablet' => 100, 'mobile' => 100 ), '.site-logo' );
+			} else {
+				$custom .= $this->get_height_css( 'site_logo_size', $defaults = array( 'desktop' => 100, 'tablet' => 100, 'mobile' => 100 ), '.site-logo, .shfb-component-logo .site-logo' );
+				$custom .= ".site-logo { max-height: none; }"."\n";
+			}
             
             //Site title
 			$logo_site_title    = get_theme_mod('logo_site_title', 0);
@@ -840,7 +855,25 @@ if ( !class_exists( 'Sydney_Custom_CSS' ) ) :
 			}
 
 			return $css;
-		}           
+		}
+
+		//height
+		public static function get_height_css( $setting, $defaults, $selector ) {
+			$devices    = array( 
+				'desktop'   => '@media (min-width: 992px)',
+				'tablet'    => '@media (min-width: 576px) and (max-width:  991px)',
+				'mobile'    => '@media (max-width: 575px)',
+			);
+
+			$css = '';
+
+			foreach ( $devices as $device => $media ) {
+				$mod = get_theme_mod( $setting . '_' . $device, $defaults[$device] );
+				$css .= $media . ' { ' . $selector . ' { height:' . intval( $mod ) . 'px;} }' . "\n";   
+			}
+
+			return $css;
+		}    
 
 		//Max height
 		public static function get_max_height_css( $setting, $defaults, $selector ) {

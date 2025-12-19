@@ -5,17 +5,22 @@ if ( ! defined( 'WPINC' ) ) {
 /* delete after redirect */
 if(isset($_GET['wt_iew_delete_log'])) 
 {
-	?>
-	<script type="text/javascript">
-		window.location.href='<?php echo admin_url('admin.php?page='.$this->module_id.'_log'); ?>';
-	</script>
-	<?php
+	// Verify nonce for security - deletion already processed in history.php, this is just for cleanup redirect
+	$nonce = isset($_GET['_wpnonce']) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+	if ( wp_verify_nonce( $nonce, WT_IEW_PLUGIN_ID_BASIC ) )
+	{
+		?>
+		<script type="text/javascript">
+			window.location.href='<?php echo esc_url(admin_url('admin.php?page='.$this->module_id.'_log')); ?>';
+		</script>
+		<?php
+	}
 }
 ?>
 <div class="wt_iew_history_page">
-	<h2 class="wp-heading-inline"><?php _e('Import Logs');?></h2>
+	<h2 class="wp-heading-inline"><?php esc_html_e('Import Logs', 'product-import-export-for-woo');?></h2>
 	<p>
-		<?php _e('Lists developer logs mostly required for debugging purposes. Options to view detailed logs are available along with delete and download(that can be shared with the support team in case of issues).');?>
+		<?php esc_html_e('Lists developer logs mostly required for debugging purposes. Options to view detailed logs are available along with delete and download(that can be shared with the support team in case of issues).', 'product-import-export-for-woo');?>
 	</p>
 
 	<?php
@@ -39,20 +44,20 @@ if(isset($_GET['wt_iew_delete_log']))
 		?>
 	<div class="wt_iew_bulk_action_box">
 		<select class="wt_iew_bulk_action wt_iew_select">
-			<option value=""><?php _e( 'Bulk Actions' ); ?></option>
-			<option value="delete"><?php _e( 'Delete' ); ?></option>
+			<option value=""><?php esc_html_e( 'Bulk Actions', 'product-import-export-for-woo' ); ?></option>
+			<option value="delete"><?php esc_html_e( 'Delete', 'product-import-export-for-woo' ); ?></option>
 		</select>
-		<button class="button button-primary wt_iew_bulk_action_logs_btn" type="button" style="float:left;"><?php _e( 'Apply' ); ?></button>
+		<button class="button button-primary wt_iew_bulk_action_logs_btn" type="button" style="float:left;"><?php esc_html_e( 'Apply', 'product-import-export-for-woo' ); ?></button>
 	</div>
 		<table class="wp-list-table widefat fixed striped history_list_tb log_list_tb">
 		<thead>
 			<tr>
 				<th width="100">
 					<input type="checkbox" name="" class="wt_iew_history_checkbox_main">
-					<?php _e("No."); ?>
+					<?php esc_html_e("No.", 'product-import-export-for-woo'); ?>
 				</th>
-				<th class="log_file_name_col"><?php _e("File"); ?></th>
-				<th><?php _e("Actions"); ?></th>
+				<th class="log_file_name_col"><?php esc_html_e("File", 'product-import-export-for-woo'); ?></th>
+				<th><?php esc_html_e("Actions", 'product-import-export-for-woo'); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -65,14 +70,14 @@ if(isset($_GET['wt_iew_delete_log']))
 			?>
 			<tr>
 				<th>
-					<input type="checkbox" value="<?php echo $file_name;?>" name="logfile_name[]" class="wt_iew_history_checkbox_sub">
-					<?php echo $i;?>						
+					<input type="checkbox" value="<?php echo esc_attr($file_name);?>" name="logfile_name[]" class="wt_iew_history_checkbox_sub">
+					<?php echo absint($i);?>						
 				</td>
-				<td class="log_file_name_col"><a class="wt_iew_view_log_btn" data-log-file="<?php echo $file_name;?>"><?php echo $file_name; ?></a></td>
+				<td class="log_file_name_col"><a class="wt_iew_view_log_btn" data-log-file="<?php echo esc_attr($file_name);?>"><?php echo esc_html($file_name); ?></a></td>
 				<td>
-					<a class="wt_iew_delete_log" data-href="<?php echo str_replace('_log_file_', $file_name, $delete_url);?>"><?php _e('Delete'); ?></a>
-					| <a class="wt_iew_view_log_btn" data-log-file="<?php echo $file_name;?>"><?php _e("View");?></a>
-					| <a class="wt_iew_download_log_btn" href="<?php echo str_replace('_log_file_', $file_name, $download_url);?>"><?php _e("Download");?></a>
+					<a class="wt_iew_delete_log" data-href="<?php echo esc_url(str_replace('_log_file_', $file_name, $delete_url));?>"><?php esc_html_e('Delete', 'product-import-export-for-woo'); ?></a>
+					| <a class="wt_iew_view_log_btn" data-log-file="<?php echo esc_attr($file_name);?>"><?php esc_html_e("View", 'product-import-export-for-woo');?></a>
+					| <a class="wt_iew_download_log_btn" href="<?php echo esc_url(str_replace('_log_file_', $file_name, $download_url));?>"><?php esc_html_e("Download", 'product-import-export-for-woo');?></a>
 				</td>
 			</tr>
 			<?php
@@ -84,9 +89,9 @@ if(isset($_GET['wt_iew_delete_log']))
 	}else
 	{
 		?>
-		<h4 class="wt_iew_history_no_records"><?php _e( "No logs found." ); ?>
+		<h4 class="wt_iew_history_no_records"><?php esc_html_e( "No logs found.", 'product-import-export-for-woo' ); ?>
 			<?php if ( Wt_Import_Export_For_Woo_Basic_Common_Helper::get_advanced_settings( 'enable_import_log' ) == 0 ): ?>		
-				<span> <?php _e( 'Please enable import log under' ); ?> <a target="_blank" href="<?php echo admin_url( 'admin.php?page=wt_import_export_for_woo_basic' ) ?>"><?php _e( 'settings' ); ?></a></span>		
+				<span> <?php esc_html_e( 'Please enable import log under', 'product-import-export-for-woo' ); ?> <a target="_blank" href="<?php echo esc_url(admin_url( 'admin.php?page=wt_import_export_for_woo_basic' )); ?>"><?php esc_html_e( 'settings', 'product-import-export-for-woo' ); ?></a></span>		
 			<?php endif; ?>
 		</h4>
 		<?php

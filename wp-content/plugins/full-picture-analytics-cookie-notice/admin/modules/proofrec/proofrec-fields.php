@@ -1,8 +1,16 @@
 <?php
 
 $option_arr_id = 'fupi_proofrec';
+// if ( fupi_fs()->can_use_premium_code__premium_only() ) {
+// 	if ( isset( $this->main['geo'] ) ) {
+// 		$field_disabled = '';
+// 		$must_have_html = '';
+// 	} else {
+// 		$must_have_html = '<div class="fupi_must_have_info">' . esc_html__( 'Requires', 'full-picture-analytics-cookie-notice' ) . ': <span class="fupi_req">General settings > Geolocation</span></div>';
+// 	}
+// };
 $storage_location_options = array(
-    'cdb' => esc_html__( 'In the cloud (with initial free storage for 1000 proofs)', 'full-picture-analytics-cookie-notice' ),
+    'cdb' => esc_html__( 'In the cloud', 'full-picture-analytics-cookie-notice' ),
 );
 $under_field_storage_location = '<label><input type="radio" disabled>' . esc_html__( 'On my email account (Pro only)', 'full-picture-analytics-cookie-notice' ) . '</label>';
 $under_field_storage_location .= '<p style="margin-top: 10px;">' . sprintf( esc_html__( '%1$sWhat are the differences?%2$s.', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/records-of-consents-in-inbox-vs-the-cloud/">', '</a>' ) . '</p>';
@@ -34,9 +42,9 @@ $sections = array(array(
                         <p><strong>' . esc_html__( 'To start saving consents:', 'full-picture-analytics-cookie-notice' ) . '</strong></p>
                         <ol>
                             <li>' . sprintf( esc_html__( 'Make sure your site is set up correctly in the %1$sGDPR setup info%2$s page.', 'full-picture-analytics-cookie-notice' ), '<a href="' . get_admin_url() . 'admin.php?page=full_picture_tools&tab=gdpr_setup_helper">', '</a>' ) . '</li>
-                            <li><a href="https://consentsdb.com/">' . esc_html__( 'Create an account at ConsentsDB.com.', 'full-picture-analytics-cookie-notice' ) . '</a></li>
-                            <li>' . esc_html__( 'Add this website to your account.', 'full-picture-analytics-cookie-notice' ) . '</li>
-                            <li>' . esc_html__( 'When you get a secret key, paste it in the field above and follow the rest of instructions in the ConsentsDB.', 'full-picture-analytics-cookie-notice' ) . '</li>
+                            <li>' . sprintf( esc_html__( 'Purchase %1$sone of the packages%2$s (start at €10/year).', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/addons/consentsdb" target="_blank">', '</a>' ) . '</li>
+                            <li><a href="https://consentsdb.com/">' . esc_html__( 'Register your website at ConsentsDB.com.', 'full-picture-analytics-cookie-notice' ) . '</a></li>
+                            <li>' . esc_html__( 'Follow the instructions in the ConsentsDB.', 'full-picture-analytics-cookie-notice' ) . '</li>
                         </ol>
                         <p><strong>' . esc_html__( 'Learn more:', 'full-picture-analytics-cookie-notice' ) . '</strong></p>
                         <ol>

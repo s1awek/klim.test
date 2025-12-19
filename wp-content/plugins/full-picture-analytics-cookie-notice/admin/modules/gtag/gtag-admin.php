@@ -21,6 +21,16 @@ class Fupi_GTAG_admin {
         add_filter( 'fupi_gtag_get_page_descr', array( $this, 'get_page_descr' ), 10, 2 );
     }
 
+    private function pp_ok(){
+            
+        if ( ! empty( $this->cook['pp_id'] ) ) {
+            $pp_id = (int) $this->cook['pp_id'];
+            return get_post_status( $pp_id ) == 'publish';
+        }
+
+        return false;
+    }
+
     public function add_fields_settings( $sections ){
         include_once 'gtag-fields.php';
         return $sections;
@@ -38,7 +48,7 @@ class Fupi_GTAG_admin {
 
         trigger_error( 'fupi_updating_gtag_options' );
 		
-        if ( ! empty ( $this->tools['cook'] ) && ! empty ( $this->tools['proofrec'] ) && ! empty ( get_privacy_policy_url() ) ) {
+        if ( ! empty ( $this->tools['cook'] ) && ! empty ( $this->tools['proofrec'] ) && $this->pp_ok() ) {
 			include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
 			$gdpr_checker = new Fupi_compliance_status_checker( 'gtag', $clean_data );
             $gdpr_checker->send_and_return_status();

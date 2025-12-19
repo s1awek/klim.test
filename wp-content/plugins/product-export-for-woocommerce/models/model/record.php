@@ -1,7 +1,13 @@
-<?php 
+<?php
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Base class for models
- * 
+ *
  * @author Max Tsiplyakov <makstsiplyakov@gmail.com>
  */
 class PMWPE_Model_Record extends PMXE_Model {
@@ -12,7 +18,7 @@ class PMWPE_Model_Record extends PMXE_Model {
 	public function __construct($data = array()) {
 		parent::__construct();
 		if (! is_array($data)) {
-			throw new Exception("Array expected as paramenter for " . get_class($this) . "::" . __METHOD__);
+			throw new Exception("Array expected as paramenter for " . esc_html(get_class($this)) . "::" . __METHOD__);
 		}
 		$data and $this->set($data);
 	}
@@ -23,9 +29,11 @@ class PMWPE_Model_Record extends PMXE_Model {
 	 */
 	public function getBy($field = NULL, $value = NULL) {
 		if (is_null($field)) {
-			throw new Exception("Field parameter is expected at " . get_class($this) . "::" . __METHOD__);
+			throw new Exception("Field parameter is expected at " . esc_html(get_class($this)) . "::" . __METHOD__);
 		}
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- buildWhere() method from parent class handles escaping
 		$sql = "SELECT * FROM $this->table WHERE " . $this->buildWhere($field, $value);
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- SQL is safely constructed above
 		$result = $this->wpdb->get_row($sql, ARRAY_A);
 		if (is_array($result)) {
 			foreach ($result as $k => $v) {
@@ -75,7 +83,7 @@ class PMWPE_Model_Record extends PMXE_Model {
 			}
 			return $this;
 		} else {
-			throw new Exception($this->wpdb->last_error);
+			throw new Exception(esc_html($this->wpdb->last_error));
 		}
 	}
 	/**
@@ -86,7 +94,7 @@ class PMWPE_Model_Record extends PMXE_Model {
 		$record = $this->toArray(TRUE);
 		$this->wpdb->update($this->table, $record, array_intersect_key($record, array_flip($this->primary)));
 		if ($this->wpdb->last_error) {
-			throw new Exception($this->wpdb->last_error);
+			throw new Exception(esc_html($this->wpdb->last_error));
 		}
 		return $this;
 	}
@@ -96,10 +104,11 @@ class PMWPE_Model_Record extends PMXE_Model {
 	 * @return PMWPE_Model_Record
 	 */
 	public function delete() {
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- buildWhere() method from parent class handles escaping, table name is from class property
 		if ($this->wpdb->query("DELETE FROM $this->table WHERE " . $this->buildWhere(array_intersect_key($this->toArray(TRUE), array_flip($this->primary))))) {
 			return $this;
 		} else {
-			throw new Exception($this->wpdb->last_error);
+			throw new Exception(esc_html($this->wpdb->last_error));
 		}
 	}
 	/**
@@ -145,7 +154,7 @@ class PMWPE_Model_Record extends PMXE_Model {
 	 */
 	public function __get($field) {
 		if ( ! $this->offsetExists($field)) {
-			throw new Exception("Undefined field $field.");
+			throw new Exception(esc_html("Undefined field $field."));
 		}
 		return $this[$field];
 	}

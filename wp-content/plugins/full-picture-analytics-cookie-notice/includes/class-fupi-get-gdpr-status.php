@@ -10,30 +10,35 @@ class Fupi_compliance_status_checker {
     private $url_pass_enabled = false;
     private $proofrec;
     private $cook;
+    private $main;
     private $gtag;
     private $format;
     private $cdb_key;
     private $is_first_reg;
     private $modules_names;
-    private $priv_policy_url;
     private $woo_enabled;
     private $clean_val_id;
     private $clean_val;
     private $send_to;
+    private $pp_ok = false;
     
     public function __construct( $clean_val_id = false, $clean_val = false, $opts = array() ) {
 
         $this->clean_val_id     = $clean_val_id;
         $this->clean_val        = $clean_val;
         $this->proofrec         = $this->clean_val_id == 'proofrec' && ! empty( $this->clean_val ) ? $this->clean_val : get_option('fupi_proofrec');
-        $this->priv_policy_url  = get_privacy_policy_url();
+
+        $this->cook             = $this->clean_val_id == 'cook' && $this->clean_val !== false ? $this->clean_val : get_option('fupi_cook');
+        $this->pp_ok            = $this->pp_ok(); // ! $this->cook has to be set before
+
         $this->is_first_reg     = empty( $opts['is_first_reg'] ) ? false : true;
         $this->cdb_key          = ! empty( $opts['cdb_key'] ) ? esc_attr( $opts['cdb_key'] ) : ( empty ( $this->proofrec['cdb_key'] ) ? false : esc_attr( $this->proofrec['cdb_key'] ) );
 
         $this->tools            = $this->clean_val_id == 'tools' && $this->clean_val !== false ? $this->clean_val : get_option('fupi_tools'); 
+        $this->main             = $this->clean_val_id == 'main' && $this->clean_val !== false ? $this->clean_val : get_option('fupi_main'); 
         $this->track            = $this->clean_val_id == 'track' && $this->clean_val !== false ? $this->clean_val : get_option('fupi_track');
         $this->gtag             = $this->clean_val_id == 'gtag' && $this->clean_val !== false ? $this->clean_val : get_option('fupi_gtag');
-        $this->cook             = $this->clean_val_id == 'cook' && $this->clean_val !== false ? $this->clean_val : get_option('fupi_cook');
+        
 
         $this->get_modules_data();
 
@@ -48,6 +53,16 @@ class Fupi_compliance_status_checker {
                 $this->woo_enabled = true;
             }
         }
+    }
+
+    private function pp_ok(){
+        
+        if ( ! empty( $this->cook['pp_id'] ) ) {
+            $pp_id = (int) $this->cook['pp_id'];
+            return get_post_status( $pp_id ) == 'publish';
+        }
+
+        return false;
     }
 
     private function process_data(){
@@ -80,7 +95,7 @@ class Fupi_compliance_status_checker {
                 // TOP COMMENT
                 if ( isset( $checked_module_data['top comments'] ) ) {
                     foreach ( $checked_module_data['top comments'] as $str ) {
-                        $output .= '<p style="font-size: 15px;">' . $str . '</p>';
+                        $output .= '<p style="font-size: 17px;">' . $str . '</p>';
                     };
                 }
 
@@ -232,7 +247,7 @@ class Fupi_compliance_status_checker {
 
     public function send_and_return_status(){
 
-        if ( empty( $this->priv_policy_url ) ) {
+        if ( ! $this->pp_ok ) {
             trigger_error('[FP] Privacy policy is not published. Recording consents is disabled.');
             return;
         }
@@ -453,7 +468,7 @@ class Fupi_compliance_status_checker {
         $open_tag_pos = strpos($text, '{{');
         $close_tag_pos = strpos($text, '}}');
     
-        if ( $open_tag_pos && $close_tag_pos ) {
+        if ( $open_tag_pos !== false && $close_tag_pos !== false ) {
     
             // get the content between {{ }}
             $regex = '/\{\{(.*?)\}\}/';
@@ -462,16 +477,28 @@ class Fupi_compliance_status_checker {
             $text = preg_replace_callback($regex, function($match) {
                 
                 $innerText = $match[1]; // Capture inner text
-                $url = get_privacy_policy_url();
-    
+                $url = false;
+
+                if ( ! empty( $this->cook['pp_id'] ) ) {
+
+                    $pp_id = (int) $this->cook['pp_id'];
+                    $pp_post = get_post( $pp_id );
+            
+                    if ( ! empty ( $pp_post ) && isset( $pp_post->post_status ) && $pp_post->post_status === 'publish' ) {
+                        $url = get_permalink( $pp_post );
+                    }
+                }
+
                 // get URL and create a link
-                if ( strpos( $innerText, '|') > 0 ) {
+                if ( strpos( $innerText, '|') !== false ) {
                     $innerText_a = explode( '|', $innerText );
                     if ( ! empty( $innerText_a[1] ) ) {
                         $url = $innerText_a[1];
                         $innerText = $innerText_a[0];
                     } 
                 }
+
+                if ( $url === false ) return $innerText;
     
                 return "<a href=\"$url\">$innerText</a>";
     

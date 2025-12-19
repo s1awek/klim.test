@@ -2,14 +2,20 @@
 
 $cook = get_option( 'fupi_cook' );
 $tools = get_option( 'fupi_tools' );
-$priv_policy_url = get_privacy_policy_url();
-$priv_policy_url_text = ( empty( $priv_policy_url ) ? ' <span style="color: red;">' . esc_html__( 'Privacy policy page is not set! Please set it in Settings > Privacy.', 'full-picture-analytics-cookie-notice' ) . '</span>' : '' );
+$main = get_option( 'fupi_main' );
+$priv_policy_url_text = '<p style="color: red;">' . esc_html__( 'Attention. Your privacy policy page is either not published or its ID is not set in the settings of the Consent Banner module', 'full-picture-analytics-cookie-notice' ) . '</p>';
+if ( !empty( $cook['pp_id'] ) ) {
+    $pp_id = (int) $cook['pp_id'];
+    if ( get_post_status( $pp_id ) == 'publish' ) {
+        $priv_policy_url_text = '';
+    }
+}
 // CHECK IF IS PREMIUM
 $is_premium = false;
 // CHECK IF BANNER ONLY NOTIFIES
 $banner_only_notifies = false;
 $hide_when_banner_only_notifies = '__return_true';
-if ( isset( $tools['geo'] ) && $is_premium ) {
+if ( isset( $main['geo'] ) && $is_premium ) {
     if ( !empty( $cook ) && isset( $cook['mode'] ) && $cook['mode'] === 'notify' ) {
         $hide_when_banner_only_notifies = '__return_false';
         // triggers a function which returns false which hides the field
@@ -31,6 +37,7 @@ if ( class_exists( 'WP_Customize_Control' ) ) {
         public function render_content() {
             $cook = get_option( 'fupi_cook' );
             $tools = get_option( 'fupi_tools' );
+            $main = get_option( 'fupi_main' );
             $preview_ver = "opt_in_out";
             // default
             if ( !empty( $cook ) && isset( $cook['enable_scripts_after'] ) && $cook['enable_scripts_after'] === 'notify' ) {
@@ -244,12 +251,12 @@ $wp_customize->add_control( 'fupi_cookie_notice[active_preview]', array(
     ),
     'default'         => 'opt_in_out',
     'description'     => esc_html__( 'Depending on the location of your visitors, some of them will see the first and some the second type of the notice.', 'full-picture-analytics-cookie-notice' ) . '<br><br>' . esc_html__( 'To make customisation easier, settings that do not apply to the currently chosen type will be disabled.', 'full-picture-analytics-cookie-notice' ),
-    'active_callback' => function ( $control ) use($tools, $cook, $is_premium) {
+    'active_callback' => function ( $control ) use($main, $cook, $is_premium) {
         if ( !$is_premium ) {
             return false;
         }
         // This field shows only when the geo is enabled and the mode is either "auto_strict", "auto_lax", "manual" or not set (default to "auto" on front-end)
-        return isset( $tools['geo'] ) && (empty( $cook ) || (!isset( $cook['mode'] ) || ($cook['mode'] === 'auto_strict' || $cook['mode'] === 'auto_lax' || $cook['mode'] === 'manual')));
+        return isset( $main['geo'] ) && (empty( $cook ) || (!isset( $cook['mode'] ) || ($cook['mode'] === 'auto_strict' || $cook['mode'] === 'auto_lax' || $cook['mode'] === 'manual')));
     },
 ) );
 // POSITION (ALL BUTTONS)
@@ -293,7 +300,7 @@ $wp_customize->add_control( 'fupi_cookie_notice[position_inform]', array(
     'description'     => esc_html__( 'On small screens, the notice will show as a narrow box at the bottom of the screen.', 'full-picture-analytics-cookie-notice' ),
     'active_callback' => function ( $control ) use($tools, $cook, $is_premium) {
         $has_cook_opts = !empty( $cook );
-        $geo_enabled = isset( $tools['geo'] );
+        $geo_enabled = isset( $main['geo'] );
         if ( $geo_enabled && $is_premium ) {
             if ( $has_cook_opts ) {
                 if ( isset( $cook['mode'] ) ) {
@@ -366,7 +373,7 @@ $hide_options = array(
     'market'       => esc_html__( 'Hide "marketing" section (in the "Settings" panel)', 'full-picture-analytics-cookie-notice' ),
     'pers'         => esc_html__( 'Hide "personalisation" section (in the "Settings" panel)', 'full-picture-analytics-cookie-notice' ),
 );
-if ( !isset( $tools['geo'] ) || !isset( $cook['auto_mode'] ) || $cook['auto_mode'] == 'off' ) {
+if ( !isset( $main['geo'] ) || !isset( $cook['auto_mode'] ) || $cook['auto_mode'] == 'off' ) {
     $hide_descr = esc_html__( 'You can\'t hide both "Decline" and "Settings" buttons. If you don\'t want to give your visitors an option to decline cookies / tracking then, please go to the Consent Banner settings in the admin panel and change the notice mode to "only inform".', 'full-picture-analytics-cookie-notice' );
     $decline_option = array(
         'decline_btn' => esc_html__( 'Hide "decline" button (does not comply with GDPR)', 'full-picture-analytics-cookie-notice' ),
@@ -457,12 +464,12 @@ $wp_customize->add_control( new FUPI_Customize_Pure_HTML($wp_customize, 'fupi_co
     'type'            => 'faux_preview_selector',
     'section'         => 'fupi_notice_design',
     'content'         => '',
-    'active_callback' => function ( $control ) use($tools, $cook, $is_premium) {
+    'active_callback' => function ( $control ) use($main, $cook, $is_premium) {
         if ( !$is_premium ) {
             return false;
         }
         // The same display rules as for all previewers
-        return isset( $tools['geo'] ) && (empty( $cook ) || (!isset( $cook['mode'] ) || ($cook['mode'] === 'auto_strict' || $cook['mode'] === 'auto_lax' || $cook['mode'] === 'manual')));
+        return isset( $main['geo'] ) && (empty( $cook ) || (!isset( $cook['mode'] ) || ($cook['mode'] === 'auto_strict' || $cook['mode'] === 'auto_lax' || $cook['mode'] === 'manual')));
     },
 )) );
 // POPUP WIDTH
@@ -521,16 +528,16 @@ $wp_customize->add_setting( 'fupi_cookie_notice[btn_config]', array(
     'type'              => 'option',
     'sanitize_callback' => 'sanitize_key',
     'transport'         => 'postMessage',
-    'default'           => 'config_1',
+    'default'           => 'config_3',
 ) );
 $wp_customize->add_control( 'fupi_cookie_notice[btn_config]', array(
     'label'           => esc_html__( 'Button placement & configuration', 'full-picture-analytics-cookie-notice' ),
     'section'         => 'fupi_notice_design',
     'type'            => 'select',
     'choices'         => array(
-        'config_1' => esc_html__( 'Inline (default)', 'full-picture-analytics-cookie-notice' ),
-        'config_2' => esc_html__( 'Inline, reversed', 'full-picture-analytics-cookie-notice' ),
-        'config_3' => esc_html__( 'Inline, reversed on mobile', 'full-picture-analytics-cookie-notice' ),
+        'config_3' => esc_html__( 'In a line, reversed on mobile', 'full-picture-analytics-cookie-notice' ),
+        'config_1' => esc_html__( 'In a line', 'full-picture-analytics-cookie-notice' ),
+        'config_2' => esc_html__( 'In a line, reversed', 'full-picture-analytics-cookie-notice' ),
         'default'  => esc_html__( 'Multi-line', 'full-picture-analytics-cookie-notice' ),
     ),
     'active_callback' => $hide_when_banner_only_notifies,
@@ -580,6 +587,7 @@ $wp_customize->add_control( 'fupi_cookie_notice[cta_class]', array(
 $wp_customize->add_setting( 'fupi_notice_round_corners', array(
     'sanitize_callback' => 'sanitize_key',
     'transport'         => 'postMessage',
+    'default'           => 16,
 ) );
 $wp_customize->add_control( 'fupi_notice_round_corners', array(
     'label'       => esc_html__( 'Rounded corners of notice pannels (in px)', 'full-picture-analytics-cookie-notice' ),
@@ -593,6 +601,7 @@ $wp_customize->add_control( 'fupi_notice_round_corners', array(
 $wp_customize->add_setting( 'fupi_notice_btn_round_corners', array(
     'sanitize_callback' => 'sanitize_key',
     'transport'         => 'postMessage',
+    'default'           => 8,
 ) );
 $wp_customize->add_control( 'fupi_notice_btn_round_corners', array(
     'label'       => esc_html__( 'Rounded corners of buttons (in px)', 'full-picture-analytics-cookie-notice' ),
@@ -950,9 +959,9 @@ $wp_customize->add_control( 'fupi_cookie_notice[ok_text]', array(
     'description'     => esc_html__( 'Leave empty to use default', 'full-picture-analytics-cookie-notice' ),
     'section'         => 'fupi_notice_texts',
     'type'            => 'text',
-    'active_callback' => function ( $control ) use($tools, $cook, $is_premium) {
+    'active_callback' => function ( $control ) use($main, $cook, $is_premium) {
         $has_cook_opts = !empty( $cook );
-        $geo_enabled = isset( $tools['geo'] );
+        $geo_enabled = isset( $main['geo'] );
         // show if "auto", "notify" or "manual" mode is selected
         if ( $geo_enabled && $is_premium ) {
             if ( $has_cook_opts ) {

@@ -59,9 +59,16 @@ class UpdraftPlusAddOns_Options2 {
 
 	}
 
-	public function updraftplus_addonstab_content() {
+	/**
+	 * Return the content of the addons tab
+	 *
+	 * @param string $content - the addons tab content
+	 * @return string - the addons tab content
+	 */
+	public function updraftplus_addonstab_content($content) {
 		ob_start();
 		$this->options_printpage();
+		echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escape late; we don't do it here because we want it to happen at caller's side
 		return ob_get_clean();
 	}
 
@@ -115,7 +122,7 @@ class UpdraftPlusAddOns_Options2 {
 	}
 
 	public function show_admin_warning_notconnected() {
-		$this->show_admin_warning(esc_html(__('You have not yet connected the UpdraftPlus plugin to your UpdraftPlus licence.', 'updraftplus')).' <a href="https://teamupdraft.com/my-account/?utm_source=udp-plugin&utm_medium=referral&utm_campaign=paac&utm_content=connect-to-licence&utm_creative_format=notice">'.esc_html__('Connect to your account.', 'updraftplus').'</a>');
+		$this->show_admin_warning(esc_html(__('You have not yet connected the UpdraftPlus plugin to your UpdraftPlus licence.', 'updraftplus')).' <a href="'.esc_url(network_admin_url($this->options->addons_admin_url())).'">'.esc_html__('Connect to your account.', 'updraftplus').'</a>');
 	}
 
 	public function show_admin_warning_noupdraftplus() {
@@ -221,7 +228,7 @@ class UpdraftPlusAddOns_Options2 {
 
 		$options = $this->options->get_option(UDADDONS2_SLUG.'_options');
 
-		echo "\t<div class=\"wrap\">\n";
+		echo "\t<div class=\"wrap updraft-account-connection\">\n";
 
 		global $updraftplus_addons2, $updraftplus_admin, $updraftplus;
 

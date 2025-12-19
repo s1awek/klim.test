@@ -2,7 +2,6 @@
 
 $option_arr_id = 'fupi_tools';
 $ga42_cond_info_text = '';
-$module_removal_info = '<p style="color: red;">' . esc_html__( 'In October 2025, this and other integrations with tools that do not offer a free plan, will be removed from WP FP and will be available as separate addons.', 'full-picture-analytics-cookie-notice' ) . '</p>';
 // TOOLS
 $tools_fields = array(
     // Crazy Egg
@@ -13,7 +12,7 @@ $tools_fields = array(
         'option_arr_id' => $option_arr_id,
         'tags'          => 'tests heat surveys woo',
         'el_data_name'  => 'Crazy Egg',
-        'popup3'        => $module_removal_info . '<p>' . esc_html__( 'Crazy Egg let\'s you:', 'full-picture-analytics-cookie-notice' ) . '</p>
+        'popup'         => '<p>' . esc_html__( 'Crazy Egg let\'s you:', 'full-picture-analytics-cookie-notice' ) . '</p>
 		<ol>
 			<li>' . esc_html__( 'record how your users interact with your website,', 'full-picture-analytics-cookie-notice' ) . '</li>
 			<li>' . esc_html__( 'see where they click the most and the least,', 'full-picture-analytics-cookie-notice' ) . '</li>
@@ -123,7 +122,7 @@ $tools_fields = array(
         'option_arr_id' => $option_arr_id,
         'tags'          => 'stats nocook proxy woo',
         'el_data_name'  => 'Matomo (basic)',
-        'popup3'        => $module_removal_info . '<p>' . esc_html__( 'This module lets you install Matomo on your website. It supports Matomo on-premise and cloud versions.', 'full-picture-analytics-cookie-notice' ) . '</p>
+        'popup'         => '<p>' . esc_html__( 'This module lets you install Matomo on your website. It supports Matomo on-premise and cloud versions.', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<p>' . esc_html__( 'Matomo is a powerful Google Analytics alternative. It is similar to Google Analytics UA but it is slightly easier to use. Matomo can import GA UA\'s data and it can work as its replacement.', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<p>' . sprintf( esc_html__( '%1$sLearn more about this module%2$s', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/module/matomo/" class="button-primary">', '</a>' ) . '</p>
 			<p>' . sprintf( esc_html__( '%1$sVisit Matomo website%2$s', 'full-picture-analytics-cookie-notice' ), '<a href="https://matomo.org" class="button-secondary">', '</a>' ) . '</p>',
@@ -199,7 +198,7 @@ $tools_fields = array(
         'option_arr_id' => $option_arr_id,
         'tags'          => 'nocook woo admin_stats proxy',
         'el_data_name'  => 'Plausible',
-        'popup3'        => $module_removal_info . '<p>' . esc_html__( 'Plausible is a basic tracking tool that:', 'full-picture-analytics-cookie-notice' ) . '</p>
+        'popup'         => '<p>' . esc_html__( 'Plausible is a basic tracking tool that:', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<ol>
 				<li>' . esc_html__( 'can import data from Google Analytics UA (Universal Analytics),', 'full-picture-analytics-cookie-notice' ) . '</li>
 				<li>' . esc_html__( 'can be configured to bypass adblockers,', 'full-picture-analytics-cookie-notice' ) . '</li>
@@ -338,10 +337,9 @@ $privacy_fields = array(array(
     'popup2'        => '
 			<p class="fupi_warning_text">' . esc_html__( 'This module has no settings page.', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<p>' . sprintf( esc_html__( 'Once enabled, it will try to replace links to Google Fonts (which are not GDPR compliant) with links to the same fonts hosted by GDPR compliant %1$sBunny Fonts%2$s.', 'full-picture-analytics-cookie-notice' ), '<a href="https://fonts.bunny.net" target="_blank">', '</a>' ) . '</p>
-			<p class="fupi_warning_text">' . esc_html__( 'Links to fonts loaded dynamically (after the page has loaded) will not be replaced. You must disable them or load them from your own server.', 'full-picture-analytics-cookie-notice' ) . '</p>
+			<p>' . sprintf( esc_html__( '%1$sFollow this guide%2$s, if some Google Fonts still remain unchanged.', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-replace-google-fonts-with-gdpr-compliant-fonts/" target="_blank">', '</a>' ) . '</p>
 			<h3>' . esc_html__( 'Other information', 'full-picture-analytics-cookie-notice' ) . '</h3>
-			<p>' . sprintf( esc_html__( '%1$sHere%2$s you can check if your website uses any Google Fonts.', 'full-picture-analytics-cookie-notice' ), '<a href="https://fontsplugin.com/google-fonts-checker/" target="_blank">', '</a>' ) . '</p>
-			<p>' . esc_html__( 'As a preventive measure, we recommend that you always keep this module enabled - even if you are not using Google Fonts at the moment.', 'full-picture-analytics-cookie-notice' ) . '</p>',
+			<p>' . sprintf( esc_html__( '%1$sHere%2$s you can check if your website uses any Google Fonts.', 'full-picture-analytics-cookie-notice' ), '<a href="https://fontsplugin.com/google-fonts-checker/" target="_blank">', '</a>' ) . '</p>',
 ));
 $priv_tools_fields = apply_filters( 'fupi_add_privacy_module_switch', [] );
 // ! ADDON
@@ -359,33 +357,30 @@ $privacy_fields = array_merge( $privacy_fields, $priv_tools_fields );
 // ) );
 $woo_disabled_class = ( function_exists( 'WC' ) ? '' : ' fupi_disabled fupi_do_not_hide' );
 $woo_disabled_text = ( function_exists( 'WC' ) ? false : esc_html__( 'Requires: WooCommerce plugin', 'full-picture-analytics-cookie-notice' ) );
-$extensions_fields = array(
-    array(
-        'type'          => 'toggle',
-        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/reports_ico.png" aria-hidden="true">' . esc_html__( 'Analytics Dashboards', 'full-picture-analytics-cookie-notice' ) . '</div>',
-        'field_id'      => 'reports',
-        'option_arr_id' => $option_arr_id,
-        'popup'         => '<p>' . esc_html__( 'This extension lets you add to your WP admin, analytics & marketing dashboards created with Google Looker Studio, Databox or similar platforms.', 'full-picture-analytics-cookie-notice' ) . '</p>
+$extensions_fields = array(array(
+    'type'          => 'toggle',
+    'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/reports_ico.png" aria-hidden="true">' . esc_html__( 'Analytics Dashboards', 'full-picture-analytics-cookie-notice' ) . '</div>',
+    'field_id'      => 'reports',
+    'option_arr_id' => $option_arr_id,
+    'popup'         => '<p>' . esc_html__( 'This extension lets you add to your WP admin, analytics & marketing dashboards created with Google Looker Studio, Databox or similar platforms.', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<p>' . sprintf( esc_html__( '%1$sLearn more about this module%2$s', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/module/analytics-dashboards/" class="button-primary">', '</a>' ) . '</p>',
-    ),
-    array(
-        'type'          => 'toggle',
-        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/woo_fav.png" aria-hidden="true">' . esc_html__( 'WooCommerce Tracking', 'full-picture-analytics-cookie-notice' ) . '</div>',
-        'field_id'      => 'woo',
-        'option_arr_id' => $option_arr_id,
-        'class'         => $woo_disabled_class,
-        'under field'   => $woo_disabled_text,
-        'popup'         => '<p>' . esc_html__( 'This extension lets you track WooCommerce events and product data with your installed tracking tools (all extended integrations and the GTM module support it).', 'full-picture-analytics-cookie-notice' ) . '</p>
+), array(
+    'type'          => 'toggle',
+    'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/woo_fav.png" aria-hidden="true">' . esc_html__( 'WooCommerce Tracking', 'full-picture-analytics-cookie-notice' ) . '</div>',
+    'field_id'      => 'woo',
+    'option_arr_id' => $option_arr_id,
+    'class'         => $woo_disabled_class,
+    'under field'   => $woo_disabled_text,
+    'popup'         => '<p>' . esc_html__( 'This extension lets you track WooCommerce events and product data with your installed tracking tools (all extended integrations and the GTM module support it).', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<p>' . sprintf( esc_html__( '%1$sLearn more about this module%2$s', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/module/woocommerce-tracking/" class="button-primary">', '</a>' ) . '</p>',
-    ),
-    array(
-        'type'          => 'toggle',
-        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/adv_triggers_ico.png" aria-hidden="true">' . esc_html__( 'Advanced Triggers + Visitor Scoring', 'full-picture-analytics-cookie-notice' ) . '</div>',
-        'field_id'      => 'atrig',
-        'option_arr_id' => $option_arr_id,
-        'class'         => 'fupi_do_not_hide fupi_adv',
-        'must_have'     => 'pro_round',
-        'popup'         => '<p>' . esc_html__( 'Here you can define triggers for custom events and set up visitor scoring rules. You can use it for:', 'full-picture-analytics-cookie-notice' ) . '</p>
+), array(
+    'type'          => 'toggle',
+    'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/adv_triggers_ico.png" aria-hidden="true">' . esc_html__( 'Custom triggers + Visitor Scoring', 'full-picture-analytics-cookie-notice' ) . '</div>',
+    'field_id'      => 'atrig',
+    'option_arr_id' => $option_arr_id,
+    'class'         => 'fupi_do_not_hide fupi_adv',
+    'must_have'     => 'pro_round',
+    'popup'         => '<p>' . esc_html__( 'Here you can define triggers for custom events and set up visitor scoring rules. You can use it for:', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<ol>
 				<li>' . esc_html__( 'measuring the quality of traffic sources and ad campaigns,', 'full-picture-analytics-cookie-notice' ) . '</li>
 				<li>' . esc_html__( 'counting how many users are on different stages of customer journeys,', 'full-picture-analytics-cookie-notice' ) . '</li>
@@ -394,26 +389,7 @@ $extensions_fields = array(
 			</ol>
 			<p>' . esc_html__( 'The module works with Google Analytics, Google Ads, Google Tag Manager, Meta Pixel, Plausible and Matomo.', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<p>' . sprintf( esc_html__( '%1$sLearn more about this module%2$s', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/module/advanced-triggers/" class="button-primary">', '</a>' ) . '</p>',
-    ),
-    array(
-        'type'          => 'toggle',
-        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/geo_ico.png" aria-hidden="true">' . esc_html__( 'Geolocation', 'full-picture-analytics-cookie-notice' ) . '</div>',
-        'field_id'      => 'geo',
-        'option_arr_id' => $option_arr_id,
-        'class'         => 'fupi_do_not_hide',
-        'must_have'     => 'pro_round',
-        'popup2'        => '
-			<p>' . esc_html__( 'With the Geolocation module you can:', 'full-picture-analytics-cookie-notice' ) . '</p>
-			<ol>
-				<li>' . esc_html__( 'use geolocation-based options of the consent banner (useful when your visitors come from different countries, with different privacy rules),', 'full-picture-analytics-cookie-notice' ) . '</li>
-				<li>' . sprintf( esc_html__( 'prevent Google Analytics from loading in %1$scountries where it is illegal%2$s,', 'full-picture-analytics-cookie-notice' ), '<a href="https://www.simpleanalytics.com/google-analytics-is-illegal-in-these-countries">', '</a>' ) . '</li>
-				<li>' . esc_html__( 'load tracking tools only in countries where you need them (e.g. load live chat only in countries where you do business)', 'full-picture-analytics-cookie-notice' ) . '</li>
-			</ol>
-			<h3>' . esc_html__( 'Impact on page speed', 'full-picture-analytics-cookie-notice' ) . '</h3>
-			<p class="fupi_warning_text">' . esc_html__( 'Using geolocation will slightly decrease your page-speed scores in tools like GT Metrix or Google Lighthouse.', 'full-picture-analytics-cookie-notice' ) . '</p>
-			<p>' . esc_html__( 'This is because tools that use geolocation need to wait for the location information. Fortunately, this impacts loading time only on the first page view. After the first geolocation check, visitor\'s country is remembered in a cookie for later use.', 'full-picture-analytics-cookie-notice' ) . '</p>',
-    )
-);
+));
 $ext_tools_fields = apply_filters( 'fupi_add_ext_module_switch', [] );
 // ! ADDON
 $extensions_fields = array_merge( $extensions_fields, $ext_tools_fields );

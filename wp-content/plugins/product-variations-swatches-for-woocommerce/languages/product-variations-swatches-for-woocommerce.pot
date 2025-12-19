@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Product Variations Swatches for WooCommerce\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-12 06:24+0000\n"
+"POT-Creation-Date: 2025-11-21 07:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -27,11 +27,11 @@ msgstr ""
 msgid " to configure settings specifically for this product."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:483
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:614
 msgid "%"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:310
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:198
 msgid "*Important: "
 msgstr ""
 
@@ -52,30 +52,30 @@ msgstr ""
 msgid "Activate"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:177
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:928
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:222
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:955
 msgid "Ajax variation threshold"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1019
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1046
 msgid "Assign page"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:457
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:590
 msgid "Attribute image size"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1102
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1129
 msgid "Attribute name is case-insensitive"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:694
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:797
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:735
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:838
 msgid "Background"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:503
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:603
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:497
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:644
 msgid "Background color"
 msgstr ""
 
@@ -107,54 +107,54 @@ msgstr ""
 msgid "Basic vertical"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:574
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:568
 msgid "Blur"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:291
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:179
 msgid "Blur out backorders"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:577
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:571
 msgid "Blur with icon"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:512
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:612
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:703
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:806
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:506
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:653
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:744
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:847
 msgid "Border color"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:525
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:625
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:716
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:844
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:519
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:666
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:757
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:885
 msgid "Border radius"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:540
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:640
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:731
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:534
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:681
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:772
 msgid "Border width"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:829
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:870
 msgid "Bottom"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:557
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:657
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:748
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:551
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:698
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:789
 msgid "Box shadow color"
 msgstr ""
 
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/global-attributes.php:64
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:91
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:93
 msgid "Button"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1292
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1321
 msgid "Can not remove all Countdown timer settings."
 msgstr ""
 
@@ -168,12 +168,12 @@ msgstr ""
 msgid "Change product image"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:666
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:757
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:707
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:798
 msgid "Change the size of attribute items"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:464
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:599
 msgid "Change the size of attribute items on"
 msgstr ""
 
@@ -205,16 +205,8 @@ msgstr ""
 msgid "Choose swatches profile"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:918
-msgid "Choose variation and add to cart on the Product List"
-msgstr ""
-
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:910
-msgid "Choose variation by attribute on the Product List"
-msgstr ""
-
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:209
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:993
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:254
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1020
 msgid "Clear on Reselect"
 msgstr ""
 
@@ -235,6 +227,7 @@ msgstr ""
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/setting-global-attrs.php:533
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/setting-global-attrs.php:578
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/setting-global-attrs.php:583
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:324
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/templates/html-product-attribute-item.php:59
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/templates/html-product-attribute-item.php:79
 msgid "Color"
@@ -251,11 +244,11 @@ msgstr ""
 msgid "Current Page"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:67
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:69
 msgid "Custom Attributes"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:317
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:205
 msgid "Custom css"
 msgstr ""
 
@@ -263,15 +256,15 @@ msgstr ""
 msgid "Default design"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:75
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:77
 msgid "Default display type"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:382
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:412
 msgid "Default styling"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:117
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:119
 msgid ""
 "Design attribute display on the frontend. You can design how it is displayed "
 "at <a href=\"#swatches_profile\"><strong>Swatches Profile tab</strong></a>"
@@ -286,8 +279,8 @@ msgstr ""
 msgid "Design with Product category"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:190
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:939
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:235
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:966
 msgid "Disable 'out of stock' variation items"
 msgstr ""
 
@@ -298,7 +291,7 @@ msgstr ""
 msgid "Display style"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:259
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:306
 msgid "Display the selected item beside attribute title on single product page"
 msgstr ""
 
@@ -313,26 +306,20 @@ msgid ""
 "display them when the customer selects"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:411
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:441
 msgid "eg: 3px 5px"
 msgstr ""
 
-#. Description of the plugin
-msgid ""
-"Elegant Color, Image, and Button Swatches for WooCommerce product attributes "
-"– Elevate Product Variations and Delight Your Customers."
-msgstr ""
-
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:776
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:817
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/woo-widget.php:41
 msgid "Enable"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:969
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:996
 msgid "Enable add to cart"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:228
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:273
 msgid "Enable attribute title"
 msgstr ""
 
@@ -343,30 +330,30 @@ msgid ""
 "update Pro version to unlock this feature"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:987
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1014
 msgid "Enable to show the attribute name on the product list"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1007
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1034
 msgid "Enable tooltip"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1125
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1152
 msgid "Export Settings"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1207
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1234
 msgid "File is empty."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1189
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1216
 msgid ""
 "File is empty. Please upload something more substantial. This error could "
 "also be caused by uploads being disabled in your php.ini or by post_max_size "
 "being defined as smaller than upload_max_filesize in php.ini."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1194
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1221
 msgid "File is error."
 msgstr ""
 
@@ -374,15 +361,15 @@ msgstr ""
 msgid "First Page"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:441
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:471
 msgid "Font size"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:859
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:900
 msgid "font size"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1100
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1127
 msgid ""
 "For each rule, if a custom attribute has the same name as field \"Attribute "
 "name\" and products that contain this custom attribute belongs to one of "
@@ -390,7 +377,7 @@ msgid ""
 "applied to that custom attribute"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:308
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:196
 msgid ""
 "For products that have more than 1 attribute, when selecting a value of the "
 "first attribute but the current combination is not available, select this "
@@ -402,7 +389,10 @@ msgid ""
 "For special taxonomy, please go to 'Global Attributes' to set display type"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:61
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:63
+msgid "General"
+msgstr ""
+
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/woo-widget.php:28
 msgid "General Settings"
 msgstr ""
@@ -451,7 +441,7 @@ msgstr ""
 msgid "Hard lines vertical"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:415
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:445
 msgid "Height"
 msgstr ""
 
@@ -459,7 +449,7 @@ msgstr ""
 msgid "here"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:571
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:565
 msgid "Hide"
 msgstr ""
 
@@ -470,7 +460,7 @@ msgstr ""
 msgid "Horizontal"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:587
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:628
 msgid "Hover styling"
 msgstr ""
 
@@ -483,14 +473,14 @@ msgid ""
 "https://villatheme.com/extensions/woocommerce-product-variations-swatches"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:122
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:124
 msgid ""
 "If each of your products has a single attribute and already has images "
 "assigned to its variations, we highly recommend selecting <strong>Variation "
 "Image</strong>."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1103
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1130
 msgid ""
 "If Product category of a rule is empty, this rule applies to products from "
 "all categories"
@@ -510,11 +500,11 @@ msgid ""
 "is not Image"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1138
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1165
 msgid "Import"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1121
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1148
 msgid "Import Settings"
 msgstr ""
 
@@ -540,11 +530,11 @@ msgstr ""
 msgid "Last Page"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:145
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:147
 msgid "Leave empty to apply to all attribute."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:832
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:873
 msgid "Left"
 msgstr ""
 
@@ -558,27 +548,27 @@ msgid ""
 "WooCommerce product variation?"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1054
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1081
 msgid "Maximum attribute items"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:403
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:433
 msgid "Millisecond"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:474
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:605
 msgid "Mobile"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:386
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:416
 msgid "Name"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1297
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1326
 msgid "Names are unique."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1303
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1332
 msgid "Names can not be empty."
 msgstr ""
 
@@ -598,7 +588,7 @@ msgstr ""
 msgid "No taxonomy found."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:85
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:87
 msgid "None"
 msgstr ""
 
@@ -610,24 +600,24 @@ msgstr ""
 msgid "of"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1000
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1027
 msgid "On Product list, clicking on a selected attribute will deselect it"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:221
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:266
 msgid ""
 "On single product page, clicking on a selected attribute will deselect it"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:133
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:135
 msgid "Only the attributes has name in"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:566
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:560
 msgid "Out of stock"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:408
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:438
 msgid "Padding"
 msgstr ""
 
@@ -635,22 +625,22 @@ msgstr ""
 msgid "Please click 'Save attributes' before setting the new attribute item"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1201
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1228
 msgid "Please select the csv file"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:962
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:989
 msgid ""
 "Please turn off the <strong>Enable add to cart</strong> option to use this "
 "feature."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:824
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1042
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:865
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1069
 msgid "Position"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:899
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:940
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/woo-widget.php:50
 msgid "Preview"
 msgstr ""
@@ -659,7 +649,7 @@ msgstr ""
 msgid "Previous Page"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:302
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:190
 msgid "Prioritize first attribute"
 msgstr ""
 
@@ -667,7 +657,7 @@ msgstr ""
 msgid "Product category"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:469
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:620
 msgid "Product list - Unlock This Feature"
 msgstr ""
 
@@ -676,26 +666,26 @@ msgstr ""
 msgid "Product Variations Swatches for WooCommerce"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:423
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:436
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:449
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:534
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:549
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:634
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:649
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:725
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:740
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:853
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:868
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:453
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:466
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:479
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:528
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:543
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:675
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:690
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:766
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:781
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:894
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:909
 msgid "Px"
 msgstr ""
 
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/global-attributes.php:68
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:94
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:96
 msgid "Radio"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:951
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:978
 msgid "Redirect to product"
 msgstr ""
 
@@ -708,22 +698,22 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1129
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1156
 msgid "Reset Settings"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:835
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:876
 msgid "Right"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1101
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1128
 msgid ""
 "Rules are checked from top to bottom and will stop if the attribute matches "
 "a rule"
 msgstr ""
 
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/setting-global-attrs.php:298
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1118
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1145
 msgid "Save"
 msgstr ""
 
@@ -747,8 +737,12 @@ msgstr ""
 msgid "Search attribute"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:678
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:719
 msgid "Selected styling"
+msgstr ""
+
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:315
+msgid "Separator"
 msgstr ""
 
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/admin.php:21
@@ -756,7 +750,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1098
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1125
 msgid "Settings the rules for Custom Attributes"
 msgstr ""
 
@@ -764,17 +758,17 @@ msgstr ""
 msgid "Settings the Swatches for 'Filter Products by Attribute' WooCommerce: "
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:284
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1089
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:351
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1116
 msgid ""
 "Show all items of the attribute in a slider. The tooltip will hide on slider."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:981
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1008
 msgid "Show attribute name"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:240
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:285
 msgid "Show attribute title on single product page"
 msgstr ""
 
@@ -790,41 +784,52 @@ msgstr ""
 msgid "Show in product list - Premium version only"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1068
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1095
 msgid "Show more link"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:247
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:292
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:583
 msgid "Show selected attribute item"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:975
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1002
 msgid ""
 "Show the Add to cart button after selecting variation swatches on the "
 "product list"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1013
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1040
 msgid ""
 "Show tooltip on the product list if this tooltip is enabled on swatches "
 "profile"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:277
+#. Description of the plugin
+msgid ""
+"Showcase variations and impress your customers with beautiful swatches such "
+"as color, button, image, and more."
+msgstr ""
+
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:344
 msgid "Single Swatches slider"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:266
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1031
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:333
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1058
 msgid "Swatches align"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:65
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:67
 msgid "Swatches on Product List"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:63
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:168
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:65
+msgid "Swatches on Single Product page"
+msgstr ""
+
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:61
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:170
 msgid "Swatches Profile"
 msgstr ""
 
@@ -855,7 +860,7 @@ msgstr ""
 msgid "Swatches Settings for WooCommerce Filter Widget"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1082
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1109
 msgid "Swatches slider"
 msgstr ""
 
@@ -867,30 +872,30 @@ msgstr ""
 msgid "Term Settings"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:494
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:594
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:685
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:788
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:488
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:635
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:726
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:829
 msgid "Text color"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:137
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:139
 msgid ""
 "The attribute appears as a variation image, while others are shown as "
 "buttons."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:130
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:132
 msgid "The first attribute"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1061
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1088
 msgid ""
 "The maximum number of items of an attribute can be displayed. Set to 0 to "
 "not limit this."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1048
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1075
 msgid ""
 "The position of variation on shop page, category page and other product list "
 "pages"
@@ -900,25 +905,25 @@ msgstr ""
 msgid "Theme Default"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1212
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1239
 msgid "There isn't Swatches Settings. Please select the another"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:202
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:580
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:945
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:247
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:574
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:972
 msgid ""
 "This function does not work for products whose number of variations is "
 "greater than the \"Ajax variation threshold\""
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:98
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:100
 msgid ""
 "This is used if an attribute is not config yet or no rules are "
 "applied</strong></a>"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1075
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1102
 msgid ""
 "This option is used when total items of an attribute is greater than the "
 "Maximum attribute items above"
@@ -929,58 +934,59 @@ msgid ""
 "This page allows you to customize all WooCommerce global attributes rapidly"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:310
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:198
 msgid ""
 "To make out-of-stock items clickable, you have to turn off \"Disable 'out of "
 "stock' variation items\" option"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:817
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:858
 msgid "Tooltip content"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:874
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:915
 msgid "Tooltip image width"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:769
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:810
 msgid "Tooltip styling"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:838
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:879
 msgid "Top"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:394
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:424
 msgid "Transition Duration"
 msgstr ""
 
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/setting-global-attrs.php:316
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/setting-global-attrs.php:368
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/setting-global-attrs.php:411
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:271
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:282
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:296
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:307
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:322
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:460
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:820
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:877
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:890
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:933
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:944
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:956
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:974
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:986
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:998
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1012
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1024
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1036
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1047
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1059
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1073
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1087
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1108
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:184
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:195
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:210
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:338
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:349
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:586
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:593
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:861
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:918
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:931
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:960
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:971
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:983
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1001
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1013
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1025
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1039
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1051
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1063
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1074
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1086
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1100
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1114
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1135
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/woo-widget.php:45
 msgid "Unlock This Feature"
 msgstr ""
@@ -992,12 +998,12 @@ msgstr ""
 msgid "Upload/Add an image"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:148
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:150
 msgid "Use “|” to separate different values."
 msgstr ""
 
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/global-attributes.php:67
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:88
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:90
 msgid "Variation Image"
 msgstr ""
 
@@ -1019,7 +1025,7 @@ msgstr ""
 msgid "VillaTheme"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:959
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:986
 msgid ""
 "When clicking on an attribute, redirecting to the product page with a "
 "selected variation is allowed."
@@ -1031,7 +1037,7 @@ msgid ""
 "attribute/variation image(Only use for Image/Variation image type)"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:428
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:458
 msgid "Width"
 msgstr ""
 
@@ -1048,7 +1054,7 @@ msgstr ""
 msgid "Would you want to remove this?"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:888
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:929
 msgid ""
 "You can add only 3 profiles. Please update Pro version to add unlimited "
 "profiles."
@@ -1063,7 +1069,7 @@ msgstr ""
 msgid "You can not remove the last item."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1025
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:1052
 msgid ""
 "You can use WP's <a href=\"https://villatheme.com/knowledge-base/conditional-"
 "tags/\" target=\"_blank\">Conditional tags</a> to enable/disable swatches of "

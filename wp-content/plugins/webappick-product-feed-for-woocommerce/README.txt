@@ -3,9 +3,9 @@ Contributors: wahid0003, webappick
 Donate link: https://webappick.com
 Tags: WooCommerce, Product Feed, Google Shopping, Facebook Catalog, Google listings
 Requires at least: 4.4
-Tested Up To: 6.8
+Tested Up To: 6.9
 Requires PHP: 5.6
-Stable tag: 6.5.84
+Stable tag: 6.6.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,6 +16,8 @@ Advanced WooCommerce Feed Plugin to Generate Optimized, Error-Free Product Feeds
 🏆 **Reach millions of customers and sell faster with the optimized & error-free  Product Feed Plugin for Google Shopping, Facebook, Instagram & 130+ marketplaces—trusted by 70,000+ stores.**
 
 Get your products listed across Google Shopping, Facebook, Pinterest, Instagram, TikTok, Snapchat, eBay, Bing, PriceRunner, Rakuten, PriceSpy, Kelko, and 100+ more channels with optimized, error-free product feeds—directly from your WooCommerce store.
+
+**<a target="_blank" href="https://webappick.com/discount-deal/?utm_source=org-text-Holiday&utm_medium=free-to-pro&utm_campaign=H-Holiday&utm_id=1"> 🎉 Happy Holidays! Save BIG with up to 60% OFF using CTX Feed Pro — but hurry, the joy ends December 31st!</a>**
 
 With CTX Feed – the Best  WooCommerce Product Feed Manager Plugin – you can connect with over 100+ recognized marketplaces, search engines, affiliate sites, and price comparison platforms to maximize your product reach.
 
@@ -371,6 +373,65 @@ Using pro version:
 4. Category Mapping
 
 == Changelog ==
+
+= 6.6.14 (2025-12-18) =
+* Updated : Plugin Information
+
+= 6.6.13 (2025-12-16) =
+* Added : Black Friday Discount Banner
+
+= 6.6.12 (2025-12-11) =
+* Added : Parent Description Attribute
+* Updated : Security Vulnerability Issue
+
+= 6.6.11 (2025-12-08) =
+* Removed : Black Friday Discount Banner
+
+= 6.6.10 (2025-12-02) =
+* Tweak: WordPress version 6.9 compatibility checked
+
+= 6.6.9 (2025-11-28) =
+* Updated : Discount Banner UTM Link
+
+= 6.6.8 (2025-11-25) =
+* Updated : Plugin Information
+
+= 6.6.7 (2025-11-25) =
+* Added : Black Friday Discount Banner
+
+= 6.6.6 (2025-11-20) =
+* Fixed : Canonical URL attribute issue
+
+= 6.6.5 (2025-11-17) =
+* Added : 10 Year Anniversary Discount Banner
+
+= 6.6.4 (2025-11-06) =
+* Updated : Plugin Information
+
+= 6.6.3 (2025-11-03) =
+* Removed : Halloween Discount Banner
+
+= 6.6.2 (2025-10-27) =
+* Updated : Code Refactor
+
+= 6.6.1 (2025-10-27) =
+* Updated : Manage Feed Page Sidebar
+* Updated : Make Feed Page Sidebar
+
+= 6.6.0 (2025-10-22) =
+* Added : ChatGPT(OpenAI) Product Feed Template
+
+= 6.5.88 (2025-10-20) =
+* Added : Halloween Discount Banner
+
+= 6.5.87 (2025-10-13) =
+* Updated: Code Refactor
+
+= 6.5.86 (2025-10-13) =
+* Updated: Manage Feed Page UI
+
+= 6.5.85 (2025-10-07) =
+* Fixed: Settings Page UI Issue
 
 = 6.5.84 (2025-09-30) =
 * Updated: Attributes Mapping Page UI

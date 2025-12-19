@@ -90,52 +90,53 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
-#fupi_console_intro{
-    margin-left: -20px;
-    margin-right: -20px;
-    padding: 1px 20px;
-    background-color: #e5f6ff;
-}
-
 #fupi_console_buttons{
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
     margin-top: 20px;
-    button{
+}
+    .fupi_primary_button,
+    .fupi_secondary_button{
         flex: 0 0 100%;
         border-radius: 100px;
         box-shadow: none !important;
         font-size: 14px !important;
         padding: 5px 14px !important;
         line-height: 1.3em !important;
+        text-decoration: none;
+        text-align: center;
         &:hover, &:active{
             box-shadow: none !important;
             font-size: 14px !important;
             padding: 5px 14px !important;
         }
+        .dashicons{
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+        }
     }
     .fupi_primary_button{
-        background-color: #f3c836 !important;
+        background-color: #ffdd68 !important;
         color: #000 !important;
         border: 1px solid #bf9c27 !important;
         &:hover, &:active{
             color: #000 !important;
-            background-color: #f9e296 !important;
+            background-color: #ffe488 !important;
             border: 1px solid #bf9c27 !important;
         }
     }
     .fupi_secondary_button{
         background-color: #f3faff !important;
         color: #112849 !important;
-        border: 1px solid #517b9d !important;
+        border: 1px solid #9dabb6 !important;
         &:hover, &:active{
             color: #112849 !important;
-            background-color: #fff !important;
-            border: 1px solid #517b9d !important;
+            background-color: #fefefe !important;
+            border: 1px solid #9dabb6 !important;
         }
     }
-}
 
 #fupi_console_close_btn{
     display: block !important;

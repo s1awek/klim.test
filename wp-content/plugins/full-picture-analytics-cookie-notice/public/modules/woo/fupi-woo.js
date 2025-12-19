@@ -345,8 +345,28 @@
 			
 			let form_el = fpdata.clicked.element.closest('form.cart');
 
+			// if no form element
+			if ( ! form_el ) {
+
+				// this is a single button
+				if ( fpdata.clicked.element?.href && fpdata.clicked.element.href.includes('add-to-cart=') ) {
+					
+					let prod_id = FP.getUrlParamByName( 'add-to-cart', fpdata.clicked.element.href );
+
+					if ( fpdata.woo.products[prod_id] ) {
+						
+						let qty_from_url = FP.getUrlParamByName( 'quantity', fpdata.clicked.element.href ),
+							qty = qty_from_url || 1,
+							prod = fpdata.woo.products[prod_id],
+							value = Math.round( prod.price * qty * 100 ) / 100;
+
+						FP.doActions( 'woo_add_to_cart', { 'products' : [[prod, qty]], 'value': value } );
+						FP.setCookie( 'fp_last_atc', prod_id, 0 );
+					}
+				}
+			
 			// track variable product
-			if ( form_el.classList.contains('variations_form') ) {
+			} else if ( form_el.classList.contains('variations_form') ) {
 
 				let prod_id = FP.findFirst( 'input.variation_id', form_el ).value;
 
@@ -390,7 +410,7 @@
 				
 
 			// track simple product
-			} else {
+			} else if ( form_el ) {
 
 				let prod_id = FP.findFirst( '.single_add_to_cart_button', form_el ).value;
 
@@ -438,19 +458,16 @@
 
 		let cart_data_el = FP.findFirst('span.fupi_cart_data:not(.fupi_ready)');
 
-		if ( cart_data_el ) {
+		if ( cart_data_el && !! cart_data_el.innerHTML ) {
 
-			let cart_data_dirty = cart_data_el.innerHTML,
-				cart_data_clean = cart_data_dirty.replaceAll('“', '"').replaceAll('”', '"').replaceAll('″', '"').replaceAll('„', '"'), // for some reason WP reformats JSON and we need to fix quotes
-				cart_data = JSON.parse(cart_data_clean);
+			let cart_data = JSON.parse( cart_data_el.innerHTML );
 
 			if ( ajax_update ) fpdata.woo.cart_old = {...fpdata.woo.cart};
 			
 			fpdata.woo.cart = cart_data;
+			cart_data_el.classList.add('fupi_ready'); // Mark as processed
 		}
 	};
-
-	setTimeout( prepare_classic_cart, 300 ); // puts <span>cart_data</span> into fpdata.woo.cart. Must run on page load. We add timeout to wait for the cart contents to load
 
 	function compare_old_and_new_carts(){
 		
@@ -507,14 +524,25 @@
 		}
 	};
 
-	// when a big cart is updated
-	// for some reason the jquery event won't get attached when the script loads, but we need to wait a bit
-	setTimeout( ()=>{
-		jQuery('body').on('updated_cart_totals', ()=>{
+	// puts <span>cart_data</span> into fpdata.woo.cart. Must run on page load. We add timeout to wait for the cart contents to load
+	setTimeout( prepare_classic_cart, 300 );
+
+	// Bind event handler immediately (no timeout)
+	jQuery(document).ready(function($) {
+		$('body').on('updated_cart_totals', function(){
 			prepare_classic_cart(true);
 			compare_old_and_new_carts();
 		});
-	}, 100 );
+	});
+
+	// when a big cart is updated
+	// for some reason the jquery event won't get attached when the script loads, but we need to wait a bit
+	// setTimeout( ()=>{
+	// 	jQuery('body').on('updated_cart_totals', ()=>{
+	// 		prepare_classic_cart(true);
+	// 		compare_old_and_new_carts();
+	// 	});
+	// }, 100 );
 
 	// TRACK ADD TO WISHLIST
 

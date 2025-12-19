@@ -4,11 +4,13 @@ class Fupi_COOK_admin {
 
     private $settings;
     private $tools;
+    private $main;
     private $proofrec;
 
     public function __construct(){
         $this->settings = get_option('fupi_cook');
         $this->tools = get_option('fupi_tools');
+        $this->main = get_option('fupi_main');
         $this->proofrec = get_option('fupi_proofrec');
         $this->add_actions_and_filters();
     }
@@ -31,6 +33,18 @@ class Fupi_COOK_admin {
 		}
     }
 
+    // HELPER
+
+    private function pp_ok(){
+        
+        if ( ! empty( $this->settings['pp_id'] ) ) {
+            $pp_id = (int) $this->settings['pp_id'];
+            return get_post_status( $pp_id ) == 'publish';
+        }
+
+        return false;
+    }
+
     // CUSTOMIZER
 
 	// Register customizer settings
@@ -50,7 +64,7 @@ class Fupi_COOK_admin {
 
 	// Update settings sent to CDB after changes in customizer
 	public function fupi_customize_save_after(){
-		if ( ! empty ( $this->tools['cook'] ) && ! empty ( $this->tools['proofrec'] ) && ! empty ( get_privacy_policy_url() ) ) {
+		if ( ! empty ( $this->tools['cook'] ) && ! empty ( $this->tools['proofrec'] ) && $this->pp_ok() ) {
 			include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
 			$gdpr_checker = new Fupi_compliance_status_checker();
             $gdpr_checker->send_and_return_status();
@@ -91,7 +105,7 @@ class Fupi_COOK_admin {
 
         if ( apply_filters( 'fupi_updating_many_options', false ) ) return $clean_data;
         
-        if ( ! empty ( $this->tools['cook'] ) && ! empty ( $this->tools['proofrec'] ) && ! empty ( get_privacy_policy_url() ) ) {
+        if ( ! empty ( $this->tools['cook'] ) && ! empty ( $this->tools['proofrec'] ) && $this->pp_ok() ) {
 			include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
 			$gdpr_checker = new Fupi_compliance_status_checker( 'cook', $clean_data );
             $gdpr_checker->send_and_return_status();

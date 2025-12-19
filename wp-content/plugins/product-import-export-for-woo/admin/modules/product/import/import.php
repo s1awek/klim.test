@@ -80,16 +80,16 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
                     } else {
                         $msg = 'Product imported successfully.';
                     }
-                    $this->import_results[$row] = array('row'=>$row, 'message'=>$msg, 'status'=>true, 'status_msg' => __( 'Success' ), 'post_id'=>$result['id'], 'post_link' => Wt_Import_Export_For_Woo_Basic_Product::get_item_link_by_id($result['id'])); 
+                    $this->import_results[$row] = array('row'=>$row, 'message'=>$msg, 'status'=>true, 'status_msg' => __( 'Success', 'product-import-export-for-woo' ), 'post_id'=>$result['id'], 'post_link' => Wt_Import_Export_For_Woo_Basic_Product::get_item_link_by_id($result['id'])); 
                     Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - ".$msg);                    
                     $success++;
                 }else{
-                    $this->import_results[$row] = array('row'=>$row, 'message'=>$result->get_error_message(), 'status'=>false, 'status_msg' => __( 'Failed/Skipped' ), 'post_id'=>'', 'post_link' => array( 'title' => __( 'Untitled' ), 'edit_url' => false ) );
+                    $this->import_results[$row] = array('row'=>$row, 'message'=>$result->get_error_message(), 'status'=>false, 'status_msg' => __( 'Failed/Skipped', 'product-import-export-for-woo' ), 'post_id'=>'', 'post_link' => array( 'title' => __( 'Untitled', 'product-import-export-for-woo' ), 'edit_url' => false ) );
                     Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - Processing failed. Reason: ".$result->get_error_message());
                    $failed++;
                 }                
             }else{
-               $this->import_results[$row] = array('row'=>$row, 'message'=>$parsed_data->get_error_message(), 'status'=>false, 'status_msg' => __( 'Failed/Skipped' ), 'post_id'=>'', 'post_link' => array( 'title' => __( 'Untitled' ), 'edit_url' => false ) );
+               $this->import_results[$row] = array('row'=>$row, 'message'=>$parsed_data->get_error_message(), 'status'=>false, 'status_msg' => __( 'Failed/Skipped', 'product-import-export-for-woo' ), 'post_id'=>'', 'post_link' => array( 'title' => __( 'Untitled', 'product-import-export-for-woo' ), 'edit_url' => false ) );
                Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - Parsing failed. Reason: ".$parsed_data->get_error_message());
                $failed++;               
             }            
@@ -114,7 +114,8 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
     
     public function clean_after_import() {
         global $wpdb;
-        $posts = $wpdb->get_col($wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE post_status = '%s' AND post_type  IN ( 'product', 'product_variation')", 'importing')); 
+        //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+        $posts = $wpdb->get_col($wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE post_status = %s AND post_type  IN ( 'product', 'product_variation')", 'importing')); 
         if($posts){
             array_map('wp_delete_post',$posts);
         }
@@ -128,6 +129,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
             'fields' => 'ids',
             'posts_per_page' => -1,
             'post_status' => array( 'publish', 'private', 'draft', 'pending', 'future'),
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Required for import functionality
             'meta_query' => [
                 [
                     'key' => '_wt_delete_existing',
@@ -146,6 +148,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
             'fields' => 'ids',
             'posts_per_page' => -1,
             'post_status' => array( 'publish', 'private', 'draft', 'pending', 'future'),
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Required for import functionality
             'meta_query' => [
                 [
                     'key' => '_wt_delete_existing',
@@ -227,7 +230,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
                     if(in_array($product_type, $types)){
                         $this->item_data['type'] = $product_type;
                     }else{
-                        return new WP_Error('woocommerce_product_importer_invalid_type', __('This product type is not supported.', 'woocommerce'), array('status' => 401));
+                        return new WP_Error('woocommerce_product_importer_invalid_type', __('This product type is not supported.', 'product-import-export-for-woo'), array('status' => 401));
                     }
                 }else{
                     $this->item_data['type'] = 'simple';
@@ -668,6 +671,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
                     $id = intval( $value );
 
                     // See if the given ID maps to a valid product allready.
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
                     $existing_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type IN ( 'product' ) AND ID = %d;", $id ) ); // WPCS: db call ok, cache ok.
                     if ( $existing_id ) {
                             $parent_id = absint( $existing_id );
@@ -678,14 +682,14 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
 //                $id = wc_get_product_id_by_sku( $value );
                 $value = trim($value);
 
-                $db_query = $wpdb->prepare("SELECT $wpdb->posts.ID
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+                $id = $wpdb->get_var($wpdb->prepare("SELECT $wpdb->posts.ID
                                             FROM $wpdb->posts
                                             LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id)
                                             WHERE $wpdb->posts.post_status IN ( 'publish', 'private', 'draft', 'pending', 'future' )
                                             AND $wpdb->posts.post_type IN ( 'product' )
-                                            AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
-                                            ", $value);
-                $id = $wpdb->get_var($db_query);
+                                            AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = %s
+                                            ", $value));
 
                 if ( $id ) {
                         $parent_id = $id;
@@ -722,7 +726,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
             
             
             if( $type == 'variation' || $type == 'variable'  ){
-                throw new Exception(sprintf('Basic version does not support import of %s products.',$value ));
+                throw new Exception( esc_html( sprintf( 'Basic version does not support import of %s products.', $value )));
             }
             
                          
@@ -733,7 +737,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
 //                    $types[] = 'variation';
                     
                     if ( ! in_array( $type, $types, true ) ) {
-                        throw new Exception(sprintf('Invalid product type %s',$value ));
+                        throw new Exception( esc_html( sprintf( 'Invalid product type %s', $value ) ) );
                     } 
             }                                  
             return $type;
@@ -892,7 +896,8 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
         
         $id = isset($data['ID']) && !empty($data['ID']) ? absint($data['ID']) : 0;         
         $id_found_with_id = '';
-        if($id && 'id' == $this->merge_with){ 
+        if($id && 'id' == $this->merge_with){
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
             $id_found_with_id = $wpdb->get_var($wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE post_status IN ( 'publish', 'private', 'draft', 'pending', 'future' ) AND ID = %d;", $id)); // WPCS: db call ok, cache ok.
             if($id_found_with_id){
                if(in_array(get_post_type($id_found_with_id), array('product', 'product_variation'))){
@@ -909,14 +914,14 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
             $sku = isset($data['sku']) && '' != $data['sku'] ? trim($data['sku']) : '';
         }
         $id_found_with_sku = '';
-        if(!empty($sku) && 'sku' == $this->merge_with){            
-            $db_query = $wpdb->prepare("SELECT $wpdb->posts.ID,$wpdb->posts.post_type
+        if(!empty($sku) && 'sku' == $this->merge_with){ 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+            $id_found_with_sku = $wpdb->get_row($wpdb->prepare("SELECT $wpdb->posts.ID,$wpdb->posts.post_type
                                         FROM $wpdb->posts
                                         LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id)
                                         WHERE $wpdb->posts.post_status IN ( 'publish', 'private', 'draft', 'pending', 'future' )
-                                        AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
-                                        ", $sku);
-            $id_found_with_sku = $wpdb->get_row($db_query);
+                                        AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = %s
+                                        ", $sku));
             if ($id_found_with_sku && (in_array($id_found_with_sku->post_type, array('product', 'product_variation')))) {
                 $id_found_with_sku = $id_found_with_sku->ID;
                 $this->is_product_exist = true; 
@@ -930,14 +935,14 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
 
             if (apply_filters('wpml_setting', false, 'setup_complete') && (!empty($sku)) && ((!empty($data['wpml:original_product_id']) || !empty($data['wpml:original_product_sku'])) && !empty($data['wpml:language_code']))) {
 
-                $db_query = $wpdb->prepare("
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+                $found_product_ids = $wpdb->get_results($wpdb->prepare("
 						SELECT $wpdb->posts.ID
 						FROM $wpdb->posts
 						LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id)
 						WHERE $wpdb->posts.post_status IN ( 'publish', 'private', 'draft', 'pending', 'future' )
-						AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
-						", $sku);
-                $found_product_ids = $wpdb->get_results($db_query);
+						AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = %s
+						", $sku));
 
                 /*
                  * Finding product ID by sku (each translation may have the same sku if the translation created by duplicating original product)
@@ -957,9 +962,9 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
             if($this->is_product_exist){
             if('skip' == $this->found_action){
                 if($id && $id_found_with_id ){
-                    throw new Exception(sprintf('Product with same ID already exists. ID: %d',$id ));
+                    throw new Exception( esc_html( sprintf( 'Product with same ID already exists. ID: %d', $id )));
                 }elseif($sku && $id_found_with_sku ){
-                    throw new Exception(sprintf('Product with same SKU already exists. SKU: %s',$sku ));
+                    throw new Exception( esc_html( sprintf( 'Product with same SKU already exists. SKU: %s', $sku )));
                 }else{
                     throw new Exception('Product already exists.');
                 }                 
@@ -975,7 +980,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
         }        
         
         if($id && $id_found_with_id && !$this->is_product_exist && 'skip' == $this->id_conflict){
-            throw new Exception(sprintf('Importing Product(ID) conflicts with an existing post. ID: %d',$id ));
+            throw new Exception( esc_html( sprintf( 'Importing Product(ID) conflicts with an existing post. ID: %d', $id ) ) );
         }
     }
 
@@ -1026,7 +1031,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
             Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', sprintf('Importing as new '. ($this->parent_module->module_base).' ID:%d',$post_id ));
             return $post_id;
         }else{
-            throw new Exception($post_id->get_error_message());
+            throw new Exception(esc_html($post_id->get_error_message()));
         }
 
     }
@@ -1551,7 +1556,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
             $types = array('simple', 'grouped', 'external');
 
             if (!in_array($data['type'], $types, true)) {
-                return new WP_Error('woocommerce_product_importer_invalid_type', __('Invalid product type.', 'woocommerce'), array('status' => 401));
+                return new WP_Error('woocommerce_product_importer_invalid_type', __('Invalid product type.', 'product-import-export-for-woo'), array('status' => 401));
             }
 
             try {
@@ -1565,7 +1570,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
             if (!$product) {
                 return new WP_Error(
                         'woocommerce_product_csv_importer_invalid_id',
-                        /* translators: %d: product ID */ sprintf(__('Invalid product ID %d.', 'woocommerce'), $id), array(
+                        /* translators: %d: product ID */ sprintf(__('Invalid product ID %d.', 'product-import-export-for-woo'), $id), array(
                     'id' => $id,
                     'status' => 401,
                         )
@@ -1610,7 +1615,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
         );
 
         if (is_wp_error($attribute_id)) {
-            throw new Exception($attribute_id->get_error_message(), 400);
+            throw new Exception(esc_html($attribute_id->get_error_message()), 400);
         }
 
         // Register as taxonomy while importing.
@@ -1874,7 +1879,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
         }
 
         // Upload the file
-        $upload = wp_upload_bits($file_name, '', wp_remote_retrieve_body($response));
+        $upload = wp_upload_bits($file_name, null, wp_remote_retrieve_body($response));
 
         if ($upload['error'])
             return new WP_Error('upload_dir_error', $upload['error']);
@@ -1885,7 +1890,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
         if (0 == $filesize) {
             @unlink($upload['file']);
             unset($upload);
-            return new WP_Error('import_file_error', __('Zero size file downloaded', 'wf_csv_import_export'));
+            return new WP_Error('import_file_error', __('Zero size file downloaded', 'product-import-export-for-woo'));
         }
 
         unset($response);
@@ -1986,7 +1991,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
  
             if (!wp_attachment_is_image($id)) {
                 /* translators: %s: image URL */
-                Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', sprintf(__('Not able to attach "%s".'), $url));
+                Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', sprintf(__('Not able to attach "%s".', 'product-import-export-for-woo'), $url));
                 return;
                 
             }
@@ -1997,7 +2002,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
 
         if (!$id) {
             /* translators: %s: image URL */
-            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', sprintf(__('Unable to use image "%s".'), $url));
+            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', sprintf(__('Unable to use image "%s".', 'product-import-export-for-woo'), $url));
             return;
             
         }
@@ -2133,38 +2138,32 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
                 ),
             );
 
-            // Configure curl request
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $api_url);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt(
-                    $ch,
-                    CURLOPT_HTTPHEADER,
-                    array(
-                        'Content-Type: application/json',
-                        'Authorization: Bearer ' . $api_key,
-                    )
-            );
-
+            // Configure WordPress HTTP API request
             $post_data = array(
                 'messages' => $messages,
                 'model' => 'gpt-3.5-turbo',
                 'temperature' => 1,
             );
 
-            $post_data_json = json_encode($post_data);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data_json);
+            $args = array(
+                'method' => 'POST',
+                'headers' => array(
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $api_key,
+                ),
+                'body' => json_encode($post_data),
+                'timeout' => 30,
+            );
 
-            $response = curl_exec($ch);
+            $response = wp_remote_post($api_url, $args);
 
             $generated_text = $product_description;
 
-            if (curl_error($ch)) {
-                Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "ChatGPT API error response : " . curl_error($ch));    
+            if (is_wp_error($response)) {
+                Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "ChatGPT API error response : " . $response->get_error_message());    
             } else {
-
-                $response_data = json_decode($response, true);
+                $response_body = wp_remote_retrieve_body($response);
+                $response_data = json_decode($response_body, true);
 
                 if (isset($response_data['error']) && !empty($response_data['error'])) {
                     Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "ChatGPT API error response : " . $response_data['error']['message']);
@@ -2177,8 +2176,6 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
                     }
                 }
             }
-
-            curl_close($ch);
 
             return $generated_text;
         }

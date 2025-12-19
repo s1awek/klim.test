@@ -74,6 +74,14 @@ $wp_customize->add_control(
 
 // Background Color
 $wp_customize->add_setting(
+	'global_sydney_section_fb_wrapper__footer_builder_background_color',
+	array(
+		'default'           => '',
+		'sanitize_callback' => 'wp_kses_post',
+		'transport'         => 'postMessage'
+	)
+);
+$wp_customize->add_setting(
 	'sydney_section_fb_wrapper__footer_builder_background_color',
 	array(
 		'default'           => '#f5f5f5',
@@ -88,6 +96,10 @@ $wp_customize->add_control(
 		array(
 			'label'         	=> esc_html__( 'Background color', 'sydney' ),
 			'section'       	=> 'sydney_section_fb_wrapper',
+			'settings'       => array(
+				'global'  => 'global_sydney_section_fb_wrapper__footer_builder_background_color',
+				'setting' => 'sydney_section_fb_wrapper__footer_builder_background_color',
+			),
 			'priority'			=> 35
 		)
 	)

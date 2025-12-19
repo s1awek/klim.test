@@ -169,7 +169,7 @@ class Swatches_Admin {
 			'flatsome-swatches-admin',
 			'flatsome_swatches',
 			array(
-				'placeholder' => WC()->plugin_url() . '/assets/images/placeholder.png',
+				'placeholder' => wc_placeholder_img_src(),
 			)
 		);
 	}
@@ -227,7 +227,7 @@ class Swatches_Admin {
 		switch ( $type ) {
 			case 'ux_image':
 				$image = $value ? wp_get_attachment_image_src( $value ) : '';
-				$image = $image ? $image[0] : WC()->plugin_url() . '/assets/images/placeholder.png';
+				$image = $image ? $image[0] : wc_placeholder_img_src();
 				?>
 				<div class="ux-swatches-term-image-thumbnail" style="margin: 8px 0;">
 					<img src="<?php echo esc_url( $image ); ?>" width="60px" height="60px" alt=""/>
@@ -387,7 +387,7 @@ class Swatches_Admin {
 
 				case 'ux_image':
 					$image     = $value ? wp_get_attachment_image_src( $value ) : '';
-					$image     = $image ? $image[0] : WC()->plugin_url() . '/assets/images/placeholder.png';
+					$image     = $image ? $image[0] : wc_placeholder_img_src();
 					$classes[] = 'ux-swatch--image';
 					printf( '<div class="%s"><img class="ux-swatch__img" src="%s" width="30px" height="30px" alt=""></div>',
 						esc_attr( implode( ' ', $classes ) ),

@@ -1,5 +1,10 @@
 <?php
 
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! class_exists('XmlExportWooCommerce') )
 {
     final class XmlExportWooCommerce
@@ -63,7 +68,8 @@ if ( ! class_exists('XmlExportWooCommerce') )
 
             if ( empty(PMXE_Plugin::$session) ) // if cron execution
             {
-                $id = $_GET['export_id'];
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Cron execution context, nonce not applicable
+                $id = isset($_GET['export_id']) ? absint(wp_unslash($_GET['export_id'])) : 0;
                 $export = new PMXE_Export_Record();
                 $export->getById($id);
                 if ( $export->options['export_to'] == 'csv'){
@@ -189,8 +195,8 @@ if ( ! class_exists('XmlExportWooCommerce') )
         {
             $uc_title = ucwords(trim(str_replace("_", " ", $title)));
 
-            if($title == __('Excerpt')) {
-                return __('Short Description');
+            if($title == __('Excerpt', 'wpae-wooco-product-export-addon')) {
+                return __('Short Description', 'wpae-wooco-product-export-addon');
             }
 
             return stripos($uc_title, "width") === false ? str_ireplace(array(' id ', ' url ', ' sku ', ' wc '), array('ID', 'URL', 'SKU', 'WC'), $uc_title) : $uc_title;
@@ -351,15 +357,15 @@ if ( ! class_exists('XmlExportWooCommerce') )
          */
         public function filter_available_sections($available_sections){
 
-            $available_sections['other']['title'] = __("Other", "wp_all_export_plugin");
+            $available_sections['other']['title'] = __("Other", "wpae-wooco-product-export-addon");
 
             $product_data = array(
                 'product_data' => array(
-                    'title'    => __("Product Data", "wp_all_export_plugin"),
+                    'title'    => __("Product Data", "wpae-wooco-product-export-addon"),
                     'content'  => 'product_fields',
                     'additional' => array(
                         'attributes' => array(
-                            'title' => __("Attributes", "wp_all_export_plugin"),
+                            'title' => __("Attributes", "wpae-wooco-product-export-addon"),
                             'meta'  => $this->get_fields_for_product_attributes_section()
                         )
                     )
@@ -424,10 +430,9 @@ if ( ! class_exists('XmlExportWooCommerce') )
 
                 global $wpdb;
 
-                $table_prefix = $wpdb->prefix;
-
-                self::$products_data['attributes'] = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT meta_key FROM {$table_prefix}postmeta 
-						WHERE {$table_prefix}postmeta.meta_key LIKE %s AND {$table_prefix}postmeta.meta_key NOT LIKE %s", 'attribute_%', 'attribute_pa_%'));
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Required for dynamic attribute detection
+                self::$products_data['attributes'] = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT meta_key FROM {$wpdb->prefix}postmeta
+						WHERE {$wpdb->prefix}postmeta.meta_key LIKE %s AND {$wpdb->prefix}postmeta.meta_key NOT LIKE %s", 'attribute_%', 'attribute_pa_%'));
 
                 if ( ! empty(PMXE_Plugin::$session) )
                 {
@@ -482,23 +487,23 @@ if ( ! class_exists('XmlExportWooCommerce') )
 
             return array(
                 'product_data'  => array(
-                    'title' => __('Product Data', 'wp_all_export_plugin'),
+                    'title' => __('Product Data', 'wpae-wooco-product-export-addon'),
                     'meta'  => $default_data,
                 ),
                 'taxonomies'    => array(
-                    'title' => __('Taxonomies', 'wp_all_export_plugin'),
+                    'title' => __('Taxonomies', 'wpae-wooco-product-export-addon'),
                     'meta'  => $taxes_data
                 ),
                 'cf' 			=> array(
-                    'title' => __('Custom Fields', 'wp_all_export_plugin'),
+                    'title' => __('Custom Fields', 'wpae-wooco-product-export-addon'),
                     'meta'  => $meta_keys
                 ),
                 'attributes'      => array(
-                    'title' => __('Attributes', 'wp_all_export_plugin'),
+                    'title' => __('Attributes', 'wpae-wooco-product-export-addon'),
                     'meta'  => $this->get_fields_for_product_attributes_section()
                 ),
                 'advanced'      => array(
-                    'title' => __('Advanced', 'wp_all_export_plugin'),
+                    'title' => __('Advanced', 'wpae-wooco-product-export-addon'),
                     'meta'  => $this->get_fields_for_product_advanced_section()
                 )
             );
@@ -1127,10 +1132,9 @@ if ( ! class_exists('XmlExportWooCommerce') )
 
                     global $wpdb;
 
-                    $table_prefix = $wpdb->prefix;
-
-                    $attributes = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT meta_key FROM {$table_prefix}postmeta 
-							WHERE {$table_prefix}postmeta.meta_key LIKE %s AND {$table_prefix}postmeta.meta_key NOT LIKE %s", 'attribute_%', 'attribute_pa_%'));
+                    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Required for dynamic attribute detection
+                    $attributes = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT meta_key FROM {$wpdb->prefix}postmeta
+							WHERE {$wpdb->prefix}postmeta.meta_key LIKE %s AND {$wpdb->prefix}postmeta.meta_key NOT LIKE %s", 'attribute_%', 'attribute_pa_%'));
 
                     if ( ! empty($attributes))
                     {

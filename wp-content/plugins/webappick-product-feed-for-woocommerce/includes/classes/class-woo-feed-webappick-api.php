@@ -115,48 +115,6 @@ if ( ! class_exists( 'WooFeedWebAppickAPI' ) ) {
 		 * @return void
 		 */
 		private function insightInit() {
-			global $wpdb;
-			$result = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $wpdb->options WHERE option_name LIKE %s;", "wf_feed_%"), 'ARRAY_A' ); // phpcs:ignore
-			if ( ! is_array( $result ) ) {
-				$result = array();
-			}
-			$catCount = wp_count_terms(
-				array(
-					'taxonomy'   => 'product_cat',
-					'hide_empty' => false,
-					'parent'     => 0,
-				)
-			);
-			if ( is_wp_error( $catCount ) ) {
-				$catCount = 0;
-			}
-			/**
-			 * @TODO count products by type
-			 * @see wc_get_product_types();
-			 */
-			// update_option( 'woo_feed_review_notice', $value );
-			//				$notices = [ 'rp-wcdpd', 'wpml', 'rating', 'product_limit' ];
-			//
-			$hidden_notices = array();
-			foreach ( array( 'rp-wcdpd', 'wpml', 'rating', 'product_limit' ) as $which ) {
-				$hidden_notices[ $which ] = (int) get_option( sprintf( 'woo_feed_%s_notice_hidden', $which ), 0 );
-			}
-
-            $this->is_add_extra = apply_filters( 'woo_feed_woocommerce_add_extra', true );
-
-            if( $this->is_add_extra ) {
-
-                $tracker_extra = array(
-                    'products' => $this->insights->get_post_count('product'),
-                    'variations' => $this->insights->get_post_count('product_variation'),
-                    'batch_limit' => get_option('woo_feed_per_batch'),
-                    'feed_configs' => wp_json_encode($result),
-                    'product_cat_num' => $catCount,
-                    'review_notice' => wp_json_encode(get_option('woo_feed_review_notice', array())),
-                    'hidden_notices' => $hidden_notices,
-                );
-                $this->insights->add_extra($tracker_extra);
-            }
 
 			$projectSlug = $this->client->getSlug();
 			add_filter( $projectSlug . '_what_tracked', array( $this, 'data_we_collect' ), 10, 1 );
@@ -296,6 +254,7 @@ if ( ! class_exists( 'WooFeedWebAppickAPI' ) ) {
 
 		public function premium_features() {
 			add_submenu_page( 'webappick-manage-feeds', esc_html__( 'Premium', 'woo-feed' ), '<span class="woo-feed-premium">' . esc_html__( 'Premium', 'woo-feed' ) . '</span>', 'manage_woocommerce', 'webappick-feed-pro-vs-free', array( $this, 'woo_feed_pro_vs_free' ) );
+            add_submenu_page( 'webappick-manage-feeds', esc_html__( 'Get 60% OFF Now!', 'woo-feed' ), '<span class="woo-feed-halloween">' . esc_html__( 'Get 60% OFF Now!', 'woo-feed' ) . '</span>', 'manage_woocommerce', 'webappick-feed-halloween-deal', '__return_null'  );
             add_submenu_page( 'webappick-manage-feeds', esc_html__( 'Our Plugins', 'woo-feed' ), '<span class="woo-feed-our-plugin">' . esc_html__( 'Our Plugins', 'woo-feed' ) . '</span>', 'manage_woocommerce', 'webappick-feed-our-plugins', array( $this, 'woo_feed_our_plugins' ) );
 			add_action( 'admin_head', array( $this, 'remove_admin_notices' ), 9999 );
 		}

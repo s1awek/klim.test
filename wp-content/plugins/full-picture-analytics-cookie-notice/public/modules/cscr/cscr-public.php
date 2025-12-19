@@ -108,7 +108,7 @@ class Fupi_CSCR_public {
             }
             // GET title
             $cscr_title = esc_attr( $script_data['title'] );
-            // CREATE an optional advanced trigger wrapper
+            // CREATE an optional custom trigger wrapper
             $atrig_start = '';
             $atrig_end = '';
             //     if ( $atrig_id ) {

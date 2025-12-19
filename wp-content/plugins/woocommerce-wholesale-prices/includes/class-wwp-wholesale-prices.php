@@ -1633,9 +1633,8 @@ CSS;
         if ( ! empty( $user_wholesale_role ) && isset( $_GET['min_price'] ) && isset( $_GET['max_price'] ) ) { //phpcs:ignore
             $min_price = isset( $_GET['min_price'] ) ? floatval( wp_unslash( $_GET['min_price'] ) ) : 1; //phpcs:ignore
             $max_price = isset( $_GET['max_price'] ) ? floatval( wp_unslash( $_GET['max_price'] ) ) : 0; //phpcs:ignore
-            $meta_key              = $user_wholesale_role[0] . '_wholesale_price';
-            $meta_key_variations   = $user_wholesale_role[0] . '_variations_with_wholesale_price';
-            $meta_key_variations_2 = '_price';
+            $meta_key            = $user_wholesale_role[0] . '_wholesale_price';
+            $meta_key_variations = $user_wholesale_role[0] . '_variations_with_wholesale_price';
 
             $meta_query          = array(
                 'relation' => 'OR',
@@ -1647,12 +1646,6 @@ CSS;
                 ),
                 array(
                     'key'     => $meta_key_variations,
-                    'value'   => array( $min_price, $max_price ),
-                    'compare' => 'BETWEEN',
-                    'type'    => 'NUMERIC',
-                ),
-                array(
-                    'key'     => $meta_key_variations_2,
                     'value'   => array( $min_price, $max_price ),
                     'compare' => 'BETWEEN',
                     'type'    => 'NUMERIC',
@@ -1677,9 +1670,8 @@ CSS;
         if ( ! empty( $user_wholesale_role ) && isset( $_GET['min_price'] ) && isset( $_GET['max_price'] ) ) { //phpcs:ignore
             $min_price = isset( $_GET['min_price'] ) ? floatval( wp_unslash( $_GET['min_price'] ) ) : 1; //phpcs:ignore
             $max_price = isset( $_GET['max_price'] ) ? floatval( wp_unslash( $_GET['max_price'] ) ) : 0; //phpcs:ignore
-            $meta_key              = $user_wholesale_role[0] . '_wholesale_price';
-            $meta_key_variations   = $user_wholesale_role[0] . '_variations_with_wholesale_price';
-            $meta_key_variations_2 = '_price';
+            $meta_key            = $user_wholesale_role[0] . '_wholesale_price';
+            $meta_key_variations = $user_wholesale_role[0] . '_variations_with_wholesale_price';
 
             $meta_query = array(
                 'relation' => 'OR',
@@ -1691,12 +1683,6 @@ CSS;
                 ),
                 array(
                     'key'     => $meta_key_variations,
-                    'value'   => array( $min_price, $max_price ),
-                    'compare' => 'BETWEEN',
-                    'type'    => 'NUMERIC',
-                ),
-                array(
-                    'key'     => $meta_key_variations_2,
                     'value'   => array( $min_price, $max_price ),
                     'compare' => 'BETWEEN',
                     'type'    => 'NUMERIC',

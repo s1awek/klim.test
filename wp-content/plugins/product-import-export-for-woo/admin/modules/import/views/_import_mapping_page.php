@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
 }
 ?>
 <?php
-	$click_to_use=__('Click to use');
+	$click_to_use=__('Click to use', 'product-import-export-for-woo');
 ?>
 <script type="text/javascript">
 	var wt_iew_file_head_default=<?php echo json_encode($file_heading_default_fields);?>;
@@ -12,47 +12,47 @@ if (!defined('ABSPATH')) {
 </script>
 
 <!-- Mapping field editor popup -->
-<div class="wt_iew_mapping_field_editor_container" data-title="<?php _e('Set value for column:');?> <span class='wt_iew_target_column'></span>" data-module="import">
+<div class="wt_iew_mapping_field_editor_container" data-title="<?php esc_attr_e('Set value for column:', 'product-import-export-for-woo');?> <span class='wt_iew_target_column'></span>" data-module="import">
 	<div class="wt_iew_mapping_field_editor">
 		<div class="wt_iew_mapping_field_editor_top">			
 			<p class="wt_iew_mapping_field_editor_info">
-				<?php esc_html_e('If you want to compute or combine any column values during import you can do it below.'); ?>
-				(<a target="_blank" href="https://www.webtoffee.com/evaluation-field-in-product-export-import-plugin-for-woocommerce/"><?php esc_html_e('Learn More'); ?>)</a>
-				<br/><span style="font-size: 95%;color:#6e6d6d;"><b><?php esc_html_e(' Supported operators:'); ?> +, *, /, -, ()</b></span><br/>
-				<br/><i><span style="font-size: 95%;color:#6e6d6d;"><?php esc_html_e(' Example:'); ?> [{stock}+5] or [{regular_price}+(9/100)*{regular_price}]</span></i>
+				<?php esc_html_e('If you want to compute or combine any column values during import you can do it below.', 'product-import-export-for-woo'); ?>
+				(<a target="_blank" href="https://www.webtoffee.com/evaluation-field-in-product-export-import-plugin-for-woocommerce/"><?php esc_html_e('Learn More', 'product-import-export-for-woo'); ?>)</a>
+				<br/><span style="font-size: 95%;color:#6e6d6d;"><b><?php esc_html_e(' Supported operators:', 'product-import-export-for-woo'); ?> +, *, /, -, ()</b></span><br/>
+				<br/><i><span style="font-size: 95%;color:#6e6d6d;"><?php esc_html_e(' Example:', 'product-import-export-for-woo'); ?> [{stock}+5] or [{regular_price}+(9/100)*{regular_price}]</span></i>
 			</p>
 			<p class="wt_iew_mapping_field_editor_er"></p>
 			<div class="wt_iew_mapping_field_editor_box">
 				<textarea class="wt_iew_mapping_field_editor_expression"></textarea>
 			</div>
 		</div>
-		<label class="wt_iew_mapping_popup_label"><?php _e('Input file columns');?></label>	
+		<label class="wt_iew_mapping_popup_label"><?php esc_html_e('Input file columns', 'product-import-export-for-woo');?></label>	
 		<div class="wt_iew_mapping_field_editor_box">
-			<input type="text" class="wt_iew_mapping_field_editor_column_search" placeholder="<?php _e('Type here to search');?>"><span style="float: right;position: absolute;top: 15px; left: 25px;" class="dashicons dashicons-search wt-input-column-search"></span>
+			<input type="text" class="wt_iew_mapping_field_editor_column_search" placeholder="<?php esc_attr_e('Type here to search', 'product-import-export-for-woo');?>"><span style="float: right;position: absolute;top: 15px; left: 25px;" class="dashicons dashicons-search wt-input-column-search"></span>
 			<div class="wt_iew_mapping_field_selector_box">
 				<ul class="wt_iew_mapping_field_selector">
 					<?php
 					foreach ($file_heading_default_fields as $key => $value) 
 					{
 						?>
-					<li title="<?php echo $click_to_use;?>" data-val="<?php echo $key;?>"><?php echo $key;?><br/><span style="color:#cdb2b2;"><?php echo Wt_Iew_IE_Basic_Helper::wt_truncate($value, 80);?></span></li>
+					<li title="<?php echo esc_attr($click_to_use);?>" data-val="<?php echo esc_attr($key);?>"><?php echo esc_html($key);?><br/><span style="color:#cdb2b2;"><?php echo wp_kses_post(Wt_Iew_IE_Basic_Helper::wt_truncate($value, 80));?></span></li>
 						<?php
 					}
 					foreach ($file_heading_meta_fields as $key => $value) 
 					{
 						?>
-					<li title="<?php echo $click_to_use;?>" data-val="<?php echo $key;?>"><?php echo $key;?><br/><span style="color:#cdb2b2;"><?php echo Wt_Iew_IE_Basic_Helper::wt_truncate($value, 80);?></span></li>
+					<li title="<?php echo esc_attr($click_to_use);?>" data-val="<?php echo esc_attr($key);?>"><?php echo esc_html($key);?><br/><span style="color:#cdb2b2;"><?php echo wp_kses_post(Wt_Iew_IE_Basic_Helper::wt_truncate($value, 80));?></span></li>
 						<?php
 					}
 					?>
 				</ul>
-				<div class="wt_iew_mapping_field_selector_no_column"><?php _e('No column found.');?></div>	
+				<div class="wt_iew_mapping_field_selector_no_column"><?php esc_html_e('No column found.', 'product-import-export-for-woo');?></div>	
 			</div>
 		</div>
 		<div class="wt_iew_mapping_field_editor_bottom">
-			<label><?php _e('Preview');?></label>
+			<label><?php esc_html_e('Preview', 'product-import-export-for-woo');?></label>
 			<p class="wt_iew_mapping_field_editor_info">
-				<?php _e('Sample value based on the first record from input file.'); ?>
+				<?php esc_html_e('Sample value based on the first record from input file.', 'product-import-export-for-woo'); ?>
 			</p>
 			<div class="wt_iew_mapping_field_editor_box" style="max-height:80px; overflow:auto; margin-bottom:0px; border:dashed 1px #ccc; padding:5px;">
 				<div class="wt_iew_mapping_field_editor_sample"></div>
@@ -63,20 +63,20 @@ if (!defined('ABSPATH')) {
 <!-- Mapping field editor popup -->
 
 <div class="wt_iew_import_main">	
-	<p><?php echo $this->step_description;?></p>
+	<p><?php echo wp_kses_post($this->step_description);?></p>
 
 	<p class="wt_iew_info_box wt_iew_info">
-		-- <?php _e('The first row from your input file is considered as a header for mapping columns and hence will NOT BE imported.');?>
+		-- <?php esc_html_e('The first row from your input file is considered as a header for mapping columns and hence will NOT BE imported.', 'product-import-export-for-woo');?>
 		<br />
-		-- <?php _e('Columns are mapped automatically only if a matching header name is found in the input file.');?>
+		-- <?php esc_html_e('Columns are mapped automatically only if a matching header name is found in the input file.', 'product-import-export-for-woo');?>
 		<br/>
-		-- <?php _e('In the case of empty fields, you can simply click on the respective field and map the corresponding column from your input file.');?>
+		-- <?php esc_html_e('In the case of empty fields, you can simply click on the respective field and map the corresponding column from your input file.', 'product-import-export-for-woo');?>
 	</p>
 
 	<div class="meta_mapping_box">
 		<div class="meta_mapping_box_hd_nil wt_iew_noselect">
-			<?php _e('Default fields');?>
-			<span class="meta_mapping_box_selected_count_box"><span class="meta_mapping_box_selected_count_box_num">0</span> <?php _e(' columns(s) selected'); ?></span>
+			<?php esc_html_e('Default fields', 'product-import-export-for-woo');?>
+			<span class="meta_mapping_box_selected_count_box"><span class="meta_mapping_box_selected_count_box_num">0</span> <?php esc_html_e(' columns(s) selected', 'product-import-export-for-woo'); ?></span>
 		</div>
 		<div style="clear:both;"></div>
 		<div class="meta_mapping_box_con" data-sortable="0" data-loaded="1" data-field-validated="0" data-key="" style="display:inline-block;">
@@ -86,14 +86,14 @@ if (!defined('ABSPATH')) {
 			    		<th>
 			    			<input type="checkbox" name="" class="wt_iew_mapping_checkbox_main">
 			    		</th>
-			    		<th width="35%"><span class="wt_iew_step_head_post_type_name"></span> <?php esc_html_e( 'fields' );?></th>
-			    		<th><?php esc_html_e( 'File columns' );?></th>
-						<th><?php esc_html_e( 'Transform' );?></th>
+			    		<th width="35%"><span class="wt_iew_step_head_post_type_name"></span> <?php esc_html_e( 'fields', 'product-import-export-for-woo' );?></th>
+			    		<th><?php esc_html_e( 'File columns', 'product-import-export-for-woo' );?></th>
+						<th><?php esc_html_e( 'Transform', 'product-import-export-for-woo' );?></th>
 			    	</tr>
 				</thead>
 				<tbody>
 				<?php
-				$draggable_tooltip=__("Drag to rearrange the columns");
+				$draggable_tooltip=__("Drag to rearrange the columns", 'product-import-export-for-woo');
 				$tr_count=0;
 				foreach($form_data_mapping_fields as $key=>$val_arr) /* looping the template form data */
 				{
@@ -255,7 +255,7 @@ if (!defined('ABSPATH')) {
 					?>
 					<tr>
 						<td colspan="3" style="text-align:center;">
-							<?php _e('No fields found.'); ?>
+							<?php esc_html_e('No fields found.', 'product-import-export-for-woo'); ?>
 						</td>
 					</tr>
 					<?php
@@ -288,11 +288,11 @@ if (!defined('ABSPATH')) {
 			<div class="meta_mapping_box">
 				<div class="meta_mapping_box_hd wt_iew_noselect">
 					<span class="dashicons dashicons-arrow-right"></span>
-					<?php echo $mapping_enabled_field[0];?>
-					<span class="meta_mapping_box_selected_count_box"><span class="meta_mapping_box_selected_count_box_num">0</span> <?php _e(' columns(s) selected'); ?></span>
+					<?php echo esc_html($mapping_enabled_field[0]);?>
+					<span class="meta_mapping_box_selected_count_box"><span class="meta_mapping_box_selected_count_box_num">0</span> <?php esc_html_e(' columns(s) selected', 'product-import-export-for-woo'); ?></span>
 				</div>
 				<div style="clear:both;"></div>
-				<div class="meta_mapping_box_con" data-sortable="0" data-loaded="0" data-field-validated="0" data-key="<?php echo $mapping_enabled_field_key;?>"></div>
+				<div class="meta_mapping_box_con" data-sortable="0" data-loaded="0" data-field-validated="0" data-key="<?php echo esc_attr($mapping_enabled_field_key);?>"></div>
 			</div>
 			<div style="clear:both;"></div>
 			<?php

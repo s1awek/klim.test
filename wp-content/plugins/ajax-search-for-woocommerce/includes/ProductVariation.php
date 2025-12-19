@@ -58,6 +58,7 @@ class ProductVariation extends Product {
 
     /**
      * Check, if class is initialized correctly
+     *
      * @return bool
      */
     public function isValid() {
@@ -70,10 +71,11 @@ class ProductVariation extends Product {
 
     /**
      * Prepare attributes for display
+     *
      * @return array
      */
     public function getVariationAttributes() {
-        $formattedAttributes = array();
+        $formattedAttributes = [];
         $attributes = $this->wcProduct->get_variation_attributes();
         if ( !empty( $attributes ) && is_array( $attributes ) ) {
             foreach ( $attributes as $key => $termSlug ) {
@@ -82,10 +84,10 @@ class ProductVariation extends Product {
                     $term = get_term_by( 'slug', $termSlug, $taxonomy );
                     if ( !empty( $term ) && is_object( $term ) && is_a( $term, 'WP_Term' ) ) {
                         $attributeLabel = wc_attribute_label( $taxonomy );
-                        $formattedAttributes[] = array(
+                        $formattedAttributes[] = [
                             'label' => $attributeLabel,
                             'value' => $term->name,
-                        );
+                        ];
                     }
                 }
             }

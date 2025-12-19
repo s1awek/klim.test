@@ -49,6 +49,7 @@ $wp_customize->add_control(
 						'#customize-control-sydney_section_hb_wrapper__header_builder_container_title',
 						'#customize-control-sydney_section_hb_wrapper__header_builder_upsell',
 						'#customize-control-sydney_section_hb_wrapper__header_builder_sticky_group',
+						'#customize-control-enable_sticky_mobile_header_hb',
 						'#customize-control-mobile_breakpoint'
 					),
 					array_map( function( $name ){ return "#customize-control-$name"; }, $opts_to_move[ 'general' ] )
@@ -142,6 +143,26 @@ $wp_customize->add_control(
 	) 
 );
 
+$wp_customize->add_setting(
+	'enable_sticky_mobile_header_hb',
+	array(
+		'default'           => 0,
+		'sanitize_callback' => 'sydney_sanitize_checkbox',
+		'transport'         => 'postMessage',
+	)
+);
+$wp_customize->add_control(
+	new Sydney_Toggle_Control(
+		$wp_customize,
+		'enable_sticky_mobile_header_hb',
+		array(
+			'label'             => esc_html__( 'Enable sticky header on mobile devices', 'sydney' ),
+			'section'           => 'sydney_section_hb_wrapper',
+			'active_callback'   => 'sydney_callback_sticky_header',
+			'priority'        => 26
+		)
+	)
+);
 
 // Header Transparent - Apply transparent header to
 $wp_customize->add_setting( 
@@ -192,6 +213,14 @@ $wp_customize->add_control( new Sydney_Responsive_Slider( $wp_customize, 'mobile
 
 // Background Color
 $wp_customize->add_setting(
+	'global_sydney_section_hb_wrapper__header_builder_background_color',
+	array(
+		'default'           => '',
+		'sanitize_callback' => 'wp_kses_post',
+		'transport'         => 'postMessage'
+	)
+);
+$wp_customize->add_setting(
 	'sydney_section_hb_wrapper__header_builder_background_color',
 	array(
 		'default'           => '#fff',
@@ -206,6 +235,10 @@ $wp_customize->add_control(
 		array(
 			'label'         	=> esc_html__( 'Background color', 'sydney' ),
 			'section'       	=> 'sydney_section_hb_wrapper',
+			'settings'       => array(
+				'global'  => 'global_sydney_section_hb_wrapper__header_builder_background_color',
+				'setting' => 'sydney_section_hb_wrapper__header_builder_background_color',
+			),
 			'priority'			=> 35
 		)
 	)

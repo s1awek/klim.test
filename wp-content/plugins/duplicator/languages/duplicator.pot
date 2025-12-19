@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-09-12T15:30:32+00:00\n"
+"POT-Creation-Date: 2025-10-13T20:06:57+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: duplicator\n"
@@ -42,8 +42,8 @@ msgid "RESPONSE SUCCESS"
 msgstr ""
 
 #: assets/js/duplicator/dup.util.php:97
-#: template/admin_pages/settings/general/general.php:201
-#: template/admin_pages/settings/general/general.php:246
+#: template/admin_pages/settings/general/general.php:199
+#: template/admin_pages/settings/general/general.php:244
 msgid "RESPONSE ERROR!"
 msgstr ""
 
@@ -603,7 +603,7 @@ msgstr ""
 msgid "Please tell us the reason so we can improve it."
 msgstr ""
 
-#: src/Ajax/ServicesEducation.php:418
+#: src/Ajax/ServicesEducation.php:417
 msgid "Upgrade installation failed: %s. Please try again or install manually."
 msgstr ""
 
@@ -1013,7 +1013,7 @@ msgid "Are you enjoying %s?"
 msgstr ""
 
 #: src/Core/Notifications/Review.php:98
-#: template/admin_pages/settings/general/general.php:177
+#: template/admin_pages/settings/general/general.php:175
 msgid "Yes"
 msgstr ""
 
@@ -1876,32 +1876,32 @@ msgstr ""
 msgid "Save General Settings"
 msgstr ""
 
-#: template/admin_pages/settings/general/general.php:172
+#: template/admin_pages/settings/general/general.php:170
 msgid "Reset Backups ?"
 msgstr ""
 
-#: template/admin_pages/settings/general/general.php:173
+#: template/admin_pages/settings/general/general.php:171
 msgid "This will clear and reset all of the current temporary Backups.  Would you like to continue?"
 msgstr ""
 
-#: template/admin_pages/settings/general/general.php:174
+#: template/admin_pages/settings/general/general.php:172
 msgid "Resetting settings, Please Wait..."
 msgstr ""
 
-#: template/admin_pages/settings/general/general.php:178
+#: template/admin_pages/settings/general/general.php:176
 msgid "No"
 msgstr ""
 
-#: template/admin_pages/settings/general/general.php:184
+#: template/admin_pages/settings/general/general.php:182
 msgid "AJAX Call Error!"
 msgstr ""
 
-#: template/admin_pages/settings/general/general.php:186
+#: template/admin_pages/settings/general/general.php:184
 msgctxt "1 and 2 are opening and closing <a> tags"
 msgid "AJAX error encountered when resetting Backups. Please see %1$sthis FAQ entry%2$s for possible resolutions."
 msgstr ""
 
-#: template/admin_pages/settings/general/general.php:236
+#: template/admin_pages/settings/general/general.php:234
 msgid "Backups successfully reset"
 msgstr ""
 

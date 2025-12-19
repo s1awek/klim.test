@@ -63,18 +63,18 @@ if (!defined('ABSPATH')) {
             ?>
     </div>
     
-	<p><?php echo $step_info['description']; ?></p>
+	<p><?php echo esc_html($step_info['description']); ?></p>
 	
     <div class="wt_iew_warn wt_iew_method_export_wrn" style="display:none;">
-		<?php _e('Please select an export method');?>
+		<?php esc_html_e('Please select an export method', 'product-import-export-for-woo');?>
 	</div>
 
     <div class="wt_iew_warn wt_iew_export_template_wrn" style="display:none;">
-        <?php _e('Please select an export template.');?>
+        <?php esc_html_e('Please select an export template.', 'product-import-export-for-woo');?>
     </div>
 	<table class="form-table wt-iew-form-table">
 		<tr>
-			<th><label><?php _e('Select an export method');?></label></th>
+			<th><label><?php esc_html_e('Select an export method', 'product-import-export-for-woo');?></label></th>
 			<td colspan="2" style="width:75%;">
                 <div class="wt_iew_radio_block">
                     <?php
@@ -85,8 +85,8 @@ if (!defined('ABSPATH')) {
                     {
                         ?>
                         <p>
-                            <input type="radio" value="<?php echo $key;?>" id="wt_iew_export_<?php echo $key;?>_export" name="wt_iew_export_method_export" <?php echo ($this->export_method==$key ? 'checked="checked"' : '');?>><b><label for="wt_iew_export_<?php echo $key;?>_export"><?php echo $value['title']; ?></label></b> <br />
-                            <span><label for="wt_iew_export_<?php echo $key;?>_export"><?php echo $value['description']; ?></label></span>
+                            <input type="radio" value="<?php echo esc_attr($key);?>" id="wt_iew_export_<?php echo esc_attr($key);?>_export" name="wt_iew_export_method_export" <?php echo ($this->export_method==$key ? 'checked="checked"' : '');?>><b><label for="wt_iew_export_<?php echo esc_attr($key);?>_export"><?php echo esc_html($value['title']); ?></label></b> <br />
+                            <span><label for="wt_iew_export_<?php echo esc_attr($key);?>_export"><?php echo esc_html($value['description']); ?></label></span>
                         </p>
                         <?php
                     }
@@ -97,7 +97,7 @@ if (!defined('ABSPATH')) {
 		</tr>
 		<?php if(!empty($this->mapping_enabled_fields)):?>
         <tr class="wt-iew-export-method-options wt-iew-export-method-options-quick">
-            <th style="width:150px; text-align:left; vertical-align:top;"><label><?php esc_html_e('Include additional fields');?></label></th>
+            <th style="width:150px; text-align:left; vertical-align:top;"><label><?php esc_html_e('Include additional fields', 'product-import-export-for-woo');?></label></th>
             <td colspan="2" style="width:75%;">
                 <?php
                 foreach($this->mapping_enabled_fields as $mapping_enabled_field_key=>$mapping_enabled_field)
@@ -120,28 +120,28 @@ if (!defined('ABSPATH')) {
                     }
                     ?>
                     <div class="wt_iew_checkbox" style="padding-left:0px;">
-                        <input type="checkbox" id="wt_iew_<?php echo $mapping_enabled_field_key;?>" name="wt_iew_include_these_fields[]" value="<?php echo $mapping_enabled_field_key;?>" <?php echo ($mapping_enabled_field[1]==1 ? 'checked="checked"' : '');?> /> 
-                        <label for="wt_iew_<?php echo $mapping_enabled_field_key;?>"><?php echo $mapping_enabled_field[0];?></label>
+                        <input type="checkbox" id="wt_iew_<?php echo esc_attr($mapping_enabled_field_key);?>" name="wt_iew_include_these_fields[]" value="<?php echo esc_attr($mapping_enabled_field_key);?>" <?php echo ($mapping_enabled_field[1]==1 ? 'checked="checked"' : '');?> /> 
+                        <label for="wt_iew_<?php echo esc_attr($mapping_enabled_field_key);?>"><?php echo esc_html($mapping_enabled_field[0]);?></label>
                     </div>  
                     <?php
                 }
                 ?>
-                <span class="wt-iew_form_help"><?php esc_html_e('By default, only basic fields are exported to the CSV file. Enable Attributes to include all product attributes, or enable Taxonomies to export all the fields from the taxonomies group.');?></span>
+                <span class="wt-iew_form_help"><?php esc_html_e('By default, only basic fields are exported to the CSV file. Enable Attributes to include all product attributes, or enable Taxonomies to export all the fields from the taxonomies group.', 'product-import-export-for-woo');?></span>
             </td>
         </tr>
 		<?php endif; ?>
 
 		<tr class="wt-iew-export-method-options wt-iew-export-method-options-template" style="display:none;">
-    		<th><label><?php _e('Export template');?></label></th>
+    		<th><label><?php esc_html_e('Export template', 'product-import-export-for-woo');?></label></th>
     		<td>
     			<select class="wt-iew-export-template-sele">
-    				<option value="0">-- <?php _e('Select a template'); ?> --</option>
+    				<option value="0">-- <?php esc_html_e('Select a template', 'product-import-export-for-woo'); ?> --</option>
     				<?php
     				foreach($this->mapping_templates as $mapping_template)
     				{
     				?>
-    					<option value="<?php echo $mapping_template['id'];?>" <?php echo ($form_data_export_template==$mapping_template['id'] ? ' selected="selected"' : ''); ?>>
-    						<?php echo $mapping_template['name'];?>
+    					<option value="<?php echo esc_attr($mapping_template['id']);?>" <?php echo ($form_data_export_template==$mapping_template['id'] ? ' selected="selected"' : ''); ?>>
+    						<?php echo esc_html($mapping_template['name']);?>
     					</option>
     				<?php
     				}

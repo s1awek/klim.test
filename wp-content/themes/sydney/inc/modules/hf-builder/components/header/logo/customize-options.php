@@ -203,6 +203,14 @@ $wp_customize->add_control(
 
 // Sticky Header - Site TItle Color
 $wp_customize->add_setting(
+	'global_site_title_sticky_color',
+	array(
+		'default'           => '',
+		'sanitize_callback' => 'wp_kses_post',
+		'transport'         => 'postMessage'
+	)
+);
+$wp_customize->add_setting(
 	'site_title_sticky_color',
 	array(
 		'default'           => '#212121',
@@ -217,13 +225,25 @@ $wp_customize->add_control(
 		array(
 			'label'         	=> esc_html__( 'Site Title Color', 'sydney' ),
 			'section'       	=> 'sydney_section_hb_component__logo',
-            'active_callback'   => 'sydney_callback_sticky_header',
+			'settings'       => array(
+				'global'  => 'global_site_title_sticky_color',
+				'setting' => 'site_title_sticky_color',
+			),
+			'active_callback'   => 'sydney_callback_sticky_header',
 			'priority'			=> 52
 		)
 	)
 );
 
 // Sticky Header - Site Description Color
+$wp_customize->add_setting(
+	'global_site_description_sticky_color',
+	array(
+		'default'           => '',
+		'sanitize_callback' => 'wp_kses_post',
+		'transport'         => 'postMessage'
+	)
+);
 $wp_customize->add_setting(
 	'site_description_sticky_color',
 	array(
@@ -239,7 +259,11 @@ $wp_customize->add_control(
 		array(
 			'label'         	=> esc_html__( 'Site Description Color', 'sydney' ),
 			'section'       	=> 'sydney_section_hb_component__logo',
-            'active_callback'   => 'sydney_callback_sticky_header',
+			'settings'       => array(
+				'global'  => 'global_site_description_sticky_color',
+				'setting' => 'site_description_sticky_color',
+			),
+			'active_callback'   => 'sydney_callback_sticky_header',
 			'priority'			=> 53
 		)
 	)

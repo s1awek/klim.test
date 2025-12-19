@@ -123,6 +123,17 @@ switch( $section_id ){
 
 	break;
 
+	// GEO
+
+	case 'fupi_main_geo':
+		$ret_text = '<p>' . esc_html__( 'Use geolocation to load tracking tools in specific regions and adjust how the Consent Banner works across different locations.', 'full-picture-analytics-cookie-notice') . '</p>
+		<ol> 
+			<li><a href="https://wpfullpicture.com/support/documentation/geolocation/">' . esc_html__('How to choose the right geolocation service', 'full-picture-analytics-cookie-notice') . '</a></li>
+			<li><a href="https://wpfullpicture.com/support/documentation/geolocation-information-for-developers/">' . esc_html__('For developers', 'full-picture-analytics-cookie-notice') . '</a></li>
+			<li><a href="https://wpfullpicture.com/support/documentation/how-to-test-geolocation/">' . esc_html__('How to test geolocation', 'full-picture-analytics-cookie-notice') . '</a></li>
+		</ol>';
+	break;
+
 	// FUPI SHORTCODE
 
 	case 'fupi_main_shortcode':
@@ -131,8 +142,8 @@ switch( $section_id ){
 			'classes' => 'fupi_descr_standard_width',
 			'content' => '<div class="fupi_cols" style="text-align: left; margin-top: 20px;">
 				<div class="fupi_col_50">
-					<p>' . sprintf( esc_html__('Use the shortcode %1$s[fp_info]%2$s in your privacy policy. It will display a list of tracking tools which you installed with WP Full Picture\'s modules (except GTM) or control with the Consent Banner.', 'full-picture-analytics-cookie-notice' ), '<code>', '</code>' ) . '</p>
-					<p>' . esc_html__('The list automatically updates when you make changes in your tools. Use the form below to provide information about tools that are missing from the list (e.g. installed with GTM).', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<p>' . sprintf( esc_html__('%1$s[fp_info]%2$s shortcode displays tools which use visitor\'s personal information for collecting statistics, marketing or personalisation. The list automatically updates when you enable/disable tools on this site that do it.', 'full-picture-analytics-cookie-notice' ), '<code>', '</code>' ) . '</p>
+					<p>' . esc_html__('The list only contains tools that you installed with or control with WP Full Picture. The only exception are tools installed with the GTM module. Use the form below to provide information about them and other tools that may be missing from the list.', 'full-picture-analytics-cookie-notice' ) . '</p>
 				</div>
 				<div class="fupi_col_50" style="border: 2px solid #ccc; padding: 0 20px 20px; box-sizing: border-box; margin-top: 1em;">
 					<p><strong style="text-transform: uppercase; font-size: 13px; letter-spacing: 1px;">' . esc_html__('Preview', 'full-picture-analytics-cookie-notice' ) . '</strong></p>

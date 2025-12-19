@@ -23,12 +23,14 @@ class Wt_Import_Export_For_Woo_Basic_Logreader
 	{
 		$this->file_path=$file_path;
 		$this->mode=$mode;
+		//phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		$this->file_pointer=@fopen($file_path, 'r');
 	}
 	public function close_file_pointer()
 	{
 		if($this->file_pointer!=null)
 		{
+			//phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 			fclose($this->file_pointer);
 		}
 	}
@@ -44,6 +46,7 @@ class Wt_Import_Export_For_Woo_Basic_Logreader
 		{
 			return $out;
 		}
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
 		$data=fread($this->file_pointer, filesize($file_path));
 
 		$this->close_file_pointer();

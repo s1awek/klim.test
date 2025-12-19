@@ -92,7 +92,28 @@ if ( isset( $this->tools['cook'] ) ) {
     );
     $scr_fields = array_merge( $scr_fields, $cook_scr_fields );
     $footer_scr_fields = array_merge( $footer_scr_fields, $cook_scr_fields );
+} else {
+    $cook_scr_fields = array(array(
+        'label'             => esc_html__( 'Enable the Consent Banner module to load this script according to privacy regulations', 'full-picture-analytics-cookie-notice' ),
+        'type'              => 'label',
+        'field_id'          => 'label_cook_text',
+        'class'             => 'fupi_col_100',
+        'start_sub_section' => true,
+        'end_sub_section'   => true,
+    ));
+    $scr_fields = array_merge( $scr_fields, $cook_scr_fields );
+    $footer_scr_fields = array_merge( $footer_scr_fields, $cook_scr_fields );
 }
+$geo_fields = array(array(
+    'label'             => esc_html__( 'Enable Geolocation in the General Settings to load this script in specific countries', 'full-picture-analytics-cookie-notice' ),
+    'type'              => 'label',
+    'field_id'          => 'label_geo_text',
+    'class'             => 'fupi_col_100 fupi_adv_group',
+    'start_sub_section' => true,
+    'end_sub_section'   => true,
+));
+$scr_fields = array_merge( $scr_fields, $geo_fields );
+$footer_scr_fields = array_merge( $footer_scr_fields, $geo_fields );
 // $atrig_fields = array(
 // 	array(
 // 		'type'	 			=> 'r3',
