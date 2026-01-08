@@ -12,8 +12,8 @@
  *
  * @see              https://woocommerce.com/document/template-structure/
  * @package          WooCommerce\Templates
- * @version          9.6.0
- * @flatsome-version 3.19.9
+ * @version          10.3.0
+ * @flatsome-version 3.20.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -39,10 +39,23 @@ $repeater['slider_style'] = 'reveal';
 $repeater['row_spacing']  = 'small';
 
 
-if ( $related_products ) : ?>
+if ( $related_products ) :
+	/**
+	 * Ensure all images of related products are lazy loaded by increasing the
+	 * current media count to WordPress's lazy loading threshold if needed.
+	 * Because wp_increase_content_media_count() is a private function, we
+	 * check for its existence before use.
+	 */
+	if ( function_exists( 'wp_increase_content_media_count' ) ) {
+		$content_media_count = wp_increase_content_media_count( 0 );
+		if ( $content_media_count < wp_omit_loading_attr_threshold() ) {
+			wp_increase_content_media_count( wp_omit_loading_attr_threshold() - $content_media_count );
+		}
+	}
+	?>
 
 	<div class="related related-products-wrapper product-section">
-		
+
 		<?php
 		$heading = apply_filters( 'woocommerce_product_related_products_heading', __( 'Related products', 'woocommerce' ) );
 
