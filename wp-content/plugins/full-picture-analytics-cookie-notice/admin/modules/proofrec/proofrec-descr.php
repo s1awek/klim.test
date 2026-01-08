@@ -12,7 +12,7 @@ switch( $section_id ){
             <p>' . esc_html__( 'Keeping records of consents is required by GDPR, protects against potential fines, enables audit trails, and helps demonstrate responsible data handling practices.', 'full-picture-analytics-cookie-notice' ) . '</p>';
 
             if ( ! empty ( $proofrec_opt['storage_location'] ) && $proofrec_opt['storage_location'] == 'email') {
-                $ret_text .= '<p><strong>View latest records of consent:</strong> <a href="' . admin_url( 'admin.php?page=full_picture_proofrec&tab=consents_list' ) . '" class="button button-primary" style="padding: 4px 18px;">View records</a></p>';
+                $ret_text .= '<p><strong>' . esc_html__( 'View latest records of consent:', 'full-picture-analytics-cookie-notice' ) . '</strong> <a href="' . admin_url( 'admin.php?page=full_picture_proofrec&tab=consents_list' ) . '" class="button button-primary" style="padding: 4px 18px;">' . esc_html__( 'View records', 'full-picture-analytics-cookie-notice' ) . '</a></p>';
             }
 
         $ret_text .= '</div>';

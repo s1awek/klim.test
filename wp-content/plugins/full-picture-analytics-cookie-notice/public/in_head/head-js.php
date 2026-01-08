@@ -11,10 +11,16 @@ fp.notice.vars = {};
 	var d = document,
 		w = window;
 
-	FP.getUrlParamByName = name => {
-		// var match = RegExp(\'[?&]\' + name + \'=([^&]*)\').exec(window.location.search);
+	FP.getUrlParamByName = (name, url = false ) => {
+		if ( ! url ) {
+            url = window.location.search;
+        } else {
+            url = url.split(\'?\')[1];
+			if ( ! url ) return null;
+        };
+		// var match = RegExp(\'[?&]\' + name + \'=([^&]*)\').exec(url);
 		// return match && decodeURIComponent(match[1].replace(/\\+/g, \' \'));
-		const queryString = window.location.search,
+		const queryString = url,
 			urlParams = new URLSearchParams(queryString);
 		return urlParams.get(name);
 	};

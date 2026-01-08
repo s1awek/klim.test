@@ -126,6 +126,14 @@ $sections = array(
 				'under field'		=> '<p>' . esc_html__('Recommended statuses - Cancelled and Refunded.', 'full-picture-analytics-cookie-notice') . '</p>',
 				'popup'		 		=> '<p>' . esc_html__('You can enter here multiple order statuses indicating that the order has been cancelled or refunded. The "refund" event will be sent only the first time an order gets a matching status.', 'full-picture-analytics-cookie-notice') . '</p>',
 			),
+			array(
+				'type' 				=> 'toggle',
+				'label' 			=> esc_html__('Debug Status-Based Order Tracking','full-picture-analytics-cookie-notice'),
+				'field_id' 			=> 'debug_server_calls',
+				'class'				=> 'fupi_adv',
+				'option_arr_id'		=> $option_arr_id,
+				'popup'				=> '<p>' . esc_html__('This will add a meta box in the order details/edit page. The box will contain the data that WP FP sent to tracking tools with SBOT. The box will not show any results for orders created when this option was not active.','full-picture-analytics-cookie-notice') . '</p>',
+			),
 		),
 	),
 

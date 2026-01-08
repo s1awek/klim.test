@@ -465,6 +465,7 @@ class Fupi_WOO_public {
         // Get data
         $shipping_cost = ( $this->incl_tax ? (float) $order->get_total_shipping() + (float) $order->get_shipping_tax() : (float) $order->get_total_shipping() );
         $order_data = [
+            'order_id'        => $order_id,
             'id'              => $order_number,
             'fees'            => $order->get_fees(),
             'coupons'         => $order->get_coupon_codes(),
@@ -523,8 +524,7 @@ class Fupi_WOO_public {
                 $cart = WC()->cart;
                 if ( !empty( $cart ) && !$cart->is_empty() ) {
                     $cart_data = json_encode( $this->get_cart_data( $cart ) );
-                    $checkout_nonce = wp_create_nonce( 'wpfp_checkout_nonce' );
-                    echo "<!--noptimize--><script data-no-optimize='1' id='fupi_woo_checkout_data' class='fupi_no_defer' nowprocket>\r\n\t\t\t\t\t\tif ( fpdata.woo.cart.value ) fpdata.woo.cart_old = { ...fpdata.woo.cart };\r\n\t\t\t\t\t\tfpdata.woo.cart = {$cart_data};\r\n\t\t\t\t\t\tfp.woo.checkout_start_nonce = '{$checkout_nonce}';\r\n\t\t\t\t\t\tfp.woo.checkout_data_ready = true;\r\n\t\t\t\t\t\tFP.sendEvt( 'fupi_woo_checkout_data_ready' );\r\n\t\t\t\t\t</script><!--/noptimize-->";
+                    echo "<!--noptimize--><script data-no-optimize='1' id='fupi_woo_checkout_data' class='fupi_no_defer' nowprocket>\r\n\t\t\t\t\t\tif ( fpdata.woo.cart.value ) fpdata.woo.cart_old = { ...fpdata.woo.cart };\r\n\t\t\t\t\t\tfpdata.woo.cart = {$cart_data};\r\n\t\t\t\t\t\tfp.woo.checkout_data_ready = true;\r\n\t\t\t\t\t\tFP.sendEvt( 'fupi_woo_checkout_data_ready' );\r\n\t\t\t\t\t</script><!--/noptimize-->";
                 }
             }
         }
@@ -536,7 +536,7 @@ class Fupi_WOO_public {
         // Action
         $cart = WC()->cart;
         if ( !empty( $cart ) && !$cart->is_empty() ) {
-            $cart_data = json_encode( $this->get_cart_data( $cart ) );
+            $cart_data = esc_attr( wp_json_encode( $this->get_cart_data( $cart ) ) );
             echo "<span class='fupi_cart_data' style='display: none;' id='fupi_woo_cart_element'>{$cart_data}</span>";
         }
     }
@@ -757,9 +757,13 @@ class Fupi_WOO_public {
             if ( empty( $product ) ) {
                 return;
             }
+            // check if the product is published and can be purchased
+            if ( !$product->is_purchasable() ) {
+                return;
+            }
             $prod_data = json_encode( $this->get_prod_data( $product, $id ) );
             $qty = ( isset( $_GET['quantity'] ) ? (int) $_GET['quantity'] : 1 );
-            echo "<!--noptimize--><script data-no-optimize='1' nowprocket class='fupi_add_to_cart_prod_data fupi_no_defer'>\r\n\t\t\t\t\r\n\t\t\t\tlet prod = {$prod_data},\r\n\t\t\t\t\tqty = {$qty},\r\n\t\t\t\t\tvalue = Math.round( prod.price * qty * 100 ) / 100;\r\n\r\n\t\t\t\tsetTimeout( \r\n\t\t\t\t\t()=>{\r\n\r\n\t\t\t\t\t\tFP.doActions( \r\n\t\t\t\t\t\t\t'woo_add_to_cart', \r\n\t\t\t\t\t\t\t{ \r\n\t\t\t\t\t\t\t\t'products' : [[prod, qty]],\r\n\t\t\t\t\t\t\t\t'value' : value\r\n\t\t\t\t\t\t \t}\r\n\t\t\t\t\t\t);\r\n\t\t\t\t\t}, 200 // a little bit of extra time in case any of the footer scripts did not load\r\n\t\t\t\t);\r\n\t\t\t\t</script><!--/noptimize-->";
+            echo "<!--noptimize--><script data-no-optimize='1' nowprocket class='fupi_add_to_cart_prod_data fupi_no_defer'>\r\n\r\n\t\t\t\tlet fupi_last_atc_cookie = FP.readCookie( 'fp_last_atc' );\r\n\r\n\t\t\t\tif ( ! fupi_last_atc_cookie || fupi_last_atc_cookie != {$id} ) {\r\n\r\n\t\t\t\t\tlet fupi_prod = {$prod_data},\r\n\t\t\t\t\t\tfupi_qty = {$qty},\r\n\t\t\t\t\t\tfupi_value = Math.round( fupi_prod.price * fupi_qty * 100 ) / 100;\r\n\t\r\n\t\t\t\t\tsetTimeout( \r\n\t\t\t\t\t\t()=>{\r\n\t\r\n\t\t\t\t\t\t\tFP.doActions( \r\n\t\t\t\t\t\t\t\t'woo_add_to_cart', \r\n\t\t\t\t\t\t\t\t{ \r\n\t\t\t\t\t\t\t\t\t'products' : [[fupi_prod, fupi_qty]],\r\n\t\t\t\t\t\t\t\t\t'value' : fupi_value\r\n\t\t\t\t\t\t\t\t }\r\n\t\t\t\t\t\t\t);\r\n\t\t\t\t\t\t}, 2000 // extra time to load footer scripts\r\n\t\t\t\t\t);\r\n\t\t\t\t} else {\r\n\t\t\t\t\tFP.deleteCookie( 'fp_last_atc' );\r\n\t\t\t\t}\r\n\t\t\t\t</script><!--/noptimize-->";
         }
     }
 

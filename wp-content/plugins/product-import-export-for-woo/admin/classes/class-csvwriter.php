@@ -10,6 +10,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 if(!class_exists('Wt_Import_Export_For_Woo_Basic_Csvwriter')){
+
+#[AllowDynamicProperties]
 class Wt_Import_Export_For_Woo_Basic_Csvwriter
 {
 	public $file_path='';
@@ -21,6 +23,7 @@ class Wt_Import_Export_For_Woo_Basic_Csvwriter
 	public function __construct($file_path, $offset, $csv_delimiter=",", $use_bom=true)
 	{
 		$this->csv_delimiter=$csv_delimiter;
+		$this->csv_delimiter = ( ( 'tab' === $this->csv_delimiter || 't' === $this->csv_delimiter ) ?  "\t" : $this->csv_delimiter);
 		$this->file_path=$file_path;
 		$this->use_bom = $use_bom;
 		$this->get_file_pointer($offset);
@@ -59,22 +62,30 @@ class Wt_Import_Export_For_Woo_Basic_Csvwriter
 	{
 		if($offset==0)
 		{
+			// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 			$this->file_pointer=fopen($this->file_path, 'w');
+			// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 			$this->use_bom = apply_filters('wt_ier_include_bom_in_csv', $this->use_bom);
 			if($this->use_bom){
 				$BOM = "\xEF\xBB\xBF"; // UTF-8 BOM
+				// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
 				fwrite($this->file_pointer, $BOM); // NEW LINE
+				// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
 			}
 		}else
 		{
+			// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 			$this->file_pointer=fopen($this->file_path, 'a+');
+			// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		}
 	}
 	private function close_file_pointer()
 	{
 		if($this->file_pointer!=null)
 		{
+			// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 			fclose($this->file_pointer);
+			// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		}
 	}
 	/**
@@ -155,14 +166,18 @@ class Wt_Import_Export_For_Woo_Basic_Csvwriter
 	}
 	private function array_to_csv($arr, $delm=',', $encloser='"')
 	{
+		// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		$fp=fopen('php://memory','rw');
+		// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		foreach($arr as $row)
 		{
 			$this->fput_csv($fp, $row, $delm, $encloser);
 		}
 		rewind($fp);
 		$csv=stream_get_contents($fp);
+		// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		fclose($fp);
+		// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		return $csv;
 	}
 }

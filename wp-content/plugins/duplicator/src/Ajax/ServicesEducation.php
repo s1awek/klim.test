@@ -339,11 +339,10 @@ class ServicesEducation extends AbstractAjaxService
                 DUP_Log::trace("Authentication token saved for Pro activation.");
             }
 
-            // Validate download origin
-            $host = wp_parse_url($download_url, PHP_URL_HOST);
-            if (!preg_match('/(^|\\.)duplicator\\.com$/i', $host)) {
-                DUP_Log::trace("ERROR: Invalid download origin: " . $host);
-                throw new Exception("Invalid download origin");
+            // Validate download URL format
+            if (!filter_var($download_url, FILTER_VALIDATE_URL)) {
+                DUP_Log::trace("ERROR: Invalid download URL format: " . $download_url);
+                throw new Exception("Invalid download URL format");
             }
 
             // Install Pro if not already installed

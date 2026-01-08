@@ -435,7 +435,12 @@ class AttachmentHandler{
 				if (!empty($imgs)){
 					foreach ($imgs as $img) {
 						if ( ! is_numeric($img) ){
-							$gallery_images[] = json_decode($img, true);
+							// WP All Export Pro encodes gallery image data as base64_encode(json_encode(...))
+							// so we need to base64_decode first, then json_decode
+							$decoded_img = json_decode(base64_decode($img), true);
+							if ($decoded_img !== null) {
+								$gallery_images[] = $decoded_img;
+							}
 						}
 					}
 				}
@@ -478,6 +483,16 @@ class AttachmentHandler{
 
 			foreach ( $images as $image ){
 
+				// Extract URL from gallery image data if needed
+				if ($source_type == 'gallery'){
+					$image_data = $image;
+					$image = $image_data['url'];
+					$image_title = $image_data['title'];
+					$image_caption = $image_data['caption'];
+					$image_alt = $image_data['alt'];
+					$image_description = $image_data['description'];
+				}
+
 				$base64_name = false;
 
 				$is_base64_images_allowed = apply_filters("wp_all_import_is_base64_images_allowed", true, $image, self::$importRecord->id);
@@ -506,14 +521,6 @@ class AttachmentHandler{
 					continue;
 				}
 
-				if ($source_type == 'gallery'){
-					$image_data = $image;
-					$image = $image_data['url'];
-					$image_title = $image_data['title'];
-					$image_caption = $image_data['caption'];
-					$image_alt = $image_data['alt'];
-					$image_description = $image_data['description'];
-				}
 				$original_image_url = $image;
 				// Trying to get image full size.
 				if ($content_images_try_go_get_full_size) {
@@ -780,7 +787,7 @@ class AttachmentHandler{
 
 								$is_keep_existing_images = ( ! empty($this->articleData['ID']) and self::$importRecord->options['is_update_images'] and self::$importRecord->options['update_images_logic'] == "add_new" and self::$importRecord->options['update_all_data'] == "no" and $is_show_add_new_images);
 
-								if ( 'yes' === self::$importRecord->options[$this->option_slug . 'preload_images'] && 'yes' === self::$importRecord->options[$this->option_slug . 'download_images'] ) {
+								if ( isset(self::$importRecord->options[$this->option_slug . 'preload_images']) && 'yes' === self::$importRecord->options[$this->option_slug . 'preload_images'] && 'yes' === self::$importRecord->options[$this->option_slug . 'download_images'] ) {
 									// Only preload images if there are more than 2 for this record.
 									count($imgs) > 2 &&	$this->downloadAllImages($imgs);
 								}
@@ -1698,6 +1705,11 @@ class AttachmentHandler{
 	}
 
 	public function get_base64_image_type($base64string) {
+		// Return null if not a string
+		if (!is_string($base64string)) {
+			return null;
+		}
+
 		// Check if the string starts with the data URL scheme
 		if (preg_match('/^data:image\/(\w+);base64,/', $base64string, $matches)) {
 			// Extract the MIME type and the actual base64 string

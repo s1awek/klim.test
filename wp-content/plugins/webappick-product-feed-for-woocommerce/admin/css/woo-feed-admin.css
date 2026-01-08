@@ -3091,3 +3091,49 @@ span[id*=cat-map-] {
     aspect-ratio: 580/270;
   }
 }
+/* Basic styling for the div */
+.woo-feed-widget-banner-discount-free {
+  background-image: url("../images/discount/discount_720.gif");
+  aspect-ratio: 720/250;
+  height: auto;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Media query for laptop devices */
+@media (min-width: 1024px) {
+  .woo-feed-widget-banner-discount-free {
+    background-image: url("../images/discount/discount_360.gif");
+    aspect-ratio: 360/250;
+  }
+}
+/* Media query for large laptop devices */
+@media (min-width: 1440px) {
+  .woo-feed-widget-banner-discount-free {
+    background-image: url("../images/discount/discount_580.gif");
+    aspect-ratio: 580/270;
+  }
+}
+.wp-submenu li span.woo-feed-halloween {
+  font-weight: bold;
+  color: #F1EB0B;
+}
+
+.wp-submenu li:hover span.woo-feed-halloween,
+.wp-submenu li.current span.woo-feed-halloween {
+  color: #bbb608;
+}
+
+.woo-feed-custom-link {
+  font-weight: bold;
+  color: #e5440a;
+}

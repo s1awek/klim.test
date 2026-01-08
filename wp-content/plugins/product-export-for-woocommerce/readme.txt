@@ -1,11 +1,11 @@
-=== Product Export for WooCommerce — Export Products from CSV, Excel, and XML ===
+=== WP All Export — Product Export for WooCommerce ===
 Contributors: soflyy, wpallimport
 Tags: product export, export products, woocommerce product export, export woocommerce products, CSV export
 Requires at least: 5.0
 Tested up to: 6.8
 License: GPLv2 or later
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 
 Export WooCommerce products to CSV, Excel, XML, or the Google Merchant Center. Run your product export on demand or on a schedule.
 
@@ -131,7 +131,7 @@ With the premium version of WooCommerce Product Export, you get all the free fea
 
 = Premium Support =
 
-[Upgrade to the Pro edition of WP All Export](http://www.wpallimport.com/upgrade-to-wp-all-export-pro/) for premium support.
+[Upgrade to the Pro edition of WP All Export](https://www.wpallimport.com/upgrade-to-wp-all-export-pro/) for premium support.
 
 You can submit the [support form on our website](https://www.wpallimport.com/support/) or email us at [support@wpallimport.com](mailto:support@wpallimport.com). While we try to assist users of our free version, please note that support is not guaranteed and will depend on our capacity. For premium support, purchase [WP All Export Pro](https://www.wpallimport.com/upgrade-to-wp-all-export-pro/?utm_source=dotorg&utm_medium=readme&utm_campaign=premium-support).
 
@@ -306,6 +306,9 @@ The free version of WooCommerce Product Export is supported through the WordPres
 14. WooCommerce Export Products Confirm and Run
 
 == Changelog ==
+
+= 1.0.5 =
+* improvement: code review and updates
 
 = 1.0.4 =
 * improvement: UI updates

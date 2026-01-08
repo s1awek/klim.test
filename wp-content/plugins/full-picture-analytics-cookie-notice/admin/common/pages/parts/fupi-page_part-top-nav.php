@@ -11,7 +11,9 @@
         // FIRST STEPS / GDPR HELPER / DOCS / SUPPORT
 //<a class="fupi_top_nav_link" href="https://wpfullpicture.com/support/documentation/first-steps-in-full-picture/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">' . esc_html__('First steps', 'full-picture-analytics-cookie-notice') . '</a>
         $top_nav = '
-            <button type="button" class="fupi_top_nav_link fupi_open_popup" data-popup="fupi_first_steps_2_popup">' . esc_html__('Recommendations', 'full-picture-analytics-cookie-notice') . '</button>
+            <button type="button" class="fupi_top_nav_link fupi_open_popup" data-popup="fupi_first_steps_popup">' . esc_html__('First steps', 'full-picture-analytics-cookie-notice') . '</button>
+        
+            <button type="button" class="fupi_top_nav_link fupi_open_popup" data-popup="fupi_guides_popup">' . esc_html__('Guides', 'full-picture-analytics-cookie-notice') . '</button>
 
             <button type="button" class="fupi_top_nav_link fupi_open_popup" data-popup="fupi_help_links_popup">' . esc_html__('Help', 'full-picture-analytics-cookie-notice') . '</button>';
         
@@ -37,8 +39,10 @@
 
     if ( empty ( $this->ver['debug'] ) ) {
         $setup_mode_checked = '';
+        $hide_setup_notif = 'style="display: none;"';
     } else {
         $setup_mode_checked = 'checked="checked"';
+        $hide_setup_notif = '';
     }
 
     echo '<div id="fupi_top_setup_info">
@@ -86,4 +90,8 @@
     if ( ! empty( $pro_nav ) ) {
         echo '<div id="fupi_pro_nav" class="top_menu_section">' . $pro_nav . '</div>';
     }; ?>
+</div>
+
+<div id="setup_helper_notif_bar" <?php echo $hide_setup_notif; ?>>
+    <span><?php echo sprintf( esc_html__( '%1$sSetup helper is active%2$s. %3$sVisit your site%4$s, click the %5$s icon and test your setup.', 'full-picture-analytics-cookie-notice' ), '<strong>', '</strong>', '<a href="/" target="_blank">', '</a>', '<img src="' . FUPI_URL . 'admin/assets/img/fp-ico.svg"><span class="fupi_srt">WP FP</span>' ); ?></span>
 </div>

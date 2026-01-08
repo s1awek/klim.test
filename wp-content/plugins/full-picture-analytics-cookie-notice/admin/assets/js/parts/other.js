@@ -243,8 +243,18 @@
 		});
 	}
 
+	function toggleNotifAndSave(e){
+		
+		handleChange(e);
+		
+		let notif_bar = FP.findID('setup_helper_notif_bar'),
+			show_notice = notif_bar && e.target.checked;
+
+		notif_bar.style.display = show_notice ? '' : 'none';
+	}
+
 	if (advModeCheckbox) advModeCheckbox.addEventListener('change', alertBeforeChange  );
-	if (setupModeCheckbox) setupModeCheckbox.addEventListener('change', handleChange);
+	if (setupModeCheckbox) setupModeCheckbox.addEventListener('change', toggleNotifAndSave);
 
 })();
 

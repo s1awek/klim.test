@@ -2,9 +2,9 @@
 if ( !defined( 'ABSPATH' ) ) {
 	exit;
 }
-if ( !class_exists( 'wt_inform_server_secure' ) ) {
+if ( !class_exists( 'Wt_Non_Apache_Info' ) ) {
 
-	class wt_inform_server_secure {
+	class Wt_Non_Apache_Info {
 
 		/**
 		 * config options 
@@ -36,14 +36,19 @@ if ( !class_exists( 'wt_inform_server_secure' ) ) {
 		 */
 		public function show_banner() {
 			?>
-			<div class="<?php echo $this->banner_css_class; ?> notice-warning notice is-dismissible">
+			<div class="<?php echo esc_attr($this->banner_css_class); ?> notice-warning notice is-dismissible">
 
 				<p>
-					<?php echo $this->banner_message; ?>				
+					<?php 
+					// translators: %s: Plugin title.
+					echo wp_kses_post( sprintf(__('The %s plugin uploads the imported file into <b>wp-content/webtoffee_import</b> folder. Please ensure that public access restrictions are set in your server for this folder.', 'product-import-export-for-woo' ), '<b>'.$this->plugin_title.'</b>') );
+					?>				
 				</p>
 				<p>
-					<?php if ( (strpos( $_SERVER[ 'SERVER_SOFTWARE' ], 'nginx' ) !== false ) ): ?>
-					<h4><?php _e( 'Incase of Nginx server, copy the below code into your server config file to restrict public access to the wp-content folder or contact the server team to assist accordingly.' ); ?></h4>
+				<?php
+				$server_software = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_SOFTWARE'])) : '';
+				if ( !empty($server_software) && (strpos($server_software, 'nginx') !== false) ): ?>
+					<h4><?php esc_html_e( 'Incase of Nginx server, copy the below code into your server config file to restrict public access to the wp-content folder or contact the server team to assist accordingly.', 'product-import-export-for-woo' ); ?></h4>
 					<code>
 						#Deny access to wp-content folders<br/>
 						location ~* ^/(wp-content)/(.*?)\.(zip|gz|tar|csv|bzip2|7z)\$ { deny all; }<br/>
@@ -79,16 +84,16 @@ if ( !class_exists( 'wt_inform_server_secure' ) ) {
 
 			/* prepare data object */
 			var data_obj = {
-			_wpnonce: '<?php echo $nonce; ?>',
-			action: '<?php echo $this->ajax_action_name; ?>',
+			_wpnonce: '<?php echo esc_js($nonce); ?>',
+			action: '<?php echo esc_js($this->ajax_action_name); ?>',
 			wt_action_type: 'dismiss',
 			};
 
-			$( document ).on( 'click', '.<?php echo $this->banner_css_class; ?> .notice-dismiss', function ( e )
+			$( document ).on( 'click', '.<?php echo esc_attr($this->banner_css_class); ?> .notice-dismiss', function ( e )
 			{
 			e.preventDefault();
 			$.ajax( {
-				url: '<?php echo $ajax_url; ?>',
+				url: '<?php echo esc_url($ajax_url); ?>',
 				data: data_obj,
 				type: 'POST',
 			} );
@@ -101,12 +106,14 @@ if ( !class_exists( 'wt_inform_server_secure' ) ) {
 		}
 
 		public function wt_get_display_server_info() {
-
-			if ( (strpos( $_SERVER[ 'SERVER_SOFTWARE' ], 'Apache' ) !== false) || (strpos( $_SERVER[ 'SERVER_SOFTWARE' ], 'LiteSpeed' ) !== false) ) {
+			$server_software = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : '';
+			if ( ! empty( $server_software ) && ( ( strpos( $server_software, 'Apache' ) !== false) || (strpos( $server_software, 'LiteSpeed' ) !== false)) ) {
 				return true;
 			} else {
 				return (bool) get_option( $this->sholud_show_server_info );
 			}
+
+			
 		}
 
 		public function wt_set_display_server_info( $display = false ) {

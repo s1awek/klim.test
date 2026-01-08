@@ -1,13 +1,19 @@
 ;(function(window){
 
-	//
-	// ATTENTION!
-	// This documentation is more complete than META's and has info on what data CAPI takes (not the same as the JS tracking)
-	// >>> https://support.bigcommerce.com/s/article/Meta-Pixel?language=en_US
-	//
 	function getEventTimeInSecs(diff){
 		let d = new Date();
 		return Math.floor( ( d.getTime() / 1000 ) - diff ); // timestamp in seconds minus 0 secs (if FB makes problems, increase up to 2 secs);
+	}
+
+	function makeFBC( now ){
+
+		let fbclid = FP.getUrlParamByName('fbclid');
+
+		if ( fbclid ) {
+			let fbc = 'fb.1.' + now + '.' + fbclid;
+			FP.setCookie( '_fbc', fbc, 90 );
+			fp.fbp.fbc = fbc;
+		}
 	}
 
 	function set_fbp_fbc(){
@@ -23,15 +29,31 @@
 		}
 
 		fp.fbp.fbp = fbp; // save for easy access
-		
+
 		if ( ! fbc ) {
-			let fbclid = FP.getUrlParamByName('fbclid');
-			if ( fbclid ) fbc = 'fb.1.' + now + '.' + fbclid;
-			if ( fbc ) FP.setCookie( '_fbc', fbc, 90 );
+			makeFBC( now );
+		} else {
+			
+			let fbc_parts = fbc.split('.');
+			
+			if ( fbc_parts.length == 4 ) {
+				
+				let fbc_timestamp = parseInt(fbc_parts[2]),
+					age_in_days = ( now - fbc_timestamp ) / ( 1000 * 60 * 60 * 24 );
+				
+				if ( age_in_days < 90 ) {
+					fp.fbp.fbc = fbc;
+				} else {
+					makeFBC( now );
+				}
+
+			} else {
+				makeFBC( now ); // Fallback for malformed cookies
+			}
 		}
-		
-		fp.fbp.fbc = fbc; // save for easy access
 	}
+
+	
 
 	FP.track_fbp_evt = ( custom, evt_name, evt_time, extra_custom_data = false, use_capi = true ) => {
 
@@ -42,11 +64,11 @@
 		// EVENT ID
 		let evt_id = evt_time + fp.random + evt_name;
 
-		if ( evt_name == 'woo_enh_order_tracking' ) {
+		/*if ( evt_name == 'woo_enh_order_tracking' ) {
 			evt_id = FP.readCookie( 'fp_fbp_enh_order_evt_id' );
 			if ( ! evt_id ) return; // cookie may not be available if it timed out
 			evt_name = 'Purchase';
-		}
+		}*/
 
 		// PIXEL EVT
 		if ( typeof fbq !== 'undefined' ) {
@@ -153,6 +175,7 @@
     function load_fbp() {
 
 		load_pixel();
+		
 		set_fbp_fbc();
 		set_user_data();
 		set_custom_data();

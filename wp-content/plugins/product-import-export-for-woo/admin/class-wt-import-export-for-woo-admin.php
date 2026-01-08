@@ -113,8 +113,9 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 				if (!function_exists('is_plugin_active')) {
 					include_once(ABSPATH . 'wp-admin/includes/plugin.php');
 				}
-				if (is_plugin_active('woocommerce/woocommerce.php')) {
-					wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/wt-import-export-for-woo-admin.js', array('jquery', 'jquery-tiptip'), $this->version, false);
+				if ( class_exists( 'WooCommerce' ) ) {
+					$tiptip_handle = version_compare( WC()->version, '10.3.0', '>=' ) ? 'wc-jquery-tiptip' : 'jquery-tiptip';
+					wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/wt-import-export-for-woo-admin.js', array('jquery', $tiptip_handle), $this->version, false);
 					wp_enqueue_script($this->plugin_name . '_wbftHeaderScripts', plugin_dir_url(__FILE__) . 'js/wbftHeaderScripts.js', array('jquery'), $this->version, false);
 				} else {
 					wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/wt-import-export-for-woo-admin.js', array('jquery'), $this->version, false);
@@ -155,7 +156,8 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 						'template_del_error' => __('Unable to delete template', 'product-import-export-for-woo'),
 						'template_del_loader' => __('Deleting template...', 'product-import-export-for-woo'),
 						'value_empty' => __('Value is empty.', 'product-import-export-for-woo'),
-						'error' => sprintf(__('An unknown error has occurred! Refer to our %stroubleshooting guide%s for assistance.'), '<a href="' . WT_IEW_DEBUG_BASIC_TROUBLESHOOT . '" target="_blank">', '</a>'),
+						// translators: %1$s is the opening link tag, %2$s is the closing link tag
+						'error' => sprintf(__('An unknown error has occurred! Refer to our %1$stroubleshooting guide%2$s for assistance.', 'product-import-export-for-woo'), '<a href="' . WT_IEW_DEBUG_BASIC_TROUBLESHOOT . '" target="_blank">', '</a>'),
 						'success' => __('Success.', 'product-import-export-for-woo'),
 						'loading' => __('Loading...', 'product-import-export-for-woo'),
 						'sure' => __('Are you sure?', 'product-import-export-for-woo'),
@@ -170,56 +172,56 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 					'pro_plugins' => array(
 						'order' => array(
 							'url' => "https://www.webtoffee.com/product/order-import-export-plugin-for-woocommerce/?utm_source=free_plugin_revamp&utm_medium=basic_revamp&utm_campaign=Order_Import_Export&utm_content=" . WT_P_IEW_VERSION,
-							'name' => __('Order, Coupon, Subscription Export Import for WooCommerce'),
+							'name' => __('Order, Coupon, Subscription Export Import for WooCommerce', 'product-import-export-for-woo'),
 							'icon_url' => WT_P_IEW_PLUGIN_URL . 'assets/images/gopro/order-ie.svg',
 							'sample_csv_url' => "https://www.webtoffee.com/wp-content/uploads/2021/03/Order_SampleCSV.csv",
 							'is_active' => $order_addon_active_status
 						),
 						'coupon' => array(
 							'url' => "https://www.webtoffee.com/product/order-import-export-plugin-for-woocommerce/?utm_source=free_plugin_revamp&utm_medium=basic_revamp&utm_campaign=Order_Import_Export&utm_content=" . WT_P_IEW_VERSION,
-							'name' => __('Order, Coupon, Subscription Export Import for WooCommerce'),
+							'name' => __('Order, Coupon, Subscription Export Import for WooCommerce', 'product-import-export-for-woo'),
 							'icon_url' => WT_P_IEW_PLUGIN_URL . 'assets/images/gopro/order-ie.svg',
 							'sample_csv_url' => "https://www.webtoffee.com/wp-content/uploads/2016/09/Coupon_Sample_CSV.csv",
 							'is_active' => $order_addon_active_status
 						),
 						'product' => array(
 							'url' => "https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_revamp&utm_medium=basic_revamp&utm_campaign=Product_Import_Export&utm_content=" . WT_P_IEW_VERSION,
-							'name' => __('Product Import Export Plugin For WooCommerce'),
+							'name' => __('Product Import Export Plugin For WooCommerce', 'product-import-export-for-woo'),
 							'icon_url' => WT_P_IEW_PLUGIN_URL . 'assets/images/gopro/product-ie.svg',
 							'sample_csv_url' => "https://www.webtoffee.com/wp-content/uploads/2021/03/Product_SampleCSV.csv",
 							'is_active' => true
 						),
 						'product_review' => array(
 							'url' => "https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_revamp&utm_medium=basic_revamp&utm_campaign=Product_Import_Export&utm_content=" . WT_P_IEW_VERSION,
-							'name' => __('Product Import Export Plugin For WooCommerce'),
+							'name' => __('Product Import Export Plugin For WooCommerce', 'product-import-export-for-woo'),
 							'icon_url' => WT_P_IEW_PLUGIN_URL . 'assets/images/gopro/product-ie.svg',
 							'sample_csv_url' => "https://www.webtoffee.com/wp-content/uploads/2021/04/product_review_SampleCSV.csv",
 							'is_active' => true
 						),
 						'product_categories' => array(
 							'url' => "https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_revamp&utm_medium=basic_revamp&utm_campaign=Product_Import_Export&utm_content=" . WT_P_IEW_VERSION,
-							'name' => __('Product Import Export Plugin For WooCommerce'),
+							'name' => __('Product Import Export Plugin For WooCommerce', 'product-import-export-for-woo'),
 							'icon_url' => WT_P_IEW_PLUGIN_URL . 'assets/images/gopro/product-ie.svg',
 							'sample_csv_url' => "https://www.webtoffee.com/wp-content/uploads/2021/09/Sample-CSV-of-product-categories.csv",
 							'is_active' => true
 						),
 						'product_tags' => array(
 							'url' => "https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_revamp&utm_medium=basic_revamp&utm_campaign=Product_Import_Export&utm_content=" . WT_P_IEW_VERSION,
-							'name' => __('Product Import Export Plugin For WooCommerce'),
+							'name' => __('Product Import Export Plugin For WooCommerce', 'product-import-export-for-woo'),
 							'icon_url' => WT_P_IEW_PLUGIN_URL . 'assets/images/gopro/product-ie.svg',
 							'sample_csv_url' => "https://www.webtoffee.com/wp-content/uploads/2021/09/Sample-CSV-with-product-tags.csv",
 							'is_active' => true
 						),
 						'user' => array(
 							'url' => "https://www.webtoffee.com/product/wordpress-users-woocommerce-customers-import-export/?utm_source=free_plugin_revamp&utm_medium=basic_revamp&utm_campaign=User_Import_Export&utm_content=" . WT_P_IEW_VERSION,
-							'name' => __('WordPress Users & WooCommerce Customers Import Export'),
+							'name' => __('WordPress Users & WooCommerce Customers Import Export', 'product-import-export-for-woo'),
 							'icon_url' => WT_P_IEW_PLUGIN_URL . 'assets/images/gopro/user-ie.svg',
 							'sample_csv_url' => "https://www.webtoffee.com/wp-content/uploads/2020/10/Sample_Users.csv",
 							'is_active' => $user_addon_active_status
 						),
 						'subscription' => array(
 							'url' => "https://www.webtoffee.com/product/order-import-export-plugin-for-woocommerce/?utm_source=free_plugin_revamp&utm_medium=basic_revamp&utm_campaign=Order_Import_Export&utm_content=" . WT_P_IEW_VERSION,
-							'name' => __('Order, Coupon, Subscription Export Import for WooCommerce'),
+							'name' => __('Order, Coupon, Subscription Export Import for WooCommerce', 'product-import-export-for-woo'),
 							'icon_url' => WT_P_IEW_PLUGIN_URL . 'assets/images/gopro/order-ie.svg',
 							'sample_csv_url' => "https://www.webtoffee.com/wp-content/uploads/2021/04/Subscription_Sample_CSV.csv",
 							'is_active' => false
@@ -241,8 +243,8 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 			$menus = array(
 				'general-settings' => array(
 					'menu',
-					__('General Settings'),
-					__('General Settings'),
+					__('General Settings', 'product-import-export-for-woo'),
+					__('General Settings', 'product-import-export-for-woo'),
 					apply_filters('wt_import_export_allowed_capability', 'import'),
 					WT_IEW_PLUGIN_ID_BASIC,
 					array($this, 'admin_settings_page'),
@@ -252,8 +254,8 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 				'scheduled-job' => array(
 					'submenu',
 					WT_IEW_PLUGIN_ID_BASIC,
-					__('Schedule Job'),
-					__('Scheduled Job <img src="' . plugin_dir_url(__FILE__) . '../assets/images/wt_iew_crown.svg" alt="crown" style="vertical-align: middle;">'),
+					__('Schedule Job', 'product-import-export-for-woo'),
+					__('Scheduled Job', 'product-import-export-for-woo') . ' <img src="' . plugin_dir_url(__FILE__) . '../assets/images/wt_iew_crown.svg" alt="crown" style="vertical-align: middle;">',
 					apply_filters('wt_import_export_allowed_capability', 'import'),
 					'wt_iew_scheduled_job',
 					array($this, 'admin_scheduled_job_page')
@@ -273,8 +275,8 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 			$menus['general-settings-sub'] = array(
 				'submenu',
 				$parent_menu_key,
-				__('General Settings'),
-				__('General Settings'),
+				__('General Settings', 'product-import-export-for-woo'),
+				__('General Settings', 'product-import-export-for-woo'),
 				apply_filters('wt_import_export_allowed_capability', 'import'),
 				WT_IEW_PLUGIN_ID_BASIC,
 				array($this, 'admin_settings_page')
@@ -290,7 +292,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 				}
 			}
 
-			add_submenu_page($parent_menu_key, esc_html__('Pro upgrade'), '<span class="wt-go-premium">' . esc_html__('Pro upgrade') . '</span>', 'import', $parent_menu_key . '-premium', array($this, 'admin_upgrade_premium_settings'));
+			add_submenu_page($parent_menu_key, esc_html__('Pro upgrade', 'product-import-export-for-woo'), '<span class="wt-go-premium">' . esc_html__('Pro upgrade', 'product-import-export-for-woo') . '</span>', 'import', $parent_menu_key . '-premium', array($this, 'admin_upgrade_premium_settings'));
 
 			if (function_exists('remove_submenu_page')) {
 				//remove_submenu_page(WT_PIEW_POST_TYPE, WT_PIEW_POST_TYPE);
@@ -336,7 +338,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 		{
 			$out = array(
 				'status' => false,
-				'msg' => __('Error'),
+				'msg' => __('Error', 'product-import-export-for-woo'),
 			);
 
 			if (Wt_Iew_Sh::check_write_access(WT_IEW_PLUGIN_ID_BASIC)) {
@@ -348,9 +350,12 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 					$form_field_name = isset($value['field_name']) ? $value['field_name'] : '';
 					$field_name = (substr($form_field_name, 0, 8) !== 'wt_iew_' ? 'wt_iew_' : '') . $form_field_name;
 					$validation_key = str_replace('wt_iew_', '', $field_name);
+					// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verification performed in the Wt_Iew_Sh::check_write_access() method.
 					if (isset($_POST[$field_name])) {
-						$new_advanced_settings[$field_name] = Wt_Iew_Sh::sanitize_data($_POST[$field_name], $validation_key, $validation_rule);
+						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitization performed in the Wt_Iew_Sh::sanitize_data() method.
+						$new_advanced_settings[$field_name] = Wt_Iew_Sh::sanitize_data(wp_unslash($_POST[$field_name]), $validation_key, $validation_rule);
 					}
+					// phpcs:enable WordPress.Security.NonceVerification.Missing -- Nonce verification performed in the Wt_Iew_Sh::check_write_access() method.
 				}
 
 				$checkbox_items = array('wt_iew_enable_import_log', 'wt_iew_enable_history_auto_delete', 'wt_iew_include_bom');
@@ -360,7 +365,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 
 				Wt_Import_Export_For_Woo_Basic_Common_Helper::set_advanced_settings($new_advanced_settings);
 				$out['status'] = true;
-				$out['msg'] = __('Settings Updated');
+				$out['msg'] = __('Settings Updated', 'product-import-export-for-woo');
 				do_action('wt_iew_after_advanced_setting_update_basic', $new_advanced_settings);
 			}
 			echo json_encode($out);
@@ -373,21 +378,25 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 		 */
 		public function delete_template()
 		{
+
 			$out = array(
 				'status' => false,
-				'msg' => __('Error'),
+				'msg' => __('Error', 'product-import-export-for-woo'),
 			);
 
-			if (Wt_Iew_Sh::check_write_access(WT_IEW_PLUGIN_ID_BASIC) && isset($_POST['template_id'])) {
-				global $wpdb;
-				$template_id = absint($_POST['template_id']);
-				$tb = $wpdb->prefix . Wt_Import_Export_For_Woo_Basic::$template_tb;
-				$where = "=%d";
-				$where_data = array($template_id);
-				$wpdb->query($wpdb->prepare("DELETE FROM $tb WHERE id" . $where, $where_data));
-				$out['status'] = true;
-				$out['msg'] = __('Template deleted successfully');
-				$out['template_id'] = $template_id;
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification performed in the Wt_Iew_Sh::check_write_access() method.
+			if (Wt_Iew_Sh::check_write_access(WT_IEW_PLUGIN_ID_BASIC)) { // @codingStandardsIgnoreLine.
+				
+				if (isset($_POST['template_id'])) { // @codingStandardsIgnoreLine.
+					global $wpdb;
+					$template_id = absint(wp_unslash($_POST['template_id'])); // @codingStandardsIgnoreLine.
+					$tb = $wpdb->prefix . Wt_Import_Export_For_Woo_Basic::$template_tb;
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+					$wpdb->query($wpdb->prepare("DELETE FROM {$tb} WHERE id=%d", $template_id)); // @codingStandardsIgnoreLine.
+					$out['status'] = true;
+					$out['msg'] = __('Template deleted successfully', 'product-import-export-for-woo');
+					$out['template_id'] = $template_id;
+				}
 			}
 			wp_send_json($out);
 		}
@@ -498,35 +507,38 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 		 */
 		public function plugin_action_links($links)
 		{
-			$links[] = '<a href="' . esc_url(admin_url('admin.php?page=' . WT_IEW_PLUGIN_ID_BASIC)) . '">' . esc_html__('Settings') . '</a>';
-			$links[] = '<a href="' . esc_url('https://www.webtoffee.com/') . '" target="_blank">' . esc_html__('Documentation') . '</a>';
-			$links[] = '<a href="' . esc_url('https://www.webtoffee.com/support/') . '" target="_blank">' . esc_html__('Support') . '</a>';
+			$links[] = '<a href="' . esc_url(admin_url('admin.php?page=' . WT_IEW_PLUGIN_ID_BASIC)) . '">' . esc_html__('Settings', 'product-import-export-for-woo') . '</a>';
+			$links[] = '<a href="' . esc_url('https://www.webtoffee.com/') . '" target="_blank">' . esc_html__('Documentation', 'product-import-export-for-woo') . '</a>';
+			$links[] = '<a href="' . esc_url('https://www.webtoffee.com/support/') . '" target="_blank">' . esc_html__('Support', 'product-import-export-for-woo') . '</a>';
 			return $links;
 		}
 
 		public function tools_wtexport_text()
 		{
 
-			echo "<p><b>" . sprintf(__('Export WooCommerce products, product categories, product tags and product reviews in CSV format using <a href="%s">this exporter</a>.'), admin_url('admin.php?page=wt_import_export_for_woo_basic_export&wt_to_export=product')) . "</b></p>";
+			// translators: %s is the URL to the exporter page
+			echo "<p><b>" . wp_kses_post( sprintf(__('Export WooCommerce products, product categories, product tags and product reviews in CSV format using <a href="%s">this exporter</a>.', 'product-import-export-for-woo' ), esc_url( admin_url('admin.php?page=wt_import_export_for_woo_basic_export&wt_to_export=product')))) . "</b></p>";
 
 			if (!is_plugin_active('users-customers-import-export-for-wp-woocommerce/users-customers-import-export-for-wp-woocommerce.php')) {
-				echo "<p><b>" . sprintf(
-					/* translators: %s: User Import Export for WooCommerce plugin  URL */
-					__('You can export Users and WooCommerce customers in CSV format using the plugin <a href="%s" target="_blank">Import Export WordPress Users and WooCommerce Customers</a>.'),
+				echo "<p><b>" . wp_kses_post( sprintf(
+				/* translators: %s: User Import Export for WooCommerce plugin  URL */
+				__('You can export Users and WooCommerce customers in CSV format using the plugin <a href="%s" target="_blank">Import Export WordPress Users and WooCommerce Customers</a>.', 'product-import-export-for-woo'),
 					esc_url(admin_url('plugin-install.php?tab=plugin-information&plugin=users-customers-import-export-for-wp-woocommerce'))
-				) . "</b></p>";
+				)) . "</b></p>";
 			} else {
-				echo "<p><b>" . sprintf(__('Export Users and WooCommerce customers in CSV format using <a href="%s">this exporter</a>.'), esc_url(admin_url('admin.php?page=wt_import_export_for_woo_basic_export&wt_to_export=user'))) . "</b></p>";
+				// translators: %s is the URL to the exporter page
+				echo "<p><b>" . wp_kses_post( sprintf(__('Export Users and WooCommerce customers in CSV format using <a href="%s">this exporter</a>.', 'product-import-export-for-woo'), esc_url(admin_url('admin.php?page=wt_import_export_for_woo_basic_export&wt_to_export=user')))) . "</b></p>";
 			}
 
 			if (!is_plugin_active('order-import-export-for-woocommerce/order-import-export-for-woocommerce.php')) {
-				echo "<p><b>" . sprintf(
-					/* translators: %s: Order Import Export for WooCommerce plugin  URL */
-					__('You can export WooCommerce orders and coupons in CSV format using the plugin <a href="%s" target="_blank">Order Export & Order Import for WooCommerce</a>.'),
+				echo "<p><b>" . wp_kses_post( sprintf(
+				/* translators: %s: Order Import Export for WooCommerce plugin  URL */
+				__('You can export WooCommerce orders and coupons in CSV format using the plugin <a href="%s" target="_blank">Order Export & Order Import for WooCommerce</a>.', 'product-import-export-for-woo'),
 					esc_url(admin_url('plugin-install.php?tab=plugin-information&plugin=order-import-export-for-woocommerce'))
-				) . "</b></p>";
+				)) . "</b></p>";
 			} else {
-				echo "<p><b>" . sprintf(__('Export WooCommerce orders and coupons in CSV format using <a href="%s">this exporter</a>.'), esc_url(admin_url('admin.php?page=wt_import_export_for_woo_basic_export&wt_to_export=order'))) . "</b></p>";
+				// translators: %s is the URL to the exporter page
+				echo "<p><b>" . wp_kses_post( sprintf( __('Export WooCommerce orders and coupons in CSV format using <a href="%s">this exporter</a>.', 'product-import-export-for-woo'), esc_url(admin_url('admin.php?page=wt_import_export_for_woo_basic_export&wt_to_export=order')))) . "</b></p>";
 			}
 		}
 
@@ -558,6 +570,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 
 		public function filter_admin_notices() { 
 			// Exit if not on the plugin screen.
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification not needed.		
 			if ( empty( $_REQUEST['page'] ) || ! $this->is_plugin_page() ) { 
 				return;
 			}
@@ -577,6 +590,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 				'order_import_export_review_request', 
 				'user_import_export_review_request',
 				'woocommerce',
+				'wt_bfcm_twenty_twenty_five', // Preserve BFCM 2025 banner
 			);
 
 			foreach ( $notices_types as $type ) { 
@@ -616,7 +630,9 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 	
 		private function is_plugin_page() {
 			// Early return if 'page' parameter is not set.
-			if ( ! isset( $_GET['page'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification not needed.
+			$page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : '';
+			if ( empty( $page ) ) {
 				return false;
 			}
 			// List of plugin pages.
@@ -630,7 +646,39 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 			);
 	
 			// Check if the current 'page' parameter contains any of the plugin pages.
-			return in_array( $_GET['page'], $plugin_pages, true );
+			return in_array( $page, $plugin_pages, true );
 		}
+
+
+		/**
+		 * 	Initiate non apache info message.
+		 * 
+		 * 	@since 2.5.7
+		 */
+		public function init_non_apache_info(){
+			$non_apache_info = new Wt_Non_Apache_Info('product');
+			$non_apache_info->plugin_title = 'Product Import Export';
+		}
+
+		/**
+		 *  Screens to show Black Friday and Cyber Monday Banner.
+		 *
+		 *  @since 2.5.7
+		 *  @param array $screen_ids Array of screen ids.
+		 *  @return array            Array of screen ids.
+		 */
+		public function wt_bfcm_banner_screens( $screen_ids ) {
+			
+			$screen_ids[] = 'toplevel_page_wt_import_export_for_woo_basic_export';
+			
+			$screen_ids[] = 'webtoffee-import-export-basic_page_wt_import_export_for_woo_basic_import';
+			
+			$screen_ids[] = 'webtoffee-import-export-basic_page_wt_iew_scheduled_job';
+			
+			$screen_ids[] = 'webtoffee-import-export-basic_page_wt_import_export_for_woo_basic';
+					
+			return $screen_ids;
+		}
+
 	}
 }

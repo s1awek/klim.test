@@ -2,6 +2,7 @@
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\IReader;
+use PhpOffice\PhpSpreadsheet\Shared\Date as SpreadsheetDate;
 
 class PMXI_XLSParser{
 
@@ -104,13 +105,59 @@ class PMXI_XLSParser{
 			$spreadsheetDelimiter = ",";
 			$spreadsheetDelimiter = apply_filters('wp_all_import_phpexcel_delimiter', $spreadsheetDelimiter, $this->_filename);
 
-			// Create a CSV writer and set the settings
-			$objWriter = IOFactory::createWriter($objSpreadsheet, 'Csv');
-			$objWriter->setDelimiter($spreadsheetDelimiter)
-			          ->setEnclosure('"')
-			          ->setLineEnding("\r\n")
-			          ->setSheetIndex(0)
-			          ->save($this->csv_path);
+			// Instead of using the CSV writer which uses raw values, manually create CSV with formatted values
+			// This preserves quotes and other formatting from Excel's custom number formats
+			$worksheet = $objSpreadsheet->getActiveSheet();
+			$highestRow = $worksheet->getHighestRow();
+			$highestCol = $worksheet->getHighestDataColumn();
+			$highestColIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestCol);
+
+			$csvHandle = fopen($this->csv_path, 'w');
+			if ($csvHandle === false) {
+				throw new Exception("Could not open CSV file for writing: " . $this->csv_path);
+			}
+
+			for ($row = 1; $row <= $highestRow; $row++) {
+				$rowData = array();
+				for ($col = 1; $col <= $highestColIndex; $col++) {
+					$cell = $worksheet->getCellByColumnAndRow($col, $row);
+					$formatCode = $cell->getStyle()->getNumberFormat()->getFormatCode();
+					$isDateTime = false;
+
+					try {
+						$isDateTime = SpreadsheetDate::isDateTime($cell);
+					} catch (Exception $e) {
+						$isDateTime = false;
+					}
+
+					// Check if the format code contains quotes (indicating text should be added to display)
+					// Excel custom formats use quotes to add literal text to the display
+					if ($isDateTime) {
+						// Prefer a full timestamp when the underlying serial includes a time portion,
+						// because Excel can hide the time in display formats but keep it in the value.
+						$rawValue = $cell->getValue();
+						if (is_numeric($rawValue)) {
+							// Detect a time component using a small epsilon to account for float conversion.
+							$hasTimePart = abs($rawValue - floor($rawValue)) > 1e-9;
+							$dateTime = SpreadsheetDate::excelToDateTimeObject($rawValue);
+							$value = $dateTime->format($hasTimePart ? 'Y-m-d H:i:s' : 'Y-m-d');
+						} else {
+							$value = $cell->getFormattedValue();
+						}
+					} elseif (strpos($formatCode, '"') !== false && $formatCode !== 'General') {
+						// Use formatted value to preserve the quotes added by custom format
+						$value = $cell->getFormattedValue();
+					} else {
+						// Use raw value for normal cells
+						$value = $cell->getValue();
+					}
+
+					$rowData[] = $value;
+				}
+				fputcsv($csvHandle, $rowData, $spreadsheetDelimiter, '"');
+			}
+
+			fclose($csvHandle);
 		}
 
         include_once(PMXI_Plugin::ROOT_DIR . '/libraries/XmlImportCsvParse.php');
@@ -255,7 +302,7 @@ class PMXI_XLSParser{
 			if ($xml !== false) {
 				$index = 0;
 				foreach ($xml->si as $si) {
-					$shared_strings[$index] = (string)$si->t;
+						$shared_strings[$index] = (string)$si->t;
 					$index++;
 				}
 			}

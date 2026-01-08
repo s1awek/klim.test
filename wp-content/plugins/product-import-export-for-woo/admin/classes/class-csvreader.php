@@ -36,13 +36,19 @@ class Wt_Import_Export_For_Woo_Basic_Csvreader
 		{
 		    setlocale(LC_ALL, 'en_US.'.$enc);
 		}
+		// phpcs:disable Squiz.PHP.DiscouragedFunctions.Discouraged 
 		@ini_set('auto_detect_line_endings', true);
+		// phpcs:enable Squiz.PHP.DiscouragedFunctions.Discouraged
 
 		$sample_data_key=array();
 		$sample_data_val=array();
 		$sample_data=array();
+
+		// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+		$handle = @fopen($file, "r");
+		// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		
-		if(($handle=@fopen($file, "r"))!== false) 
+		if ( false !== $handle ) 
 		{
 			$row_count=0;
 			while(($row=($this->fgetcsv_esc_check) ? fgetcsv($handle, 0, $this->delimiter, '"', '"') : fgetcsv($handle, 0, $this->delimiter, '"') )!==false) 
@@ -109,7 +115,9 @@ class Wt_Import_Export_For_Woo_Basic_Csvreader
 				}
 	    	}
 
+	    	// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 	    	fclose($handle);   	
+	    	// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		}
 
 		return $sample_data;
@@ -127,7 +135,9 @@ class Wt_Import_Export_For_Woo_Basic_Csvreader
 		{
 			setlocale( LC_ALL, 'en_US.' . $enc );
 		}
+		// phpcs:disable Squiz.PHP.DiscouragedFunctions.Discouraged 
 		@ini_set('auto_detect_line_endings', true);
+		// phpcs:enable Squiz.PHP.DiscouragedFunctions.Discouraged
 
 		$out=array(
 			'response'=>false,
@@ -135,7 +145,10 @@ class Wt_Import_Export_For_Woo_Basic_Csvreader
 			'data_arr'=>array(),
 		);
 
-		if(($handle=@fopen($file, "r"))!== false) 
+		// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+		$handle = @fopen($file, "r");
+		// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+		if ( false !== $handle ) 
 		{
 			/**
 			*	taking head
@@ -241,7 +254,9 @@ class Wt_Import_Export_For_Woo_Basic_Csvreader
 	    			break;
 	    		}
 	    	}
+			// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 	    	fclose($handle);
+			// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 
 	    	$out=array(
 				'response'=>true,

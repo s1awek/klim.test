@@ -23,17 +23,15 @@ class WC_Connect_TaxJar_Integration {
 
 	private $expected_options = array(
 		// Users can set either billing or shipping address for tax rates but not shop
-		'woocommerce_tax_based_on'          => 'shipping',
+		'woocommerce_tax_based_on'       => 'shipping',
 		// Rate calculations assume tax not included
-		'woocommerce_prices_include_tax'    => 'no',
+		'woocommerce_prices_include_tax' => 'no',
 		// Use no special handling on shipping taxes, our API handles that
-		'woocommerce_shipping_tax_class'    => '',
-		// API handles rounding precision
-		'woocommerce_tax_round_at_subtotal' => 'no',
+		'woocommerce_shipping_tax_class' => '',
 		// Rates are calculated in the cart assuming tax not included
-		'woocommerce_tax_display_shop'      => 'excl',
+		'woocommerce_tax_display_shop'   => 'excl',
 		// TaxJar returns one total amount, not line item amounts
-		'woocommerce_tax_display_cart'      => 'excl',
+		'woocommerce_tax_display_cart'   => 'excl',
 	);
 
 	/**
@@ -68,11 +66,9 @@ class WC_Connect_TaxJar_Integration {
 	private $response_line_items;
 
 	/**
-	 * Indicates whether taxes should be displayed in an itemized format.
-	 *
 	 * @var bool
 	 */
-	private $is_tax_display_itemized;
+	private $is_itemized_tax_display;
 
 	/**
 	 * Backend tax classes.
@@ -80,6 +76,13 @@ class WC_Connect_TaxJar_Integration {
 	 * @var array
 	 */
 	private $backend_tax_classes;
+
+	/**
+	 * Tracks instance.
+	 *
+	 * @var WC_Connect_Tracks
+	 */
+	protected $tracks;
 
 	const PROXY_PATH               = 'taxjar/v2';
 	const OPTION_NAME              = 'wc_connect_taxes_enabled';
@@ -91,18 +94,21 @@ class WC_Connect_TaxJar_Integration {
 	 * @param WC_Connect_API_Client     $api_client          TaxJar API client.
 	 * @param WC_Connect_Logger         $logger              Logger.
 	 * @param string                    $wc_connect_base_url WC Connect base URL.
+	 * @param WC_Connect_Tracks         $tracks              Tracks.
 	 * @param StoreNoticesNotifier|null $notifier            Notifier.
 	 */
 	public function __construct(
 		WC_Connect_API_Client $api_client,
 		WC_Connect_Logger $logger,
 		$wc_connect_base_url,
+		WC_Connect_Tracks $tracks,
 		?StoreNoticesNotifier $notifier = null
 	) {
 		$this->api_client          = $api_client;
 		$this->logger              = $logger;
 		$this->wc_connect_base_url = $wc_connect_base_url;
 		$this->notifier            = $notifier;
+		$this->tracks              = $tracks;
 
 		// Cache rates for 1 hour.
 		$this->cache_time = HOUR_IN_SECONDS;
@@ -112,6 +118,8 @@ class WC_Connect_TaxJar_Integration {
 
 		// Cache error response for 5 minutes.
 		$this->error_cache_time = MINUTE_IN_SECONDS * 5;
+
+		$this->is_itemized_tax_display = ( 'itemized' === get_option( 'woocommerce_tax_total_display' ) );
 	}
 
 	/**
@@ -119,76 +127,55 @@ class WC_Connect_TaxJar_Integration {
 	 *
 	 * @param string $taxjar_rate_name The tax rate name from TaxJar, typically including '_tax_rate'.
 	 * @param string $to_country       The destination country for the tax calculation.
+	 * @param array  $jurisdictions    Tax jurisdictions.
 	 *
 	 * @return string The formatted and localized tax rate name.
 	 */
-	private static function generate_itemized_tax_rate_name( string $taxjar_rate_name, string $to_country ) {
-		$rate_name = str_replace( '_tax_rate', '', $taxjar_rate_name );
-		if ( 'country' === $rate_name && in_array( $to_country, WC()->countries->get_vat_countries(), true ) ) {
-			$rate_name = 'VAT';
-		} elseif ( 'US' === $to_country ) {
-			$rate_name = str_replace( '_', ' ', $rate_name );
-			$rate_name = ucwords( $rate_name ) . ' ' . __( 'Tax', 'woocommerce-services' );
+	private static function generate_itemized_tax_rate_name( string $taxjar_rate_name, string $to_country, array $jurisdictions ) {
+		// Normalize the base key by stripping the trailing "_tax_rate" and converting underscores to spaces.
+		$base_key   = str_replace( '_tax_rate', '', $taxjar_rate_name );
+		$label_core = ucwords( str_replace( '_', ' ', $base_key ) );
+		$rate_name  = $label_core . ' ' . __( 'Tax', 'woocommerce-services' );
 
-		} else {
-			$rate_name = strtoupper( $rate_name );
+		// Handle VAT countries where country-level tax should be labeled as VAT.
+		$is_vat_country = false;
+		if ( function_exists( 'WC' ) && WC() && isset( WC()->countries ) && method_exists( WC()->countries, 'get_vat_countries' ) ) {
+			$is_vat_country = in_array( $to_country, WC()->countries->get_vat_countries(), true );
 		}
 
-		return $rate_name;
-	}
+		if ( 'country' === $base_key && $is_vat_country ) {
+			return 'VAT';
+		}
 
-	/**
-	 * Generates a combined tax rate name based on jurisdictions and location information.
-	 *
-	 * @param array  $jurisdictions Details for the tax jurisdictions (e.g., city, county, state, country).
-	 *                              This may include attributes for tax determination purposes.
-	 * @param string $to_country    The destination country for the tax calculation.
-	 * @param string $to_state      The destination state for the tax calculation.
-	 *
-	 * @return string The formatted and combined tax rate name including relevant jurisdictions and location data.
-	 */
-	private static function generate_combined_tax_rate_name( $jurisdictions, $to_country, $to_state ) {
+		// Default, country-agnostic formatting for non‑US destinations.
 		if ( 'US' !== $to_country ) {
-			return sprintf(
-				'%s Tax',
-				$to_state
-			);
+			// Preserve previous behavior of uppercasing for non‑US.
+			return strtoupper( $rate_name );
 		}
 
-		// for a list of possible attributes in the `jurisdictions` attribute, see:
-		// https://developers.taxjar.com/api/reference/#post-calculate-sales-tax-for-an-order
-		$jurisdiction_pieces = array_merge(
-			array(
-				'city'    => '',
-				'county'  => '',
-				'state'   => $to_state,
-				'country' => $to_country,
-			),
-			(array) $jurisdictions
-		);
+		// United States specific naming enhancements.
+		$county = isset( $jurisdictions['county'] ) ? trim( (string) $jurisdictions['county'] ) : '';
+		$city   = isset( $jurisdictions['city'] ) ? trim( (string) $jurisdictions['city'] ) : '';
 
-		// sometimes TaxJar returns a string with the value 'FALSE' for `state`.
-		if ( rest_is_boolean( $to_state ) ) {
-			$jurisdiction_pieces['state'] = '';
+		switch ( $taxjar_rate_name ) {
+			case 'city_tax_rate':
+			case 'special_tax_rate':
+				// Example: "Some County Some City : City Tax".
+				$prefix = trim( $county . ' ' . $city );
+				return ( '' !== $prefix ? $prefix . ' : ' : '' ) . $rate_name;
+
+			case 'county_tax_rate':
+				// Example: "Some County : County Tax".
+				return ( '' !== $county ? $county . ' : ' : '' ) . $rate_name;
+
+			case 'state_sales_tax_rate':
+				// Example: "State Sales Tax" (no jurisdiction prefix).
+				return $rate_name;
+
+			default:
+				// Fallback for any other US rate types.
+				return $rate_name;
 		}
-
-		return sprintf(
-			'%s Tax',
-			join(
-				'-',
-				array_filter(
-					array(
-						// the `$jurisdiction_pieces` is not really sorted
-						// so let's sort it with COUNTRY-STATE-COUNTY-CITY
-						// `array_filter` will take care of filtering out the "falsy" entries
-						$jurisdiction_pieces['country'],
-						$jurisdiction_pieces['state'],
-						$jurisdiction_pieces['county'],
-						$jurisdiction_pieces['city'],
-					)
-				)
-			)
-		);
 	}
 
 	public function init() {
@@ -242,6 +229,8 @@ class WC_Connect_TaxJar_Integration {
 		add_filter( 'woocommerce_calc_tax', array( $this, 'override_woocommerce_tax_rates' ), 10, 3 );
 		add_filter( 'woocommerce_matched_rates', array( $this, 'allow_street_address_for_matched_rates' ), 10, 2 );
 
+		add_filter( 'woocommerce_rate_label', array( $this, 'cleanup_tax_label' ) );
+
 		WC_Connect_Custom_Surcharge::init();
 	}
 
@@ -273,7 +262,7 @@ class WC_Connect_TaxJar_Integration {
 		$enabled                = $this->is_enabled();
 		$backedup_tax_rates_url = admin_url( '/admin.php?page=wc-status&tab=connect#tax-rate-backups' );
 
-		$powered_by_wct_notice = '<p>' . sprintf( __( 'Automated taxes take over from the WooCommerce core tax settings. This means that "Display prices" will be set to Excluding tax and tax will be Calculated using Customer shipping address. %1$sLearn more about Automated taxes here.%2$s', 'woocommerce-services' ), '<a href="https://woocommerce.com/document/woocommerce-shipping-and-tax/woocommerce-tax/#automated-tax-calculation">', '</a>' ) . '</p>';
+		$powered_by_wct_notice = '<p>' . sprintf( __( 'Automated taxes take over from the WooCommerce core tax settings. This means that "Display prices" will be set to Excluding tax and tax will be Calculated using Customer shipping address. %1$sLearn more about Automated taxes here.%2$s', 'woocommerce-services' ), '<a href="https://woocommerce.com/document/woocommerce-shipping-and-tax/woocommerce-tax/#setup-and-configuration">', '</a>' ) . '</p>';
 
 		$backup_notice = ( ! empty( WC_Connect_Functions::get_backed_up_tax_rate_files() ) ) ? '<p>' . sprintf( __( 'Your previous tax rates were backed up and can be downloaded %1$shere%2$s.', 'woocommerce-services' ), '<a href="' . esc_url( $backedup_tax_rates_url ) . '">', '</a>' ) . '</p>' : '';
 
@@ -333,12 +322,12 @@ class WC_Connect_TaxJar_Integration {
 		$country_state = ( $full_state ) ? $full_state . ', ' . $full_country : $full_country;
 
 		if ( ! $this->is_enabled() ) {
-			/* translators: 1: full state and country name */
-			return sprintf( __( 'Your tax rates and settings will be automatically configured for %1$s. Automated taxes uses your store address as your "tax nexus". If you want to charge tax for any other state, you can add a %2$stax rate%3$s for that state in addition to using automated taxes. %4$sLearn more about Tax Nexus here%5$s.', 'woocommerce-services' ), $country_state, '<a href="https://woocommerce.com/document/setting-up-taxes-in-woocommerce/#section-12">', '</a>', '<a href="https://woocommerce.com/document/woocommerce-shipping-and-tax/woocommerce-tax/#automated-taxes-do-not-appear-to-be-calculating">', '</a>' );
+			/* translators: 1: full state and country name, 2: anchor opening with tax rate link, 3: anchor closer, 4: anchor opening with tax nexus link, 5: anchor closer */
+			return sprintf( __( 'Your tax rates and settings will be automatically configured for %1$s. Automated taxes uses your store address as your "tax nexus". If you want to charge tax for any other state, you can add a %2$stax rate%3$s for that state in addition to using automated taxes. %4$sLearn more about Tax Nexus here%5$s.', 'woocommerce-services' ), $country_state, '<a href="https://woocommerce.com/document/setting-up-taxes-in-woocommerce/#setting-up-tax-rates">', '</a>', '<a href="https://woocommerce.com/document/woocommerce-shipping-and-tax/woocommerce-tax/#section-14">', '</a>' );
 		}
 
-		/* translators: 1: full state and country name, 2: anchor opening with link, 3: anchor closing */
-		return sprintf( __( 'Your tax rates are now automatically calculated for %1$s. Automated taxes uses your store address as your "tax nexus". If you want to charge tax for any other state, you can add a %2$stax rate%3$s for that state in addition to using automated taxes. %4$sLearn more about Tax Nexus here%5$s.', 'woocommerce-services' ), $country_state, '<a href="https://woocommerce.com/document/setting-up-taxes-in-woocommerce/#section-12">', '</a>', '<a href="https://woocommerce.com/document/woocommerce-shipping-and-tax/woocommerce-tax/#automated-taxes-do-not-appear-to-be-calculating">', '</a>' );
+		/* translators: 1: full state and country name, 2: anchor opening with tax rate link, 3: anchor closer, 4: anchor opening with tax nexus link, 5: anchor closer */
+		return sprintf( __( 'Your tax rates are now automatically calculated for %1$s. Automated taxes uses your store address as your "tax nexus". If you want to charge tax for any other state, you can add a %2$stax rate%3$s for that state in addition to using automated taxes. %4$sLearn more about Tax Nexus here%5$s.', 'woocommerce-services' ), $country_state, '<a href="https://woocommerce.com/document/setting-up-taxes-in-woocommerce/#setting-up-tax-rates">', '</a>', '<a href="https://woocommerce.com/document/woocommerce-shipping-and-tax/woocommerce-tax/#section-14">', '</a>' );
 	}
 
 	/**
@@ -392,16 +381,6 @@ class WC_Connect_TaxJar_Integration {
 		// the option is currently being enabled - backup the rates and flush the rates table
 		if ( ! $this->is_enabled() && self::OPTION_NAME === $option['id'] && 'yes' === $value ) {
 			$this->backup_existing_tax_rates();
-			return $value;
-		}
-
-		// If itemized taxes are enabled or disabled - backup the rates and flush the rates table.
-		if (
-			( 'single' === $value && $this->is_tax_display_itemized() )
-			|| ( 'itemized' === $value && ! $this->is_tax_display_itemized() )
-		) {
-			$this->backup_existing_tax_rates();
-			$this->is_tax_display_itemized = null;
 			return $value;
 		}
 
@@ -662,6 +641,9 @@ class WC_Connect_TaxJar_Integration {
 			)
 		);
 		if ( class_exists( 'WC_Order_Item_Tax' ) ) { // Add tax rates manually for Woo 3.0+
+			/**
+			 * @var WC_Order_Item_Product $item Product Order Item.
+			 */
 			foreach ( $order->get_items() as $item_key => $item ) {
 				$product_id    = $item->get_product_id();
 				$line_item_key = $product_id . '-' . $item_key;
@@ -727,12 +709,24 @@ class WC_Connect_TaxJar_Integration {
 					'country'   => $country,
 					'state'     => $state,
 					'postcode'  => $postcode,
-					'city'      => $city,
+					'city'      => strtoupper( $city ),
 					'tax_class' => $tax_class,
 				)
 			);
 		}
 		return $matched_tax_rates;
+	}
+
+	public function cleanup_tax_label( $rate_name ) {
+
+		if ( ! $this->is_itemized_tax_display ) {
+			return $rate_name;
+		}
+
+		$label_parts = explode( ' : ', $rate_name );
+		$clean_label = ! empty( $label_parts[1] ) ? $label_parts[1] : $label_parts[0];
+
+		return $clean_label;
 	}
 
 	/**
@@ -932,32 +926,39 @@ class WC_Connect_TaxJar_Integration {
 	 * @return array
 	 */
 	public function override_woocommerce_tax_rates( $taxes, $price, $rates ) {
-		if ( isset( $this->response_line_items ) && array_values( $rates ) ) {
-			// Get tax rate ID for current item
-			$keys        = array_keys( $taxes );
-			$tax_rate_id = $keys[0];
-			$line_items  = array();
+		if (
+			! isset( $this->response_line_items )
+			|| empty( $rates )
+			|| ! is_array( $rates )
+			|| ! is_array( $taxes )
+		) {
+				return $taxes;
+		}
 
-			// Map line items using rate ID
-			foreach ( $this->response_rate_ids as $line_item_key => $rate_id ) {
-				if ( $rate_id == $tax_rate_id ) {
-					$line_items[] = $line_item_key;
-				}
+		// Get tax rate ID for current item
+		$keys        = array_keys( $taxes );
+		$tax_rate_id = $keys[0];
+		$line_items  = array();
+
+		// Map line items using rate ID
+		foreach ( $this->response_rate_ids as $line_item_key => $rate_id ) {
+			if ( $rate_id == $tax_rate_id ) {
+				$line_items[] = $line_item_key;
 			}
+		}
 
-			// Remove number precision if Woo 3.2+
-			if ( function_exists( 'wc_remove_number_precision' ) ) {
-				$price = wc_remove_number_precision( $price );
-			}
+		// Remove number precision if Woo 3.2+
+		if ( function_exists( 'wc_remove_number_precision' ) ) {
+			$price = wc_remove_number_precision( $price );
+		}
 
-			foreach ( $this->response_line_items as $line_item_key => $line_item ) {
-				// If line item belongs to rate and matches the price, manually set the tax
-				if ( in_array( $line_item_key, $line_items ) && $price == $line_item->line_total ) {
-					if ( function_exists( 'wc_add_number_precision' ) ) {
-						$taxes[ $tax_rate_id ] = wc_add_number_precision( $line_item->tax_collectable );
-					} else {
-						$taxes[ $tax_rate_id ] = $line_item->tax_collectable;
-					}
+		foreach ( $this->response_line_items as $line_item_key => $line_item ) {
+			// If line item belongs to rate and matches the price, manually set the tax
+			if ( in_array( $line_item_key, $line_items ) && $price == $line_item->line_total ) {
+				if ( function_exists( 'wc_add_number_precision' ) ) {
+					$taxes[ $tax_rate_id ] = wc_add_number_precision( $line_item->tax_collectable );
+				} else {
+					$taxes[ $tax_rate_id ] = $line_item->tax_collectable;
 				}
 			}
 		}
@@ -997,8 +998,6 @@ class WC_Connect_TaxJar_Integration {
 
 		if ( '' != $street ) {
 			return array( $country, $state, $postcode, $city, $street );
-		} else {
-			return array( $country, $state, $postcode, $city );
 		}
 
 		return array( $country, $state, $postcode, $city );
@@ -1055,8 +1054,8 @@ class WC_Connect_TaxJar_Integration {
 	 * TaxJar request body and the "from" address needs to be removed from it in order to
 	 * get the correct rates. This is due to a limitation/miscalculation at the TaxJar API.
 	 *
-	 * This method adds the "nexus_addresses" element to the request body and unsets the "from"
-	 * address elements if the workaround is enabled and an address case is matched.
+	 * This method returns a nexus address to be used as a workaround
+	 * if the workaround is enabled and an address case is matched.
 	 *
 	 * New edge cases can be added to the $cases array as needed.
 	 *
@@ -1064,9 +1063,10 @@ class WC_Connect_TaxJar_Integration {
 	 *
 	 * @return array
 	 */
-	public function maybe_apply_taxjar_nexus_addresses_workaround( $body ) {
+	private function maybe_apply_taxjar_nexus_addresses_workaround( $body ) {
+		$workaround_nexus_addresses = array();
 		if ( true !== apply_filters( 'woocommerce_apply_taxjar_nexus_addresses_workaround', true ) ) {
-			return $body;
+			return $workaround_nexus_addresses;
 		}
 
 		$cases = array(
@@ -1087,6 +1087,12 @@ class WC_Connect_TaxJar_Integration {
 				'from_country' => 'US',
 				'from_state'   => 'AZ',
 			),
+			'US-OH' => array(
+				'to_country'   => 'US',
+				'to_state'     => 'OH',
+				'from_country' => 'US',
+				'from_state'   => 'OH',
+			),
 		);
 
 		foreach ( $cases as $case ) {
@@ -1102,32 +1108,124 @@ class WC_Connect_TaxJar_Integration {
 				}
 			}
 
-			$body['nexus_addresses'] = array(
-				array(
-					'street'  => $body['to_street'],
-					'city'    => $body['to_city'],
-					'state'   => $body['to_state'],
-					'country' => $body['to_country'],
-					'zip'     => $body['to_zip'],
-				),
+			$workaround_nexus_addresses = array(
+				'country' => $body['to_country'],
+				'zip'     => $body['to_zip'],
+				'state'   => $body['to_state'],
+				'city'    => $body['to_city'],
+				'street'  => $body['to_street'],
 			);
-
-			$params_to_unset = array(
-				'from_country',
-				'from_state',
-				'from_zip',
-				'from_city',
-				'from_street',
-			);
-
-			foreach ( $params_to_unset as $param ) {
-				unset( $body[ $param ] );
-			}
 
 			break;
 		}
 
-		return $body;
+		return $workaround_nexus_addresses;
+	}
+
+	/**
+	 * Validates TaxJar nexus address.
+	 *
+	 * @param  array $address
+	 *
+	 * @return bool
+	 */
+	private function is_nexus_address_valid( $address ): bool {
+		$errors = array();
+		$schema = array(
+			'id'      => array(
+				'type'        => 'string',
+				'required'    => false,
+				'description' => 'Unique identifier for the nexus address (optional).',
+				'max_length'  => 255,
+			),
+			'country' => array(
+				'type'        => 'string',
+				'required'    => true,
+				'pattern'     => '/^[A-Z]{2}$/', // two-letter ISO alpha-2 (upper-case)
+				'description' => 'Two-letter ISO country code (e.g. "US").',
+				'max_length'  => 2,
+			),
+			'zip'     => array(
+				'type'        => 'string',
+				'required'    => false,
+				'description' => 'Postal code (format varies by country).',
+				'max_length'  => 20,
+			),
+			'state'   => array(
+				'type'        => 'string',
+				'required'    => true,
+				'pattern'     => '/^[A-Z0-9\-]{1,100}$/', // typical short code like "NY", "CA", "NSW"
+				'description' => 'Two-letter (or short) ISO state/province code where applicable.',
+				'max_length'  => 100,
+			),
+			'city'    => array(
+				'type'        => 'string',
+				'required'    => false,
+				'description' => 'City name.',
+				'max_length'  => 100,
+			),
+			'street'  => array(
+				'type'        => 'string',
+				'required'    => false,
+				'description' => 'Street address (line).',
+				'max_length'  => 255,
+			),
+		);
+
+		/**
+		 * Return without logging as empty array() or false
+		 * might be return on purpose from filter to remove nexus address.
+		 */
+		if ( empty( $address ) ) {
+			return false;
+		}
+
+		if ( ! is_array( $address ) ) {
+			$this->logger->error( 'Nexus Address ERRORS: Nexus addresses has invalid format' . PHP_EOL . 'Nexus address removed from request body.' . PHP_EOL . print_r( $address, true ), 'WCS Tax' );
+
+			return false;
+		}
+
+		foreach ( $schema as $field => $rules ) {
+			$exists = array_key_exists( $field, $address );
+			$value  = $exists ? $address[ $field ] : null;
+
+			if ( ! empty( $rules['required'] ) && ! $exists ) {
+				$errors[] = "[$field] field is required";
+				continue;
+			}
+
+			if ( ! $exists || $value === '' || $value === null ) {
+				continue;
+			}
+
+			if ( isset( $rules['type'] ) ) {
+				if ( $rules['type'] === 'string' && ! is_string( $value ) ) {
+					$errors[] = "[$field] field must be a string";
+					continue;
+				}
+			}
+
+			if ( isset( $rules['max_length'] ) && is_string( $value ) ) {
+				if ( strlen( $value ) > $rules['max_length'] ) {
+					$errors[] = "[$field] field exceeds maximum length of {$rules['max_length']}";
+				}
+			}
+
+			if ( isset( $rules['pattern'] ) && is_string( $value ) ) {
+				if ( ! preg_match( $rules['pattern'], $value ) ) {
+					$errors[] = "[$field] field format is invalid";
+				}
+			}
+		}
+
+		if ( ! empty( $errors ) ) {
+			$this->logger->error( 'Nexus Address ERRORS: ' . implode( ', ', $errors ) . PHP_EOL . 'Nexus address removed from request body.' . PHP_EOL . print_r( $address, true ), 'WCS Tax' );
+
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -1141,23 +1239,16 @@ class WC_Connect_TaxJar_Integration {
 	public function calculate_tax( $options = array() ) {
 		$this->_log( ':::: TaxJar Plugin requested ::::' );
 
-		// Process $options array and turn them into variables
+		// Normalize options to an array and safely map to local variables.
 		$options = is_array( $options ) ? $options : array();
 
-		extract(
-			array_replace_recursive(
-				array(
-					'to_country'      => null,
-					'to_state'        => null,
-					'to_zip'          => null,
-					'to_city'         => null,
-					'to_street'       => null,
-					'shipping_amount' => null,
-					'line_items'      => null,
-				),
-				$options
-			)
-		);
+		$to_country      = $options['to_country'] ?? null;
+		$to_state        = $options['to_state'] ?? null;
+		$to_zip          = $options['to_zip'] ?? null;
+		$to_city         = $options['to_city'] ?? null;
+		$to_street       = $options['to_street'] ?? null;
+		$shipping_amount = $options['shipping_amount'] ?? 0;
+		$line_items      = $options['line_items'] ?? null;
 
 		$taxes = array(
 			'freight_taxable' => 1,
@@ -1167,11 +1258,11 @@ class WC_Connect_TaxJar_Integration {
 			'tax_rate'        => 0,
 		);
 
-		// Strict conditions to be met before API call can be conducted
+		// Strict conditions to be met before API call can be conducted.
 		if (
 			empty( $to_country ) ||
-			empty( $to_zip ) ||
-			( empty( $line_items ) && ( 0 == $shipping_amount ) ) ||
+			( empty( $to_zip ) && ! in_array( $to_country, WC()->countries->get_vat_countries() ) ) ||
+			( empty( $line_items ) && ( empty( $shipping_amount ) ) ) ||
 			WC()->customer->is_vat_exempt()
 		) {
 			return false;
@@ -1180,14 +1271,12 @@ class WC_Connect_TaxJar_Integration {
 		$to_zip = explode( ',', $to_zip );
 		$to_zip = array_shift( $to_zip );
 
-		$store_settings  = $this->get_store_settings();
-		$from_country    = $store_settings['country'];
-		$from_state      = $store_settings['state'];
-		$from_zip        = $store_settings['postcode'];
-		$from_city       = $store_settings['city'];
-		$from_street     = $store_settings['street'];
-		$shipping_amount = is_null( $shipping_amount ) ? 0.0 : $shipping_amount;
-		$items_total     = array_sum( array_column( $line_items, 'unit_price' ) );
+		$store_settings = $this->get_store_settings();
+		$from_country   = $store_settings['country'];
+		$from_state     = $store_settings['state'];
+		$from_zip       = $store_settings['postcode'];
+		$from_city      = $store_settings['city'];
+		$from_street    = $store_settings['street'];
 
 		$this->_log( ':::: TaxJar API called ::::' );
 
@@ -1206,73 +1295,125 @@ class WC_Connect_TaxJar_Integration {
 			'plugin'       => 'woo',
 		);
 
-		$body = $this->maybe_apply_taxjar_nexus_addresses_workaround( $body );
+		$nexus_address = $this->maybe_apply_taxjar_nexus_addresses_workaround( $body );
+
+		// If workaround empty use default store address as nexus address.
+		if ( empty( $nexus_address ) ) {
+			$nexus_address = array(
+				'country' => $body['from_country'],
+				'zip'     => $body['from_zip'],
+				'state'   => $body['from_state'],
+				'city'    => $body['from_city'],
+				'street'  => $body['from_street'],
+			);
+		}
+
+		/**
+		 * Filter to modify or disable the nexus address sent to TaxJar API.
+		 *
+		 * This filter allows modification of the nexus address that will be sent
+		 * in the TaxJar API request. The nexus address replaces the standard from_*
+		 * address fields when provided.
+		 *
+		 * Return false or an empty array to disable sending nexus addresses entirely,
+		 * which will cause the request to use the standard from_* address fields instead.
+		 *
+		 * The nexus address array should contain the following keys:
+		 * - country: Two-letter country code (required).
+		 * - state: Two-letter state/province code (required for US/CA).
+		 * - zip: Postal/ZIP code (required).
+		 * - city: City name (required).
+		 * - street: Street address (optional).
+		 *
+		 * @since 3.3.0
+		 *
+		 * @param array $nexus_address The nexus address array to be sent to TaxJar.
+		 * @param array $body          The complete TaxJar API request body.
+		 *
+		 * @return array|false Modified nexus address array, or false to disable nexus addresses.
+		 *
+		 * @example
+		 * // Disable nexus addresses entirely.
+		 * add_filter( 'woocommerce_taxjar_nexus_address', '__return_false' );
+		 *
+		 * @example
+		 * // Modify the nexus address.
+		 * add_filter( 'woocommerce_taxjar_nexus_address', function( $nexus_address, $body ) {
+		 *     $nexus_address['street'] = '123 Custom Street';
+		 *     return $nexus_address;
+		 * }, 10, 2 );
+		 */
+		$nexus_address = apply_filters( 'woocommerce_taxjar_nexus_address', $nexus_address, $body );
+
+		if ( is_array( $nexus_address ) && ! empty( $nexus_address ) && $this->is_nexus_address_valid( $nexus_address ) ) {
+			$params_to_unset = array(
+				'from_country',
+				'from_state',
+				'from_zip',
+				'from_city',
+				'from_street',
+			);
+
+			foreach ( $params_to_unset as $param ) {
+				unset( $body[ $param ] );
+			}
+			$body['nexus_addresses'] = array( $nexus_address );
+		}
 
 		// Either `amount` or `line_items` parameters are required to perform tax calculations.
-		if (
-			empty( $line_items )
-			|| ( 0 == $items_total
-			&& ! $this->is_tax_display_itemized() )
-		) {
+		if ( empty( $line_items ) ) {
 			$body['amount'] = 0.01;
 		} else {
 			$body['line_items'] = $line_items;
 		}
 
-		$response = $this->smartcalcs_cache_request( wp_json_encode( $body ) );
+		$response = $this->smartcalcs_cache_request( wp_json_encode( $body ), $from_state );
 
-		// if no response, no need to keep going - bail early
+		// if no response, no need to keep going - bail early.
 		if ( ! isset( $response ) || ! $response ) {
 			$this->_log( 'Received: none.' );
 
 			return false;
 		}
 
-		// Log the response
+		// Log the response.
 		$this->_log( 'Received: ' . $response['body'] );
 
-		// Decode Response
+		// Decode Response.
 		$taxjar_response = json_decode( $response['body'] );
 		if ( empty( $taxjar_response->tax ) ) {
 			return false;
 		}
-
-		if ( $this->is_tax_display_itemized() ) {
-			$taxjar_taxes = $taxjar_response->tax;
-			$taxes        = $this->get_itemized_tax_rates( $taxes, $taxjar_taxes, $options );
-		} else {
-			$taxjar_taxes = $this->maybe_override_taxjar_tax( $taxjar_response->tax, $body );
-			$taxes        = $this->get_combined_tax_rates( $taxes, $taxjar_taxes, $options );
-		}
+		$taxjar_taxes = $this->maybe_override_taxjar_tax( $taxjar_response->tax, $body );
+		$taxes        = $this->get_itemized_tax_rates( $taxes, $taxjar_taxes, $options );
 
 		return $taxes;
 	} // End calculate_tax().
 
-	private function get_itemized_tax_rates( $taxes, $taxjar_taxes, $options ) {
+	/**
+	 * Get itemized tax rates from TaxJar response.
+	 *
+	 * @param array  $taxes        The tax data array that will be modified and returned.
+	 * @param object $taxjar_taxes TaxJar response object.
+	 * @param array  $options      Cart data used for tax calculation.
+	 *
+	 * @return array
+	 */
+	private function get_itemized_tax_rates( $taxes, $taxjar_taxes, $options ): array {
 
-		// Process $options array and turn them into variables
+		// Normalize options and safely map to local variables.
 		$options = is_array( $options ) ? $options : array();
 
-		extract(
-			array_replace_recursive(
-				array(
-					'to_country'      => null,
-					'to_state'        => null,
-					'to_zip'          => null,
-					'to_city'         => null,
-					'to_street'       => null,
-					'shipping_amount' => null,
-					'line_items'      => null,
-				),
-				$options
-			)
-		);
+		$to_country = $options['to_country'] ?? null;
+		$to_state   = $options['to_state'] ?? null;
+		$to_zip     = $options['to_zip'] ?? null;
+		$to_city    = $options['to_city'] ?? null;
 
 		$store_settings = $this->get_store_settings();
 		$from_country   = $store_settings['country'];
 		$from_state     = $store_settings['state'];
 
-		// Update Properties based on Response
+		// Update Properties based on Response.
 		$taxes['freight_taxable'] = (int) $taxjar_taxes->freight_taxable;
 		$taxes['has_nexus']       = (int) $taxjar_taxes->has_nexus;
 		$taxes['tax_rate']        = $taxjar_taxes->rate;
@@ -1288,8 +1429,27 @@ class WC_Connect_TaxJar_Integration {
 		}
 
 		if ( $taxes['has_nexus'] ) {
-			// Use Woo core to find matching rates for taxable address
-			$location = array(
+
+			$this->tracks->record_user_event(
+				'tax_calculation_nexus_detected',
+				array(
+					'from_country'      => $from_country,
+					'from_state'        => $from_state,
+					'to_country'        => $to_country,
+					'to_state'          => $to_state,
+					'to_zip'            => $to_zip,
+					'to_city'           => $to_city,
+					'freight_taxable'   => $taxes['freight_taxable'],
+					'combined_tax_rate' => $taxes['tax_rate'],
+				)
+			);
+
+			// Use Woo core to find matching rates for taxable address.
+			$jurisdictions = array(
+				'county' => $taxjar_taxes->jurisdictions->county ?? null,
+				'city'   => $taxjar_taxes->jurisdictions->city ?? null,
+			);
+			$location      = array(
 				'from_country' => $from_country,
 				'from_state'   => $from_state,
 				'to_country'   => $to_country,
@@ -1304,10 +1464,11 @@ class WC_Connect_TaxJar_Integration {
 				$product_id           = $line_item_key_chunks[0];
 				$product              = wc_get_product( $product_id );
 
+				$tax_class = '';
 				if ( $product ) {
 					$tax_class = $product->get_tax_class();
 				} elseif ( isset( $this->backend_tax_classes[ $product_id ] ) ) {
-						$tax_class = $this->backend_tax_classes[ $product_id ];
+					$tax_class = $this->backend_tax_classes[ $product_id ];
 				}
 
 				$_tax_rates = (array) $line_item;
@@ -1317,13 +1478,12 @@ class WC_Connect_TaxJar_Integration {
 						continue;
 					}
 					$taxes['rate_ids'][ $line_item_key ][] = $this->create_or_update_tax_rate(
-						$taxjar_taxes->jurisdictions,
 						$location,
 						round( $tax_rate * 100, 4 ),
 						$tax_class,
 						$taxes['freight_taxable'],
 						$priority,
-						self::generate_itemized_tax_rate_name( $tax_rate_name, $to_country )
+						self::generate_itemized_tax_rate_name( $tax_rate_name, $to_country, $jurisdictions )
 					);
 
 					++$priority;
@@ -1338,124 +1498,37 @@ class WC_Connect_TaxJar_Integration {
 					continue;
 				}
 				$taxes['rate_ids']['shipping'][] = $this->create_or_update_tax_rate(
-					$taxjar_taxes->jurisdictions,
 					$location,
 					round( $tax_rate * 100, 4 ),
-					$tax_class,
+					'',
 					$taxes['freight_taxable'],
 					$priority,
-					self::generate_itemized_tax_rate_name( $tax_rate_name, $to_country )
+					self::generate_itemized_tax_rate_name( $tax_rate_name, $to_country, $jurisdictions )
 				);
 
 				++$priority;
 			}
-		} // End if().
-
-		return $taxes;
-	}
-
-	private function get_combined_tax_rates( $taxes, $taxjar_taxes, $options ) {
-
-		// Process $options array and turn them into variables
-		$options = is_array( $options ) ? $options : array();
-
-		extract(
-			array_replace_recursive(
-				array(
-					'to_country'      => null,
-					'to_state'        => null,
-					'to_zip'          => null,
-					'to_city'         => null,
-					'to_street'       => null,
-					'shipping_amount' => null,
-					'line_items'      => null,
-				),
-				$options
-			)
-		);
-
-		$store_settings = $this->get_store_settings();
-		$from_country   = $store_settings['country'];
-		$from_state     = $store_settings['state'];
-
-		// Update Properties based on Response
-		$taxes['freight_taxable'] = (int) $taxjar_taxes->freight_taxable;
-		$taxes['has_nexus']       = (int) $taxjar_taxes->has_nexus;
-		$taxes['tax_rate']        = $taxjar_taxes->rate;
-
-		if ( ! empty( $taxjar_taxes->breakdown ) ) {
-			if ( ! empty( $taxjar_taxes->breakdown->line_items ) ) {
-				$line_items = array();
-				foreach ( $taxjar_taxes->breakdown->line_items as $line_item ) {
-					$line_items[ $line_item->id ] = $line_item;
-				}
-				$taxes['line_items'] = $line_items;
-			}
 		}
-
-		if ( $taxes['has_nexus'] ) {
-			// Use Woo core to find matching rates for taxable address
-			$location = array(
-				'from_country' => $from_country,
-				'from_state'   => $from_state,
-				'to_country'   => $to_country,
-				'to_state'     => $to_state,
-				'to_zip'       => $to_zip,
-				'to_city'      => $to_city,
-			);
-
-			// Add line item tax rates
-			foreach ( $taxes['line_items'] as $line_item_key => $line_item ) {
-				$line_item_key_chunks = explode( '-', $line_item_key );
-				$product_id           = $line_item_key_chunks[0];
-				$product              = wc_get_product( $product_id );
-
-				if ( $product ) {
-					$tax_class = $product->get_tax_class();
-				} elseif ( isset( $this->backend_tax_classes[ $product_id ] ) ) {
-						$tax_class = $this->backend_tax_classes[ $product_id ];
-				}
-
-				if ( $line_item->combined_tax_rate ) {
-					$taxes['rate_ids'][ $line_item_key ] = $this->create_or_update_tax_rate(
-						$taxjar_taxes->jurisdictions,
-						$location,
-						round( $line_item->combined_tax_rate * 100, 4 ),
-						$tax_class,
-						$taxes['freight_taxable'],
-						1,
-						self::generate_combined_tax_rate_name( $taxjar_taxes->jurisdictions, $location['to_country'], $to_state )
-					);
-				}
-			}
-
-			// Add shipping tax rate
-			$taxes['rate_ids']['shipping'] = $this->create_or_update_tax_rate(
-				$taxjar_taxes->jurisdictions,
-				$location,
-				round( $taxes['tax_rate'] * 100, 4 ),
-				'',
-				$taxes['freight_taxable'],
-				1,
-				self::generate_combined_tax_rate_name( $taxjar_taxes->jurisdictions, $location['to_country'], $to_state )
-			);
-		} // End if().
 
 		return $taxes;
 	}
 
 	/**
-	 * Add or update a native WooCommerce tax rate
+	 * Add or update WooCommerce tax rate.
 	 *
-	 * Unchanged from the TaxJar plugin.
-	 * See: https://github.com/taxjar/taxjar-woocommerce-plugin/blob/9d8e725/includes/class-wc-taxjar-integration.php#L396
+	 * @param  array     $location
+	 * @param  int|float $rate
+	 * @param  string    $tax_class
+	 * @param  int       $freight_taxable
+	 * @param  int       $rate_priority
+	 * @param  string    $tax_rate_name
 	 *
 	 * @return int
 	 */
-	public function create_or_update_tax_rate( $jurisdictions, $location, $rate, $tax_class = '', $freight_taxable = 1, $rate_priority = 1, $rate_name = '' ) {
-		// all the states in GB have the same tax rate
-		// prevents from saving a "state" column value for GB
-		$to_state      = 'GB' === $location['to_country'] ? '' : $location['to_state'];
+	public function create_or_update_tax_rate( $location, $rate, $tax_class = '', $freight_taxable = 1, $rate_priority = 1, $tax_rate_name = 'Tax' ) {
+		// Prevent filling "State code" column for countries with VAT tax.
+		// VAT tax is country wide.
+		$to_state      = 'VAT' === $tax_rate_name ? '' : $location['to_state'];
 		$rate_priority = absint( $rate_priority );
 
 		/**
@@ -1479,14 +1552,14 @@ class WC_Connect_TaxJar_Integration {
 		if ( true === apply_filters( 'woocommerce_taxjar_enable_florida_shipping_tax', true ) && 'US' === $location['to_country'] && 'FL' === $location['from_state'] && 'FL' === $location['to_state'] ) {
 			$freight_taxable = 1;
 		}
-		$tax_rate_name = $rate_name ? $rate_name : self::generate_combined_tax_rate_name( $jurisdictions, $location['to_country'], $to_state );
-		$tax_rate      = array(
+
+		$tax_rate = array(
 			'tax_rate_country'  => $location['to_country'],
 			'tax_rate_state'    => $to_state,
 			// For the US, we're going to modify the name of the tax rate to simplify the reporting and distinguish between the tax rates at the counties level.
 			// I would love to do this for other locations, but it looks like that would create issues.
 			// For example, for the UK it would continuously rename the rate name with an updated `state` "piece", each time a request is made
-			'tax_rate_name'     => $rate_name,
+			'tax_rate_name'     => $tax_rate_name,
 			'tax_rate_priority' => $rate_priority,
 			'tax_rate_compound' => false,
 			'tax_rate_shipping' => $freight_taxable,
@@ -1497,9 +1570,9 @@ class WC_Connect_TaxJar_Integration {
 		$wc_rates = WC_Tax::find_rates(
 			array(
 				'country'   => $location['to_country'],
-				'state'     => $to_state,
+				'state'     => str_replace( ' ', '', $to_state ),
 				'postcode'  => $location['to_zip'],
-				'city'      => $location['to_city'],
+				'city'      => strtoupper( $location['to_city'] ),
 				'tax_class' => $tax_class,
 			)
 		);
@@ -1523,9 +1596,7 @@ class WC_Connect_TaxJar_Integration {
 			$this->_log( $tax_rate );
 			if ( $wc_rate[ $rate_id ]['label'] !== $tax_rate_name || (float) $wc_rate[ $rate_id ]['rate'] !== (float) $rate ) {
 				// Allow to manually change is Shipping taxable, won't be overwritten automatically.
-				if ( $this->is_tax_display_itemized() ) {
-					$tax_rate['tax_rate_shipping'] = wc_string_to_bool( $wc_rate[ $rate_id ]['shipping'] );
-				}
+				$tax_rate['tax_rate_shipping'] = wc_string_to_bool( $wc_rate[ $rate_id ]['shipping'] );
 				WC_Tax::_update_tax_rate( $rate_id, $tax_rate );
 			}
 		} else {
@@ -1533,7 +1604,7 @@ class WC_Connect_TaxJar_Integration {
 			$this->_log( ':: Adding New Tax Rate ::' );
 			$this->_log( $tax_rate );
 			$rate_id = WC_Tax::_insert_tax_rate( $tax_rate );
-			// VAT is alwyas country wide, no need to create spearate entires for each zip and city.
+			// VAT is always country wide, no need to create separate entires for each zip and city.
 			if ( 'VAT' !== $tax_rate_name ) {
 				WC_Tax::_update_tax_rate_postcodes( $rate_id, wc_normalize_postcode( wc_clean( $location['to_zip'] ) ) );
 				WC_Tax::_update_tax_rate_cities( $rate_id, wc_clean( $location['to_city'] ) );
@@ -1541,6 +1612,7 @@ class WC_Connect_TaxJar_Integration {
 		}
 
 		$this->_log( 'Tax Rate ID Set for ' . $rate_id );
+
 		return $rate_id;
 	}
 
@@ -1599,10 +1671,11 @@ class WC_Connect_TaxJar_Integration {
 	 * See: https://github.com/taxjar/taxjar-woocommerce-plugin/blob/4b481f5/includes/class-wc-taxjar-integration.php#L451
 	 *
 	 * @param $json
+	 * @param $from_state
 	 *
 	 * @return mixed|WP_Error
 	 */
-	public function smartcalcs_cache_request( $json ) {
+	public function smartcalcs_cache_request( $json, $from_state ) {
 		$cache_key           = 'tj_tax_' . hash( 'md5', $json );
 		$zip_state_cache_key = false;
 		$request             = json_decode( $json );
@@ -1612,7 +1685,15 @@ class WC_Connect_TaxJar_Integration {
 			$zip_state_cache_key = strtolower( 'tj_tax_' . $to_zip . '_' . $to_state );
 			$response            = get_transient( $zip_state_cache_key );
 		}
-		$response         = $response ? $response : get_transient( $cache_key );
+		$response = ! empty( $response ) ? $response : get_transient( $cache_key );
+		if ( $response && 'CA' !== $from_state ) {
+			// If $from_state is not California, we need to check for incorrect California tax nexus.
+			try {
+				$this->check_for_incorrect_california_tax_nexus( $response['body'], true, $from_state );
+			} catch ( Exception $e ) {
+				$this->_log( 'Error checking for incorrect California tax nexus: ' . $e->getMessage() );
+			}
+		}
 		$response_code    = wp_remote_retrieve_response_code( $response );
 		$save_error_codes = array( 404, 400 );
 
@@ -1620,9 +1701,17 @@ class WC_Connect_TaxJar_Integration {
 		$this->notifier->clear_notices( 'taxjar' );
 
 		if ( false === $response ) {
-			$response                 = $this->smartcalcs_request( $json );
-			$response_code            = wp_remote_retrieve_response_code( $response );
-			$body                     = json_decode( wp_remote_retrieve_body( $response ) );
+			$response      = $this->smartcalcs_request( $json );
+			$response_code = wp_remote_retrieve_response_code( $response );
+			$body          = json_decode( wp_remote_retrieve_body( $response ) );
+			if ( 'CA' !== $from_state ) {
+				// If $from_state is not California, we need to check for incorrect California tax nexus.
+				try {
+					$this->check_for_incorrect_california_tax_nexus( $body, false, $from_state );
+				} catch ( Exception $e ) {
+					$this->_log( 'Error checking for incorrect California tax nexus: ' . $e->getMessage() );
+				}
+			}
 			$is_zip_to_state_mismatch = (
 				isset( $body->detail )
 				&& is_string( $body->detail )
@@ -1768,15 +1857,40 @@ class WC_Connect_TaxJar_Integration {
 	}
 
 	/**
-	 * Determines whether taxes are displayed itemized based on WooCommerce settings.
+	 * Check for incorrect California tax nexus in the TaxJar API response or cached response.
 	 *
-	 * @return bool True if taxes are displayed itemized, false otherwise.
+	 * @param $response_body
+	 * @param $cached
+	 *
+	 * @return void
 	 */
-	private function is_tax_display_itemized() {
-		if ( null === $this->is_tax_display_itemized ) {
-			$this->is_tax_display_itemized = 'itemized' === get_option( 'woocommerce_tax_total_display', 'single' );
+	private function check_for_incorrect_california_tax_nexus( $response_body, $cached, $from_state ): void {
+		$log_suffix = 'in TaxJar API response.';
+
+		if ( $cached ) {
+			$response_body = json_decode( $response_body );
+			$log_suffix    = 'in cached response.';
 		}
 
-		return $this->is_tax_display_itemized;
+		$to_state   = isset( $response_body->tax->jurisdictions->state ) ? $response_body->tax->jurisdictions->state : 'not set';
+		$to_country = isset( $response_body->tax->jurisdictions->country ) ? $response_body->tax->jurisdictions->country : 'not set';
+		$has_nexus  = isset( $response_body->tax->has_nexus ) ? $response_body->tax->has_nexus : null;
+
+		if ( 'CA' === $to_state && 'US' === $to_country && true === $has_nexus ) {
+			$this->_log(
+				sprintf(
+					'Incorrect California tax nexus detected %1$s (from_state: %2$s, to_state: %3$s, to_country: %4$s, has_nexus: %5$s).',
+					$log_suffix,
+					$from_state ?: 'unknown',
+					$to_state,
+					$to_country,
+					json_encode( $has_nexus ),
+				)
+			);
+		}
+
+		if ( 'not set' === $to_state || 'not set' === $to_country || null === $has_nexus ) {
+			throw new Exception( sprintf( 'One or more values are not set : to_state=>%1$s, to_country=>%2$s, has_nexus=>%3$s', $to_state, $to_country, json_encode( $has_nexus ) ) );
+		}
 	}
 }

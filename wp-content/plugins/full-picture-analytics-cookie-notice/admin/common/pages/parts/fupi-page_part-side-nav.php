@@ -31,7 +31,6 @@ class Fupi_Build_Side_Nav {
         // $this->add_account_link();
         $this->add_extra_html();
         $this->output_all_html();
-
     }
 
     private function get_modules_names(){
@@ -170,9 +169,9 @@ class Fupi_Build_Side_Nav {
         if ( $section_type == 'priv') {
             
             if ( $this->active_slug == 'gdpr_setup_helper' ) {
-                $section_html .= '<div class="fupi_sidenav_item fupi_current fupi_alt_style"><span class="fupi_sidenav_title">' . esc_html__('GDPR setup info', 'full-picture-analytics-cookie-notice') . '</span></div>';
+                $section_html .= '<div class="fupi_sidenav_item fupi_current fupi_alt_style"><img src="' . FUPI_URL . '/admin/assets/img/info_ico2.png" aria-hidden="true"> <span class="fupi_sidenav_title">' . esc_html__('GDPR setup info', 'full-picture-analytics-cookie-notice') . '</span></div>';
             } else {
-                $section_html .= '<a class="fupi_sidenav_item fupi_alt_style" href="' . admin_url('admin.php?page=full_picture_tools&tab=gdpr_setup_helper') . '"><span class="fupi_sidenav_title">' . esc_html__('GDPR setup info', 'full-picture-analytics-cookie-notice') . '</span></a>';
+                $section_html .= '<a class="fupi_sidenav_item fupi_alt_style" href="' . admin_url('admin.php?page=full_picture_tools&tab=gdpr_setup_helper') . '"><img src="' . FUPI_URL . '/admin/assets/img/info_ico2.png" aria-hidden="true"> <span class="fupi_sidenav_title">' . esc_html__('GDPR setup info', 'full-picture-analytics-cookie-notice') . '</span></a>';
             }
         }
         
@@ -190,21 +189,30 @@ class Fupi_Build_Side_Nav {
 
     private function add_extra_html(){
 
-        // $this->menu_html .= '<div class="fupi_sidenav_section">
-        //     <h3 class="fupi_sidenav_item fupi_sidenav_section_title">' . esc_html__('Guides & Discussions', 'full-picture-analytics-cookie-notice') . '</h3>
-            
-        //     <a class="fupi_sidenav_item" href="https://www.facebook.com/groups/onlinegrowthtools" target="_blank"><span class="dashicons dashicons-facebook"></span><span class="fupi_sidenav_title">' . esc_html__('Facebook group', 'full-picture-analytics-cookie-notice') . '</span></a>
-            
-        //     <a class="fupi_sidenav_item " href="https://www.youtube.com/channel/UCHyy-PD_OIV_kebY9HPyPOQ" target="_blank"><span class="dashicons dashicons-youtube"></span><span class="fupi_sidenav_title">' . esc_html__('Youtube channel', 'full-picture-analytics-cookie-notice') . '</span></a>    
-        // </div>';
-
         if ( fupi_fs()->is_not_paying() ) {
-            $this->extra_html .= '<div id="fupi_sidenav_banner">
+
+            // Define date range (October 31, 2025 to November 30, 2025)
+            $start_date = strtotime('2025-10-31 00:00:00');
+            $end_date = strtotime('2025-12-07 23:59:59');
+            $current_time = current_time('timestamp');
+
+            $this->extra_html = '<div id="fupi_sidenav_banner">
                 <div id="fupi_sidenav_banner_unlock_icon"><span class="dashicons dashicons-unlock"></span></div>
                 <h3>' . esc_html__('Unlock all PRO features', 'full-picture-analytics-cookie-notice') . '</h3>
                 <a href="https://wpfullpicture.com/pricing/" class="button-primary">' . esc_html__('Get PRO', 'full-picture-analytics-cookie-notice') . '<span class="dashicons dashicons-arrow-right"></span></a>
                 <a href="https://wpfullpicture.com/free-vs-pro/" style="color: lightblue; text-align: center; display: block;">' . esc_html__('Compare Free and PRO', 'full-picture-analytics-cookie-notice') . '</a>
             </div>';
+            
+            // Show BF DEAL notification if current date is within the range
+            if ( $current_time >= $start_date && $current_time <= $end_date ) {
+                $this->extra_html = '<div id="fupi_sidenav_banner">
+                    <div id="fupi_sidenav_banner_unlock_icon"><span class="dashicons dashicons-unlock"></span></div>
+                    <h3>' . esc_html__('Black Friday deal!', 'full-picture-analytics-cookie-notice') . '</h3>
+                    <p style="color: #efefef; font-size: 15px; text-align: center;">' . esc_html__('Last days of our Black Friday deal!', 'full-picture-analytics-cookie-notice') . '</p>
+                    <a href="https://wpfullpicture.com/pricing/" class="button-primary">' . esc_html__('Check prices', 'full-picture-analytics-cookie-notice') . '<span class="dashicons dashicons-arrow-right"></span></a>
+                    <a href="https://wpfullpicture.com/free-vs-pro/" style="color: lightblue; text-align: center; display: block;">' . esc_html__('Compare Free and PRO', 'full-picture-analytics-cookie-notice') . '</a>
+                </div>';
+            }
         }
     }
 
@@ -220,7 +228,7 @@ class Fupi_Build_Side_Nav {
             <div class="fupi_slides">
                 <div class="fupi_slide">
                     <div class="fupi_slide_main_text">' . esc_html__('Measure how many visitors are really interested in your products', 'full-picture-analytics-cookie-notice') . '</div>
-                    <p class="small" style="line-height: 1.2"><a href="https://wpfullpicture.com/support/documentation/how-to-set-up-advanced-triggers/" target="_blank">' . esc_html__('See how to do it with Advanced Triggers', 'full-picture-analytics-cookie-notice') . '</a></p>
+                    <p class="small" style="line-height: 1.2"><a href="https://wpfullpicture.com/support/documentation/how-to-set-up-advanced-triggers/" target="_blank">' . esc_html__('See how to do it with custom triggers', 'full-picture-analytics-cookie-notice') . '</a></p>
                 </div>
                 <div class="fupi_slide">
                     <div class="fupi_slide_main_text">' . esc_html__('Improve conersion tracking with server-side tracking and enhanced attribution', 'full-picture-analytics-cookie-notice') . '</div>

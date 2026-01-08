@@ -98,6 +98,23 @@ if ( ! empty( $input ) ) foreach( $input as $key => $value ) {
 				
 			break;
 
+			// for the geolocation
+
+			case 'ipdata_api_key':
+			case 'geo':
+				$clean_val = sanitize_key( $value );
+			break;
+
+			case 'cf_worker_url':
+				$clean_val = esc_url_raw( $value );
+			break;
+			
+			case 'remember_geo':
+				$clean_val = (int) $value;
+			break;
+			
+			// default
+
 			default:
 				$clean_val = is_bool ( $value ) || is_string ( $value ) ? strip_tags( stripslashes( $value ) ) : false;
 			break;

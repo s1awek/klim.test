@@ -18,11 +18,11 @@ if(!class_exists('Wt_Iew_IE_Basic_Helper'))
 		public static function _get_csv_delimiters()
 		{
 			return array(
-				'comma'=>array('value'=>__('Comma'), 'val'=>","),
-				'semicolon'=>array('value'=>__('Semicolon'), 'val'=>";"),
-				'tab'=>array('value'=>__('Tab'), 'val'=>"\t"),
-				'space'=>array('value'=>__('Space'), 'val'=>" "),
-				'other'=>array('value'=>__('Other'), 'val'=>""),
+				'comma'=>array('value'=>__('Comma', 'product-import-export-for-woo'), 'val'=>","),
+				'semicolon'=>array('value'=>__('Semicolon', 'product-import-export-for-woo'), 'val'=>";"),
+				'tab'=>array('value'=>__('Tab', 'product-import-export-for-woo'), 'val'=>"\t"),
+				'space'=>array('value'=>__('Space', 'product-import-export-for-woo'), 'val'=>" "),
+				'other'=>array('value'=>__('Other', 'product-import-export-for-woo'), 'val'=>""),
 			);
 		}
 		public static function _get_local_file_path($file_url)
@@ -192,12 +192,12 @@ if(!class_exists('Wt_Iew_IE_Basic_Helper'))
 			{
 				$debug_panel_btns=array(
 					'refresh_step'=>array(
-						'title'=>__('Refresh the step'),
+						'title'=>__('Refresh the step', 'product-import-export-for-woo'),
 						'icon'=>'dashicons dashicons-update',
 						'onclick'=>'wt_iew_basic_'.$module_base.'.refresh_step();',
 					),
 					'console_form_data'=>array(
-						'title'=>__('Console form data'),
+						'title'=>__('Console form data', 'product-import-export-for-woo'),
 						'icon'=>'dashicons dashicons-code-standards',
 						'onclick'=>'wt_iew_basic_'.$module_base.'.console_formdata();',
 					),
@@ -208,15 +208,15 @@ if(!class_exists('Wt_Iew_IE_Basic_Helper'))
 			if(defined('WT_IEW_DEBUG_BASIC') && WT_IEW_DEBUG_BASIC && is_array($debug_panel_btns) && count($debug_panel_btns)>0)
 			{
 				?>
-				<div class="wt_iew_debug_panel" title="<?php _e('For debugging process');?>">
-					<div class="wt_iew_debug_panel_hd"><?php _e('Debug panel');?></div>
+				<div class="wt_iew_debug_panel" title="<?php esc_html_e('For debugging process', 'product-import-export-for-woo');?>">
+					<div class="wt_iew_debug_panel_hd"><?php esc_html_e('Debug panel', 'product-import-export-for-woo');?></div>
 					<div class="wt_iew_debug_panel_con">
 						<?php
 						foreach ($debug_panel_btns as $btn) 
 						{
 							?>
-							<a onclick="<?php echo $btn['onclick'];?>" title="<?php echo $btn['title'];?>">
-								<span class="<?php echo $btn['icon'];?>"></span>
+							<a onclick="<?php echo esc_attr($btn['onclick']);?>" title="<?php echo esc_attr($btn['title']);?>">
+								<span class="<?php echo esc_attr($btn['icon']);?>"></span>
 							</a>
 							<?php
 						}

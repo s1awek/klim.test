@@ -1,0 +1,1 @@
+System.register(["../../../common/FreeGuide.vue_vue_type_style_index_0_lang-legacy.DI07gl1u.js","../index-legacy.DHUdaNDE.js"],(function(e,t){"use strict";return{setters:[t=>{t._,e("default",t._)},null],execute:function(){}}}));

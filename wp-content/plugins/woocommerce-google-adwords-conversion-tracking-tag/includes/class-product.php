@@ -327,8 +327,7 @@ class Product {
 		foreach ((array) $order_items as $order_item) {
 
 			$order_item_data = $order_item->get_data();
-
-			$product = $order_item->get_product();
+			$product         = $order_item->get_product();
 
 			if (self::is_not_wc_product($product)) {
 				return [];
@@ -339,7 +338,9 @@ class Product {
 				'variation_id'        => $order_item_data['variation_id'],
 				'name'                => $order_item_data['name'],
 				'quantity'            => $order_item_data['quantity'],
-				'price'               => Google_Helpers::pmw_get_order_item_price($order_item),
+				'price'               => self::pmw_get_order_item_price($order_item),
+				'price_tax_included'  => self::pmw_get_order_item_price($order_item, true),
+				'price_tax_excluded'  => self::pmw_get_order_item_price($order_item, false),
 				'subtotal'            => (float) Helpers::format_decimal($order_item_data['subtotal'], 2),
 				'subtotal_tax'        => (float) Helpers::format_decimal($order_item_data['subtotal_tax'], 2),
 				'total'               => (float) Helpers::format_decimal($order_item_data['total'], 2),
@@ -411,7 +412,7 @@ class Product {
 
 		?>
 		<script<?php echo wp_kses(Helpers::get_opening_script_string(), Helpers::get_script_string_allowed_html()); ?>>
-			(window.wpmDataLayer = window.wpmDataLayer || {}).products             = window.wpmDataLayer.products || {};
+			(window.wpmDataLayer = window.wpmDataLayer || {}).products                = window.wpmDataLayer.products || {};
 			window.wpmDataLayer.products[<?php echo esc_html($product->get_id()); ?>] = <?php echo wp_json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
 			<?php $set_position ? self::get_product_data_layer_script_html_part_2($product) : ''; ?>
 		</script>
@@ -445,5 +446,34 @@ class Product {
 	 */
 	public static function is_not_wc_product( $var ) {
 		return !self::is_wc_product($var);
+	}
+
+	/**
+	 * Get the price of an order item.
+	 *
+	 * @param      $order_item
+	 * @param null $include_tax
+	 * @return float
+	 */
+	public static function pmw_get_order_item_price( $order_item, $include_tax = null ) {
+
+		if (Environment::is_woo_discount_rules_active()) {
+
+			$item_value = $order_item->get_meta('_advanced_woo_discount_item_total_discount');
+
+			if (isset($item_value['discounted_price']) && 0 !== $item_value['discounted_price']) {
+				return (float) wc_format_decimal($item_value['discounted_price'], 2);
+			}
+
+			if (isset($item_value['initial_price']) && 0 !== $item_value['initial_price']) {
+				return (float) wc_format_decimal($item_value['initial_price'], 2);
+			}
+		}
+
+		if (null === $include_tax) {
+			$include_tax = self::output_product_prices_with_tax();
+		}
+
+		return (float) wc_format_decimal($order_item->get_order()->get_item_total($order_item, $include_tax), 2);
 	}
 }

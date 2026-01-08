@@ -4,6 +4,7 @@ if (!defined('WPINC')) {
     exit;
 }
 
+#[AllowDynamicProperties]
 class Wt_Import_Export_For_Woo_Basic_Categories_Import {
 
     public $parent_module = null;
@@ -55,17 +56,17 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
                         $msg = 'Category updated successfully.';
                     }
 
-                    $this->import_results[$row] = array('row'=>$row, 'message'=>$msg, 'status'=>true, 'status_msg' => __( 'Success' ), 'post_id'=>$result['id'], 'post_link' => Wt_Import_Export_For_Woo_Basic_Product_Categories::get_item_link_by_id($result['id'])); 
+                    $this->import_results[$row] = array('row'=>$row, 'message'=>$msg, 'status'=>true, 'status_msg' => __( 'Success', 'product-import-export-for-woo' ), 'post_id'=>$result['id'], 'post_link' => Wt_Import_Export_For_Woo_Basic_Product_Categories::get_item_link_by_id($result['id'])); 
                     Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - " . $msg);
                     $success++;
                 } else {
 
-                    $this->import_results[$row] = array('row'=>$row, 'message'=>$result->get_error_message(), 'status'=>false, 'status_msg' => __( 'Failed/Skipped' ), 'post_id'=>'', 'post_link' => array( 'title' => __( 'Untitled' ), 'edit_url' => false ) );
+                    $this->import_results[$row] = array('row'=>$row, 'message'=>$result->get_error_message(), 'status'=>false, 'status_msg' => __( 'Failed/Skipped', 'product-import-export-for-woo' ), 'post_id'=>'', 'post_link' => array( 'title' => __( 'Untitled', 'product-import-export-for-woo' ), 'edit_url' => false ) );
                     Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - Prosessing failed. Reason: " . $result->get_error_message());
                     $failed++;
                 }
             } else {
-                $this->import_results[$row] = array('row'=>$row, 'message'=>$parsed_data->get_error_message(), 'status'=>false, 'status_msg' => __( 'Failed/Skipped' ), 'post_id'=>'', 'post_link' => array( 'title' => __( 'Untitled' ), 'edit_url' => false ) );
+                $this->import_results[$row] = array('row'=>$row, 'message'=>$parsed_data->get_error_message(), 'status'=>false, 'status_msg' => __( 'Failed/Skipped', 'product-import-export-for-woo' ), 'post_id'=>'', 'post_link' => array( 'title' => __( 'Untitled', 'product-import-export-for-woo' ), 'edit_url' => false ) );
                 Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - Parsing failed. Reason: " . $parsed_data->get_error_message());
                 $failed++;
             }
@@ -155,12 +156,14 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
 
         // Check by term_id.
         if ( '' !== $term_id ) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $chk_term_id = $wpdb->get_results($wpdb->prepare("SELECT t.term_id, t.slug FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_id = t.term_id WHERE t.term_id = %d and tt.taxonomy = %s ORDER BY t.term_id", $term_id, $tax_type), ARRAY_A);
             if ( ! empty($chk_term_id[0]['term_id']) ) {
                 $tid = $chk_term_id[0]['term_id'];
 
             // Check by original term_id in termmeta.
             } else {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                 $chk_meta = $wpdb->get_results($wpdb->prepare("SELECT term_id FROM $wpdb->termmeta WHERE meta_key = %s and meta_value = %d ORDER BY meta_key,meta_id", $term_meta_tbl_key, $term_id), ARRAY_A);
                 if ( ! empty($chk_meta[0]['term_id']) ) {
                     $tid = $chk_meta[0]['term_id'];
@@ -170,6 +173,7 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
 
         // Check by slug if term_id check didn't find anything.
         if ( '' !== $slug && '' === $tid ) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $chk_slug = $wpdb->get_row($wpdb->prepare("SELECT t.term_id, t.slug FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_id = t.term_id WHERE t.slug = %s and tt.taxonomy = %s ORDER BY t.term_id", rawurlencode($slug), $tax_type), ARRAY_A);
             if ( ! empty($chk_slug['term_id']) ) {
                 $tid = $chk_slug['term_id'];
@@ -185,8 +189,10 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
 
                     if ($taxonomy_type == 'product_tag' || $taxonomy_type == 'product_cat') {
 
+                        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                         $res = $wpdb->get_results($wpdb->prepare("SELECT term_id FROM $wpdb->termmeta WHERE meta_key = %s and meta_value = %d ORDER BY meta_key,meta_id", $term_meta_tbl_key, $parent_id), ARRAY_A);
 						if(empty($res)){
+                            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 							$res = $wpdb->get_results($wpdb->prepare("SELECT term_id FROM $wpdb->terms WHERE term_id = %d ORDER BY term_id", $parent_id), ARRAY_A);
 						}
 

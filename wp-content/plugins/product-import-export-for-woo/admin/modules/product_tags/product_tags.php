@@ -36,7 +36,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Tags {
         {
             include_once(ABSPATH.'wp-admin/includes/plugin.php');
         }
-        if(!is_plugin_active('woocommerce/woocommerce.php'))
+        if ( ! class_exists( 'WooCommerce' ) )
         {
             return;
         }
@@ -76,7 +76,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Tags {
     {
         if($this->module_base==$base)
         {
-            $steps['advanced']['description']=__('Use advanced options from below to decide updates to existing tags, batch import count. You can also save the template file for future imports.');
+            $steps['advanced']['description']=__('Use advanced options from below to decide updates to existing tags, batch import count. You can also save the template file for future imports.', 'product-import-export-for-woo');
         }
         return $steps;
     }
@@ -89,7 +89,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Tags {
         if(0 == $batch_offset){                        
             $memory = size_format(self::wt_let_to_num(ini_get('memory_limit')));
             $wp_memory = size_format(self::wt_let_to_num(WP_MEMORY_LIMIT));                      
-            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->module_base, 'import', '---[ New import started at '.date('Y-m-d H:i:s').' ] PHP Memory: ' . $memory . ', WP Memory: ' . $wp_memory);
+            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->module_base, 'import', '---[ New import started at '.current_time('Y-m-d H:i:s').' ] PHP Memory: ' . $memory . ', WP Memory: ' . $wp_memory);
         }
         
         include plugin_dir_path(__FILE__) . 'import/import.php';
@@ -98,7 +98,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Tags {
         $response = $import->prepare_data_to_import($import_data,$form_data,$batch_offset,$is_last_batch);
         
         if($is_last_batch){
-            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->module_base, 'import', '---[ Import ended at '.date('Y-m-d H:i:s').']---');
+            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->module_base, 'import', '---[ Import ended at '.current_time('Y-m-d H:i:s').']---');
         }
         
         return $response;
@@ -216,9 +216,9 @@ class Wt_Import_Export_For_Woo_Basic_Product_Tags {
 
     public static function get_tags_sort_columns() {
             $sort_columns = array(
-                'id' => __('Tag ID'),
-                'name' => __('Tag name'),
-                'slug' => __('Tag slug'),
+                'id' => __('Tag ID', 'product-import-export-for-woo'),
+                'name' => __('Tag name', 'product-import-export-for-woo'),
+                'slug' => __('Tag slug', 'product-import-export-for-woo'),
             );
             return apply_filters('wt_iew_allowed_tags_sort_columns', $sort_columns);
     }
@@ -317,20 +317,20 @@ class Wt_Import_Export_For_Woo_Basic_Product_Tags {
 
         $sort_columns = self::get_tags_sort_columns();
         $fields['sort_columns'] = array(
-            'label' => __('Sort Columns'),
-            'placeholder' => __('comment_ID'),
+            'label' => __('Sort Columns', 'product-import-export-for-woo'),
+            'placeholder' => __('comment_ID', 'product-import-export-for-woo'),
             'field_name' => 'sort_columns',
             'sele_vals' => $sort_columns,
-            'help_text' => __('Sort the exported data based on the selected column in the order specified. Defaulted to ascending order.'),
+            'help_text' => __('Sort the exported data based on the selected column in the order specified. Defaulted to ascending order.', 'product-import-export-for-woo'),
             'type' => 'select',
         );
         
         $fields['order_by'] = array(
-                'label' => __('Sort'),
-                'placeholder' => __('ASC'),
+                'label' => __('Sort', 'product-import-export-for-woo'),
+                'placeholder' => __('ASC', 'product-import-export-for-woo'),
                 'field_name' => 'order_by',
                 'sele_vals' => array('ASC' => 'Ascending', 'DESC' => 'Descending'),
-                'help_text' => __('Defaulted to Ascending. Applicable to above selected columns in the order specified.'),
+                'help_text' => __('Defaulted to Ascending. Applicable to above selected columns in the order specified.', 'product-import-export-for-woo'),
                 'type' => 'select',
                 'css_class' => '',
             );
@@ -357,24 +357,24 @@ class Wt_Import_Export_For_Woo_Basic_Product_Tags {
         
         
         $out['merge'] = array(
-            'label' => __("If the tag exists in the store"),
+            'label' => __("If the tag exists in the store", 'product-import-export-for-woo'),
             'type' => 'radio',
             'radio_fields' => array(                
-                '0' => __('Skip'),
-                '1' => __('Update')
+                '0' => __('Skip', 'product-import-export-for-woo'),
+                '1' => __('Update', 'product-import-export-for-woo')
             ),
             'value' => '0',
             'field_name' => 'merge',
-            'help_text' => __('Tags are matched by their ID/slugs.'),
+            'help_text' => __('Tags are matched by their ID/slugs.', 'product-import-export-for-woo'),
             'help_text_conditional'=>array(
                 array(
-                    'help_text'=> __('Retains the tag in the store as is and skips the matching tag from the input file.'),
+                    'help_text'=> __('Retains the tag in the store as is and skips the matching tag from the input file.', 'product-import-export-for-woo'),
                     'condition'=>array(
                         array('field'=>'wt_iew_merge', 'value'=>0)
                     )
                 ),
                 array(
-                    'help_text'=> __('Update tag as per data from the input file'),
+                    'help_text'=> __('Update tag as per data from the input file', 'product-import-export-for-woo'),
                     'condition'=>array(
                         array('field'=>'wt_iew_merge', 'value'=>1)
                     )

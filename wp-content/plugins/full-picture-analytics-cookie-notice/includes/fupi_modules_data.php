@@ -21,7 +21,7 @@
         'type' => 'home',
         'sticky_link' => true,
         'always_enabled' => true,
-        // 'icon' => 'settings_ico2',
+        'icon' => 'cog_ico',
     ],
     [ 
         'name' => 'Crazy Egg',
@@ -304,6 +304,7 @@
         'type' => 'integr',
         'always_enabled' => true,
         'sticky_link' => true,
+        'icon'  => 'cog_ico',
         // 'dashicon' => 'dashicons-arrow-right-alt2',
     ],
     [ 
@@ -362,7 +363,7 @@
         'type' => 'ext',
     ],
     [ 
-        'name' => 'Advanced Triggers + Visitor Scoring',
+        'name' => 'Custom triggers + Visitor Scoring',
         'id' => 'atrig', 
         'is_avail' => fupi_fs()->can_use_premium_code(), 
         'is_premium' => true, 
@@ -370,15 +371,5 @@
         'icon' => 'adv_triggers_ico2',
         'is_addon' => false,
         'type' => 'ext', 
-    ],
-    [ 
-        'name' => 'Geolocation',
-        'id' => 'geo', 
-        'is_avail' => fupi_fs()->can_use_premium_code(),
-        'is_premium' => true, 
-        'has_admin_page' => true, 
-        'is_addon' => false,
-        'icon' => 'geo_ico2',
-        'type' => 'ext',
     ],
 ];

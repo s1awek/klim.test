@@ -3,7 +3,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 ?>
-<table class="wt-iew-mapping-tb wt-iew-importer-meta-mapping-tb wt-iew-mapping-tb-imp" data-field-type="<?php echo $meta_mapping_screen_field_key; ?>">
+<table class="wt-iew-mapping-tb wt-iew-importer-meta-mapping-tb wt-iew-mapping-tb-imp" data-field-type="<?php echo esc_attr($meta_mapping_screen_field_key); ?>">
 	<thead>
 		<tr>
     		<th>
@@ -11,11 +11,11 @@ if (!defined('ABSPATH')) {
     			$is_checked=$meta_mapping_screen_field_val['checked'];
     			$checked_attr=($is_checked==1 ? ' checked="checked"' : '');
     			?>
-    			<input type="checkbox" name="" class="wt_iew_mapping_checkbox_main" <?php echo $checked_attr; ?>>
+    			<input type="checkbox" name="" class="wt_iew_mapping_checkbox_main" <?php echo esc_attr($checked_attr); ?>>
     		</th>
-    		<th width="35%"><span class="wt_iew_step_head_post_type_name"></span> <?php esc_html_e( 'fields' );?></th>
-    		<th><?php _e('File columns');?></th>
-			<th><?php esc_html_e( 'Transform' );?></th>
+    		<th width="35%"><span class="wt_iew_step_head_post_type_name"></span> <?php esc_html_e( 'fields', 'product-import-export-for-woo');?></th>
+    		<th><?php esc_html_e('File columns', 'product-import-export-for-woo');?></th>
+			<th><?php esc_html_e( 'Transform', 'product-import-export-for-woo');?></th>
     	</tr>
 	</thead>
 	<tbody>
@@ -34,7 +34,7 @@ if (!defined('ABSPATH')) {
 			?>
 			<tr>
 				<td colspan="3" style="text-align:center;">
-					<?php _e('No fields found.'); ?>
+					<?php esc_html_e('No fields found.', 'product-import-export-for-woo'); ?>
 				</td>
 			</tr>
 			<?php

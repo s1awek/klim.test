@@ -1139,7 +1139,7 @@ if ( ! class_exists( 'WWP_Script_Loader' ) ) {
         public function ajax_dismiss_admin_notice() {
             $notice_key = isset( $_REQUEST['nkey'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['nkey'] ) ) : ''; // phpcs:ignore
 
-			if ( defined( 'DOING_AJAX' ) && DOING_AJAX && current_user_can( 'manage_options' ) && $notice_key && isset( $_REQUEST['nonce'] ) && false !== check_ajax_referer( 'wp_wpay_toolbar_dismiss_notice', 'nonce', false ) ) {
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX && $notice_key && isset( $_REQUEST['nonce'] ) && false !== check_ajax_referer( 'wp_wpay_toolbar_dismiss_notice', 'nonce', false ) ) {
 				$userdata   = get_user_meta( get_current_user_id(), '_wws_notifications_close', true );
 				$userdata   = empty( $userdata ) && ! is_array( $userdata ) ? array() : $userdata;
 				$userdata[] = $notice_key;

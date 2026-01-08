@@ -191,6 +191,9 @@ class Fupi_Public {
     // exclude script files
     public function fupi_rocket_exclude_js_files( $excludes ) {
         if ( !empty( $this->main['wprocket_compat'] ) ) {
+            if ( !is_array( $excludes ) ) {
+                $excludes = array();
+            }
             $excludes[] = 'hooks.js';
             $excludes[] = 'hooks.min.js';
             $excludes[] = '/wp-includes/js/jquery/(.*).js';

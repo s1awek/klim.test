@@ -14,6 +14,10 @@ use Automattic\Jetpack\Status\Request;
 use Jetpack_Gutenberg;
 use Jetpack_Podcast_Helper;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 if ( ! class_exists( 'Jetpack_Podcast_Helper' ) ) {
 	require_once JETPACK__PLUGIN_DIR . '/_inc/lib/class-jetpack-podcast-helper.php';
 }
@@ -182,7 +186,7 @@ function render_player( $player_data, $attributes ) {
 			<?php endif; ?>
 		</section>
 		<?php if ( ! $is_amp ) : ?>
-		<script type="application/json"><?php echo wp_json_encode( $player_props ); ?></script>
+		<script type="application/json"><?php echo wp_json_encode( $player_props, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP ); ?></script>
 		<?php endif; ?>
 	</div>
 	<?php

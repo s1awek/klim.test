@@ -2,10 +2,13 @@
 
 $this->data['blockscr'] = [ 
     'module_name' => esc_html__('Tracking tools installed with other plugins', 'full-picture-analytics-cookie-notice'),
+    'top comments' => [
+        esc_attr__( 'Do you use other plugins to install analytics and marketing tools, live chats, CRM tools, newsletter plugins and other tools that can track your visitors? They need to be blocked until visitors consent to their use in the consent banner.', 'full-picture-analytics-cookie-notice'),
+    ],
     'setup' => [
         [ 
             'warning',
-            esc_html__('Load tracking tools that you installed without WP Full Picture after visitors agree to tracking. You can set it up in the Consent Banner module > Control other tracking tools.', 'full-picture-analytics-cookie-notice'),
+            esc_html__('Go to the Consent Banner module > Control other tracking tool. There, you will be able to set up blocking tools until visitors agree to tracking. .', 'full-picture-analytics-cookie-notice'),
         ],
     ],
     'pp comments' => [ 

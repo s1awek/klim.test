@@ -36,7 +36,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
         {
             include_once(ABSPATH.'wp-admin/includes/plugin.php');
         }
-        if(!is_plugin_active('woocommerce/woocommerce.php'))
+        if ( ! class_exists( 'WooCommerce' ) )
         {
             return;
         }
@@ -76,7 +76,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
     {
         if($this->module_base==$base)
         {
-            $steps['advanced']['description']=__('Use advanced options from below to decide updates to existing reviews, batch import count. You can also save the template file for future imports.');
+            $steps['advanced']['description']=__('Use advanced options from below to decide updates to existing reviews, batch import count. You can also save the template file for future imports.', 'product-import-export-for-woo');
         }
         return $steps;
     }
@@ -89,7 +89,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
         if(0 == $batch_offset){                        
             $memory = size_format(self::wt_let_to_num(ini_get('memory_limit')));
             $wp_memory = size_format(self::wt_let_to_num(WP_MEMORY_LIMIT));                      
-            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->module_base, 'import', '---[ New import started at '.date('Y-m-d H:i:s').' ] PHP Memory: ' . $memory . ', WP Memory: ' . $wp_memory);
+            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->module_base, 'import', '---[ New import started at '.gmdate('Y-m-d H:i:s').' ] PHP Memory: ' . $memory . ', WP Memory: ' . $wp_memory);
         }
         
         include plugin_dir_path(__FILE__) . 'import/import.php';
@@ -98,7 +98,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
         $response = $import->prepare_data_to_import($import_data,$form_data,$batch_offset,$is_last_batch);
         
         if($is_last_batch){
-            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->module_base, 'import', '---[ Import ended at '.date('Y-m-d H:i:s').']---');
+            Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->module_base, 'import', '---[ Import ended at '.gmdate('Y-m-d H:i:s').']---');
         }
         
         return $response;
@@ -342,6 +342,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
     public static function get_all_metakeys() {
         global $wpdb;
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $meta = $wpdb->get_col(
         "SELECT DISTINCT cm.meta_key
         FROM {$wpdb->commentmeta} AS cm
@@ -392,17 +393,17 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
         }
 
         /* altering help text of default fields */
-        $fields['limit']['label']=__('Total number of reviews to export'); 
-		$fields['limit']['help_text']=__('Exports specified number of reviews. e.g. Entering 500 with a skip count of 10 will export reviews from 11th to 510th position.');
-        $fields['offset']['label']=__('Skip first <i>n</i> reviews');
-		$fields['offset']['help_text']=__('Skips specified number of reviews from the beginning of the database. e.g. Enter 10 to skip first 10 reviews from export.');
+        $fields['limit']['label']=__('Total number of reviews to export', 'product-import-export-for-woo'); 
+		$fields['limit']['help_text']=__('Exports specified number of reviews. e.g. Entering 500 with a skip count of 10 will export reviews from 11th to 510th position.', 'product-import-export-for-woo');
+        $fields['offset']['label']=__('Skip first <i>n</i> reviews', 'product-import-export-for-woo');
+		$fields['offset']['help_text']=__('Skips specified number of reviews from the beginning of the database. e.g. Enter 10 to skip first 10 reviews from export.', 'product-import-export-for-woo');
 
         $fields['date_from'] = array(
-            'label' => __('Date From'),
-            'placeholder' => __('Date'),
+            'label' => __('Date From', 'product-import-export-for-woo'),
+            'placeholder' => __('Date', 'product-import-export-for-woo'),
             'field_name' => 'date_from',
             'sele_vals' => '',
-            'help_text' => __('Date on which the review was received. Export products reviews received on and after the specified date.'),
+            'help_text' => __('Date on which the review was received. Export products reviews received on and after the specified date.', 'product-import-export-for-woo'),
             'type' => 'text',
             'css_class' => 'wt_iew_datepicker',
 //            'type' => 'field_html',
@@ -410,11 +411,11 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
         );
         
         $fields['date_to'] = array(
-            'label' => __('Date To'),
-            'placeholder' => __('Date'),
+            'label' => __('Date To', 'product-import-export-for-woo'),
+            'placeholder' => __('Date', 'product-import-export-for-woo'),
             'field_name' => 'date_to',
             'sele_vals' => '',
-            'help_text' => __('Date on which the review was received. Export products reviews received upto the specified date.'),
+            'help_text' => __('Date on which the review was received. Export products reviews received upto the specified date.', 'product-import-export-for-woo'),
             'type' => 'text',
             'css_class' => 'wt_iew_datepicker',
 //            'type' => 'field_html',
@@ -423,33 +424,33 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
         
                
         $fields['product'] = array(
-            'label' => __('Products'),
-            'placeholder' => __('All product'),
+            'label' => __('Products', 'product-import-export-for-woo'),
+            'placeholder' => __('All product', 'product-import-export-for-woo'),
             'field_name' => 'product',
             'sele_vals' => array(),
-            'help_text' => __('Input the product name to export respective reviews.'),
+            'help_text' => __('Input the product name to export respective reviews.', 'product-import-export-for-woo'),
             'type' => 'multi_select',
             'css_class' => 'wc-product-search',
             'validation_rule' => array('type'=>'text_arr')
         );
         
         $fields['stars'] = array(
-            'label' => __('Stars'),
-            'placeholder' => __('All'),
+            'label' => __('Stars', 'product-import-export-for-woo'),
+            'placeholder' => __('All', 'product-import-export-for-woo'),
             'field_name' => 'stars',
             'sele_vals' => array(1=>1,2=>2,3=>3,4=>4,5=>5),
-            'help_text' => __('Export reviews of a specific star rating.'),
+            'help_text' => __('Export reviews of a specific star rating.', 'product-import-export-for-woo'),
             'type' => 'multi_select',
             'css_class' => 'wc-enhanced-select',
             'validation_rule' => array('type'=>'text_arr')
         );
 
         $fields['owner'] = array(
-            'label' => __('Customer/Guest Review'),
-            'placeholder' => __('All'),
+            'label' => __('Customer/Guest Review', 'product-import-export-for-woo'),
+            'placeholder' => __('All', 'product-import-export-for-woo'),
             'field_name' => 'owner',
             'sele_vals' => array(''=>'All Reviews','verified'=>'Customer','non-verified'=>'Guest'),
-            'help_text' => __('Export reviews by customer or guest or both.'),
+            'help_text' => __('Export reviews by customer or guest or both.', 'product-import-export-for-woo'),
             'type' => 'select',
             'css_class' => '',
             'validation_rule' => array('type'=>'text_arr')
@@ -458,22 +459,22 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
 
 
         $fields['reply'] = array(
-            'label' => __('Review with replies'),
+            'label' => __('Review with replies', 'product-import-export-for-woo'),
 //            'placeholder' => __('Any tag'),
             'field_name' => 'reply',
             'sele_vals' => '',
-            'help_text' => __('Enable to include the replies along with the respective reviews.'),
+            'help_text' => __('Enable to include the replies along with the respective reviews.', 'product-import-export-for-woo'),
             'type' => 'field_html',
             'field_html' => '<input type="checkbox" name="reply" value="1" id="v_replycolumn" class="input-text" />',
             'css_class' => '',
         );
 
         $fields['status'] = array(
-            'label' => __('Status'),
-            'placeholder' => __('All status'),
+            'label' => __('Status', 'product-import-export-for-woo'),
+            'placeholder' => __('All status', 'product-import-export-for-woo'),
             'field_name' => 'status',
             'sele_vals' => self::get_product_review_statuses(),
-            'help_text' => __('Export reviews by specific post status.'),
+            'help_text' => __('Export reviews by specific post status.', 'product-import-export-for-woo'),
             'type' => 'multi_select',
             'css_class' => 'wc-enhanced-select',
             'validation_rule' => array('type'=>'text_arr')
@@ -481,20 +482,20 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
 
         $sort_columns = self::get_product_review_sort_columns();
         $fields['sort_columns'] = array(
-            'label' => __('Sort Columns'),
-            'placeholder' => __('comment_ID'),
+            'label' => __('Sort Columns', 'product-import-export-for-woo'),
+            'placeholder' => __('comment_ID', 'product-import-export-for-woo'),
             'field_name' => 'sort_columns',
             'sele_vals' => $sort_columns,
-            'help_text' => __('Sort the exported data based on the selected column in the order specified. Defaulted to ascending order.'),
+            'help_text' => __('Sort the exported data based on the selected column in the order specified. Defaulted to ascending order.', 'product-import-export-for-woo'),
             'type' => 'select',
         );
         
         $fields['order_by'] = array(
-                'label' => __('Sort By'),
-                'placeholder' => __('ASC'),
+                'label' => __('Sort By', 'product-import-export-for-woo'),
+                'placeholder' => __('ASC', 'product-import-export-for-woo'),
                 'field_name' => 'order_by',
                 'sele_vals' => array('ASC' => 'Ascending', 'DESC' => 'Descending'),
-                'help_text' => __('Defaulted to Ascending. Applicable to above selected columns in the order specified.'),
+                'help_text' => __('Defaulted to Ascending. Applicable to above selected columns in the order specified.', 'product-import-export-for-woo'),
                 'type' => 'select',
                 'css_class' => '',
             );
@@ -519,23 +520,24 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
         $out = array();
         
         $out['skip_new'] = array(
-            'label' => __("Update Only"),
+            'label' => __("Update Only", 'product-import-export-for-woo'),
             'type' => 'radio',
             'radio_fields' => array(
-                '1' => __('Yes'),
-                '0' => __('No')
+                '1' => __('Yes', 'product-import-export-for-woo'),
+                '0' => __('No', 'product-import-export-for-woo')
             ),
             'value' => '0',
             'field_name' => 'skip_new',
             'help_text_conditional'=>array(
                 array(
-                    'help_text'=> sprintf(__('The store is updated with the data from the input file only for matching/existing records from the file. In case of a conflict with %sIDs of other existing post types%s the reviews will not be imported.'), '<b>', '</b>'),
+                    // translators: %1$s and %2$s are HTML bold tags
+                    'help_text'=> sprintf(__('The store is updated with the data from the input file only for matching/existing records from the file. In case of a conflict with %1$sIDs of other existing post types%2$s the reviews will not be imported.', 'product-import-export-for-woo'), '<b>', '</b>'),
                     'condition'=>array(
                         array('field'=>'wt_iew_skip_new', 'value'=>1)
                     )
                 ),
                 array(
-                    'help_text'=> __('The entire data from the input file is processed for an update or insert as the case maybe.'),
+                    'help_text'=> __('The entire data from the input file is processed for an update or insert as the case maybe.', 'product-import-export-for-woo'),
                     'condition'=>array(
                         array('field'=>'wt_iew_skip_new', 'value'=>0)
                     )
@@ -548,24 +550,24 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
         ); 
         
         $out['merge'] = array(
-            'label' => __("If the review exists in the store"),
+            'label' => __("If the review exists in the store", 'product-import-export-for-woo'),
             'type' => 'radio',
             'radio_fields' => array(                
-                '0' => __('Skip'),
-                '1' => __('Update')
+                '0' => __('Skip', 'product-import-export-for-woo'),
+                '1' => __('Update', 'product-import-export-for-woo')
             ),
             'value' => '0',
             'field_name' => 'merge',
-            'help_text' => __('Reviews are matched by their IDs.'),
+            'help_text' => __('Reviews are matched by their IDs.', 'product-import-export-for-woo'),
             'help_text_conditional'=>array(
                 array(
-                    'help_text'=> __('Retains the order in the store as is and skips the matching order from the input file.'),
+                    'help_text'=> __('Retains the order in the store as is and skips the matching order from the input file.', 'product-import-export-for-woo'),
                     'condition'=>array(
                         array('field'=>'wt_iew_merge', 'value'=>0)
                     )
                 ),
                 array(
-                    'help_text'=> __('Update order as per data from the input file'),
+                    'help_text'=> __('Update order as per data from the input file', 'product-import-export-for-woo'),
                     'condition'=>array(
                         array('field'=>'wt_iew_merge', 'value'=>1)
                     )
@@ -578,15 +580,15 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
         );
         
         $out['merge_empty_cells'] = array(
-            'label' => __("Update even if empty values"),
+            'label' => __("Update even if empty values", 'product-import-export-for-woo'),
             'type' => 'radio',
             'radio_fields' => array(
-                '1' => __('Yes'),
-                '0' => __('No')
+                '1' => __('Yes', 'product-import-export-for-woo'),
+                '0' => __('No', 'product-import-export-for-woo')
             ),
             'value' => '0',
             'field_name' => 'merge_empty_cells',
-            'help_text' => __('Updates the order data respectively even if some of the columns in the input file contains empty value.'),
+            'help_text' => __('Updates the order data respectively even if some of the columns in the input file contains empty value.', 'product-import-export-for-woo'),
             'form_toggler'=>array(
                 'type'=>'child',
                 'id'=>'wt_iew_found_action',
@@ -595,23 +597,24 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review {
         );
         
         $out['use_sku'] = array(
-            'label' => __("Associate product reviews by SKU"),
+            'label' => __("Associate product reviews by SKU", 'product-import-export-for-woo'),
             'type' => 'radio',
             'radio_fields' => array(
-                '1' => __('Yes'),
-                '0' => __('No')
+                '1' => __('Yes', 'product-import-export-for-woo'),
+                '0' => __('No', 'product-import-export-for-woo')
             ),
             'value' => '0',
             'field_name' => 'use_sku',
             'help_text_conditional'=>array(
                 array(
-                    'help_text'=> __('Link the products reviews being imported with the respective products by their SKU.'),
+                    'help_text'=> __('Link the products reviews being imported with the respective products by their SKU.', 'product-import-export-for-woo'),
                     'condition'=>array(
                         array('field'=>'wt_iew_use_sku', 'value'=>1)
                     )
                 ),
                 array(
-                    'help_text'=> sprintf(__(' Link the products reviews being imported with the respective products by their product ID. In case of a conflict with %sIDs of other existing post types%s the reviews will not be imported.'), '<b>', '</b>'),
+                    // translators: %1$s and %2$s are HTML bold tags
+                    'help_text'=> sprintf(__(' Link the products reviews being imported with the respective products by their product ID. In case of a conflict with %1$sIDs of other existing post types%2$s the reviews will not be imported.', 'product-import-export-for-woo'), '<b>', '</b>'),
                     'condition'=>array(
                         array('field'=>'wt_iew_use_sku', 'value'=>0)
                     )

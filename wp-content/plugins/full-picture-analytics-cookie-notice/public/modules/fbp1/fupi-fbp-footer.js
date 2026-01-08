@@ -1,5 +1,6 @@
 // WOO EVENTS
 
+
 FP.fns.fbp_woo_events = () => {
 
 	// TRACK IMPRESSIONS
@@ -11,30 +12,40 @@ FP.fns.fbp_woo_events = () => {
 		
 		let items_a = [],
 			value = 0,
+			is_variable_prod = false,
 			item_ids = fpdata.woo.lists.single.filter( id => ! fp.woo.fbp.single.includes(id) ); // track only items that were not tracked before
 
 		item_ids.forEach( id => {
 			
-			let prod = fpdata.woo.products[id],
-				item = { 
-				'id' : FP.fns.get_woo_prod_id(prod),
-				'quantity' : 1,
-			};
+			let prod = fpdata.woo.products[id];
+			
+			if ( prod ) {
+				
+				let item = { 
+					'id' : FP.fns.get_woo_prod_id(prod),
+					'quantity' : 1,
+				};
+	
+				if ( prod.type == 'variable' ) is_variable_prod = true;
 
-			value += prod.price;
-			items_a.push( item );
-		});
+				value += prod.price;
+				items_a.push( item );
+			}
+		} );
 
 		// prevent double tracking in case the next prods are added dynamically
 		fp.woo.fbp.single.push(...item_ids);
 
 		if ( items_a.length > 0 ) {
 
+			let track_var_as_single = fp.woo.variable_tracking_method == 'track_parents',
+				content_type = items_a.length == 1 && is_variable_prod && ! track_var_as_single ? 'product_group' : 'product';
+
 			let payload_o = { 
 				'contents' : items_a, 
 				'currency' : fpdata.woo.currency, 
 				'value' : value, 
-				'content_type' : 'product'
+				'content_type' : content_type,
 			};
 
 			FP.track_fbp_evt( false, 'ViewContent', false, payload_o );

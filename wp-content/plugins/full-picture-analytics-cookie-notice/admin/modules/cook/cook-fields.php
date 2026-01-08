@@ -3,8 +3,14 @@
 $option_arr_id = 'fupi_cook';
 $field_disabled = 'fupi_disabled';
 $must_have_html = '<div class="fupi_must_have_pro_ico_round fupi_tooltip"><span class="dashicons dashicons-lock"></span><span class="fupi_tooltiptext">' . esc_html__( 'Requires Pro licence', 'full-picture-analytics-cookie-notice' ) . '</span></div>';
-$priv_policy_url = get_privacy_policy_url();
-$priv_policy_url_text = ( empty( $priv_policy_url ) ? '<p style="color: red;">' . sprintf( esc_html__( 'Please make sure that your privacy policy page is published and set %1$son this page%2$s page.', 'full-picture-analytics-cookie-notice' ), '<a href="/wp-admin/options-privacy.php" target="_blank">', '</a>' ) . '</p>' : '' );
+// EXTRA MESSAGE IF THE PP IS NOT PUBLISHED
+$priv_policy_url_text = '<p style="color: red;">' . esc_html__( 'Attention. Your privacy policy page is either not published or its ID is not set in the settings of the Consent Banner module', 'full-picture-analytics-cookie-notice' ) . '</p>';
+if ( !empty( $this->settings['pp_id'] ) ) {
+    $pp_id = (int) $this->settings['pp_id'];
+    if ( get_post_status( $pp_id ) == 'publish' ) {
+        $priv_policy_url_text = '';
+    }
+}
 $current_theme = wp_get_theme();
 $is_oceanWP_theme = $current_theme->get( 'Name' ) == 'OceanWP';
 // CONSENT BANNER FIELDS
@@ -44,8 +50,9 @@ $cook_fields = array_merge( $cook_fields, array(
         'field_id'      => 'hide_on_pages',
         'label'         => esc_html__( 'Hide consent banner on these pages', 'full-picture-analytics-cookie-notice' ),
         'option_arr_id' => $option_arr_id,
-        'popup'         => '<p>' . esc_html__( 'By default, WP Full Picture hides consent banner on the privacy policy page.', 'full-picture-analytics-cookie-notice' ) . '</p>
-		<p>' . esc_html__( 'Hiding the banner only hides it visually. It does not automatically give consent to tracking.', 'full-picture-analytics-cookie-notice' ) . '</p>',
+        'popup2'        => '<p>' . esc_html__( 'By default, WP Full Picture hides consent banner on the privacy policy page.', 'full-picture-analytics-cookie-notice' ) . '</p>
+		<p class="fupi_warning_text">' . esc_html__( 'Hiding the banner only hides it visually. It does not automatically give consent to tracking.', 'full-picture-analytics-cookie-notice' ) . '</p>
+		<p class="fupi_warning_text">' . esc_html__( 'In this field you can only provide the IDs of pages - not posts, categories, or pages used as categories (e.g. blog archive page).', 'full-picture-analytics-cookie-notice' ) . '</p>',
     ),
     array(
         'type'          => 'text',
@@ -66,6 +73,13 @@ $cook_fields = array_merge( $cook_fields, array(
         'option_arr_id' => $option_arr_id,
         'after field'   => esc_html__( 'Breaks GDPR. Best used on dev sites.', 'full-picture-analytics-cookie-notice' ),
         'popup3'        => '<p>' . esc_html__( 'When you enable this setting, visitors who already consented, will not be asked for consent every time you enable new tracking tools or change your privacy policy. This will break GDPR, so we recommend to use it only on development sites or while setting up tracking.', 'full-picture-analytics-cookie-notice' ) . '</p>',
+    ),
+    array(
+        'type'          => 'number',
+        'label'         => esc_html__( 'Privacy policy page ID', 'full-picture-analytics-cookie-notice' ),
+        'field_id'      => 'pp_id',
+        'option_arr_id' => $option_arr_id,
+        'popup2'        => '<p>' . sprintf( esc_html__( 'Provide the ID of the privacy policy page that is published and chosen %1$son this page%2$s. If you have a multilingual site, this must be the ID of the page in the main language.', 'full-picture-analytics-cookie-notice' ), '<a href="/wp-admin/options-privacy.php" target="_blank">', '</a>' ) . '</p>',
     )
 ) );
 // SCRIPT BLOCKING
@@ -138,30 +152,15 @@ $scr_fields = array(
         'class'    => 'fupi_col_50_grow',
     )
 );
-if ( !empty( $this->tools ) && isset( $this->tools['geo'] ) ) {
-    $geo_scr_fields = array(array(
-        'label'             => esc_html__( 'Load only in specific countries (leave blank to use everywhere)', 'full-picture-analytics-cookie-notice' ),
-        'type'              => 'label',
-        'field_id'          => 'countries_label',
-        'start_sub_section' => true,
-        'class'             => 'fupi_col_100',
-    ), array(
-        'type'     => 'select',
-        'field_id' => 'method',
-        'options'  => array(
-            'excl' => esc_html__( 'All except', 'full-picture-analytics-cookie-notice' ),
-            'incl' => esc_html__( 'Only in', 'full-picture-analytics-cookie-notice' ),
-        ),
-        'class'    => 'fupi_col_20',
-    ), array(
-        'type'            => 'text',
-        'field_id'        => 'countries',
-        'placeholder'     => esc_html__( 'e.g. GB, DE, FR, AU, etc.', 'full-picture-analytics-cookie-notice' ),
-        'end_sub_section' => true,
-        'class'           => 'fupi_col_50',
-    ));
-    $scr_fields = array_merge( $scr_fields, $geo_scr_fields );
-}
+$geo_fields = array(array(
+    'label'             => esc_html__( 'Enable Geolocation in the General Settings to load this tool in specific countries', 'full-picture-analytics-cookie-notice' ),
+    'type'              => 'label',
+    'field_id'          => 'label_geo_text',
+    'class'             => 'fupi_col_100 fupi_adv_group',
+    'start_sub_section' => true,
+    'end_sub_section'   => true,
+));
+$scr_fields = array_merge( $scr_fields, $geo_fields );
 $scr_fields = array_merge( $scr_fields, array(array(
     'label'    => esc_html__( 'Temporarily stop WP Full Picture from managing this script (blocking, conditional-loading, etc.)', 'full-picture-analytics-cookie-notice' ),
     'type'     => 'checkbox',
@@ -181,7 +180,7 @@ $sections = array(
         'section_title' => esc_html__( 'Control tracking tools', 'full-picture-analytics-cookie-notice' ),
         'fields'        => array(array(
             'type'          => 'multi checkbox',
-            'label'         => esc_html__( 'Automatically control loading of tracking tools', 'full-picture-analytics-cookie-notice' ),
+            'label'         => esc_html__( 'Control tracking tools installed outside WP FP', 'full-picture-analytics-cookie-notice' ),
             'field_id'      => 'scrblk_auto_rules',
             'option_arr_id' => $option_arr_id,
             'options'       => array(

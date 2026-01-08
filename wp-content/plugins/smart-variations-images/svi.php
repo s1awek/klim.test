@@ -9,16 +9,16 @@
  * @package           Smart_Variations_Images
  * @author            David Rosendo
  * @link              https://www.rosendo.pt
- * @since             5.2.16
+ * @since             5.2.23
  * @license           GPL-2.0+
  * @wordpress-plugin
  *
  * Plugin Name:       Smart Variations Images & Swatches for WooCommerce
  * Plugin URI:        https://www.smart-variations.com/
  * Description:       Enhance your WooCommerce store by adding multiple images to the product gallery and using them as variable product variations images effortlessly.
- * Version:           5.2.16
+ * Version:           5.2.23
  * WC requires at least: 5.0
- * WC tested up to:   9.6.0
+ * WC tested up to:   10.4.4
  * Author:            David Rosendo
  * Author URI:        https://www.rosendo.pt
  * License:           GPL-2.0+
@@ -33,12 +33,13 @@ if ( !defined( 'WPINC' ) ) {
 /**
  * Define plugin constants.
  */
-define( 'SMART_VARIATIONS_IMAGES_VERSION', '5.2.16' );
+define( 'SMART_VARIATIONS_IMAGES_VERSION', '5.2.23' );
 // Current plugin version.
 define( 'WCSVFS_VERSION', '1.0' );
 // Version for additional functionality.
 define( 'SMART_SVI_DIR_URL', plugin_dir_url( __FILE__ ) );
 // Plugin directory URL.
+// Load minified assets when not in SCRIPT_DEBUG
 define( 'SMART_SCRIPT_DEBUG', ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min' ) );
 // Script debugging flag.
 define( 'SMART_SVI_OPTIONS_CONTROL', '1' );
@@ -176,7 +177,7 @@ if ( !function_exists( 'fs_ddd' ) ) {
 
 }
 // Run the plugin after all plugins are loaded.
-add_action( 'plugins_loaded', 'run_smart_variations_images', 99 );
+add_action( 'init', 'run_smart_variations_images' );
 /**
  * Declare compatibility with WooCommerce custom order tables.
  */
@@ -199,7 +200,7 @@ add_action( 'admin_enqueue_scripts', 'svibo_enqueue_scripts' );
  */
 function svi_dismiss_notice() {
     if ( current_user_can( 'manage_options' ) ) {
-        update_user_meta( get_current_user_id(), 'svi_notice_dismissed', 'yes' );
+        update_user_meta( get_current_user_id(), 'svi_notice_dismissed_1', 'yes' );
     }
     wp_die();
     // Properly close out the AJAX request.
@@ -211,7 +212,7 @@ add_action( 'wp_ajax_svi_dismiss_notice', 'svi_dismiss_notice' );
  */
 function svi_plugin_review_notice() {
     // Check if the notice has been dismissed.
-    if ( get_user_meta( get_current_user_id(), 'svi_notice_dismissed', true ) ) {
+    if ( get_user_meta( get_current_user_id(), 'svi_notice_dismissed_1', true ) ) {
         return;
     }
     $logo_url = SMART_SVI_DIR_URL . 'admin/images/svi.png';

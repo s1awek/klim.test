@@ -87,8 +87,10 @@ class Product_Import_Export_Review_Request
             $wt_iew_review_banner_shown = true; // Set the global flag 
                     
             add_action('init', function() {
-                $this->banner_message = sprintf(__("Hey, we at %sWebToffee%s would like to thank you for using our plugin. We would really appreciate if you could take a moment to drop a quick review that will inspire us to keep going."), '<b>', '</b>');
+                /* translators: %1$s: Opening bold tag, %2$s: Closing bold tag */
+                $this->banner_message = sprintf(__("Hey, we at %1\$sWebToffee%2\$s would like to thank you for using our plugin. We would really appreciate if you could take a moment to drop a quick review that will inspire us to keep going.", 'product-import-export-for-woo'), '<b>', '</b>');
 
+                /* translators: %1$s: Star emoji, %2$s: Opening span tag, %3$s: Closing span tag, %4$s: Opening span tag, %5$s: Closing span tag */
                 $this->new_review_banner_title = sprintf(__('%1$s  %2$s  Loving %3$s  WebToffee Import Export plugin? %4$s  Share Your Feedback! %5$s', 'product-import-export-for-woo'), '🌟', '<span style="font-weight:300;">', '</span>', '<span style="font-weight:300;">', '</span>');
 
                 /* button texts */
@@ -245,7 +247,8 @@ class Product_Import_Export_Review_Request
         
         // Check WC Reports tab if applicable
         if ($currentScreen->id === 'woocommerce_page_wc-reports') {
-            $current_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'orders';
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce not required.
+            $current_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'orders';
             $required_tab = in_array($post_type, array('order', 'coupon', 'subscription')) ? 'orders' : 
             ($post_type === 'user' ? 'customers' : '');
             if (!$required_tab || $current_tab !== $required_tab) {
@@ -255,17 +258,19 @@ class Product_Import_Export_Review_Request
 
         // $this->update_banner_state(1); /* update banner active state */
         $current_user = wp_get_current_user();
-        $user_first_name = !empty($current_user->first_name) ? $current_user->first_name : __('there', 'users-customers-import-export-for-wp-woocommerce');
+        $user_first_name = !empty($current_user->first_name) ? $current_user->first_name : __('there', 'product-import-export-for-woo');
 
         if(in_array($currentScreen->id, $plugin_pages)){
             $banner_color = 'rgba(233, 242, 252, 1)';
             $border_radius = '8px'; 
             $border_color = '#A0B2D6';
+            /* translators: %1$s: User name in bold, %2$s: Line break, %3$s: Opening bold tag, %4$s: Closing bold tag, %5$s: Opening bold tag, %6$s: Closing bold tag, %7$s: Opening bold tag, %8$s: Closing bold tag */
             $this->new_review_banner_message = sprintf(__('Hi  %1$s, %2$s We\'re thrilled to see you making great use of our plugin! It\'s our mission to make %3$s data management %4$s as %5$s efficient %6$s as possible for you. If you found the plugin helpful, please leave us a quick %7$s 5-star review. %8$s', 'product-import-export-for-woo'),  '<b>' . $user_first_name . '</b>', '<br>', '<b>', '</b>', '<b>', '</b>', '<b>', '</b>');
 
         }else{
             $banner_color = '#ffffff';
             $border_color = '#ffffff';
+            /* translators: %1$s: User name in bold, %2$s: Line break, %3$s: Opening bold tag, %4$s: Closing bold tag, %5$s: Opening bold tag, %6$s: Closing bold tag, %7$s: Line breaks, %8$s: Opening bold tag, %9$s: Closing bold tag, %10$s: Line breaks, %11$s: Opening bold tag, %12$s: Closing bold tag */
             $this->new_review_banner_message = sprintf(__('Hi  %1$s, %2$s We\'re thrilled to see you making great use of our WooCommerce import export plugin! It\'s our mission to make %3$s data management %4$s as %5$s efficient %6$s as possible for you. %7$s If you found the plugin helpful, please leave us a quick %8$s 5-star review. %9$s It would mean the world to us. %10$s Warm regards, %11$s Team WebToffee %12$s', 'product-import-export-for-woo'), '<b>' . $user_first_name . '</b>', '<br>', '<b>', '</b>', '<b>', '</b>', '<br><br>', '<b>', '</b>', '<br><br>', '<br><b>', '</b>');
         }
     ?>
@@ -299,7 +304,7 @@ class Product_Import_Export_Review_Request
     {
         check_ajax_referer($this->plugin_prefix);
         if (isset($_POST['wt_review_action_type'])) {
-            $action_type = sanitize_text_field($_POST['wt_review_action_type']);
+            $action_type = sanitize_text_field( wp_unslash( $_POST['wt_review_action_type'] ) );
 
             /* current action is in allowed action list */
             if (in_array($action_type, $this->allowed_action_type_arr)) {
@@ -353,32 +358,32 @@ class Product_Import_Export_Review_Request
 
                 /* prepare data object */
                 var data_obj = {
-                    _wpnonce: '<?php echo $nonce; ?>',
-                    action: '<?php echo $this->ajax_action_name; ?>',
+                    _wpnonce: '<?php echo esc_js($nonce); ?>',
+                    action: '<?php echo esc_js($this->ajax_action_name); ?>',
                     wt_review_action_type: ''
                 };
 
-                $(document).on('click', '.<?php echo $this->banner_css_class; ?> a.button', function(e) {
+                $(document).on('click', '.<?php echo esc_js($this->banner_css_class); ?> a.button', function(e) {
                     e.preventDefault();
                     var elm = $(this);
                     var btn_type = elm.attr('data-type');
                     if (btn_type == 'review') {
-                        window.open('<?php echo $this->review_url; ?>');
+                        window.open('<?php echo esc_url($this->review_url); ?>');
                     }
-                    elm.parents('.<?php echo $this->banner_css_class; ?>').hide();
+                    elm.parents('.<?php echo esc_js($this->banner_css_class); ?>').hide();
 
                     data_obj['wt_review_action_type'] = btn_type;
                     $.ajax({
-                        url: '<?php echo $ajax_url; ?>',
+                        url: '<?php echo esc_url($ajax_url); ?>',
                         data: data_obj,
                         type: 'POST'
                     });
 
-                }).on('click', '.<?php echo $this->banner_css_class; ?> .notice-dismiss', function(e) {
+                }).on('click', '.<?php echo esc_js($this->banner_css_class); ?> .notice-dismiss', function(e) {
                     e.preventDefault();
                     data_obj['wt_review_action_type'] = 'closed';
                     $.ajax({
-                        url: '<?php echo $ajax_url; ?>',
+                        url: '<?php echo esc_url($ajax_url); ?>',
                         data: data_obj,
                         type: 'POST',
                     });
@@ -443,6 +448,7 @@ class Product_Import_Export_Review_Request
         global $wpdb, $wt_iew_review_banner_shown;
 
         // Get first successful job date
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $start_date = $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT created_at FROM {$wpdb->prefix}wt_iew_action_history 
@@ -450,7 +456,7 @@ class Product_Import_Export_Review_Request
                 1
             )
         );
-        
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         if (!$start_date) {
             return false;
         } 
@@ -460,6 +466,7 @@ class Product_Import_Export_Review_Request
         // If less than 30 days from start
         if ($days_since_start > 5 && $days_since_start <= 30) {
             // Get successful jobs on distinct dates after 5 days
+            // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $query = $wpdb->prepare(
                 "SELECT h.item_type, 
                     COUNT(DISTINCT DATE(FROM_UNIXTIME(h.created_at))) as date_count,
@@ -473,9 +480,8 @@ class Product_Import_Export_Review_Request
                 LIMIT 1",
                 1, $start_date
             );
-            
-
-            $success_jobs = $wpdb->get_row($query);  
+            // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $success_jobs = $wpdb->get_row($query);  // @codingStandardsIgnoreLine
 
             if ($success_jobs && $success_jobs->date_count >= 2) { 
                 $this->current_post_type = $success_jobs->item_type; 
@@ -488,13 +494,14 @@ class Product_Import_Export_Review_Request
             // After 30 days, check last job (regardless of success)
 
             // First get the last job regardless of post type
+            // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $last_job = $wpdb->get_row(
                 "SELECT item_type, status, created_at 
                 FROM {$wpdb->prefix}wt_iew_action_history 
                 ORDER BY created_at DESC 
                 LIMIT 1"
             );
-            
+            // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             if ($last_job && $last_job->status == 1) {
                 $this->current_post_type = $last_job->item_type;
                 $wt_iew_review_banner_shown = true;
@@ -535,7 +542,8 @@ class Product_Import_Export_Review_Request
         
         global $wpdb;
         
-        $query = $wpdb->prepare(
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $results = $wpdb->get_row($wpdb->prepare(
             "SELECT h.item_type, 
                     COUNT(*) as success_count,
                     MAX(h.created_at) as last_success
@@ -546,10 +554,8 @@ class Product_Import_Export_Review_Request
              ORDER BY success_count DESC, last_success DESC
              LIMIT 1",
             1, $last_dismissal
-        );
-        
-        
-        $results = $wpdb->get_row($query);
+        )); 
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         
         // If we have results, get the highest count (with latest success date if tied)
         if ($results) {
@@ -574,7 +580,9 @@ class Product_Import_Export_Review_Request
                 // Check if we're on the WooCommerce Reports page
                 if ($screen->id == 'woocommerce_page_wc-reports') {
                     // Set 'orders' as default tab if no 'tab' is set
-                    $current_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'orders';
+                    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce not required.
+                    $current_tab = isset($_GET['tab']) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'orders';
+                    // phpcs:enable WordPress.Security.NonceVerification.Recommended -- Nonce not required.
 
                     // Define content and plugin URL based on the current tab
                     $content = '';
@@ -586,7 +594,7 @@ class Product_Import_Export_Review_Request
                         case 'orders':
                             // Check if the 'orders' banner has been hidden
                             $cookie_name = 'hide_cta_orders';
-                            if (isset($_COOKIE[$cookie_name]) && sanitize_text_field($_COOKIE[$cookie_name]) == 'true') {
+                            if (isset($_COOKIE[$cookie_name]) && 'true' === sanitize_text_field( wp_unslash( $_COOKIE[$cookie_name] ) ) ) {
                                 return; // Don't show the banner if the cookie is set
                             }
 
@@ -597,7 +605,7 @@ class Product_Import_Export_Review_Request
                         case 'customers':
                             // Check if the 'customers' banner has been hidden
                             $cookie_name = 'hide_cta_customers';
-                            if (isset($_COOKIE[$cookie_name]) && sanitize_text_field($_COOKIE[$cookie_name]) == 'true') {
+                            if (isset($_COOKIE[$cookie_name]) && 'true' === sanitize_text_field( wp_unslash( $_COOKIE[$cookie_name] ) ) ) {
                                 return; // Don't show the banner if the cookie is set
                             }
 
@@ -608,7 +616,7 @@ class Product_Import_Export_Review_Request
                         case 'stock':
                             // Check if the 'stock' banner has been hidden
                             $cookie_name = 'hide_cta_stock';
-                            if (isset($_COOKIE[$cookie_name]) && sanitize_text_field($_COOKIE[$cookie_name]) == 'true') {
+                            if (isset($_COOKIE[$cookie_name]) && 'true' === sanitize_text_field( wp_unslash( $_COOKIE[$cookie_name] ) ) ) {
                                 return; // Don't show the banner if the cookie is set
                             }
 
@@ -619,7 +627,7 @@ class Product_Import_Export_Review_Request
                         case 'subscriptions':
                             // Check if the 'subscriptions' banner has been hidden
                             $cookie_name = 'hide_cta_subscriptions';
-                            if (isset($_COOKIE[$cookie_name]) && sanitize_text_field($_COOKIE[$cookie_name]) == 'true') {
+                            if (isset($_COOKIE[$cookie_name]) && 'true' === sanitize_text_field( wp_unslash( $_COOKIE[$cookie_name] ) ) ) {
                                 return; // Don't show the banner if the cookie is set
                             }
 
@@ -710,7 +718,7 @@ class Product_Import_Export_Review_Request
             }
 
             // Check if banner is hidden via cookie
-            if (isset($_COOKIE[$banner_data['cookie_name']]) && sanitize_text_field($_COOKIE[$banner_data['cookie_name']]) === 'true') {
+            if (isset($_COOKIE[$banner_data['cookie_name']]) && 'true' === sanitize_text_field( wp_unslash( $_COOKIE[$banner_data['cookie_name']] ) ) ) {
                 return;
             }
 

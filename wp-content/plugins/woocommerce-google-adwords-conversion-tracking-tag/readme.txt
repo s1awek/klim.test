@@ -2,9 +2,9 @@
 Contributors: alekv, wolfbaer, freemius
 Tags: woocommerce, google analytics, google ads, facebook pixel, conversion tracking
 Requires at least: 3.7
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.3
-Stable tag: 1.49.1
+Stable tag: 1.54.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -68,7 +68,7 @@ Unique tools like the [Payment Gateway Accuracy Report](https://sweetcode.com/do
 * Snapchat Ads Pixel (Pro)
 * Taboola Ads Pixel (Pro)
 * TikTok Ads Pixel (Pro)
-* Twitter Ads Pixel (Pro)
+* X (Twitter) Ads Pixel (Pro)
 
 <strong>Highlights</strong>
 
@@ -106,14 +106,17 @@ Have a look at the full feature list over [here](https://sweetcode.com/docs/wpm/
 
 <strong>Premium Pixels</strong>
 
+* Adroll Ads
+* Contentsquare Statistics
 * LinkedIn Ads
 * Microsoft Ads
+* Outbrain Ads
 * Pinterest Ads
 * Reddit Ads
 * Snapchat Ads
 * Taboola Ads
 * TikTok Ads
-* Twitter Ads
+* X (Twitter) Ads
 * VWO (Visual Website Optimizer) AB-testing tool
 
 <strong>Premium Features</strong>
@@ -254,7 +257,7 @@ No. The plugin is very lightweight and fast.
 * The back-end features are small and efficient.
 * Database queries are designed to be fast and are cached where possible.
 * Larger tasks are executed during nighttime using the Action Scheduler.
-* The front-end JavaScript library is compiled, minified and pre-compressed with gzip and brotli.
+* The front-end JavaScript library is compiled, minified, and pre-compressed with gzip and brotli.
 * The pro version even allows lazy loading of the JavaScript library.
 
 = Do you have videos that show how to set up the plugin and get most out of it? =
@@ -291,9 +294,9 @@ Therefore, we recommend admins of the shop to exclude their own shop from the bl
 Please post your problem in the Pixel Manager for WooCommerce Support forum: [Link](http://wordpress.org/support/plugin/woocommerce-google-adwords-conversion-tracking-tag)
 You can send the link to the front page of your shop too if you think it would be of help.
 
-= I found a security vulnerability. How do I report it? =
+= How can I report security bugs? =
 
-We are committed to ensuring the security of our customers and their data. If you believe you have found a security vulnerability in the Pixel Manager for WooCommerce, we encourage you to report it through Patchstack our security partner. Patchstack runs a managed Vulnerability Disclosure Program (mVDP) that helps us receive, triage, and respond to reported vulnerabilities. Patchstack also provides a reward for the responsible disclosure of security vulnerabilities. [Report a vulnerability](https://patchstack.com/database/vdp/woocommerce-google-adwords-conversion-tracking-tag)
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team helps validate, triage, and handle any security vulnerabilities. [Report a security vulnerability.]( https://patchstack.com/database/vdp/9e5fb86a-6813-46f6-90e8-79d46b61cf46 )
 
 == Screenshots ==
 
@@ -301,11 +304,102 @@ We are committed to ensuring the security of our customers and their data. If yo
 
 == Changelog ==
 
+= 1.54.1  =
+*Release date - 15.12.2025*
+
+* Tweak: Added a missing check for Contentsquare
+
+= 1.54.0  =
+*Release date - 15.12.2025*
+* Tweak: Admin UX improvements in the settings page.
+* Tweak: Refactored opportunity card output: sort by impact level and streamline dismissed opportunities
+* Tweak: Enhanced client IP address handling
+* Tweak: Add external object cache detection and enhance debug info output
+* Tweak: Enhanced transient handling: add verification for transient storage to improve reliability with external object caches
+
+= 1.53.0  =
+*Release date - 09.12.2025*
+
+* New: Implement Google Tag Gateway Proxy for proxying requests to Google's First-Party Servers
+* Tweak: Added support for loading deprecated functions with user toggle in settings
+* Tweak: Simplified documentation link retrieval by removing unnecessary parameters
+* Tweak: Added notification badges
+* Tweak: Enhanced Facebook Pixel script loading and user data caching
+* Tweak: Added multiple enhancement opportunity notifications for various settings
+* Tweak: Added crossDomain option to AJAX requests
+* Tweak: Replaced jQuery.ajax with native script loading for improved performance and error handling
+* Tweak: Removed unused code and files
+
+= 1.52.1  =
+*Release date - 03.12.2025*
+
+* Tweak: Added new documenation links.
+* Tweak: Updated the GA4 tag ID format.
+* Tweak: Updated Google tag ID suppression logic in functions.js
+* Tweak: Implemented public front-end API for third-party integrations with event dispatching and consent context
+
+= 1.52.0  =
+*Release date - 01.12.2025*
+
+* Tweak: Bumped up WP version compatibility to 6.9
+* Tweak: Filter out non-existent or unpublished products from transient data
+* Tweak: Refactored pixel file structure to unify server-side and browser-side handling, implementing a centralized pixel registry for improved management and automatic detection of active pixels.
+* Tweak: Added validations for some input data.
+
+= 1.51.1  =
+*Release date - 27.11.2025*
+
+* Fix: Fixed chunk loading compatibility with script optimization plugins (that combine JavaScript) by setting the .js public path dynamically (with an absolute instead of a relative path).
+* Fix: Disabled the Composer APCU optimization since it caused loading issues on a small subset of servers.
+
+= 1.51.0  =
+*Release date - 25.11.2025*
+
+* New: Event filtering system.
+* Tweak: Added error handling in the queue runner.
+* Tweak: Added null and undefined check in visitor permission logic.
+* Tweak: Updated the documentation links.
+* Tweak: Bumped up Facebook CAPI API version to v24.0.
+* Fix: Fixed chunk loading compatibility with script optimization plugins (SiteGround Optimizer, Autoptimize, WP Rocket, etc.) by implementing webpack runtime publicPath configuration.
+
+= 1.50.1 =
+*Release date - 19.11.2025*
+
+* Fix: Fixed undefined check for visitorAllowed cache.
+
+= 1.50.0  =
+*Release date - 16.11.2025*
+
+* New: Split the tracking library into chunks to only load the necessary code for the active pixels and features.
+* Tweak: Switched bot detection from IP based to user-agent based for better accuracy, flexibility, and much smaller file size.
+* Tweak: Added support in the pmw_google_ads_conversion_identifiers filter for multiple labels for the same Google Ads conversion ID.
+* Tweak: Updated vendor packages.
+* Tweak: Added filter to take over control of the Reddit tracking pixel in case the Reddit pixel is active in the Pixel Manager and the official Reddit for WooCommerce plugin is also active.
+
+= 1.49.3  =
+*Release date - 06.11.2025*
+
+* Tweak: Replaced Cody widget with Chatbase widget.
+* Tweak: Added chatbot widget with side panel.
+* Fix: Fixed product ID validation and filtered unpublished products in get_products_for_datalayer_by_product_ids. (CVE-2025-12545)
+
+= 1.49.2  =
+*Release date - 07.10.2025*
+
+* Tweak: Expanded consent mode regions by adding entries for 11 additional U.S. states.
+* Tweak: Updated the `add-to-cart` URL parameter handling to include an optional `quantity` parameter.
+* Tweak: Added payment type details to Google Analytics events.
+* Tweak: Refactored order item price handling for Google Ads cart items to always exclude tax.
+* Tweak: Automatically detect disabled Google tags after combining Google tags and prevent running a config command for them.
+* Tweak: Updated vendor packages.
+* Tweak: Refactored gateway analysis calculations for improved clarity and accuracy.
+* Tweak: Bumped up WC version compatibility to 10.2
+* Fix: Moved the GLA activation filter to the init hook. It prevented other Pixel Manager filters from being applied.
+
 = 1.49.1  =
 *Release date - 18.06.2025*
 
 * Tweak: Updated plugin URI to SweetCode site.
-* Tweak: Removed the deprecated Facebook Microdata output.
 * Tweak: Automatic options backup on plugin upgrades.
 * Fix: Fixed edge-case XSS vulnerabilities related to unquoted product ID injection in post-editing scenarios. Exploitation required specific conditions and permissions.
 * Fix: Fixed the "Show recent log file" link in the logs tab.

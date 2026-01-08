@@ -31,13 +31,18 @@ switch( $section_id ){
 		$ret_text = '<p>' . esc_html__( 'These settings impact the amount and precision of collected data.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
-	// TAGS
+	// SIMPLE EVENTS
 
 	case 'fupi_hotj_tags':
 		$ret_text = '<div>
-			<p>' . esc_html__( 'Here you can tag session recordings with user actions and extra information.', 'full-picture-analytics-cookie-notice' ) . '</p>
-			<p class="fupi_warning_text">' . sprintf( esc_html__( '%1$sRead this%2$s before you start.', 'full-picture-analytics-cookie-notice'), '<button type="button" class="fupi_faux_link fupi_open_popup" data-popup="fupi_warning_popup">', ' <span class="fupi_open_popup_i">i</span></button>' ) . '</p>
+			<p>' . esc_html__( 'Use simple events to tag session recordings with clicks, form submissions and others events.', 'full-picture-analytics-cookie-notice' ) . ' <span class="fupi_warning_text">' . sprintf( esc_html__( '%1$sRead this%2$s before you start.', 'full-picture-analytics-cookie-notice'), '<button type="button" class="fupi_faux_link fupi_open_popup" data-popup="fupi_warning_popup">', ' <span class="fupi_open_popup_i">i</span></button>' ) . '</span></p>
 		</div>';
+	break;
+
+	// CUSTOM EVENTS
+	
+	case 'fupi_hotj_custom_events':
+		$ret_text = '<p>' . sprintf( esc_html__( 'Here you can set up tagging your recordings with custom events. Trigger them with %1$scustom triggers%2$s.' , 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-advanced-triggers/" target="_blank">', '</a>' ) . '  <span class="fupi_warning_text">' . sprintf( esc_html__( '%1$sRead this%2$s before you start.', 'full-picture-analytics-cookie-notice'), '<button type="button" class="fupi_faux_link fupi_open_popup" data-popup="fupi_warning_popup">', ' <span class="fupi_open_popup_i">i</span></button>' ) . '</span></p>';
 	break;
 
 	// E-COMMERCE

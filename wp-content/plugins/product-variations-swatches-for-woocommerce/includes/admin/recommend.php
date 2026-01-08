@@ -7,7 +7,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Recommend {
 	protected static $settings;
     public static $plugins=[];
 
-	public function __construct() {
+	public function __construct() {return;
 		$this->dismiss  = 'villatheme_swatches_install_recommended_plugins_dismiss';
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}

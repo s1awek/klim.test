@@ -3,21 +3,32 @@
 function fupi_modify_cons_banner_text(  $text  ) {
     $open_tag_pos = strpos( $text, '{{' );
     $close_tag_pos = strpos( $text, '}}' );
-    if ( $open_tag_pos && $close_tag_pos ) {
+    if ( $open_tag_pos !== false && $close_tag_pos !== false ) {
         // get the content between {{ }}
         $regex = '/\\{\\{(.*?)\\}\\}/';
         // Replace matches with anchor tags using preg_replace
         $text = preg_replace_callback( $regex, function ( $match ) {
             $innerText = $match[1];
             // Capture inner text
-            $url = get_privacy_policy_url();
+            $url = false;
+            $cook = get_option( 'fupi_cook' );
+            if ( !empty( $cook['pp_id'] ) ) {
+                $pp_id = (int) $cook['pp_id'];
+                $pp_post = get_post( $pp_id );
+                if ( !empty( $pp_post ) && isset( $pp_post->post_status ) && $pp_post->post_status === 'publish' ) {
+                    $url = get_permalink( $pp_post );
+                }
+            }
             // get URL and create a link
-            if ( strpos( $innerText, '|' ) > 0 ) {
+            if ( strpos( $innerText, '|' ) !== false ) {
                 $innerText_a = explode( '|', $innerText );
                 if ( !empty( $innerText_a[1] ) ) {
                     $url = $innerText_a[1];
                     $innerText = $innerText_a[0];
                 }
+            }
+            if ( $url === false ) {
+                return $innerText;
             }
             return "<a href=\"{$url}\">{$innerText}</a>";
         }, $text );
@@ -78,7 +89,7 @@ $current_texts = [
 $notice_position = ( !empty( $notice_opts['position'] ) ? esc_attr( $notice_opts['position'] ) : 'popup' );
 $notice_position_inform = ( !empty( $notice_opts['position_inform'] ) ? esc_attr( $notice_opts['position_inform'] ) : 'bottom' );
 $notice_paddings = ( !empty( $notice_opts['paddings'] ) ? esc_attr( $notice_opts['paddings'] ) : 'default' );
-$btn_config = ( !empty( $notice_opts['btn_config'] ) ? esc_attr( $notice_opts['btn_config'] ) : 'config_1' );
+$btn_config = ( !empty( $notice_opts['btn_config'] ) ? esc_attr( $notice_opts['btn_config'] ) : 'config_3' );
 $btn_class = ( !empty( $notice_opts['btn_class'] ) ? esc_attr( $notice_opts['btn_class'] ) : '' );
 $cta_class = ( !empty( $notice_opts['cta_class'] ) ? esc_attr( $notice_opts['cta_class'] ) : '' );
 $necess_headline_class = ( empty( $current_texts['necess_h'] ) ? 'fupi_hidden' : '' );
@@ -115,8 +126,8 @@ $panel_bg_color_val = get_theme_mod( 'fupi_notice_bg_color', '#fff' );
 $panel_bg_color = ( !empty( $panel_bg_color_val ) ? esc_attr( $panel_bg_color_val ) : '#fff' );
 // Panel round corners
 $panel_round_corners_val = get_theme_mod( 'fupi_notice_round_corners' );
-if ( isset( $panel_round_corners_val ) ) {
-    $panel_round_corners = ( empty( $panel_round_corners_val ) ? '16px' : esc_attr( $panel_round_corners_val ) . 'px' );
+if ( isset( $panel_round_corners_val ) && is_numeric( $panel_round_corners_val ) ) {
+    $panel_round_corners = esc_attr( $panel_round_corners_val ) . 'px';
 } else {
     $panel_round_corners = '16px';
 }
@@ -170,8 +181,8 @@ if ( isset( $popup_max_width_val ) ) {
 }
 // Btn round corners
 $btn_round_corners_val = get_theme_mod( 'fupi_notice_btn_round_corners' );
-if ( isset( $btn_round_corners_val ) ) {
-    $btn_round_corners = ( empty( $btn_round_corners_val ) ? '8px' : esc_attr( $btn_round_corners_val ) . 'px' );
+if ( isset( $btn_round_corners_val ) && is_numeric( $btn_round_corners_val ) ) {
+    $btn_round_corners = esc_attr( $btn_round_corners_val ) . 'px';
 } else {
     $btn_round_corners = '8px';
 }
@@ -187,7 +198,7 @@ if ( isset( $btn_txt_size_val ) ) {
     $btn_txt_size = '16px';
 }
 // Btn txt size - mobile
-$btn_txt_size_val_mobile = get_theme_mod( 'fupi_cookie_notice_button_font_size' );
+$btn_txt_size_val_mobile = get_theme_mod( 'fupi_cookie_notice_button_font_size_mobile' );
 if ( isset( $btn_txt_size_val_mobile ) ) {
     $btn_txt_size_mobile = ( empty( $btn_txt_size_val_mobile ) ? '14px' : esc_attr( $btn_txt_size_val_mobile ) . 'px' );
 } else {
@@ -380,7 +391,7 @@ if ( is_customize_preview() || (!$hidden_elements || $hidden_elements && !in_arr
 echo '</aside>';
 // TOGGLER
 $is_mode_notify = false;
-if ( isset( $this->tools['geo'] ) ) {
+if ( isset( $this->main['geo'] ) ) {
     if ( isset( $this->settings['mode'] ) && $this->settings['mode'] === 'notify' ) {
         $is_mode_notify = true;
     }

@@ -36,17 +36,15 @@ switch( $section_id ){
 	// SIMPLE EVENTS
 	case 'fupi_gads_events':
 		$ret_text = '<div>
-			<p>' . esc_html__('Use functions on this page to track as conversions simple events, like clicking a button or submitting a form.', 'full-picture-analytics-cookie-notice' ) . '</p>
-			<p>' . sprintf( esc_html__('%1$sFollow this tutorial%2$s to get conversion labels for use on this page.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-get-google-ads-tag-id-conversion-id/">', '</a>' ) . '</p>
+			<p>' . esc_html__('Use simple events to track clicks, form submissions and others events.', 'full-picture-analytics-cookie-notice' ) . ' ' . sprintf( esc_html__('%1$sFollow this tutorial%2$s to get conversion labels that you can use below.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-get-google-ads-tag-id-conversion-id/">', '</a>' ) . '</p>
 		</div>';
 	break;
 
 	// COMPLEX EVENTS
 	
-	case 'fupi_gads_atrig':
+	case 'fupi_gads_custom_events':
 		$ret_text = '<div>
-			<p>' . esc_html__( 'Use functions on this page to track complex events as conversions. Complex events can have many conditions, for example, when a visitor from France visits 5 product pages in one session. You can set these conditions in the "Advanced triggers" module.' , 'full-picture-analytics-cookie-notice' ) . '</p>
-			<p>' . sprintf( esc_html__('%1$sFollow this tutorial%2$s to get conversion labels for use on this page.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-get-google-ads-tag-id-conversion-id/">', '</a>' ) . '</p>
+			<p>' . sprintf( esc_html__( 'Here you can set up custom events. Trigger them with %1$scustom triggers%2$s and add %3$soptional parameters%2$s.' , 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-advanced-triggers/" target="_blank">', '</a>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-parameters/" target="_blank">' ) . ' ' . sprintf( esc_html__('%1$sFollow this tutorial%2$s to get conversion labels that you can use below.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-get-google-ads-tag-id-conversion-id/" target="_blank">', '</a>' ) . '</p>
 		</div>';
 	break;
 

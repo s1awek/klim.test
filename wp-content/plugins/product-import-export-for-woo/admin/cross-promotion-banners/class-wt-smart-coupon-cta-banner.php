@@ -12,11 +12,19 @@ if (! defined('ABSPATH')) {
 if (!class_exists('Wt_Smart_Coupon_Cta_Banner')) {
     class Wt_Smart_Coupon_Cta_Banner {
         /**
+         * Is BFCM season.
+         *
+         * @var bool
+         */
+        private static $is_bfcm_season = false;
+        /**
          * Constructor.
          */
         public function __construct() { 
             // Check if premium plugin is active
             if (!in_array('wt-smart-coupon-pro/wt-smart-coupon-pro.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+                self::$is_bfcm_season = method_exists( 'Wt_Import_Export_For_Woo_Basic', 'is_bfcm_season' ) && Wt_Import_Export_For_Woo_Basic::is_bfcm_season();
+
                 add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
                 add_action('add_meta_boxes', array($this, 'add_meta_box'));
                 add_action('wp_ajax_wt_dismiss_smart_coupon_cta_banner', array($this, 'dismiss_banner'));
@@ -61,7 +69,7 @@ if (!class_exists('Wt_Smart_Coupon_Cta_Banner')) {
             if ( !defined( 'WT_SMART_COUPON_DISPLAY_BANNER' ) ){
                 add_meta_box(
                     'wbte_coupon_import_export_pro',
-                    '—',
+                    self::$is_bfcm_season ? ' ' : __( 'Smart Coupons for WooCommerce Pro', 'product-import-export-for-woo' ),
                     array($this, 'render_banner'),
                     'shop_coupon',
                     'side',
@@ -83,41 +91,64 @@ if (!class_exists('Wt_Smart_Coupon_Cta_Banner')) {
             
             if ($hide_banner) {
                 echo '<style>#wbte_coupon_import_export_pro { display: none !important; }</style>';
+                return;
             }
             ?>
+            <style type="text/css">
+				<?php
+				if ( self::$is_bfcm_season ) {
+					?>
+                     #wbte_coupon_import_export_pro .postbox-header{  height: 66px; background: url( <?php echo esc_url( plugin_dir_url(__FILE__ ) . 'assets/images/bfcm-doc-settings-coupon.svg' ); ?> ) no-repeat 18px 0 #FFFBD5; }
+					.wbte-cta-banner-features_head_div{ height: 80px; border-bottom: 1px solid #c3c4c7; display: flex; align-items: center; padding-left: 15px; justify-content: center; }
+					.wbte-cta-banner-features_head_div img{ width: 50px; }
+					.wbte-cta-banner-features_head_div h2{ font-weight: 600 !important; font-size: 13px !important; }
+					<?php
+				} else {
+					echo '#wbte_coupon_import_export_pro .postbox-header{  height:80px; background:url(' . esc_url( $wt_admin_img_path . '/smart-coupon.svg' ) . ') no-repeat 18px 18px #fff; padding-left:65px; margin-bottom:18px; background-size: 45px 45px; }';
+				}
+				?>
+			</style>
+
             <div class="wbte-cta-banner">
                 <div class="wbte-cta-content">
-                    <div class="wbte-cta-header">
-                        <img src="<?php echo esc_url($wt_admin_img_path . '/smart-coupon.svg'); ?>" alt="<?php esc_attr_e('Smart Coupons for WooCommerce Pro'); ?>" class="wbte-smart-coupon-cta-icon">
-                        <h3><?php esc_html_e('Create better coupon campaigns with advanced WooCommerce coupon features'); ?></h3>
-                    </div>
 
-                    <div class="wbte-cta-features-header">
-                        <h2 style="font-size: 13px; font-weight: 700; color: #4750CB;"><?php esc_html_e('Smart Coupons for WooCommerce Pro'); ?></h2>
-                    </div>
+                    <?php
+                    if ( self::$is_bfcm_season ) {
+                        ?>
+                        <div class="wbte-cta-banner-features_head_div">
+                            <img src="<?php echo esc_url( $wt_admin_img_path . '/smart-coupon.svg' ); ?>" alt="<?php esc_attr_e( 'upgrade box icon', 'product-import-export-for-woo' ); ?>">
+                            <h2><?php esc_html_e( 'Create better coupon campaigns with advanced WooCommerce coupon features', 'product-import-export-for-woo' ); ?></h2>
+                        </div>
+                        <?php
+                    }
+                    ?>
+
+                    <div class="wt-cta-features-header">
+						<h2 style="font-size: 13px; font-weight: 700; color: #4750CB;"><?php esc_html_e( 'Smart Coupons for WooCommerce Pro', 'product-import-export-for-woo' ); ?></h2>
+					</div>
 
                     <ul class="wbte-cta-features">
-                        <li><?php esc_html_e('Auto-apply coupons'); ?></li>
-                        <li><?php esc_html_e('Create attractive Buy X Get Y (BOGO) offers'); ?></li>
-                        <li><?php esc_html_e('Create product quantity/subtotal based discounts'); ?></li>
-                        <li><?php esc_html_e('Offer store credits and gift cards'); ?></li>
-                        <li><?php esc_html_e('Set up smart giveaway campaigns'); ?></li>
-                        <li><?php esc_html_e('Set advanced coupon rules and conditions'); ?></li>
-                        <li class="hidden-feature"><?php esc_html_e('Bulk generate coupons'); ?></li>
-                        <li class="hidden-feature"><?php esc_html_e('Shipping, purchase history, and payment method-based coupons'); ?></li>
-                        <li class="hidden-feature"><?php esc_html_e('Sign up coupons'); ?></li>
-                        <li class="hidden-feature"><?php esc_html_e('Cart abandonment coupons'); ?></li>
-                        <li class="hidden-feature"><?php esc_html_e('Create day-specific deals'); ?></li>
-                        <li class="hidden-feature"><?php esc_html_e('Display coupon banners and widgets'); ?></li>
-                        <li class="hidden-feature"><?php esc_html_e('Import coupons'); ?></li>
+                        <li><?php esc_html_e('Auto-apply coupons', 'product-import-export-for-woo'); ?></li>
+                        <li><?php esc_html_e('Create attractive Buy X Get Y (BOGO) offers', 'product-import-export-for-woo'); ?></li>
+                        <li><?php esc_html_e('Create product quantity/subtotal based discounts', 'product-import-export-for-woo'); ?></li>
+                        <li><?php esc_html_e('Offer store credits and gift cards', 'product-import-export-for-woo'); ?></li>
+                        <li><?php esc_html_e('Set up smart giveaway campaigns', 'product-import-export-for-woo'); ?></li>
+                        <li><?php esc_html_e('Set advanced coupon rules and conditions', 'product-import-export-for-woo'); ?></li>
+                        <li class="hidden-feature"><?php esc_html_e('Bulk generate coupons', 'product-import-export-for-woo'); ?></li>
+                        <li class="hidden-feature"><?php esc_html_e('Shipping, purchase history, and payment method-based coupons', 'product-import-export-for-woo'); ?></li>
+                        <li class="hidden-feature"><?php esc_html_e('Sign up coupons', 'product-import-export-for-woo'); ?></li>
+                        <li class="hidden-feature"><?php esc_html_e('Cart abandonment coupons', 'product-import-export-for-woo'); ?></li>
+                        <li class="hidden-feature"><?php esc_html_e('Create day-specific deals', 'product-import-export-for-woo'); ?></li>
+                        <li class="hidden-feature"><?php esc_html_e('Display coupon banners and widgets', 'product-import-export-for-woo'); ?></li>
+                        <li class="hidden-feature"><?php esc_html_e('Import coupons', 'product-import-export-for-woo'); ?></li>
                     </ul>
 
                     <div class="wbte-cta-footer">
                         <div class="wbte-cta-footer-links">
-                            <a href="#" class="wbte-cta-toggle" data-show-text="<?php esc_attr_e('View all premium features'); ?>" data-hide-text="<?php esc_attr_e('Show less'); ?>"><?php esc_html_e('View all premium features'); ?></a>
-                            <a href="<?php echo esc_url($plugin_url); ?>" class="wbte-cta-button" target="_blank"><img src="<?php echo esc_url($wt_admin_img_path . '/promote_crown.png');?>" style="width: 15.01px; height: 10.08px; margin-right: 8px;"><?php esc_html_e('Get the plugin'); ?></a>
+                            <a href="#" class="wbte-cta-toggle" data-show-text="<?php esc_attr_e('View all premium features', 'product-import-export-for-woo'); ?>" data-hide-text="<?php esc_attr_e('Show less', 'product-import-export-for-woo'); ?>"><?php esc_html_e('View all premium features', 'product-import-export-for-woo'); ?></a>
+                            <a href="<?php echo esc_url($plugin_url); ?>" class="wbte-cta-button" target="_blank"><img src="<?php echo esc_url($wt_admin_img_path . '/promote_crown.png');?>" style="width: 15.01px; height: 10.08px; margin-right: 8px;"><?php esc_html_e('Get the plugin', 'product-import-export-for-woo'); ?></a>
                         </div>
-                        <a href="#" class="wt-cta-dismiss" style="display: block; text-align: center; margin-top: 15px; color: #666; text-decoration: none;"><?php esc_html_e('Dismiss'); ?></a>
+                        <a href="#" class="wbte-cta-dismiss" style="display: block; text-align: center; margin-top: 15px; color: #666; text-decoration: none;"><?php esc_html_e('Dismiss', 'product-import-export-for-woo'); ?></a>
                     </div>
                 </div>
             </div>

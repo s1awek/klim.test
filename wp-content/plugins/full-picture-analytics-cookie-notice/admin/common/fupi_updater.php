@@ -38,6 +38,8 @@ class  Fupi_Updater {
             $this->update_to_8_5_1();
             $this->update_to_9_0();
             $this->update_to_9_2();
+            $this->update_to_9_3_0();
+            $this->update_to_9_4_0();
         }
         
         if ( $restore_backup || $options_changed ) {
@@ -146,6 +148,7 @@ class  Fupi_Updater {
             // set current time and ver
             $this->o['fupi_versions'][0] = time();
             $this->o['fupi_versions'][1] = FUPI_VERSION;
+            $this->prev_version = FUPI_VERSION;
 
         // is old install if array is not empty
         } else {
@@ -164,9 +167,15 @@ class  Fupi_Updater {
 
         if ( ! $this->regenerate_cdb ) return;
 
-        $this->get_fupi_options( ['fupi_tools'] );
+        $this->get_fupi_options( ['fupi_tools', 'fupi_cook'] );
+        $pp_ok = false;
+
+        if ( ! empty( $this->o['fupi_cook']['pp_id'] ) ) {
+            $pp_id = (int) $this->o['fupi_cook']['pp_id'];
+            $pp_ok = get_post_status( $pp_id ) == 'publish';
+        }
         
-        if ( isset ( $this->o['fupi_tools']['cook'] ) && isset ( $this->o['fupi_tools']['proofrec'] ) && ! empty ( get_privacy_policy_url() ) ) {
+        if ( isset ( $this->o['fupi_tools']['cook'] ) && isset ( $this->o['fupi_tools']['proofrec'] ) && $pp_ok ) {
             include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
             $gdpr_checker = new Fupi_compliance_status_checker();
             $gdpr_checker->send_and_return_status();
@@ -337,6 +346,78 @@ class  Fupi_Updater {
         
         $this->get_fupi_options( ['fupi_versions'] );
         $this->o['fupi_versions']['use_adv_mode'] = true; // this will make sure that users who updated from earlier versions will see advanced settings and not be surprised with the basic ones
+    }
+
+    private function update_to_9_3_0(){
+
+        if ( version_compare( $this->prev_version, '9.2.0.9' ) != -1 ) return;
+
+        // Get vars
+
+        global $wpdb;
+        $this->get_fupi_options( ['fupi_main', 'fupi_geo', 'fupi_tools', 'fupi_cook'] );
+
+        // Move settings of the Geo module to fupi_main
+
+        if ( ! empty( $this->o['fupi_tools']['geo'] ) ) {
+            if ( ! empty( $this->o['fupi_geo']['geo'] ) ) {
+                $this->o['fupi_main']['geo'] = $this->o['fupi_geo']['geo'];
+                $this->o['fupi_main']['remember_geo'] = ! empty ( $this->o['fupi_geo']['remember_geo'] ) ? $this->o['fupi_geo']['remember_geo'] : 30;
+            } else {
+                $this->o['fupi_main']['geo'] = 'cf_non_user';
+            }
+
+            $this->regenerate_cdb = true;
+        }
+
+        // Save the ID of the main privacy policy page in the fupi_cook[pp_id]
+
+        $options_table = is_multisite() ? $wpdb->get_blog_prefix() . 'options' : $wpdb->options;
+
+        $pp_id = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT option_value FROM {$options_table} WHERE option_name = %s",
+                'wp_page_for_privacy_policy'
+            )
+        );
+
+        if ( ! empty ( $pp_id ) && is_numeric( $pp_id ) ) $this->o['fupi_cook']['pp_id'] = (int) $pp_id;
+    }
+
+    private function update_to_9_4_0(){
+
+        if ( version_compare( $this->prev_version, '9.3.2.8' ) != -1 ) return;
+
+        $opt_names = ['fupi_ga41','fupi_ga42', 'fupi_gtm'];
+
+        $this->get_fupi_options( $opt_names );
+
+        foreach ( $opt_names as $o_name ) {
+            
+            // Save the value of "value" field as a parameter in the sub r3
+    
+            if ( ! empty( $this->o[$o_name]['custom_events'] ) && is_array( $this->o[$o_name]['custom_events'] ) ) {
+    
+                foreach ( $this->o[$o_name]['custom_events'] as $i => $event ) {
+                    
+                    if ( isset( $event['evt_val'] ) ) {
+    
+                        if ( ! empty( $event['evt_val'] ) ) {
+                            $this->o[$o_name]['custom_events'][$i]['params'] = [
+                                [
+                                    'name' => 'fp_event_value',
+                                    'type' => 'number',
+                                    'val'  => (float) $event['evt_val'],
+                                ]
+                            ];
+                        }
+    
+                        unset( $this->o[$o_name]['custom_events'][$i]['evt_val'] );
+                    }
+                }
+            }
+        }
+
     }
 
     private function restore_options_from_backup(){

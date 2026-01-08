@@ -31,6 +31,7 @@ if ( ! empty( $input ) ) foreach( $input as $key => $value ) {
 			break;
 
 			case 'priv_policy_page':
+			case 'pp_id':
 				$clean_val = (int) $value;
 			break;
 

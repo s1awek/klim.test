@@ -2,8 +2,8 @@
 Contributors: drosendo
 Tags: woocommerce, product variations, image gallery, swatches, ecommerce  
 Requires at least: 4.9 
-Tested up to: 6.7
-Stable tag: 5.2.16
+Tested up to: 6.9
+Stable tag: 5.2.23
 Requires PHP: 7.4
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -55,6 +55,7 @@ By default, WooCommerce swaps only the main variation image. This extension allo
 * Add variation image to Cart / Email / Admin order Edit / Order details
 * API actions
 * Import/Export handling
+* Filter Attribute Animation (Sliding effect on hover for Diagonal, Vertical, and Horizontal layouts)
 * And much more...
 
 ## Installation
@@ -126,6 +127,46 @@ A: SVI replaces your default theme settings/options for the image & thumbnails a
 7. Setup swatches on Product > Attributes
 
 == Changelog ==
+
+= 5.2.23 =
+* Added: Divi Builder compatibility - SVI gallery now replaces Divi's WooCommerce Images module
+* Fix: CSS class conflicts when using Divi theme - conditionally removes 'images' class to prevent styling conflicts
+* Compatibility: 'Showcase Images under Variations' option now fully supported with Divi Builder
+
+= 5.2.22 =
+* Fix: PHP 8.2 compatibility - Added proper property declaration for $runSitePress to prevent dynamic property deprecation warning in Smart_Variations_Images_Admin class
+* Fix: PHP 8+ TypeError in filter_wc_get_template - Made $template_path parameter nullable to prevent crashes when other plugins (e.g., WooCommerce Mercado Pago) pass null values
+* Fix: Slider TypeError when thumbnails disabled - Added null check for galleryThumbs.slideTo() to prevent JavaScript error that broke lens functionality after slide changes
+* Update WC,WP compatibility
+
+= 5.2.21 =
+* Fix: Prevent PHP fatal when a product has no featured image by normalizing attachment IDs and falling back to WooCommerce placeholders in gallery rendering.
+* Fix: Default to minified assets when not in SCRIPT_DEBUG to reduce JS parse issues with external minifiers or rewrites.
+* Fix: Avoid PHP 8 TypeError on non-product templates (e.g. Elementor/YITH account or quote pages) by allowing nullable template args in the `wc_get_template` filter hook.
+* Update WC,WP,Freemius SDK version compatibility
+
+= 5.2.20 =
+* Fixed Elementor builder templates not displaying the SVI gallery by routing `wc_get_template()` calls through a plugin-aware stub.
+* Added safer fallback when the gallery output is empty to prevent blank product images in custom templates.
+* Reduced front-end DOM payload by localizing gallery data to scripts instead of embedding large JSON blobs in markup.
+* Added lightweight skeleton placeholders so the gallery retains its layout while the Vue app boots.
+* Introduced product-data caching and Store API image overrides so Gutenberg Cart & Checkout blocks show the matching variation thumbnail.
+* Refined admin order item filters to avoid duplicate thumbnails when viewing/editing orders.
+
+= 5.2.19 =
+* Added compatibility fix for Gutenberg Product Template — ensures gallery renders inside WooCommerce block `<div data-block-name="woocommerce/product-image-gallery">`.
+* Improved compatibility with block-based themes.
+* Added relocation fallback script for older versions of SVI to maintain gallery positioning.
+
+
+= 5.2.18 =
+* Added feature: Filter Attribute on Shop/archive Pages to show fitlered image
+* Added premium feature: Filter Attribute Animation (Sliding effect on hover for Diagonal, Vertical, and Horizontal layouts in Filter Attribute Image Swapping)
+* Update WC,WP,Freemius SDK version compatibility
+
+= 5.2.17 =
+* Update WC,WP,Freemius SDK version compatibility
+* Minor bug fixed
 
 = 5.2.16 =
 * Update WC,WP,Freemius SDK version compatibility

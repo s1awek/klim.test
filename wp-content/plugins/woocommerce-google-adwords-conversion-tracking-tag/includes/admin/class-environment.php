@@ -16,7 +16,8 @@ class Environment {
 
 	private static $last_order_id      = null;
 	private static $last_order         = null;
-	private static $transients_enabled = null;
+	private static $transients_enabled    = null;
+	private static $external_object_cache = null;
 
 	public static function is_allowed_notification_page( $page = null ) {
 
@@ -862,6 +863,10 @@ class Environment {
 		$exclude_js[] = 'wpm-public.p2.min.js';
 		$exclude_js[] = 'wpm-public__premium_only.p2.min.js';
 
+		// Include paths for free and pro folders
+		$exclude_js[] = 'js/public/free/';
+		$exclude_js[] = 'js/public/pro/';
+
 //        $exclude_js[] = 'jquery.js';
 //        $exclude_js[] = 'jquery.min.js';
 		return $exclude_js;
@@ -877,6 +882,10 @@ class Environment {
 
 		$dontmove[] = 'wpm-public.p2.min.js';
 		$dontmove[] = 'wpm-public__premium_only.p2.min.js';
+
+		// Include paths for free and pro folders
+		$dontmove[] = 'js/public/free/';
+		$dontmove[] = 'js/public/pro/';
 
 		$dontmove[] = 'jquery.js';
 		$dontmove[] = 'jquery.min.js';
@@ -984,13 +993,15 @@ class Environment {
 	}
 
 	/**
-	 * Load the third party plugin tweaks during the plugins_loaded action
+	 * Third party plugin tweaks
+	 *
+	 * !!
+	 * Don't load these on plugins_loaded,
+	 * because our filter won't be applied.
 	 *
 	 * @return void
-	 *
-	 * @since 1.48.0
 	 */
-	public static function third_party_plugin_tweaks_on_plugins_loaded() {
+	public static function third_party_plugin_tweaks_on_init() {
 
 		/**
 		 * Google Listing and Ads
@@ -1002,14 +1013,6 @@ class Environment {
 		if (Options::is_google_ads_active()) {
 			add_filter('woocommerce_gla_disable_gtag_tracking', '__return_true');
 		}
-	}
-
-	/**
-	 * Third party plugin tweaks
-	 *
-	 * @return void
-	 */
-	public static function third_party_plugin_tweaks_on_init() {
 
 		/**
 		 * WP Consent API compatibility declaration
@@ -1166,6 +1169,19 @@ class Environment {
 
 		if (Options::is_pinterest_active()) {
 			add_filter('woocommerce_pinterest_disable_tracking', '__return_true');
+		}
+
+		/**
+		 * Reddit for WooCommerce
+		 */
+
+		if (Options::is_reddit_active()) {
+
+			add_filter('reddit_for_woocommerce_filter_tracking_data', function ( $data ) {
+				$data['is_pixel_enabled']      = false;
+				$data['is_conversion_enabled'] = false;
+				return $data;
+			});
 		}
 
 		/**
@@ -1542,6 +1558,11 @@ class Environment {
 			'wpm__premium_only.min.js',
 			'wpm-public.p1.min.js',
 			'wpm-public__premium_only.p1.min.js',
+			// Include paths for free and pro folders
+			'js/public/free/',
+			'js/public/pro/',
+			'/free/',
+			'/pro/',
 			//            'facebook.js',
 			//            'facebook.min.js',
 			//            'facebook__premium_only.js',
@@ -1737,6 +1758,56 @@ class Environment {
 
 		self::$transients_enabled = false;
 		return false;
+	}
+
+	/**
+	 * Get the external object cache type if enabled.
+	 *
+	 * Checks for Redis or Memcached object caching.
+	 *
+	 * @return string The cache type ('Redis', 'Memcached') or 'no' if not enabled.
+	 *
+	 * @since 1.46.0
+	 */
+	public static function get_external_object_cache() {
+
+		if ( null !== self::$external_object_cache ) {
+			return self::$external_object_cache;
+		}
+
+		// Check for Redis
+		if (class_exists('Redis')) {
+			self::$external_object_cache = 'Redis';
+			return self::$external_object_cache;
+		}
+
+		// Check for WP Redis plugin constant
+		if (defined('WP_REDIS_DISABLED') && !WP_REDIS_DISABLED) {
+			self::$external_object_cache = 'Redis';
+			return self::$external_object_cache;
+		}
+
+		// Check for Memcached
+		if (class_exists('Memcached') || class_exists('Memcache')) {
+			self::$external_object_cache = 'Memcached';
+			return self::$external_object_cache;
+		}
+
+		// Check object-cache.php drop-in for Redis or Memcached
+		if (file_exists(WP_CONTENT_DIR . '/object-cache.php')) {
+			$object_cache_content = file_get_contents(WP_CONTENT_DIR . '/object-cache.php');
+			if (stripos($object_cache_content, 'redis') !== false) {
+				self::$external_object_cache = 'Redis';
+				return self::$external_object_cache;
+			}
+			if (stripos($object_cache_content, 'memcache') !== false) {
+				self::$external_object_cache = 'Memcached';
+				return self::$external_object_cache;
+			}
+		}
+
+		self::$external_object_cache = 'no';
+		return self::$external_object_cache;
 	}
 
 	public static function is_on_playground_wordpress_net() {

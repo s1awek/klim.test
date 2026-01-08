@@ -457,7 +457,9 @@ class UpdraftPlus_Addons_Incremental {
 		jQuery(function() {
 			<?php
 				$intervals = $this->get_intervals();
-				echo 'var intervals = '.wp_json_encode($intervals)."\n";
+				// wp_json_encode() was added in WP 4.1
+				$intervals_json = function_exists('wp_json_encode') ? wp_json_encode($intervals) : json_encode($intervals);
+				echo 'var intervals = '.$intervals_json."\n";
 			?>
 			function updraft_update_incremental_selector() {
 				var fileint = jQuery('#updraft-navtab-settings-content select.updraft_interval').val();

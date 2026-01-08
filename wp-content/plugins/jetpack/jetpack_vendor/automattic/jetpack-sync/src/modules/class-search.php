@@ -441,6 +441,7 @@ class Search extends Module {
 		'_wc_general_product_dependency_theme'   => array(),
 		'_wc_general_product_dependency_plugin'  => array(),
 		'wpcom_marketplace_product_extra_fields' => array(),
+		'wccom_product_search_keywords'          => array( 'searchable_in_all_content' => true ),
 
 	); // end indexed post meta.
 
@@ -806,6 +807,7 @@ class Search extends Module {
 		'pa_colour',
 		'pa_compactor',
 		'pa_condition',
+		'pa_conditions-options',
 		'pa_cor',
 		'pa_couleur',
 		'pa_country',
@@ -874,6 +876,7 @@ class Search extends Module {
 		'pa_high-blow-tank',
 		'pa_hoehe',
 		'pa_inhoud',
+		'pa_interchange-part-number',
 		'pa_isadultproduct',
 		'pa_isbn',
 		'pa_iseligiblefortradein',

@@ -86,7 +86,7 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Export {
            
 
             if ( 0 === $batch_offset && 0 === $total_records ) {
-                $return['no_post'] = __( 'Nothing to export under the selected criteria. Please check and try adjusting the filters.' );
+                $return['no_post'] = __( 'Nothing to export under the selected criteria. Please check and try adjusting the filters.', 'product-import-export-for-woo' );
             } 
 
             return $return;

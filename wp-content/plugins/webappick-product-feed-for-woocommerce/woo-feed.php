@@ -10,7 +10,7 @@
  * Plugin Name:       CTX Feed
  * Plugin URI:        https://webappick.com/
  * Description:       Easily generate woocommerce product feed for any marketing channel like Google Shopping(Merchant), Facebook Remarketing, Bing, eBay & more. Support 100+ Merchants.
- * Version:           6.5.84
+ * Version:           6.6.17
  * Author:            WebAppick
  * Author URI:        https://webappick.com/
  * License:           GPL v2
@@ -26,7 +26,7 @@
  *
  * WC Requirement & Test
  * WC requires at least: 3.3
- * WC tested up to: 10.0.2
+ * WC tested up to: 10.4
  */
 
 use CTXFeed\V5\API\RestController;
@@ -230,13 +230,7 @@ if ( ! function_exists( 'run_woo_feed' ) ) {
                 }
             } );
         }
-
-		//WooFeedWebAppickAPI::getInstance();
-        add_action('init', function() {
-            // Instantiate classes or run initialization code here
-            WooFeedWebAppickAPI::getInstance();
-        });
-
+		WooFeedWebAppickAPI::getInstance();
 	}
 
 	run_woo_feed();
@@ -999,4 +993,5 @@ if ( !function_exists( 'init_rest_api' ) ) {
 }
 
 add_action( 'init', 'init_rest_api' );
+
 // End of file woo-feed.php

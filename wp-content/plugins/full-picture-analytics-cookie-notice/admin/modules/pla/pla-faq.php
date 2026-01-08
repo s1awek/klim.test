@@ -27,14 +27,14 @@
 
     <div id="fupi_setup_popup" class="fupi_popup_content">
 
-        <p>' . esc_html__('To register user actions and their properties in Plausible:', 'full-picture-analytics-cookie-notice' ) . '</p>
+        <p>' . esc_html__('To register events and their properties in Plausible:', 'full-picture-analytics-cookie-notice' ) . '</p>
 
         <ol>
             <li>' . esc_html__( 'give descriptive names to actions you want to track,', 'full-picture-analytics-cookie-notice' ) . '</li>
             <li>' . esc_html__( 'enable Setup Helper in the top menu and start a test,', 'full-picture-analytics-cookie-notice' ) . '</li>
             <li>' . esc_html__( 'do all the actions that you\'ve just set up,', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__( 'in the Plausible Analytics panel go to the Site Settings page > Goals > Custom Goal / Property and click "Add new",', 'full-picture-analytics-cookie-notice' ) . '</li>
-            <li>' . esc_html__( 'you should see there a dropdown field with goal / property names that you entered in the "name" fields of this module.', 'full-picture-analytics-cookie-notice' ) . '</li>
+            <li>' . esc_html__( 'in the Plausible Analytics panel go to the Site Settings page > Goals > Custom Goal (and later Custom Property) and click "Add new",', 'full-picture-analytics-cookie-notice' ) . '</li>
+            <li>' . esc_html__( 'you should see a dropdown field with goal / property names that you entered in the "name" fields of this module.', 'full-picture-analytics-cookie-notice' ) . '</li>
         </ol>
 
         <p>' . esc_html__('P.S. If you are registering ecommerce actions, such as purchases, also enable the "revenue tracking" switch in the goal creation popup.', 'full-picture-analytics-cookie-notice' ) . '</p>

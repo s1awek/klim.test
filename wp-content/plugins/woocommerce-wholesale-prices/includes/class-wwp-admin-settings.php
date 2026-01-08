@@ -193,9 +193,59 @@ if ( ! class_exists( 'WWP_Admin_Settings' ) ) {
                 'status'  => 'success',
                 'message' => esc_html__( 'Settings saved successfully.', 'woocommerce-wholesale-prices' ),
             );
+
+            $allowed_prefix = array(
+                'wwp_',
+                'wwpp_',
+                'wwof_',
+                'wwlc_',
+                'wpay_',
+            );
+            $allowed_prefix = apply_filters( 'wwp_allowed_settings_prefix', $allowed_prefix );
+
+            $prefix_pattern = '/^(' . implode(
+                '|',
+                array_map(
+                    function ( $prefix ) {
+                        return preg_quote( $prefix, '/' );
+                    },
+                    $allowed_prefix
+                )
+            ) . ')/';
+
             if ( ! empty( $params ) ) {
+
+                // Check if there is an action.
+                $has_action = false;
+                foreach ( $params as $param ) {
+                    if ( isset( $param['key'] ) && 'action' === $param['key'] ) {
+                        $has_action = true;
+                        break;
+                    }
+                }
+
+                $ignored_keys = array(
+                    'action',
+                    'enable_wholesale_role_cart_quantity_based_wholesale_discount',
+                    'enable_wholesale_role_cart_quantity_based_wholesale_discount_mode_2',
+                    'enable_wholesale_role_cart_only_apply_discount_if_min_order_req_met',
+                    'apply_discounts_to_wholesale_products_only',
+                );
+                $ignored_keys = apply_filters( 'wwp_ignored_settings_keys', $ignored_keys );
+
                 $options = array();
                 foreach ( $params as $param ) {
+                    if ( ! $has_action && ! in_array( $param['key'], $ignored_keys, true ) ) {
+                        $is_allowed = false;
+                        if ( isset( $param['key'] ) && preg_match( $prefix_pattern, $param['key'] ) ) {
+                            $is_allowed = true;
+                        }
+
+                        if ( ! $is_allowed ) {
+                            continue;
+                        }
+                    }
+
                     if ( is_array( $param ) && isset( $param['key'] ) ) {
                         $value       = isset( $param['value'] ) ? $param['value'] : '';
                         $final_value = $value;
@@ -1600,7 +1650,7 @@ if ( ! class_exists( 'WWP_Admin_Settings' ) ) {
          * @access public
          */
         public function wwp_new_settings_notice_hide() {
-            if ( ! wp_doing_ajax() || ! wp_verify_nonce( $_POST['nonce'], 'wwp_new_settings_notice_nonce' ) ) {
+            if ( ! wp_doing_ajax() || ! wp_verify_nonce( $_POST['nonce'], 'wwp_new_settings_notice_nonce' ) ) { // phpcs:ignore.
                 // Security check failure.
                 return;
             }

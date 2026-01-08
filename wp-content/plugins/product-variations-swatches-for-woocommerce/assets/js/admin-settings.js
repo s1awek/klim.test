@@ -14,13 +14,16 @@ jQuery(document).ready(function ($) {
         });
     }
     $(document).on('change','select#vi-wpvs-attribute_display_default',function (){
-        switch ($(this).val()){
-            case 'variation_img':
-                $('.vi-wpvs-attribute_display_default-variation_img').removeClass('vi-wpvs-hidden');
-                break;
-            default:
-                $('.vi-wpvs-attribute_display_default-variation_img').addClass('vi-wpvs-hidden');
-
+        let val = $(this).val();
+        if (val === 'variation_img'){
+            $('.vi-wpvs-attribute_display_default-variation_img').removeClass('vi-wpvs-hidden');
+        }else {
+            $('.vi-wpvs-attribute_display_default-variation_img').addClass('vi-wpvs-hidden');
+        }
+        if (val==='none'){
+            $('.vi-wpvs-attribute_profile_default-wrap').addClass('vi-wpvs-hidden');
+        }else {
+            $('.vi-wpvs-attribute_profile_default-wrap').removeClass('vi-wpvs-hidden');
         }
     });
     $(document).on('change','select#vi-wpvs-attribute_variation_img_apply',function (){

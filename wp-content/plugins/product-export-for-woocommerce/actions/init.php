@@ -1,6 +1,9 @@
 <?php
 
-function pmwpe_init(){
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-?>
+function pmwpe_init(){
+}

@@ -479,7 +479,7 @@
 
 	function modify_specific_fields(){
 
-		// FOR SELECTING ADVANCED TRIGGERS ON A MODULE'S PAGE
+		// FOR SELECTING CUSTOM TRIGGERS ON A MODULE'S PAGE
 		let trigger_selects = FP.findAll('.fupi_events_builder select[name*="atrig_id"]');
 		
 		hide_already_selected_atrig_selects( trigger_selects );

@@ -3,9 +3,9 @@ Contributors: wahid0003, webappick
 Donate link: https://webappick.com
 Tags: WooCommerce, Product Feed, Google Shopping, Facebook Catalog, Google listings
 Requires at least: 4.4
-Tested Up To: 6.8
+Tested Up To: 6.9
 Requires PHP: 5.6
-Stable tag: 6.5.84
+Stable tag: 6.6.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -371,6 +371,74 @@ Using pro version:
 4. Category Mapping
 
 == Changelog ==
+
+= 6.6.17 (2026-01-06) =
+* Removed : Happy Holiday Discount Banner
+
+= 6.6.16 (2026-01-05) =
+* Updated: Compatibility code refactor
+
+= 6.6.15 (2025-12-30) =
+* Tweak: WooCommerce version 10.4 compatibility checked
+
+= 6.6.14 (2025-12-18) =
+* Updated : Plugin Information
+
+= 6.6.13 (2025-12-16) =
+* Added : Happy Holiday Discount Banner
+
+= 6.6.12 (2025-12-11) =
+* Added : Parent Description Attribute
+* Updated : Security Vulnerability Issue
+
+= 6.6.11 (2025-12-08) =
+* Removed : Black Friday Discount Banner
+
+= 6.6.10 (2025-12-02) =
+* Tweak: WordPress version 6.9 compatibility checked
+
+= 6.6.9 (2025-11-28) =
+* Updated : Discount Banner UTM Link
+
+= 6.6.8 (2025-11-25) =
+* Updated : Plugin Information
+
+= 6.6.7 (2025-11-25) =
+* Added : Black Friday Discount Banner
+
+= 6.6.6 (2025-11-20) =
+* Fixed : Canonical URL attribute issue
+
+= 6.6.5 (2025-11-17) =
+* Added : 10 Year Anniversary Discount Banner
+
+= 6.6.4 (2025-11-06) =
+* Updated : Plugin Information
+
+= 6.6.3 (2025-11-03) =
+* Removed : Halloween Discount Banner
+
+= 6.6.2 (2025-10-27) =
+* Updated : Code Refactor
+
+= 6.6.1 (2025-10-27) =
+* Updated : Manage Feed Page Sidebar
+* Updated : Make Feed Page Sidebar
+
+= 6.6.0 (2025-10-22) =
+* Added : ChatGPT(OpenAI) Product Feed Template
+
+= 6.5.88 (2025-10-20) =
+* Added : Halloween Discount Banner
+
+= 6.5.87 (2025-10-13) =
+* Updated: Code Refactor
+
+= 6.5.86 (2025-10-13) =
+* Updated: Manage Feed Page UI
+
+= 6.5.85 (2025-10-07) =
+* Fixed: Settings Page UI Issue
 
 = 6.5.84 (2025-09-30) =
 * Updated: Attributes Mapping Page UI

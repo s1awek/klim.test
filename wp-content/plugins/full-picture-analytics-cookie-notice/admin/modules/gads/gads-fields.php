@@ -17,18 +17,20 @@ $sections = array(
 				'class'				=> 'fupi_required',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[id]',
-				'placeholder'		=> esc_html__( 'GT-00000000 or AW-00000000', 'full-picture-analytics-cookie-notice' ),
-				'under field'		=> '<p>' . sprintf ( esc_html__( '%1$sHow to get GTAG ID%2$s.', 'full-picture-analytics-cookie-notice') , '<a href="https://wpfullpicture.com/support/documentation/how-to-install-google-ads/">', '</a>' ) . '</p>',
+				'placeholder'		=> 'XX-00000000',
+				'under field'		=> '
+					<p>' . sprintf ( esc_html__( '%1$sHow to get GTAG ID and Conversion ID and install Google Ads%2$s.', 'full-picture-analytics-cookie-notice') , '<a href="https://wpfullpicture.com/support/documentation/how-to-install-google-ads/">', '</a>' ) . '</p>
+					<p>' . esc_html__( 'Attention. Google cannot properly detect if multiple Google Analytics and Ads tools are installed. If you click "test instalation" in your Google account, disregard its result.', 'full-picture-analytics-cookie-notice' ) . '</p>'
 			),
 			array(
 				'type'	 			=> 'text',
 				'label' 			=> esc_html__( 'Conversion ID', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'id2',
-				'class'				=> 'fupi_sub fupi_hidden',
+				'class'				=> 'fupi_join',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[id2]',
 				'placeholder'		=> 'AW-00000000',
-				'under field'		=> '<p>' . esc_html__( 'Provide conversion ID which starts with AW-.', 'full-picture-analytics-cookie-notice') . '</p>',
+				'under field'		=> '<p>' . esc_html__( 'Provide Conversion ID if it is different from GTAG ID.', 'full-picture-analytics-cookie-notice') . '</p>',
 			),
 		),
 	),
@@ -47,7 +49,7 @@ $sections = array(
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . sprintf( esc_html__( 'This will load the tracking script for all website visitors, including administrators, bots, excluded users, people browsing from excluded locations and people that didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
+				<p>' . sprintf( esc_html__( 'This will load the tracking script for administrators, bots, excluded users, people browsing from excluded locations and people who didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
 			),
 			array(
 				'type'	 			=> 'r3',
@@ -82,7 +84,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_gads_basic',
-		'section_title' => esc_html__( 'Data collection settings', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Data collection', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',
@@ -105,7 +107,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_gads_events',
-		'section_title' => esc_html__( 'Tracking simple events', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Simple events', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'text',
@@ -244,8 +246,8 @@ $sections = array(
 
 $adv_triggers_section = array(
 	array(
-		'section_id' => 'fupi_gads_atrig',
-		'section_title' => esc_html__( 'Tracking complex events', 'full-picture-analytics-cookie-notice' ),
+		'section_id' => 'fupi_gads_custom_events',
+		'section_title' => esc_html__( 'Custom events', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'r3',
@@ -277,12 +279,46 @@ $adv_triggers_section = array(
 					),
 					array(
 						'type'				=> 'text',
-						'label'				=> esc_html__( 'Send event', 'full-picture-analytics-cookie-notice' ),
+						'label'				=> esc_html__( 'Send an event with a conversion label', 'full-picture-analytics-cookie-notice' ),
 						'placeholder'		=> esc_html__( 'Conversion label', 'full-picture-analytics-cookie-notice' ),
 						'field_id'			=> 'conv_label',
 						'el_class'			=> 'fupi_events_builder_evt',
 						'required'			=> true,
-						'class'				=> 'fupi_col_25',
+						'class'				=> 'fupi_col_40',
+					),
+					array(
+						'type'				=> 'r3',
+						'label'				=> esc_html__( 'Event parameters (optional)', 'full-picture-analytics-cookie-notice' ),
+						'field_id'			=> 'params',
+                        'is_repeater'		=> true,
+						'class'		        => 'fupi_col_100 fupi_simple_r3',
+						'fields'			=> array(
+                            array(
+                                'placeholder'		=> esc_html__( 'Parameter name', 'full-picture-analytics-cookie-notice' ),
+                                'type'				=> 'text',
+                                'field_id'			=> 'name',
+                                'class'		        => 'fupi_col_30',
+                            ),
+							array(
+								'type'	 			=> 'select',
+								'field_id' 			=> 'type',
+								'option_arr_id'		=> $option_arr_id,
+								'class'				=> 'fupi_col_20',
+								'options'			=> array(
+									''					=> esc_html__( 'Value type', 'full-picture-analytics-cookie-notice' ),
+									'string'			=> esc_html__( 'Text', 'full-picture-analytics-cookie-notice' ),
+									'number'			=> esc_html__( 'Number', 'full-picture-analytics-cookie-notice' ),
+									'bool'				=> esc_html__( 'true/false', 'full-picture-analytics-cookie-notice' ),
+									'path'			=> esc_html__( 'Path to a JS value', 'full-picture-analytics-cookie-notice' ),
+								),
+							),
+							array(
+                                'placeholder'		=> esc_html__( 'Parameter value', 'full-picture-analytics-cookie-notice' ),
+                                'type'				=> 'text',
+                                'field_id'			=> 'val',
+                                'class'		        => 'fupi_col_30',
+                            ),
+						)
 					),
 				),
 			)

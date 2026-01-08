@@ -93,7 +93,7 @@ $sections = array(
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . sprintf( esc_html__( 'This will load the tracking script for all website visitors, including administrators, bots, excluded users, people browsing from excluded locations and people that didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
+				<p>' . sprintf( esc_html__( 'This will load the tracking script for administrators, bots, excluded users, people browsing from excluded locations and people who didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
 				),
 			array(
 				'type'	 			=> 'toggle',
@@ -138,17 +138,31 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_fbp1_basic',
-		'section_title' => esc_html__( 'Data collection settings', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Data collection', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Advanced matching', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'adv_match',
 				'must_have'			=> 'pro',
+				'el_class'			=> 'fupi_condition',
+				'el_data_target'	=> 'fupi_adv_match_opts',
 				'option_arr_id'		=> $option_arr_id,
 				'popup' 			=> '<p>' . esc_html__( 'Advanced matching improves the accuracy of conversion tracking by sending to Meta personally identifiable information about your users.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p>' . esc_html__( 'When you enable Advanced Matching, WP Full Picture will start sending to Meta encrypted addresses, email addresses, phone numbers and user identifiers of your visitors. The data will be sent on all pages where your visitor is logged in and on the WooCommerce order confirmation page. The type and amount of sent data depends on what is known about the visitors at a given moment.', 'full-picture-analytics-cookie-notice' ) . '</p>',
+					<p>' . esc_html__( 'When you enable Advanced Matching, WP Full Picture will start sending to Meta encrypted addresses, email addresses, phone numbers and user identifiers of your visitors.', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<p>' . esc_html__( 'The data will be sent on all pages where your visitor is logged in and on the WooCommerce order confirmation page. The type and amount of sent data depends on what is known about the visitors at a given moment.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
+				array(
+					'type'	 			=> 'text',
+					'label' 			=> esc_html__('Advanced External ID', 'full-picture-analytics-cookie-notice'),
+					'under field'		=> esc_html__('Provide comma-separated CSS selectors of form fields, where users are the most likely to leave the same email address as they used to register to this website.', 'full-picture-analytics-cookie-notice'),
+					'field_id' 			=> 'user_email_fields',
+					'class'				=> 'fupi_adv fupi_adv_match_opts fupi_sub fupi_disabled',
+					'option_arr_id'		=> $option_arr_id,
+					'popup' 			=> '<p>' . esc_html__('This function improves cross-browser conversion attribution and event match quality score.', 'full-picture-analytics-cookie-notice') . '</p>
+					<p>' . esc_html__('It generates External IDs for users who are not logged-in, based on email addresses they provide in form fields on your site.', 'full-picture-analytics-cookie-notice') . '</p>
+					<p><a href="https://wpfullpicture.com/support/documentation/what-is-advanced-external-id/" target="_blank">' . esc_html__('Learn more', 'full-picture-analytics-cookie-notice') . '</a></p>',
+				),
 			array(
 				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Enable "Limited Data Use" for visitors from the US', 'full-picture-analytics-cookie-notice' ),
@@ -164,7 +178,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_fbp1_events',
-		'section_title' => esc_html__( 'Tracking simple events', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Simple events', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',
@@ -419,7 +433,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_fbp1_atrig',
-		'section_title' => esc_html__( 'Tracking complex events', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Custom events', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'r3',
@@ -431,10 +445,10 @@ $sections = array(
 				'is_repeater'		=> true,
 				'fields'			=> array(
 					array(
-						'label'				=> esc_html__( 'When this happens', 'full-picture-analytics-cookie-notice' ),
+						'label'				=> esc_html__( 'When this happens...', 'full-picture-analytics-cookie-notice' ),
 						'type' 				=> 'atrig_select',
 						'field_id'			=> 'atrig_id',
-						'class'				=> 'fupi_col_40',
+						'class'				=> 'fupi_col_30',
 						'required'			=> true,
 					),
 					array(
@@ -449,13 +463,58 @@ $sections = array(
 						),
 					),
 					array(
+						'type'	 			=> 'select',
+						'label' 			=> esc_html__( '...send', 'full-picture-analytics-cookie-notice' ),
+						'field_id' 			=> 'evt_type',
+						'option_arr_id'		=> $option_arr_id,
+						'class'				=> 'fupi_col_25',
+						'options'			=> array(
+							'custom'				=> esc_html__( 'Custom event', 'full-picture-analytics-cookie-notice' ),
+							'standard'				=> esc_html__( 'Meta standard event', 'full-picture-analytics-cookie-notice' ),
+						),
+					),
+					array(
 						'type'				=> 'text',
-						'label'				=> esc_html__( 'Send event', 'full-picture-analytics-cookie-notice' ),
+						'label'				=> esc_html__( '...with event name', 'full-picture-analytics-cookie-notice' ),
 						'placeholder'		=> esc_html__( 'event_name', 'full-picture-analytics-cookie-notice' ),
 						'field_id'			=> 'evt_name',
 						'el_class'			=> 'fupi_events_builder_evt',
 						'required'			=> true,
-						'class'				=> 'fupi_col_20',
+						'class'				=> 'fupi_col_25',
+					),
+					array(
+						'type'				=> 'r3',
+						'label'				=> esc_html__( 'Event parameters (optional)', 'full-picture-analytics-cookie-notice' ),
+						'field_id'			=> 'params',
+                        'is_repeater'		=> true,
+						'class'		        => 'fupi_col_100 fupi_simple_r3',
+						'fields'			=> array(
+                            array(
+                                'placeholder'		=> esc_html__( 'Parameter name', 'full-picture-analytics-cookie-notice' ),
+                                'type'				=> 'text',
+                                'field_id'			=> 'name',
+                                'class'		        => 'fupi_col_30',
+                            ),
+							array(
+								'type'	 			=> 'select',
+								'field_id' 			=> 'type',
+								'option_arr_id'		=> $option_arr_id,
+								'class'				=> 'fupi_col_20',
+								'options'			=> array(
+									''					=> esc_html__( 'Value type', 'full-picture-analytics-cookie-notice' ),
+									'string'			=> esc_html__( 'Text', 'full-picture-analytics-cookie-notice' ),
+									'number'			=> esc_html__( 'Number', 'full-picture-analytics-cookie-notice' ),
+									'bool'				=> esc_html__( 'true/false', 'full-picture-analytics-cookie-notice' ),
+									'path'			=> esc_html__( 'Path to a JS value', 'full-picture-analytics-cookie-notice' ),
+								),
+							),
+							array(
+                                'placeholder'		=> esc_html__( 'Parameter value', 'full-picture-analytics-cookie-notice' ),
+                                'type'				=> 'text',
+                                'field_id'			=> 'val',
+                                'class'		        => 'fupi_col_30',
+                            ),
+						)
 					),
 					array(
 						'type'	 			=> 'toggle',
@@ -473,7 +532,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_fbp1_wpdata',
-		'section_title' => esc_html__( 'Tracking event parameters', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Event parameters', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',
@@ -607,15 +666,8 @@ $sections = array(
 				'must_have'			=> 'pro woo', //field|fupi_fbp1|capi_token|exists|' . esc_html__("Conversion_API_token")
 				'option_arr_id'		=> $option_arr_id,
 				'under field'		=> esc_html__( 'This feature requires the use of Conversion API. Please check if you entered its key in the "Installation" section.', 'full-picture-analytics-cookie-notice' ),
-				'popup'				=> '
-					<p>' . esc_html__( 'Status-Based Order Tracking is an alternative method of tracking purchases. Instead of tracking them on order confirmation pages, orders are tracked when their status changes.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<p>' . esc_html__( 'This method of tracking is recommended for stores that use payment gateways, which do not redirect back to the order confirmation page.', 'full-picture-analytics-cookie-notice' ) . '</p>
-					<h3>' . esc_html__( 'Other information', 'full-picture-analytics-cookie-notice' ) . '</h3>
-					<ol>
-						<li>' . esc_html__( 'Orders will be tracked when they get a status that is set in "WooCommerce Tracking" page > "Status-Based Order Tracking" section.', 'full-picture-analytics-cookie-notice' ) . '</li>
-						<li>' . esc_html__( 'Purchases are attributed to users and sessions just like with standard tracking.', 'full-picture-analytics-cookie-notice' ) . '</li>
-						<li>' . esc_html__( 'SBOT does not track orders added manually in the WooCommerce admin panel, since they cannot be attributed to any website users.', 'full-picture-analytics-cookie-notice' ) . '</li>
-					</ol>',
+				'popup'				=> '<p>' . esc_html__( 'Status-Based Order Tracking is an alternative method of tracking purchases. Instead of tracking them on order confirmation pages, orders are tracked when their status changes.', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<p>' . sprintf( esc_html__( 'You can learn how it works %1$son this page%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/what-you-need-to-know-about-status-based-order-tracking/">', '</a>' ) . '</p>',
 			),
 		),
 	),

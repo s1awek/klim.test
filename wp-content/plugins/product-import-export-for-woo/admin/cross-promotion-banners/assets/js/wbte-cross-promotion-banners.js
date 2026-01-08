@@ -56,7 +56,7 @@
             },
 
             initDismissButtons: function() {
-                $('.wt-cta-dismiss').on('click', function(e) {
+                $('.wbte-cta-dismiss').on('click', function(e) {
                     e.preventDefault();
                     var $this = $(this);
                     var $banner = $this.closest('.postbox');

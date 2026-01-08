@@ -124,8 +124,8 @@ if (!class_exists('WT_IEW_Request_Feature')) {
             <div id="wt_iew_request_a_feature_popup" class="wt_iew_request_a_feature_popup wt_iew_popup" style=" display: none;">
                 <div class="wt_iew_popup_hd">
                     <div class="wt_iew_popup_title">
-                        <?php _e('Missing a feature?', 'product-import-export-for-woo'); ?>
-                        <div class="wt_iew_popup_title_caption"><?php _e('Drop a message to let us know!', 'product-import-export-for-woo'); ?></div>
+                        <?php esc_html_e('Missing a feature?', 'product-import-export-for-woo'); ?>
+                        <div class="wt_iew_popup_title_caption"><?php esc_html_e('Drop a message to let us know!', 'product-import-export-for-woo'); ?></div>
                     </div>
                     <div class="wt_iew_popup_close" id="wt_iew_request_a_feature_close">X</div>
                 </div>

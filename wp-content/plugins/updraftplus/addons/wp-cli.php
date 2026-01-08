@@ -385,7 +385,9 @@ class UpdraftPlus_CLI_Command extends WP_CLI_Command {
 			
 			$job_identifier = strip_tags($date_label).' ['.$nonce.']';
 			if (!empty($backup['service'])) {
-				 $job_identifier .= ' ('.implode(',', $backup['service']).')';
+				$job_identifier .= ' ('.(is_array($backup['service']) ? implode(',', $backup['service']) : (string) $backup['service']).')';
+			} else {
+				$job_identifier .= ' (none)';
 			}
 			$items[] = array(
 				'job_identifier'  => $job_identifier,

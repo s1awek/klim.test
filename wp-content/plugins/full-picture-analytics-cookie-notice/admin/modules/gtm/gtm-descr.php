@@ -36,7 +36,7 @@ switch( $section_id ){
 	break;
 
 	case 'fupi_gtm_atrig':
-		$ret_text = '<p>' . esc_html__( 'Use functions on this page to push to the dataLayer information about complex events, for example, when a visitor from France visits 5 product pages in one session. You can set these conditions in the "Advanced triggers" module.', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . sprintf( esc_html__( 'Here you can set up pushing to the dataLayer data of custom events. They can be triggered by %1$scustom triggers%2$s and include %3$soptional parameters%2$s.' , 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-advanced-triggers/" target="_blank">', '</a>', '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-parameters/" target="_blank">' ) . '</p>';
 	break;
 
 	case 'fupi_gtm_users':

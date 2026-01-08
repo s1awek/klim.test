@@ -42,25 +42,25 @@ switch( $section_id ){
 	case 'fupi_mato_basic':
 		$ret_text = '<p>' . esc_html__( 'These settings impact the amount and precision of collected data.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
-
+	
+	// SIMPLE EVENTS
+	
+	case 'fupi_mato_events':
+		$ret_text = '<p>' . esc_html__('Use simple events to track clicks, form submissions and others events.', 'full-picture-analytics-cookie-notice' ) . '</p>';
+	break;
+		
+	// CUSTOM EVENTS
+	
+	case 'fupi_mato_atrig':
+		$ret_text = '<p>' . sprintf( esc_html__( 'Here you can set up custom events. Trigger them with %1$scustom triggers%2$s' , 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-advanced-triggers/" target="_blank">', '</a>' ) . '</p>';
+	break;
+	
 	// WP DATA TRACKING
 
 	case 'fupi_mato_wpdata':
-		$ret_text = '<p>' . sprintf( esc_html__( 'Give context to tracked events. To track most of the data below, you will have to %1$sregister custom dimensions in your Matomo\'s admin panel%2$s.', 'full-picture-analytics-cookie-notice'), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-dimensions-in-matomo/">', '</a>' ) . '</p>';
+		$ret_text = '<p>' . sprintf( esc_html__( 'Event parameters are sent with all events, including the initial pageview event and custom events. Provide parameter ID in the fields below to use them. %1$sLearn how to register parameters%2$s.', 'full-picture-analytics-cookie-notice'), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-set-up-custom-dimensions-in-matomo/">', '</a>' ) . '</p>';
 	break;
-
-	// EVENTS TRACKING
-
-	case 'fupi_mato_events':
-		$ret_text = '<p>' . esc_html__('Use functions on this page to track simple events, like clicking a button or submitting a form.', 'full-picture-analytics-cookie-notice' ) . '</p>';
-	break;
-
-	// CUSTOM EVENTS TRACKING
-
-	case 'fupi_mato_atrig':
-		$ret_text = '<p>' . esc_html__( 'Use functions on this page to track complex events, with many conditions, for example, when a visitor from France visits 5 product pages in one session. You can set these conditions in the "Advanced triggers" module.' , 'full-picture-analytics-cookie-notice' ) . '</p>';
-	break;
-
+		
 	// WOOCOMMERCE
 
 	case 'fupi_mato_ecomm':

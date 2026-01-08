@@ -248,13 +248,15 @@ class Insights {
 	public function send_tracking_data( $override = false ) {
 		// skip on AJAX Requests.
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			return;
+            return;
 		}
+
 		if ( ! $this->is_tracking_allowed() && ! $override ) {
 			return;
 		}
 		// Send a maximum of once per week.
 		$last_send = $this->__get_last_send();
+
 		/**
 		 * Tracking interval
 		 *
@@ -273,6 +275,7 @@ class Insights {
 		if ( $last_send && $last_send > $intervalCheck && ! $override ) {
 			return;
 		}
+
 		$this->client->send_request( $this->get_tracking_data(), 'track' );
 		update_option( $this->client->getSlug() . '_tracking_last_send', time(), false );
 	}
@@ -308,6 +311,7 @@ class Insights {
 		];
 		// for child classes.
 		$extra = $this->get_extra_data();
+
 		if ( ! empty( $extra ) ) {
 			$data['extra'] = $extra;
 		}
@@ -321,6 +325,49 @@ class Insights {
 	 * @return mixed
 	 */
 	protected function get_extra_data() {
+
+        global $wpdb;
+        $result = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $wpdb->options WHERE option_name LIKE %s;", "wf_feed_%"), 'ARRAY_A' ); // phpcs:ignore
+        if ( ! is_array( $result ) ) {
+            $result = array();
+        }
+        $catCount = wp_count_terms(
+            array(
+                'taxonomy'   => 'product_cat',
+                'hide_empty' => false,
+                'parent'     => 0,
+            )
+        );
+        if ( is_wp_error( $catCount ) ) {
+            $catCount = 0;
+        }
+        /**
+         * @TODO count products by type
+         * @see wc_get_product_types();
+         */
+
+        $hidden_notices = array();
+        foreach ( array( 'rp-wcdpd', 'wpml', 'rating', 'product_limit' ) as $which ) {
+            $hidden_notices[ $which ] = (int) get_option( sprintf( 'woo_feed_%s_notice_hidden', $which ), 0 );
+        }
+
+        $this->is_add_extra = apply_filters( 'woo_feed_woocommerce_add_extra', true );
+
+        if( $this->is_add_extra ) {
+
+            $tracker_extra = array(
+                'products' => $this->get_post_count('product'),
+                'variations' => $this->get_post_count('product_variation'),
+                'batch_limit' => get_option('woo_feed_per_batch'),
+                'feed_configs' => wp_json_encode($result),
+                'product_cat_num' => $catCount,
+                'review_notice' => wp_json_encode(get_option('woo_feed_review_notice', array())),
+                'hidden_notices' => $hidden_notices,
+            );
+            $this->add_extra($tracker_extra);
+        }
+
+
 		return $this->extra_data;
 	}
 
@@ -698,6 +745,7 @@ class Insights {
 	 * @return void
 	 */
 	public function activate_plugin() {
+
 		$allowed = get_option( $this->client->getSlug() . '_allow_tracking', 'no' );
 		// if it wasn't allowed before, do nothing.
 		if ( 'yes' !== $allowed ) {

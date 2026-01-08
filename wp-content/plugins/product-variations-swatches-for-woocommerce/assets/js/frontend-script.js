@@ -388,16 +388,32 @@
                 }
             }
 
-            if ($(v).data('show_selected_item') && $(v).find('.vi-wpvs-option-wrap-selected').length) {
+            if ($(v).data('show_selected_item') && $(v).find('.vi-wpvs-option-wrap-selected').length && $(v).find('.vi-wpvs-option-wrap-selected').data('attribute_label')) {
                 if ($(v).parent().parent().find('.vi-wpvs-label-selected').length) {
-                    $(v).parent().parent().find('.vi-wpvs-label-selected').html($(v).find('.vi-wpvs-option-wrap-selected').data('attribute_label')).removeClass('vi-wpvs-hidden');
+                    $(v).parent().parent().find('.vi-wpvs-label-selected.vi-wpvs-label-selected-title').html($(v).find('.vi-wpvs-option-wrap-selected').data('attribute_label'));
+                    $(v).parent().parent().find('.vi-wpvs-label-selected').removeClass('vi-wpvs-hidden');
                 } else {
-                    let append_wrap = $(v).parent().parent().find('.label');
-                    if (!append_wrap.length) {
-                        append_wrap = $(v).parent().parent().find('label');
+                    let $append_wrap = $(v).parent().parent().find('.label');
+                    if (!$append_wrap.length) {
+                        $append_wrap = $(v).parent().parent().find('label');
                     }
-                    append_wrap.css({display: 'inline-flex', flexWrap: 'wrap', alignItems: 'center'})
-                        .append('<span class="vi-wpvs-label-selected">' + $(v).find('.vi-wpvs-option-wrap-selected').data('attribute_label') + '</span>');
+                    if ($append_wrap.length) {
+                        if (vi_wpvs_frontend_param?.single_attr_selected_separator){
+                            $append_wrap.append('<span class="vi-wpvs-label-selected vi-wpvs-label-selected-separator">' + vi_wpvs_frontend_param.single_attr_selected_separator + '</span>')
+                        }
+                        $append_wrap.append('<span class="vi-wpvs-label-selected vi-wpvs-label-selected-title">' +  $(v).find('.vi-wpvs-option-wrap-selected').data('attribute_label') + '</span>');
+                        $append_wrap.css({
+                            display: 'inline-flex',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                        });
+                        $append_wrap.find(' *').css({
+                            margin: '0',
+                        });
+                        $append_wrap.find('.vi-wpvs-label-selected-title').css({
+                            margin: '0 5px',
+                        });
+                    }
                 }
             }
         });

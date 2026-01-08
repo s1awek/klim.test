@@ -24,7 +24,7 @@ if ( empty( $this->cook ) ){
 
     $this->data['cook']['setup'][] = [ 'ok', 'Consent banner is set to work in Opt-in mode - it enables tracking tools and loads embedded content according to visitors tracking choices.' ];
     
-    if ( ! empty( $this->tools['geo'] ) ) $this->data['cook']['setup'] = array_merge( $this->data['cook']['setup'], $default_geo_texts );
+    if ( ! empty( $this->main['geo'] ) ) $this->data['cook']['setup'] = array_merge( $this->data['cook']['setup'], $default_geo_texts );
 
     $this->data['cook']['setup'][] = [ 'ok', 'Visitors are asked for consent again, when the privacy policy text changes or when tracking modules are enabled.' ];
 
@@ -41,7 +41,7 @@ if ( empty( $this->cook ) ){
     
     // WHEN CONSENT BANNER IS ENABLED, HAS SETTINGS AND USES GEO
 
-    if ( ! empty( $this->tools['geo'] ) ) {
+    if ( ! empty( $this->main['geo'] ) ) {
 
         // check if saved after enabling geo
         $use_default_geo = empty( $this->cook['mode'] );
@@ -178,11 +178,6 @@ if ( empty( $this->cook ) ){
     }
 }
 
-// Privacy policy page
-if ( empty ( $this->priv_policy_url ) ) {
-    $this->data['cook']['setup'][] = [ 'alert', 'Privacy policy page is not set or published' ];
-}
-
 // Text for pre-selected switches
 if ( isset( $notice_opts['switches_on'] ) && is_array( $notice_opts['switches_on'] ) && ! empty( $notice_opts['optin_switches'] ) ) {
     // and we are not hiding the whole section with settings
@@ -200,11 +195,11 @@ if ( $toggle_btn_enabled ) {
     
 } else {
 
-    $priv_policy_id = get_option( 'wp_page_for_privacy_policy' );
-    $priv_policy_post = get_post( $priv_policy_id );
-    $toggler_found = false;
+    $priv_policy_id     = ! empty( $this->cook['pp_id'] ) ? $this->cook['pp_id'] : false;
+    $priv_policy_post   = ! empty ( $priv_policy_id ) ? get_post( $priv_policy_id ) : false;
+    $toggler_found      = false;
 
-    if ( ! empty( $priv_policy_post ) ) {
+    if ( ! empty( $priv_policy_post ) && isset( $priv_policy_post->post_status ) && $priv_policy_post->post_status === 'publish' ) {
         
         $priv_policy_content = $priv_policy_post->post_content;
         $priv_policy_content = apply_filters( 'the_content', $priv_policy_content );

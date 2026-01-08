@@ -506,7 +506,7 @@
 
 	wp.customize( 'fupi_notice_round_corners', value => {
 		value.bind( function( val ) {
-			if ( ! val ) val = 0;
+			if ( ! val ) val = 16;
 			document.body.style.setProperty('--fupi-notice-panel-round-corners', val + 'px');
 		} );
 	} );
@@ -515,7 +515,7 @@
 
 	wp.customize( 'fupi_notice_btn_round_corners', value => {
 		value.bind( function( val ) {
-			if ( ! val ) val = 0;
+			if ( ! val ) val = 8;
 			document.body.style.setProperty('--fupi-notice-btn-round-corners', val + 'px');
 		} );
 	} );

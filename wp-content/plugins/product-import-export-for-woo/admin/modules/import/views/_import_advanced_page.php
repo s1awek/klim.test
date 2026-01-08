@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
 }
 ?>
 <div class="wt_iew_import_main">
-	<p><?php echo $this->step_description;?></p>
+	<p><?php echo wp_kses_post($this->step_description);?></p>
 	<form class="wt_iew_import_advanced_form">
 		<table class="form-table wt-iew-form-table">
 			<?php

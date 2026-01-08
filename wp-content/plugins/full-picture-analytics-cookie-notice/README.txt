@@ -1,128 +1,146 @@
-=== All-in-1 Analytics and Consent Banner - WP Full Picture ===
+=== Tracking and Consent Manager - WP Full Picture ===
 Contributors: chrisplaneta
 Donate link: https://wpfullpicture.com/
 Tags: Consent mode, Analytics, GDPR, GTM, Google Ads
 Requires at least: 5.4.0
-Tested up to: 6.8.2
-Stable tag: 9.2.0.1
+Tested up to: 6.9.0
+Stable tag: 9.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Set up analytis tools and a consent banner in 1 tool. Integrations with Google Analytics, GTM, Meta pixel, WooCommerce and more.
+Install the best tracking tools and manage tracking consents with one plugin. Google Analytics, GTM, Meta pixel, WooCommerce and more.
 
 == Description ==
 
-WP Full Picture is an all-in-1 plugin for analytics and consent management.
+Are you tired of juggling multiple plugins just to make your tracking work? Or dealing with a confusing Google Tag Manager?
 
-It can replace several plugins and save you from dealing with compatibility issues and confusing setup. It replaces:
+Do you wish you had an easy, GDPR-compliant consent banner that "just works" with your tracking tools and supports Consent Mode right out of the box?
+
+WP Full Picture can help you with all of it.
+
+WP Full Picture lets you install tracking tools and manage tracking consents - so you can track your visitors with the tools you need and stay compliant with privacy regulations.
+
+Say goodbye to plugin overload. WP Full Picture replaces:
 
 - PixelYourSite, Pixel Manager for WooCommerce, MonsterInsights and other similar plugins,
-- GTM4WP plugin (WP FP includes its own Google Tag Manager integration),
+- GTM4WP plugin,
 - CookieBot, CookieYes, Complianz and similar solutions.
 
-It is the only tool you need to install tracking tools, display a consent banner (GDPR-compliant, with consent mode), manage consents, track user actions and show statistics in WP admin panel. Sweet!
+## 🎁 WHAT YOU ARE GETTING
 
-See for yourself.
+With WP Full Picture, you get everything you need to get traffic insights, track conversions, and stay compliant — all in one lightweight plugin:
 
-[youtube https://www.youtube.com/watch?v=5Z_5k089oHw]
+- 16 ready-to-use integrations with tools like Google Analytics, Google Ads, Meta Pixel, and more
+- Built-in, pre-configured consent banner
+- Google Consent Mode v2 and Microsoft UET Consent Mode support
+- Two modes of work: simple (for most users) and advanced (for marketers and developers)
+- Google Tag Manager integration for advanced setups
+- Comprehensive WooCommerce tracking
+…and much more
 
-## 🧩 INTEGRATIONS WITH TRACKING TOOLS
+## 🧩 INTEGRATIONS
 
-WP FP has ready-to-use integrations with:
+Connect all your favorite tracking and analytics tools in minutes — no coding, no chaos.
 
-- Google Analytics [feature list](https://wpfullpicture.com/module/google-analytics-integration-for-wordpress/)
-- Google Ads [feature list](https://wpfullpicture.com/module/google-ads/)
-- Google Tag Manager [feature list](https://wpfullpicture.com/module/google-tag-manager/)
-- Meta Pixel [feature list](https://wpfullpicture.com/module/meta-pixel/)
-- Pinterest Ads tag [feature list](https://wpfullpicture.com/module/pinterest-ads/)
-- Hotjar [feature list](https://wpfullpicture.com/module/hotjar/)
-- Twitter / X [feature list](https://wpfullpicture.com/module/x-ads-twitter-ads/)
-- Microsoft Advertising [feature list](https://wpfullpicture.com/module/microsoft-advertising/)
-- Microsoft Clarity [feature list](https://wpfullpicture.com/module/microsoft-clarity/)
-- LinkedIn Insights Tag [feature list](https://wpfullpicture.com/module/linkedin-insight-tag/)
-- TikTok Pixel [feature list](https://wpfullpicture.com/module/tiktok-pixel/)
-- Plausible Analytics [feature list](https://wpfullpicture.com/module/plausible-analytics/)
+WP Full Picture comes with ready-to-use integrations that help you understand your visitors, optimize your campaigns, and grow your business — all while staying compliant.
+
+- Google Analytics [learn more](https://wpfullpicture.com/module/google-analytics-integration-for-wordpress/)
+- Google Ads [learn more](https://wpfullpicture.com/module/google-ads/)
+- Meta Pixel [learn more](https://wpfullpicture.com/module/meta-pixel/)
+- Pinterest Ads tag [learn more](https://wpfullpicture.com/module/pinterest-ads/)
+- Hotjar [learn more](https://wpfullpicture.com/module/hotjar/)
+- Twitter / X [learn more](https://wpfullpicture.com/module/x-ads-twitter-ads/)
+- Microsoft Advertising [learn more](https://wpfullpicture.com/module/microsoft-advertising/)
+- Microsoft Clarity [learn more](https://wpfullpicture.com/module/microsoft-clarity/)
+- LinkedIn Insights Tag [learn more](https://wpfullpicture.com/module/linkedin-insight-tag/)
+- TikTok Pixel [learn more](https://wpfullpicture.com/module/tiktok-pixel/)
+- Plausible Analytics [learn more](https://wpfullpicture.com/module/plausible-analytics/)
+- Matomo [learn more](https://wpfullpicture.com/module/matomo/)
+- Inspectlet [learn more](https://wpfullpicture.com/module/inspectlet/)
+- Crazy Egg [learn more](https://wpfullpicture.com/module/crazy-egg/)
 - PostHog (installation only)
 - Simple Analytics (installation only)
-- Matomo [feature list](https://wpfullpicture.com/module/matomo/)
-- Inspectlet [feature list](https://wpfullpicture.com/module/inspectlet/)
-- Crazy Egg [feature list](https://wpfullpicture.com/module/crazy-egg/)
 
-You can also install other tools with the built-in GTM integration and Custom Scripts module [feature list](https://wpfullpicture.com/module/custom-scripts/).
+Need something else?
 
-All of these integrations work seemlessly with our built-in consent banner and consent management solutions.
+Install more tools with the built-in [Google Tag Manager integration](https://wpfullpicture.com/module/google-tag-manager/) (advanced) or a [Custom Scripts module](https://wpfullpicture.com/module/custom-scripts/) (quick and simple).
 
-**[PRO]** Currently, there are no extra integrations available in the Pro version.
+Best of all, all tools installed with our modules work seamlessly with the built-in consent banner and consent management system — so every tool runs in full compliance.
 
 ## 🍪 CONSENT BANNER
 
-WP Full Picture comes with a GDPR-compliant consent banner. It supports **Google Advanced Consent Mode** and **Microsoft UET Consent Mode** out-of-the-box.
+Show a beautiful, GDPR-compliant consent banner that just works — no setup headaches, no cookie scans, no limits.
 
-It manages all tracking tools installed with WP Full Picture - with no extra setup, cookie scanning or usage limits.
+It comes with Google Consent Mode v2 and Microsoft UET Consent Mode built-in, so you can safely collect traffic insights, run ad campaigns and track conversions.
 
-Other tools can be controlled with our iframes blocker and tracking tools manager.
+The banner automatically manages all your tracking tools that you installed with WP Full Picture, ensuring your site stays compliant with privacy laws while you keep gathering valuable data.
 
-See how it compares to CookieBot, CookieYes and Complianz.
-
-[youtube https://www.youtube.com/watch?v=IrSMKJDB840]
-
-**[PRO]** The Pro version lets you show a consent banner only in countries where it is required.
+**[PRO]** The Pro version lets you display the consent banner only in countries where it’s required, helping you stay compliant while keeping your visitors’ experience smooth and distraction-free.
 
 ## ✍️ CONSENT MANAGEMENT
 
-WP Full Picture Free comes with an integration with ConsentsDB, for storing users' tracking consents. The service is paid extra, starting at less then a dollar a month.
+WP Full Picture integrates with ConsentsDB cloud service.
 
-**[PRO]** WP Full Picture Pro comes with a free option to store consents in your email inbox.
+CDB lets you store visitor consents outside your website for less than a dollar a month. This keeps your site fast and compliant without extra maintenance.
+
+**[PRO]** With WP Full Picture Pro, you can store all consent records in your email inbox for free, making compliance even simpler and more transparent.
+
+No complicated setup. No third-party cookie scanners. Just peace of mind and easy data control.
 
 ## 👁️ ADVANCED TRACKING
 
-WP Full Picture Free lets you track more user actions, events and data than any of its competitors.
+Do you need detailed insights into how visitors interact with your website?
 
-You can track:
+With WP Full Picture you can track:
 
-- Clicks in affiliate links
-- Clicks in contact links
-- Clicks on buttons and other page elements
+- Clicks in affiliate links, contact links, buttons and other page elements
 - Form submissions
-- Views of popups, ads, pricing tables and other important page elements
+- Views of popups, ads and pricing tables
 - WooCommerce events (see below)
-- Locations of broken links (to pages that don't exist)
-- Page types, categories and tags
-- Custom taxonomies
+- Page types, categories, tags
 - User roles and statuses
 - and more
 
-**[PRO]** WP Full Picture Pro comes with advanced tracking features:
+You can track it with the tools installed with WP FP or push this data to Google Tag Manager's dataLayer. Whatever you prefer.
 
+**[PRO]** With WP Full Picture Pro, you go one step further and unlock business-oriented features like:
+
+- Server-side tracking with Meta CAPI and Measurement Protocol
+- Google Tag Gateway via Cloudflare
 - Advanced Matching / Enhanced conversions tracking
-- Behavioral tracking (multi-conditional event triggers)
+- Custom events builder
 - Visitor scoring (for measuring the quality of traffic sources)
-- Server-side tracking
-- Google Tag Gateway
-- Tracking sources of traffic from Android social media apps
 - Metadata tracking
-- JavaScript error tracking (only supported by Google Analytics)
+- JavaScript error tracking
 - and more
 
 ## 🛒 WOOCOMMERCE TRACKING
 
-WP Full Picture lets you easily track WooCommerce events in 14 tracking tools, from Google Analytics to Google Tag Manager.
+Get the full picture of your eCommerce performance — automatically.
 
-You can track product views, clicks in "add to cart" buttons, checkouts, purchases and many more.
+WP Full Picture tracks all major WooCommerce events in 14 tracking tools, including Google Analytics, Google Ads, Meta Pixel, and Google Tag Manager.
 
-We send every event with product and event data (except user information - PRO only), which is extremely important for advertising and conversion tracking.
+Measure key actions like:
 
-**[PRO]** The PRO version comes with status-based order tracking (an alternative method of tracking purchases) and advanced matching/enhanced conversions.
+- Product views and “add to cart” clicks
+- Checkout progress and completed purchases
+- Coupon usage and more
+
+Every event includes detailed product information for accurate conversion tracking and smarter ad targeting — without sharing personal information.
+
+**[PRO]** The Pro version adds:
+
+- Status-based order tracking (for higher accuracy)
+- Server-side tracking with Meta Capi and Measurement Protocol (to better avoid ad blockers)
+- Enhanced conversions and advanced matching (for better conversion attribution and ad optimisation)
 
 ## 📈 STATISTICS IN WP ADMIN
 
-Do you want to see traffic statistics and marketing reports in your WP admin dashboard? No problem.
+See your marketing performance right where you work — inside your WordPress dashboard.
 
-You can easily show in your WP admin panel reports and dashboards from Google Looker Studio, Databox and other similar services.
+With WP Full Picture, you can embed reports and dashboards from Google Looker Studio, Databox, and other data-dashboard platforms directly in your WP admin. Sweet.
 
-**[PRO]** PRO version lets you choose non-admin users in your store that will also have access to reports.
-
-## 💎 WP FULL PICTURE PRO vs FREE
+## 💎 WP FULL PICTURE FREE vs PRO
 
 [See Free vs Pro comparison](https://wpfullpicture.com/free-vs-pro/)
 
@@ -205,6 +223,56 @@ No. WP Full Picture is focused on tracking and privacy. To generate a product ca
 6. View traffic and marketing reports in the admin panel
 
 == Changelog ==
+
+= 9.4.2 (1-12-2025) =
+
+* [Fix] [GA] Fixed SBOT when gtag ID is different then measurement ID
+* [Other] Freemius SDK update
+
+= 9.4.1 (20-11-2025, PRO-only) =
+
+* [New] [GA] [Pro] You can now add custom parameters to "purchase" event payloads sent via SBOT
+* [New] [GA] [Pro] Added an option to view SBOT payloads in order details pages
+* [Update] [GA] [Pro] Added to SBOT a fallback to WC session saving - saving order data in transients
+* [Fix] [Pro] SBOT fixes and improvements
+* [Other] Freemius SDK update
+
+= 9.4.0 (04-10-2025) =
+
+* [New] [Pro] Custom events can now have custom properties
+* [New] [Pro] Custom events in Hotjar
+* [Fix] [Meta] When variable products are viewed, they are now correctly sent with content_type equal to product_group (works only when the user did not choose to track variable products as single products)
+* [Fix] [Pro] [GA] Triggering GA #2 pageview after user consent
+* [Update] [Pro] Small improvements to status based order tracking
+* [Other] Updated texts and in-app documentation
+* [Other] Advanced Triggers are renamed to Custom Triggers
+* [Other] Added Black Friday notifications
+* [Other] Added more reasonable timeouts to sending to remote servers
+
+= 9.3.2 (27-10-2025) =
+
+* [Fix] [Pro] Status-based order tracking fixes and improvements in GA and Meta
+
+= 9.3.1 (23-10-2025) =
+
+* [New] [Meta Pixel] Advanced External ID
+* [Change] [Woo] [Meta] When a variable product is viewed, the "content_type" is now sent to "product_group" instead of "product"
+* [Fix] [Pro] [Google Ads] Fixes of bugs that showed up after the last update - connected to using GA and GAds with connected tags (the bug was introduced in the 9.3.0)
+* [Fix] [Pro] [Google Analytics] When orders are sent via Measurement Protocol, item_category2 was skipped
+* [Fix] Information in the GDPR setup helper about missing privacy policy did not change even if the user published it
+* [Fix] [Pro] [Google Analytics] When orders are sent via Measurement Protocol, coupon text is now properly added to the payload
+* [Update] GDPR-related texts and GDPR setup info page
+
+= 9.3.0 (14-10-2025) =
+
+* [Update] [Google Ads] [Google Analytics] Major improvement for tracking with combined Google Tags
+* [Update] Improvement for tracking products added to cart via a link with "add-to-cart" parameter
+* [Update] Geolocation module's settings are moved to the General Settings
+* [Update] [Consent Banner] Added a field for the ID of the privacy policy page - important for multilingual websites
+* [Update] [Meta Pixel] Status based order tracking no longer sends and empty value for FBC, when it is not available
+* [Fix] [Setup Helper] SH no longer shows in the Bricks builder editor
+* [Fix] [Consent Banner] Default settings for the rounded corners and button text size on mobile did not get applied properly
+* [Other] Updated internal function for getting URL parameter values
 
 = 9.2.0 (24-09-2025) =
 
@@ -406,29 +474,3 @@ No. WP Full Picture is focused on tracking and privacy. To generate a product ca
 * [Other] Included latest JS and CSS files for select2 dropdowns
 * [Other] Function FP.doActions() can now pass arguments between actions
 * [Other] Consent banner - default with increased to 700px
-
-= 8.1.2 (26-11-2024) =
-
-* [Other] Checked compatibility with latest WP version
-* [Other] Added Black Friday deal info
-
-= 8.1.1 (15-10-2024) =
-
-* [Fix] A few minor fixes to the logic and texts of the GDPR setup helper
-* [Fix] The page no longer refreshes when only Google's tools are loaded and visitors consent to only some cookies
-* [Fix] [Woo] Orders from not logged clients are no longer tracked when they return to the "thank you" page
-* [Removed] Removed checkbox with the "Administrator" role for excluded user roles - unnecessary, since admins are always excluded
-* [Other] The name of the exported settings file now includes the site's domain
-* [Other] Polish translation of the GDPR setup helper
-
-= 8.1.0 (08-10-2024) =
-
-* [New] Import/export of plugin settings
-* [Removed] Adblock usage tracking - removed due to low accuracy
-
-= 8.0.1 (01-10-2024) =
-
-* [Fix] [Pro] Fixed PHP error when a user tried to enter secret key to consentsDB without registering it first
-* [Fix] [Facebook] If user.id is missing, no external_id is set
-* [Fix] [Woo] Semicolons are now removed from product titles and categories to prevent JSON parsing errors
-* [Other] If OceanWP theme is active, then we disable the customizer controls for the Consent Banner and show in-admin notifications.

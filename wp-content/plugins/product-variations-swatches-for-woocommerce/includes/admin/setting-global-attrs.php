@@ -654,38 +654,38 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Setting_Global_Attrs {
 			}
 			wp_dequeue_style( 'eopa-admin-css' );
 			/*Stylesheet*/
-			wp_enqueue_style( 'semantic-ui-accordion', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'accordion.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-button', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'button.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-checkbox', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'checkbox.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-dropdown', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'dropdown.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-form', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'form.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-header', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'header.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-icon', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'icon.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-input', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'input.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-table', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'table.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-menu', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'menu.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-grid', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'grid.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-label', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'label.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-message', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'message.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-popup', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'popup.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-segment', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'segment.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-dimmer', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'dimmer.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'semantic-ui-loader', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'loader.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-			wp_enqueue_style( 'transition', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'transition.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-accordion', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'accordion.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-button', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'button.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-checkbox', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'checkbox.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-dropdown', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'dropdown.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-form', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'form.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-header', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'header.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-icon', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'icon.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-input', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'input.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-table', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'table.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-menu', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'menu.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-grid', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'grid.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-label', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'label.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-message', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'message.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-popup', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'popup.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-segment', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'segment.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-dimmer', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'dimmer.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-semantic-ui-loader', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'loader.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
+			wp_enqueue_style( 'viwvps-transition', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'transition.min.css', '', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
 
 			wp_enqueue_style( 'product-variations-swatches-for-woocommerce-admin-attrs-attrs-css', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'admin-setting-attrs.css', array(), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
 			wp_enqueue_style( 'product-variations-swatches-for-woocommerce-admin-minicolors', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'minicolors.css', array(), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
 
-			wp_enqueue_script( 'jquery-data-table', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'jquery.dataTables.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
-			wp_enqueue_script( 'semantic-ui-data-table', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'dataTables.semanticui.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-jquery-data-table', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'jquery.dataTables.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-semantic-ui-data-table', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'dataTables.semanticui.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
 			wp_enqueue_media();
 			wp_enqueue_script( 'jquery-ui-sortable' );
-			wp_enqueue_script( 'semantic-ui-accordion', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'accordion.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
-			wp_enqueue_script( 'semantic-ui-address', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'address.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
-			wp_enqueue_script( 'semantic-ui-checkbox', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'checkbox.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
-			wp_enqueue_script( 'semantic-ui-dropdown', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'dropdown.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
-			wp_enqueue_script( 'semantic-ui-form', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'form.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
-			wp_enqueue_script( 'transition', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'transition.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-semantic-ui-accordion', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'accordion.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-semantic-ui-address', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'address.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-semantic-ui-checkbox', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'checkbox.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-semantic-ui-dropdown', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'dropdown.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-semantic-ui-form', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'form.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+			wp_enqueue_script( 'viwvps-transition', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'transition.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
 
 			wp_enqueue_script( 'product-variations-swatches-for-woocommerce-admin-attrs-js', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'admin-setting-attrs.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
 			wp_enqueue_script( 'product-variations-swatches-for-woocommerce-admin-minicolors', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'minicolors.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );

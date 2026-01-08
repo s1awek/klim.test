@@ -39,7 +39,7 @@ $sections = array(
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . sprintf( esc_html__( 'This will load the tracking script for all website visitors, including administrators, bots, excluded users, people browsing from excluded locations and people that didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
+				<p>' . sprintf( esc_html__( 'This will load the tracking script for administrators, bots, excluded users, people browsing from excluded locations and people who didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
 			),
 			array(
 				'type'	 			=> 'toggle',
@@ -85,7 +85,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_hotj_basic',
-		'section_title' => esc_html__( 'Data collection settings', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Data collection', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',
@@ -144,7 +144,7 @@ $sections = array(
 
 	array(
 		'section_id' => 'fupi_hotj_tags',
-		'section_title' => esc_html__( 'Tagging recordings', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Simple events', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',
@@ -326,12 +326,63 @@ $sections = array(
 			),
 		),
 	),
+	// CUSTOM TRIGGER TAGGING
+
+	array(
+		'section_id' => 'fupi_hotj_custom_events',
+		'section_title' => esc_html__( 'Custom events', 'full-picture-analytics-cookie-notice' ),
+		'fields' => array(
+			array(
+				'type'	 			=> 'r3',
+				'label' 			=> esc_html__( 'Tag recordings on specific conditions', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'custom_events',
+				'option_arr_id'		=> $option_arr_id,
+				'is_repeater'		=> true,
+				'class'				=> 'fupi_adv fupi_events_builder fupi_fullwidth_tr',
+				'must_have'			=> 'pro atrig',
+				'btns_class'		=> 'fupi_push_right',
+				'fields'			=> array(
+					array(
+						'label'				=> esc_html__( 'When this happens', 'full-picture-analytics-cookie-notice' ),
+						'type'				=> 'atrig_select',
+						'field_id'			=> 'atrig_id',
+						'class'				=> 'fupi_col_50',
+						'required'			=> true,
+						'format'			=> 'key'
+					),
+					array(
+						'type'				=> 'select',
+						'label' 			=> esc_html__( '...for...', 'full-picture-analytics-cookie-notice' ),
+						'field_id'			=> 'repeat',
+						'option_arr_id'		=> $option_arr_id,
+						'class'				=> 'fupi_col_20',
+						'options'			=> array(
+							'no'				=> esc_html__( 'Once per page', 'full-picture-analytics-cookie-notice' ),
+							'yes'				=> esc_html__( 'Multiple times', 'full-picture-analytics-cookie-notice' ),
+						),
+					),
+					array(
+						'type'				=> 'text',
+						'label'				=> esc_html__( 'Tag with', 'full-picture-analytics-cookie-notice' ),
+						'placeholder'		=> esc_html__( 'Tag name (required)', 'full-picture-analytics-cookie-notice' ),
+						'field_id'			=> 'tag_name',
+						'el_class'			=> 'fupi_events_builder_evt',
+						'class'				=> 'fupi_col_30',
+						'required'			=> true,
+					),
+				),
+				'popup2'			=> '<p>' . esc_html__( 'Tag session recordings when specific conditions are met. You can set conditions with "Custom triggers" module.', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<p>' . esc_html__( 'Each trigger can fire once per pageview or multiple times depending on your settings.', 'full-picture-analytics-cookie-notice' ) . '</p>',
+			),
+		),
+	),
+
 
 	// WOOCOMMERCE
 
 	array(
 		'section_id' => 'fupi_hotj_ecomm',
-		'section_title' => esc_html__( 'WooCommerce tagging', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'WooCommerce tracking', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',

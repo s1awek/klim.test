@@ -199,7 +199,7 @@ class Bootstrap
         add_action('in_admin_header', array('Duplicator\\Views\\ViewHelper', 'adminLogoHeader'), 100);
 
         /* CSS */
-        wp_register_style('dup-jquery-ui', DUPLICATOR_PLUGIN_URL . 'assets/css/jquery-ui.css', null, "1.11.2");
+        wp_register_style('dup-jquery-ui', DUPLICATOR_PLUGIN_URL . 'assets/css/jquery-ui.css', null, "1.14.1");
         wp_register_style('dup-font-awesome', DUPLICATOR_PLUGIN_URL . 'assets/css/font-awesome/css/all.min.css', [], '6.4.2');
         wp_register_style('dup-plugin-global-style', DUPLICATOR_PLUGIN_URL . 'assets/css/global_admin_style.css', null, DUPLICATOR_VERSION);
         wp_register_style('dup-plugin-style', DUPLICATOR_PLUGIN_URL . 'assets/css/style.css', array('dup-plugin-global-style'), DUPLICATOR_VERSION);

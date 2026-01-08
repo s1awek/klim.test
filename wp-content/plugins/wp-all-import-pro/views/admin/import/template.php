@@ -2,6 +2,9 @@
 
 <form class="wpallimport-template <?php echo ! $this->isWizard ? 'edit' : '' ?> wpallimport-step-3" method="post">
 
+	<!-- Hidden field for preview unique key override - updated by preview modal before refresh -->
+	<input type="hidden" name="wpai_preview_unique_key" id="wpai-preview-unique-key-hidden" value="" />
+
 	<div class="wpallimport-wrapper">
 		<div class="wpallimport-header">
 			<div class="wpallimport-logo"></div>
@@ -14,6 +17,9 @@
 		</div>
 		<div class="clear"></div>
 	</div>
+
+
+
 
 	<?php $visible_sections = apply_filters('pmxi_visible_template_sections', array('caption', 'main', 'taxonomies', 'cf', 'featured', 'other', 'nested'), $post['custom_type']); ?>
 
@@ -104,6 +110,12 @@
 													<input type="checkbox" id="is_leave_html" name="is_leave_html" class="fix_checkbox" value="1" <?php echo $post['is_leave_html'] ? 'checked="checked"' : '' ?> style="position:relative;"/>
 													<label for="is_leave_html"><?php _e('Decode HTML entities with <b>html_entity_decode</b>', 'wp-all-import-pro') ?></label>
                                                     <a class="wpallimport-help" href="#help" style="position:relative; top:1px;" title="<?php _e('If HTML code is showing up in your posts, use this option. You can also use <br /><br /><i>[html_entity_decode({my/xpath})]</i><br /><br /> or <br /><br /><i>[htmlentities({my/xpath})]</i><br /><br /> or <br /><br /><i>[htmlspecialchars_decode({my/xpath})]</i><br /><br /> to decode or encode HTML in this import file.', 'wp-all-import-pro'); ?>">?</a>
+												</div>
+												<div class="input pmxi_option">
+													<input type="hidden" name="is_convert_to_blocks" value="0" />
+													<input type="checkbox" id="is_convert_to_blocks" name="is_convert_to_blocks" class="fix_checkbox" value="1" <?php echo $post['is_convert_to_blocks'] ? 'checked="checked"' : '' ?> style="position:relative;"/>
+													<label for="is_convert_to_blocks"><?php _e('Convert content to Gutenberg blocks', 'wp-all-import-pro') ?></label>
+                                                    <a class="wpallimport-help" href="#help" style="position:relative; top:1px;" title="<?php _e('Enable this option to automatically convert imported content to Gutenberg block format. If the content already contains block markup, it will be preserved. Otherwise, the content will be wrapped in appropriate blocks for proper display in the block editor.', 'wp-all-import-pro'); ?>">?</a>
 												</div>
 											</div>
 										</div>
@@ -230,6 +242,7 @@
 						<?php else: ?>
 							<a href="<?php echo esc_url(remove_query_arg('id', remove_query_arg('action', $this->baseUrl))); ?>" class="back rad3" style="float:none;"><?php _e('Back to Manage Imports', 'wp-all-import-pro') ?></a>
 						<?php endif; ?>
+						<button type="button" id="wpai-full-preview-btn" class="button button-secondary button-hero wpallimport-large-button" style="margin: 0 10px; background: 50% #425f9a; color: #fff;"><?php _e('Preview', 'wp-all-import-pro') ?></button>
 						<input type="submit" class="button button-primary button-hero wpallimport-large-button" value="<?php _e( ($this->isWizard) ? 'Continue to Import Settings' : 'Update Template', 'wp-all-import-pro') ?>" />
 					</div>
 
@@ -248,3 +261,5 @@
 	</table>
 
 </form>
+
+<?php include __DIR__ . '/full-preview-modal.php'; ?>

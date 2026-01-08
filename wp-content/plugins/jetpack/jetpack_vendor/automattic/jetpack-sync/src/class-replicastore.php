@@ -873,6 +873,7 @@ class Replicastore implements Replicastore_Interface {
 		if ( ! $t || is_wp_error( $t ) ) {
 			return $t;
 		}
+		// @phan-suppress-next-line PhanAccessMethodInternal -- the @internal annotation is for an internal comment, not to mark the function as internal
 		return get_terms( $taxonomy );
 	}
 
@@ -1293,7 +1294,7 @@ class Replicastore implements Replicastore_Interface {
 		try {
 			$range_edges = $checksum_table->get_range_edges( $start_id, $end_id );
 		} catch ( Exception $ex ) {
-			return new WP_Error( 'invalid_range_edges', '[' . $start_id . '-' . $end_id . ']: ' . $ex->getMessage() );
+			return new WP_Error( 'invalid_range_edges', '[' . ( $start_id ?? 'null' ) . '-' . ( $end_id ?? 'null' ) . ']: ' . $ex->getMessage() );
 		}
 
 		if ( $only_range_edges ) {

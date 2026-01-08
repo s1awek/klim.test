@@ -30,7 +30,7 @@ select.wt_iew_bulk_action{ float:left; width:auto; height:20px; margin-right:10p
 <div class="wt_iew_view_log wt_iew_popup">
 	<div class="wt_iew_popup_hd">
 		<span style="line-height:40px;" class="dashicons dashicons-media-text"></span>
-		<span class="wt_iew_popup_hd_label"><?php _e('View log');?></span>
+		<span class="wt_iew_popup_hd_label"><?php esc_html_e('View log', 'product-import-export-for-woo');?></span>
 		<div class="wt_iew_popup_close">X</div>
 	</div>
 	<div class="wt_iew_log_container">
@@ -38,6 +38,7 @@ select.wt_iew_bulk_action{ float:left; width:auto; height:20px; margin-right:10p
 	</div>
 </div>
 <?php
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification not required.
 if(isset($_GET['page']) && $_GET['page']==$this->module_id.'_log')
 {
 	include plugin_dir_path(__FILE__)."/_log_list.php";

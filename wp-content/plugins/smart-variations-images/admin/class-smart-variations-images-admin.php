@@ -54,6 +54,15 @@ class Smart_Variations_Images_Admin {
     private $attributes;
 
     /**
+     * SitePress integration flag.
+     *
+     * @since    1.0.0
+     * @access   private
+     * @var      bool    $runSitePress    Whether SitePress is running.
+     */
+    private $runSitePress;
+
+    /**
      * Initialize the class and set its properties.
      *
      * @since    1.0.0

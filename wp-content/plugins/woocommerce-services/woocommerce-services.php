@@ -8,13 +8,13 @@
  * Author URI: https://woocommerce.com/
  * Text Domain: woocommerce-services
  * Domain Path: /i18n/languages/
- * Version: 3.1.1
+ * Version: 3.3.0
  * Requires Plugins: woocommerce
  * Requires PHP: 7.4
  * Requires at least: 6.7
- * Tested up to: 6.8
- * WC requires at least: 10.0
- * WC tested up to: 10.2
+ * Tested up to: 6.9
+ * WC requires at least: 10.2
+ * WC tested up to: 10.4
  *
  * Copyright (c) 2017-2023 Automattic
  *
@@ -874,7 +874,7 @@ if ( ! class_exists( 'WC_Connect_Loader' ) ) {
 			$shipping_label         = new WC_Connect_Shipping_Label( $api_client, $settings_store, $schemas_store, $payment_methods_store );
 			$nux                    = new WC_Connect_Nux( $tracks, $shipping_label );
 			$store_notices_notifier = new StoreNoticesNotifier( $taxes_logger->is_debug_enabled() );
-			$taxjar                 = new WC_Connect_TaxJar_Integration( $api_client, $taxes_logger, $this->wc_connect_base_url, $store_notices_notifier );
+			$taxjar                 = new WC_Connect_TaxJar_Integration( $api_client, $taxes_logger, $this->wc_connect_base_url, $tracks, $store_notices_notifier );
 			$this->set_store_notices_notifier( $store_notices_notifier );
 			$paypal_ec     = new WC_Connect_PayPal_EC( $api_client, $nux );
 			$label_reports = new WC_Connect_Label_Reports( $settings_store );
@@ -914,6 +914,11 @@ if ( ! class_exists( 'WC_Connect_Loader' ) ) {
 			add_action( 'admin_notices', array( WC_Connect_Error_Notice::instance(), 'render_notice' ) );
 			add_action( 'admin_notices', array( $this, 'render_schema_notices' ) );
 
+			// Don't register settings if only_tax mode.
+			if ( ! self::should_load_shipping_features() ) {
+				return;
+			}
+
 			// We only use the settings page for shipping since tax settings are part of
 			// the core "WooCommerce > Settings > Tax" tab.
 			require_once __DIR__ . '/classes/class-wc-connect-settings-pages.php';
@@ -945,7 +950,7 @@ if ( ! class_exists( 'WC_Connect_Loader' ) ) {
 			$this->paypal_ec->init();
 
 			// Only register shipping label-related logic if WC Shipping is not active.
-			if ( ! self::is_wc_shipping_activated() && '1' !== WC_Connect_Options::get_option( 'only_tax' ) ) {
+			if ( self::should_load_shipping_features() ) {
 				add_action( 'rest_api_init', array( $this, 'wc_api_dev_init' ), 9999 );
 
 				$this->init_shipping_labels();
@@ -1945,8 +1950,20 @@ if ( ! class_exists( 'WC_Connect_Loader' ) ) {
 			$result = ( WC_Connect_Jetpack::is_connected() && '1' === WC_Connect_Options::get_option( 'only_tax' ) ) ||
 						( ! WC_Connect_Jetpack::is_connected() && ! self::_has_any_labels_db_check() );
 
-			// Allow tests to override this functionality
+			// Allow tests to override this functionality.
 			return apply_filters( 'wc_connect_has_only_tax_functionality', $result );
+		}
+
+		/**
+		 * Checks whether shipping-related functionality and views should be loaded.
+		 *
+		 * Shipping features should only be loaded when the WooCommerce Shipping plugin
+		 * is not active and the site is not restricted to tax-only functionality.
+		 *
+		 * @return bool True if shipping features should be loaded, false otherwise.
+		 */
+		public static function should_load_shipping_features(): bool {
+			return ! self::is_wc_shipping_activated() && ! self::has_only_tax_functionality();
 		}
 
 		public function maybe_rename_plugin( $plugins ) {

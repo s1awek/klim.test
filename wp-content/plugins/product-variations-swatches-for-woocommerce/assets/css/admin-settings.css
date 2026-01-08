@@ -21,7 +21,9 @@ a {
     line-height: 50px;
     visibility: visible;
 }
-
+.minicolors-theme-default .minicolors-input.vi-wpvs-color{
+    height: auto;
+}
 
 .minicolors-input-swatch {
     display: none !important;

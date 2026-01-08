@@ -7,11 +7,17 @@ switch( $section_id ){
 	// DEFAULT
 
 	case 'fupi_woo_main':
-		$ret_text = '<p>' . esc_html__('These settings apply to all tools which support WooCommerce Tracking module (have the "WooCommerce tracking" section in their settings pages).', 'full-picture-analytics-cookie-notice' ) . '</p>';
+		$ret_text = '<p>' . esc_html__('These settings apply to all tools which support WooCommerce Tracking module (have the "WooCommerce tracking" section in their settings pages). ', 'full-picture-analytics-cookie-notice' ) . '</p>';
+		// <div>
+		// 	<p class="fupi_warning_text">' . esc_html__('Make sure that the settings for taxes and product IDs are consistent with the product catalog/feed you send to Meta, Google Merchant Center, and other platforms. ', 'full-picture-analytics-cookie-notice' ) . '</p>
+		// </div>';
 	break;
 
 	case 'fupi_woo_adv':
-		$ret_text = '<p>' . esc_html__( 'Status-Based Order Tracking is an alternative method of tracking purchases. At the moment it is only available in Meta Pixel and Google Analytics and needs to be enabled in their settings.', 'full-picture-analytics-cookie-notice' ) . ' <button type="button" class="fupi_open_popup fupi_faux_link" data-popup="fupi_adv_tracking_popup">' . esc_html__('Learn more', 'full-picture-analytics-cookie-notice' ) . ' <span class="fupi_open_popup_i">i</span></button></p>';
+		$ret_text = '<div>
+			<p>' . esc_html__( 'Status-Based Order Tracking is an alternative method of tracking purchases that does not require clients to see the order confirmation page. In Google Analytics it also tracks refunds and cancellations.', 'full-picture-analytics-cookie-notice' ) . '</p>
+			<p>' . sprintf( esc_html__('At the moment it is only supported in Google Analytics and Meta Pixel. You can learn how it works %1$son this page%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/what-you-need-to-know-about-status-based-order-tracking/">', '</a>' ) . '</p>
+		</div>';
 	break;
 
 	case 'fupi_woo_priv':

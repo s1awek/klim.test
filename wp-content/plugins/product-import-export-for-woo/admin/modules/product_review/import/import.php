@@ -94,16 +94,16 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Import {
                     if($this->is_comment_exist){
                         $msg = 'Product Review updated successfully.';
                     }
-                    $this->import_results[$row] = array('row'=>$row, 'message'=>$msg, 'status'=>true, 'status_msg' => __( 'Success' ), 'post_id'=>$result['id'], 'post_link' => Wt_Import_Export_For_Woo_Basic_Product_Review::get_item_link_by_id($result['id'])); 
+                    $this->import_results[$row] = array('row'=>$row, 'message'=>$msg, 'status'=>true, 'status_msg' => __( 'Success', 'product-import-export-for-woo' ), 'post_id'=>$result['id'], 'post_link' => Wt_Import_Export_For_Woo_Basic_Product_Review::get_item_link_by_id($result['id'])); 
                     Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - ".$msg);
                     $success++;                     
                 }else{
-                   $this->import_results[$row] = array('row'=>$row, 'message'=>$result->get_error_message(), 'status'=>false, 'status_msg' => __( 'Failed/Skipped' ), 'post_id'=>'', 'post_link' => array( 'title' => __( 'Untitled' ), 'edit_url' => false ) );
+                   $this->import_results[$row] = array('row'=>$row, 'message'=>$result->get_error_message(), 'status'=>false, 'status_msg' => __( 'Failed/Skipped', 'product-import-export-for-woo' ), 'post_id'=>'', 'post_link' => array( 'title' => __( 'Untitled', 'product-import-export-for-woo' ), 'edit_url' => false ) );
                    Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - Prosessing failed. Reason: ".$result->get_error_message());
                    $failed++;
                 } 
            }else{               
-               $this->import_results[$row] = array('row'=>$row, 'message'=>$parsed_data->get_error_message(), 'status'=>false, 'status_msg' => __( 'Failed/Skipped' ), 'post_id'=>'', 'post_link' => array( 'title' => __( 'Untitled' ), 'edit_url' => false ) );
+               $this->import_results[$row] = array('row'=>$row, 'message'=>$parsed_data->get_error_message(), 'status'=>false, 'status_msg' => __( 'Failed/Skipped', 'product-import-export-for-woo' ), 'post_id'=>'', 'post_link' => array( 'title' => __( 'Untitled', 'product-import-export-for-woo' ), 'edit_url' => false ) );
                Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - Parsing failed. Reason: ".$parsed_data->get_error_message());
                $failed++; 
            }           
@@ -196,12 +196,12 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Import {
 			if($this->use_sku == 1 && (!isset($item['product_SKU']) || $item['product_SKU'] === ''))
 			{
                                 $this->hf_log_data_change( 'review-csv-import', '> > Skipped. No Product SKU given, for which new comment is to be imported');
-                                return new WP_Error( 'parse-error', __( 'Product SKU is empty, Skipped the review.', 'wf_csv_import_export' ) );
+                                return new WP_Error( 'parse-error', __( 'Product SKU is empty, Skipped the review.', 'product-import-export-for-woo' ) );
 			}
 			elseif ( $this->use_sku == 0 && ( !isset($item['comment_post_ID']) || $item['comment_post_ID'] === '') )
 			{
                                 $this->hf_log_data_change( 'review-csv-import','> > Skipped. No post(product) id found, for which new comment is to be imported' );
-                                return new WP_Error( 'parse-error', 'No product id found, Skipped the review.', 'wf_csv_import_export' );
+                                return new WP_Error( 'parse-error', __( 'No product id found, Skipped the review.', 'product-import-export-for-woo' ) );
 			}
 
                     if($this->skip_new){
@@ -216,7 +216,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Import {
 			if(! $temp_product_id)
 			{
 				$this->hf_log_data_change( 'review-csv-import', '> > Skipped. No Product found for given SKU, for which new comment is to be imported');
-				return new WP_Error( 'parse-error', 'No Product found for given SKU, Skipped the review.');
+				return new WP_Error( 'parse-error', __( 'No Product found for given SKU, Skipped the review.', 'product-import-export-for-woo' ) );
 			}
 		}
 		elseif($item['comment_post_ID'] )
@@ -225,7 +225,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Import {
 			if(! $temp_post || $temp_post->post_type != 'product')
 			{
 				$this->hf_log_data_change( 'review-csv-import', '> > Skipped. No product found for given product id, for which new comment is to be imported');
-				return new WP_Error( 'parse-error', 'Post is not a product, Skipped the review.' );
+				return new WP_Error( 'parse-error', __( 'Post is not a product, Skipped the review.', 'product-import-export-for-woo' ) );
 			}
 		}
 			
@@ -347,10 +347,10 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Import {
                     $postdata['comment_author_url'] = $post['comment_author_url'];
                 }
                 if (!empty($post['comment_date']) || $this->merge_empty_cells) {
-                    $postdata['comment_date'] = date("Y-m-d H:i:s", strtotime($post['comment_date']));
+                    $postdata['comment_date'] = gmdate("Y-m-d H:i:s", strtotime($post['comment_date']));
                 }
                 if (!empty($post['comment_date_gmt']) || $this->merge_empty_cells) {
-                    $postdata['comment_date_gmt'] = date("Y-m-d H:i:s", strtotime($post['comment_date_gmt']));
+                    $postdata['comment_date_gmt'] = gmdate("Y-m-d H:i:s", strtotime($post['comment_date_gmt']));
                 }
                 if (!empty($post['comment_author_email']) || $this->merge_empty_cells) {
                     $postdata['comment_author_email'] = $post['comment_author_email'];
@@ -375,14 +375,12 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Import {
 
                 // Update product review
                 if (sizeof($postdata) > 1) {
-                    global $wpdb;                
-                    $result = $wpdb->update('wp_comments', $postdata, array('comment_ID' => $post_id));
-                    if(!$result){
+
                         if (!empty($post_id)) {
                             $postdata['comment_ID'] = $post_id;
                         }
                         $result = wp_update_comment($postdata);
-                    }
+
                     if (!empty($post['rating']) || $this->merge_empty_cells)
                         update_comment_meta($post_id, 'rating', $post['rating']);
                 }
@@ -398,6 +396,11 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Import {
                 
                 $review_parent = $post['comment_parent'];
                 $comment_parent_session= unserialize( get_option( 'wf_prod_review_alter_id'));
+
+                if ( false === $comment_parent_session ) {
+                    $comment_parent_session = array();
+                }
+                
                 if ($post['comment_parent']!= 0 && $post['comment_parent']!= '') {
                           $arr_index = $post['comment_parent'];
                           if (isset($comment_parent_session['wt_review_basic']) && array_key_exists($arr_index, $comment_parent_session['wt_review_basic'])) {
@@ -411,8 +414,8 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Import {
                 $postdata = array(
                     // 'comment_ID' => $processing_product_id, // this will not work for wp_insert_comment
                     'comment_post_ID' => $post['comment_post_ID'],
-                    'comment_date' => ( $post['comment_date'] ) ? date('Y-m-d H:i:s', strtotime($post['comment_date'])) : current_time( 'mysql' ),
-                    'comment_date_gmt' => ( $post['comment_date_gmt'] ) ? date('Y-m-d H:i:s', strtotime($post['comment_date_gmt'])) : get_gmt_from_date( current_time( 'mysql' ) ),
+                    'comment_date' => ( $post['comment_date'] ) ? gmdate('Y-m-d H:i:s', strtotime($post['comment_date'])) : current_time( 'mysql' ),
+                    'comment_date_gmt' => ( $post['comment_date_gmt'] ) ? gmdate('Y-m-d H:i:s', strtotime($post['comment_date_gmt'])) : get_gmt_from_date( current_time( 'mysql' ) ),
                     'comment_author' => $post['comment_author'],
                     'comment_author_url' => $post['comment_author_url'],
                     'comment_author_email' => $post['comment_author_email'],
@@ -426,14 +429,11 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Import {
 
                 if(isset($post['comment_ID']) && !empty($post['comment_ID']) ){
                     if (sizeof($postdata) > 1) {
-                        global $wpdb;
-                        $updated = $wpdb->update('wp_comments', $postdata, array('comment_ID' => $post['comment_ID']));
-                        if(!$updated){
+
                             if (!empty($post['comment_ID'])) {
                                 $postdata['comment_ID'] = $post['comment_ID'];
                             }
                             $updated = wp_update_comment($postdata);
-                        }
                         if($updated){
                             $post_id = $post['comment_ID'];
                         }else{
@@ -491,6 +491,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Import {
 
     public function product_review_exists($id) {
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $posts_that_exist = $wpdb->get_var($wpdb->prepare("SELECT comment_ID FROM $wpdb->comments WHERE comment_ID = %d AND comment_approved != 'trash'", $id));
         if ($posts_that_exist) {
             return $posts_that_exist;
@@ -499,7 +500,8 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Import {
     }
     
     public function get_last_comment_id() {
-        global $wpdb;        
+        global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $get_id = $wpdb->get_row("SHOW TABLE STATUS LIKE '".$wpdb->prefix."comments'"); 
         $last_id = $get_id->Auto_increment;
         return $last_id;
@@ -511,6 +513,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Import {
         wp_defer_comment_counting(false);
         global $wpdb;
         if(class_exists('WC_Product_Reviews_Pro')){
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->query("DELETE FROM `$wpdb->options` WHERE `option_name` LIKE ('%_transient_wc_product_reviews_pro_review_count_%')");
         }
     }
@@ -519,9 +522,11 @@ class Wt_Import_Export_For_Woo_Basic_Product_Review_Import {
     public function wt_create_review_with_given_id($product_review){
         global $wpdb;
         $id = $product_review['comment_ID'];
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $posts_that_exist = $wpdb->get_var($wpdb->prepare("SELECT comment_ID FROM $wpdb->comments WHERE comment_ID = %d ", $id));
         $return = '';
         if (!$posts_that_exist) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $inserted_id = $wpdb->insert('wp_comments', array('comment_ID' =>  $id, 'comment_type' => 'review'));
             if($inserted_id ){
                 $return = $id;

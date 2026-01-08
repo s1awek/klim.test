@@ -5,6 +5,8 @@ class Fupi_PROOFREC_admin {
 
     private $tools;
 
+    private $main;
+
     private $cook;
 
     private $versions;
@@ -16,6 +18,7 @@ class Fupi_PROOFREC_admin {
     public function __construct() {
         $this->settings = get_option( 'fupi_proofrec' );
         $this->tools = get_option( 'fupi_tools' );
+        $this->main = get_option( 'fupi_main' );
         $this->cook = get_option( 'fupi_cook' );
         $this->versions = get_option( 'fupi_versions' );
         $this->add_actions_and_filters();
@@ -49,21 +52,14 @@ class Fupi_PROOFREC_admin {
     //
     // Check if the page with the provided ID is the Privacy Policy page and it is published
     private function is_pp_ok( $post_id ) {
-        // STOP if there is no privacy policy page set in the settings
-        if ( empty( get_privacy_policy_url() ) ) {
-            return false;
+        if ( !empty( $this->cook['pp_id'] ) ) {
+            $pp_id = (int) $this->cook['pp_id'];
+            if ( $post_id == $pp_id ) {
+                $page_status = get_post_status( $pp_id );
+                return $page_status == 'publish';
+            }
         }
-        // STOP if the currently published page is not privacy policy
-        $pp_id = get_option( 'wp_page_for_privacy_policy' );
-        if ( $post_id != $pp_id ) {
-            return false;
-        }
-        // Stop if the privacy policy page is not published
-        $page_status = get_post_status( $post_id );
-        if ( $page_status !== 'publish' ) {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     public function fupi_listen_to_pp_page_updates( $post_id, $post ) {
@@ -222,7 +218,11 @@ class Fupi_PROOFREC_admin {
         if ( apply_filters( 'fupi_updating_many_options', false ) ) {
             return $clean_data;
         }
-        $priv_policy_url = get_privacy_policy_url();
+        $pp_ok = false;
+        if ( !empty( $this->cook['pp_id'] ) ) {
+            $pp_id = (int) $this->cook['pp_id'];
+            $pp_ok = get_post_status( $pp_id ) == 'publish';
+        }
         $send_to_email = !empty( $clean_data['storage_location'] ) && $clean_data['storage_location'] == 'email';
         $send_to_cdb = !$send_to_email && !empty( $clean_data['cdb_key'] );
         if ( $send_to_email ) {
@@ -259,12 +259,12 @@ class Fupi_PROOFREC_admin {
                 // CDB - register site or update config data
                 // if CDB key is new or has changed
                 if ( empty( $this->settings['cdb_key'] ) || $this->settings['cdb_key'] != $clean_data['cdb_key'] ) {
-                    if ( empty( $priv_policy_url ) ) {
+                    if ( !$pp_ok ) {
                         unset($clean_data['cdb_key']);
                         add_settings_error(
                             'fupi_proofrec',
                             'settings_updated',
-                            esc_attr__( 'ConsentsDB registration failed. To register ConsentsDB you must first publish a privacy policy page and set it in "Settings > Privacy".', 'full-picture-analytics-cookie-notice' ),
+                            esc_attr__( 'ConsentsDB registration failed. To register ConsentsDB you must first publish a privacy policy page and save its ID in the settings of the Consent Banner module.', 'full-picture-analytics-cookie-notice' ),
                             'error'
                         );
                     } else {

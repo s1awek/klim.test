@@ -7,46 +7,6 @@ $option_arr_id = 'fupi_track';
 
 $sections = array(
 
-	// TRACKING EXCLUSION
-
-	// array(
-	// 	'section_id' => 'fupi_track_no_track',
-	// 	'section_title' => esc_html__( 'Do not track', 'full-picture-analytics-cookie-notice' ),
-	// 	'fields' => array(
-	// 		array(
-	// 			'type'	 			=> 'text',
-	// 			'label' 			=> esc_html__( 'Do not track visitors who enter the site from this link:', 'full-picture-analytics-cookie-notice' ),
-	// 			'field_id' 			=> 'magic_keyword',
-	// 			'el_class'			=> 'fupi_narrow_text_field',
-	// 			'option_arr_id'		=> $option_arr_id,
-	// 			'label_for' 		=> $option_arr_id . '[magic_keyword]',
-	// 			'before field'		=> $siteURL . '?',
-	// 			'after field'		=> '=off',
-	// 			'placeholder'		=> 'tracking',
-	// 			'format'			=> 'key',
-	// 			'default'			=> 'tracking',
-	// 			'under field'		=> '<p><a href="' . get_bloginfo('url') . '/?' . $magic_keyword . '=off"><strong>' . get_bloginfo('url') . '/?' . $magic_keyword . '=off</strong></a></p>',
-	// 			'popup' 			=> '<p>' . esc_html__( 'When someone clicks this link they will no longer be tracked no matter whether they are logged in or not. This state will be remembered by their browser until they:','full-picture-analytics-cookie-notice') . '</p>
-	// 			<ol>
-	// 				<li>' . esc_html__( 'visit the site from address that ends with "','full-picture-analytics-cookie-notice') . '?' . $magic_keyword . '=on",</li>
-	// 				<li>' . esc_html__( 'click an "eye" icon in the bottom-left corner of the screen (on the visitor-facing website),','full-picture-analytics-cookie-notice') . '</li>
-	// 				<li>' . esc_html__( 'clear cookies in their browser.','full-picture-analytics-cookie-notice') . '</li>
-	// 			</ol>
-	// 			<p><strong>' . $magic_keyword . '=on</strong> or <strong>' . $magic_keyword . '=reset</strong>: ' . esc_html__( 'resets visitor\'s tracking preferences','full-picture-analytics-cookie-notice') . '</p>
-	// 			',
-	// 		),
-	// 		array(
-	// 			'type'	 			=> 'roles multi checkbox',
-	// 			'label' 			=> esc_html__( 'Do not track logged-in users with these roles:', 'full-picture-analytics-cookie-notice' ),
-	// 			'field_id' 			=> 'disable_for_roles',
-	// 			'option_arr_id'		=> $option_arr_id,
-	// 			'label_for' 		=> $option_arr_id . '[disable_for_roles]',
-	// 			'default'			=> 'administrator',
-	// 			'under field'		=> esc_html__( 'Site administrator is always excluded from tracking. If you want to test a tracking tool while being logged in as an administrator, please enable the "Force load" option in the settings of a module of a tracking tool you want to test.', 'full-picture-analytics-cookie-notice' ),
-	// 		),
-	// 	),
-	// ),
-
 	// OPTIONAL TRAKING FUNCTIONS
 
 	array(

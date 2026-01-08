@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'updraftplus/updraftplus',
-        'pretty_version' => 'v1.25.7',
-        'version' => '1.25.7.0',
-        'reference' => 'e85ac29af46edbcc20a83f1aa1687a8fd7d8357b',
+        'pretty_version' => 'v1.25.9',
+        'version' => '1.25.9.0',
+        'reference' => '076f2849886cfc81f3f6b79b581ff85365157a1a',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -248,9 +248,9 @@
             'dev_requirement' => false,
         ),
         'phpseclib/phpseclib' => array(
-            'pretty_version' => '2.0.48',
-            'version' => '2.0.48.0',
-            'reference' => 'eaa7be704b8b93a6913b69eb7f645a59d7731b61',
+            'pretty_version' => '2.0.49',
+            'version' => '2.0.49.0',
+            'reference' => '4de468f48f0ab9709fc875aca0762abdc81cfa9b',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpseclib/phpseclib',
             'aliases' => array(),
@@ -362,9 +362,9 @@
             'dev_requirement' => false,
         ),
         'updraftplus/updraftplus' => array(
-            'pretty_version' => 'v1.25.7',
-            'version' => '1.25.7.0',
-            'reference' => 'e85ac29af46edbcc20a83f1aa1687a8fd7d8357b',
+            'pretty_version' => 'v1.25.9',
+            'version' => '1.25.9.0',
+            'reference' => '076f2849886cfc81f3f6b79b581ff85365157a1a',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

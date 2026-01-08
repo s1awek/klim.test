@@ -199,10 +199,14 @@ class UpdraftPlus_Addon_Reporting {
 	if (!class_exists('UpdraftPlus_Notices')) updraft_try_include_file('includes/updraftplus-notices.php', 'include_once');
 	global $updraftplus_notices;
 	$updraftplus_notices->do_notice(false, 'report', false);
+	$backup_type = __('Manual backup began:', 'updraftplus');
+	if (!empty($jobdata['is_scheduled_backup'])) $backup_type = __('Scheduled backup began:', 'updraftplus');
+	if (!empty($jobdata['is_autobackup'])) $backup_type = __('Automatic backup began:', 'updraftplus');
+	if ('incremental' === $jobdata['job_type']) $backup_type = __('Incremental backup began:', 'updraftplus');
 ?>
 <div style="width: 100%; display: table; margin-bottom: 5px;"><div style="font-weight: bold; width: 200px; float: left;"><?php echo esc_html__('Backup of:', 'updraftplus'); ?></div> <div style="float: left;"><a href="<?php echo esc_url(site_url()); ?>"><?php echo esc_html(site_url());?></a></div></div>
 <div style="width: 100%; display: table; margin-bottom: 5px;"><div style="font-weight: bold; width: 200px; float: left;"><?php echo esc_html__('Latest status:', 'updraftplus');?></div> <div style="float: left;"><?php echo esc_html($final_message); ?></div></div>
-<div style="width: 100%; display: table; margin-bottom: 5px;"><div style="font-weight: bold; width: 200px; float: left;"><?php echo esc_html__('Backup began:', 'updraftplus');?></div> <div style="float: left;"><?php echo esc_html($date); ?></div></div>
+<div style="width: 100%; display: table; margin-bottom: 5px;"><div style="font-weight: bold; width: 200px; float: left;"><?php echo esc_html($backup_type);?></div> <div style="float: left;"><?php echo esc_html($date); ?></div></div>
 <div style="width: 100%; display: table; margin-bottom: 5px;"><div style="font-weight: bold; width: 200px; float: left;"><?php echo esc_html__('Contains:', 'updraftplus');?></div> <div style="float: left;"><?php echo esc_html($contains); ?></div></div>
 <?php
 	$extra_messages = apply_filters('updraftplus_report_extramessages', array());
@@ -278,7 +282,7 @@ class UpdraftPlus_Addon_Reporting {
 
 			if (!empty($history)) {
 	foreach ($history as $key => $val) {
-		if ('db' == strtolower(substr($key, 0, 2)) && '-size' != substr($key, -5, 5)) {
+		if ('db' == strtolower(substr($key, 0, 2)) && '-size' != substr($key, -5, 5) && 'incremental' !== $jobdata['job_type']) {
 			echo $updraftplus->printfile(__('Database', 'updraftplus'), $history, $key, $checksums, $jobdata);// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- needs to be presented in html
 		}
 	}
@@ -342,11 +346,13 @@ class UpdraftPlus_Addon_Reporting {
 	}
 
 	public function updraft_report_subject($subject, $error_count, $warning_count) {
+		$count = 0;
 		if ($error_count > 0) {
-			$subject .= sprintf(__(' (with errors (%s))'), $error_count);
+			$count = $error_count;
 		} elseif ($warning_count >0) {
-			$subject .= sprintf(__(' (with warnings (%s))'), $warning_count);
+			$count = $warning_count;
 		}
+		if ($count) $subject .= sprintf(' (%s)', $count);
 		return $subject;
 	}
 

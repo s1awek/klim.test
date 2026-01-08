@@ -439,7 +439,9 @@ class UpdraftPlus_AddOn_FixTime {
 		if ('return' == $format) {
 			return $processed_rules;
 		} else {
-			echo "var retain_rules_".esc_js($type)." = ".wp_json_encode($processed_rules).";\n";
+			// wp_json_encode() was added in WP 4.1
+			$processed_rules_json = function_exists('wp_json_encode') ? wp_json_encode($processed_rules) : json_encode($processed_rules);
+			echo "var retain_rules_".esc_js($type)." = ".$processed_rules_json.";\n";
 		}
 	}
 

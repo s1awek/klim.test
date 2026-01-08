@@ -1,32 +1,35 @@
-=== Wholesale Suite – WooCommerce Wholesale Prices, B2B, Catalog Mode, Order Form, Wholesale User Roles, Dynamic Pricing & More ===
+=== Wholesale Suite – B2B, Dynamic Pricing & WooCommerce Wholesale Prices ===
 Contributors: jkohlbach, RymeraWebCo, smub
 Tags: woocommerce wholesale, b2b, wholesale pricing, catalog mode, dynamic pricing
 Requires at least: 4.2
 Tested up to: 6.8
-Stable tag: 2.2.4.2
+Requires PHP: 7.4
+Stable tag: 2.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 WooCommerce wholesale plugin for serving wholesale & B2B customers. Adds wholesale pricing, user roles, dynamic pricing & more.
 
-== DESCRIPTION ==
+== Description ==
 
-**🏆 #1 WooCommerce wholesale plugin for adding wholesale prices & managing B2B customers.** Trusted by 25k+ store owners with 500+ reviews.
+**🏆 Highly rated WooCommerce wholesale plugin for adding wholesale prices & managing B2B customers.**
 
-Adding ***WooCommerce Wholesale Prices*** gives WooCommerce store owners the ability to supply specific users with wholesale pricing for their products. It's the perfect wholesale plugin for WooCommerce B2B.
+Trusted by 25k+ store owners with 500+ reviews. Helping store owners grow for over 10 years!
 
-***👉 Adding wholesale prices is simple:***
+Adding ***WooCommerce Wholesale Prices*** plugin gives WooCommerce store owners the ability to supply specific users with wholesale pricing for their products. It's the perfect wholesale plugin for WooCommerce B2B.
+
+= 👉 Adding wholesale prices is simple: =
 
 1. Install & activate Wholesale Prices for WooCommerce (it's free!)
 1. Edit the product you want to enter wholesale pricing for
-1. Enter the wholesale price (handles simple & variable products!)
-1. Change the customer's user role to "Wholesale Customer" and they'll see the wholesale price
+1. Enter the wholesale price (works with simple and variable products!)
+1. Change the customer's user role to 'Wholesale Customer' and they'll see the wholesale price
 
 Check out how easy it is to add wholesale pricing to WooCommerce:
 
 https://youtu.be/AnmoSvoXJMI
 
-***Key Features (Free Plugin):***
+= Key Features (Free Wholesale Plugin) =
 
 * New user role "Wholesale Customer"
 * Set wholesale prices for the new user role (different prices per product) on Simple product or Variable product variations
@@ -55,9 +58,9 @@ Want to create a WooCommerce private store? Show or hide certain products with v
 
 The [Wholesale Suite bundle](https://wholesalesuiteplugin.com/bundle/) includes all of these features and more.
 
-**WHOLESALE WOOCOMMERCE PRICING EXTENSION – FREE, SIMPLE & ACCURATE**
+= WOOCOMMERCE WHOLESALE PRICING EXTENSION – FREE, SIMPLE & ACCURATE =
 
-No complex setups and no confusing WooCommerce dynamic pricing or WooCommerce discount rules to figure out. It's simply plug and play. 
+No complex setups and no confusing WooCommerce dynamic pricing or WooCommerce discount rules to figure out. It's simple plug-and-play. 
 
 Providing WooCommerce bulk discounts has never been easier for wholesale WooCommerce customer types (it adds a new user role for "Wholesale Customer").
 
@@ -71,27 +74,27 @@ To activate wholesale capabilities for your customers simply change their WordPr
 
 If you want multiple WooCommerce user roles you can add an unlimited number of additional user roles with the [WooCommerce Wholesale Prices Premium add-on](https://wholesalesuiteplugin.com/woocommerce-wholesale-prices-premium/).
 
-**WOOCOMMERCE DYNAMIC PRICING FOR WHOLESALE DISCOUNT RULES**
+= WOOCOMMERCE DYNAMIC PRICING FOR WHOLESALE DISCOUNT RULES =
 
 You might not always have a WooCommerce bulk discount for each product, so you don't have to set wholesale pricing for all of your products, you can just do a sub-set.
 
-Similar extensions like WooCommerce dynamic prices extensions are NOT made specifically for wholesale or B2B purposes so they aren't aware of the challenges of WooCommerce b2b sales and they don't take into account the special needs of wholesale customers. This often leaves store owners feeling frustrated trying to figure out how all those WooCommerce discount rules hang together.
+Similar extensions like WooCommerce dynamic prices extensions are NOT made specifically for wholesale or B2B purposes so they aren't aware of the challenges of WooCommerce B2B sales and they don't take into account the special needs of wholesale customers. This often leaves store owners feeling frustrated trying to figure out how all those WooCommerce discount rules hang together.
 
 We have purposefully created Wholesale Suite as a flexible solution specifically for wholesale sales. It's the perfect solution to WooCommerce tiered pricing using WordPress's robust user role system.
 
 This free version lets you set prices on Simple products & product variations easily for one wholesale user role and is a great way to get started selling to wholesale customers online.
 
-**WORDPRESS WHOLESALE USER ROLES**
+= WORDPRESS WHOLESALE USER ROLES =
 
 Display of your wholesale prices is automatic once your wholesale customers login to their account. The plugin takes care of the front end display. It's like giving a WooCommerce private store just for that customer.
 
-The store admin just needs the add the new user role "Wholesale Customer" to the customer's user account and they will see the wholesale pricing that you have set on your products.
+The store admin just needs to add the new user role "Wholesale Customer" to the customer's user account and they will see the wholesale pricing that you have set on your products.
 
 You can add multiple wholesale user role levels with the [WooCommerce Wholesale Prices Premium add-on](https://wholesalesuiteplugin.com/woocommerce-wholesale-prices-premium/).
 
 You can also recruit new wholesale customers automatically with a custom WooCommerce user registration for your wholesale customers using the [Wholesale Lead Capture plugin](https://wholesalesuiteplugin.com/woocommerce-wholesale-lead-capture/).
 
-**WOOCOMMERCE CATALOG MODE (PRIVATE STORE)**
+= WOOCOMMERCE CATALOG MODE (PRIVATE STORE) =
 
 Want to set up a WooCommerce private store in catalog mode? You can now do it easily with the free wholesale plugin option to hide add to cart and retail pricing.
 
@@ -99,17 +102,17 @@ Turn any store into a catalog only WooCommerce private store by simply enabling 
 
 This makes it easy to run a separate wholesale store if you want, or simply to create an online presence even if you only have a B2B wholesale business and not a retail business.
 
-**COMPATIBLE WITH OTHER LOADS OF 3RD PARTY PLUGINS**
+= COMPATIBLE WITH LOADS OF OTHER 3RD-PARTY PLUGINS =
 
-Wholesale Suite is the most compatible wholesale WooCommerce plugin, hands down. We have worked with loads of other developers in the community to ensure that your wholesale features can work with all your website's features.
+Wholesale Suite is the most compatible wholesale WooCommerce plugin, hands down. We have worked with 100's of other developers in the community to ensure that your wholesale features can work with all your website's features.
 
-It works seamlessly with complementary plugins such as [Advanced Coupons for WooCommerce](https://wordpress.org/plugins/advanced-coupons-for-woocommerce-free/), hundreds of shipping and payment gateways, WooCommerce Currency Switcher by Aelia (even with our free Wholesale Prices plugin!), WPML language switching plugin, WooCommerce Order Form and WooCommerce user registration (Lead Capture) by Wholesale Suite, plus loads more.
+It works seamlessly with complementary plugins such as [Advanced Coupons for WooCommerce](https://wordpress.org/plugins/advanced-coupons-for-woocommerce-free/), hundreds of popular shipping and payment gateways, WooCommerce Currency Switcher by Aelia (even with our free Wholesale Prices plugin!), WPML language switching plugin, WooCommerce Order Form and WooCommerce user registration (Lead Capture) by Wholesale Suite, and many more.
 
-**WHOLESALE SUITE ADDITIONAL FEATURES (WOOCOMMERCE ORDER FORM, WOOCOMMERCE USER REGISTRATION, ADVANCED DYNAMIC PRICES & DISCOUNT RULES, PRODUCT VISIBILITY, MULTIPLE USER ROLES, TAX EXEMPTION & MORE)**
+= WHOLESALE SUITE ADDITIONAL FEATURES (WOOCOMMERCE ORDER FORM, WOOCOMMERCE USER REGISTRATION, ADVANCED DYNAMIC PRICES & DISCOUNT RULES, PRODUCT VISIBILITY, MULTIPLE USER ROLES, TAX EXEMPTION & MORE) =
 
 Add multiple wholesale roles, multi-levels of pricing, percentage based dynamic pricing, category based dynamic pricing, wholesale minimum order requirements, product min and step requirements, wholesale reports, WooCommerce product visibility control, WooCommerce order form, wholesale lead capture, wholesale WooCommerce user registration form & login form, and much more.
 
-Click here to ditch the spreadsheets & learn what [Wholesale Suite](https://wholesalesuiteplugin.com/bundle/) can do for your whoelsale business.
+Click here to ditch the spreadsheets & learn what [Wholesale Suite](https://wholesalesuiteplugin.com/bundle/) can do for your wholesale business.
 
 == Installation ==
 
@@ -135,10 +138,16 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Screenshots ==
 
-Plenty of amazing screenshots for this plugin and more over at:
+See plenty of screenshots for this plugin and others at:
 [https://wholesalesuiteplugin.com/woocommerce-wholesale-prices-premium/](https://wholesalesuiteplugin.com/woocommerce-wholesale-prices-premium/)
 
 == Changelog ==
+
+= 2.2.5 =
+- Bug Fix: Percentage Discounts Removed When Updating Product Data via Quick Edit
+- Bug Fix: Product Price Not Filtering Wholesale Price
+- Bug Fix: Security Vulnerability: Privilege Escalation Risk for Shop Manager
+- Improvement: Wholesale Payments recommendation no longer showing on WooCommerce Payments settings
 
 = 2.2.4.2 =
 - Bug Fix: PHP Fatal Error: Undefined Method get_product_wholesale_sale_price()

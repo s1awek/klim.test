@@ -3,9 +3,17 @@
 Plugin Name: WP All Export - WooCommerce Product Export Add-On
 Plugin URI: https://www.wpallimport.com/
 Description: Drag & drop to export WooCommerce products to any CSV or XML. A paid upgrade is available for premium support, exporting advanced WooCommerce product data, and more.
-Version: 1.0.4
+Version: 1.0.5
 Author: Soflyy
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Plugin root dir with forward slashes as directory separator regardless of actuall DIRECTORY_SEPARATOR value
  * @var string
@@ -24,7 +32,7 @@ define('PMWPE_ROOT_URL', rtrim(plugin_dir_url(__FILE__), '/'));
  */
 define('PMWPE_PREFIX', 'pmwpe_');
 
-define('PMWPE_VERSION', '1.0.4');
+define('PMWPE_VERSION', '1.0.5');
 
 
 define('PMWPE_EDITION', 'free');
@@ -92,7 +100,7 @@ final class PMWPE_Plugin
                 return $info[$mtch[1]];
             }
         }
-        throw new Exception("Requested method " . get_class($this) . "::$method doesn't exist.");
+        throw new Exception(esc_html("Requested method " . get_class($this) . "::$method doesn't exist."));
     }
 
     /**
@@ -149,21 +157,7 @@ final class PMWPE_Plugin
 
     public function init()
     {
-        $this->load_plugin_textdomain();
-    }
 
-    /**
-     * Load Localisation files.
-     *
-     * Note: the first-loaded translation file overrides any following ones if the same translation is present
-     *
-     * @access public
-     * @return void
-     */
-    public function load_plugin_textdomain()
-    {
-        $locale = apply_filters('plugin_locale', get_locale(), 'wp_all_export_woocommerce_add_on');
-        load_plugin_textdomain('wp_all_export_woocommerce_add_on', false, dirname(plugin_basename(__FILE__)) . "/i18n/languages");
     }
 
     /**
@@ -171,7 +165,7 @@ final class PMWPE_Plugin
      */
     public function adminInit()
     {
-        $input = new PMWPE_Input();
+        // Reserved for future admin initialization logic
     }
 
     /**
@@ -187,7 +181,7 @@ final class PMWPE_Plugin
         $controllerName = self::PREFIX . preg_replace_callback('%(^|_).%', array($this, "replace_callback"), $tag);// capitalize first letters of class name parts and add prefix
         $controller = new $controllerName();
         if (!$controller instanceof PMWPE_Controller) {
-            throw new Exception("Shortcode `$tag` matches to a wrong controller type.");
+            throw new Exception(esc_html("Shortcode `$tag` matches to a wrong controller type."));
         }
         ob_start();
         $controller->index($args, $content);
@@ -206,7 +200,7 @@ final class PMWPE_Plugin
     {
         // Uncaught exception doesn't prevent plugin from being activated, therefore replace it with fatal error so it does.
         set_exception_handler(function ($e) {
-            trigger_error($e->getMessage(), E_USER_ERROR);
+            trigger_error(esc_html($e->getMessage()), E_USER_ERROR);
         });
     }
 }
