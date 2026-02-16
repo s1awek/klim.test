@@ -8,6 +8,20 @@ use OmnibusProVendor\WPDesk\Migrations\AbstractMigration;
 final class Version141 extends AbstractMigration {
 
 	public function up(): bool {
+		$has_index = $this->wpdb->query(
+			$this->wpdb->prepare(
+				<<<SQL
+				SHOW INDEX FROM %i
+				WHERE Key_name = 'covering';
+				SQL,
+				Schema::price_logger_table_name()
+			)
+		);
+
+		if ( $has_index ) {
+			return true;
+		}
+
 		return (bool) $this->wpdb->query(
 			$this->wpdb->prepare(
 				<<<SQL

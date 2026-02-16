@@ -79,6 +79,7 @@ class PluginUpgrade
     {
         $response = $this->prepare_transient_base();
         $response->message = wp_kses_post('<span style="color: red" class="error">' . sprintf(esc_html__('Error while connecting to remote server %s. Please contact your hosting provider or try again later. Errors:  ', 'wpdesk-omnibus'), $this->server) . implode(', ', $remote_response->get_error_messages()) . '</span>');
+        $response->new_version = '';
         return $response;
     }
     /**
@@ -147,10 +148,15 @@ class PluginUpgrade
         $response = $this->prepare_transient_base();
         $this->logger->notice("Update for {$this->plugin_info->get_plugin_name()} cannot be retrieved. Remote response invalid: " . json_encode($remote_response));
         if (isset($remote_response['response']['code'])) {
-            $message = sprintf(esc_html__('Error while connecting to remote server %1$s. Please contact with your hosting provider. Cannot parse response. Response code: %2$s Message: %3$s', 'wpdesk-omnibus'), $this->server, $remote_response['response']['code'], $remote_response['body']);
+            if (in_array($remote_response['response']['code'], [503, 502], \true)) {
+                $message = esc_html__('License server is currently unavailable. Please, try again later.', 'wpdesk-omnibus');
+            } else {
+                $message = sprintf(esc_html__('Error while connecting to remote server %1$s. Please contact with your hosting provider. Cannot parse response. Response code: %2$s Message: %3$s', 'wpdesk-omnibus'), $this->server, $remote_response['response']['code'], $remote_response['body']);
+            }
         } else {
             $message = sprintf(esc_html__('Error while connecting to remote server %1$s. Please contact with your hosting provider. Cannot parse response: %2$s', 'wpdesk-omnibus'), $this->server, json_encode($remote_response));
         }
+        $response->new_version = '';
         $response->message = wp_kses_post("<span style='color: red' class='upgrade-error'>{$message}</span>");
         return $response;
     }

@@ -79,12 +79,10 @@ class MessageDisplayer {
 			$product = $this->get_product_from_globals() ?? new \WC_Product();
 		}
 
-		if ( function_exists( 'WCML\functions\getWooCommerceWpml' ) ) {
-			$original_id = \WCML\functions\getWooCommerceWpml()->products->get_original_product_id( $product->get_id() );
-
-			if ( $product->get_id() !== $original_id ) {
-				$product = wc_get_product( $original_id );
-			}
+		global $wpml_post_translations;
+		if ( $wpml_post_translations ) {
+			$original_id = $wpml_post_translations->get_original_element( $product->get_id() ) ?: $product->get_id();
+			$product     = wc_get_product( $original_id );
 		}
 
 		$price_picker     = $this->factory->with_product( $product );

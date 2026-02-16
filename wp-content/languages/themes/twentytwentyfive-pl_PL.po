@@ -2395,28 +2395,28 @@ msgctxt "Pattern title"
 msgid "Banner with book description"
 msgstr "Baner z opisem książki"
 
-#: functions.php:134
+#: functions.php:142
 msgctxt "Label for the block binding placeholder in the editor"
 msgid "Post format name"
 msgstr "Nazwa formatu wpisu"
 
-#: functions.php:114
+#: functions.php:122
 msgid "A collection of post format patterns."
 msgstr "Zbiór wzorców formatu wpisu."
 
-#: functions.php:113
+#: functions.php:121
 msgid "Post formats"
 msgstr "Formaty wpisu"
 
-#: functions.php:106
+#: functions.php:114
 msgid "A collection of full page layouts."
 msgstr "Kolekcja układów pełnych stron."
 
-#: functions.php:105
+#: functions.php:113
 msgid "Pages"
 msgstr "Strony"
 
-#: functions.php:76
+#: functions.php:84
 msgid "Checkmark"
 msgstr "Znacznik wyboru"
 

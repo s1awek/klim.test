@@ -1,5 +1,5 @@
 {
-	"name": "wpdesk/wpdesk-omnibus",
+	"name": "wpdesk/wp-desk-omnibus",
 	"autoload": {
 		"psr-4": {
 			"OmnibusProVendor\\WPDesk\\Omnibus\\Core\\": "deprecated",
@@ -81,5 +81,7 @@
 			"type": "composer",
 			"url": "https://gitlab.wpdesk.dev/api/v4/group/wpdesk/-/packages/composer/"
 		}
-	}
+	},
+	"version": "2.2.16",
+	"type": "wordpress-plugin"
 }

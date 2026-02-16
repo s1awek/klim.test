@@ -9,7 +9,7 @@ namespace OmnibusProVendor;
 		<div class="update-message notice inline notice-warning notice-alt">
 			<p>
 			<?php 
-\printf(\esc_html__('This version of %1$s plugin cannot be automatically upgraded. Download the plugin from %2$syour account%3$s to receive automatic updates in future.', 'wpdesk-omnibus'), \esc_html($plugin_info->get_plugin_name()), '<a href="' . \esc_url_raw($plugin_info->get_customer_account_url()) . ' target=\'_blank\'">', '</a>');
+\printf(\esc_html__('This version of %1$s plugin cannot be automatically upgraded. Download the plugin from %2$syour account%3$s to receive automatic updates in future.', 'wpdesk-omnibus'), \esc_html($plugin_info->get_plugin_name()), '<a href="' . \esc_url_raw($plugin_info->get_customer_account_url()) . '" target=\'_blank\'>', '</a>');
 ?>
 			</p>
 		</div>

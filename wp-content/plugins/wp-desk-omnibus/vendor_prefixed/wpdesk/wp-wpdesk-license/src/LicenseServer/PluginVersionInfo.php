@@ -49,7 +49,14 @@ final class PluginVersionInfo
     }
     public function get_customer_account_url(): string
     {
-        return rtrim($this->get_shop_url(), '/') . '/my-account/wp-downloads/';
+        return rtrim($this->get_shop_url(), '/') . '/sk/' . $this->get_plugin_slug() . '-downloads-' . $this->get_shop_short_slug();
+    }
+    private function get_shop_short_slug(): string
+    {
+        $host = parse_url($this->get_shop_url(), \PHP_URL_HOST);
+        $shop = str_replace('www.', '', $host ?? '');
+        $slugs = ['wpdesk.pl' => 'pl', 'wpdesk.net' => 'net', 'shopmagic.app' => 'sm', 'flexibleinvoices.com' => 'fi', 'flexiblecoupons.com' => 'fc'];
+        return $slugs[$shop] ?? 'net';
     }
     /**
      * @param \WPDesk_Plugin_Info $info

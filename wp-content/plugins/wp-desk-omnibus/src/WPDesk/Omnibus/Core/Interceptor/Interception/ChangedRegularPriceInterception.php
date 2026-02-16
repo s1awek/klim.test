@@ -45,7 +45,8 @@ final class ChangedRegularPriceInterception implements PriceInterception {
 			$product->get_id(),
 			$this->number_formatter->parse( $old_price ),
 			false,
-			null
+			null,
+			$product instanceof ProductPricing ? $product->get_currency() : null
 		);
 
 		if ( $previous_entry instanceof HistoricalPrice ) {
