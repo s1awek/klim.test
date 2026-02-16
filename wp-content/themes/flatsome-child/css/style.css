@@ -745,3 +745,7 @@ span.reg-text {
 .header-nav .nav-dropdown {
   min-width: 300px;
 }
+
+.page-id-90 .banner-bg :is(img, picture, video) {
+  object-position: 0 50% !important;
+}
