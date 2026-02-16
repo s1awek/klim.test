@@ -1,18 +1,18 @@
 <?php
 /**
 	Plugin Name: Omnibus for WooCommerce
-	Plugin URI: https://www.wpdesk.pl/sklep/omnibus-woocommerce/
+	Plugin URI: https://www.wpdesk.pl/sk/wp-desk-omnibus-plugin/
 	Description: 100% compliance with the EU Omnibus directive. Automatically displays the lowest product price from the last 30 days.
 	Product: WP Desk Omnibus
-	Version: 2.2.13
+	Version: 2.2.16
 	Author: WP Desk
-	Author URI: https://www.wpdesk.pl/
+	Author URI: https://www.wpdesk.pl/sk/wp-desk-omnibus-author/
 	Text Domain: wpdesk-omnibus
 	Domain Path: /lang/
 	Requires at least: 6.4
-	Tested up to: 6.8
-	WC requires at least: 9.4
-	WC tested up to: 9.8
+	Tested up to: 6.9
+	WC requires at least: 10.0
+	WC tested up to: 10.4
 	Requires PHP: 7.4
 	Requires Plugins: woocommerce
 
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-$plugin_version = '2.2.13';
+$plugin_version = '2.2.16';
 $plugin_name        = 'WP Desk Omnibus';
 $plugin_class_name  = '\WPDesk\Omnibus\Core\Plugin';
 $plugin_text_domain = 'wpdesk-omnibus';

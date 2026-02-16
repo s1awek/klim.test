@@ -23,7 +23,8 @@ class Plugin extends AbstractPlugin implements Activateable, Deactivateable {
 		parent::__construct( $plugin_info );
 		$this->plugin_namespace = $this->plugin_info->get_text_domain();
 		$this->settings_url     = admin_url( 'admin.php?page=wc-settings&tab=products' );
-		$this->docs_url         = 'https://www.wpdesk.net/docs/docs-wp-desk-omnibus/?utm_campaign=omnibus-pro&utm_medium=quick-link&utm_source=user-site';
+		$this->docs_url         = 'https://www.wpdesk.net/sk/wp-desk-omnibus-docs';
+		$this->support_url      = 'https://www.wpdesk.net/sk/wp-desk-omnibus-support';
 	}
 
 	public function admin_enqueue_scripts(): void {

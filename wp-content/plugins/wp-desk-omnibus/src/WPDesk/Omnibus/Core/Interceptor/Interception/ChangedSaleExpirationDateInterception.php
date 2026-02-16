@@ -56,7 +56,8 @@ final class ChangedSaleExpirationDateInterception implements PriceInterception {
 			$product->get_id(),
 			$this->number_formatter->parse( $product->get_sale_price() ),
 			true,
-			$old_expiration_date ?: null
+			$old_expiration_date ?: null,
+			$product instanceof ProductPricing ? $product->get_currency() : null
 		);
 
 		if ( $previous_entry instanceof HistoricalPrice ) {

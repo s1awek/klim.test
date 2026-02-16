@@ -73,12 +73,10 @@ class PriceTableMetabox implements Hookable {
 	 * @return void
 	 */
 	private function output( $post ): void {
-		if ( function_exists( 'WCML\functions\getWooCommerceWpml' ) ) {
-			$original_id = \WCML\functions\getWooCommerceWpml()->products->get_original_product_id( $post->ID );
-
-			if ( $post->ID !== $original_id ) {
-				$post = get_post( $original_id );
-			}
+		global $wpml_post_translations;
+		if ( $wpml_post_translations ) {
+			$original_id = $wpml_post_translations->get_original_element( $post->ID ) ?: $post->ID;
+			$post        = get_post( $original_id );
 		}
 
 		$products = $this->get_products_ids( $post );

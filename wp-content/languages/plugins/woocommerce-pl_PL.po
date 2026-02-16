@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - WooCommerce - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-12-28 11:09:22+0000\n"
+"PO-Revision-Date: 2026-01-20 10:34:27+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -46994,7 +46994,7 @@ msgstr "Szkic produktu został zaktualizowany. <a target=\"_blank\" href=\"%s\">
 #: includes/admin/settings/views/html-webhooks-edit.php:199
 #: includes/class-wc-webhook.php:494
 msgid "M j, Y @ G:i"
-msgstr "M d, R @ G:m"
+msgstr "Y-m-d H:i"
 
 #. translators: 1: date 2: product url
 #: includes/admin/class-wc-admin-post-types.php:147
