@@ -749,3 +749,32 @@ span.reg-text {
 .page-id-90 .banner-bg :is(img, picture, video) {
   object-position: 0 50% !important;
 }
+
+/* EU Entity Info */
+.klim-eu-entity-info {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: #777;
+  font-size: 13px;
+}
+
+.klim-eu-entity-info p.klim-eu-entity-title {
+  margin-bottom: 5px;
+}
+
+.klim-eu-entity-info p.klim-eu-entity-title strong {
+  font-weight: 500;
+}
+
+.klim-eu-entity-info p.klim-eu-entity-details {
+  margin-bottom: 5px;
+  line-height: 1.4;
+}
+
+.klim-eu-entity-info p.klim-eu-entity-contact {
+  margin-bottom: 0;
+}
+
+.klim-eu-entity-info p.klim-eu-entity-contact a {
+  color: #777;
+}

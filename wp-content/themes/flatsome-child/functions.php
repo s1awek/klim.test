@@ -940,14 +940,27 @@ add_filter('action_scheduler_queue_runner_concurrent_batches', function () {
     return 10;
 });
 
-// Display returns banner under description inside .product-footer on single product
-add_action('woocommerce_after_single_product_summary', 'klim_show_returns_banner_under_description', 11);
-function klim_show_returns_banner_under_description()
+// Display EU entity info under description inside .product-footer on single product
+add_action('woocommerce_after_single_product_summary', 'klim_show_eu_entity_info', 11);
+function klim_show_eu_entity_info()
 {
     if (!is_product()) {
         return;
     }
-    echo '<div id="ak_returns_banner_869d5759-03fc-4e2f-8ae3-4547156f82e8">[BANER-WZ]</div>';
+    ?>
+    <div class="klim-eu-entity-info">
+        <p class="klim-eu-entity-title"><strong>Podmiot odpowiedzialny za produkt na terenie UE:</strong></p>
+        <p class="klim-eu-entity-details">
+            KLIM Europe<br>
+            T Outfitters GmbH<br>
+            Römerstraße 3<br>
+            5322 Hof bei Salzburg<br>
+            Austria<br>
+            UID ATU79648268
+        </p>
+        <p class="klim-eu-entity-contact"><a href="mailto:klimeurope@klim.com">klimeurope@klim.com</a></p>
+    </div>
+    <?php
 }
 
 // Register My Account endpoint for returns banner
