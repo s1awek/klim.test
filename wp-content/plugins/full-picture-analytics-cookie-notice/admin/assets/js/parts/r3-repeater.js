@@ -29,6 +29,7 @@
 
 		cloned_section = clear_section(cloned_section);
 		cloned_section = remove_extra_repeaters(cloned_section);
+		// cloned_section = show_collapsed_fields(cloned_section);
 		current_section.parentElement.insertBefore(cloned_section, current_section.nextSibling);
 
 		if ( module_id == 'cscr' || module_id == 'cook' || module_id == 'reports' || module_id == 'atrig' ) {
@@ -36,6 +37,33 @@
 			if ( id_field ) id_field.value = generate_random_id();
 		}
 	}
+
+	// function collapse_fields(){
+	// 	let tr_collapsible_fields = FP.findAll('.fupi_collapsible_fields');
+
+	// 	tr_collapsible_fields.forEach( tr => {
+	// 		tr.addEventListener('click', e => {
+	// 			if ( e.target.closest('.fupi_fields_toggle_btn') ) {
+	// 				let parent_section_el = e.target.closest('.fupi_r3_section.fupi_r3_repeater');
+	// 				if ( parent_section_el ) parent_section_el.classList.toggle('fupi_fields_visible');
+	// 			}
+	// 		})
+	// 	});
+	// }
+
+	// function show_collapsed_fields( cloned_section ){
+		
+	// 	// make fields visible if this section has a "collapse fields" button
+		
+	// 	let collapse_btn = FP.findFirst( '.fupi_fields_toggle_btn', cloned_section );
+
+	// 	if ( collapse_btn ) {
+	// 		let parent_section_el = collapse_btn.closest('.fupi_r3_section.fupi_r3_repeater');
+	// 		if ( parent_section_el ) parent_section_el.classList.add('fupi_fields_visible');
+	// 	}
+
+	// 	return cloned_section;
+	// }
 
 	function destroy_all_select2s(){
 		(($)=>{
@@ -455,10 +483,8 @@
         })
     }
 
-	function hide_already_selected_atrig_selects( trigger_selects ){
-
-		trigger_selects = trigger_selects || FP.findAll('.fupi_events_builder select[name*="atrig_id"]');
-
+	function hide_selects_in_group( trigger_selects ){
+		
 		// get fields that are already selected
 		let selected_options = [];
 
@@ -477,16 +503,37 @@
 		});
 	}
 
+	function hide_already_selected_atrig_selects( trigger_selects ){
+
+		if ( ! trigger_selects ) {
+
+			let builders = FP.findAll('.fupi_events_builder');
+
+			builders.forEach( builder => {
+				trigger_selects = FP.findAll('select[name*="atrig_id"]', builder);
+				hide_selects_in_group( trigger_selects );
+			})
+
+		} else {
+			hide_selects_in_group( trigger_selects );
+		}
+	}
+
 	function modify_specific_fields(){
 
 		// FOR SELECTING CUSTOM TRIGGERS ON A MODULE'S PAGE
-		let trigger_selects = FP.findAll('.fupi_events_builder select[name*="atrig_id"]');
-		
-		hide_already_selected_atrig_selects( trigger_selects );
-		
-		trigger_selects.forEach( select => {
-			toggle_leadscore_repeat_field( select );
-		});
+		let builders = FP.findAll('.fupi_events_builder');
+
+		builders.forEach( builder => {
+			
+			let trigger_selects = FP.findAll('select[name*="atrig_id"]', builder);
+			
+			hide_already_selected_atrig_selects( trigger_selects );
+			
+			trigger_selects.forEach( select => {
+				toggle_leadscore_repeat_field( select );
+			});
+		})
 	}
 
 	// INIT
@@ -500,6 +547,9 @@
 		enable_section_buttons();
 		enable_focusout_checks();
 		modify_specific_fields();
+
+		// collapse fields if there are
+		// collapse_fields();
     	listen_to_select_events();
 
 		if ( module_id == 'reports' ) make_ids_from_titles();

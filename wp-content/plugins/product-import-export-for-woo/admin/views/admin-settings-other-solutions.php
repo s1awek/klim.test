@@ -60,7 +60,7 @@ $plugins=array(
     ),
     'request_quote' => array(
         'title'         => __('WebToffee Woocommerce Request a Quote', 'product-import-export-for-woo'),
-        'description'   => __('Configure a fully optimized WooCommerce quote request set up in your store. Allow customers to request quotes and store managers to respond to them. Hide product prices, set up email alerts, and more.', 'product-import-export-for-woo'),
+        'description'   => __('Set up a WooCommerce quote request system that lets customers request custom pricing. Hide product prices, replace "Add to Cart" with an "Add to quote" button, accept pricing requests, and manage all quotes directly from your store.', 'product-import-export-for-woo'),
         'image_url'     => 'request-quote.png',
         'premium_url'   => 'https://www.webtoffee.com/product/woocommerce-request-a-quote/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=Request_Quote',
         'basic_url'     => '',
@@ -69,25 +69,16 @@ $plugins=array(
     ),
     'giftcards_plugin' => array(
         'title'         => __('WebToffee WooCommerce Gift Cards', 'product-import-export-for-woo'),
-        'description'   => __('Create and manage advanced gift cards for WooCommerce stores. Enable your customers to buy, redeem, and share gift cards from your store.', 'product-import-export-for-woo'),
+        'description'   => __('Create and sell customizable digital and physical gift cards in your WooCommerce store. Allow customers to send, schedule, and redeem gift vouchers while you manage store credits and boost sales using flexible gift card options and templates.', 'product-import-export-for-woo'),
         'image_url'     => 'giftcards_plugin.png',
         'premium_url'   => 'https://www.webtoffee.com/product/woocommerce-gift-cards/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=WooCommerce_Gift_Cards',
         'basic_url'     => 'https://wordpress.org/plugins/wt-gift-cards-woocommerce/',
         'pro_plugin'    => 'wt-woocommerce-gift-cards/wt-woocommerce-gift-cards.php',
         'basic_plugin'  => 'wt-gift-cards-woocommerce/wt-gift-cards-woocommerce.php', 
     ),
-    'fbt_plugins' => array(
-        'title'         => __('Frequently Bought Together for WooCommerce', 'product-import-export-for-woo'),
-        'description'   => __('Boost the visibility of the products by displaying them as ‘Frequently bought together’ items in your store. You may also set up discounts for Frequently Bought Together bundles with this plugin.', 'product-import-export-for-woo'),
-        'image_url'     => 'fbt_plugin.png',
-        'premium_url'   => 'https://www.webtoffee.com/product/woocommerce-frequently-bought-together/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=Frequently_Bought_Together',
-        'basic_url'     => '',
-        'pro_plugin'    => 'wt-frequently-bought-together/wt-frequently-bought-together.php',
-        'basic_plugin'  => '', 
-    ),
     'gdpr_cookie_consent_plugin' => array(
         'title'         => __('GDPR Cookie Consent Plugin (CCPA Ready)', 'product-import-export-for-woo'),
-        'description'   => __('The plugin helps you get compliant with GDPR, CCPA, and other major cookie laws. You can create and manage cookie consent banners, scan website cookies, and generate cookie policies with this plugin.','product-import-export-for-woo'),
+        'description'   => __('Make your WordPress site compliant with GDPR, CCPA, and other major privacy laws with this Google-certified CMP cookie consent plugin. Create and manage cookie consent banners, block non-essential cookies until users give consent, scan website cookies, generate cookie policies, and track user consent logs.', 'product-import-export-for-woo'),
         'image_url'     => 'gdpr-cookie-concent-plugin.png',
         'premium_url'   => 'https://www.webtoffee.com/product/gdpr-cookie-consent/?utm_source=other_solution_page&utm_medium=_free_plugin_&utm_campaign=GDPR',
         'basic_url'     => 'https://wordpress.org/plugins/cookie-law-info/',
@@ -136,7 +127,7 @@ $plugins=array(
     ),
     'smart_coupons_plugin' => array(
         'title'         => __('Smart Coupons for WooCommerce', 'product-import-export-for-woo'),
-        'description'   => __('Create coupons to offer discounts and free products to your customers with Smart Coupons for WooCommerce. You can set up BOGO coupons, giveaways, gift cards, store credits, and more with this plugin.', 'product-import-export-for-woo'),
+        'description'   => __('Create and manage advanced WooCommerce coupons and discounts for your customers. Set up high-converting campaigns like BOGO deals, store credits, gift vouchers, auto-apply and condition-based coupons, and bulk-generate coupon codes to increase sales and customer engagement.', 'product-import-export-for-woo'),
         'image_url'     => 'smart-coupons-plugin.png',
         'premium_url'   => 'https://www.webtoffee.com/product/smart-coupons-for-woocommerce/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=smart_coupons',
         'basic_url'     => 'https://wordpress.org/plugins/wt-smart-coupons-for-woocommerce/',
@@ -145,7 +136,7 @@ $plugins=array(
     ),
     'url_coupons_plugin' => array(
         'title'         => __('URL Coupons for WooCommerce', 'product-import-export-for-woo'),
-        'description'   => __('Generate custom URLs and QR codes for every discount coupon in your WooCommerce store. These unique coupons are easy to share and can even be set to add new products to the cart upon application.', 'product-import-export-for-woo'),
+        'description'   => __('Generate custom URLs and QR codes for your WooCommerce coupons that are easy to share and automatically apply discounts when clicked. These unique coupon URLs are easy to share and can even be set to add new products to the cart upon clicking.', 'product-import-export-for-woo'),
         'image_url'     => 'url-coupons-plugin.png',
         'premium_url'   => 'https://www.webtoffee.com/product/url-coupons-for-woocommerce/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=URL_Coupons',
         'basic_url'     => '',
@@ -154,7 +145,7 @@ $plugins=array(
     ),
     'sequential_order_plugin' => array(
         'title' => __('Sequential Order Numbers for WooCommerce', 'product-import-export-for-woo'),
-        'description' => __('Number your WooCommerce orders in a custom, sequential & manageable format. The Sequential Order Number plugin lets your orders follow a custom & unique numbering sequence suitable for your business.', 'product-import-export-for-woo'),
+        'description' => __('Make your WooCommerce order numbers look clean and professional with sequential order numbers. This plugin creates sequential WooCommerce order numbers and lets you set custom order numbers with prefixes, suffixes, and increments, making orders easier to track and manage.', 'product-import-export-for-woo'),
         'image_url' => 'Sequential-order-number-plugin.png',
         'premium_url' => 'https://www.webtoffee.com/product/woocommerce-sequential-order-numbers/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=Sequential_Order_Numbers',
         'basic_url' => 'https://wordpress.org/plugins/wt-woocommerce-sequential-order-numbers/',
@@ -163,7 +154,7 @@ $plugins=array(
     ),
 	'wt_ipc_addon' => array(
         'title'         => __('WooCommerce PDF Invoices, Packing Slips and Credit Notes', 'product-import-export-for-woo'),
-        'description'   => __('Easily generate & print fully customized PDF Invoices, Packing Slips, and Credit Notes for your orders. Automatically send the documents to the recipients by attaching them to the order status emails.', 'product-import-export-for-woo'),
+        'description'   => __('Automatically generate and send professional PDF invoices, packing slips, and credit notes for every WooCommerce order. Customize document templates, include tax details, and allow customers to easily download or print order documents.', 'product-import-export-for-woo'),
         'image_url'     => 'wt_ipc_logo.png',
         'premium_url'   => 'https://www.webtoffee.com/product/woocommerce-pdf-invoices-packing-slips/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=PDF_invoice',
         'basic_url'     => '',
@@ -172,7 +163,7 @@ $plugins=array(
     ),
     'wt_sdd_addon' => array(
         'title'         => __('WooCommerce Shipping Labels, Dispatch Labels and Delivery Notes', 'product-import-export-for-woo'),
-        'description'   => __('Automatically generate WooCommerce Shipping Labels, Dispatch Labels, and Delivery Notes with custom settings and layouts. Customize the label sizes and add extra product or order fields as required.', 'product-import-export-for-woo'),
+        'description'   => __('Create and print shipping labels, delivery notes, and dispatch documents from your WooCommerce store. Customize document layouts and include order details to make packing and shipping easier and faster.', 'product-import-export-for-woo'),
         'image_url'     => 'wt_sdd_logo.png',
         'premium_url'   => 'https://www.webtoffee.com/product/woocommerce-shipping-labels-delivery-notes/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=Shipping_Label',
         'basic_url'     => '',
@@ -181,7 +172,7 @@ $plugins=array(
     ),
     'wt_pl_addon' => array(
         'title'         => __('WooCommerce Picklists', 'product-import-export-for-woo'),
-        'description'   => __('Customize, generate and print WooCommerce picklists for all orders on your store and automatically attach them to the order status emails. Add product variation data and other fields to the document.', 'product-import-export-for-woo'),
+        'description'   => __('Generate printable pick lists for WooCommerce orders to quickly find and gather products for packing. Customize picklist layouts, attach them as PDFs to order emails, download or print them, and include extra product details to ensure accurate fulfillment and fewer errors.', 'product-import-export-for-woo'),
         'image_url'     => 'wt_pl_logo.png',
         'premium_url'   => 'https://www.webtoffee.com/product/woocommerce-picklist/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=Picklist',
         'basic_url'     => '',
@@ -190,7 +181,7 @@ $plugins=array(
     ),
     'wt_pi_addon' => array(
         'title'         => __('WooCommerce Proforma Invoices', 'product-import-export-for-woo'),
-        'description'   => __('Automate the generation of WooCommerce proforma invoices when new orders are placed and send them to your customers via order emails. Customize the layout and content of the invoice as per your needs.', 'product-import-export-for-woo'),
+        'description'   => __('Automatically create and send professional proforma invoices for WooCommerce orders. Customize invoice templates, numbers, and details, attach PDFs to order emails, and let customers download or print them easily for pre-payment clarity.', 'product-import-export-for-woo'),
         'image_url'     => 'wt_pi_logo.png',
         'premium_url'   => 'https://www.webtoffee.com/product/woocommerce-proforma-invoice/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=Proforma_Invoice',
         'basic_url'     => '',
@@ -199,7 +190,7 @@ $plugins=array(
     ),
     'wt_al_addon' => array(
         'title'         => __('WooCommerce Address Labels', 'product-import-export-for-woo'),
-        'description'   => __('Generate address labels for all orders in your store and easily print them in bulk. Customize the label layout and create labels of different types (shipping, billing, return, from address) with ease.', 'product-import-export-for-woo'),
+        'description'   => __('Generate address labels for your WooCommerce orders and print them in bulk to make packing and shipping faster and more accurate. Customize label layouts and easily generate labels of different types (shipping, billing, return, and from address) with ease.', 'product-import-export-for-woo'),
         'image_url'     => 'wt_al_logo.png',
         'premium_url'   => 'https://www.webtoffee.com/product/woocommerce-address-label/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=Address_Label',
         'basic_url'     => '',
@@ -217,7 +208,7 @@ $plugins=array(
     ),
     'product_recommendations' => array(
         'title'         => __('WooCommerce Product Recommendations', 'product-import-export-for-woo'),
-        'description'   => __('Generate Intelligent Product Recommendations For Your WooCommerce Store. Offer WooCommerce smart product recommendations to your customers & maximize the average cart value.', 'product-import-export-for-woo'),
+        'description'   => __('Show personalized product recommendations with 10+ popular recommendations templates. Recommend upsells, cross-sells, best-sellers, frequently bought together, and more to increase the average order value and improve the shopping experience.', 'product-import-export-for-woo'),
         'image_url'     => 'product-recommendation.png',
         'premium_url'   => 'https://www.webtoffee.com/product/woocommerce-product-recommendations/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=Product_Recommendations',
         'basic_url'     => '',

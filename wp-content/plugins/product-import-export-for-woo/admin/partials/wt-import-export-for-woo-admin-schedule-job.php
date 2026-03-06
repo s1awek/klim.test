@@ -81,13 +81,15 @@ $wf_img_path = WT_P_IEW_PLUGIN_URL . 'images/';
             <ul class="wt_listout_features">
                 <!-- First list item -->
                 <?php
-                function render_list_item($text)
-                {
-                    $icon_url = esc_url(WT_P_IEW_PLUGIN_URL . 'assets/images/wt_tick_mark.svg');
-                    echo '<li style="display: flex; align-items: center; margin-bottom: 20px;">';
-                    echo '<img src="' . esc_url($icon_url) . '" alt="' . esc_attr__('Check Icon', 'product-import-export-for-woo') . '" style="width: 13px; height: 16px; margin-right: 10px;color: black;">';
-                    echo esc_html($text);
-                    echo '</li>';
+                if (!function_exists('wt_iew_product_render_list_item')) {
+                    function wt_iew_product_render_list_item($text)
+                    {
+                        $icon_url = esc_url(WT_P_IEW_PLUGIN_URL . 'assets/images/wt_tick_mark.svg');
+                        echo '<li style="display: flex; align-items: center; margin-bottom: 20px;">';
+                        echo '<img src="' . esc_url($icon_url) . '" alt="' . esc_attr__('Check Icon', 'product-import-export-for-woo') . '" style="width: 13px; height: 16px; margin-right: 10px;color: black;">';
+                        echo esc_html($text);
+                        echo '</li>';
+                    }
                 }
 
                 $list_items = [
@@ -99,7 +101,7 @@ $wf_img_path = WT_P_IEW_PLUGIN_URL . 'images/';
                 ];
 
                 foreach ($list_items as $item) {
-                    render_list_item($item);
+                    wt_iew_product_render_list_item($item);
                 }
                 ?>
             </ul>

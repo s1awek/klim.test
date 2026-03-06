@@ -31,10 +31,6 @@ let FP = {};
 		return urlParams.get(name);
     };
 
-    FP.isNumeric = function(n){
-        return !isNaN(parseFloat(n)) && isFinite(n);
-    };
-
     FP.getSiblings = function(e){
 
         // for collecting siblings

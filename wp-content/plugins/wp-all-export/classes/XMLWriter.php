@@ -366,7 +366,7 @@ class PMXE_XMLWriter extends XMLWriter
     {
 
         if (XmlExportEngine::$is_preview) {
-            $v = str_replace('&amp;', '&', $v);
+            $v = str_replace('&amp;', '&', (string) $v);
             $v = htmlspecialchars($v);
         }
 

@@ -151,7 +151,7 @@ class ADBC_Common_Validator {
 	 */
 	public static function validate_get_column_value_endpoint_data( $items_type, $site_id, $row_id, $transient_found_in ) {
 
-		$answer = [ "success" => false, "message" => "", "data" => []];
+		$answer = [ "success" => false, "message" => "", "data" => [] ];
 
 		// Check items type is valid
 		if ( ! in_array( $items_type, [ 'options', 'transients', 'posts_meta', 'users_meta', 'revisions', 'auto_drafts', 'trashed_posts', 'unapproved_comments', 'spam_comments', 'trashed_comments', 'pingbacks', 'trackbacks', 'unused_postmeta', 'duplicated_postmeta', 'unused_commentmeta', 'duplicated_commentmeta', 'unused_usermeta', 'duplicated_usermeta', 'unused_termmeta', 'duplicated_termmeta', 'unused_relationships', 'expired_transients', 'oembed_caches', 'actionscheduler_completed_actions', 'actionscheduler_failed_actions', 'actionscheduler_canceled_actions', 'actionscheduler_completed_logs', 'actionscheduler_failed_logs', 'actionscheduler_canceled_logs', 'actionscheduler_orphan_logs' ], true ) )
@@ -440,6 +440,32 @@ class ADBC_Common_Validator {
 	}
 
 	/**
+	 * Sanitize an array of items types sent by the user.
+	 * 
+	 * @param array $items_types The array of items types.
+	 * 
+	 * @return array The sanitized array of items types, empty array if all invalid.
+	 */
+	public static function sanitize_items_types( $items_types ) {
+
+		if ( ! is_array( $items_types ) ) {
+			return [];
+		}
+
+		$validated_items_types = [];
+
+		foreach ( $items_types as $item_type ) {
+			$sanitized = self::sanitize_items_type( $item_type );
+			if ( $sanitized !== '' ) {
+				$validated_items_types[] = $sanitized;
+			}
+		}
+
+		return $validated_items_types;
+
+	}
+
+	/**
 	 * Validate the manual categorization sent by the user.
 	 *
 	 * @param string $manual_categorization The manual categorization.
@@ -503,7 +529,7 @@ class ADBC_Common_Validator {
 	 * 
 	 * @param int $limit The limit.
 	 * 
-	 * @return int The sanitized limit, 50 if invalid and 200 max.
+	 * @return int The sanitized limit, 50 if invalid and 1000 max.
 	 */
 	public static function sanitize_validate_limit( $limit ) {
 
@@ -514,9 +540,9 @@ class ADBC_Common_Validator {
 		if ( $limit < 1 )
 			return 50;
 
-		// Limit the limit to 200
-		if ( $limit > 200 )
-			return 200;
+		// Limit the limit to 1000
+		if ( $limit > 1000 )
+			return 1000;
 
 		return $limit;
 

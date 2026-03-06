@@ -153,6 +153,9 @@ class ADBC_Transients {
 
 		// ---- Build branches ---------------------------------------------
 		$branches = [];
+
+		$needs_collation_fix = ! ADBC_Database::is_collaction_unified( 'options', true, $site_arg );
+
 		foreach ( ADBC_Sites::instance()->get_sites_list( $site_arg ) as $site ) {
 
 			$branches = array_merge(
@@ -161,7 +164,8 @@ class ADBC_Transients {
 					$site['id'],
 					$filters, // pass whole arg set for WHERE glue
 					$maybe_order_by, // pass sorting column and order or null
-					$branch_batch_size  // pass limit for this branch
+					$branch_batch_size,  // pass limit for this branch
+					$needs_collation_fix
 				)
 			);
 
@@ -170,11 +174,11 @@ class ADBC_Transients {
 		$union_sql = implode( "\nUNION ALL\n", $branches );
 
 		$sql = "
-		SELECT *
-		FROM ( {$union_sql} ) AS rows_merged
-		{$maybe_order_by}
-		LIMIT %d OFFSET %d
-	";
+			SELECT *
+			FROM ( {$union_sql} ) AS rows_merged
+			{$maybe_order_by}
+			LIMIT %d OFFSET %d
+		";
 
 		$sql = $wpdb->prepare( $sql, $limit, $offset );
 
@@ -389,13 +393,15 @@ class ADBC_Transients {
 	 * 
 	 * @return array An array containing the SQL branch for the specified site.
 	 */
-	private static function build_branches_for_site( $site_id, $filters, $maybe_order_by, $sub_limit ) {
+	private static function build_branches_for_site( $site_id, $filters, $maybe_order_by, $sub_limit, $needs_collation_fix = false ) {
 
 		global $wpdb;
 
 		ADBC_Sites::instance()->switch_to_blog_id( $site_id );
 
 		$branches = [];
+
+		$collation = ! empty( $wpdb->collate ) ? $wpdb->collate : 'utf8mb4_unicode_ci';
 
 		foreach ( self::get_sql_templates() as $template ) {
 
@@ -405,6 +411,22 @@ class ADBC_Transients {
 
 			// Build the inner query first
 			$inner_sql = "{$template['sql']}{$search}{$size}{$autoload}";
+
+			if ( $needs_collation_fix ) {
+				$inner_sql = "
+					SELECT
+						CONVERT(name USING utf8mb4) COLLATE {$collation} AS name,
+						id,
+						CONVERT(value USING utf8mb4) COLLATE {$collation} AS value,
+						CONVERT(timeout USING utf8mb4) COLLATE {$collation} AS timeout,
+						site_id,
+						CONVERT(found_in USING utf8mb4) COLLATE {$collation} AS found_in,
+						CONVERT(autoload USING utf8mb4) COLLATE {$collation} AS autoload,
+						size,
+						CONVERT(expired USING utf8mb4) COLLATE {$collation} AS expired
+					FROM ( {$inner_sql} ) AS t
+				";
+			}
 
 			// Check if we need to filter by expired status
 			if ( $filters['expired'] !== 'all' ) {

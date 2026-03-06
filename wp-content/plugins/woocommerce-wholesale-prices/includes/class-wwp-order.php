@@ -291,8 +291,8 @@ if ( ! class_exists( 'WWP_Order' ) ) {
                 // Filter By Wholesale Role.
                 $wwpp_fbwr = null;
 
-                if ( isset( $_GET['wwpp_fbwr'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-                    $wwpp_fbwr = $_GET['wwpp_fbwr']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+                if ( isset( $_GET['wwpp_fbwr'] ) ) {  //phpcs:ignore
+                    $wwpp_fbwr = sanitize_text_field( wp_unslash( trim($_GET['wwpp_fbwr']) ) ); //phpcs:ignore
                 }
 
                 $all_registered_wholesale_roles = array( 'all_wholesale_orders' => array( 'roleName' => __( 'All Wholesale Orders', 'woocommerce-wholesale-prices' ) ) ) + $all_registered_wholesale_roles;
@@ -327,8 +327,16 @@ if ( ! class_exists( 'WWP_Order' ) ) {
             global $pagenow;
             $wholesale_filter = null;
 
-            if ( isset( $_GET['wwpp_fbwr'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-                $wholesale_filter = trim( $_GET['wwpp_fbwr'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $allowed_filters = array( 'all_order_types', 'all_retail_orders', 'all_wholesale_orders' );
+            if ( isset( $_GET['wwpp_fbwr'] ) ) { //phpcs:ignore
+                $wholesale_filter = sanitize_text_field( wp_unslash( trim( $_GET['wwpp_fbwr'] ) ) ); //phpcs:ignore
+                if ( ! in_array( $wholesale_filter, $allowed_filters, true ) && ! empty( $wholesale_filter ) ) {
+                    // Validate it's a valid wholesale role if not in allowed filters.
+                    $all_wholesale_roles = $this->_wwp_wholesale_roles->getAllRegisteredWholesaleRoles();
+                    if ( ! isset( $all_wholesale_roles[ $wholesale_filter ] ) ) {
+                        $wholesale_filter = null;
+                    }
+                }
             }
 
             if ( ! OrderUtil::custom_orders_table_usage_is_enabled() &&
@@ -398,8 +406,16 @@ if ( ! class_exists( 'WWP_Order' ) ) {
         public function custom_order_tables_query_args( $order_query_args ) {
             $wholesale_filter = null;
 
-            if ( isset( $_GET['wwpp_fbwr'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-                $wholesale_filter = trim( $_GET['wwpp_fbwr'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $allowed_filters = array( 'all_order_types', 'all_retail_orders', 'all_wholesale_orders' );
+            if ( isset( $_GET['wwpp_fbwr'] ) ) { //phpcs:ignore
+                $wholesale_filter = sanitize_text_field( wp_unslash( trim( $_GET['wwpp_fbwr'] ) ) ); //phpcs:ignore
+                if ( ! in_array( $wholesale_filter, $allowed_filters, true ) && ! empty( $wholesale_filter ) ) {
+                    // Validate it's a valid wholesale role if not in allowed filters.
+                    $all_wholesale_roles = $this->_wwp_wholesale_roles->getAllRegisteredWholesaleRoles();
+                    if ( ! isset( $all_wholesale_roles[ $wholesale_filter ] ) ) {
+                        $wholesale_filter = null;
+                    }
+                }
             }
 
             if ( ! is_null( $wholesale_filter ) ) {

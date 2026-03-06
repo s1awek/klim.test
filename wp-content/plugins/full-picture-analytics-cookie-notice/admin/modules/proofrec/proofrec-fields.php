@@ -41,7 +41,7 @@ $sections = array(array(
             'after field'   => '
                         <p><strong>' . esc_html__( 'To start saving consents:', 'full-picture-analytics-cookie-notice' ) . '</strong></p>
                         <ol>
-                            <li>' . sprintf( esc_html__( 'Make sure your site is set up correctly in the %1$sGDPR setup info%2$s page.', 'full-picture-analytics-cookie-notice' ), '<a href="' . get_admin_url() . 'admin.php?page=full_picture_tools&tab=gdpr_setup_helper">', '</a>' ) . '</li>
+                            <li>' . sprintf( esc_html__( 'Make sure your site is set up correctly in the %1$sGDPR setup helper%2$s page.', 'full-picture-analytics-cookie-notice' ), '<a href="' . get_admin_url() . 'admin.php?page=full_picture_home&tab=gdpr_setup_helper">', '</a>' ) . '</li>
                             <li>' . sprintf( esc_html__( 'Purchase %1$sone of the packages%2$s (start at €10/year).', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/addons/consentsdb" target="_blank">', '</a>' ) . '</li>
                             <li><a href="https://consentsdb.com/">' . esc_html__( 'Register your website at ConsentsDB.com.', 'full-picture-analytics-cookie-notice' ) . '</a></li>
                             <li>' . esc_html__( 'Follow the instructions in the ConsentsDB.', 'full-picture-analytics-cookie-notice' ) . '</li>

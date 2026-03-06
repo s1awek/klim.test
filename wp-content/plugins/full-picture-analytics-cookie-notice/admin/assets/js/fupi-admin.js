@@ -217,21 +217,6 @@
 
 })();
 
-// TOGGLE MENU O MOBILES
-
-(()=>{
-
-	$toggle_menu_btn = FP.findID('fupi_mobile_nav_toggle_button');
-
-	if ( ! $toggle_menu_btn ) return;
-
-	$menu = FP.findID('fupi_side_menu');
-
-	$toggle_menu_btn.addEventListener('click', () => {
-		$menu.classList.toggle('fupi_show_mobile_menu');
-	});
-})();
-
 (() => {
 
 	// DISABLE SETTINGS NOT AVAILABLE FOR FREE USERS
@@ -412,24 +397,6 @@
 		fupi_settings_tables.forEach( table => table.classList.add('fupi_table_grid') );
 	}
 
-	// Add an "Advanced integrations" headline
-
-	let fupi_first_module		= FP.findFirst('.fupi_table_grid tr'),
-		fupi_adv_headline_html = FP.findFirst('.fupi_adv_headline_html_template');
-
-	if ( fupi_first_module && fupi_adv_headline_html ){
-		fupi_first_module.insertAdjacentHTML( 'beforebegin', fupi_adv_headline_html.innerHTML );
-	}
-
-	// Add a "Basic integrations" headline
-
-	let fupi_basic_module		= FP.findFirst('tr.fupi_basic'),
-		fupi_basic_headline_html = FP.findFirst('.fupi_basic_headline_html_template');
-
-	if ( fupi_basic_module && fupi_basic_headline_html ){
-		fupi_basic_module.insertAdjacentHTML( 'beforebegin', fupi_basic_headline_html.innerHTML );
-	}
-
 	// Add a "Tag Managers" headline
 
 	let fupi_tagman_module		= FP.findFirst('tr.fupi_tagman'),
@@ -511,6 +478,7 @@
 
 		cloned_section = clear_section(cloned_section);
 		cloned_section = remove_extra_repeaters(cloned_section);
+		// cloned_section = show_collapsed_fields(cloned_section);
 		current_section.parentElement.insertBefore(cloned_section, current_section.nextSibling);
 
 		if ( module_id == 'cscr' || module_id == 'cook' || module_id == 'reports' || module_id == 'atrig' ) {
@@ -518,6 +486,33 @@
 			if ( id_field ) id_field.value = generate_random_id();
 		}
 	}
+
+	// function collapse_fields(){
+	// 	let tr_collapsible_fields = FP.findAll('.fupi_collapsible_fields');
+
+	// 	tr_collapsible_fields.forEach( tr => {
+	// 		tr.addEventListener('click', e => {
+	// 			if ( e.target.closest('.fupi_fields_toggle_btn') ) {
+	// 				let parent_section_el = e.target.closest('.fupi_r3_section.fupi_r3_repeater');
+	// 				if ( parent_section_el ) parent_section_el.classList.toggle('fupi_fields_visible');
+	// 			}
+	// 		})
+	// 	});
+	// }
+
+	// function show_collapsed_fields( cloned_section ){
+		
+	// 	// make fields visible if this section has a "collapse fields" button
+		
+	// 	let collapse_btn = FP.findFirst( '.fupi_fields_toggle_btn', cloned_section );
+
+	// 	if ( collapse_btn ) {
+	// 		let parent_section_el = collapse_btn.closest('.fupi_r3_section.fupi_r3_repeater');
+	// 		if ( parent_section_el ) parent_section_el.classList.add('fupi_fields_visible');
+	// 	}
+
+	// 	return cloned_section;
+	// }
 
 	function destroy_all_select2s(){
 		(($)=>{
@@ -937,10 +932,8 @@
         })
     }
 
-	function hide_already_selected_atrig_selects( trigger_selects ){
-
-		trigger_selects = trigger_selects || FP.findAll('.fupi_events_builder select[name*="atrig_id"]');
-
+	function hide_selects_in_group( trigger_selects ){
+		
 		// get fields that are already selected
 		let selected_options = [];
 
@@ -959,16 +952,37 @@
 		});
 	}
 
+	function hide_already_selected_atrig_selects( trigger_selects ){
+
+		if ( ! trigger_selects ) {
+
+			let builders = FP.findAll('.fupi_events_builder');
+
+			builders.forEach( builder => {
+				trigger_selects = FP.findAll('select[name*="atrig_id"]', builder);
+				hide_selects_in_group( trigger_selects );
+			})
+
+		} else {
+			hide_selects_in_group( trigger_selects );
+		}
+	}
+
 	function modify_specific_fields(){
 
 		// FOR SELECTING CUSTOM TRIGGERS ON A MODULE'S PAGE
-		let trigger_selects = FP.findAll('.fupi_events_builder select[name*="atrig_id"]');
-		
-		hide_already_selected_atrig_selects( trigger_selects );
-		
-		trigger_selects.forEach( select => {
-			toggle_leadscore_repeat_field( select );
-		});
+		let builders = FP.findAll('.fupi_events_builder');
+
+		builders.forEach( builder => {
+			
+			let trigger_selects = FP.findAll('select[name*="atrig_id"]', builder);
+			
+			hide_already_selected_atrig_selects( trigger_selects );
+			
+			trigger_selects.forEach( select => {
+				toggle_leadscore_repeat_field( select );
+			});
+		})
 	}
 
 	// INIT
@@ -982,6 +996,9 @@
 		enable_section_buttons();
 		enable_focusout_checks();
 		modify_specific_fields();
+
+		// collapse fields if there are
+		// collapse_fields();
     	listen_to_select_events();
 
 		if ( module_id == 'reports' ) make_ids_from_titles();
@@ -1000,7 +1017,7 @@
 
 	document.addEventListener('keyup', e=>{
 		if ( e.target.dataset.dataformat && e.target.dataset.dataformat == 'key' ){
-			let reg = /^\d/, // digit at the begining
+			let reg = /^\d/, // digit at the beginning
 				reg2 = /[^\w]/gi, // not a special char or underscore
 				txt = e.target.value;
 
@@ -1195,6 +1212,12 @@
 		} else {
 			num_field.value = old_val - ( num_field.step || 1 );
 		}
+
+		// check if this is a condition field and trigger it
+		if ( num_field.classList.contains('fupi_condition') ) {
+			const event = new Event('change', { bubbles: true });
+  			num_field.dispatchEvent(event);
+		}
 	}
 
 	document.addEventListener('click', e=>{
@@ -1245,17 +1268,23 @@
 
     // CUSTOM EVENTS BUILDER - clear sections that contain not existing (expired) trigger
 
-    let builder_sections = FP.findAll('.fupi_events_builder .fupi_r3_section');
-
-    builder_sections.forEach( section => {
+    let builders = FP.findAll('.fupi_events_builder');
+    
+    builders.forEach( builder => {
         
-        let atrig_select = FP.findFirst( '.fupi_field_type_atrig_select select', section );
+        let builder_sections = FP.findAll('.fupi_r3_section', builder);
 
-        if ( atrig_select && ! atrig_select.value ){
-            let minus_button = FP.findFirst( '.fupi_btn_remove', section );
-            if ( minus_button ) minus_button.click();
-        }
-    } );
+        builder_sections.forEach( section => {
+            
+            let atrig_select = FP.findFirst( '.fupi_field_type_atrig_select select', section );
+    
+            if ( atrig_select && ! atrig_select.value ){
+                let minus_button = FP.findFirst( '.fupi_btn_remove', section );
+                if ( minus_button ) minus_button.click();
+            }
+        } );
+    })
+
 
 })();
 
@@ -1269,7 +1298,7 @@
         
         let metadata_select = FP.findFirst( '.fupi_field_type_custom_meta_select select', section );
 
-        if ( ! metadata_select.value ){
+        if ( metadata_select && ! metadata_select.value ){
             let minus_button = FP.findFirst( '.fupi_btn_remove', section );
             if ( minus_button ) minus_button.click();
         }
@@ -1316,19 +1345,28 @@
 (()=>{
 
 	// ADD "EXTERNAL" DASHICON TO LINKS AND SET THEM TO OPEN IN A NEW TAB
-
 	window.addEventListener( 'DOMContentLoaded', ()=>{
 
 		let links = FP.findAll('#fupi_main_col a');
 
 		links.forEach( link => {
-			if ( ! link.href.includes(document.location.host) && ! link.classList.contains('fupi_vid') && ! link.classList.contains('fupi_vid_btn') ) {
+			if ( ! link.classList.contains('no_external_icon') && ! link.href.includes(document.location.host) && ! link.classList.contains('fupi_vid') && ! link.classList.contains('fupi_vid_btn') ) {
 				if ( ! link.target ) link.target = '_blank';
 				link.insertAdjacentHTML('beforeend', ' <span class="dashicons dashicons-external"></span>');
 			}
 		})
-
 	})
+
+	// ADD UTM PARAMS TO LINKS TO WP FP
+	if ( ! window.location.href.includes('wpfullpicture') ) {
+		window.addEventListener( 'click', e=>{
+			let link = e.target.closest('a[href]');
+			if ( link && link.matches('#fupi_content a[href]') && link.href.includes('wpfullpicture.com') && fupi_version && fupi_licence ) {
+				link.href += '?utm_source=wpfp_plugin&utm_medium=wp_admin&utm_term=' + fupi_licence + '&utm_content=v_' + fupi_version;
+			}		
+		})
+	}
+
 })();
 
 (()=>{
@@ -1619,6 +1657,100 @@ jQuery( document ).ready( function($) {
 	}
 })();
 
+// CONFLICT CHECKER - Check for plugin/theme conflicts via AJAX
+
+(()=>{
+	
+	const checkBtns = FP.findAll('.fupi_check_conflicts_btn');
+
+	if ( checkBtns.length == 0 ) return;
+
+	checkBtns.forEach( btn => checkForConflicts(btn) );
+	
+	function checkForConflicts(checkBtn){
+		checkBtn.addEventListener('click', function() {
+		
+			// Show loading state
+			checkBtn.disabled = true;
+			const originalText = checkBtn.textContent;
+			checkBtn.textContent = fupi_conflicts_data.i18n.checking;
+			
+			// Make AJAX request
+			fetch(fupi_conflicts_data.ajax_url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: new URLSearchParams({
+					action: 'fupi_check_conflicts',
+					security: fupi_conflicts_data.nonce
+				}),
+				credentials: 'same-origin'
+			})
+			.then(response => response.json())
+			.then(data => {
+				// Reset button
+				checkBtn.disabled = false;
+				checkBtn.textContent = originalText;
+				
+				// Display results in popup
+				displayConflicts(data);
+			})
+			.catch(error => {
+				// Handle error
+				console.error('Error checking conflicts:', error);
+				checkBtn.disabled = false;
+				checkBtn.textContent = originalText;
+				
+				// Show error message
+				const resultsContainer = FP.findID('fupi_conflicts_results');
+				if (resultsContainer) {
+					resultsContainer.innerHTML = '<p style="color: red;"><span class="dashicons dashicons-warning"></span> ' + fupi_conflicts_data.i18n.error_occurred + '</p>';
+					openPopup();
+				}
+			});
+		});
+	}
+	
+	function displayConflicts(data) {
+		const resultsContainer = FP.findID('fupi_conflicts_results');
+		
+		if (!resultsContainer) {
+			console.error('Conflicts results container not found');
+			return;
+		}
+		
+		if (data.success && data.data.has_conflicts) {
+			let html = '';
+			data.data.conflicts.forEach(conflict => {
+				html += '<p><span class="dashicons dashicons-warning" style="color: red"></span> <span>' + conflict.message + '</span></p>';
+			});
+			resultsContainer.innerHTML = html;
+		} else if (data.success) {
+			resultsContainer.innerHTML = '<p style="color: green;"><span class="dashicons dashicons-yes-alt"></span> <span>' + fupi_conflicts_data.i18n.no_conflicts + '</span></p>';
+		} else {
+			resultsContainer.innerHTML = '<p><span class="dashicons dashicons-warning" style="color: red;"></span> ' + (data.data || fupi_conflicts_data.i18n.error_generic) + '</p>';
+		}
+		
+		// Open the popup
+		openPopup();
+	}
+	
+	function openPopup() {
+		// Create temporary button to trigger the existing popup system
+		const popupBtn = document.createElement('button');
+		popupBtn.classList.add('fupi_open_popup');
+		popupBtn.dataset.popup = 'fupi_conflicts_popup_content';
+		popupBtn.style.display = 'none';
+		document.body.appendChild(popupBtn);
+		popupBtn.click();
+		// Clean up
+		setTimeout(() => {
+			document.body.removeChild(popupBtn);
+		}, 100);
+	}
+	
+})();
 /**
  * Copyright Marc J. Schmidt. See the LICENSE file at the top-level
  * directory of this distribution and at

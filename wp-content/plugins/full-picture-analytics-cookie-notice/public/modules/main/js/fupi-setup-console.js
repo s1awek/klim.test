@@ -1,4 +1,5 @@
-(()=>{
+function fupi_setup_console(){
+
     'use strict';
     
     let console_toggle_btns = FP.findAll('.fupi_console_toggle_btn'),
@@ -68,5 +69,9 @@
         FP.deleteCookie('fp_track_me' ); // disable tests
         window.location.reload(); // reload window
     });
+
+    FP.loaded('setup_console');
     
-})();
+};
+
+FP.load('setup_console', 'fupi_setup_console', ['head_helpers']);

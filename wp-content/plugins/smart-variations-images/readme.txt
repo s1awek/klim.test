@@ -3,7 +3,7 @@ Contributors: drosendo
 Tags: woocommerce, product variations, image gallery, swatches, ecommerce  
 Requires at least: 4.9 
 Tested up to: 6.9
-Stable tag: 5.2.23
+Stable tag: 5.2.24
 Requires PHP: 7.4
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -127,6 +127,10 @@ A: SVI replaces your default theme settings/options for the image & thumbnails a
 7. Setup swatches on Product > Attributes
 
 == Changelog ==
+
+= 5.2.24 =
+* Improved: Enhanced admin review notice with detailed v6 preview showcasing upcoming features
+* Info: Version 6 development update - preparing major architecture improvements, enhanced gallery builder, better mobile experience, and performance optimizations
 
 = 5.2.23 =
 * Added: Divi Builder compatibility - SVI gallery now replaces Divi's WooCommerce Images module

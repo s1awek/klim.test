@@ -412,5 +412,6 @@ if ( !$is_mode_notify && (is_customize_preview() || isset( $notice_opts ) && !em
     }
     echo '<aside><button id="fupi_notice_toggler" class="fp_show_cookie_notice fupi_tooltip ' . $toggler_class . '" style="display: none;"><span class="fupi_srt">' . esc_attr__( 'Change cookie preferences', 'full-picture-analytics-cookie-notice' ) . '</span><img src="' . $img_src . '">' . $toggler_tooltip . '</button></aside>';
 }
-echo '<!-- WP Full Picture - Consent Banner & Analytics - END -->';
+echo '<!--noptimize--><script data-no-optimize="1" data-noptimize nowprocket>FP.loaded("consb_html");</script><!--/noptimize-->
+	<!-- WP Full Picture - Consent Banner & Analytics - END -->';
 ob_end_flush();

@@ -56,7 +56,7 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
                         $msg = 'Category updated successfully.';
                     }
 
-                    $this->import_results[$row] = array('row'=>$row, 'message'=>$msg, 'status'=>true, 'status_msg' => __( 'Success', 'product-import-export-for-woo' ), 'post_id'=>$result['id'], 'post_link' => Wt_Import_Export_For_Woo_Basic_Product_Categories::get_item_link_by_id($result['id'])); 
+                    $this->import_results[$row] = array('row'=>$row, 'message'=>$msg, 'status'=>true, 'status_msg' => __( 'Success', 'product-import-export-for-woo' ), 'post_id'=>$result['id'], 'post_link' => Wt_Import_Export_For_Woo_Product_Basic_Product_Categories::get_item_link_by_id($result['id'])); 
                     Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - " . $msg);
                     $success++;
                 } else {

@@ -5,12 +5,12 @@
   Description: Import and Export Products From and To your WooCommerce Store.
   Author: WebToffee
   Author URI: https://www.webtoffee.com/product/product-import-export-woocommerce/
-  Version: 2.5.9
+  Version: 2.6.1
   License:           GPLv3
   License URI:       https://www.gnu.org/licenses/gpl-3.0.html
   Text Domain: product-import-export-for-woo
   Domain Path: /languages
-  WC tested up to: 10.3
+  WC tested up to: 10.5.1
   Requires at least: 3.0
   Requires PHP: 5.6
  */
@@ -53,7 +53,7 @@ if ( ! defined( 'WBTE_PIEW_CROSS_PROMO_BANNER_VERSION' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WT_P_IEW_VERSION', '2.5.9' );
+define( 'WT_P_IEW_VERSION', '2.6.1' );
 
 /**
  * The code that runs during plugin activation.
@@ -139,9 +139,10 @@ if (strpos(@ini_get('disable_functions'), 'set_time_limit') === false) {
  */
 function run_wt_import_export_for_woo_basic_product() {
 
-	if ( !defined( 'WT_IEW_BASIC_STARTED' ) ) {
-		define( 'WT_IEW_BASIC_STARTED', 1 );
-		$plugin = new Wt_Import_Export_For_Woo_Basic();
+	// Use separate constant for product plugin to allow independent initialization
+	if ( ! defined( 'WT_IEW_PRODUCT_BASIC_STARTED' ) ) {
+		define ( 'WT_IEW_PRODUCT_BASIC_STARTED', 1);
+		$plugin = new Wt_Import_Export_For_Woo_Product_Basic();
 		$plugin->run();
 	}
 }
@@ -223,7 +224,7 @@ if(!function_exists('wt_wc_get_product_object')){  // need change this approch, 
 include_once 'class-wt-product-review-request.php';
 
 // Load Common Helper Class (needed by non-apache-info)
-if ( ! class_exists( 'Wt_Import_Export_For_Woo_Basic_Common_Helper' ) ) {
+if ( ! class_exists( 'Wt_Import_Export_For_Woo_Product_Basic_Common_Helper' ) ) {
     require_once plugin_dir_path( __FILE__ ) . 'helpers/class-wt-common-helper.php';
 }
 
@@ -346,7 +347,7 @@ function wt_product_imp_exp_basic_migrate_serialized_data_to_json() {
                 if (is_serialized($row['data'])) {
 					
 					include_once plugin_dir_path(__FILE__) . 'helpers/class-wt-common-helper.php';
-                    $unserialized_data = Wt_Import_Export_For_Woo_Basic_Common_Helper::wt_unserialize_safe($row['data']);
+                    $unserialized_data = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_unserialize_safe($row['data']);
                     if ($unserialized_data !== false) {
                         $json_data = wp_json_encode($unserialized_data);
 						// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching

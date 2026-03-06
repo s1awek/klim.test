@@ -13,10 +13,10 @@ class Fupi_Deactivator {
 			if ( ! empty( $fupi_main['clean_all'] ) ) {
 
 				$options_ids = [
-					'fupi_versions',
 					'cookie_notice',
 					'versions',
 					'reports',
+					'reactions',
 					'tools', 
 					'main', 
 					'track', 

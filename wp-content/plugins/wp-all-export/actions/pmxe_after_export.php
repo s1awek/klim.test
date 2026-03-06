@@ -71,12 +71,12 @@ function pmxe_pmxe_after_export($export_id, $export)
             $in  = fopen($tmp_file, 'r');
             $out = fopen($filepath, 'w');
 
-            $headers = fgetcsv($in, 0, XmlExportEngine::$exportOptions['delimiter']);
+            $headers = fgetcsv($in, 0, XmlExportEngine::$exportOptions['delimiter'], '"', '\\');
 
             if (is_resource($in)) {
                 $lineNumber = 0;
                 while ( ! feof($in) ) {
-                    $data = fgetcsv($in, 0, XmlExportEngine::$exportOptions['delimiter']);
+                    $data = fgetcsv($in, 0, XmlExportEngine::$exportOptions['delimiter'], '"', '\\');
                     if ( empty($data) ) continue;
                     $data_assoc = array_combine($headers, array_values($data));
                     $line = array();
@@ -85,10 +85,10 @@ function pmxe_pmxe_after_export($export_id, $export)
                     }
                     if ( ! $lineNumber && XmlExportEngine::$exportOptions['include_bom']){
                         fwrite($out, chr(0xEF).chr(0xBB).chr(0xBF));
-                        fputcsv($out, $line, XmlExportEngine::$exportOptions['delimiter']);
+                        fputcsv($out, $line, XmlExportEngine::$exportOptions['delimiter'], '"', '\\');
                     }
                     else{
-                        fputcsv($out, $line, XmlExportEngine::$exportOptions['delimiter']);
+                        fputcsv($out, $line, XmlExportEngine::$exportOptions['delimiter'], '"', '\\');
                     }
                     apply_filters('wp_all_export_after_csv_line', $out, XmlExportEngine::$exportID);
                     $lineNumber++;
@@ -197,9 +197,9 @@ function pmxe_pmxe_after_export($export_id, $export)
 
 						$rowCount  = 0;
 						$fileCount = 1;
-						$headers = fgetcsv($in);
+						$headers = fgetcsv($in, 0, ',', '"', '\\');
 						while (!feof($in)) {
-						    $data = fgetcsv($in);
+						    $data = fgetcsv($in, 0, ',', '"', '\\');
 						    if (empty($data)) continue;
 						    if (($rowCount % $splitSize) == 0) {
 						        if ($rowCount > 0) {
@@ -213,9 +213,9 @@ function pmxe_pmxe_after_export($export_id, $export)
 						    }
 						    if ($data){
 						    	if (($rowCount % $splitSize) == 0) {
-						    		fputcsv($out, $headers);
+						    		fputcsv($out, $headers, ',', '"', '\\');
 						    	}
-						        fputcsv($out, $data);
+						        fputcsv($out, $data, ',', '"', '\\');
 						    }
 						    $rowCount++;
 						}

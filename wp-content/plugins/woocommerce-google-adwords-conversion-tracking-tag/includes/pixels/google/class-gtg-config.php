@@ -3,7 +3,7 @@
  * Google Tag Gateway Configuration
  *
  * Handles server-side detection of the optimal GTG handler and provides
- * the configuration to the frontend via wpmDataLayer.
+ * the configuration to the frontend via pmwDataLayer.
  *
  * @package SweetCode\Pixel_Manager\Pixels\Google
  */
@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * Priority:
  * 1. External (Cloudflare) - measurement_path responds without X-PMW-GTG-Handler header
- * 2. Isolated - direct PHP proxy responds with X-PMW-GTG-Handler: isolated
+ * 2. Standalone - direct PHP proxy responds with X-PMW-GTG-Handler: standalone
  * 3. WordPress - fallback when others fail
  */
 class GTG_Config {
@@ -44,17 +44,17 @@ class GTG_Config {
 	/**
 	 * Valid handler types
 	 */
-	const VALID_HANDLERS = [ 'external', 'isolated', 'wordpress' ];
+	const VALID_HANDLERS = [ 'external', 'standalone', 'wordpress' ];
 
 	/**
 	 * Detect the GTG handler server-side
 	 *
 	 * Priority:
 	 * 1. External (Cloudflare) - measurement_path responds without X-PMW-GTG-Handler
-	 * 2. Isolated - direct PHP proxy responds with X-PMW-GTG-Handler: isolated
+	 * 2. Standalone - direct PHP proxy responds with X-PMW-GTG-Handler: standalone
 	 * 3. WordPress - fallback
 	 *
-	 * @return string Handler type ('external', 'isolated', 'wordpress')
+	 * @return string Handler type ('external', 'standalone', 'wordpress')
 	 */
 	public static function detect_handler() {
 		$measurement_path = Options::get_google_tag_gateway_measurement_path();
@@ -62,8 +62,8 @@ class GTG_Config {
 
 		// If no measurement path configured, can't use external/Cloudflare
 		if ( empty( $measurement_path ) ) {
-			// Still check if isolated proxy is available
-			return self::check_isolated_proxy() ? 'isolated' : 'wordpress';
+			// Still check if standalone proxy is available
+			return self::check_standalone_proxy() ? 'standalone' : 'wordpress';
 		}
 
 		// Priority 1: Check if measurement_path is handled by external (Cloudflare)
@@ -73,14 +73,14 @@ class GTG_Config {
 			return 'external';
 		}
 
-		// If measurement_path returned 'isolated', use it
-		if ( 'isolated' === $handler ) {
-			return 'isolated';
+		// If measurement_path returned 'standalone', use it
+		if ( 'standalone' === $handler ) {
+			return 'standalone';
 		}
 
-		// Priority 2: Check if isolated proxy is available via direct access
-		if ( self::check_isolated_proxy() ) {
-			return 'isolated';
+		// Priority 2: Check if standalone proxy is available via direct access
+		if ( self::check_standalone_proxy() ) {
+			return 'standalone';
 		}
 
 		// Priority 3: Fallback to WordPress proxy
@@ -175,16 +175,23 @@ class GTG_Config {
 	}
 
 	/**
-	 * Check if isolated proxy is available via direct access
+	 * Check if standalone proxy is available via direct access
 	 *
-	 * @return bool True if isolated proxy is available
+	 * If the config file doesn't exist but GTG is active, try to create it first.
+	 * This ensures sites that upgraded to 1.56.0+ get the config file automatically.
+	 *
+	 * @return bool True if standalone proxy is available
 	 */
-	private static function check_isolated_proxy() {
+	private static function check_standalone_proxy() {
 		$proxy_url = GTG_Proxy::get_isolated_proxy_url();
 
 		if ( ! $proxy_url ) {
 			return false;
 		}
+
+		// Before checking the proxy, ensure the config file exists
+		// This handles sites that upgraded but didn't have the config created
+		self::ensure_config_exists();
 
 		$response = wp_remote_get(
 			$proxy_url . '?healthCheck=1',
@@ -207,7 +214,43 @@ class GTG_Config {
 
 		$handler_header = wp_remote_retrieve_header( $response, 'x-pmw-gtg-handler' );
 
-		return 'isolated' === $handler_header;
+		return 'standalone' === $handler_header;
+	}
+
+	/**
+	 * Ensure the standalone proxy config file exists
+	 *
+	 * Creates the config file if GTG is active but the config is missing.
+	 * This handles sites that upgraded to 1.56.0+ but didn't have the config
+	 * file created during the upgrade process.
+	 *
+	 * @return void
+	 * @since 1.56.0
+	 */
+	private static function ensure_config_exists() {
+		// Only run if GTG is active
+		if ( ! GTG_Proxy::is_active() ) {
+			return;
+		}
+
+		// Check if config file exists
+		$config_file = GTG_Proxy::get_config_file_path();
+		if ( ! $config_file ) {
+			return;
+		}
+
+		// If config file already exists and is not too old, skip
+		if ( file_exists( $config_file ) ) {
+			// Check if it's not expired (7 days — matches standalone proxy TTL)
+			// WP-Cron refreshes every 24h, this is a safety net
+			$file_age = time() - filemtime( $config_file );
+			if ( $file_age < 7 * DAY_IN_SECONDS ) {
+				return;
+			}
+		}
+
+		// Create or refresh the config file
+		GTG_Proxy::update_proxy_config_cache();
 	}
 
 	/**

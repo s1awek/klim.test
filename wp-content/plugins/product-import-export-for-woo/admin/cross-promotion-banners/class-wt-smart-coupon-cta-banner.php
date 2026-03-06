@@ -23,7 +23,7 @@ if (!class_exists('Wt_Smart_Coupon_Cta_Banner')) {
         public function __construct() { 
             // Check if premium plugin is active
             if (!in_array('wt-smart-coupon-pro/wt-smart-coupon-pro.php', apply_filters('active_plugins', get_option('active_plugins')))) {
-                self::$is_bfcm_season = method_exists( 'Wt_Import_Export_For_Woo_Basic', 'is_bfcm_season' ) && Wt_Import_Export_For_Woo_Basic::is_bfcm_season();
+                self::$is_bfcm_season = method_exists( 'Wt_Import_Export_For_Woo_Product_Basic', 'is_bfcm_season' ) && Wt_Import_Export_For_Woo_Product_Basic::is_bfcm_season();
 
                 add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
                 add_action('add_meta_boxes', array($this, 'add_meta_box'));

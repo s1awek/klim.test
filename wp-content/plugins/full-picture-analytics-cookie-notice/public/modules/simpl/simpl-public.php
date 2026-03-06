@@ -32,19 +32,16 @@ class Fupi_SIMPL_public {
     }
 
     public function enqueue_scripts() {
-        $head_args = [
-            'in_footer' => false,
-        ];
-        if ( !empty( $this->main ) && isset( $this->main['async_scripts'] ) ) {
-            $head_args['strategy'] = 'defer';
-        }
         /* ^ */
         wp_enqueue_script(
             'fupi-simpl-head-js',
             FUPI_URL . 'public/modules/simpl/fupi-simpl.js',
             array('fupi-helpers-js'),
             FUPI_VERSION,
-            $head_args
+            [
+                'in_footer' => false,
+                'strategy'  => 'async',
+            ]
         );
     }
 

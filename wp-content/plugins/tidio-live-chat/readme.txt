@@ -3,7 +3,7 @@ Contributors: tytus-tytus, lucastidio, marcingwizdala, kkopaczyktidio, ksladek, 
 Tags: free live chat, live chat, chat, chatbot, livechat, tidio, widget, zendesk, mailchimp, messenger
 Requires at least: 4.7
 Tested up to: 6.9
-Stable tag: 6.0.31
+Stable tag: 7.0.0
 Requires PHP: 7.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -211,6 +211,14 @@ Tidio offers six language versions: English, French, German, Spanish, Italian, a
 
 
 == Changelog ==
+
+= 7.0.0 =
+
+- Breaking Change: Async widget loading priority changed from PHP_INT_MAX to 1000 for compatibility with consent management and caching plugins. Use the `tidio_widget_footer_priority` filter to customize.
+
+= 6.1.0 =
+
+- Require read_write scope for WooCommerce integration
 
 = 6.0.31 =
 

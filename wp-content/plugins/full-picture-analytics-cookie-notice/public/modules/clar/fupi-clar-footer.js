@@ -1,4 +1,4 @@
-FP.fns.clar_woo_events = () => {
+function fupi_clar_woo_footer(){
 
 	// TRACK IMPRESSIONS
 
@@ -72,6 +72,8 @@ FP.fns.clar_woo_events = () => {
 		track_items( data, 'add to cart' );
 	} );
 
+	if ( fp.woo.cart_to_track ) track_items( fp.woo.cart_to_track, 'add to cart' ); // when ATC is tracked in cart
+
 	FP.addAction( ['woo_add_to_wishlist'], data => {
 		track_items( data, 'add to wishlist');
 	} );
@@ -128,9 +130,11 @@ FP.fns.clar_woo_events = () => {
 			})
 		};
 	}
+
+	FP.loaded('clar_woo_footer');
 };
 
-FP.fns.clar_standard_events = () => {
+function fupi_clar_footer(){
 
 	// TAG OUTBOUND LINKS
 
@@ -231,12 +235,9 @@ FP.fns.clar_standard_events = () => {
 			}
 		})
 	}
+
+	FP.loaded('clar_footer');
 };
 
-FP.fns.load_clar_footer = function() {
-	FP.fns.clar_standard_events();
-	if ( fp.loaded.includes('woo') ) FP.fns.clar_woo_events();
-}
-
-// INIT FOOTER SCRIPTS
-FP.enqueueFn( 'FP.fns.load_clar_footer' );
+FP.load('clar_footer', 'fupi_clar_footer', ['clar', 'footer_helpers']);
+FP.load('clar_woo_footer', 'fupi_clar_woo_footer', ['clar', 'footer_helpers', 'woo']);

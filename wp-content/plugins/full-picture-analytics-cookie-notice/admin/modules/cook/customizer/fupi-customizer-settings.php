@@ -3,7 +3,7 @@
 $cook = get_option( 'fupi_cook' );
 $tools = get_option( 'fupi_tools' );
 $main = get_option( 'fupi_main' );
-$priv_policy_url_text = '<p style="color: red;">' . esc_html__( 'Attention. Your privacy policy page is either not published or its ID is not set in the settings of the Consent Banner module', 'full-picture-analytics-cookie-notice' ) . '</p>';
+$priv_policy_url_text = '<p style="color: red;">' . esc_html__( 'Attention. Your privacy policy page is either not published or its ID is not added to the Consent Management module', 'full-picture-analytics-cookie-notice' ) . '</p>';
 if ( !empty( $cook['pp_id'] ) ) {
     $pp_id = (int) $cook['pp_id'];
     if ( get_post_status( $pp_id ) == 'publish' ) {
@@ -366,7 +366,7 @@ $wp_customize->add_control( 'fupi_cookie_notice[blur_page]', array(
     'active_callback' => $hide_when_banner_only_notifies,
 ) );
 // HIDE ELEMENTS
-$hide_descr = sprintf( esc_html__( 'Automatic setup of the consent banner is enabled. It will show / hide the "Decline" button depending on the visitor\'s location. %1$sLearn more%2$s', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/setting-up-the-cookie-notice/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">', '</a>' );
+$hide_descr = sprintf( esc_html__( 'Automatic setup of the consent banner is enabled. It will show / hide the "Decline" button depending on the visitor\'s location. %1$sLearn more%2$s', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/setting-up-the-cookie-notice/" target="_blank">', '</a>' );
 $hide_options = array(
     'settings_btn' => esc_html__( 'Hide "Settings" button & panel', 'full-picture-analytics-cookie-notice' ),
     'stats'        => esc_html__( 'Hide "statistics" section (in the "Settings" panel)', 'full-picture-analytics-cookie-notice' ),
@@ -374,7 +374,7 @@ $hide_options = array(
     'pers'         => esc_html__( 'Hide "personalisation" section (in the "Settings" panel)', 'full-picture-analytics-cookie-notice' ),
 );
 if ( !isset( $main['geo'] ) || !isset( $cook['auto_mode'] ) || $cook['auto_mode'] == 'off' ) {
-    $hide_descr = esc_html__( 'You can\'t hide both "Decline" and "Settings" buttons. If you don\'t want to give your visitors an option to decline cookies / tracking then, please go to the Consent Banner settings in the admin panel and change the notice mode to "only inform".', 'full-picture-analytics-cookie-notice' );
+    $hide_descr = esc_html__( 'You can\'t hide both "Decline" and "Settings" buttons. If you don\'t want to give your visitors an option to decline cookies / tracking then, please go to the Consent Banner settings in the Consent Management module and change the notice mode to "only inform".', 'full-picture-analytics-cookie-notice' );
     $decline_option = array(
         'decline_btn' => esc_html__( 'Hide "decline" button (does not comply with GDPR)', 'full-picture-analytics-cookie-notice' ),
     );
@@ -909,7 +909,7 @@ $wp_customize->add_setting( 'fupi_cookie_notice[notif_text]', array(
 ) );
 $wp_customize->add_control( 'fupi_cookie_notice[notif_text]', array(
     'label'       => esc_html__( 'Main notification', 'full-picture-analytics-cookie-notice' ),
-    'description' => esc_html__( 'Words wrapped with {{ }} will turn into a link to your privacy policy page. You can provide your own URL after "|" character, like this {{my link|https://example.com}}. You can also add shortcodes.', 'full-picture-analytics-cookie-notice' ) . $priv_policy_url_text,
+    'description' => sprintf( esc_html__( 'Words wrapped with {{ }} will turn into a link to your privacy policy page. You can provide your own URL after "|" character, like this {{my link|%1$s}}. You can also add shortcodes.', 'full-picture-analytics-cookie-notice' ), 'https://example.com' ) . $priv_policy_url_text,
     'section'     => 'fupi_notice_texts',
     'type'        => 'textarea',
 ) );
@@ -1104,7 +1104,7 @@ $wp_customize->add_setting( 'fupi_cookie_notice[necess_text]', array(
 ) );
 $wp_customize->add_control( 'fupi_cookie_notice[necess_text]', array(
     'label'           => esc_html__( '"Necessary cookies" section description (optional)', 'full-picture-analytics-cookie-notice' ),
-    'description'     => esc_html__( 'This text will show up at the top of the "Settings" panel.', 'full-picture-analytics-cookie-notice' ) . ' ' . esc_html__( 'Words wrapped with {{ }} will turn into links. You can provide the address after "|" character, like this {{my link|https://example.com}}. You can also add shortcodes.', 'full-picture-analytics-cookie-notice' ),
+    'description'     => sprintf( esc_html__( 'This text will show up at the top of the "Settings" panel.', 'full-picture-analytics-cookie-notice' ) . ' ' . esc_html__( 'Words wrapped with {{ }} will turn into links. You can provide the address after "|" character, like this {{my link|%1$s}}. You can also add shortcodes.', 'full-picture-analytics-cookie-notice' ), 'https://example.com' ),
     'section'         => 'fupi_notice_texts',
     'type'            => 'textarea',
     'active_callback' => function ( $control ) use($banner_only_notifies) {
@@ -1144,7 +1144,7 @@ $wp_customize->add_setting( 'fupi_cookie_notice[stats_text]', array(
 ) );
 $wp_customize->add_control( 'fupi_cookie_notice[stats_text]', array(
     'label'           => esc_html__( '"Statistics" section description', 'full-picture-analytics-cookie-notice' ),
-    'description'     => esc_html__( 'Leave empty to use default.', 'full-picture-analytics-cookie-notice' ) . ' ' . esc_html__( 'Words wrapped with {{ }} will turn into links. You can provide the address after "|" character, like this {{my link|https://example.com}}. You can also add shortcodes.', 'full-picture-analytics-cookie-notice' ),
+    'description'     => sprintf( esc_html__( 'Leave empty to use default.', 'full-picture-analytics-cookie-notice' ) . ' ' . esc_html__( 'Words wrapped with {{ }} will turn into links. You can provide the address after "|" character, like this {{my link|%1$s}}. You can also add shortcodes.', 'full-picture-analytics-cookie-notice' ), 'https://example.com' ),
     'section'         => 'fupi_notice_texts',
     'type'            => 'textarea',
     'active_callback' => function ( $control ) use($banner_only_notifies) {
@@ -1184,7 +1184,7 @@ $wp_customize->add_setting( 'fupi_cookie_notice[pers_text]', array(
 ) );
 $wp_customize->add_control( 'fupi_cookie_notice[pers_text]', array(
     'label'           => esc_html__( '"Personalisation" section description', 'full-picture-analytics-cookie-notice' ),
-    'description'     => esc_html__( 'Leave empty to use default.', 'full-picture-analytics-cookie-notice' ) . ' ' . esc_html__( 'Words wrapped with {{ }} will turn into links. You can provide the address after "|" character, like this {{my link|https://example.com}}. You can also add shortcodes.', 'full-picture-analytics-cookie-notice' ),
+    'description'     => sprintf( esc_html__( 'Leave empty to use default.', 'full-picture-analytics-cookie-notice' ) . ' ' . esc_html__( 'Words wrapped with {{ }} will turn into links. You can provide the address after "|" character, like this {{my link|%1$s}}. You can also add shortcodes.', 'full-picture-analytics-cookie-notice' ), 'https://example.com' ),
     'section'         => 'fupi_notice_texts',
     'type'            => 'textarea',
     'active_callback' => function ( $control ) use($banner_only_notifies) {
@@ -1224,7 +1224,7 @@ $wp_customize->add_setting( 'fupi_cookie_notice[marketing_text]', array(
 ) );
 $wp_customize->add_control( 'fupi_cookie_notice[marketing_text]', array(
     'label'           => esc_html__( '"Marketing" section description', 'full-picture-analytics-cookie-notice' ),
-    'description'     => esc_html__( 'Leave empty to use default.', 'full-picture-analytics-cookie-notice' ) . ' ' . esc_html__( 'Words wrapped with {{ }} will turn into links. You can provide the address after "|" character, like this {{my link|https://example.com}}. You can also add shortcodes.', 'full-picture-analytics-cookie-notice' ),
+    'description'     => sprintf( esc_html__( 'Leave empty to use default.', 'full-picture-analytics-cookie-notice' ) . ' ' . esc_html__( 'Words wrapped with {{ }} will turn into links. You can provide the address after "|" character, like this {{my link|%1$s}}. You can also add shortcodes.', 'full-picture-analytics-cookie-notice' ), 'https://example.com' ),
     'section'         => 'fupi_notice_texts',
     'type'            => 'textarea',
     'active_callback' => function ( $control ) use($banner_only_notifies) {

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Product Variations Swatches for WooCommerce\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-21 07:49+0000\n"
+"POT-Creation-Date: 2026-01-23 07:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -35,7 +35,7 @@ msgstr ""
 msgid "*Important: "
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:92
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:84
 msgid "<p>WooCommerce Product Variations Swatches will work better with:</p>"
 msgstr ""
 
@@ -47,8 +47,8 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:57
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:80
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:63
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:72
 msgid "Activate"
 msgstr ""
 
@@ -300,7 +300,7 @@ msgstr ""
 msgid "Display type"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:156
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:147
 msgid ""
 "Easily set unlimited images or videos for each WC product variation and "
 "display them when the customer selects"
@@ -508,21 +508,17 @@ msgstr ""
 msgid "Import Settings"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:72
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:53
 msgid "Install"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:151
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:142
 msgid ""
 "is currently inactive, external images added by this plugin(Post/product "
 "featured image, product gallery images...) will no longer work properly."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:162
-msgid "is currently inactive, the variation gallery setting will not be set."
-msgstr ""
-
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:160
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:151
 msgid "is what you need."
 msgstr ""
 
@@ -542,7 +538,7 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:159
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:150
 msgid ""
 "Looking for a plugin that lets you add unlimited images or videos to each "
 "WooCommerce product variation?"
@@ -572,7 +568,7 @@ msgstr ""
 msgid "Names can not be empty."
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:147
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:138
 msgid "Need to save your server storage?"
 msgstr ""
 
@@ -729,7 +725,7 @@ msgstr ""
 msgid "Save all settings of the attribute taxonomies on this page?"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:144
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:136
 msgid "Save storage by using external image URLs"
 msgstr ""
 
@@ -743,6 +739,10 @@ msgstr ""
 
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/settings.php:315
 msgid "Separator"
+msgstr ""
+
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:153
+msgid "Set unlimited images or videos for every WooCommerce product variation."
 msgstr ""
 
 #: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/admin.php:21
@@ -1041,7 +1041,7 @@ msgstr ""
 msgid "Width"
 msgstr ""
 
-#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:148
+#: D:/git/free-version/product-variations-swatches-for-woocommerce/product-variations-swatches-for-woocommerce/includes/admin/recommend.php:139
 msgid "will help you solve the problem by using external image URLs."
 msgstr ""
 

@@ -127,7 +127,7 @@ var wbte_pimpexp_help_widget={
 			var widget = jQuery('.wbte_pimpexp_help-widget');
 			var checkbox = jQuery('#wt_ds_help-widget_hidden_checkbox');
 
-			if (checkbox.is(':checked') && !widget.has(e.target).length && !widget.is(e.target)) {
+			if (checkbox.length && checkbox.is(':checked') && !widget.has(e.target).length && !widget.is(e.target)) {
 			  checkbox.prop('checked', false);
 			}
 		});

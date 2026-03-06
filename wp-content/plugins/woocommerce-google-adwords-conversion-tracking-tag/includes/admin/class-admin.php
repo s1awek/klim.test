@@ -43,7 +43,7 @@ class Admin {
         // Load textdomain
         add_action( 'init', [__CLASS__, 'load_plugin_textdomain'] );
         add_action( 'admin_head', [__CLASS__, 'output_cody_availability'] );
-        // output some info into the wpmDataLayer object in the header
+        // output some info into the pmwDataLayer object in the header
         add_action( 'admin_head', [__CLASS__, 'wpm_data_layer'] );
     }
 
@@ -116,7 +116,7 @@ class Admin {
         $data['version'] = Helpers::get_version_info();
         ?>
 		<script>
-			var wpmDataLayer = <?php 
+			var pmwDataLayer = <?php 
         echo wp_json_encode( $data );
         ?>;
 		</script>
@@ -131,7 +131,7 @@ class Admin {
     public static function freemius_enqueue_deactivation_button_js() {
         wp_enqueue_script(
             'freemius-enqueue-deactivation-button',
-            PMW_PLUGIN_DIR_PATH . 'js/admin/wpm-admin-freemius.p1.min.js',
+            PMW_PLUGIN_DIR_PATH . 'js/admin/pmw-admin-freemius.p1.min.js',
             ['jquery'],
             PMW_CURRENT_VERSION,
             true
@@ -158,11 +158,11 @@ class Admin {
     // endDeleteIf(wcMarketFree)
     public static function wpm_admin_css( $hook_suffix ) {
         // Only output the css on PMW pages and the order page
-        if ( !(strpos( $hook_suffix, 'page_wpm' ) || Helpers::is_orders_page() || Helpers::is_edit_order_page() || Helpers::is_dashboard()) ) {
+        if ( !(strpos( $hook_suffix, 'page_pmw' ) || Helpers::is_orders_page() || Helpers::is_edit_order_page() || Helpers::is_dashboard()) ) {
             return;
         }
         wp_enqueue_style(
-            'wpm-admin',
+            'pmw-admin',
             PMW_PLUGIN_DIR_PATH . 'css/admin.css',
             [],
             PMW_CURRENT_VERSION
@@ -171,17 +171,17 @@ class Admin {
 
     public static function wpm_admin_scripts( $hook_suffix ) {
         // Only output the remaining scripts on PMW settings page
-        if ( !strpos( $hook_suffix, 'page_wpm' ) ) {
+        if ( !strpos( $hook_suffix, 'page_pmw' ) ) {
             return;
         }
         wp_enqueue_script(
-            'wpm-admin',
-            PMW_PLUGIN_DIR_PATH . 'js/admin/wpm-admin.p1.min.js',
+            'pmw-admin',
+            PMW_PLUGIN_DIR_PATH . 'js/admin/pmw-admin.p1.min.js',
             ['jquery'],
             PMW_CURRENT_VERSION,
             false
         );
-        wp_localize_script( 'wpm-admin', 'pmwAdminApi', [
+        wp_localize_script( 'pmw-admin', 'pmwAdminApi', [
             'root'     => esc_url_raw( rest_url() ),
             'nonce'    => wp_create_nonce( 'wp_rest' ),
             'timezone' => [
@@ -189,18 +189,18 @@ class Admin {
                 'offset' => wp_timezone()->getOffset( new \DateTime() ) / 3600,
             ],
         ] );
-        //        wp_enqueue_script('wpm-script-blocker-warning', WPM_PLUGIN_DIR_PATH . 'js/admin/script-blocker-warning.js', ['jquery'], WPM_CURRENT_VERSION, false);
-        //        wp_enqueue_script('wpm-admin-helpers', WPM_PLUGIN_DIR_PATH . 'js/admin/helpers.js', ['jquery'], WPM_CURRENT_VERSION, false);
-        //        wp_enqueue_script('wpm-admin-tabs', WPM_PLUGIN_DIR_PATH . 'js/admin/tabs.js', ['jquery'], WPM_CURRENT_VERSION, false);
+        //        wp_enqueue_script('pmw-script-blocker-warning', WPM_PLUGIN_DIR_PATH . 'js/admin/script-blocker-warning.js', ['jquery'], WPM_CURRENT_VERSION, false);
+        //        wp_enqueue_script('pmw-admin-helpers', WPM_PLUGIN_DIR_PATH . 'js/admin/helpers.js', ['jquery'], WPM_CURRENT_VERSION, false);
+        //        wp_enqueue_script('pmw-admin-tabs', WPM_PLUGIN_DIR_PATH . 'js/admin/tabs.js', ['jquery'], WPM_CURRENT_VERSION, false);
         wp_enqueue_script(
-            'wpm-selectWoo',
+            'pmw-selectWoo',
             PMW_PLUGIN_DIR_PATH . 'js/admin/selectWoo.full.min.js',
             ['jquery'],
             PMW_CURRENT_VERSION,
             false
         );
         wp_enqueue_style(
-            'wpm-selectWoo',
+            'pmw-selectWoo',
             PMW_PLUGIN_DIR_PATH . 'css/selectWoo.min.css',
             [],
             PMW_CURRENT_VERSION
@@ -283,7 +283,7 @@ class Admin {
             esc_html__( 'Pixel Manager', 'woocommerce-google-adwords-conversion-tracking-tag' ),
             $menu_title,
             Environment::get_user_edit_capability(),
-            'wpm',
+            'pmw',
             [__CLASS__, 'plugin_options_page']
         );
     }
@@ -303,18 +303,109 @@ class Admin {
         if ( !Environment::is_pmw_settings_page() ) {
             return;
         }
-        self::add_section_main();
-        self::add_section_advanced();
-        if ( Environment::is_woocommerce_active() ) {
-            self::add_section_shop();
+        $tabs = self::get_admin_tabs();
+        foreach ( $tabs as $tab ) {
+            if ( isset( $tab['add_section_callback'] ) && is_callable( $tab['add_section_callback'] ) ) {
+                call_user_func( $tab['add_section_callback'] );
+            }
         }
-        self::add_section_consent_management();
-        self::add_section_opportunities();
+    }
+
+    /**
+     * Get the registered admin tabs, sorted by priority.
+     *
+     * Add-ons can use the 'pmw_admin_tabs' filter to register their own tabs.
+     *
+     * Each tab array should contain:
+     * - 'slug'                (string) Unique tab identifier
+     * - 'title'               (string) Display title
+     * - 'priority'            (int)    Sort order (lower = earlier)
+     * - 'show_save_button'    (bool)   Whether the save button is shown for this tab
+     * - 'add_section_callback' (callable) Function that registers the tab's settings sections and fields
+     * - 'option_name'         (string) Optional. The wp_options key this tab saves to (for add-on tabs)
+     * - 'sanitize_callback'   (callable) Optional. Validation/sanitize function for add-on tab data
+     *
+     * @return array Sorted array of tab configurations.
+     *
+     * @since 1.57.0
+     */
+    public static function get_admin_tabs() {
+        $tabs = [[
+            'slug'                 => 'main',
+            'priority'             => 10,
+            'show_save_button'     => true,
+            'add_section_callback' => [__CLASS__, 'add_section_main'],
+        ], [
+            'slug'                 => 'advanced',
+            'priority'             => 20,
+            'show_save_button'     => true,
+            'add_section_callback' => [__CLASS__, 'add_section_advanced'],
+        ]];
         if ( Environment::is_woocommerce_active() ) {
-            self::add_section_diagnostics();
+            $tabs[] = [
+                'slug'                 => 'shop',
+                'priority'             => 30,
+                'show_save_button'     => true,
+                'add_section_callback' => [__CLASS__, 'add_section_shop'],
+            ];
         }
-        self::add_section_support();
-        self::add_section_logs();
+        // SSE tab — requires active pro license
+        if ( Helpers::is_pmw_pro_version_active() || Options::is_pro_version_demo_active() ) {
+            $tabs[] = [
+                'slug'                 => 'sse',
+                'priority'             => 25,
+                'show_save_button'     => true,
+                'add_section_callback' => [__CLASS__, 'add_section_sse__premium_only'],
+            ];
+        }
+        $tabs[] = [
+            'slug'                 => 'consent-management',
+            'priority'             => 40,
+            'show_save_button'     => true,
+            'add_section_callback' => [__CLASS__, 'add_section_consent_management'],
+        ];
+        $tabs[] = [
+            'slug'                 => 'opportunities',
+            'priority'             => 70,
+            'show_save_button'     => false,
+            'add_section_callback' => [__CLASS__, 'add_section_opportunities'],
+        ];
+        if ( Environment::is_woocommerce_active() ) {
+            $tabs[] = [
+                'slug'                 => 'diagnostics',
+                'priority'             => 80,
+                'show_save_button'     => false,
+                'add_section_callback' => [__CLASS__, 'add_section_diagnostics'],
+            ];
+        }
+        $tabs[] = [
+            'slug'                 => 'support',
+            'priority'             => 90,
+            'show_save_button'     => false,
+            'add_section_callback' => [__CLASS__, 'add_section_support'],
+        ];
+        $tabs[] = [
+            'slug'                 => 'logger',
+            'priority'             => 100,
+            'show_save_button'     => true,
+            'add_section_callback' => [__CLASS__, 'add_section_logs'],
+        ];
+        /**
+         * Filter the admin settings tabs.
+         *
+         * Add-ons can use this filter to register their own tabs with custom
+         * priority, rendering, and save handling.
+         *
+         * @param array $tabs Array of tab configuration arrays.
+         *
+         * @since 1.57.0
+         */
+        $tabs = apply_filters( 'pmw_admin_tabs', $tabs );
+        // Sort by priority
+        usort( $tabs, function ( $a, $b ) {
+            return (( isset( $a['priority'] ) ? $a['priority'] : 50 )) - (( isset( $b['priority'] ) ? $b['priority'] : 50 ));
+        } );
+        return $tabs;
     }
 
     public static function add_section_main() {
@@ -376,6 +467,14 @@ class Admin {
             'wpm_plugin_hotjar_site_id',
             esc_html__( 'Hotjar site ID', 'woocommerce-google-adwords-conversion-tracking-tag' ),
             [__CLASS__, 'option_html_hotjar_site_id'],
+            'wpm_plugin_options_page',
+            $section_ids['settings_name']
+        );
+        // add the field for the CrazyEgg pixel
+        add_settings_field(
+            'wpm_plugin_crazyegg_account_number',
+            esc_html__( 'CrazyEgg account number', 'woocommerce-google-adwords-conversion-tracking-tag' ),
+            [__CLASS__, 'option_html_crazyegg_account_number'],
             'wpm_plugin_options_page',
             $section_ids['settings_name']
         );
@@ -624,14 +723,6 @@ class Admin {
                 'pmw_setting_lazy_load_pmw',
                 esc_html__( 'Lazy Load PMW', 'woocommerce-google-adwords-conversion-tracking-tag' ),
                 [__CLASS__, 'html_lazy_load_pmw'],
-                'wpm_plugin_options_page',
-                $section_ids['settings_name']
-            );
-            // Add option for tracking PageView events through s2s
-            add_settings_field(
-                'pmw_setting_track_pageview_events_s2s',
-                esc_html__( 'Track PageView Events Server-to-Server', 'woocommerce-google-adwords-conversion-tracking-tag' ) . self::html_beta(),
-                [__CLASS__, 'html_track_pageview_events_s2s'],
                 'wpm_plugin_options_page',
                 $section_ids['settings_name']
             );
@@ -1425,6 +1516,27 @@ class Admin {
         );
     }
 
+    /**
+     * Convert an SSP status slug to a human-readable label.
+     *
+     * @param string $status
+     *
+     * @return string
+     * @since 1.57.0
+     */
+    private static function ssp_status_label( $status ) {
+        $labels = [
+            'active'         => __( 'Active', 'woocommerce-google-adwords-conversion-tracking-tag' ),
+            'pending_dns'    => __( 'Pending DNS', 'woocommerce-google-adwords-conversion-tracking-tag' ),
+            'disabled'       => __( 'Disabled', 'woocommerce-google-adwords-conversion-tracking-tag' ),
+            'deleted'        => __( 'Deleted', 'woocommerce-google-adwords-conversion-tracking-tag' ),
+            'waiting_config' => __( 'Waiting for Config', 'woocommerce-google-adwords-conversion-tracking-tag' ),
+            'synced'         => __( 'Synced', 'woocommerce-google-adwords-conversion-tracking-tag' ),
+            'sync_error'     => __( 'Sync Error', 'woocommerce-google-adwords-conversion-tracking-tag' ),
+        ];
+        return ( isset( $labels[$status] ) ? $labels[$status] : __( 'Unknown', 'woocommerce-google-adwords-conversion-tracking-tag' ) );
+    }
+
     public static function add_section_support() {
         $section_ids = [
             'title'         => esc_html__( 'Support', 'woocommerce-google-adwords-conversion-tracking-tag' ),
@@ -1452,9 +1564,31 @@ class Admin {
         );
     }
 
+    /**
+     * Render the section marker div with data attributes for JS tab rendering.
+     *
+     * The priority and show-save-button attributes are looked up from the
+     * registered tabs configuration. If no matching tab is found, defaults
+     * are used (priority=50, show-save-button=true).
+     *
+     * @param array $section_ids Section configuration array with 'title', 'slug', and optional 'badge_count'.
+     *
+     * @since 1.57.0
+     */
     public static function section_generic_opening_div_html( $section_ids ) {
         $badge_count = ( isset( $section_ids['badge_count'] ) ? $section_ids['badge_count'] : 0 );
-        echo '<div class="section" data-section-title="' . esc_js( $section_ids['title'] ) . '" data-section-slug="' . esc_js( $section_ids['slug'] ) . '" data-badge-count="' . esc_attr( $badge_count ) . '"></div>';
+        $priority = 50;
+        $show_save_button = true;
+        // Look up priority and show_save_button from the registered tabs
+        $tabs = self::get_admin_tabs();
+        foreach ( $tabs as $tab ) {
+            if ( $tab['slug'] === $section_ids['slug'] ) {
+                $priority = ( isset( $tab['priority'] ) ? $tab['priority'] : 50 );
+                $show_save_button = ( isset( $tab['show_save_button'] ) ? $tab['show_save_button'] : true );
+                break;
+            }
+        }
+        echo '<div class="section"' . ' data-section-title="' . esc_js( $section_ids['title'] ) . '"' . ' data-section-slug="' . esc_js( $section_ids['slug'] ) . '"' . ' data-badge-count="' . esc_attr( $badge_count ) . '"' . ' data-priority="' . esc_attr( $priority ) . '"' . ' data-show-save-button="' . esc_attr( ( $show_save_button ? '1' : '0' ) ) . '"' . '></div>';
     }
 
     public static function subsection_generic_opening_div_html( $section_ids, $sub_section_ids ) {
@@ -1485,40 +1619,65 @@ class Admin {
         }
         ?>
 
-		<div id="script-blocker-notice" style="
-			 font-weight: bold;
-			 width:90%;
-			 float: left;
-			 margin: 5px 15px 2px;
-			 padding: 1px 12px;
-			 background: #fff;
-			 border: 1px solid #c3c4c7;
-			 border-left-width: 4px;
-			 border-left-color: #d63638;
-			 box-shadow: 0 1px 1px rgb(0 0 0 / 4%);">
-			<p>
-				<?php 
-        esc_html_e( 'It looks like you are using some sort of ad- or script-blocker in your browser which is blocking the script and CSS files of this plugin.
-                    In order for the plugin to work properly you need to disable the script blocker in your browser.', 'woocommerce-google-adwords-conversion-tracking-tag' );
+		<div id="script-blocker-notice"
+			 class="notice notice-error pmw script-blocker-notice"
+			 style="display: none; padding: 12px 16px; flex-direction: row; justify-content: space-between; align-items: flex-start; border-left-color: #dc3545;">
+			<div>
+				<div style="color: black; margin-bottom: 8px;">
+					<strong style="font-size: 14px;">
+						<?php 
+        esc_html_e( '⚠️ Script Blocker Detected', 'woocommerce-google-adwords-conversion-tracking-tag' );
         ?>
-			</p>
-			<p>
+					</strong>
+				</div>
+				<div style="color: #444; margin-bottom: 10px;">
+					<?php 
+        esc_html_e( 'It looks like you are using an ad- or script-blocker in your browser which is blocking the script and CSS files of this plugin.', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        ?>
+				</div>
+
+				<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+					<span style="display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 3px; font-size: 12px; font-weight: 500; background: #fde8e8; border: 1px solid #f56565; color: #c53030;">
+						<?php 
+        esc_html_e( 'Plugin functionality may be impaired', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        ?>
+					</span>
+				</div>
+
+				<div style="color: #444; margin-bottom: 12px;">
+					<?php 
+        esc_html_e( 'Please disable the script blocker for this site to ensure the plugin works correctly.', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        ?>
+				</div>
+
 				<a href="<?php 
         echo esc_url( Documentation::get_link( 'script_blockers' ) );
-        ?>" target="_blank">
-					<?php 
+        ?>"
+				   target="_blank"
+				   style="text-decoration: none; box-shadow: none;">
+					<div class="button button-primary" style="margin: 0;">
+						<?php 
         esc_html_e( 'Learn more', 'woocommerce-google-adwords-conversion-tracking-tag' );
         ?>
+					</div>
 				</a>
-			</p>
-
-			<script>
-				if (typeof wpm_hide_script_blocker_warning === "function") {
-					wpm_hide_script_blocker_warning();
-				}
-			</script>
-
+			</div>
 		</div>
+
+		<script>
+			// Detect if PMW admin script is blocked.
+			// Wait for window.load (all resources finished), then check if the script set its flag.
+			window.addEventListener('load', function() {
+				setTimeout(function() {
+					if (!window.pmwAdminScriptLoaded) {
+						var notice = document.getElementById('script-blocker-notice');
+						if (notice) {
+							notice.style.display = 'flex';
+						}
+					}
+				}, 500);
+			});
+		</script>
 
 		<div style="width:90%; margin: 5px">
 
@@ -1532,11 +1691,20 @@ class Admin {
 
 			<h2 class="nav-tab-wrapper"></h2>
 
-			<form id="wpm_settings_form" action="options.php" method="post">
+			<form id="pmw_settings_form" method="post">
 
 				<?php 
-        settings_fields( 'wpm_plugin_options_group' );
+        // Keep nonce for REST save validation
+        wp_nonce_field( 'pmw_settings_save', 'pmw_settings_nonce' );
         do_settings_sections( 'wpm_plugin_options_page' );
+        /**
+         * Fires after PMW's own settings sections have been rendered,
+         * but before the submit button. Add-on plugins should use
+         * this hook to output their settings fields.
+         *
+         * @since 1.57.0
+         */
+        do_action( 'pmw_admin_settings_after_sections' );
         submit_button();
         self::inject_developer_banner();
         ?>
@@ -2047,7 +2215,7 @@ class Admin {
 				<div class="pmw-export-buttons">
 					<button id="export-to-disk-button" class="button button-primary"
 							type="button"
-							onclick="wpm.saveSettingsToDisk()">
+							onclick="pmw.saveSettingsToDisk()">
 						<?php 
         esc_html_e( 'Export to disk', 'woocommerce-google-adwords-conversion-tracking-tag' );
         ?>
@@ -2294,16 +2462,16 @@ class Admin {
                 $db_version = ( isset( $settings['db_version'] ) ? esc_html( $settings['db_version'] ) : esc_html__( 'Unknown', 'woocommerce-google-adwords-conversion-tracking-tag' ) );
                 // Check if this backup is currently active
                 $is_active = null !== $current_timestamp && $timestamp == $current_timestamp;
-                $row_class = ( $is_active ? ' style="background-color: #e8f5e8; font-weight: bold;"' : '' );
-                echo '<tr' . esc_html( $row_class ) . '>';
+                $row_class = ( $is_active ? ' class="pmw-active-row"' : '' );
+                echo '<tr' . esc_attr( $row_class ) . '>';
                 echo '<td><code class="pmw-timestamp-id">' . esc_html( $timestamp ) . '</code></td>';
                 echo '<td>' . esc_html( $readable_date ) . '</td>';
                 echo '<td><span class="pmw-db-version">' . esc_html( $db_version ) . '</span></td>';
                 // Status column
                 if ( $is_active ) {
-                    echo '<td><span class="pmw-active-status">● ' . esc_html__( 'Active', 'woocommerce-google-adwords-conversion-tracking-tag' ) . '</span></td>';
+                    echo '<td><span class="pmw-active-status">' . esc_html__( 'Active', 'woocommerce-google-adwords-conversion-tracking-tag' ) . '</span></td>';
                 } else {
-                    echo '<td><span class="pmw-backup-status">○ ' . esc_html__( 'Backup', 'woocommerce-google-adwords-conversion-tracking-tag' ) . '</span></td>';
+                    echo '<td><span class="pmw-backup-status">' . esc_html__( 'Backup', 'woocommerce-google-adwords-conversion-tracking-tag' ) . '</span></td>';
                 }
                 // Restore button - disabled for active backup
                 if ( $is_active ) {
@@ -2321,220 +2489,6 @@ class Admin {
         }
         ?>
 			</div> <!-- Close .pmw-backup-content -->
-			<style>
-                /* Backup section styling */
-                .pmw-backup-section {
-                    margin: 20px 0;
-                    padding: 0;
-                }
-
-                .pmw-backup-heading {
-                    margin-bottom: 10px;
-                    font-size: 1.5em;
-                    color: #23282d;
-                }
-
-                .pmw-backup-description {
-                    margin-bottom: 20px;
-                    color: #646970;
-                    font-size: 14px;
-                    max-width: 800px;
-                }
-
-                .pmw-no-backups-message {
-                    padding: 20px;
-                    background-color: #f8f9fa;
-                    border: 1px solid #e2e4e7;
-                    border-radius: 4px;
-                    text-align: center;
-                    color: #646970;
-                }
-
-                /* Table styling */
-                .pmw-table-container {
-                    margin-top: 20px;
-                    max-width: 100%;
-                    overflow-x: auto;
-                    background: #fff;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-                    padding: 2px;
-                }
-
-                .pmw-backup-table {
-                    border-collapse: separate;
-                    border-spacing: 0;
-                    width: 100%;
-                    border: 1px solid #e2e4e7;
-                    background-color: #fff;
-                    font-size: 14px;
-                    border-radius: 6px;
-                }
-
-                .pmw-backup-table th {
-                    background: linear-gradient(to bottom, #f9f9f9, #f0f0f0);
-                    border-bottom: 1px solid #ddd;
-                    padding: 12px 15px;
-                    text-align: left;
-                    font-weight: 600;
-                    color: #23282d;
-                    white-space: nowrap;
-                }
-
-                .pmw-backup-table th:first-child {
-                    border-top-left-radius: 6px;
-                }
-
-                .pmw-backup-table th:last-child {
-                    border-top-right-radius: 6px;
-                }
-
-                .pmw-timestamp-id {
-                    background: #f1f1f1;
-                    padding: 4px 8px;
-                    border-radius: 4px;
-                    font-size: 0.9em;
-                    color: #555;
-                    display: inline-block;
-                    font-family: monospace;
-                    border: 1px solid #e0e0e0;
-                }
-
-                .pmw-backup-table td {
-                    padding: 14px 15px;
-                    border-bottom: 1px solid #f0f0f0;
-                    vertical-align: middle;
-                    transition: background-color 0.15s ease;
-                }
-
-                .pmw-backup-table tr:last-child td {
-                    border-bottom: none;
-                }
-
-                .pmw-backup-table tr:last-child td:first-child {
-                    border-bottom-left-radius: 6px;
-                }
-
-                .pmw-backup-table tr:last-child td:last-child {
-                    border-bottom-right-radius: 6px;
-                }
-
-                .pmw-backup-table tr:hover {
-                    background-color: #f7fafd;
-                }
-
-                /* Active row styling */
-                .pmw-backup-table tr[style*="background-color: #e8f5e8"] {
-                    background: linear-gradient(to right, #f0fff3, #f9fcfa) !important;
-                    position: relative;
-                }
-
-                .pmw-backup-table tr[style*="background-color: #e8f5e8"] td:first-child {
-                    position: relative;
-                }
-
-                .pmw-backup-table tr[style*="background-color: #e8f5e8"] td:first-child:before {
-                    content: "";
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    height: 100%;
-                    width: 4px;
-                    background-color: #46b450;
-                    border-top-left-radius: 4px;
-                    border-bottom-left-radius: 4px;
-                }
-
-                .pmw-backup-table tr[style*="background-color: #e8f5e8"]:hover {
-                    background: linear-gradient(to right, #e8f5e8, #f0fff3) !important;
-                }
-
-                /* DB Version styling */
-                .pmw-db-version {
-                    display: inline-block;
-                    padding: 3px 8px;
-                    background-color: #f0f0f0;
-                    border-radius: 12px;
-                    font-size: 0.9em;
-                    border: 1px solid #e5e5e5;
-                }
-
-                /* Button styling */
-                .pmw-backup-table .button {
-                    min-width: 90px;
-                    text-align: center;
-                    padding: 5px 14px;
-                    height: auto;
-                    font-weight: 500;
-                    transition: all 0.2s ease;
-                    border-radius: 4px;
-                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-                }
-
-                .pmw-backup-table .button:hover {
-                    transform: translateY(-1px);
-                    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
-                }
-
-                .pmw-backup-table .button-primary {
-                    background-color: #2271b1;
-                    border-color: #2271b1;
-                }
-
-                .pmw-backup-table .button-primary:hover {
-                    background-color: #135e96;
-                    border-color: #135e96;
-                }
-
-                .pmw-backup-table .pmw-restore-backup-button {
-                    background-color: #f8f8f8;
-                    border-color: #c3c4c7;
-                    color: #2c3338;
-                }
-
-                .pmw-backup-table .pmw-restore-backup-button:hover {
-                    background-color: #f0f0f0;
-                    border-color: #8c8f94;
-                    color: #000;
-                }
-
-                .pmw-backup-table .button:disabled {
-                    cursor: not-allowed;
-                    opacity: 0.65;
-                    transform: none !important;
-                    box-shadow: none !important;
-                }
-
-                /* Status indicators */
-                .pmw-backup-table .pmw-active-status {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 5px;
-                    font-weight: 600;
-                    color: #2e7d32;
-                    background-color: #f0fff4;
-                    border: 1px solid #c6e6c9;
-                    padding: 4px 12px;
-                    border-radius: 20px;
-                    font-size: 13px;
-                    letter-spacing: 0.2px;
-                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-                }
-
-                .pmw-backup-table .pmw-backup-status {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 5px;
-                    color: #626262;
-                    background-color: #f8f8f8;
-                    border: 1px solid #e0e0e0;
-                    padding: 4px 12px;
-                    border-radius: 20px;
-                    font-size: 13px;
-                    letter-spacing: 0.2px;
-                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-                }
-			</style>
 		</div>
 
 		<!-- Automatic Settings Backup -->
@@ -2573,7 +2527,7 @@ class Admin {
             ?>
 							</div>
 							<div>
-								<button type="button" class="button button-primary" onclick="wpm.loadAiChatWindow()">
+								<button type="button" class="button button-primary" onclick="pmw.loadAiChatWindow()">
 									<?php 
             esc_html_e( 'Chat', 'woocommerce-google-adwords-conversion-tracking-tag' );
             ?>
@@ -3457,6 +3411,28 @@ class Admin {
         echo '&nbsp;<code>1234567</code>';
     }
 
+    public static function option_html_crazyegg_account_number() {
+        ?>
+		<input class="pmw mono"
+			   id="wpm_plugin_crazyegg_account_number"
+			   name="wgact_plugin_options[crazyegg][account_number]"
+			   size="40"
+			   type="text"
+			   value="<?php 
+        echo esc_html( Options::get_crazyegg_account_number() );
+        ?>"
+			   onclick="this.select();"
+		/>
+		<?php 
+        self::display_status_icon( Options::is_crazyegg_enabled() );
+        self::get_documentation_html_by_key( 'crazyegg_account_number' );
+        echo '<br><br>';
+        esc_html_e( 'The CrazyEgg account number looks similar to this:', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        echo '&nbsp;<code>01319772</code>';
+        echo '<br>';
+        esc_html_e( 'You can also paste the entire tracking script and the account number will be extracted automatically.', 'woocommerce-google-adwords-conversion-tracking-tag' );
+    }
+
     /**
      * 2023.09.11: Reddit renamed the advertiser ID to pixel ID.
      * Don't change the database key, because that would break the plugin for existing users.
@@ -3940,7 +3916,7 @@ class Admin {
         esc_html_e( "Only activate the Explicit Consent Mode if you are also using a Consent Management Platform (a cookie banner) that is compatible with the Pixel Manager. Here's a list of compatible plugins:", 'woocommerce-google-adwords-conversion-tracking-tag' );
         ?>
 			<a
-					href="https://sweetcode.com/docs/wpm/consent-management/platforms"
+					href="https://sweetcode.com/docs/pmw/consent-management/platforms"
 					target="_blank"><?php 
         esc_html_e( 'Compatible Consent Management Platforms (CMPs)', 'woocommerce-google-adwords-conversion-tracking-tag' );
         ?></a>
@@ -3949,7 +3925,7 @@ class Admin {
         esc_html_e( 'You can also use our Consent API to make your custom cookie banner compatible with the Pixel Manager:', 'woocommerce-google-adwords-conversion-tracking-tag' );
         ?>
 			<a
-					href="https://sweetcode.com/docs/wpm/consent-management/api"
+					href="https://sweetcode.com/docs/pmw/consent-management/api"
 					target="_blank"><?php 
         esc_html_e( 'Consent API', 'woocommerce-google-adwords-conversion-tracking-tag' );
         ?></a>
@@ -5285,6 +5261,9 @@ class Admin {
         checked( Options::is_pageview_events_s2s_active() );
         ?>
 				<?php 
+        disabled( Options::is_pageview_events_s2s_active_override() );
+        ?>
+				<?php 
         echo esc_html( self::disable_if_demo() );
         ?>
 			/>
@@ -5297,6 +5276,15 @@ class Admin {
         self::display_status_icon( Options::is_pageview_events_s2s_active(), Options::server_2_server_enabled(), true );
         ?>
 		<?php 
+        if ( Options::is_pageview_events_s2s_active_override() ) {
+            ?>
+			<?php 
+            self::html_status_icon_override();
+            ?>
+		<?php 
+        }
+        ?>
+		<?php 
         self::get_documentation_html_by_key( 'pageview_events_s2s' );
         ?>
 		<?php 
@@ -5304,7 +5292,82 @@ class Admin {
         ?>
 
 		<?php 
-        if ( Options::is_pageview_events_s2s_active() && !Options::server_2_server_enabled() ) {
+        if ( Options::is_pageview_events_s2s_active_override() ) {
+            ?>
+			<p style="margin-top: 10px">
+				<span class="dashicons dashicons-info"></span>
+				<?php 
+            esc_html_e( 'Automatically enabled because the SweetCode Server-Side Proxy is active. PageView events are sent through the proxy without adding load to your WooCommerce server.', 'woocommerce-google-adwords-conversion-tracking-tag' );
+            ?>
+			</p>
+		<?php 
+        } elseif ( Options::is_pageview_events_s2s_active() && !Options::server_2_server_enabled() ) {
+            ?>
+			<p>
+				<span class="dashicons dashicons-info"></span>
+				<?php 
+            esc_html_e( 'For this feature to be used, at least one server-to-server feature, like Facebook CAPI must be enabled.', 'woocommerce-google-adwords-conversion-tracking-tag' );
+            ?>
+			</p>
+		<?php 
+        }
+        ?>
+		<?php 
+        if ( !Options::is_pageview_events_s2s_active_override() ) {
+            ?>
+			<p style="margin-top: 10px">
+				<span class="dashicons dashicons-info"></span>
+				<?php 
+            esc_html_e( 'Enabling this feature is encouraged by some platforms like Meta (Facebook). But, it will add a lot of stress to your server, because it will have to run on every PageView.', 'woocommerce-google-adwords-conversion-tracking-tag' );
+            ?>
+			</p>
+		<?php 
+        }
+        ?>
+		<?php 
+    }
+
+    /**
+     * HTML output for the always send S2S events toggle.
+     *
+     * When enabled, server-side events are sent to ad platforms even when
+     * browser-side pixels haven't loaded (e.g. due to a consent manager).
+     * Browser-side tracking remains unaffected.
+     *
+     * @since 1.57.0
+     */
+    public static function html_always_send_s2s() {
+        // adding the hidden input is a hack to make WordPress save the option with the value zero,
+        // instead of not saving it and remove that array key entirely
+        // https://stackoverflow.com/a/1992745/4688612
+        ?>
+		<label>
+			<input type="hidden" value="0" name="wgact_plugin_options[general][always_send_s2s]">
+			<input type="checkbox"
+				   id="pmw_setting_always_send_s2s"
+				   name="wgact_plugin_options[general][always_send_s2s]"
+				   value="1"
+				<?php 
+        checked( Options::is_always_send_s2s_active() );
+        ?>
+				<?php 
+        echo esc_html( self::disable_if_demo() );
+        ?>
+			/>
+
+			<?php 
+        esc_html_e( 'Always send server-side events, even when browser-side pixels have not loaded', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        ?>
+		</label>
+		<?php 
+        self::display_status_icon( Options::is_always_send_s2s_active(), Options::server_2_server_enabled(), true );
+        ?>
+		<?php 
+        self::html_pro_feature();
+        ?>
+
+		<?php 
+        if ( Options::is_always_send_s2s_active() && !Options::server_2_server_enabled() ) {
             ?>
 			<p>
 				<span class="dashicons dashicons-info"></span>
@@ -5318,7 +5381,7 @@ class Admin {
 		<p style="margin-top: 10px">
 			<span class="dashicons dashicons-info"></span>
 			<?php 
-        esc_html_e( 'Enabling this feature is encouraged by some platforms like Meta (Facebook). But, it will add a lot of stress to your server, because it will have to run on every PageView.', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        esc_html_e( 'When enabled, server-side events are sent to ad platforms even when browser-side pixels have not loaded (e.g. due to a consent manager). Browser-side tracking remains unaffected — only server-side events are sent independently. Useful for platforms that support cookieless or limited-data server-side integrations.', 'woocommerce-google-adwords-conversion-tracking-tag' );
         ?>
 		</p>
 		<?php 
@@ -5988,7 +6051,7 @@ class Admin {
     }
 
     private static function html_experiment() {
-        return '<div class="pmw-status-icon beta">' . esc_html__( 'experiment', 'woocommerce-google-adwords-conversion-tracking-tag' ) . '</div>';
+        return '<div class="pmw-status-icon beta" style="vertical-align: middle; margin-top: -2px">' . esc_html__( 'beta', 'woocommerce-google-adwords-conversion-tracking-tag' ) . '</div>';
     }
 
     private static function html_beta_e( $margin_top = '1px' ) {

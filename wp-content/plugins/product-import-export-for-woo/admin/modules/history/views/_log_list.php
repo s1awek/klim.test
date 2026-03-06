@@ -90,7 +90,7 @@ if(isset($_GET['wt_iew_delete_log']))
 	{
 		?>
 		<h4 class="wt_iew_history_no_records"><?php esc_html_e( "No logs found.", 'product-import-export-for-woo' ); ?>
-			<?php if ( Wt_Import_Export_For_Woo_Basic_Common_Helper::get_advanced_settings( 'enable_import_log' ) == 0 ): ?>		
+			<?php if ( Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::get_advanced_settings( 'enable_import_log' ) == 0 ): ?>		
 				<span> <?php esc_html_e( 'Please enable import log under', 'product-import-export-for-woo' ); ?> <a target="_blank" href="<?php echo esc_url(admin_url( 'admin.php?page=wt_import_export_for_woo_basic' )); ?>"><?php esc_html_e( 'settings', 'product-import-export-for-woo' ); ?></a></span>		
 			<?php endif; ?>
 		</h4>

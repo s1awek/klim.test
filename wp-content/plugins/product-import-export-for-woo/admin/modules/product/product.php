@@ -10,10 +10,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-if(!class_exists('Wt_Import_Export_For_Woo_Basic_Product')){
+if(!class_exists('Wt_Import_Export_For_Woo_Product_Basic_Product')){
 
 #[AllowDynamicProperties]
-class Wt_Import_Export_For_Woo_Basic_Product {
+class Wt_Import_Export_For_Woo_Product_Basic_Product {
 
     public $module_id = '';
     public static $module_id_static = '';
@@ -39,7 +39,7 @@ class Wt_Import_Export_For_Woo_Basic_Product {
         /**
         *   Checking the minimum required version of `Import export plugin` plugin available
         */
-        if(!Wt_Import_Export_For_Woo_Basic_Common_Helper::check_base_version($this->module_base, $this->module_name, $this->min_base_version))
+        if(!Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::check_base_version($this->module_base, $this->module_name, $this->min_base_version))
         {
             return;
         }
@@ -52,7 +52,7 @@ class Wt_Import_Export_For_Woo_Basic_Product {
             return;
         }
 
-        $this->module_id = Wt_Import_Export_For_Woo_Basic::get_module_id($this->module_base);
+        $this->module_id = Wt_Import_Export_For_Woo_Product_Basic::get_module_id($this->module_base);
         self::$module_id_static = $this->module_id;
 
         add_filter('wt_iew_exporter_post_types_basic', array($this, 'wt_iew_exporter_post_types_basic'), 10, 1);
@@ -911,7 +911,7 @@ class Wt_Import_Export_For_Woo_Basic_Product {
 
         if (!empty($results)) {
             foreach ($results as $_product_attributes) { 
-                $attributes = Wt_Import_Export_For_Woo_Basic_Common_Helper::wt_unserialize_safe($_product_attributes);
+                $attributes = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_unserialize_safe($_product_attributes);
                 if (!empty($attributes) && is_array($attributes)) {
                     foreach ($attributes as $key => $attribute) {
                         if (!$key) {
@@ -1242,4 +1242,4 @@ class Wt_Import_Export_For_Woo_Basic_Product {
 }
 }
 
-new Wt_Import_Export_For_Woo_Basic_Product();
+new Wt_Import_Export_For_Woo_Product_Basic_Product();

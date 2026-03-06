@@ -329,6 +329,7 @@ if ( ! class_exists( 'WooFeedWebAppickAPI' ) ) {
 				?>
 				<div class="woo-feed-notice notice notice-info" style="line-height:1.5;" data-which="rating" data-nonce="<?php echo esc_attr( $nonce ); ?>">
 					<form method="post">
+						<?php wp_nonce_field( 'woo_feed_pro_notice_nonce', '_wpnonce' ); ?>
 						<p>
 						<?php
 							printf(
@@ -428,6 +429,31 @@ if ( ! class_exists( 'WooFeedWebAppickAPI' ) ) {
 		 * Show Review request admin notice
 		 */
 		public function woo_feed_save_review_notice() {
+			// Check if there's any form submission or AJAX request to process
+			$has_form_data = isset( $_POST['woo_feed_review_notice_submit'] ) ||
+			                 isset( $_POST['woo_feed_review_notice_btn_given'] ) ||
+			                 isset( $_POST['woo_feed_review_notice_btn_never'] ) ||
+			                 isset( $_POST['woo_feed_review_notice_btn_done'] ) ||
+			                 isset( $_POST['woo_feed_review_notice_btn_later'] ) ||
+			                 isset( $_POST['notice'] ); // AJAX request
+
+			// If no data to process, return early
+			if ( ! $has_form_data ) {
+				return;
+			}
+
+			if ( ! current_user_can( 'manage_woocommerce' ) ) {
+				woo_feed_log_debug_message( 'User doesnt have enough permission.' );
+				wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ), 403 );
+				die();
+			}
+
+			// Verify nonce for security - handles both form (_wpnonce) and AJAX (_ajax_nonce) requests
+			if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ?? $_POST['_ajax_nonce'] ?? '' ) ), 'woo_feed_pro_notice_nonce' ) ) {
+				wp_send_json_error( esc_html__( 'Security check failed.', 'woo-feed' ), 403 );
+				die();
+			}
+
 			$user_id = get_current_user_id();
 
 			$woo_feed_review_notice_submit    = isset( $_POST['woo_feed_review_notice_submit'] ) ? 1 : '';
@@ -471,6 +497,11 @@ if ( ! class_exists( 'WooFeedWebAppickAPI' ) ) {
 		 */
 		public function woo_feed_hide_notice() {
 			check_ajax_referer( 'woo_feed_pro_notice_nonce' );
+            if ( ! current_user_can( 'manage_woocommerce' ) ) {
+                woo_feed_log_debug_message( 'User doesnt have enough permission.' );
+                wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ),403 );
+                die();
+            }
 			$notices = array( 'rp-wcdpd', 'wpml', 'rating', 'product_limit' );
 			if ( isset( $_REQUEST['which'] ) && ! empty( $_REQUEST['which'] ) && in_array( $_REQUEST['which'], $notices ) ) {
 				$which = sanitize_text_field( $_REQUEST['which'] ); //phpcs:ignore

@@ -179,6 +179,21 @@ class Fupi_Admin {
                     true
                 );
             }
+            // Enqueue UTM parameter variables
+            $fupi_version = str_replace( '.', '_', $this->version );
+            $fupi_licence = ( fupi_fs()->can_use_premium_code() ? 'pro' : 'free' );
+            wp_add_inline_script( 'fupi-admin-helpers-js', "\r\n\t\t\t\twindow.fupi_version = '{$fupi_version}';\r\n\t\t\t\twindow.fupi_licence = '{$fupi_licence}';\r\n\t\t\t", 'before' );
+            // Localize script for conflict checker
+            wp_localize_script( 'fupi-admin-js', 'fupi_conflicts_data', array(
+                'nonce'    => wp_create_nonce( 'fupi_check_conflicts_nonce' ),
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
+                'i18n'     => array(
+                    'checking'       => esc_html__( 'Checking...', 'full-picture-analytics-cookie-notice' ),
+                    'error_occurred' => esc_html__( 'An error occurred while checking for conflicts. Please try again.', 'full-picture-analytics-cookie-notice' ),
+                    'no_conflicts'   => esc_html__( 'No conflicts detected! Your setup looks good.', 'full-picture-analytics-cookie-notice' ),
+                    'error_generic'  => esc_html__( 'An error occurred while checking for conflicts.', 'full-picture-analytics-cookie-notice' ),
+                ),
+            ) );
         }
         // REPORTS PAGE
         // this cannot be called in the reports-admin since reports page is also shown when plausible stats are enabled
@@ -219,7 +234,7 @@ class Fupi_Admin {
         // Main menu item text
         $fupi_page_title = ( !empty( $this->main ) && isset( $this->main['custom_menu_title'] ) ? esc_attr( $this->main['custom_menu_title'] ) : "WP Full Picture" );
         $show_main = false;
-        // MAIN PAGE
+        // MAIN PAGE - now points to Home
         add_menu_page(
             'WP Full Picture',
             // page title
@@ -227,11 +242,25 @@ class Fupi_Admin {
             // menu title
             $this->user_cap,
             // capability
-            'full_picture_tools',
-            // menu slug
-            array($this, 'fupi_display_admin_page'),
+            'full_picture_home',
+            // menu slug - changed to home
+            array($this, 'fupi_display_home_page'),
+            // changed to home display method
             'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+Cjxzdmcgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDU5NSA2MzciIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeG1sbnM6c2VyaWY9Imh0dHA6Ly93d3cuc2VyaWYuY29tLyIgc3R5bGU9ImZpbGwtcnVsZTpldmVub2RkO2NsaXAtcnVsZTpldmVub2RkO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2UtbWl0ZXJsaW1pdDoyOyI+CiAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgyLjk5NTM2LDAsMCwyLjk5NTM2LC01NTcuMzQ0LC04NjYuNTA0KSI+CiAgICAgICAgPHBhdGggZD0iTTM2My43ODQsNDk4LjQ5MkwzMzkuOTI5LDQ3NC42NzJDMzM5LjMzNCw0NzQuMDcgMzM4LjgxMSw0NzMuNDMyIDMzOC4zODgsNDcyLjc1MkMzMjMuMDYsNDgyLjQxOCAzMDQuOTAyLDQ4OC4wMjIgMjg1LjQzOSw0ODguMDIyQzIzMC41NzcsNDg4LjAyMiAxODYuMDQ4LDQ0My41IDE4Ni4wNjksMzg4LjY2NkMxODYuMDU1LDMzMy43OTcgMjMwLjU4NCwyODkuMjgyIDI4NS40MjUsMjg5LjI4MkMzNDAuMjgsMjg5LjI3NSAzODQuODA5LDMzMy43OTcgMzg0LjgwMiwzODguNjY2QzM4NC44MDksNDE1Ljg0IDM3My44ODEsNDQwLjQ3NiAzNTYuMTc0LDQ1OC40MzRMMzgwLjAzNyw0ODIuMjU0QzM4NC40ODcsNDg2Ljc1NCAzODQuNTA4LDQ5NC4wMiAzODAuMDIyLDQ5OC40OTJDMzc1LjU0NCw1MDIuOTkyIDM2OC4yNjMsNTAyLjk5MiAzNjMuNzg0LDQ5OC40OTJaTTM2NC4wMzUsMzg4LjY1MkMzNjQuMDM1LDM0NS43NjQgMzI5LjI0NCwzMTAuOTk1IDI4Ni4zODUsMzEwLjk5NUMyNDMuNTExLDMxMC45OTUgMjA4LjcxMywzNDUuNzcxIDIwOC43MTMsMzg4LjY2NkMyMDguNzEzLDQzMS41MjYgMjQzLjUwNCw0NjYuMzE3IDI4Ni4zNjMsNDY2LjMxN0MzMjkuMjQ0LDQ2Ni4zMTcgMzY0LjA0Miw0MzEuNTI2IDM2NC4wMzUsMzg4LjY1MloiLz4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDIuOTk1MzYsMCwwLDIuOTk1MzYsLTU1Ny4zNDQsLTc1Ni4yOTYpIj4KICAgICAgICA8cGF0aCBkPSJNMjM2Ljc5NywzNjkuNDk3TDIzNi43OTcsMzg1Ljk3N0MyMzYuNzk3LDM5NC42NjUgMjQxLjk4OCw0MDEuNzE5IDI0OC4zODEsNDAxLjcxOUwyNDguMzg0LDQwMS43MTlDMjU0Ljc3Nyw0MDEuNzE5IDI1OS45NjgsMzk0LjY2NSAyNTkuOTY4LDM4NS45NzdMMjU5Ljk2OCwzNjkuNDk3QzI1OS45NjgsMzYwLjgwOSAyNTQuNzc3LDM1My43NTUgMjQ4LjM4NCwzNTMuNzU1TDI0OC4zODEsMzUzLjc1NUMyNDEuOTg4LDM1My43NTUgMjM2Ljc5NywzNjAuODA5IDIzNi43OTcsMzY5LjQ5N1oiLz4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDIuOTk1MzYsMCwwLDIuOTk1MzYsLTU1Ny4zNDQsLTgyMy4zNSkiPgogICAgICAgIDxwYXRoIGQ9Ik0yNzMuODI3LDM2OS41MDJMMjczLjgyNyw0MDguMzU4QzI3My44MjcsNDE3LjA0NiAyNzkuMDE4LDQyNC4xIDI4NS40MTQsNDI0LjFMMjg1LjQxOCw0MjQuMUMyOTEuODE0LDQyNC4xIDI5Ny4wMDUsNDE3LjA0NiAyOTcuMDA1LDQwOC4zNThMMjk3LjAwNSwzNjkuNTAyQzI5Ny4wMDUsMzYwLjgxNCAyOTEuODE0LDM1My43NiAyODUuNDE4LDM1My43NkwyODUuNDE0LDM1My43NkMyNzkuMDE4LDM1My43NiAyNzMuODI3LDM2MC44MTQgMjczLjgyNywzNjkuNTAyWiIvPgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMi45OTUzNiwwLDAsMi45OTUzNiwtNTU3LjM0NCwtODk5LjkzOCkiPgogICAgICAgIDxwYXRoIGQ9Ik0zMTAuODg1LDM2OS41MDFMMzEwLjg4NSw0MzMuOTI4QzMxMC44ODUsNDQyLjYxNiAzMTYuMDc3LDQ0OS42NyAzMjIuNDY5LDQ0OS42N0wzMjIuNDczLDQ0OS42N0MzMjguODY1LDQ0OS42NyAzMzQuMDU3LDQ0Mi42MTYgMzM0LjA1Nyw0MzMuOTI4TDMzNC4wNTcsMzY5LjUwMUMzMzQuMDU3LDM2MC44MTMgMzI4Ljg2NSwzNTMuNzU5IDMyMi40NzMsMzUzLjc1OUwzMjIuNDY5LDM1My43NTlDMzE2LjA3NywzNTMuNzU5IDMxMC44ODUsMzYwLjgxMyAzMTAuODg1LDM2OS41MDFaIi8+CiAgICA8L2c+Cjwvc3ZnPgo=',
             90
+        );
+        add_submenu_page(
+            'full_picture_home',
+            // parent slug - changed to home
+            esc_attr__( 'Dashboard', 'full-picture-analytics-cookie-notice' ),
+            // page title
+            esc_attr__( 'Dashboard', 'full-picture-analytics-cookie-notice' ),
+            // menu title
+            $this->user_cap,
+            // capability
+            'full_picture_home',
+            // menu slug
+            array($this, 'fupi_display_home_page')
         );
         // SUBPAGES
         $modules_opts = [];
@@ -255,8 +284,8 @@ class Fupi_Admin {
                 $sections_to_show[] = $module['type'];
             }
             array_push( $modules_opts, [$module['type'], [
-                'full_picture_tools',
-                // parent slug
+                'full_picture_home',
+                // parent slug - changed to home
                 $fupi_modules_names[$module['id']],
                 // page title
                 $fupi_modules_names[$module['id']],
@@ -295,6 +324,10 @@ class Fupi_Admin {
         include_once 'common/pages/fupi-admin-page-display.php';
     }
 
+    public function fupi_display_home_page() {
+        include_once 'common/pages/fupi-home-page-display.php';
+    }
+
     public function fupi_settings_permissions( $cap ) {
         return $this->user_cap;
     }
@@ -310,7 +343,7 @@ class Fupi_Admin {
         $active_slug = false;
         $active_page = ( isset( $_GET['page'] ) ? sanitize_html_class( $_GET['page'] ) : false );
         // find active slug
-        if ( $active_page !== false && strpos( $active_page, 'full_picture_' ) === 0 ) {
+        if ( $active_slug == false && $active_page !== false && strpos( $active_page, 'full_picture_' ) === 0 ) {
             $active_slug = str_replace( 'full_picture_', '', $active_page );
         }
         // ADD addons settings
@@ -361,7 +394,7 @@ class Fupi_Admin {
         $tab_slug = $arr[1];
         $no_woo_descr_text = '';
         if ( !$this->is_woo_enabled ) {
-            $no_woo_descr_text = '<div class="fupi_enable_woo_notice">' . esc_html__( 'Enable WooCommerce plugin and WooCommerce Tracking module.', 'full-picture-analytics-cookie-notice' ) . '</div>';
+            $no_woo_descr_text = '<div class="fupi_enable_woo_notice">' . esc_html__( 'Enable WooCommerce Tracking module.', 'full-picture-analytics-cookie-notice' ) . '</div>';
         }
         $addons_data = apply_filters( 'fupi_register_addon', [] );
         // ! ADDON
@@ -528,7 +561,7 @@ class Fupi_Admin {
                 'fupi_uses_oceanwp_theme',
                 // !! MUST BE SMALL CAPS
                 '',
-                sprintf( esc_html__( 'WP Full Picture plugin has detected that you are using OceanWP theme. This theme breaks the controls for styling Consent Banner in the WordPress theme customizer. %1$sLearn what to do about it%2$s.', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-go-around-the-incompatibility-issues-with-oceanwp-theme/" target="_blank">', '</a>' ),
+                sprintf( esc_html__( 'WP Full Picture has detected that you are using OceanWP theme. This theme breaks the controls for styling Consent Banner. %1$sLearn what to do about it%2$s.', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-go-around-the-incompatibility-issues-with-oceanwp-theme/" target="_blank">', '</a>' ),
                 array(
                     'type'  => 'error',
                     'scope' => 'user',
@@ -659,6 +692,55 @@ class Fupi_Admin {
             );
         }
         wp_send_json( $results );
+    }
+
+    // Check for plugin/theme conflicts via AJAX
+    public function fupi_check_conflicts_callback() {
+        // Check if the current user is an administrator
+        if ( !current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( esc_html__( 'You do not have sufficient permissions to access this page.', 'full-picture-analytics-cookie-notice' ) );
+        }
+        // Verify nonce
+        check_ajax_referer( 'fupi_check_conflicts_nonce', 'security' );
+        $conflicts = array();
+        // Check for Bricks Builder
+        if ( defined( 'BRICKS_NAME' ) && $this->is_woo_enabled ) {
+            $conflicts[] = array(
+                'type'     => 'bricks_builder',
+                'message'  => sprintf( esc_html__( 'We have detected that you are using Bricks Builder. This theme removes one of the core WooCommerce hooks that WP FP needs to track products in lists. %1$sSee how to re-enable it%2$s.', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-fix-tracking-issues-in-bricks-builder/" target="_blank">', '</a>' ),
+                'severity' => 'warning',
+            );
+        }
+        // Check for OceanWP theme
+        $theme = wp_get_theme();
+        if ( $this->cook_enabled && $theme->get( 'Name' ) == 'OceanWP' ) {
+            $conflicts[] = array(
+                'type'     => 'oceanwp',
+                'message'  => sprintf( esc_html__( 'We have detected that you are using OceanWP theme. This theme breaks the controls for styling Consent Banner. %1$sLearn what to do about it%2$s.', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-go-around-the-incompatibility-issues-with-oceanwp-theme/" target="_blank">', '</a>' ),
+                'severity' => 'warning',
+            );
+        }
+        // Check for WP Rocket
+        if ( defined( 'WP_ROCKET_VERSION' ) ) {
+            $conflicts[] = array(
+                'type'     => 'wp_rocket',
+                'message'  => sprintf( esc_html__( 'We have detected that you are using WP Rocket. Please, enable the compatibility mode in %1$sGeneral Settings%2$s > Performance', 'full-picture-analytics-cookie-notice' ), '<a href="' . admin_url( 'admin.php?page=full_picture_main' ) . '" target="_blank">', '</a>' ),
+                'severity' => 'warning',
+            );
+        }
+        // Check for Autoptimize
+        if ( is_plugin_active( 'autoptimize/autoptimize.php' ) ) {
+            $conflicts[] = array(
+                'type'     => 'autoptimize',
+                'message'  => esc_html__( 'We have detected that you are using Autoptimize. Please, make sure to disable the option "Also disable inline JS". It is not compatible with WP FP.', 'full-picture-analytics-cookie-notice' ),
+                'severity' => 'warning',
+            );
+        }
+        // Return results
+        wp_send_json_success( array(
+            'conflicts'     => $conflicts,
+            'has_conflicts' => count( $conflicts ) > 0,
+        ) );
     }
 
 }

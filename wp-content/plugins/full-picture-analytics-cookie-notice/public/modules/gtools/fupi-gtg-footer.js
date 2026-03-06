@@ -12,7 +12,7 @@ FP.fns.send_ga4_evt = ( nr, evt_name, data )=>{
 	if ( fp.main.debug ) console.log('[FP] GA4 #' + nr + ' event: ' + evt_name, data);
 };
 
-FP.fns.gtg_woo_events = ()=>{
+function fupi_gtools_woo_footer(){
 
     fp.woo.gtg = {};
     
@@ -115,7 +115,6 @@ FP.fns.gtg_woo_events = ()=>{
 			let payload_o = { 
 				'items' : teasers_arr,
 				'currency' : fpdata.woo.currency,
-				// 'send_to' : ecommerce_event_send_to
 			};
 				
 			gtag( 'event', 'view_item_list', payload_o );
@@ -124,6 +123,11 @@ FP.fns.gtg_woo_events = ()=>{
 
 		if ( single_arr.length > 0 ) {
 
+			let impress_evt_name = 'view_item';
+			if ( fp.woo?.force_item_view_on_url && fp.woo?.force_item_view_on_url.some( url_part => document.location.href.includes(url_part) ) ) {
+				impress_evt_name = 'view_item_list';
+			}
+
 			let payload_o = { 
 				'items' : single_arr, 
 				'currency' : fpdata.woo.currency,
@@ -131,8 +135,8 @@ FP.fns.gtg_woo_events = ()=>{
 				// 'send_to' : ecommerce_event_send_to
 			};
 
-			gtag( 'event', 'view_item', payload_o );
-			if ( fp.main.debug ) console.log( '[FP] GA4/GAds view_item event:', payload_o );
+			gtag( 'event', impress_evt_name, payload_o );
+			if ( fp.main.debug ) console.log( '[FP] GA4/GAds ' + impress_evt_name + ' event:', payload_o );
 		}
 	};
 
@@ -243,6 +247,8 @@ FP.fns.gtg_woo_events = ()=>{
 	FP.addAction( ['woo_add_to_cart'], data =>{
 		track_items( data, 'add_to_cart' );
 	} );
+
+	if ( fp.woo.cart_to_track ) track_items( fp.woo.cart_to_track, 'add_to_cart' ); // when ATC is tracked in cart
 
 	FP.addAction( ['woo_add_to_wishlist'], data => {
 		track_items( data, 'add_to_wishlist');
@@ -370,11 +376,13 @@ FP.fns.gtg_woo_events = ()=>{
 			})
 		};
 	}
+
+	FP.loaded('gtools_woo_footer');
 };
 
 // STANDARD EVENTS
 
-FP.fns.ga4_standard_events = nr => {
+function fupi_ga4_footer(nr){
 
 	if ( ! fp.loaded.includes('ga4' + nr) ) return;
 	
@@ -541,9 +549,11 @@ FP.fns.ga4_standard_events = nr => {
 	}
 
 	
+
+	FP.loaded('ga4' + nr + '_footer');
 };
 
-FP.fns.gads_standard_events = () => {
+function fupi_gads_footer(){
 
 	// TRACK EMAIL LINKS
 
@@ -624,13 +634,19 @@ FP.fns.gads_standard_events = () => {
 			}
 		})
 	}
+
+	FP.loaded('gads_footer');
 };
 
-FP.fns.load_gtg_footer = () => {
-	if ( fp.loaded.includes('ga41') ) FP.fns.ga4_standard_events( 1 );
-    if ( fp.loaded.includes('ga42') ) FP.fns.ga4_standard_events( 2 );
-    if ( fp.loaded.includes('gads') ) FP.fns.gads_standard_events();
-	if ( fp.loaded.includes('woo') ) FP.fns.gtg_woo_events();
+function fupi_ga41_footer(){
+	fupi_ga4_footer( 1 );
 };
 
-FP.enqueueFn( 'FP.fns.load_gtg_footer' );
+function fupi_ga42_footer(){
+	fupi_ga4_footer( 2 );
+};
+
+FP.load('ga41_footer', 'fupi_ga41_footer', ['ga41_config', 'footer_helpers']);
+FP.load('ga42_footer', 'fupi_ga42_footer', ['ga42_config', 'footer_helpers']);
+FP.load('gads_footer', 'fupi_gads_footer', ['gads_config', 'footer_helpers']);
+FP.load('gtools_woo_footer', 'fupi_gtools_woo_footer', ['gtag_config','woo', 'footer_helpers']);

@@ -19,6 +19,9 @@ class ADBC_Cleanup_Unused_Relationships_Handler extends ADBC_Abstract_Cleanup_Ha
 		global $wpdb;
 		return $wpdb->term_relationships;
 	}
+	protected function table_suffix() {
+		return 'term_relationships';
+	}
 	protected function pk() {
 		return 'object_id';
 	}

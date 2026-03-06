@@ -1,4 +1,4 @@
-;(function(window){
+function fupi_twit(){
 
 	if ( allow_loading_twit() ) { 
 		load_twit();
@@ -6,15 +6,11 @@
 		document.addEventListener('fp_load_scripts', ()=>{ if ( allow_loading_twit() ) load_twit(); } );
 	}
 
-	// FUNCTIONS
-
 	function allow_loading_twit(){
 		return FP.isAllowedToLoad( 'twit', ['stats','marketing'], ['id'] ); // module id in fp.XX, required cookie permission, setting name with required data (like in fp.gtm.setting_name)
 	}
 
 	function load_twit() {
-
-		// LOAD PIXEL
 
 		!function(e,t,n,s,u,a){
 			e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);},
@@ -29,9 +25,8 @@
 
 		twq('config', fp.twit.id);
 
-		fp.loaded.push('twit');
-		if ( fp.main.debug ) console.log('[FP] Twitter loaded');
-		FP.runFn( 'FP.fns.load_twit_footer' );
+		FP.loaded('twit','twit','[FP] Twitter loaded');
 	}
+};
 
-})(window);
+FP.load('twit', 'fupi_twit', ['head_helpers']);

@@ -6,7 +6,7 @@ FP.fns.push_to_gtm_dl = ( evt_name, payload ) => {
 	if ( fp.main.debug ) console.log( '[FP] GTM event ' + evt_name + ':', payload );
 };
 
-FP.fns.gotm_woo_events = () => {
+function fupi_footer_gtm_woo(){
 	
 	// Helpers
 
@@ -104,8 +104,13 @@ FP.fns.gotm_woo_events = () => {
 
 		if ( single_arr.length > 0 ) {
 
+			let impress_evt_name = 'view_item';
+			if ( fp.woo?.force_item_view_on_url && fp.woo?.force_item_view_on_url.some( url_part => document.location.href.includes(url_part) ) ) {
+				impress_evt_name = 'view_item_list';
+			}
+
 			let single_payload_o = { 
-				'event' : 'view_item',
+				'event' : impress_evt_name,
 				'ecommerce' : {
 					'currency' : fpdata.woo.currency,
 					'value' : value,
@@ -113,7 +118,7 @@ FP.fns.gotm_woo_events = () => {
 				}
 			};
 
-			FP.fns.push_to_gtm_dl( 'view_item' , single_payload_o );
+			FP.fns.push_to_gtm_dl( impress_evt_name , single_payload_o );
 		}
 	};
 
@@ -205,6 +210,8 @@ FP.fns.gotm_woo_events = () => {
 		track_items( data, 'add_to_cart' );
 	} );
 
+	if ( fp.woo.cart_to_track ) track_items( fp.woo.cart_to_track, 'add_to_cart' ); // when ATC is tracked in cart
+
 	FP.addAction( ['woo_add_to_wishlist'], data => {
 		track_items( data, 'add_to_wishlist');
 	} );
@@ -277,9 +284,11 @@ FP.fns.gotm_woo_events = () => {
 			})
 		};
 	}
+
+	FP.loaded('gtm_footer_woo');
 }
 
-FP.fns.gotm_standard_events = function(){
+function fupi_footer_gtm(){
 
 	// TRACK OUTBOUND LINKS
 
@@ -474,12 +483,9 @@ FP.fns.gotm_standard_events = function(){
 			}
 		})
 	}
+	
+	FP.loaded('gtm_footer');
 }
 
-
-FP.fns.load_gotm_footer = () => {
-	FP.fns.gotm_standard_events();
-	if ( fp.loaded.includes('woo') ) FP.fns.gotm_woo_events();
-};
-
-FP.enqueueFn( 'FP.fns.load_gotm_footer' );
+FP.load('gtm_footer', 'fupi_footer_gtm', ['gtm','footer_helpers']);
+FP.load('gtm_footer_woo', 'fupi_footer_gtm_woo', ['gtm','footer_helpers','woo']);

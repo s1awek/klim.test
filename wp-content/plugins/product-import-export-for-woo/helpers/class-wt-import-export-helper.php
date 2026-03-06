@@ -60,7 +60,7 @@ if(!class_exists('Wt_Iew_IE_Basic_Helper'))
 			if(method_exists($module_obj, $method_name))
 			{
 				$fields=$module_obj->{$method_name}($form_data);
-				$out=Wt_Import_Export_For_Woo_Basic_Common_Helper::extract_validation_rules($fields);
+				$out=Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::extract_validation_rules($fields);
 			}
 			$form_data=$module_obj=null;
 			unset($form_data, $module_obj);

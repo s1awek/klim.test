@@ -7,9 +7,9 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Recommend {
 	protected static $settings;
     public static $plugins=[];
 
-	public function __construct() {return;
-		$this->dismiss  = 'villatheme_swatches_install_recommended_plugins_dismiss';
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+	public function __construct() {
+        $this->dismiss  = 'villatheme_swatches_install_recommended_plugins_dismiss';
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 
 
@@ -30,7 +30,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Recommend {
 
 	public function admin_notices() {
 		global $pagenow;
-        if ( $pagenow === 'update.php'){
+        if ( $pagenow === 'update.php' || get_option( $this->dismiss )){
             return;
         }
 		$installed_plugins = get_plugins();
@@ -39,50 +39,42 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Recommend {
         $notices =[];
         $prefix = 'swatches';
 		foreach ( $recommended_plugins as $recommended_plugin ) {
-			$plugin_slug = $recommended_plugin['slug'];
+            $plugin_slug = $recommended_plugin['slug'];
             if (empty( $recommended_plugin['message_not_install'] ) && empty( $recommended_plugin['message_not_active'] )){
                 continue;
             }
-			if ( ! get_option( "{$this->dismiss}__{$plugin_slug}" ) ) {
-                $pro_install = false;
-				$button = '';
-				if ( ! empty( $recommended_plugin['pro'] )  ) {
-					$pro_file = "{$recommended_plugin['pro']}/{$recommended_plugin['pro']}.php";
-					if (isset($installed_plugins[$pro_file])) {
-                        $pro_install = true;
-	                    if ( ! empty( $recommended_plugin['message_not_active'] ) && ! isset($active_plugins[$recommended_plugin['pro']]) ){
-                            if (current_user_can( 'activate_plugin',$pro_file)) {
-	                            $button = sprintf( '<br><br> <a href="%s" target="_blank" class="button button-primary">%s %s</a>',
-		                            esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'activate', 'plugin' => $pro_file ), self_admin_url( 'plugins.php' ) ), "activate-plugin_{$pro_file}" ) ),
-		                            esc_html__( 'Activate', 'product-variations-swatches-for-woocommerce' ),
-		                            $recommended_plugin['name']);
-                            }
-                            $notices[]= $recommended_plugin['message_not_active'] . $button;
-	                    }
-                    }
-				}
-                if ($pro_install ){
-                    continue;
+            $button = '';
+            $pro_file =  ! empty( $recommended_plugin['pro'] )? "{$recommended_plugin['pro']}/{$recommended_plugin['pro']}.php":'';
+            $plugin_file = "{$plugin_slug}/{$plugin_slug}.php";
+            if ((!$pro_file || !isset($installed_plugins[$pro_file])) && !isset($installed_plugins[$plugin_file]) && ! empty( $recommended_plugin['message_not_install'] ) ){
+                if ( current_user_can( 'install_plugins' )  ) {
+                    $button = sprintf( '<br><br> <a href="%s" target="_blank" class="button button-primary">%s %s</a>',
+                            esc_url( wp_nonce_url( network_admin_url( "update.php?action=install-plugin&plugin={$plugin_slug}" ), "install-plugin_{$plugin_slug}" ) ),
+                            esc_html__( 'Install', 'product-variations-swatches-for-woocommerce' ),
+                            $recommended_plugin['name']);
                 }
-				$plugin_file = "{$plugin_slug}/{$plugin_slug}.php";
-				if ( !isset($installed_plugins[$plugin_file]) && ! empty( $recommended_plugin['message_not_install'] ) ){
-					if ( current_user_can( 'install_plugins' )  ) {
-						$button = sprintf( '<br><br> <a href="%s" target="_blank" class="button button-primary">%s %s</a>',
-							esc_url( wp_nonce_url( network_admin_url( "update.php?action=install-plugin&plugin={$plugin_slug}" ), "install-plugin_{$plugin_slug}" ) ),
-							esc_html__( 'Install', 'product-variations-swatches-for-woocommerce' ),
-							$recommended_plugin['name']);
-					}
-					$notices[] = $recommended_plugin['message_not_install']. $button;
-				}elseif ( ! empty( $recommended_plugin['message_not_active'] ) && ! isset($active_plugins[$plugin_slug] ) ){
-                    if ( current_user_can( 'activate_plugin', $plugin_file )) {
-	                    $button = sprintf( '<br><br> <a href="%s" target="_blank" class="button button-primary">%s %s</a>',
-		                    esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'activate', 'plugin' => $plugin_file ), self_admin_url( 'plugins.php' ) ), "activate-plugin_{$plugin_file}" ) ),
-		                    esc_html__( 'Activate', 'product-variations-swatches-for-woocommerce' ),
-		                    $recommended_plugin['name']);
+                $notices[] = $recommended_plugin['message_not_install']. $button;
+            }elseif ( ! empty( $recommended_plugin['message_not_active'] ) && ! isset($active_plugins[$plugin_slug] ) ) {
+                if ( isset( $installed_plugins[ $pro_file ] ) ) {
+                    if (! isset( $active_plugins[ $recommended_plugin['pro'] ] )) {
+                        if ( current_user_can( 'activate_plugin', $pro_file ) ) {
+                            $button = sprintf( '<br><br> <a href="%s" target="_blank" class="button button-primary">%s %s</a>',
+                                    esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'activate', 'plugin' => $pro_file ), self_admin_url( 'plugins.php' ) ), "activate-plugin_{$pro_file}" ) ),
+                                    esc_html__( 'Activate', 'product-variations-swatches-for-woocommerce' ),
+                                    $recommended_plugin['name'] );
+                        }
+                        $notices[] = $recommended_plugin['message_not_active'] . $button;
                     }
-					$notices[]= $recommended_plugin['message_not_active'] . $button;
-				}
-			}
+                } else {
+                    if ( current_user_can( 'activate_plugin', $plugin_file ) ) {
+                        $button = sprintf( '<br><br> <a href="%s" target="_blank" class="button button-primary">%s %s</a>',
+                                esc_url( wp_nonce_url( add_query_arg( array( 'action' => 'activate', 'plugin' => $plugin_file ), self_admin_url( 'plugins.php' ) ), "activate-plugin_{$plugin_file}" ) ),
+                                esc_html__( 'Activate', 'product-variations-swatches-for-woocommerce' ),
+                                $recommended_plugin['name'] );
+                    }
+                    $notices[] = $recommended_plugin['message_not_active'] . $button;
+                }
+            }
 		}
         if (!empty($notices)){
             ?>
@@ -141,8 +133,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Recommend {
 				'exmage-wp-image-links' => [
 					'slug' => 'exmage-wp-image-links',
 					'name' => 'EXMAGE – WordPress Image Links',
-					'desc' => esc_html__( 'Save storage by using external image URLs',
-						'product-variations-swatches-for-woocommerce' ),
+					'desc' => esc_html__( 'Save storage by using external image URLs', 'product-variations-swatches-for-woocommerce' ),
 					'message_not_install' => sprintf( "%s <strong>EXMAGE – WordPress Image Links</strong> %s </br>",
 						esc_html__( 'Need to save your server storage?', 'product-variations-swatches-for-woocommerce' ),
 						esc_html__( 'will help you solve the problem by using external image URLs.', 'product-variations-swatches-for-woocommerce' )
@@ -159,7 +150,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Recommend {
 						esc_html__( 'Looking for a plugin that lets you add unlimited images or videos to each WooCommerce product variation?', 'product-variations-swatches-for-woocommerce' ),
 						esc_html__( 'is what you need.', 'product-variations-swatches-for-woocommerce' ) ),
 					'message_not_active'  => sprintf( "<strong>VARGAL</strong> %s",
-						esc_html__( 'is currently inactive, the variation gallery setting will not be set.', 'product-variations-swatches-for-woocommerce' ) ),
+						esc_html__( 'Set unlimited images or videos for every WooCommerce product variation.', 'product-variations-swatches-for-woocommerce' ) ),
 				],
 			];
 		}

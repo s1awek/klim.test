@@ -20,6 +20,9 @@ abstract class ADBC_Cleanup_Posts_Handler_Base extends ADBC_Abstract_Cleanup_Han
 		global $wpdb;
 		return $wpdb->posts;
 	}
+	protected function table_suffix() {
+		return 'posts';
+	}
 	protected function pk() {
 		return 'ID';
 	}
@@ -60,6 +63,44 @@ abstract class ADBC_Cleanup_Posts_Handler_Base extends ADBC_Abstract_Cleanup_Han
 	protected function all_post_types() {
 		return "SELECT DISTINCT post_type FROM {$this->table()}";
 	}
+	/**
+	 * WordPress core post types allowed for generic post cleanup.
+	 * Intentionally excludes all plugin / theme CPTs (e.g. shop_order).
+	 *
+	 * @return string Comma-separated list of escaped post types, already quoted for SQL IN(...).
+	 */
+	protected function wp_core_post_types() {
+
+		$wp_core_types = [ 
+			// Classic core:
+			'post',
+			'page',
+			'attachment',
+			'revision',
+			'nav_menu_item',
+
+			// Customizer / internal:
+			'custom_css',
+			'customize_changeset',
+			'oembed_cache',
+			'user_request',
+
+			// Block editor / site editor:
+			'wp_block',
+			'wp_template',
+			'wp_template_part',
+			'wp_global_styles',
+			'wp_navigation',
+
+			// Font Library (WP 6.5+):
+			'wp_font_family',
+			'wp_font_face',
+		];
+
+		return "'" . implode( "','", $wp_core_types ) . "'";
+
+	}
+
 
 }
 
@@ -117,7 +158,7 @@ class ADBC_Cleanup_Trashed_Posts_Handler extends ADBC_Cleanup_Posts_Handler_Base
 		return 'trashed_posts';
 	}
 	protected function base_where() {
-		return "( post_status='trash' AND post_type in ({$this->all_post_types()}) )";
+		return "( post_status = 'trash' AND post_type IN ({$this->wp_core_post_types()}) )";
 	}
 
 }

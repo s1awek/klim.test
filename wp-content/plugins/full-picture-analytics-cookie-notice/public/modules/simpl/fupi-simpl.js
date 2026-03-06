@@ -1,4 +1,4 @@
-;(function(window){
+function fupi_simpl(){
 
 	if ( allow_loading_simpl() ) { 
 		load_simpl();
@@ -35,8 +35,10 @@
 		let use_server = false;
 		
 		use_server ? simpleServer() : simplePixel();
-		fp.loaded.push('simpl');
-		if ( fp.main.debug ) console.log('[FP] Simple Analytics loaded');
+
+		FP.loaded('simpl','simpl','[FP] Simple Analytics loaded');
 	}
 
-})(window);
+};
+
+FP.load('simpl', 'fupi_simpl', ['head_helpers']);

@@ -55,7 +55,7 @@ abstract class PMXE_Controller_Admin extends PMXE_Controller {
 		wp_enqueue_style('pmxe-angular-scss', PMXE_ROOT_URL . '/dist/styles.css', array('media-views'), PMXE_VERSION.PMXE_ASSETS_VERSION);
         wp_enqueue_style('jquery-codemirror', PMXE_ROOT_URL . '/static/css/codemirror.css', array(), PMXE_VERSION);
 
-		$wp_styles->add_data('pmxe-admin-style-ie', 'conditional', 'lte IE 7');
+		// IE conditional comments removed - no longer supported in modern browsers or WordPress 6.9+
 		wp_enqueue_style('wp-pointer');		
 		
 		if ( version_compare(get_bloginfo('version'), '3.8-RC1') >= 0 ){			

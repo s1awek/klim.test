@@ -14,6 +14,7 @@ abstract class ADBC_Cleanup_Unused_Meta_Handler_Base extends ADBC_Abstract_Clean
 	// Required, all unused meta subclasses must supply
 	abstract protected function items_type();
 	abstract protected function table();
+	abstract protected function table_suffix();
 	abstract protected function pk();
 	abstract protected function parent_join();
 	abstract protected function parent_null_test();
@@ -44,7 +45,8 @@ abstract class ADBC_Cleanup_Unused_Meta_Handler_Base extends ADBC_Abstract_Clean
 	}
 	protected function delete_helper() {
 		return function ($mid) {
-			return delete_metadata_by_mid( $this->meta_type(), $mid ); };
+			return delete_metadata_by_mid( $this->meta_type(), $mid );
+		};
 	}
 	protected function extra_joins() {
 		return $this->parent_join();
@@ -71,6 +73,9 @@ class ADBC_Cleanup_Unused_Postmeta_Handler extends ADBC_Cleanup_Unused_Meta_Hand
 	protected function table() {
 		global $wpdb;
 		return $wpdb->postmeta;
+	}
+	protected function table_suffix() {
+		return 'postmeta';
 	}
 	protected function pk() {
 		return 'meta_id';
@@ -101,6 +106,9 @@ class ADBC_Cleanup_Unused_Commentmeta_Handler extends ADBC_Cleanup_Unused_Meta_H
 		global $wpdb;
 		return $wpdb->commentmeta;
 	}
+	protected function table_suffix() {
+		return 'commentmeta';
+	}
 	protected function pk() {
 		return 'meta_id';
 	}
@@ -130,6 +138,9 @@ class ADBC_Cleanup_Unused_Usermeta_Handler extends ADBC_Cleanup_Unused_Meta_Hand
 	protected function table() {
 		global $wpdb;
 		return $wpdb->usermeta;
+	}
+	protected function table_suffix() {
+		return 'usermeta';
 	}
 	protected function pk() {
 		return 'umeta_id';
@@ -229,6 +240,9 @@ class ADBC_Cleanup_Unused_Termmeta_Handler extends ADBC_Cleanup_Unused_Meta_Hand
 		global $wpdb;
 		return $wpdb->termmeta;
 	}
+	protected function table_suffix() {
+		return 'termmeta';
+	}
 	protected function pk() {
 		return 'meta_id';
 	}
@@ -260,6 +274,9 @@ class ADBC_Cleanup_Oembed_Cache_Meta_Handler extends ADBC_Abstract_Cleanup_Handl
 		global $wpdb;
 		return $wpdb->postmeta;
 	}
+	protected function table_suffix() {
+		return 'postmeta';
+	}
 	protected function pk() {
 		return 'meta_id';
 	}
@@ -286,7 +303,8 @@ class ADBC_Cleanup_Oembed_Cache_Meta_Handler extends ADBC_Abstract_Cleanup_Handl
 	}
 	protected function delete_helper() {
 		return function ($mid) {
-			return delete_metadata_by_mid( 'post', $mid ); };
+			return delete_metadata_by_mid( 'post', $mid );
+		};
 	}
 
 }

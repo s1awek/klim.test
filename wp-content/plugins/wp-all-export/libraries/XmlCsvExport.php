@@ -645,7 +645,7 @@ final Class XmlCsvExport
 
 		$in  = fopen($file, 'r');			
 
-		$clear_old_headers = fgetcsv($in, 0, XmlExportEngine::$exportOptions['delimiter']);		
+		$clear_old_headers = fgetcsv($in, 0, XmlExportEngine::$exportOptions['delimiter'], '"', '\\');		
 
 		fclose($in);		
 
@@ -720,11 +720,11 @@ final Class XmlCsvExport
 
 			apply_filters('wp_all_export_after_csv_line', $out, XmlExportEngine::$exportID);
 
-			$exclude_old_headers = fgetcsv($in);		
+			$exclude_old_headers = fgetcsv($in, 0, ',', '"', '\\');
 
 			if (is_resource($in)) {
 				while ( ! feof($in) ) {
-				    $data = fgetcsv($in, 0, XmlExportEngine::$exportOptions['delimiter']);
+				    $data = fgetcsv($in, 0, XmlExportEngine::$exportOptions['delimiter'], '"', '\\');
 					if ( empty($data) ) continue;
 
 					// Handle CSV parsing issues by ensuring proper column count

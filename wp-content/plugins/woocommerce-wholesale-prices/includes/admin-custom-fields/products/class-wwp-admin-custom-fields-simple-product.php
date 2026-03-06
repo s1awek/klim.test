@@ -282,8 +282,8 @@ if ( ! class_exists( 'WWP_Admin_Custom_Fields_Simple_Product' ) ) {
 
                             $wholesale_price_key             = $roleKey . '_wholesale_price';
                             $wholesale_sale_price_key        = $roleKey . '_wholesale_sale_price';
-                            $wholesale_price                 = isset( $_REQUEST[ $wholesale_price_key ] ) ? $_REQUEST[ $wholesale_price_key ] : ''; //phpcs:ignore
-                            $wholesale_sale_price            = isset( $_REQUEST[ $wholesale_sale_price_key ] ) ? $_REQUEST[ $wholesale_sale_price_key ] : ''; //phpcs:ignore
+                            $wholesale_price                 = isset( $_REQUEST[ $wholesale_price_key ] ) ? sanitize_text_field( wp_unslash( $_REQUEST[ $wholesale_price_key ] ) ) : ''; //phpcs:ignore
+                            $wholesale_sale_price            = isset( $_REQUEST[ $wholesale_sale_price_key ] ) ? sanitize_text_field( wp_unslash( $_REQUEST[ $wholesale_sale_price_key ] ) ) : ''; //phpcs:ignore
                             $check_wholesale_price_existence = isset( $_REQUEST[ $wholesale_price_key ] ) && ! empty( $_REQUEST[ $wholesale_price_key ] ) ? true : false; //phpcs:ignore
 
                             if ( ! $check_wholesale_price_existence ) { // if corresponding wholesale price is empty, set wholesale sale price to empty as well.
@@ -815,9 +815,9 @@ if ( ! class_exists( 'WWP_Admin_Custom_Fields_Simple_Product' ) ) {
              * Sanitize and properly format wholesale price.
              * (This also supports comma as decimal separator currency format).
              */
-            $wholesale_discount_type = isset( $_POST[ $has_wholesale_discount_key ] ) ? trim( esc_attr( $_POST[ $has_wholesale_discount_key ] ) ) : ( ! empty( $product->get_meta( $role_key . '_wholesale_percentage_discount', true ) ) ? 'percentage' : '' ); //phpcs:ignore
+            $wholesale_discount_type = isset( $_POST[ $has_wholesale_discount_key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $has_wholesale_discount_key ] ) ) : ( ! empty( $product->get_meta( $role_key . '_wholesale_percentage_discount', true ) ) ? 'percentage' : '' ); //phpcs:ignore
 
-            $wholesale_price = trim( esc_attr( $_POST[ $wholesale_price_key ] ) ); //phpcs:ignore
+            $wholesale_price = sanitize_text_field( wp_unslash( $_POST[ $wholesale_price_key ] ) ); //phpcs:ignore
 
             if ( $thousand_sep ) {
                 $wholesale_price = str_replace( $thousand_sep, '', $wholesale_price );
@@ -843,7 +843,7 @@ if ( ! class_exists( 'WWP_Admin_Custom_Fields_Simple_Product' ) ) {
             $product->update_meta_data( $wholesale_price_key, $wholesale_price );
 
             if ( 'percentage' === $wholesale_discount_type ) {
-                $wholesale_discount = trim( esc_attr( isset( $_POST[ $role_key . '_wholesale_percentage_discount' ] ) ? $_POST[ $role_key . '_wholesale_percentage_discount' ] : ( ! empty( $product->get_meta( $role_key . '_wholesale_percentage_discount', true ) ) ? $product->get_meta( $role_key . '_wholesale_percentage_discount', true ) : '' ) ) ); //phpcs:ignore
+                $wholesale_discount = sanitize_text_field( wp_unslash( isset( $_POST[ $role_key . '_wholesale_percentage_discount' ] ) ? $_POST[ $role_key . '_wholesale_percentage_discount' ] : ( ! empty( $product->get_meta( $role_key . '_wholesale_percentage_discount', true ) ) ? $product->get_meta( $role_key . '_wholesale_percentage_discount', true ) : '' ) ) ); //phpcs:ignore
 
                 if ( $decimal_sep ) {
                     $wholesale_discount = str_replace( $decimal_sep, '.', $wholesale_discount );

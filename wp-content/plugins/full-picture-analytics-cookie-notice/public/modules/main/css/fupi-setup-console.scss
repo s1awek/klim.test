@@ -26,6 +26,9 @@
     display: flex;
     align-items: center;
     transform: translateX(-100%); // hides the wrapper so that it doesn't cover the page
+    * {
+        box-sizing: border-box;
+    }
 }
 
 // CONSOLE TOGGLE BUTTON
@@ -142,6 +145,7 @@
     display: block !important;
     color: #000 !important;
     position: absolute;
+    cursor: pointer;
     top: 10px;
     right: 10px;
     font-size: 20px !important;

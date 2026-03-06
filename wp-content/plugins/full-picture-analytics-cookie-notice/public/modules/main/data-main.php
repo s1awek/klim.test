@@ -14,6 +14,9 @@ if ( !empty( $user ) ) {
         }
     }
 }
+//
+// COMPATIBILITY CHECKS
+//
 $fp['main'] = [
     'track_current_user' => $this->track_current_user,
     'is_pro'             => fupi_fs()->can_use_premium_code(),
@@ -23,4 +26,6 @@ $fp['main'] = [
     'bot_list'           => ( !empty( $this->main['bot_list'] ) ? esc_attr( $this->main['bot_list'] ) : 'none' ),
     'server_method'      => ( !empty( $this->main['server_method'] ) ? esc_attr( $this->main['server_method'] ) : 'rest' ),
     'magic_keyword'      => ( !empty( $this->main['magic_keyword'] ) ? esc_attr( $this->main['magic_keyword'] ) : 'tracking' ),
+    'ajax_url'           => admin_url( 'admin-ajax.php' ),
+    'is_bricks_builder'  => function_exists( 'bricks_is_builder' ) && bricks_is_builder(),
 ];

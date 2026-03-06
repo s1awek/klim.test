@@ -107,10 +107,15 @@
 	.fupi_must_have_pro_ico{
 		top: 10px;
 	}
+	&.fupi_bold_label{
+		label{
+			font-weight: bold;
+		}
+	}
 }
 
 
-// label
+// Labels
 .fupi_r3_section_label{
 	font-weight: bold;
 	margin: 9px 0 5px !important;
@@ -134,6 +139,12 @@
 	flex-wrap: wrap;
 	align-items: flex-start;
 }
+
+// "TOGGLE FIELDS" BUTTON
+
+// .fupi_collapsible_fields td>.fupi_r3_section:not(.fupi_fields_visible)>*:not(.fupi_field_title_wrap):not(.fupi_field_toggle_btn_wrap):not(.fupi_field_force_load_wrap):not(.fupi_field_disable_wrap):not(.fupi_r3_btns){
+// 	display: none;
+// }
 
 // GRID
 
@@ -328,12 +339,13 @@
 			font-family: monospace;
 			min-height: 300px;
 		}
-	.fupi_field_disable_wrap{
-		.fupi_switch_slider.fupi_active, 
-		input:checked+.fupi_switch_slider{
-			background-color: #bd1e1e;
-		}
-	}
+}
+
+// R3 - BLOCKING OTHER SCRIPTS
+
+.fupi_red_switch .fupi_switch_slider.fupi_active,
+.fupi_red_switch input:checked+.fupi_switch_slider{
+	background-color: #bd1e1e;
 }
 
 // R3 - CUSTOM EVENTS BUILDER

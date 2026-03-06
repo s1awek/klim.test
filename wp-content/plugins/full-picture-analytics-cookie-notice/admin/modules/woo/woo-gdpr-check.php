@@ -37,7 +37,7 @@ if ( $order_attribution_enabled == 'yes' ){
         } else {
             $this->data['woo']['setup'][] = [ 
                 'ok', 
-                esc_html__('The source of order (Order details > "Order attribution" section) will be set to "Unknown" for user who did not agree to tracking or use ad blockers.', 'full-picture-analytics-cookie-notice')
+                esc_html__('The source of order (WooCommerce order details page > "Order attribution" section) will be set to "Unknown" for user who did not agree to tracking or use ad blockers.', 'full-picture-analytics-cookie-notice')
             ];
             $this->data['woo']['pp comments'][] = sprintf( esc_html__('Add to your privacy policy information that your website uses SourceBuster.js script for Order Attribution in WooCommerce. The script is enabled after visitors agree to using their data for statistics. Optionally, you can include %1$sa list of cookies%2$s that the script uses', 'full-picture-analytics-cookie-notice'), '<a href="https://woocommerce.com/document/order-attribution-tracking/#section-7" target="_blank">', '</a>' );
         }

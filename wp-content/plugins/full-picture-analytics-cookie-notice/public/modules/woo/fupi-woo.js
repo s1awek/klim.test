@@ -1,8 +1,8 @@
-;(()=>{
+function fupi_woo(){
 
 	if ( ! fp.woo ) return;
 
-	fp.loaded.push('woo');
+	fp.loaded.push('woo'); // checked in other functions
 
 	// Helpers
 
@@ -84,10 +84,10 @@
 	// PREPARE SINGLE PRODUCTS AND TEASERS
 	// TRACK IMPRESSIONS OF SINGLE PRODS AND TEASERS
 
-	function get_teaser_list_name( teaser_wrap, script_el ){
+	function get_teaser_list_name( teaser_wrap, el ){
 
 		let list = teaser_wrap.closest("ul") || teaser_wrap.parentElement,
-			list_name = script_el.dataset.list_name || list && list.dataset.fupi_list_name;
+			list_name = el.dataset.list_name || list && list.dataset.fupi_list_name;
 
 		if ( list && ! list_name ) {
 				
@@ -118,64 +118,31 @@
 		return list_name;
 	}
 
-	// Prepare teasers and single products for tracking and init tracking
-	FP.fns.prepare_teaser_and_single = function(){
-		
-		// Adds classes to products and product teasers and gets their list names
-		mark_products_with_type();
-		prepare_allprods_block_teasers();
-		
-		// STOP if page was refreshed
-		if ( fp.woo.dont_track_views_after_refresh && fpdata.refreshed ) return;
-		
-		// Track impressions
-		FP.doActions( "woo_impress" );
-
-		// Track views of default variant
-		if ( fp.woo.variable_tracking_method == 'track_def_var' ) { // 85
-			
-			let variant_id_field = FP.findFirst( 'form.variations_form input[name="variation_id"]' );
-
-			if ( ! variant_id_field ) return;
-
-			// keep checking the value of variant_id_field field until it is no longer '0' (string) or until 2 seconds pass
-			let timer = 0;
-
-			let	variant_check_interval = setInterval( () => {
-					
-				timer += 200;
-
-				if ( variant_id_field.value != '0' ) {
-					clearInterval( variant_check_interval );
-
-					let variant_id = get_current_variant_id();
-		
-					if ( variant_id && fpdata.woo.products[variant_id] && FP.hasActions( 'woo_def_variant_view' ) ) {
-						FP.doActions( "woo_def_variant_view", variant_id );
-					}
-				}
-
-				if ( timer > 2000 ) {
-					clearInterval( variant_check_interval );
-					return;
-				}
-			}, 200 );			
-		}
-	};
-
-	function mark_products_with_type(){
+	function process_new_html_prod_data(){
 		
 		let prod_data_els = FP.findAll(".fupi_prod_data:not(.fupi_ready)");
 
-		prod_data_els.forEach( script_el => {
+		if ( prod_data_els.length == 0 ) return false;
+
+		prod_data_els.forEach( el => {
 
 			let list_name = 'single',
-				id = script_el.dataset.id,
-				// type = script_el.dataset.type,
+				id = el.dataset.id,
+				prod_data = JSON.parse ( el.dataset.data ),
+				prod_type = el.dataset.type || prod_data.type,
 				prod_wrap = false,
-				closest_form_element = script_el.closest("form.cart");
-	
-			script_el.classList.add("fupi_ready");
+				closest_form_element = el.closest("form.cart");
+
+			// add prod data to fprada.woo.products
+			fpdata.woo.products[id] = fpdata.woo.products[id] ? { ...fpdata.woo.products[id], ...prod_data } : prod_data;
+			
+			// mark as processed
+			el.classList.add("fupi_ready");
+
+			// skip variants
+			if ( prod_type == 'variant' ) return;
+
+			// add classes to prod wrapper
 
 			// if is product
 			if ( closest_form_element ) {
@@ -192,12 +159,13 @@
 					wrapper_selector += ', ' + fp.woo.teaser_wrapper_sel;
 				}
 
-				prod_wrap = script_el.closest( wrapper_selector ) || script_el.parentElement;
-				list_name = get_teaser_list_name( prod_wrap, script_el );
+				prod_wrap = el.closest( wrapper_selector ) || el.parentElement;
+				list_name = get_teaser_list_name( prod_wrap, el );
 				prod_wrap.classList.add("fupi_woo_teaser", "fupi_woo_product");
 				
 				let btns_and_links = FP.findAll('a, button', prod_wrap );
 				
+				// add class to ATC buttons inside the wrapper
 				btns_and_links.forEach( btn => {
 
 					if ( btn.classList.contains('single_add_to_cart') ) return;
@@ -210,25 +178,22 @@
 					}
 
 				} );
-				
 			}
 
+			// save product ID in the fpdata.woo.lists
 			if ( prod_wrap ) {
-
 				prod_wrap.dataset.fupi_woo_prod_id = id;
-		
-				// save product data in the fpdata.woo.lists
 				fpdata.woo.lists[list_name] = fpdata.woo.lists[list_name] || [];
 				if ( ! fpdata.woo.lists[list_name].includes(id) ) fpdata.woo.lists[list_name].push( id );
 			}
 		});
+
+		return true;
 	}
 
-	// PREPARE "ALL PRODUCTS" BLOCK TEASERS
+	function process_new_allprods_block_data(){
 
-	function prepare_allprods_block_teasers(){
-
-		if ( ! fp.woo.products_from_all_products_block || fp.woo.products_from_all_products_block.length == 0 ) return;
+		if ( ! fp.woo.products_from_all_products_block || fp.woo.products_from_all_products_block.length == 0 ) return false;
 		
 		fp.woo.products_from_all_products_block.forEach( prod => {
 
@@ -265,6 +230,7 @@
 				
 				list_name = 'woo all products block';
 				list.dataset.fupi_list_name = list_name;
+				list.classList.add('fupi_products_list');
 
 				prod_wrap.classList.add("fupi_woo_teaser", "fupi_woo_product");
 				prod_wrap.dataset.fupi_woo_prod_id = prod.id;
@@ -278,7 +244,66 @@
 				if ( ! fpdata.woo.lists[list_name].includes(prod.id) ) fpdata.woo.lists[list_name].push( prod.id );
 			};
 		});
+
+		return true;
 	}
+
+	function prepare_prod_data(){
+		
+		let new_prods_added = process_new_html_prod_data();
+		let new_allprods_blocks_added = process_new_allprods_block_data();
+		
+		if ( ! new_prods_added && ! new_allprods_blocks_added ) return;
+		if ( fp.woo.dont_track_views_after_refresh && fpdata.refreshed ) return;
+		
+		FP.doActions( "woo_impress" );
+	}
+
+	function track_def_variant_view(){
+
+		if ( fp.woo.variable_tracking_method != 'track_def_var' ) return;
+		if ( fp.woo.dont_track_views_after_refresh && fpdata.refreshed ) return;
+			
+		let variant_id_field = FP.findFirst( 'form.variations_form input[name="variation_id"]' );
+
+		if ( ! variant_id_field ) return;
+
+		let timer = 1000;
+
+		let	variant_check_interval = setInterval( () => {
+
+			if ( variant_id_field.value != '0' ) {
+				clearInterval( variant_check_interval );
+
+				let variant_id = get_current_variant_id();
+	
+				if ( variant_id && fpdata.woo.products[variant_id] && FP.hasActions( 'woo_def_variant_view' ) ) {
+					FP.doActions( "woo_def_variant_view", variant_id );
+				}
+			}
+
+			if ( timer >= 4000 ) {
+				clearInterval( variant_check_interval );
+				return;
+			}
+
+			timer += 1000;
+
+		}, 1000 );
+	}
+
+	// Prepare teasers and single products for tracking and init tracking
+	if ( document.readyState === "complete" ) {
+		prepare_prod_data();
+		track_def_variant_view();
+	} else {
+		document.addEventListener('DOMContentLoaded', ()=>{
+			prepare_prod_data();
+			track_def_variant_view();
+		} );
+	}
+
+	setInterval( ()=>{prepare_prod_data();}, 1000 );
 
 	// TRACKING HELPERS
 
@@ -324,7 +349,10 @@
 
 	FP.addAction( ['click'], function(){
 		
-		if ( ! FP.hasActions( 'woo_add_to_cart' ) ) return;
+		// Skip if tracking should happen in cart instead
+		if ( fp.woo.where_track_addtocart === 'in_cart' ) return;
+		
+		if ( ! FP.hasActions( 'woo_add_to_cart' ) || ( !! fp.woo.disable_woo_events && fp.woo.disable_woo_events.includes('add_to_cart_teaser') ) ) return;
 
 		// prevent "add to cart" event from being fired twice - 1st time when the Add to cart button is clicked and the other one when cart is updated (tracked by a different script)
 		// if ( document.body.classList.contains('woocommerce-cart') ) return;
@@ -339,7 +367,10 @@
 
 	FP.addAction( ['click'], function(){
 		
-		if ( ! FP.hasActions( 'woo_add_to_cart' ) ) return;
+		// Skip if tracking should happen in cart instead
+		if ( fp.woo.where_track_addtocart === 'in_cart' ) return;
+		
+		if ( ! FP.hasActions( 'woo_add_to_cart' ) || ( !! fp.woo.disable_woo_events && fp.woo.disable_woo_events.includes('add_to_cart_full') ) ) return;
 
 		if ( FP.isClickTarget( '.single_add_to_cart_button:not(.disabled), .single_add_to_cart_button:not(.disabled) *' ) ) {
 			
@@ -430,6 +461,9 @@
 	// TRACK REMOVE ITEMS FROM CLASSIC MINI-CART
 
 	FP.addAction( ['click'], function(){
+
+		// Skip if tracking should happen in cart instead
+		if ( fp.woo.where_track_addtocart === 'in_cart' ) return;
 
 		if ( ! FP.hasActions( 'woo_remove_from_cart' ) ) return;
 
@@ -532,17 +566,70 @@
 		$('body').on('updated_cart_totals', function(){
 			prepare_classic_cart(true);
 			compare_old_and_new_carts();
+			update_cart_cookie();
 		});
 	});
 
-	// when a big cart is updated
-	// for some reason the jquery event won't get attached when the script loads, but we need to wait a bit
-	// setTimeout( ()=>{
-	// 	jQuery('body').on('updated_cart_totals', ()=>{
-	// 		prepare_classic_cart(true);
-	// 		compare_old_and_new_carts();
-	// 	});
-	// }, 100 );
+	function update_cart_cookie(){
+		// update or create an "fp_woo_cart" cookie, create it based on the value of fpdata.woo.cart.items - it should contain an object of elements, where the keys are the IDs of products and the values are their quantities
+		let cart_cookie_data = {};
+		for ( let prod_id in fpdata.woo.cart.items ) {
+			cart_cookie_data[prod_id] = fpdata.woo.cart.items[prod_id].qty;
+		}
+		FP.setCookie( 'fp_woo_cart', JSON.stringify(cart_cookie_data), 90 );
+	}
+
+	// This is used when add to cart events are to be sent only in cart
+	// It creates a "fp.woo.cart_to_track" object with all products that should be added to cart > this is later processed by tracking tools when they load
+	function do_addToCart_in_cart(){
+		
+		// check if there is an "fp_woo_cart" cookie with FP.readCookie() function
+		let fp_woo_cart_cookie = FP.readCookie('fp_woo_cart');
+		let added = [];
+		let added_val = 0;
+		
+		// if there is a cookie
+		if ( fp_woo_cart_cookie ) {
+
+			let saved_cart = JSON.parse(fp_woo_cart_cookie);
+			
+			// compare ids and quantities of products currently in fpdata.woo.cart.items and those saved in a cookie
+			// get an array of all product IDs and quantities of products which are now in cart but were not in the cookie
+			for ( let prod_id in fpdata.woo.cart.items ) {
+				
+				let current_qty = fpdata.woo.cart.items[prod_id].qty;
+				let saved_qty = saved_cart[prod_id] || 0;
+				
+				if ( current_qty > saved_qty ) {
+					let qty_change = current_qty - saved_qty;
+					let prod = fpdata.woo.cart.items[prod_id];
+					added.push( [prod, qty_change] );
+					added_val += prod.price * qty_change;
+				}
+			}
+			
+			// Track added products
+			if ( added.length > 0 ) {
+				added_val = Math.round( added_val * 100 ) / 100;
+				fp.woo.cart_to_track = { 'products' : added, 'value' : added_val };
+			}
+		
+		// if there is no cookie
+		} else {
+			
+			// change object with cart items into an array
+			for ( let prod_id in fpdata.woo.cart.items ) {
+				let prod = fpdata.woo.cart.items[prod_id];
+				added.push( [prod, prod.qty] );
+			}
+			
+			fp.woo.cart_to_track = { 'products' : added, 'value' : fpdata.woo.cart.value };
+		}
+		
+		update_cart_cookie();
+	}
+
+	if ( fpdata.page_type == "Woo Cart" && fpdata.woo.cart.items && fp.woo.where_track_addtocart === 'in_cart' ) do_addToCart_in_cart();
 
 	// TRACK ADD TO WISHLIST
 
@@ -584,64 +671,81 @@
 		} ) 
 	}
 
+	function update_fpdata_cart_items( id, new_qty ){
+		let prod = fpdata.woo.cart.items[id];
+		if ( prod ) {
+			if ( ! new_qty ) { // product removed
+				// make sure we have a backup of this prod in "products"
+				fpdata.woo.products[id] = structuredClone(prod);
+				delete fpdata.woo.cart.items[id];
+			} else if ( new_qty != prod.qty ) {
+				prod.qty = new_qty;
+			}
+		}
+	};
+
 	// BLOCK CART & MINI CART
 
 	function add_block_hooks(){
-		if ( typeof wp !== 'undefined' && wp.hooks && wp.hooks.addAction ){
 
-			// change quantity
-			wp.hooks.addAction(
-				"experimental__woocommerce_blocks-cart-set-item-quantity",
-				"fupi-tracking",
-				( {product} ) => {
-
-					if ( ! product ) return; 
-
-					setTimeout( ()=> {
-
-						let prod = fpdata.woo.cart.items[product.id];
-
-						if ( ! prod ) return; // this can happen when a product was added from cart's cross-sells
-
-						let cart_product_el = fpdata.clicked.element.closest('tr'),
-							qty_el = FP.findFirst('.wc-block-components-quantity-selector__input', cart_product_el),
-							new_qty = parseInt( qty_el.value );
-
-						if ( new_qty > product.quantity ) {
-						
-							let qty_change = new_qty - product.quantity,
-								value = Math.round( prod.price * qty_change * 100 ) / 100;
-
-							FP.doActions( 'woo_add_to_cart', { 'products' : [[prod, qty_change]], 'value': value } );
-						
-						} else {
-						
-							let qty_change = product.quantity - new_qty,
-								value = Math.round( prod.price * qty_change * 100 ) / 100;
-
-							FP.doActions('woo_remove_from_cart', { 'products' : [[prod, qty_change]], 'value' : value } );
-						};
-
-					}, 100 ); // we need to wait for a tiny sec.
-					
-				}
-			);
-				
-			// remove item
-			wp.hooks.addAction(
-				"experimental__woocommerce_blocks-cart-remove-item",
-				"fupi-tracking",
-				( {product} ) => {
-
-					if ( !product ) return;
-
-					let prod = { ...fpdata.woo.cart.items[product.id] },
-						value = Math.round( prod.price * prod.qty * 100 ) / 100;
-
-					FP.doActions( 'woo_remove_from_cart', { 'products' : [[prod, false]], 'value' : value } );
-				}
-			);
+		// Stable replacement using wp.data to subscribe to cart changes
+		if ( window.wp && window.wp.data && window.wp.data.select( 'wc/store/cart' ) ) {
 			
+			const { subscribe } = wp.data;
+			const cartStore = wp.data.select( 'wc/store/cart' );
+			
+			// Initialize with current cart items
+			// The selector is getCartData(), which returns an object containing 'items'
+			let previousCartItems = cartStore.getCartData().items;
+
+			subscribe( () => {
+				const newCartItems = cartStore.getCartData().items;
+
+				// If the array reference is the same, nothing changed
+				if ( newCartItems === previousCartItems ) return;
+
+				// Map items by key for easy comparison
+				const prevMap = new Map( previousCartItems.map( i => [ i.key, i ] ) );
+				const newMap = new Map( newCartItems.map( i => [ i.key, i ] ) );
+
+				// 1. Check for REMOVED items
+				for ( const [ key, prevItem ] of prevMap ) {
+					if ( ! newMap.has( key ) ) {
+						let prod = get_prod_from_store_item( prevItem );
+						let value = Math.round( prod.price * prevItem.quantity * 100 ) / 100;
+						// Trigger remove action
+						FP.doActions( 'woo_remove_from_cart', { 'products' : [[prod, false]], 'value' : value } );
+						if ( fpdata.page_type == 'Woo Cart' ) update_fpdata_cart_items(prod.id, false);
+					}
+				}
+
+				// 2. Check for QUANTITY changes
+				for ( const [ key, newItem ] of newMap ) {
+					const prevItem = prevMap.get( key );
+					
+					if ( prevItem && newItem.quantity !== prevItem.quantity ) {
+						
+						let prod = get_prod_from_store_item( newItem );
+						let qty_change = Math.abs( newItem.quantity - prevItem.quantity );
+						let value = Math.round( prod.price * qty_change * 100 ) / 100;
+
+						if ( newItem.quantity > prevItem.quantity ) {
+							// Quantity Increased
+							FP.doActions( 'woo_add_to_cart', { 'products' : [[prod, qty_change]], 'value': value } );
+							if ( fpdata.page_type == 'Woo Cart' ) update_fpdata_cart_items(prod.id, newItem.quantity);
+						} else {
+							// Quantity Decreased
+							FP.doActions( 'woo_remove_from_cart', { 'products' : [[prod, qty_change]], 'value' : value } );
+							if ( fpdata.page_type == 'Woo Cart' ) update_fpdata_cart_items(prod.id, newItem.quantity);
+						}
+					}
+				}
+
+				update_cart_cookie();
+				// Update previous items for next change
+				previousCartItems = newCartItems;
+			} );
+
 			// "All products" block
 			wp.hooks.addAction(
 				"experimental__woocommerce_blocks-product-list-render",
@@ -649,27 +753,33 @@
 				( {products, listName } ) => {
 
 					if ( products.length > 0 && listName == 'woocommerce/all-products' ) {
-
 						fp.woo.products_from_all_products_block = products;
-
-						if ( fp.vars.wooImpressTimeout ) clearTimeout( fp.vars.wooImpressTimeout );
-						fp.vars.wooImpressTimeout = setTimeout( () => FP.runFn( "FP.fns.prepare_teaser_and_single" ), 200 );
 					}
 				}
 			);
+		}
 
-			wp.hooks.addAction(
-				"wc-blocks_product_list_rendered",
-				"fupi-tracking",
-				() => {
-					console.log('List name ', arguments);
-				}
-			)
+		// Helper function to normalize product data from the store item
+		function get_prod_from_store_item( item ) {
+			// Prefer data from fpdata if available (contains more info like categories)
+			if ( fpdata.woo.cart.items && fpdata.woo.cart.items[item.id] ) {
+				return { ...fpdata.woo.cart.items[item.id] };
+			}
+			
+			// Fallback to data available in the store item
+			return {
+				id: item.id,
+				name: item.name,
+				sku: item.sku,
+				price: parseInt( item.prices.price ) / 100, // Price is in minor units
+				qty: item.quantity
+			};
 		}
 	}
 
 	add_block_hooks();
+	
+	FP.loaded('woo'); // fp.loaded.push('woo'); is at the top
+};
 
-	FP.enqueueFn( 'FP.fns.prepare_teaser_and_single' );
-
-})();
+FP.load('woo', 'fupi_woo', ['footer_helpers']);

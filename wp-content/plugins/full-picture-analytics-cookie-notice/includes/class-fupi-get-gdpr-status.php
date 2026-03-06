@@ -411,39 +411,24 @@ class Fupi_compliance_status_checker {
         // If the tools is NOT force loaded
         } else {
 
-            // If cookies are disregarded
-            if ( isset( $settings['disreg_cookies'] ) ) {
-
-                if ( $this->format == 'cdb' ) {
-                    $t_cook_1 = 'The tool is set to disregard consent banner settings and start tracking without waiting for consent';
-                } else {
-                    $t_cook_1 = esc_html__('The tool is set to disregard consent banner settings and start tracking without waiting for consent. Disable it in the module\'s settings.', 'full-picture-analytics-cookie-notice');
-                }
-
-                return ['alert', $t_cook_1 ];
-            
-            // If cookies are NOT disregarded, add info when the tool will load
+            if ( $this->format == 'cdb' ) {
+                $main_text = 'This tool requires consents to:';
+                $t_cook_4 = 'It tracks additional data after visitors agree to:';
             } else {
-
-                if ( $this->format == 'cdb' ) {
-                    $main_text = 'This tool requires consents to:';
-                    $t_cook_4 = 'It tracks additional data after visitors agree to:';
-                } else {
-                    $main_text = esc_html__('This tool requires consents to:', 'full-picture-analytics-cookie-notice');
-                    $t_cook_4 = esc_html__('It tracks additional data after visitors agree to:', 'full-picture-analytics-cookie-notice');
-                }
-
-                // paste required consents
-                if ( isset( $info['consents'] ) ) {
-                    $main_text .= ' ' . join( ', ', $info['consents'] ) . '. ';
-                    if ( isset( $info['opt_consents'] ) ) {
-                        $main_text .=  $t_cook_4 . ' ' .  join( ', ', $info['opt_consents'] );
-                    }
-                    return [ 'ok', $main_text ];
-                };
-
-                return false;
+                $main_text = esc_html__('This tool requires consents to:', 'full-picture-analytics-cookie-notice');
+                $t_cook_4 = esc_html__('It tracks additional data after visitors agree to:', 'full-picture-analytics-cookie-notice');
             }
+
+            // paste required consents
+            if ( isset( $info['consents'] ) ) {
+                $main_text .= ' ' . join( ', ', $info['consents'] ) . '. ';
+                if ( isset( $info['opt_consents'] ) ) {
+                    $main_text .=  $t_cook_4 . ' ' .  join( ', ', $info['opt_consents'] );
+                }
+                return [ 'ok', $main_text ];
+            };
+
+            return false;
         }
     }
 

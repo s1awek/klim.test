@@ -24,7 +24,7 @@ FP.fns.mads_woo_get_pagetype = ()=>{
 	return page_type;
 }
 
-FP.fns.mads_woo_events = ()=>{
+function fupi_mads_woo_footer(){
 
 	// TRACK IMPRESSIONS
 
@@ -69,7 +69,7 @@ FP.fns.mads_woo_events = ()=>{
 
 			let payload_o = { 
 				'currency' : fpdata.woo.currency, 
-				'event_value' : teasers_value,
+				'event_value' : Math.round( teasers_value * 100, 2 ) / 100, // fix for incorrect rounding
 				'ecomm_prodid' : teasers_ids_a,
 				'ecomm_pagetype' : page_type,
 			};
@@ -80,6 +80,11 @@ FP.fns.mads_woo_events = ()=>{
 
 		if ( single_ids_a.length > 0 ) {
 
+			let impress_evt_name = 'woo product view';
+			if ( fp.woo?.force_item_view_on_url && fp.woo?.force_item_view_on_url.some( url_part => document.location.href.includes(url_part) ) ) {
+				impress_evt_name = 'woo list item view';
+			}
+
 			let payload_o = { 
 				'currency' : fpdata.woo.currency, 
 				'event_value' : single_value,
@@ -89,8 +94,8 @@ FP.fns.mads_woo_events = ()=>{
 
 			if ( fpdata.content_id ) payload_o['ecomm_category'] = fpdata.content_id;
 			
-			window.uetq.push( 'event', 'woo product view', payload_o );
-			if ( fp.main.debug ) console.log('[FP] MS Ads "woo product view" event action', payload_o);
+			window.uetq.push( 'event', impress_evt_name, payload_o );
+			if ( fp.main.debug ) console.log('[FP] MS Ads "' + impress_evt_name + '" event action', payload_o);
 
 		}
 	};
@@ -170,6 +175,8 @@ FP.fns.mads_woo_events = ()=>{
 		track_items( data );
 	} );
 
+	if ( fp.woo.cart_to_track ) track_items( fp.woo.cart_to_track ); // when ATC is tracked in cart
+
 	// TRACK CHECKOUT
 	// TRACK ORDER
 
@@ -196,12 +203,14 @@ FP.fns.mads_woo_events = ()=>{
 
 		if ( items_a.length == 0 ) return false;
 
+		let cart_value = Math.round( cart.value * 100, 2 ) / 100; // fix for incorrect rounding
+
 		let payload_o = {
 			'items' : items_a, 
 			'ecomm_prodid' : items_ids_a,
 			'ecomm_pagetype' : FP.fns.mads_woo_get_pagetype(),
-			'ecomm_totalvalue' : cart.value,
-			'revenue_value' : cart.value,
+			'ecomm_totalvalue' : cart_value,
+			'revenue_value' : cart_value,
 			'currency' : fpdata.woo.currency, 
 		};
 
@@ -230,9 +239,11 @@ FP.fns.mads_woo_events = ()=>{
 			})
 		};
 	}
+
+	FP.loaded('mads_footer_woo');
 }
 
-FP.fns.mads_standard_events = function(){
+function fupi_mads_footer(){
 
 	// TRACK VIEWS OF ELEMENTS
 	// for performance: waits 250ms for dynamically generated content to finish
@@ -302,14 +313,9 @@ FP.fns.mads_standard_events = function(){
 			}
 		})
 	}
+
+	FP.loaded('mads_footer');
 }
 
-FP.fns.load_mads_footer = function() {
-	FP.fns.mads_standard_events();
-	if ( fp.loaded.includes('woo') ) FP.fns.mads_woo_events();
-}
-
-// INIT FOOTER SCRIPTS
-FP.enqueueFn( 'FP.fns.load_mads_footer' );
-
-
+FP.load('mads_footer','fupi_mads_footer',['mads','footer_helpers']);
+FP.load('mads_footer_woo','fupi_mads_woo_footer',['mads','footer_helpers','woo']);

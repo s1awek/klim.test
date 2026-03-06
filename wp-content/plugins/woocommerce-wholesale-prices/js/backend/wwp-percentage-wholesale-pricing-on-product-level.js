@@ -23,6 +23,41 @@ jQuery(document).ready(function ($) {
     });
 
     /**
+     * Normalize a value's decimal separator to a period for calculation.
+     *
+     * @since 2.2.7
+     * @param {*}      value        The input value.
+     * @param {string}  fallback     Optional fallback if value is null/empty. Defaults to returning value as-is.
+     * @returns {string|*} The normalized value or fallback.
+     */
+    function normalizeDecimalSeparator(value, fallback) {
+        if (value == null || value === '') {
+            return typeof fallback !== 'undefined' ? fallback : value;
+        }
+
+        if ($options.decimal_sep !== '.') {
+            return value.toString().replace($options.decimal_sep, '.');
+        }
+
+        return value;
+    }
+
+    /**
+     * Convert a period decimal separator back to the localized separator.
+     *
+     * @since 2.2.7
+     * @param {*} value The input value.
+     * @returns {string|*} The localized value.
+     */
+    function localizeDecimalSeparator(value) {
+        if ($options.decimal_sep !== '.') {
+            return value.toString().replace('.', $options.decimal_sep);
+        }
+
+        return value;
+    }
+
+    /**
      * @since 2.2.1
      */
     $("body").on("click", ".woocommerce_variation",
@@ -299,7 +334,7 @@ jQuery(document).ready(function ($) {
             wholesale_sale_price_field_id = $variable_product_variations.length > 0 ? role + '_wholesale_sale_price\\[' + variation_loop_index_id + '\\]' : role + '_wholesale_sale_price',
             el_wholesale_sale_price_field = $('#' + wholesale_sale_price_field_id);
 
-        discount = (discount !== "" && $options.decimal_sep !== '.') ? discount.toString().replace($options.decimal_sep, '.') : discount;
+        discount = normalizeDecimalSeparator(discount);
 
         if (parseFloat(discount) > 100) {
 
@@ -330,8 +365,8 @@ jQuery(document).ready(function ($) {
 
     /**
      * Calculate the percentage wholesale price every time the value is change and if you loss focus in the discount field input or if encounters an error on decimal separator or if the discount input field is greater than 100 or if the discount input field is less than 0.
-     * 
-     * @since 2.1.1 
+     *
+     * @since 2.1.1
      * @since 2.2.1 WC Subscriptions compatibility
      */
     $('body').on('change', '.wholesale_discount', function (e) {
@@ -346,7 +381,7 @@ jQuery(document).ready(function ($) {
             wholesale_price_field_id = $variable_product_variations.length > 0 ? role + '_wholesale_prices\\[' + variation_loop_index_id + '\\]' : role + '_wholesale_price',
             el_wholesale_price_field = $('#' + wholesale_price_field_id);
 
-        discount = (discount !== "" && $options.decimal_sep !== '.') ? discount.toString().replace($options.decimal_sep, '.') : discount;
+        discount = normalizeDecimalSeparator(discount);
 
         if (parseFloat(discount) > 100) {
 
@@ -376,7 +411,7 @@ jQuery(document).ready(function ($) {
 
     /**
      * Calculate the percentage wholesale signup fee every time the value is change and if you loss focus in the discount field input or if encounters an error on decimal separator or if the discount input field is greater than 100 or if the discount input field is less than 0.
-     * 
+     *
      * @since 2.2.1
      */
     $('body').on('change', '.wholesale_signup_fee_discount', function (e) {
@@ -395,7 +430,7 @@ jQuery(document).ready(function ($) {
         var wholesale_price_field_id = $variable_product_variations.length > 0 ? role + '_wholesale_signup_fee\\[' + variation_loop_index_id + '\\]' : role + '_wholesale_signup_fee',
             el_wholesale_price_field = $('#' + wholesale_price_field_id);
 
-        discount = (discount !== "" && $options.decimal_sep !== '.') ? discount.toString().replace($options.decimal_sep, '.') : discount;
+        discount = normalizeDecimalSeparator(discount);
 
         if (parseFloat(discount) > 100) {
 
@@ -771,7 +806,8 @@ jQuery(document).ready(function ($) {
                 return false;
             };
 
-            var discount = ($options.decimal_sep !== '.') ? el_discount_field.val().replace($options.decimal_sep, '.') : el_discount_field.val();
+            var raw_discount = el_discount_field.val();
+            var discount = normalizeDecimalSeparator(raw_discount, '');
 
             if (selected_options === 'percentage' && regular_price !== "" && el_discount_field.val() !== "") {
                 var discounted_price = calculateDiscountedPrice(regular_price, discount);
@@ -800,9 +836,9 @@ jQuery(document).ready(function ($) {
 
     /**
      * Get Percentage Wholesale Signup Fee By Subscription Sign-up fee
-     * 
+     *
      * This will get the percentage wholesale price base on Sign-up fee if the discount type is percentage. If the discount type is fixed then we set the wholesale signup fee field text to empty if it has no existing value and vice versa.
-     * 
+     *
      * @param {integer} variation_loop_index_id  This is the index id of variations in a variable product, if we have a total of 4(Four variations) its loop index will be like this "0,1,2,3" like an array index.
      * @param {float} regular_price This is the products regular price, we will base here our computation for the percentage discount.
      */
@@ -828,7 +864,8 @@ jQuery(document).ready(function ($) {
                 return false;
             };
 
-            var discount = ($options.decimal_sep !== '.') ? el_discount_field.val().replace($options.decimal_sep, '.') : el_discount_field.val();
+            var raw_discount = el_discount_field.val();
+            var discount = normalizeDecimalSeparator(raw_discount, '');
 
             if (selected_options === 'percentage' && regular_price !== "" && el_discount_field.val() !== "") {
                 var discounted_price = calculateDiscountedPrice(regular_price, discount);
@@ -869,16 +906,16 @@ jQuery(document).ready(function ($) {
 
         try {
 
-            if ((price !== "" && price !== null)) {
+            if (price != null && price !== "") {
                 // First we convert if has decimal separator of ',' to '.'
-                price = $options.decimal_sep !== '.' ? price.toString().replace($options.decimal_sep, ".") : price;
+                price = normalizeDecimalSeparator(price);
 
                 // we remove all trailing zeros using parseFloat() function
                 price = parseFloat(price);
 
                 // we check if the decimal separator is comma (','), we change it back to the decimal separator that is set in wordpress settings.
                 if (!isNaN(price)) {
-                    price = $options.decimal_sep !== '.' ? price.toString().replace('.', $options.decimal_sep) : price;
+                    price = localizeDecimalSeparator(price);
                 } else {
                     price = '';
                 }
@@ -916,8 +953,12 @@ jQuery(document).ready(function ($) {
      */
     function calculatePercentage(percent, total) {
 
-        // If the decimal separator is not a period "." replace it with a period "." so we can calculate the percentage 
-        percent = $options.decimal_sep !== '.' ? percent.toString().replace($options.decimal_sep, '.') : percent;
+        if (percent == null || percent === '' || total == null || total === '') {
+            return 0;
+        }
+
+        // If the decimal separator is not a period "." replace it with a period "." so we can calculate the percentage
+        percent = normalizeDecimalSeparator(percent);
 
         var percentage = (percent / 100) * total;
 
@@ -934,10 +975,14 @@ jQuery(document).ready(function ($) {
      */
     function calculateDiscountedPrice(price, percent) {
 
+        if (price == null || price === '' || percent == null || percent === '') {
+            return null;
+        }
+
         try {
-            price = $options.decimal_sep !== '.' ? price.toString().replace($options.decimal_sep, ".") : price;
+            price = normalizeDecimalSeparator(price);
         } catch (e) {
-            console.error(e.message);
+            return null;
         }
 
         var wholesale_price = price - calculatePercentage(percent, price);
@@ -1021,10 +1066,7 @@ jQuery(document).ready(function ($) {
                     : role + "_wholesale_discount_type",
             discount_type = $("#" + discount_field_id).val();
 
-        discount =
-            discount !== "" && $options.decimal_sep !== "."
-                ? discount.toString().replace($options.decimal_sep, ".")
-                : discount;
+        discount = normalizeDecimalSeparator(discount);
 
         if (parseFloat(discount) > 100) {
             $(document.body).triggerHandler("wc_add_error_tip", [
@@ -1092,7 +1134,7 @@ jQuery(document).ready(function ($) {
      * @param DOMElemnt $discount_element The product discount element.
      * @param String variation_loop_index_id The variation loop index id.
      * @param String role The wholesale customer role.
-     * 
+     *
      * @since 2.2.1
      */
     function processVariationWholesaleSignupFee(
@@ -1128,10 +1170,7 @@ jQuery(document).ready(function ($) {
                     : role + "_wholesale_discount_type",
             discount_type = $("#" + discount_field_id).val();
 
-        discount =
-            discount !== "" && $options.decimal_sep !== "."
-                ? discount.toString().replace($options.decimal_sep, ".")
-                : discount;
+        discount = normalizeDecimalSeparator(discount);
 
         if (parseFloat(discount) > 100) {
             $(document.body).triggerHandler("wc_add_error_tip", [

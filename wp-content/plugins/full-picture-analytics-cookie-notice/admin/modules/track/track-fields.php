@@ -80,8 +80,8 @@ $sections = array(
 				'must_have'			=> 'pro',
 				'option_arr_id'		=> $option_arr_id,
 				'popup'				=> '<p>' . esc_html__('This will add a "page label" field to page "edit" screens.','full-picture-analytics-cookie-notice') . '</p>
-					<p>' . sprintf( esc_html__('Use it, to label pages according to their type, e.g. landing page, contact page, etc. This information can be sent to tracking and marketing tools for analysis or be used by developers. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/what-is-page-labeling-and-how-to-use-it/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">', '</a>') . '</p>
-					<p>' . esc_html__('At the moment this extension works with Google Analytics, Facebook Pixel and Google Tag Manager.','full-picture-analytics-cookie-notice') . '</p>',
+					<p>' . sprintf( esc_html__('Use it, to label pages according to their type, e.g. landing page, contact page, etc. This information can be sent to tracking and marketing tools for analysis or be used by developers. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/what-is-page-labeling-and-how-to-use-it/" target="_blank">', '</a>') . '</p>
+					<p>' . esc_html__('At the moment this extension works with Google Analytics, Meta Pixel and Google Tag Manager.','full-picture-analytics-cookie-notice') . '</p>',
 			),
 			array(
 				'type'	 			=> 'toggle',
@@ -176,7 +176,7 @@ $sections = array(
 				),
 				'popup'				=> '<p>' . esc_html__('This function fixes incorrect traffic source recognition by Google Analytics and other tracking tools.' , 'full-picture-analytics-cookie-notice') . '</p>
 				<p>' . esc_html__('When you enable these options, traffic from chosen applications will no longer be labelled as "Direct" but will be recognized as coming from their websites, e.g. Google Search Bar > Google.com, Facebook App > Facebook.com, etc.' , 'full-picture-analytics-cookie-notice') . '</p>
-				<p>' . esc_html__('Traffic from Line app will be marked as coming from https://line-android-app.jp/.' , 'full-picture-analytics-cookie-notice') . '</p>',
+				<p>' . sprintf( esc_html__('Traffic from Line app will be marked as coming from %1$s.' , 'full-picture-analytics-cookie-notice'), 'https://line-android-app.jp/' ) . '</p>',
 			),
 			array(
 				'type'	 			=> 'r3',
@@ -235,7 +235,7 @@ $sections = array(
 					array(
 						'type'				=> 'text',
 						'label'				=> esc_html__('Always report as traffic from','full-picture-analytics-cookie-notice'),
-						'placeholder'		=> esc_html__('e.g. Checkout page URL (has to start with https://)','full-picture-analytics-cookie-notice'),
+						'placeholder'		=> sprintf( esc_html__('e.g. Checkout page URL (has to start with %1$s)','full-picture-analytics-cookie-notice'), 'https://' ),
 						'field_id'			=> 'replace',
 						'required'			=> true,
 					),
@@ -253,7 +253,7 @@ $sections = array(
 					'insta'		=> 'Instagram',
 					'pin'		=> 'Pinterest',
 				),
-				'popup'				=> '<p>' . esc_html__( 'Facebook, Instagram and Pinterest use multiple URLs that redirect traffic to your site, e.g. l.facebook.com, lm.facebook.com, etc. Enable this function to combine them and analyse traffic sources more easily.', 'full-picture-analytics-cookie-notice') . ' <a target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-get-better-traffic-sources-information/?utm_source=fp_admin&utm_medium=fp_link">' . esc_html__('Learn more', 'full-picture-analytics-cookie-notice') . '</a>.</p>',
+				'popup'				=> '<p>' . esc_html__( 'Facebook, Instagram and Pinterest use multiple URLs that redirect traffic to your site, e.g. l.facebook.com, lm.facebook.com, etc. Enable this function to combine them and analyse traffic sources more easily.', 'full-picture-analytics-cookie-notice') . ' <a target="_blank" href="https://wpfullpicture.com/support/documentation/how-to-get-better-traffic-sources-information/">' . esc_html__('Learn more', 'full-picture-analytics-cookie-notice') . '</a>.</p>',
 			),
 		),
 	),

@@ -27,8 +27,10 @@ $sections = array(
 					'must_have'			=> 'pro',
 					'option_arr_id'		=> $option_arr_id,
 					'label_for' 		=> $option_arr_id . '[capi_token]',
-					'popup'				=> '<p>' . esc_html__( 'After you enable Conversion API, the data you track, will be sent to Meta by both, the tracking pixel and your server. This way, you will be able to track visitors who use ad blockers (they block tracking pixels). Enabling Conversion API will put a strain on your server, requiring it to do additional work. Do not enable Conversion API on hosting that is at its limits.', 'full-picture-analytics-cookie-notice' ) . '</p>
-						<p><a href="https://wpfullpicture.com/support/documentation/3-ways-to-test-and-debug-meta-pixel-integration/">' . esc_html__('See the installation guide', 'full-picture-analytics-cookie-notice') . '</a></p>',
+					'popup'				=> '<p>' . esc_html__( 'Conversion API lets you track visitors who use ad blockers.', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<p>' . esc_html__( 'After you enable Conversion API, you will be able to send data to Meta by both, the tracking pixel and your server. Simply click the "Send event with Conversion API" on the next pages.', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<p>' . esc_html__( 'Enabling Conversion API will put a strain on your server. If it is at its limits, use Conversion API only for the most important events.', 'full-picture-analytics-cookie-notice' ) . '</p>',
+					'under field'		=> '<p><a href="https://wpfullpicture.com/support/documentation/how-to-install-meta-pixel/#hook_get_capi_token">' . esc_html__('See where to find it', 'full-picture-analytics-cookie-notice') . '</a></p>' ,
 				),
 				array(
 					'type'	 			=> 'text',
@@ -93,17 +95,7 @@ $sections = array(
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . sprintf( esc_html__( 'This will load the tracking script for administrators, bots, excluded users, people browsing from excluded locations and people who didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
-				),
-			array(
-				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Track without waiting for consent', 'full-picture-analytics-cookie-notice' ),
-				'class'				=> 'fupi_load_opts fupi_adv',
-				'field_id' 			=> 'disreg_cookies',
-				'must_have'			=> 'cook',
-				'option_arr_id'		=> $option_arr_id,
-				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . esc_html__( 'Visitors will still be able to turn off tracking by declining tracking / cookies.', 'full-picture-analytics-cookie-notice' ) . '</p>'
+				<p>' . sprintf( esc_html__( 'This will load the tracking script for administrators, bots, excluded users, people browsing from excluded locations and people who didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/">', '</a>' ) . '</p>',
 			),
 			array(
 				'type'	 			=> 'r3',
@@ -113,7 +105,7 @@ $sections = array(
 				'option_arr_id'		=> $option_arr_id,
 				'class'				=> 'fupi_load_opts fupi_adv',
 				'is repeater'		=> false,
-				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
+				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by commas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 				'fields'			=> array(
 					array(
 						'type'				=> 'select',
@@ -182,6 +174,15 @@ $sections = array(
 		'fields' => array(
 			array(
 				'type'	 			=> 'toggle',
+				'label' 			=> esc_html__( 'Track pageviews with Conversion API', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'track_pageview_capi',
+				'class'				=> 'fupi_adv',
+				'must_have'			=> 'pro',
+				'option_arr_id'		=> $option_arr_id,
+				'under field'		=> '<p>' . esc_html__( 'By default, pageviews are tracked only by the browser pixel.', 'full-picture-analytics-cookie-notice' ) . '</p>'
+			),
+			array(
+				'type'	 			=> 'toggle',
 				'label' 			=> esc_html__( 'Track clicks on outbound links', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'track_outbound',
 				'class'				=> 'fupi_adv',
@@ -240,7 +241,7 @@ $sections = array(
 				'placeholder'		=> 'pdf, doc, docx, xls, xlsx, txt',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[track_file_downl]',
-				'popup'				=> '<p>' . esc_html__( 'Enter coma separated list of file formats (extensions) you want to track', 'full-picture-analytics-cookie-notice') . '</p><p>' . esc_html__( 'Tracked as a parameter "file" of the "file download" event', 'full-picture-analytics-cookie-notice' ) . '</p>',
+				'popup'				=> '<p>' . esc_html__( 'Enter comma separated list of file formats (extensions) you want to track', 'full-picture-analytics-cookie-notice') . '</p><p>' . esc_html__( 'Tracked as a parameter "file" of the "file download" event', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
 				array(
 					'type'	 			=> 'toggle',
@@ -406,7 +407,7 @@ $sections = array(
 					'class'				=> 'fupi_sub fupi_adv',
 					'must_have'			=> 'pro',
 					'option_arr_id'		=> $option_arr_id,
-					'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'Tracking scroll with server can greatly decrease its performance. It is NOT recommended to enable this function on slow hosting.', 'full-picture-analytics-cookie-notice') . '</p>'
+					'popup2'			=> '<p class="fupi_warning_text">' . esc_html__( 'Tracking scroll with the server can greatly decrease its performance. It is NOT recommended to enable this function on slow hosting.', 'full-picture-analytics-cookie-notice') . '</p>'
 				),
 			array(
 				'type'	 			=> 'toggle',
@@ -505,7 +506,7 @@ $sections = array(
 									'string'			=> esc_html__( 'Text', 'full-picture-analytics-cookie-notice' ),
 									'number'			=> esc_html__( 'Number', 'full-picture-analytics-cookie-notice' ),
 									'bool'				=> esc_html__( 'true/false', 'full-picture-analytics-cookie-notice' ),
-									'path'			=> esc_html__( 'Path to a JS value', 'full-picture-analytics-cookie-notice' ),
+									'path'			=> esc_html__( 'Path to a JS variable', 'full-picture-analytics-cookie-notice' ),
 								),
 							),
 							array(

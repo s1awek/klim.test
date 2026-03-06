@@ -1,28 +1,49 @@
+<?php /*<div style="background: lightyellow; padding: 15px; font-size: 18px; text-align: center;">
+    <div>You are now using a Beta version of WP Full Picture. Please <a href="mailto:hello@wpfullpicture.com">report to us any issues</a> you come across. Thanks :)</div>
+</div> */ ?>
+
 <div id="fupi_top_bar">
-<?php 
-//
-// TOP NAV
-// ?>
+    <?php 
+    //
+    // TOP NAV
+    //
+    ?>
+
     <script>
         let fupi_adv_mode_alert_text = '<?php echo esc_js( __( 'This will reload the page. All unsaved data will be lost. Are you sure?', 'full-picture-analytics-cookie-notice' ) ); ?>';
     </script>
-    <div id="fupi_top_nav" class="top_menu_section"><?php 
+
+    <?php
         
+        $top_nav = '';
+
         // FIRST STEPS / GDPR HELPER / DOCS / SUPPORT
-//<a class="fupi_top_nav_link" href="https://wpfullpicture.com/support/documentation/first-steps-in-full-picture/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">' . esc_html__('First steps', 'full-picture-analytics-cookie-notice') . '</a>
-        $top_nav = '
-            <button type="button" class="fupi_top_nav_link fupi_open_popup" data-popup="fupi_first_steps_popup">' . esc_html__('First steps', 'full-picture-analytics-cookie-notice') . '</button>
-        
-            <button type="button" class="fupi_top_nav_link fupi_open_popup" data-popup="fupi_guides_popup">' . esc_html__('Guides', 'full-picture-analytics-cookie-notice') . '</button>
 
-            <button type="button" class="fupi_top_nav_link fupi_open_popup" data-popup="fupi_help_links_popup">' . esc_html__('Help', 'full-picture-analytics-cookie-notice') . '</button>';
-        
-        // MODULES TOGGLE BTN
+        //<a class="fupi_top_nav_link" href="https://wpfullpicture.com/support/documentation/first-steps-in-full-picture/" target="_blank">' . esc_html__('First steps', 'full-picture-analytics-cookie-notice') . '</a>
 
-        $top_nav .= '<button id="fupi_mobile_nav_toggle_button" type="button" class="button primary-button"><span class="dashicons dashicons-menu-alt3"></span><span class="fupi_srt">' . esc_html__( 'Menu', 'full-picture-analytics-cookie-notice' ) . '</span></button>';
-        
-        echo $top_nav; ?>
-    </div>
+        // <button type="button" class="fupi_top_nav_link fupi_open_popup" data-popup="fupi_first_steps_popup">' . esc_html__('First steps', 'full-picture-analytics-cookie-notice') . '</button>
+
+        // <button type="button" class="fupi_top_nav_link fupi_open_popup" data-popup="fupi_guides_popup">' . esc_html__('Guides', 'full-picture-analytics-cookie-notice') . '</button>
+
+        // <button type="button" class="fupi_top_nav_link fupi_open_popup" data-popup="fupi_help_links_popup">' . esc_html__('Help', 'full-picture-analytics-cookie-notice') . '</button>
+
+        $active_class = $module_id == 'home' ? 'fupi_current' : '';
+        $top_nav.= '<a class="fupi_top_nav_link ' . $active_class . '" href="' . admin_url('admin.php?page=full_picture_home') . '">' . esc_html__('Dashboard', 'full-picture-analytics-cookie-notice') . '</a>';
+
+        $active_class = $module_id == 'tools' ? 'fupi_current' : '';
+        $top_nav.= '<a class="fupi_top_nav_link ' . $active_class . '" href="' . admin_url('admin.php?page=full_picture_tools') . '">' . esc_html__('Modules', 'full-picture-analytics-cookie-notice') . '</a>';
+
+        $active_class = $module_id == 'main' ? 'fupi_current' : '';
+        $top_nav.= '<a class="fupi_top_nav_link ' . $active_class . '" href="' . admin_url('admin.php?page=full_picture_main') . '">' . esc_html__('General Settings', 'full-picture-analytics-cookie-notice') . '</a>';
+
+        $active_class = $module_id == 'status' ? 'fupi_current' : '';
+        $top_nav.= '<a class="fupi_top_nav_link ' . $active_class . '" href="' . admin_url('admin.php?page=full_picture_home&tab=gdpr_setup_helper') . '">' . esc_html__('GDPR Setup Helper', 'full-picture-analytics-cookie-notice') . '</a>';
+
+        // $top_nav.= '<a class="fupi_top_nav_link" href="https://wpfullpicture.com/support/documentation/">' . esc_html__('Documentation', 'full-picture-analytics-cookie-notice') . '</a>';
+
+        if ( ! empty( $top_nav ) ) echo '<div id="fupi_top_nav" class="top_menu_section">' . $top_nav . '</div>';
+    ?>
+
     <?php
 
     //
@@ -50,7 +71,7 @@
         <script> let fupi_setup_mode_nonce ="' . wp_create_nonce( 'fupi_update_modes_nonce' ) . '";</script>
         
         <div id="fupi_top_setup_info_adv">
-            ' . sprintf( esc_html__( 'Show advanced settings', 'full-picture-analytics-cookie-notice' ), '<strong>', '</strong>' ) . '
+            ' . sprintf( esc_html__( 'Advanced settings', 'full-picture-analytics-cookie-notice' ), '<strong>', '</strong>' ) . '
             <label class="fupi_switch">
                 <input type="checkbox" id="adv_mode_checkbox" value="1" ' . $adv_mode_checked . '>
                 <span class="fupi_switch_slider"></span>

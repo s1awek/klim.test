@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) )
  */
 class ADBC_Selected_Items_Validator {
 
-	private const MAX_ITEMS_TO_PROCESS = 200;
+	private const MAX_ITEMS_TO_PROCESS = 1000;
 
 	/**
 	 * Removes invalid selected items by checking their structure and checking if they exist in the database for tables and cron jobs.
@@ -75,13 +75,17 @@ class ADBC_Selected_Items_Validator {
 	private static function remove_invalid_structure_selected_items( $items_type, $selected_items ) {
 
 		$is_not_empty = function ($v) {
-			return ! empty( $v ); };
+			return ! empty( $v );
+		};
 		$is_in_array = function ($v) {
-			return in_array( $v, [ 'options', 'sitemeta' ], true ); };
+			return in_array( $v, [ 'options', 'sitemeta' ], true );
+		};
 		$is_numeric = function ($v) {
-			return is_numeric( $v ) && $v > 0; };
+			return is_numeric( $v ) && $v > 0;
+		};
 		$is_array = function ($v) {
-			return is_array( $v ); };
+			return is_array( $v );
+		};
 
 		// Key => validation-callback map for every item type
 		$schema = [ 

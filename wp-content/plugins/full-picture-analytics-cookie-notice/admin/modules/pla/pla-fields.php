@@ -69,7 +69,7 @@ $sections = array(
 				'el_class'			=> 'fupi_condition fupi_condition_reverse',
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
-				'popup2'			=> sprintf( esc_html__( 'When this option is enabled, it will load Plausible\'s tracking script for all visitors - even for administrators, bots, excluded users and locations. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ),
+				'popup2'			=> sprintf( esc_html__( 'When this option is enabled, it will load Plausible\'s tracking script for all visitors - even for administrators, bots, excluded users and locations. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/">', '</a>' ),
 			),
 			array(
 				'type'	 			=> 'r3',
@@ -79,7 +79,7 @@ $sections = array(
 				'class'				=> 'fupi_load_opts fupi_adv',
 				'must_have'			=> 'pro geo',
 				'is_repeater'		=> false,
-				'popup'				=> sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '<br><br>' . esc_html__('If visitor\'s country is not recognized Plausible will load normally. Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ),
+				'popup'				=> sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by commas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '<br><br>' . esc_html__('If visitor\'s country is not recognized Plausible will load normally. Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ),
 				'fields'			=> array(
 					array(
 						'type'				=> 'select',
@@ -267,7 +267,7 @@ $sections = array(
 					'class'				=> 'fupi_sub fupi_downl_subs fupi_disabled fupi_adv',
 					'option_arr_id'		=> $option_arr_id,
 					'label_for' 		=> $option_arr_id . '[track_file_downl]',
-					'under field'		=> esc_html__( 'Enter coma separated list of file formats (extensions) you want to track', 'full-picture-analytics-cookie-notice'),
+					'under field'		=> esc_html__( 'Enter comma separated list of file formats (extensions) you want to track', 'full-picture-analytics-cookie-notice'),
 				),
 			array(
 				'type'	 			=> 'r3',

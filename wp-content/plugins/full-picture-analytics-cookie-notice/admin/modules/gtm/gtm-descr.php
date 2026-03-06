@@ -21,7 +21,7 @@ switch( $section_id ){
 	case 'fupi_gtm_loading':
 
 		$ret_text = '<p class="fupi_warning_text">' . esc_html__('Tracking tools installed with GTM, track all users - even those who did not agree to tracking or are excluded from tracking (in the General Settings page).', 'full-picture-analytics-cookie-notice' ) . '</p>
-		<p class="fupi_warning_text">' . esc_html__('To comply with GDPR (and be able to decline tracking yourself), please, enable the Consent Banner module and set every tag in GTM to require relevant consents.', 'full-picture-analytics-cookie-notice' ) . '</p>
+		<p class="fupi_warning_text">' . esc_html__('To comply with GDPR (and be able to decline tracking yourself), please, enable the Consent Management module and set every tag in GTM to require relevant consents.', 'full-picture-analytics-cookie-notice' ) . '</p>
 		<ol>
 			<li>' . esc_html__( 'Open the tag configuration.', 'full-picture-analytics-cookie-notice') . ',</li>
 			<li>' . esc_html__( 'Click on "Advanced settings" and then "Consent settings"', 'full-picture-analytics-cookie-notice') . ',</li>

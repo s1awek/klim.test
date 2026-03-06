@@ -22,7 +22,7 @@ class Notifications {
         add_action( 'admin_enqueue_scripts', [__CLASS__, 'inject_admin_scripts'] );
         add_action( 'admin_enqueue_scripts', [__CLASS__, 'wpm_admin_css'] );
         add_action( 'admin_notices', function () {
-            if ( Environment::is_allowed_notification_page() ) {
+            if ( Environment::is_allowed_notification_page() || Environment::is_pmw_settings_page() ) {
                 self::opportunities_notification();
                 self::show_notifications();
             }
@@ -115,7 +115,7 @@ class Notifications {
 
     public static function can_current_page_show_pmw_notification() {
         global $hook_suffix;
-        $allowed_pages = ['page_wpm', 'index.php', 'dashboard'];
+        $allowed_pages = ['page_pmw', 'index.php', 'dashboard'];
         /**
          * We can't use in_array because woocommerce_page_wpm
          * is malformed on certain installs, but the substring
@@ -155,13 +155,43 @@ class Notifications {
 
     private static function can_show_dashboard_opportunities_message() {
         $saved_notifications = get_option( PMW_DB_NOTIFICATIONS_NAME );
-        if ( isset( $saved_notifications['dashboard-opportunities-message-dismissed'] ) && $saved_notifications['dashboard-opportunities-message-dismissed'] > time() - MONTH_IN_SECONDS * 3 ) {
+        $dismissed_time = self::get_opportunities_notification_dismissed_time( $saved_notifications );
+        // If dismissed within the cooldown period, only re-show if new opportunities
+        // have been added since the dismissal.
+        if ( $dismissed_time && $dismissed_time > time() - MONTH_IN_SECONDS * 3 && !Opportunities::has_opportunities_newer_than( $dismissed_time ) ) {
             return false;
         }
         if ( !Opportunities::active_opportunities_available() ) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Get the timestamp when the dashboard opportunities notification was dismissed.
+     *
+     * Handles both the current storage format (array with 'dismissed' key)
+     * and any legacy format (direct timestamp).
+     *
+     * @param mixed $saved_notifications The saved notifications option value.
+     *
+     * @return int|false The dismissed timestamp, or false if never dismissed.
+     * @since 1.57.1
+     */
+    private static function get_opportunities_notification_dismissed_time( $saved_notifications ) {
+        if ( empty( $saved_notifications ) || !isset( $saved_notifications['dashboard-opportunities-message-dismissed'] ) ) {
+            return false;
+        }
+        $value = $saved_notifications['dashboard-opportunities-message-dismissed'];
+        // Current format: ['dismissed' => timestamp]
+        if ( is_array( $value ) && isset( $value['dismissed'] ) ) {
+            return (int) $value['dismissed'];
+        }
+        // Legacy format: direct timestamp
+        if ( is_numeric( $value ) ) {
+            return (int) $value;
+        }
+        return false;
     }
 
     public static function notification_html( $notification_data ) {
@@ -329,6 +359,27 @@ class Notifications {
         ?>
 					<!-- Settings Link end -->
 
+					<!-- Portal Link -->
+					<?php 
+        if ( isset( $notification_data['portal_link'] ) ) {
+            ?>
+						<a class="notification-card-button-link"
+						   href="<?php 
+            echo esc_html( $notification_data['portal_link'] );
+            ?>"
+						   target="_blank"
+						>
+							<div class="notification-card-bottom-button">
+								<?php 
+            esc_html_e( 'SSP Portal', 'woocommerce-google-adwords-conversion-tracking-tag' );
+            ?>
+							</div>
+						</a>
+					<?php 
+        }
+        ?>
+					<!-- Portal Link end -->
+
 				</div>
 				<!-- bottom end -->
 
@@ -345,26 +396,89 @@ class Notifications {
         if ( self::cannot_show_dashboard_opportunities_message() ) {
             return;
         }
+        $total_count = Opportunities::get_active_opportunities_count();
+        $counts_by_impact = Opportunities::get_active_opportunities_by_impact();
         ?>
 		<div id="active-opportunities-notification"
 			 class="notice notice-info pmw active-opportunities-notification"
-			 style="padding: 8px;display: flex;flex-direction: row;justify-content: space-between;">
+			 style="padding: 12px 16px;display: flex;flex-direction: row;justify-content: space-between;align-items: flex-start;">
 			<div>
-				<div style="color:black;">
-						<span>
-							<?php 
-        esc_html_e( 'The Pixel Manager has detected new opportunities which can help improve tracking and campaign performance.', 'woocommerce-google-adwords-conversion-tracking-tag' );
+				<div style="color:black;margin-bottom: 8px;">
+					<strong style="font-size: 14px;">
+						<?php 
+        printf( 
+            /* translators: %d: number of opportunities */
+            esc_html( _n(
+                '🚀 %d Opportunity Detected!',
+                '🚀 %d Opportunities Detected!',
+                $total_count,
+                'woocommerce-google-adwords-conversion-tracking-tag'
+            ) ),
+            absint( $total_count )
+         );
         ?>
+					</strong>
+				</div>
+				<div style="color:#444;margin-bottom: 10px;">
+					<?php 
+        esc_html_e( 'The Pixel Manager has detected opportunities to improve your tracking and campaign performance.', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        ?>
+				</div>
+
+				<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+					<?php 
+        if ( $counts_by_impact['high'] > 0 ) {
+            ?>
+						<span class="pmw-opportunity-badge pmw-opportunity-badge-high" style="display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 3px; font-size: 12px; font-weight: 500; background: #f3e8ff; border: 1px solid #8b5cf6; color: #5b21b6;">
+							<span style="background: #fff; border-radius: 3px; margin-right: 6px; font-size: 11px; font-weight: 600; border: 1px solid #8b5cf6; min-width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; padding: 0 3px;"><?php 
+            echo esc_html( $counts_by_impact['high'] );
+            ?></span>
+							<?php 
+            esc_html_e( 'High Impact', 'woocommerce-google-adwords-conversion-tracking-tag' );
+            ?>
 						</span>
+					<?php 
+        }
+        ?>
+
+					<?php 
+        if ( $counts_by_impact['medium'] > 0 ) {
+            ?>
+						<span class="pmw-opportunity-badge pmw-opportunity-badge-medium" style="display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 3px; font-size: 12px; font-weight: 500; background: #dbeafe; border: 1px solid #3b82f6; color: #1e40af;">
+							<span style="background: #fff; border-radius: 3px; margin-right: 6px; font-size: 11px; font-weight: 600; border: 1px solid #3b82f6; min-width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; padding: 0 3px;"><?php 
+            echo esc_html( $counts_by_impact['medium'] );
+            ?></span>
+							<?php 
+            esc_html_e( 'Medium Impact', 'woocommerce-google-adwords-conversion-tracking-tag' );
+            ?>
+						</span>
+					<?php 
+        }
+        ?>
+
+					<?php 
+        if ( $counts_by_impact['low'] > 0 ) {
+            ?>
+						<span class="pmw-opportunity-badge pmw-opportunity-badge-low" style="display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 3px; font-size: 12px; font-weight: 500; background: #ccfbf1; border: 1px solid #14b8a6; color: #0f766e;">
+							<span style="background: #fff; border-radius: 3px; margin-right: 6px; font-size: 11px; font-weight: 600; border: 1px solid #14b8a6; min-width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; padding: 0 3px;"><?php 
+            echo esc_html( $counts_by_impact['low'] );
+            ?></span>
+							<?php 
+            esc_html_e( 'Low Impact', 'woocommerce-google-adwords-conversion-tracking-tag' );
+            ?>
+						</span>
+					<?php 
+        }
+        ?>
 				</div>
 
 				<a href="<?php 
-        echo esc_url_raw( '/wp-admin/admin.php?page=wpm&section=opportunities' );
+        echo esc_url_raw( '/wp-admin/admin.php?page=pmw&section=opportunities' );
         ?>"
 				   style="text-decoration: none;box-shadow: none;">
-					<div id="pmw-purchase-new-license-button" class="button" style="margin: 10px 0 10px 0">
+					<div class="button button-primary" style="margin: 0;">
 						<?php 
-        esc_html_e( 'Show the opportunities', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        esc_html_e( 'View Opportunities', 'woocommerce-google-adwords-conversion-tracking-tag' );
         ?>
 					</div>
 				</a>

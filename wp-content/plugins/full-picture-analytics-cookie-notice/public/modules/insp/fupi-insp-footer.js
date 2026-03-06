@@ -1,4 +1,4 @@
-FP.fns.insp_woo_events = () => {
+function fupi_insp_footer_woo(){
 
 	function track_woo_impress( caller_id ) {
 		
@@ -25,6 +25,11 @@ FP.fns.insp_woo_events = () => {
 		__insp.push( [ 'tagSession', 'add to cart' ] );
 		if ( fp.main.debug ) console.log( '[FP] Inspectlet "add to cart" tag');
 	} );
+		
+	if ( fp.woo.cart_to_track ) {
+		__insp.push( [ 'tagSession', 'add to cart' ] );
+		if ( fp.main.debug ) console.log( '[FP] Inspectlet "add to cart" tag');
+	}
 
 	FP.addAction( ['woo_add_to_wishlist'], () => {
 		__insp.push( [ 'tagSession', 'add to wishlist' ] );
@@ -58,9 +63,11 @@ FP.fns.insp_woo_events = () => {
 			})
 		};
 	}
+
+	FP.loaded('insp_footer_woo');
 }
 
-FP.fns.insp_standard_events = function() {
+function fupi_insp_footer() {
 
 	// TAG OUTBOUND LINKS
 
@@ -161,13 +168,9 @@ FP.fns.insp_standard_events = function() {
 			}
 		})
 	}
+
+	FP.loaded('insp_footer');
 }
 
-
-
-FP.fns.load_insp_footer = nr => {
-	FP.fns.insp_standard_events();
-	if ( fp.loaded.includes('woo') ) FP.fns.insp_woo_events();
-};
-
-FP.enqueueFn( 'FP.fns.load_insp_footer' );
+FP.load('insp_footer','fupi_insp_footer', ['footer_helpers', 'insp']);
+FP.load('insp_footer_woo','fupi_insp_footer_woo', ['insp', 'footer_helpers', 'woo']);

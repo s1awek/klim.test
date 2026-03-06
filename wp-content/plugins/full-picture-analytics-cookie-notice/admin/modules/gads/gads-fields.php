@@ -34,52 +34,7 @@ $sections = array(
 			),
 		),
 	),
-
-	// LOADING
-
-	array(
-		'section_id' => 'fupi_gads_loading',
-		'section_title' => esc_html__( 'Loading', 'full-picture-analytics-cookie-notice' ),
-		'fields' => array(
-			array(
-				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Force load', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'force_load',
-				'el_class'			=> 'fupi_condition fupi_condition_reverse',
-				'el_data_target'	=> 'fupi_load_opts',
-				'option_arr_id'		=> $option_arr_id,
-				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . sprintf( esc_html__( 'This will load the tracking script for administrators, bots, excluded users, people browsing from excluded locations and people who didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
-			),
-			array(
-				'type'	 			=> 'r3',
-				'label' 			=> esc_html__('Only track visitors from specific countries', 'full-picture-analytics-cookie-notice'),
-				'field_id' 			=> 'limit_country',
-				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_load_opts fupi_adv',
-				'must_have'			=> 'pro geo',
-				'is repeater'		=> false,
-				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
-				'fields'			=> array(
-					array(
-						'type'				=> 'select',
-						'field_id'			=> 'method',
-						'options'			=> array(
-							'excl'				=> esc_html__('All except','full-picture-analytics-cookie-notice'),
-							'incl'				=> esc_html__('Only in','full-picture-analytics-cookie-notice'),
-						),
-						'class'		=> 'fupi_col_20',
-					),
-					array(
-						'type'				=> 'text',
-						'field_id'			=> 'countries',
-						'placeholder'		=> 'e.g. GB, DE, FR, AU, etc.',
-					),
-				),
-			),
-		),
-	),
-
+	
 	// Privacy settings
 
 	array(
@@ -92,7 +47,7 @@ $sections = array(
 				'field_id' 			=> 'enh_conv',
 				'must_have'			=> 'pro',
 				'option_arr_id'		=> $option_arr_id,
-				'popup'				=> '<p>' . esc_html__( 'Enhanced Conversion improves the accuracy of conversion tracking by sending to Google your visitors\' personal information, like their email address, first and last name and physical address. This information is later used by Google to better match the conversions with specific users.', 'full-picture-analytics-cookie-notice' ) . '</p>
+				'popup'				=> '<p>' . esc_html__( 'Enhanced Conversions improve the accuracy of conversion tracking by sending to Google your visitors\' personal information, like their email address, first and last name and physical address. This information is later used by Google to better match the conversions with specific users.', 'full-picture-analytics-cookie-notice' ) . '</p>
 					<p>' . esc_html__( 'To implement Enhanced Conversions follow the steps below.', 'full-picture-analytics-cookie-notice') . '</p>
 					<ol>
 						<li>' . esc_html__('Enable "Enhanced Conversions" via Google Tag in your Google Ads account. You will find it in "Goals" > "Conversions" > "Settings" > "Enhanced conversions" > and select "Google tag" from the dropdown. If you can\'t see these menu elements, please switch to the new menu using the "Appearance" switch in the top.', 'full-picture-analytics-cookie-notice') . '</li>
@@ -309,7 +264,7 @@ $adv_triggers_section = array(
 									'string'			=> esc_html__( 'Text', 'full-picture-analytics-cookie-notice' ),
 									'number'			=> esc_html__( 'Number', 'full-picture-analytics-cookie-notice' ),
 									'bool'				=> esc_html__( 'true/false', 'full-picture-analytics-cookie-notice' ),
-									'path'			=> esc_html__( 'Path to a JS value', 'full-picture-analytics-cookie-notice' ),
+									'path'			=> esc_html__( 'Path to a JS variable', 'full-picture-analytics-cookie-notice' ),
 								),
 							),
 							array(
@@ -342,7 +297,7 @@ $woo_section = array(
 				'must_have'			=> 'woo',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[woo_conv_id]',
-				'popup'				=> '<p>' . esc_html__( 'Conversion event will be sent with cart value and IDs of the purchased items.', 'full-picture-analytics-cookie-notice') . '</p>
+				'popup'				=> '<p>' . esc_html__( 'The conversion event will be sent with cart value and IDs of the purchased items.', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . sprintf ( esc_html__( 'To get the conversion label, please follow this %1$sshort video tutorial%2$s.', 'full-picture-analytics-cookie-notice') , '<a href="https://wpfullpicture.com/support/documentation/how-to-get-google-ads-tag-id-conversion-id/">', '</a>' ) . '</p>',
 			),
 			array(
@@ -353,7 +308,7 @@ $woo_section = array(
 				'must_have'			=> 'woo',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[woo_checkout_conv_id]',
-				'popup'				=> '<p>' . esc_html__( 'Conversion event will be sent with cart value and IDs of the purchased items.', 'full-picture-analytics-cookie-notice') . '</p>
+				'popup'				=> '<p>' . esc_html__( 'The conversion event will be sent with cart value and IDs of the purchased items.', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . esc_html__('Attention. By default, this event will be sent every time the user visits the checkout page - even if it happens multiple times in one session (except page refreshes). You can disable it by setting this conversion as a single-time conversion in the Google Ads panel (while registering a new conversion type).', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . sprintf ( esc_html__( 'To get the conversion label, please follow this %1$sshort video tutorial%2$s.', 'full-picture-analytics-cookie-notice') , '<a href="https://wpfullpicture.com/support/documentation/how-to-get-google-ads-tag-id-conversion-id/">', '</a>' ) . '</p>',
 			),
@@ -365,7 +320,7 @@ $woo_section = array(
 				'must_have'			=> 'woo',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[woo_add_to_cart_conv_id]',
-				'popup'				=> '<p>' . esc_html__( 'Conversion event will be sent with the IDs of the items added to cart and their total value.', 'full-picture-analytics-cookie-notice') . '</p>
+				'popup'				=> '<p>' . esc_html__( 'The conversion event will be sent with the IDs of the items added to cart and their total value.', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . sprintf ( esc_html__( 'To get the conversion label, please follow this %1$sshort video tutorial%2$s.', 'full-picture-analytics-cookie-notice') , '<a href="https://wpfullpicture.com/support/documentation/how-to-get-google-ads-tag-id-conversion-id/">', '</a>' ) . '</p>',
 			),
 			array(

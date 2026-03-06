@@ -4,8 +4,11 @@ if (!defined('ABSPATH')) {
 }
 ?>
 <div class="wt_iew_import_main">
-	<div id="product-type-notice" style="display:block;">
-        <?php
+	<?php
+    if ( ! empty( $this->to_import ) && 'product' === $this->to_import ) {
+    ?>
+		<div id="product-type-notice" style="display:block;">
+        	<?php
             // Define unsupported types to check
             $unsupported_types = array(
                 'variable'     => 'Variable',
@@ -60,7 +63,10 @@ if (!defined('ABSPATH')) {
                 <?php
             }
             ?>
-    </div>
+    	</div>
+    <?php 
+    }
+    ?>
 	<p><?php //echo $this->step_description;
 		?></p>
 	<div class="wt_iew_warn wt_iew_method_import_wrn" style="display:none;">
@@ -115,7 +121,7 @@ if (!defined('ABSPATH')) {
 	<form class="wt_iew_import_method_import_form">
 		<table class="form-table wt-iew-form-table">
 			<?php
-			Wt_Import_Export_For_Woo_Basic_Common_Helper::field_generator($method_import_screen_fields, $method_import_form_data);
+			Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::field_generator($method_import_screen_fields, $method_import_form_data);
 			?>
 		</table>
 		<div class="wt_iew_suite_banner">

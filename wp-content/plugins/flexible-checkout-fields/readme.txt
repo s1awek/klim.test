@@ -4,7 +4,7 @@ Donate link: https://www.wpdesk.net/sk/flexible-checkout-fields-donate/
 Tags: woocommerce checkout fields, woocommerce checkout manager, woocommerce checkout, custom fields, checkout field customizer
 Requires at least: 5.2
 Tested up to: 6.9
-Stable tag: 4.1.31
+Stable tag: 4.1.35
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -14,6 +14,13 @@ The best WooCommerce checkout manager. Edit, remove or add checkout fields. Cust
 == Description ==
 
 We think WooCommerce is the best ecommerce plugin for WordPress. But it lacks some very basic features like customizing checkout fields with a checkout manager in an easy to use interface. You can do it by hooks and filters but why bother if you can do it by Flexible Checkout Fields for WooCommerce - WooCommerce Checkout Manager. With this single page checkout plugin you can edit the default fields (change labels, hide, delete) or add your own checkout fields. You can set your own fields order. There are a lot of field types such as a checkbox field, a date field or a color picker field (some of them exclusively in the PRO version). Read on to see how easy it is to edit WooCommerce checkout fields with this plugin and how powerful it is.
+
+### Using the WooCommerce Checkout Blocks?
+
+If you are using the block-based checkout (Checkout Blocks), check out our dedicated plugin [Flexible Checkout Fields For Blocks](https://wordpress.org/plugins/checkout-fields-for-blocks/), which lets you edit and add fields in the new block-based checkout for WooCommerce.
+
+👉 Flexible Checkout Fields (this plugin) works with the classic checkout form based on the shortcode.
+👉 Flexible Checkout Fields For Blocks is designed specifically for the block-based checkout (Checkout Blocks).
 
 ### Faster checkout for more conversions 🛒
 
@@ -134,7 +141,7 @@ Add WooCommerce additional fields to your checkout page with your new WooCommerc
 * [File Upload](https://www.wpdesk.net/sk/flexible-checkout-fields-readme-docs/#File_Upload)
 * [Hidden](https://www.wpdesk.net/sk/flexible-checkout-fields-readme-docs/#Hidden)
 
-**Get all **PRO features** and priority e-mail support. ⭐[Upgrade to PRO →]**(https://www.wpdesk.net/sk/flexible-checkout-fields-readme-pro)
+**Get all PRO features and priority e-mail support.** [Upgrade to PRO →](https://www.wpdesk.net/sk/flexible-checkout-fields-readme-pro)
 
 ### Well Documented
 
@@ -693,6 +700,18 @@ Please report security bugs found in the source code of the Flexible Checkout Fi
 If you are upgrading from the old WooCommerce Checkout Fields version (1.1, woocommerce-checkout-fields) make sure to completely delete the old version first. Your settings will be kept. If you install the new version without deleting the old one you may break your WordPress installation.
 
 == Changelog ==
+
+= 4.1.35 - 2026-02-17 =
+* Readme update
+
+= 4.1.34 - 2026-01-27 =
+* Fixed security vulnerabilities - axios library update
+
+= 4.1.33 - 2026-01-21 =
+* Added support for WooCommerce 10.5
+
+= 4.1.32 - 2026-01-15 =
+* Fixed warnings about outdated code for PHP 8.4
 
 = 4.1.31 - 2025-12-16 =
 * Added new messages about block checkout support

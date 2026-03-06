@@ -1,4 +1,4 @@
-;(function(window){
+function fupi_pla(){
 
 	if ( allow_loading_pla() ) { 
 		load_pla();
@@ -58,9 +58,9 @@
 
 		if ( send_pageview ) plausible( 'pageview', {'props': props} );
 
-		fp.loaded.push( 'pla' );
-		if ( fp.main.debug ) console.log('[FP] Plausible loaded');
-		FP.runFn( 'FP.fns.load_pla_footer' );
+		FP.loaded('pla','pla','[FP] Plausible loaded');
 	};
 
-})(window);
+};
+
+FP.load('pla', 'fupi_pla', ['head_helpers']);

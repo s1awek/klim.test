@@ -16,6 +16,7 @@ use WP_Post;
  * Feedback objects are there to help us interact with the form response data.
  */
 class Feedback {
+	use Country_Code_Utils;
 
 	const POST_TYPE = 'feedback';
 
@@ -176,6 +177,13 @@ class Feedback {
 	protected $notification_recipients = array();
 
 	/**
+	 * The jetpack_form post ID associated with this feedback, when available.
+	 *
+	 * @var int|null
+	 */
+	protected $form_id = null;
+
+	/**
 	 * Create a response object from a feedback post ID.
 	 *
 	 * @param int $feedback_post_id The ID of the feedback post.
@@ -224,10 +232,30 @@ class Feedback {
 		$this->is_unread          = $feedback_post->comment_status === self::STATUS_UNREAD;
 
 		$this->fields = $parsed_content['fields'] ?? array();
-		$source_id    = $feedback_post->post_parent ? (int) $feedback_post->post_parent : 0;
+
+		// Check if post_parent is a jetpack_form post
+		$potential_form_id = $feedback_post->post_parent;
+		if ( $potential_form_id > 0 ) {
+			$parent_post = get_post( $potential_form_id );
+			if ( $parent_post && $parent_post->post_type === 'jetpack_form' ) {
+				// New data: post_parent is form ID
+				$this->form_id = $potential_form_id;
+			}
+		}
+
+		// Determine the source ID for this feedback.
+		// Prefer the explicit source_id from parsed content when available,
+		// otherwise fall back to the legacy behavior where post_parent was
+		// used as the source post ID, but only when no explicit form_id exists.
+		$source_id = 0;
+		if ( isset( $parsed_content['source_id'] ) && null !== $parsed_content['source_id'] ) {
+			$source_id = (int) $parsed_content['source_id'];
+		} elseif ( $feedback_post->post_parent && ! $this->form_id ) {
+			$source_id = (int) $feedback_post->post_parent;
+		}
 
 		$this->source = new Feedback_Source(
-			$parsed_content['source_id'] ?? $source_id,
+			$source_id,
 			$parsed_content['entry_title'] ?? '',
 			$parsed_content['entry_page'] ?? 1,
 			$parsed_content['source_type'] ?? 'single',
@@ -291,6 +319,13 @@ class Feedback {
 	private function load_from_submission( $post_data, $form, $current_post = null, $current_page_number = 1 ) {
 
 		$this->source = Feedback_Source::from_submission( $current_post, $current_page_number );
+
+		// Extract and validate form ID from POST data or ref attribute
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification happens in process_form_submission()
+		$form_id_attribute = $post_data['contact-form-ref'] ?? $form->get_attribute( 'ref' );
+		$form_id_attribute = is_numeric( $form_id_attribute ) ? absint( $form_id_attribute ) : 0;
+		$this->form_id     = $form_id_attribute > 0 ? $form_id_attribute : null;
+
 		// If post_data is provided, use it to populate fields.
 		$this->fields          = $this->get_computed_fields( $post_data, $form );
 		$this->ip_address      = Contact_Form_Plugin::get_ip_address();
@@ -408,6 +443,72 @@ class Feedback {
 	}
 
 	/**
+	 * Process a radio field value to detect and extract "Other" option metadata.
+	 *
+	 * This method checks if a radio field value matches the "Other" pattern and combines
+	 * it with the corresponding text input value if present.
+	 *
+	 * @param string $value     The raw field value from the submission.
+	 * @param object $field     The field object from the form.
+	 * @param string $field_id  The field ID.
+	 * @param array  $post_data The POST data from the submission.
+	 *
+	 * @return array An array with 'value' and 'meta' keys.
+	 */
+	private function process_radio_field_value( $value, $field, $field_id, $post_data ) {
+		$meta        = array();
+		$allow_other = $field->get_attribute( 'allowother' );
+
+		if ( ! $allow_other || ! is_string( $value ) ) {
+			return array(
+				'value' => $value,
+				'meta'  => $meta,
+			);
+		}
+
+		$options_data = $field->get_attribute( 'optionsdata' );
+		$other_label  = null;
+
+		if ( ! empty( $options_data ) && is_array( $options_data ) ) {
+			foreach ( $options_data as $option ) {
+				if ( ! empty( $option['isOther'] ) ) {
+					$other_label = Contact_Form_Plugin::strip_tags( $option['label'] );
+					break;
+				}
+			}
+		}
+
+		if ( empty( $other_label ) ) {
+			return array(
+				'value' => $value,
+				'meta'  => $meta,
+			);
+		}
+
+		if ( $value === $other_label ) {
+			$other_text_key = $field_id . '-other-text';
+			$custom_text    = '';
+
+			if ( isset( $post_data[ $other_text_key ] ) ) {
+				$custom_text = sanitize_textarea_field( wp_unslash( $post_data[ $other_text_key ] ) );
+			}
+
+			$meta['is_other_option']  = true;
+			$meta['other_label']      = $other_label;
+			$meta['other_user_value'] = $custom_text;
+
+			if ( ! empty( $custom_text ) ) {
+				$value = $other_label . ': ' . $custom_text;
+			}
+		}
+
+		return array(
+			'value' => $value,
+			'meta'  => $meta,
+		);
+	}
+
+	/**
 	 * Get the computed fields from the post data.
 	 *
 	 * @param string $label The label of the field to look for.
@@ -504,6 +605,15 @@ class Feedback {
 	public function get_all_values( $context = 'default' ) {
 		// This is a legacy method to maintain compatibility with older code.
 		return array_merge( $this->get_compiled_fields( $context, 'key-value' ), $this->get_entry_values() );
+	}
+
+	/**
+	 * Get the jetpack_form post ID associated with this feedback.
+	 *
+	 * @return int|null The form ID, or null if not submitted via reusable form.
+	 */
+	public function get_form_id() {
+		return $this->form_id;
 	}
 
 	/**
@@ -629,6 +739,16 @@ class Feedback {
 					break;
 				case 'id-value':
 					$compiled_fields[ $field->get_form_field_id() ] = $field->get_render_value( $context );
+					break;
+				case 'collection':
+					$compiled_fields[] = array(
+						'label' => $label,
+						'value' => $field->get_render_value( $context ),
+						'type'  => $field->get_type(),
+						'id'    => $field->get_form_field_id(),
+						'key'   => $field->get_key(),
+						'meta'  => $field->get_meta(),
+					);
 					break;
 			}
 		}
@@ -824,41 +944,6 @@ class Feedback {
 	 */
 	public function get_country_flag() {
 		return self::country_code_to_emoji_flag( $this->country_code );
-	}
-
-	/**
-	 * Convert a country code to an emoji flag.
-	 *
-	 * Country codes should already be uppercase as they're stored that way by get_country_code_from_ip().
-	 *
-	 * @param string $country_code - the two-letter country code (e.g., 'US', 'GB', 'DE').
-	 *
-	 * @return string The emoji flag for the country code, or empty string if invalid.
-	 */
-	private static function country_code_to_emoji_flag( $country_code ) {
-		if ( empty( $country_code ) || strlen( $country_code ) !== 2 ) {
-			return '';
-		}
-
-		// Convert each letter to a regional indicator symbol
-		// Regional indicator symbols start at Unicode code point 127462 (🇦)
-		// and correspond to A-Z (ASCII 65-90)
-		$flag = '';
-		for ( $i = 0; $i < 2; $i++ ) {
-			$char = $country_code[ $i ];
-
-			// Check if the character is a valid uppercase letter (A-Z)
-			if ( ord( $char ) < 65 || ord( $char ) > 90 ) {
-				return '';
-			}
-
-			$code_point = 127462 + ( ord( $char ) - 65 );
-
-			// Convert code point to UTF-8 encoded character
-			$flag .= mb_chr( $code_point, 'UTF-8' );
-		}
-
-		return $flag;
 	}
 
 	/**
@@ -1198,6 +1283,9 @@ class Feedback {
 	 * @return string
 	 */
 	public function get_edit_form_url() {
+		if ( ! empty( $this->form_id ) ) {
+			return \get_edit_post_link( (int) $this->form_id, 'url' );
+		}
 		return $this->source->get_edit_form_url();
 	}
 	/**
@@ -1223,7 +1311,7 @@ class Feedback {
 				'post_name'      => $this->legacy_feedback_id,
 				'post_content'   => $this->serialize(), // In V3 we started to addslashes.
 				'post_mime_type' => 'v3', // a way to help us identify what version of the data this is.
-				'post_parent'    => $this->source->get_id(),
+				'post_parent'    => $this->form_id ?? $this->source->get_id(),
 				'comment_status' => self::STATUS_UNREAD, // New feedback is unread by default.
 			)
 		);
@@ -1749,6 +1837,26 @@ class Feedback {
 	}
 
 	/**
+	 * Get field-specific metadata based on the field type.
+	 *
+	 * @param Contact_Form_Field $field The field object.
+	 * @param string             $type  The field type.
+	 * @return array Metadata array for the field.
+	 */
+	public static function get_field_meta( $field, $type ) {
+		$meta = array();
+
+		if ( $type === 'rating' ) {
+			$icon_style        = $field->get_attribute( 'iconstyle' );
+			$max               = $field->get_attribute( 'max' );
+			$meta['iconStyle'] = ! empty( $icon_style ) ? $icon_style : 'stars';
+			$meta['maxRating'] = is_numeric( $max ) && (int) $max > 0 ? (int) $max : 5;
+		}
+
+		return $meta;
+	}
+
+	/**
 	 * Get all the fields of the response, computed from the post data.
 	 *
 	 * @param array        $post_data The post data from the form submission.
@@ -1773,7 +1881,14 @@ class Feedback {
 			$label = wp_strip_all_tags( $field->get_attribute( 'label' ) );
 			$key   = $i . '_' . $label;
 
-			$meta           = array();
+			$meta = self::get_field_meta( $field, $type );
+
+			// Process radio fields to detect and extract "Other" option metadata
+			if ( $type === 'radio' ) {
+				$processed = $this->process_radio_field_value( $value, $field, $field_id, $post_data );
+				$value     = $processed['value'];
+				$meta      = array_merge( $meta, $processed['meta'] );
+			}
 			$fields[ $key ] = new Feedback_Field( $key, $label, $value, $type, $meta, $field_id );
 			if ( ! $this->has_file && $fields[ $key ]->has_file() ) {
 				$this->has_file = true;

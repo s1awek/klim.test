@@ -1,4 +1,4 @@
-;( function () {
+function fupi_consb(){
 
 	'use strict';
 
@@ -93,9 +93,8 @@
 		notice.classList.add( 'fupi_fadeInUp', 'fupi_animated' );
 	}
 
-	// function hide_notice() {
-	// 	notice.classList.remove( 'fupi_fadeInUp' );
-	// 	notice.classList.add( 'fupi_fadeOutDown' );
-	// }
+	FP.loaded('cons_banner');
 
-})();
+};
+
+FP.load('cons_banner', 'fupi_consb', ['footer_helpers', 'consb_html']); // the same as in the non-customizer file

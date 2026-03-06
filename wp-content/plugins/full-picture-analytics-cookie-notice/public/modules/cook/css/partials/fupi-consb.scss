@@ -28,6 +28,20 @@
 	word-wrap: normal !important;
 }
 
+html.fupi_scroll_lock:not(.fupi_infobox) body{
+	overflow-y: hidden;
+}
+
+html.fupi_blur_out:not(.fupi_infobox) body{
+	>*{
+		&:not(#fupi_cookie_notice):not(.fupi_noblur){
+			animation: fupi_blur_out 1s ease;
+			-webkit-animation: fupi_blur_out 1s ease;
+			-moz-animation: fupi_blur_out 1s ease;
+		}
+	}
+}
+
 html.fupi_blur:not(.fupi_infobox) body{
 	>*{
 		&:not(#fupi_cookie_notice):not(.fupi_noblur){
@@ -799,40 +813,14 @@ input:checked + .fupi_switch_slider:before {
 
 // ANIMATIONS
 
-.fupi_animated {
-  animation-duration: 1s;
-  animation-fill-mode: both;
-}
-
-@keyframes fupi_fadeInUp {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 100%, 0);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
 .fupi_fadeInUp {
-  animation-name: fupi_fadeInUp;
-}
-
-@keyframes fupi_fadeOutDown {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-    transform: translate3d(0, 100%, 0);
-  }
+  	opacity: 1;
+    transform: translate3d(0, 0, 0);
 }
 
 .fupi_fadeOutDown {
-  animation-name: fupi_fadeOutDown;
+  	opacity: 0;
+  	transform: translate3d(0, 100%, 0);
 }
 
 // OTHER
@@ -880,6 +868,7 @@ input:checked + .fupi_switch_slider:before {
 	left: 0;
 	right: 0;
 	bottom: 0;
+	box-sizing: border-box;
 	.fupi_inner{
 		flex: 1 0 auto;
 		max-width: 100%;
@@ -887,6 +876,7 @@ input:checked + .fupi_switch_slider:before {
 		background-color: rgba(25,44,52,.85);
 		color: #fff;
 		text-align: center;
+		box-sizing: border-box;
 		> p{
 			margin: 14px 0;
 		}

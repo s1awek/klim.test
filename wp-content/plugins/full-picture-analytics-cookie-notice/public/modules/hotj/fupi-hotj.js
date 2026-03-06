@@ -1,5 +1,5 @@
 
-;(function(window){
+function fupi_hotj_head(){
 
 	if ( allow_loading_hotj() ) { 
 		load_hotj();
@@ -52,9 +52,9 @@
 		
 
 		// LOAD FOOTER SCRIPTS
-		fp.loaded.push('hotj');
-		if ( fp.main.debug ) console.log('[FP] Hotjar loaded');
-		FP.runFn( 'FP.fns.load_hotj_footer' );
+		FP.loaded('hotj','hotj','[FP] Hotjar loaded');
 	}
 
-})(window);
+};
+
+FP.load('hotj','fupi_hotj_head', ['head_helpers']);

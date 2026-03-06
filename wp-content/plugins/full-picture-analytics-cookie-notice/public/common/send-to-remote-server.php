@@ -35,8 +35,8 @@ foreach ( $requests_a as $request ) {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     }
 
-    curl_setopt($ch, CURLOPT_TIMEOUT, 10); // Set a timeout for the request (in seconds)
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5); // Add connection timeout (in seconds)
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30); // Set a timeout for the request (in seconds)
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10); // Add connection timeout (in seconds)
 
     // Add this cURL handle to the multi-cURL handle
     curl_multi_add_handle($multiCurl, $ch);

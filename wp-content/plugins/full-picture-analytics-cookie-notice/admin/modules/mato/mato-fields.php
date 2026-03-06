@@ -57,18 +57,7 @@ $sections = array(
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . sprintf( esc_html__( 'This will load the tracking script for administrators, bots, excluded users, people browsing from excluded locations and people who didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
-			),
-			array(
-				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Track without waiting for consent', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'disreg_cookies',
-				'class'				=> 'fupi_load_opts fupi_adv',
-				'must_have'			=> 'cook',
-				'option_arr_id'		=> $option_arr_id,
-				'popup3'			=> '<p>' . esc_html__( 'This setting does not have any effect if "Privacy mode" is enabled.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . esc_html__( 'Even when this is enabled, visitors will still be able to turn off tracking by declining tracking / cookies.', 'full-picture-analytics-cookie-notice' ) . '</p>'
+				<p>' . sprintf( esc_html__( 'This will load the tracking script for administrators, bots, excluded users, people browsing from excluded locations and people who didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/">', '</a>' ) . '</p>',
 			),
 			array(
 				'type'	 			=> 'r3',
@@ -94,7 +83,7 @@ $sections = array(
 						'placeholder'		=> esc_html__('e.g. GB, DE, FR, AU, etc.', 'full-picture-analytics-cookie-notice'),
 					),
 				),
-				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
+				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by commas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
 		),
 	),
@@ -110,7 +99,7 @@ $sections = array(
 				'label' 			=> esc_html__( 'Privacy mode', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'no_cookies',
 				'option_arr_id'		=> $option_arr_id,
-				'popup'				=> '<p>' . esc_html__( 'If you enable this function together with a Consent Banner module, then Matomo will track visitors in an anonymized way until they agree to tracking. After they do this, Matomo will switch to standard tracking.' ,'full-picture-analytics-cookie-notice' ) . '</p>
+				'popup'				=> '<p>' . esc_html__( 'If you enable this function together with a Consent Management module, then Matomo will track visitors in an anonymized way until they agree to tracking. After they do this, Matomo will switch to standard tracking.' ,'full-picture-analytics-cookie-notice' ) . '</p>
 					<p>' . sprintf( esc_html__( 'This is the recommended way to track as much traffic as possible. Learn about %1$sother ways to use Matomo in compliance with privacy laws%2$s.' ,'full-picture-analytics-cookie-notice' ), ' <a href="https://wpfullpicture.com/support/documentation/how-to-use-matomo-in-compliance-with-privacy-laws/">', '</a>' ) . '</p>
 					<p>' . esc_html__( 'When a visit is anonymized:' ,'full-picture-analytics-cookie-notice' ) . ':</p>
 					<ol>
@@ -300,7 +289,7 @@ $sections = array(
 				'placeholder'		=> esc_html__('e.g. pdf, doc, docx, xls, xlsx, txt', 'full-picture-analytics-cookie-notice'),
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[track_downl_file_formats]',
-				'popup2'			=> '<p>' . sprintf( esc_html__( 'By default, Matomo tracks downloads of %1$sthese file formats%2$s. Use this function to change it. Enter coma-separated list of formats that you want to track instead.', 'full-picture-analytics-cookie-notice' ), '<a href="https://matomo.org/faq/new-to-piwik/faq_47/">', '</a>' ) . '</p>
+				'popup2'			=> '<p>' . sprintf( esc_html__( 'By default, Matomo tracks downloads of %1$sthese file formats%2$s. Use this function to change it. Enter comma-separated list of formats that you want to track instead.', 'full-picture-analytics-cookie-notice' ), '<a href="https://matomo.org/faq/new-to-piwik/faq_47/">', '</a>' ) . '</p>
 					<p class="fupi_warning_text">' . esc_html__( 'Attention! Download events will not be visible in the browser console (after you enable WP FP\'s debug mode) since they are tracked by Matomo and not by WP Full Picture. ', 'full-picture-analytics-cookie-notice' ) . '</p>',
 			),
 		),
@@ -459,7 +448,7 @@ $sections = array(
 					'field_id' 			=> 'add_tax_term_cat',
 					'option_arr_id'		=> $option_arr_id,
 					'class'				=> 'fupi_adv fupi_sub fupi_tax_terms_opts fupi_disabled',
-					'popup'				=> esc_html__('Enable to see which taxonomy a given term belongs to. Term data in your GA reports will be then displayd like e.g. "term1 (category), term2 (tag)"' ,'full-picture-analytics-cookie-notice' ),
+					'popup'				=> esc_html__('Enable to see which taxonomy a given term belongs to. Term data in your GA reports will be then displayed like e.g. "term1 (category), term2 (tag)"' ,'full-picture-analytics-cookie-notice' ),
 				),
 				array( // ok
 					'type'	 			=> 'toggle',

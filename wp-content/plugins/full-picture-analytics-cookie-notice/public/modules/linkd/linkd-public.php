@@ -30,14 +30,8 @@ class Fupi_LINKD_public {
 
     public function enqueue_scripts(){
 
-        $footer_args = [ 'in_footer' => true ];
-
-        if ( ! empty( $this->main ) && isset( $this->main['async_scripts'] ) ) {
-            $footer_args['strategy'] = 'defer';
-        }
-
         $reqs = ! empty( $this->tools['woo'] ) && function_exists('WC') ? array('fupi-helpers-js', 'fupi-helpers-footer-js', 'fupi-woo-js') : array('fupi-helpers-js', 'fupi-helpers-footer-js');
 
-        /* _ */ wp_enqueue_script( 'fupi-linkd-footer-js', FUPI_URL . 'public/modules/linkd/fupi-linkd-footer.js', $reqs, FUPI_VERSION, $footer_args );
+        /* _ */ wp_enqueue_script( 'fupi-linkd-footer-js', FUPI_URL . 'public/modules/linkd/fupi-linkd-footer.js', $reqs, FUPI_VERSION, [ 'in_footer' => true, 'strategy' => 'async' ] );
     }
 }

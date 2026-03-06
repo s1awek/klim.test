@@ -58,11 +58,6 @@ class Fupi_CSCR_admin {
 			$gdpr_checker = new Fupi_compliance_status_checker( 'cscr', $clean_data );
             $gdpr_checker->send_and_return_status();
 		}
-
-        if ( ! empty( $this->settings ) && ! empty( $this->main['save_cscr_file'] ) ) {
-            include_once 'cscr-generate-files.php';
-		    new Fupi_generate_cscr_files( $clean_data );
-		}
 		
 		include FUPI_PATH . '/admin/common/fupi-clear-cache.php';
 		return $clean_data; 

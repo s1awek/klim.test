@@ -552,12 +552,6 @@ var wt_iew_basic_export = (function ($) {
 				this.to_export_title = $('.wt_iew_post-type-card.selected').find('h3').text();
 			}
 
-			if (this.to_export != "" && this.to_export_title == 'Product') {
-				$('#product-type-notice').show();
-			} else {
-				$('#product-type-notice').hide();
-			} 
-
 			if (this.to_export_title.includes('Product'))
 				$('#product-type-message').show();
 

@@ -35,9 +35,9 @@ class PMXE_Handler extends PMXE_Session
      * Return true if the current user has an active session, i.e. a cookie to retrieve values
      * @return boolean
      */
-    public function has_session() 
+    public function has_session()
     {
-    	return isset( $_COOKIE[ $this->_cookie ] ) || $this->_has_cookie || is_user_logged_in();
+    	return ( $this->_cookie !== null && isset( $_COOKIE[ $this->_cookie ] ) ) || $this->_has_cookie || is_user_logged_in();
     }
 
     /**

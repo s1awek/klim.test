@@ -28,8 +28,8 @@
  * @author     Webtoffee <info@webtoffee.com>
  */
 
-if (!class_exists('Wt_Import_Export_For_Woo_Basic')) {
-	class Wt_Import_Export_For_Woo_Basic
+if (!class_exists('Wt_Import_Export_For_Woo_Product_Basic')) {
+	class Wt_Import_Export_For_Woo_Product_Basic
 	{
 
 		/**
@@ -84,7 +84,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Basic')) {
 			if (defined('WT_P_IEW_VERSION')) {
 				$this->version = WT_P_IEW_VERSION;
 			} else {
-				$this->version = '2.5.9';
+				$this->version = '2.6.1';
 			}
 			$this->plugin_name = 'wt-import-export-for-woo-basic';
 			
@@ -198,7 +198,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Basic')) {
 
 
 			$this->loader = new Wt_Import_Export_For_Woo_Loader_Basic();
-			$this->plugin_admin = new Wt_Import_Export_For_Woo_Admin_Basic($this->get_plugin_name(), $this->get_version());
+			$this->plugin_admin = new Wt_Import_Export_For_Woo_Product_Admin_Basic($this->get_plugin_name(), $this->get_version());
 			$this->plugin_public = new Wt_Import_Export_For_Woo_Public_Basic($this->get_plugin_name(), $this->get_version());
 		}
 
@@ -328,9 +328,13 @@ if (!class_exists('Wt_Import_Export_For_Woo_Basic')) {
 		 */
 		public static function load_modules($module)
 		{
-			if (Wt_Import_Export_For_Woo_Admin_Basic::module_exists($module)) {
+			if (Wt_Import_Export_For_Woo_Product_Admin_Basic::module_exists($module)) {
 				if (!isset(self::$loaded_modules[$module])) {
-					$module_class = 'Wt_Import_Export_For_Woo_Basic_' . ucfirst($module);
+					// Convert module name to class name format (handle underscores)
+					// e.g., 'product_tags' -> 'Product_Tags', 'product' -> 'Product'
+					$module_parts = explode('_', $module);
+					$module_class_name = implode('_', array_map('ucfirst', $module_parts));
+					$module_class = 'Wt_Import_Export_For_Woo_Product_Basic_' . $module_class_name;
 					self::$loaded_modules[$module] = new $module_class;
 				}
 				return self::$loaded_modules[$module];

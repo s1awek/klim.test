@@ -392,7 +392,7 @@ class Product {
 
 		// If placed in <head> it must be a <meta> tag else, it can be an <input> tag
 		// Added name and content to meta in order to pass W3 validation test at https://validator.w3.org/nu/
-		$tag = $meta_tag ? "meta name='wpm-dataLayer-meta' content='" . $product->get_id() . "'" : "input type='hidden'";
+		$tag = $meta_tag ? "meta name='pmw-dataLayer-meta' content='" . $product->get_id() . "'" : "input type='hidden'";
 
 		self::get_product_data_layer_script_html_part_1($tag, $product, $data, $set_position, $meta_tag);
 	}
@@ -401,19 +401,19 @@ class Product {
 
 		if ($meta_tag) {
 			?>
-			<meta name="pm-dataLayer-meta" content="<?php echo esc_html($product->get_id()); ?>" class="wpmProductId"
+			<meta name="pm-dataLayer-meta" content="<?php echo esc_html($product->get_id()); ?>" class="pmwProductId"
 				  data-id="<?php echo esc_html($product->get_id()); ?>">
 			<?php
 		} else {
 			?>
-			<input type="hidden" class="wpmProductId" data-id="<?php echo esc_html($product->get_id()); ?>">
+			<input type="hidden" class="pmwProductId" data-id="<?php echo esc_html($product->get_id()); ?>">
 			<?php
 		}
 
 		?>
 		<script<?php echo wp_kses(Helpers::get_opening_script_string(), Helpers::get_script_string_allowed_html()); ?>>
-			(window.wpmDataLayer = window.wpmDataLayer || {}).products                = window.wpmDataLayer.products || {};
-			window.wpmDataLayer.products[<?php echo esc_html($product->get_id()); ?>] = <?php echo wp_json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
+			(window.pmwDataLayer = window.pmwDataLayer || {}).products                = window.pmwDataLayer.products || {};
+			window.pmwDataLayer.products[<?php echo esc_html($product->get_id()); ?>] = <?php echo wp_json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
 			<?php $set_position ? self::get_product_data_layer_script_html_part_2($product) : ''; ?>
 		</script>
 		<?php
@@ -422,7 +422,7 @@ class Product {
 	public static function get_product_data_layer_script_html_part_2( $product ) {
 		?>
 		window.pmw_product_position = window.pmw_product_position || 1;
-		window.wpmDataLayer.products[<?php echo esc_html($product->get_id()); ?>]['position'] = window.pmw_product_position++;
+		window.pmwDataLayer.products[<?php echo esc_html($product->get_id()); ?>]['position'] = window.pmw_product_position++;
 		<?php
 	}
 

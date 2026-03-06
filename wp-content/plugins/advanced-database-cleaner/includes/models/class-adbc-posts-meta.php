@@ -171,6 +171,8 @@ class ADBC_Posts_Meta {
 
 		$union_queries = [];
 
+		$needs_collation_fix = ! ADBC_Database::is_collaction_unified( 'postmeta', false, $filters['site_id'] );
+
 		// Offset starts from 0, so we need to add the limit to it to increment the
 		// number of rows to fetch in each iteration.
 		$total_rows_to_fetch = $offset + $limit;
@@ -183,7 +185,8 @@ class ADBC_Posts_Meta {
 				$table_name,
 				$filters,
 				$order_by_sql,
-				$total_rows_to_fetch
+				$total_rows_to_fetch,
+				$needs_collation_fix
 			);
 		}
 
@@ -342,7 +345,6 @@ class ADBC_Posts_Meta {
 		return $sql;
 	}
 
-
 	/**
 	 * Prepare a SQL query string to get the posts meta list that satisfy the UI filters. It will be used in a UNION query to get all posts meta in all sites.
 	 *
@@ -354,7 +356,7 @@ class ADBC_Posts_Meta {
 	 *
 	 * @return string SQL query to get the posts meta list.
 	 */
-	private static function prepare_posts_meta_list_sql_for_union( $site_id, $table_name, $filters, $order_by_sql, $total_rows_to_fetch ) {
+	private static function prepare_posts_meta_list_sql_for_union( $site_id, $table_name, $filters, $order_by_sql, $total_rows_to_fetch, $needs_collation_fix = false ) {
 
 		global $wpdb;
 
@@ -423,22 +425,22 @@ class ADBC_Posts_Meta {
 			// Build a derived table of groups: per (post_id, meta_key, value-hash),
 			// compute min(meta_id) and count(*).
 			$dup_subquery = "
-			SELECT
-				post_id,
-				meta_key,
-				CRC32(meta_value) AS vhash,
-				MIN(meta_id)      AS min_meta_id,
-				COUNT(*)          AS cnt
-			FROM {$table_name}
-			GROUP BY post_id, meta_key, CRC32(meta_value)
-		";
+				SELECT
+					post_id,
+					meta_key,
+					CRC32(meta_value) AS vhash,
+					MIN(meta_id)      AS min_meta_id,
+					COUNT(*)          AS cnt
+				FROM {$table_name}
+				GROUP BY post_id, meta_key, CRC32(meta_value)
+			";
 
 			$duplicate_join_sql = "
-			LEFT JOIN ( {$dup_subquery} ) dupg
-				ON dupg.post_id  = main.post_id
-			   AND dupg.meta_key = main.meta_key
-			   AND dupg.vhash    = CRC32(main.meta_value)
-		";
+				LEFT JOIN ( {$dup_subquery} ) dupg
+					ON dupg.post_id  = main.post_id
+				AND dupg.meta_key = main.meta_key
+				AND dupg.vhash    = CRC32(main.meta_value)
+			";
 
 			if ( 'yes' === $filters['duplicated'] ) {
 				// Only rows that belong to a group with more than one row,
@@ -452,21 +454,30 @@ class ADBC_Posts_Meta {
 			}
 		}
 
-
 		$where_sql = ! empty( $where ) ? 'WHERE ' . implode( ' AND ', $where ) : '';
 
 		// Add the limit to the params array
 		$params[] = absint( $total_rows_to_fetch );
+
+		$collation = ! empty( $wpdb->collate ) ? $wpdb->collate : 'utf8mb4_unicode_ci';
+
+		$name_expr = $needs_collation_fix
+			? "CONVERT(main.`meta_key` USING utf8mb4) COLLATE {$collation}"
+			: "main.`meta_key`";
+
+		$value_expr = $needs_collation_fix
+			? "CONVERT(SUBSTRING(main.`meta_value`, 1, {$truncate_length}) USING utf8mb4) COLLATE {$collation}"
+			: "SUBSTRING(main.`meta_value`, 1, {$truncate_length})";
 
 		/* ────────────────────────────────────────────────────────────
 		 * Final SQL
 		 * ────────────────────────────────────────────────────────────*/
 		$sql = $wpdb->prepare(
 			"SELECT
-				main.`meta_key`                         AS name,
+				{$name_expr}                           AS name,
 				main.`meta_id`                          AS meta_id,
 				main.`post_id`                          AS post_id,
-				SUBSTRING(main.`meta_value`, 1, {$truncate_length}) AS value,
+				{$value_expr}                          AS value,
 				OCTET_LENGTH(main.`meta_value`)         AS size,
 				%d                                      AS site_id
 			FROM {$table_name} main

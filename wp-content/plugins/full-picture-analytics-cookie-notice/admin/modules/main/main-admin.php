@@ -66,44 +66,6 @@ class Fupi_MAIN_admin {
 			$gdpr_checker->send_and_return_status();
 		}
 
-        // GENERATE FILES
-		
-		// Generate HEAD js if it was just enabled or if the geolocation method has changed
-
-		$main_file_gen_is_enabled = ! empty( $clean_data['save_settings_file'] );
-		$main_file_gen_was_enabled = ! empty( $this->settings['save_settings_file' ] );
-
-		$new_geo_method = ! empty( $clean_data['geo'] ) ? $clean_data['geo'] : false;
-		$old_geo_method = ! empty( $this->settings['geo' ] ) ? $this->settings['geo' ] : false;
-		
-		$generate_head_js = $main_file_gen_is_enabled && ( ! $main_file_gen_was_enabled || ( $new_geo_method != $old_geo_method ) );
-
-		// Generate CSCR files
-		
-        $cscr_module_is_enabled = ! empty( $this->tools['cscr'] );
-		$cscr_file_gen_is_enabled = ! empty ( $clean_data['save_cscr_file'] );
-		$cscr_file_gen_was_enabled =  ! empty( $this->settings['save_cscr_file'] );
-
-		$generate_cscr = $cscr_module_is_enabled && $cscr_file_gen_is_enabled && ! $cscr_file_gen_was_enabled;
-		
-        if ( $generate_head_js || $generate_cscr ) {
-
-            include_once FUPI_PATH . '/admin/common/generate-files.php';
-            $generator = new Fupi_Generate_Files();
-			
-            if ( $generate_head_js ) {
-
-				$generation_status = $generator->make_head_js_file( 'main', $clean_data );
-
-				if ( $generation_status == 'error' ) {
-					if ( ! empty( $this->ver['debug'] ) ) trigger_error('[FP] Error saving main WP FP scripts in a file. The option has been turned off. Please check your server file permissions and try again.');
-					unset( $clean_data['debug'] );
-				}
-			}
-
-            if ( $generate_cscr ) $generator->make_cscr_js_files( false );
-        }
-
         // CLEAR CACHE
 		
 		include FUPI_PATH . '/admin/common/fupi-clear-cache.php';
@@ -309,7 +271,7 @@ class Fupi_MAIN_admin {
 		$update_ok = $updater->run( true, $uploaded_settings );
 
 		if ( $update_ok ) {
-			wp_send_json_success( array('message' => esc_html__('Settings restorred successfully', 'full-picture-analytics-cookie-notice' ) ) );
+			wp_send_json_success( array('message' => esc_html__('Settings restored successfully', 'full-picture-analytics-cookie-notice' ) ) );
 		} else {
 			wp_send_json_error( array( 'message' => esc_html__('No settings data received', 'full-picture-analytics-cookie-notice' ) ) );
 		}
@@ -342,7 +304,7 @@ class Fupi_MAIN_admin {
 		$update_ok = $updater->run( true, $file_contents );
 
 		if ( $update_ok ) {
-			wp_send_json_success( array('message' => esc_html__('Settings restorred successfully', 'full-picture-analytics-cookie-notice' ) ) );
+			wp_send_json_success( array('message' => esc_html__('Settings restored successfully', 'full-picture-analytics-cookie-notice' ) ) );
 		} else {
 			wp_send_json_error( array( 'message' => esc_html__('No settings data received', 'full-picture-analytics-cookie-notice' ) ) );
 		}

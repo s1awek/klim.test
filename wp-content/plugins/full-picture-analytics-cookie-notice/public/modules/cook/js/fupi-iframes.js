@@ -1,4 +1,4 @@
-((FP)=>{
+function fupi_iframes(){
 
     let iframesTrigger = false;
 
@@ -181,19 +181,8 @@
     }
 
     // INIT
-
-    // Start processing iframes 100ms after the last iframe shows on page
-
-    FP.manageIframes = function(){
-        if ( ! iframesTrigger ) {
-            iframesTrigger = setTimeout( processIframes, 100 );
-        } else {
-            clearTimeout( iframesTrigger );
-            iframesTrigger = setTimeout( processIframes, 100 ); 
-        }
-    }
     
-    function processIframes(){
+    FP.loadIframes = () => {
 
         let wrappers = FP.findAll('.fupi_blocked_iframe'), // wrappers of blocked iframes
             cons_cookie = FP.readCookie('fp_iframes_consent'),
@@ -219,7 +208,14 @@
             }
         } )
     }
-    
+
+    if ( document.readyState === "complete" ) {
+        FP.loadIframes();
+    } else {
+        document.addEventListener('DOMContentLoaded', FP.loadIframes );
+    }
+
+	setInterval( ()=>{FP.loadIframes();}, 1000);
 
     // Load iframes when a "Load content" button is clicked
 
@@ -249,4 +245,7 @@
         }
     })
 
-})(FP);
+    FP.loaded('iframes_blocker');
+};
+
+if ( ! fp.main.is_bricks_builder ) FP.load('iframes_blocker', 'fupi_iframes', ['head_helpers']);

@@ -11,7 +11,7 @@ FP.fns.mato_remmeber_cart_changes = ( data, should_remove, return_val = true ) =
 
 		let prod = prod_a[0],
 			prod_id = FP.fns.get_woo_prod_id(prod);
-			qty = prod_a[1] || prod.qty;
+			qty = prod_a[1] !== false ? (prod_a[1] || prod.qty || 1) : false;
 
 		// if this product is already in cart
 		if ( cart[prod_id] ) {
@@ -21,37 +21,47 @@ FP.fns.mato_remmeber_cart_changes = ( data, should_remove, return_val = true ) =
 
 			if ( ! should_remove ) {
 				// increase quantity
-				cart[prod_id]['qty'] += qty || 1;
+				cart[prod_id]['qty'] += qty;
 			} else {
-				// remove the whole product if the quantity does not exist
-				if ( ! qty || cart[prod_id]['qty'] == 0 ) { 
+				// remove the whole product if the quantity does not exist or is false (remove all)
+				if ( qty === false || ! qty || cart[prod_id]['qty'] <= 0 ) { 
 					removed.push( prod_id );
-					delete cart[prod_id]
+					delete cart[prod_id];
 				// otherwise decrease quantity
 				} else {
 					// delete product if we try to remove more then there is in cart
 					if ( cart[prod_id]['qty'] <= qty ) {
 						removed.push( prod_id );
-						delete cart[prod_id]
+						delete cart[prod_id];
 					} else {
 						cart[prod_id]['qty'] -= qty;
 					}
 				}
 			}
 
-		// if it is a new product
+		// if it is a new product and we're adding (not removing)
 		} else {
-			
-			let prod_cat = prod.categories && prod.categories.length > 0 ? prod.categories.slice(0,5) : [];
-			
-			cart[prod_id] = { 
-				'name' : FP.fns.get_woo_prod_name(prod),
-				'cat' : prod_cat,
-				'price' : prod.price,
-				'qty' : qty
-			};
+			if ( ! should_remove ) {
+				let prod_cat = prod.categories && prod.categories.length > 0 ? prod.categories.slice(0,5) : [];
+				
+				cart[prod_id] = { 
+					'name' : FP.fns.get_woo_prod_name(prod),
+					'cat' : prod_cat,
+					'price' : prod.price,
+					'qty' : qty
+				};
+			}
+			// If it's a new product and we're removing, do nothing (can't remove what's not there)
 		}
 	} );
+
+	// Clean up cart - remove any products with qty <= 0
+	Object.keys(cart).forEach(prod_id => {
+		if ( cart[prod_id]['qty'] <= 0 ) {
+			removed.push(prod_id);
+			delete cart[prod_id];
+		}
+	});
 
 	// save updated cart
 	FP.setCookie('fp_matomo_cart__tmp', JSON.stringify(cart) );
@@ -59,11 +69,10 @@ FP.fns.mato_remmeber_cart_changes = ( data, should_remove, return_val = true ) =
 	if ( return_val ) return [cart, removed];
 
 	// Remove cart cookie when an order is made
-
 	if ( fp.woo.order_data_ready ) FP.deleteCookie('fp_matomo_cart__tmp');
 }
 
-FP.fns.mato_woo_update_cart = () => {
+function fupi_mato_woo_update_cart() {
 	
 	FP.addAction( ['woo_add_to_cart'], data =>{
 		if ( ! fp.loaded.includes('mato') ) FP.fns.mato_remmeber_cart_changes( data, false, false );
@@ -74,7 +83,7 @@ FP.fns.mato_woo_update_cart = () => {
 	} );
 }
 
-FP.fns.mato_woo_events = () => {
+function fupi_mato_footer_woo(){
 
 	// HELPERS
 
@@ -179,6 +188,11 @@ FP.fns.mato_woo_events = () => {
 		track_cart_changes( data, false );
 	} );
 
+	if ( fp.woo.cart_to_track ) {
+		_paq.push(['trackEvent', 'Ecommerce', 'Add to cart', 'Add to cart']);
+		track_cart_changes( fp.woo.cart_to_track, false );
+	};
+
 	FP.addAction( ['woo_remove_from_cart'], data =>{
 		_paq.push(['trackEvent', 'Ecommerce', 'Remove from cart', 'Remove from cart']);
 		track_cart_changes( data, true );
@@ -257,9 +271,11 @@ FP.fns.mato_woo_events = () => {
 
 	// track order
 	if ( fp.woo.order_data_ready ) track_purchase();
+
+	FP.loaded('mato_footer_woo');
 }
 
-FP.fns.mato_standard_events = () => {
+function fupi_mato_footer(){
 
 	// TRACK SCROLL
 
@@ -352,16 +368,14 @@ FP.fns.mato_standard_events = () => {
 			}
 		} )
 	}
+
+	FP.loaded('mato_footer');
 }
 
-// this saves cart before user agrees to cookies
-if ( fp.loaded.includes('woo') ) FP.fns.mato_woo_update_cart();
+FP.load('mato_footer','fupi_mato_footer',['mato','footer_helpers']);
+FP.load('mato_footer_woo','fupi_mato_footer_woo',['mato','footer_helpers','woo']);
 
-FP.fns.load_mato_footer = function() {
-	FP.fns.mato_standard_events();
-	if ( fp.loaded.includes('woo') ) FP.fns.mato_woo_events();
-}
-
-// INIT FOOTER SCRIPTS
-FP.enqueueFn( 'FP.fns.load_mato_footer' );
-
+// Remember cart before user agrees to cookies
+setTimeout( ()=>{
+	FP.load('mato_woo_update_cart', 'fupi_mato_woo_update_cart', ['footer_helpers','woo'])
+}, 2000);

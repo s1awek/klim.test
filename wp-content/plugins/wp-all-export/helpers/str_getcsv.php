@@ -10,7 +10,7 @@ function str_getcsv($input, $delimiter=',', $enclosure='"') {
 	$temp = fopen("php://memory", "rw");
 	fwrite($temp, $input);
 	fseek($temp, 0);
-	$r = fgetcsv($temp, strlen($input), $delimiter, $enclosure);
+	$r = fgetcsv($temp, strlen($input), $delimiter, $enclosure, '\\');
 	fclose($temp);
 	return $r;
 }

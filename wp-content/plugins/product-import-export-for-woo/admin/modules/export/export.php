@@ -9,8 +9,8 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-if(!class_exists('Wt_Import_Export_For_Woo_Basic_Export')){
-class Wt_Import_Export_For_Woo_Basic_Export
+if(!class_exists('Wt_Import_Export_For_Woo_Product_Basic_Export')){
+class Wt_Import_Export_For_Woo_Product_Basic_Export
 {
 	public $module_id='';
 	public static $module_id_static='';
@@ -32,12 +32,23 @@ class Wt_Import_Export_For_Woo_Basic_Export
 	public $default_export_method='';  /* configure this value in `advanced_setting_fields` method */
 	public $use_bom = true;
 	public $form_data=array();
-        public $validation_rule = array();
-        public $step_need_validation_filter = array();        
+	public $validation_rule = array();
+	public $step_need_validation_filter = array();
+	
+	/**
+	 * Post types this plugin handles
+	 */
+	private static $handled_post_types = array('product', 'product_review', 'product_categories', 'product_tags');
+	
+	/**
+	 * Post types handled by other plugins (for compatibility checks)
+	 */
+	private static $order_post_types = array('order', 'coupon', 'subscription');
+	private static $user_post_types = array('user');
 
 	public function __construct()
 	{
-		$this->module_id=Wt_Import_Export_For_Woo_Basic::get_module_id($this->module_base);
+		$this->module_id=Wt_Import_Export_For_Woo_Product_Basic::get_module_id($this->module_base);
 		self::$module_id_static=$this->module_id;
 
 		/* allowed file types */
@@ -121,9 +132,9 @@ class Wt_Import_Export_For_Woo_Basic_Export
 
 		public function get_defaults()
 	{	
-		$this->default_export_method= Wt_Import_Export_For_Woo_Basic_Common_Helper::get_advanced_settings('default_export_method');
-		$this->default_batch_count=Wt_Import_Export_For_Woo_Basic_Common_Helper::get_advanced_settings('default_export_batch');
-		$this->use_bom = (bool)Wt_Import_Export_For_Woo_Basic_Common_Helper::get_advanced_settings('include_bom');
+		$this->default_export_method= Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::get_advanced_settings('default_export_method');
+		$this->default_batch_count=Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::get_advanced_settings('default_export_batch');
+		$this->use_bom = (bool)Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::get_advanced_settings('include_bom');
 	}
 
 	/**
@@ -247,7 +258,15 @@ class Wt_Import_Export_For_Woo_Basic_Export
 	* 	Main ajax hook to handle all export related requests
 	*/
 	public function ajax_main()
-	{       
+	{  
+		if ( ! $this->to_export ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification done using the Wt_Iew_Sh::check_write_access() method above.
+			$this->to_export=(isset($_POST['to_export']) ? sanitize_text_field(wp_unslash($_POST['to_export'])) : '');	
+		}
+
+		if ( $this->to_export && ! in_array( $this->to_export, self::$handled_post_types ) ) {
+			return;
+		}
 
 		include_once plugin_dir_path(__FILE__).'classes/class-export-ajax.php';
 		if(Wt_Iew_Sh::check_write_access(WT_IEW_PLUGIN_ID_BASIC))
@@ -260,15 +279,40 @@ class Wt_Import_Export_For_Woo_Basic_Export
 			{	
 				// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.MissingUnslash,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce verified above, input is sanitized via Wt_Iew_Sh::sanitize_item()
 				$this->export_method=(isset($_POST['export_method']) ? Wt_Iew_Sh::sanitize_item(wp_unslash($_POST['export_method']), 'text') : '');
-				// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.MissingUnslash,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce verified above, input is sanitized via Wt_Iew_Sh::sanitize_item()
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.MissingUnslash,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce verified above, input is sanitized via Wt_Iew_Sh::check_write_access() above
 				$this->to_export=(isset($_POST['to_export']) ? Wt_Iew_Sh::sanitize_item(wp_unslash($_POST['to_export']), 'text') : '');
 				// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.MissingUnslash,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce verified above, input is sanitized via Wt_Iew_Sh::sanitize_item()
 				$this->selected_template=(isset($_POST['selected_template']) ? Wt_Iew_Sh::sanitize_item(wp_unslash($_POST['selected_template']), 'int') : 0);
 			}		
 			
+			// Check if this plugin handles the requested post type
+			if (!in_array($this->to_export, self::$handled_post_types)) {
+				// This plugin doesn't handle this type, check which plugin should handle it
+				$should_return = true;
+				
+				/**
+				 * if the plugin that handles the post type is older than the required version, the required class for the post type will not be loaded.
+				 * so we need to let the Current post type class to handle the request.
+				 */
+				if ( in_array( $this->to_export, self::$order_post_types ) ) {
+					if ( defined('WT_O_IEW_VERSION') && version_compare( WT_O_IEW_VERSION, '2.7.0', '<' ) ) {
+						$should_return = false;
+					}
+				} elseif ( in_array( $this->to_export, self::$user_post_types ) ) {
+					if ( defined('WT_U_IEW_VERSION') && version_compare( WT_U_IEW_VERSION, '2.7.0', '<' ) ) {
+						$should_return = false;
+					}
+				}
+
+				if ( $should_return ) {
+					return;
+				}
+		
+			}
+			
 			$this->get_steps();
 
-			$ajax_obj=new Wt_Import_Export_For_Woo_Basic_Export_Ajax($this, $this->to_export, $this->steps, $this->export_method, $this->selected_template, $this->rerun_id);
+			$ajax_obj=new Wt_Import_Export_For_Woo_Product_Basic_Export_Ajax($this, $this->to_export, $this->steps, $this->export_method, $this->selected_template, $this->rerun_id);
 			
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotValidated,WordPress.Security.ValidatedSanitizedInput.MissingUnslash,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce verified above, input is sanitized via Wt_Iew_Sh::sanitize_item()
 			$export_action=Wt_Iew_Sh::sanitize_item(isset($_POST['export_action']) ? wp_unslash($_POST['export_action']) : '', 'text');
@@ -405,7 +449,7 @@ class Wt_Import_Export_For_Woo_Basic_Export
 		if($rerun_id>0)
 		{
 			/* check the history module is available */
-			$history_module_obj=Wt_Import_Export_For_Woo_Basic::load_modules('history');
+			$history_module_obj=Wt_Import_Export_For_Woo_Product_Basic::load_modules('history');
 			if(!is_null($history_module_obj))
 			{
 				/* check the history entry is for export and also has form_data */
@@ -440,32 +484,32 @@ class Wt_Import_Export_For_Woo_Basic_Export
 
 	protected function enqueue_assets()
 	{
-            if(Wt_Import_Export_For_Woo_Basic_Common_Helper::wt_is_screen_allowed()){
-		wp_enqueue_script($this->module_id, plugin_dir_url(__FILE__).'assets/js/main.js', array('jquery', 'jquery-ui-sortable', 'jquery-ui-datepicker'), WT_P_IEW_VERSION, true);
-		wp_enqueue_style('jquery-ui-datepicker');
-		wp_enqueue_style(WT_IEW_PLUGIN_ID_BASIC.'-jquery-ui', WT_P_IEW_PLUGIN_URL.'admin/css/jquery-ui.css', array(), WT_P_IEW_VERSION, 'all');
-        $params=array(
-			'item_type'=>'',
-			'steps'=>$this->steps,
-			'rerun_id'=>$this->rerun_id,
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- GET parameter for UI state, nonce not required
-			'to_export'=> isset( $_GET['wt_to_export'] ) ? sanitize_text_field( wp_unslash( $_GET['wt_to_export'] ) ) : $this->to_export,
-			'export_method'=>$this->export_method,
-			'msgs'=>array(
-				'choosed_template'=>__('Choosed template:', 'product-import-export-for-woo'),
-				'choose_export_method'=>__('Please select an export method.', 'product-import-export-for-woo'),
-				'choose_template'=>__('Please select an export template.', 'product-import-export-for-woo'),
-				'step'=>__('Step', 'product-import-export-for-woo'),
-				'choose_ftp_profile'=>__('Please select an FTP profile.', 'product-import-export-for-woo'),
-				//localized strings for filename validation
-				'filename_title' => __('Only letters, numbers and hyphens are allowed', 'product-import-export-for-woo'),
-				'filename_placeholder' => __('Enter file name (letters, numbers, hyphens only)', 'product-import-export-for-woo'),
-			),
-		);
-		wp_localize_script($this->module_id, 'wt_iew_export_basic_params', $params);
+        if ( Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_is_screen_allowed() ) {
+			wp_enqueue_script($this->module_id, plugin_dir_url(__FILE__).'assets/js/main.js', array('jquery', 'jquery-ui-sortable', 'jquery-ui-datepicker'), WT_P_IEW_VERSION, true);
+			wp_enqueue_style('jquery-ui-datepicker');
+			wp_enqueue_style(WT_IEW_PLUGIN_ID_BASIC.'-jquery-ui', WT_P_IEW_PLUGIN_URL.'admin/css/jquery-ui.css', array(), WT_P_IEW_VERSION, 'all');
+			$params=array(
+				'item_type'=>'',
+				'steps'=>$this->steps,
+				'rerun_id'=>$this->rerun_id,
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- GET parameter for UI state, nonce not required
+				'to_export'=> isset( $_GET['wt_to_export'] ) ? sanitize_text_field( wp_unslash( $_GET['wt_to_export'] ) ) : $this->to_export,
+				'export_method'=>$this->export_method,
+				'msgs'=>array(
+					'choosed_template'=>__('Choosed template:', 'product-import-export-for-woo'),
+					'choose_export_method'=>__('Please select an export method.', 'product-import-export-for-woo'),
+					'choose_template'=>__('Please select an export template.', 'product-import-export-for-woo'),
+					'step'=>__('Step', 'product-import-export-for-woo'),
+					'choose_ftp_profile'=>__('Please select an FTP profile.', 'product-import-export-for-woo'),
+					//localized strings for filename validation
+					'filename_title' => __('Only letters, numbers and hyphens are allowed', 'product-import-export-for-woo'),
+					'filename_placeholder' => __('Enter file name (letters, numbers, hyphens only)', 'product-import-export-for-woo'),
+				),
+			);
+			wp_localize_script($this->module_id, 'wt_iew_export_basic_params', $params);
 
-		$this->add_select2_lib(); //adding select2 JS, It checks the availibility of woocommerce
-            }
+			$this->add_select2_lib(); //adding select2 JS, It checks the availibility of woocommerce
+        }
 	}
 
 	/**
@@ -560,7 +604,7 @@ class Wt_Import_Export_For_Woo_Basic_Export
 
 		if('local' != $file_into) /* file not save to local. Initiate the choosed remote profile */
 		{
-			$remote_adapter=Wt_Import_Export_For_Woo_Basic::get_remote_adapters('export', $file_into);
+			$remote_adapter=Wt_Import_Export_For_Woo_Product_Basic::get_remote_adapters('export', $file_into);
 			if(is_null($remote_adapter)) /* adapter object not found */
 			{
 				$msg=sprintf('Unable to initailize %s', $file_into);
@@ -780,9 +824,9 @@ class Wt_Import_Export_For_Woo_Basic_Export
                                 $msg.='<span class="wt_iew_popup_close" style="line-height:10px;width:auto" onclick="wt_iew_basic_export.hide_export_info_box();">X</span>';
                                 
                                 $msg.='<span class="wt_iew_info_box_finished_text" style="font-size: 10px; display:block">';
-                                if(Wt_Import_Export_For_Woo_Admin_Basic::module_exists('history'))
+                                if(Wt_Import_Export_For_Woo_Product_Admin_Basic::module_exists('history'))
                                 {
-                                        $history_module_id= Wt_Import_Export_For_Woo_Basic::get_module_id('history');
+                                        $history_module_id= Wt_Import_Export_For_Woo_Product_Basic::get_module_id('history');
                                         $history_page_url=admin_url('admin.php?page='.$history_module_id);
                                         $msg.=__('You can manage exports from History section.', 'product-import-export-for-woo');
                                 }
@@ -953,4 +997,4 @@ class Wt_Import_Export_For_Woo_Basic_Export
 	}
 }
 }
-Wt_Import_Export_For_Woo_Basic::$loaded_modules['export']=new Wt_Import_Export_For_Woo_Basic_Export();
+Wt_Import_Export_For_Woo_Product_Basic::$loaded_modules['export']=new Wt_Import_Export_For_Woo_Product_Basic_Export();

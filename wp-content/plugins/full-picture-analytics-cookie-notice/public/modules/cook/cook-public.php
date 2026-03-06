@@ -31,7 +31,7 @@ class Fupi_COOK_public {
         );
         add_action(
             'wp_head',
-            array($this, 'fupi_add_iframe_translations'),
+            array($this, 'fupi_add_cook_data_to_head'),
             10,
             1
         );
@@ -50,10 +50,28 @@ class Fupi_COOK_public {
         include_once FUPI_PATH . '/public/modules/cook/fupi-display-cookie-notice.php';
     }
 
-    public function fupi_add_iframe_translations() {
+    public function fupi_add_cook_data_to_head() {
         // !! DO NOT DELETE
         // we get options again because otherwise the translation would not kick in
         $cook_opts_2 = get_option( 'fupi_cook' );
+        // Add consent control for Pixel Manager
+        if ( !empty( $cook_opts_2['scrblk_auto_rules'] ) && in_array( 'pixelman', $cook_opts_2['scrblk_auto_rules'] ) ) {
+            echo '<script id="fupi_pixelman_compat">
+                window._pmwq = window._pmwq || [];
+                window._pmwq.push(function() {
+                    if ( fpdata.cookies && !! window?.pmw?.consent?.api?.updateSelectively ) {
+                        pmw.consent.api.updateSelectively({
+                            statistics: fpdata.cookies.stats,
+                            marketing: fpdata.cookies.marketing,
+                            preferences: fpdata.cookies.personalisation,
+                            necessary: true,
+                        });
+                        console.log("[FP] Updated tracking consents for Pixel Manager");
+                    }
+                });
+            </script>';
+        }
+        // Add translations to iframe texts
         $iframe_caption_txt = ( empty( $cook_opts_2['iframe_caption_txt'] ) ? esc_attr__( 'This content is hosted by [[an external source]]. By loading it, you accept its {{privacy terms}}.', 'full-picture-analytics-cookie-notice' ) : esc_attr( $cook_opts_2['iframe_caption_txt'] ) );
         $iframe_btn_text = ( empty( $cook_opts_2['iframe_btn_text'] ) ? esc_attr__( 'Load content', 'full-picture-analytics-cookie-notice' ) : esc_attr( $cook_opts_2['iframe_btn_text'] ) );
         $iframe_texts = [
@@ -119,7 +137,6 @@ class Fupi_COOK_public {
         unset($mod_settings['iframe_auto_rules']);
         unset($mod_settings['iframe_manual_rules']);
         unset($mod_settings['control_other_iframes']);
-        unset($mod_settings['scrblk_auto_rules']);
         unset($mod_settings['control_other_tools']);
         unset($mod_settings['scrblk_manual_rules']);
         // ADD VALUES
@@ -190,7 +207,10 @@ class Fupi_COOK_public {
                 FUPI_URL . 'public/modules/cook/js/fupi-customizer-consb.js',
                 array('fupi-helpers-js', 'jquery'),
                 FUPI_VERSION,
-                true
+                [
+                    'in_footer' => true,
+                    'strategy'  => 'async',
+                ]
             );
         } else {
             /*if ( $this->track_current_user )*/
@@ -200,22 +220,24 @@ class Fupi_COOK_public {
                 FUPI_URL . 'public/modules/cook/js/fupi-consb.js',
                 array('fupi-helpers-js', 'fupi-helpers-footer-js'),
                 FUPI_VERSION,
-                true
-            );
-        }
-        // Load JS only when we are NOT in the bricks builder editor
-        if ( !(function_exists( 'bricks_is_builder' ) && bricks_is_builder()) ) {
-            /* ^ */
-            wp_enqueue_script(
-                'fupi-iframes-js',
-                FUPI_URL . 'public/modules/cook/js/fupi-iframes.js',
-                array('fupi-helpers-js'),
-                FUPI_VERSION,
                 [
-                    'in_footer' => false,
+                    'in_footer' => true,
+                    'strategy'  => 'async',
                 ]
             );
         }
+        /* ^ */
+        wp_enqueue_script(
+            'fupi-iframes-js',
+            FUPI_URL . 'public/modules/cook/js/fupi-iframes.js',
+            array('fupi-helpers-js'),
+            FUPI_VERSION,
+            [
+                'in_footer' => false,
+                'strategy'  => 'async',
+            ]
+        );
+        // the included function is loaded only if we are not in bricks builder editor
     }
 
     // SHORTCODE FOR BLOCKING IFRAMES
@@ -245,7 +267,7 @@ class Fupi_COOK_public {
             $privacy = ( !empty( $a['privacy'] ) ? ' data-privacy="' . esc_url( $a['privacy'] ) . '"' : '' );
             // replace iframe
             $new_content = str_replace( '<iframe', '<div class="fupi_blocked_iframe" data-stats="' . $stats . '" data-market="' . $market . '" data-pers="' . $pers . '" ' . $placeholder . $name . $privacy . '><div class="fupi_iframe_data"', $content );
-            $output = str_replace( '/iframe>', '/div></div>', $new_content ) . '<!--noptimize--><script data-no-optimize="1" nowprocket>FP.manageIframes();</script><!--/noptimize-->';
+            $output = str_replace( '/iframe>', '/div></div>', $new_content );
             return $output;
         }
         return $content;

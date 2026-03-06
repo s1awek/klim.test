@@ -88,15 +88,14 @@ class Fupi_Public {
         global $wp;
         global $post;
         $fp = [
-            'loaded'          => [],
-            'loading'         => [],
-            'blocked_scripts' => [],
-            'waitlist'        => [],
-            'actions'         => [],
-            'observers'       => [],
-            'tools'           => [],
-            'vars'            => [],
-            'notice'          => [
+            'loaded'    => [],
+            'loading'   => [],
+            'waitlist'  => [],
+            'actions'   => [],
+            'observers' => [],
+            'tools'     => [],
+            'vars'      => [],
+            'notice'    => [
                 'enabled' => false,
             ],
         ];
@@ -117,48 +116,102 @@ class Fupi_Public {
         if ( !empty( $extra_scr ) ) {
             $output .= $extra_scr;
         }
-        if ( empty( $this->main ) || empty( $this->main['save_settings_file'] ) ) {
-            include_once dirname( __FILE__ ) . '/in_head/head-js.php';
+        // add queueing functions
+        $output .= '
+			fp.load_queue = {};
+			
+			FP.getInner = function (vals, splitter = ".") {
+        
+				let args = Array.isArray(vals) ? vals : vals.split(splitter).map( arg => arg.trim() ),
+					obj = window[args.shift()];
+
+				for (var i = 0; i < args.length; i++) {
+					var prop = args[i];
+					if (! obj || ! obj.hasOwnProperty(prop)) return false;
+					obj = obj[prop];
+				};
+
+				return obj;
+			};
+			
+			FP.load = ( slug, cb_s = false, req_a = false ) => {
+
+				if ( ! fp.load_queue[slug] ) {
+					fp.load_queue[slug] = {
+						\'state\' : \'waiting\', 
+						\'cb\' : cb_s,
+						\'req_a\' : req_a
+					}
+				}
+
+				if ( cb_s ) {
+
+					// make sure we only load things that are not loading or have loaded
+					if ( fp.load_queue[slug].state == \'waiting\' ) {
+				
+						// check if all deps are loaded
+						let deps_loaded = req_a.every( el => fp.load_queue[el] && fp.load_queue[el].state == \'loaded\' );
+					
+						if ( deps_loaded ) {
+							let fn = FP.getInner( cb_s, ".");
+							if ( fn ) {
+								fp.load_queue[slug].state = "loading";
+								fn();
+							}
+						}
+					}
+
+				}
+			};
+			
+			FP.loaded = ( slug, marker = false, text = false ) => {
+
+				fp.load_queue[slug] = {state : \'loaded\'};
+				// if (fp.main.debug) console.log( text || "[FP] " + slug + " loaded " );
+
+				if ( marker ) fp.loaded.push( marker ); // for consent banner reloading
+
+				// check if any queued scripts can now be loaded
+				for ( const [fn_slug, data_o] of Object.entries( fp.load_queue ) ) {
+					if ( fp.load_queue[fn_slug].state == "waiting" ) {
+						FP.load( fn_slug, data_o.cb, data_o.req_a );
+					}
+				}
+			};
+			
+			FP.manageIframes = ()=>{};';
+        // DO NOT REMOVE. This function is added by the script transformer on the site and some people may have it on their sites
+        if ( !empty( $this->main['geo'] ) ) {
+            $output .= "FP.fetchGeo = (method, options = {}) => {\r\n\t\t\t\t\treturn new Promise((resolve, reject) => {\r\n\t\t\t\t\t\tlet fetchUrl, fetchOptions = {};\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\tswitch(method) {\r\n\t\t\t\t\t\t\tcase 'cloudways':\r\n\t\t\t\t\t\t\t\tfetchUrl = options.ajaxUrl;\r\n\t\t\t\t\t\t\t\tfetchOptions = {\r\n\t\t\t\t\t\t\t\t\tmethod: 'POST',\r\n\t\t\t\t\t\t\t\t\tcredentials: 'same-origin',\r\n\t\t\t\t\t\t\t\t\theaders: new Headers({'Content-Type': 'application/x-www-form-urlencoded'}),\r\n\t\t\t\t\t\t\t\t\tbody: 'action=fupi_ajax_geo__premium_only&method=cloudways'\r\n\t\t\t\t\t\t\t\t};\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tcase 'db_ip':\r\n\t\t\t\t\t\t\t\tfetchUrl = 'https://api.db-ip.com/v2/free/self';\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tcase 'ip_api':\r\n\t\t\t\t\t\t\t\tfetchUrl = 'https://ipapi.co/json/';\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tcase 'ipdata':\r\n\t\t\t\t\t\t\t\tfetchUrl = 'https://api.ipdata.co/?api-key=' + options.apiKey;\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tcase 'cf_worker':\r\n\t\t\t\t\t\t\t\tfetchUrl = options.workerUrl;\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tcase 'cf_default':\r\n\t\t\t\t\t\t\t\tfetchUrl = '/cdn-cgi/trace';\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tcase 'cf_non_user':\r\n\t\t\t\t\t\t\t\tfetchUrl = 'https://www.cloudflare.com/cdn-cgi/trace';\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tdefault:\r\n\t\t\t\t\t\t\t\treject(new Error('Unknown geolocation method'));\r\n\t\t\t\t\t\t\t\treturn;\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\twindow.fetch(fetchUrl, fetchOptions)\r\n\t\t\t\t\t\t.then(response => (method === 'cf_default' || method === 'cf_non_user') ? response.text() : response.json())\r\n\t\t\t\t\t\t.then(data => {\r\n\t\t\t\t\t\t\tlet result = { country: 'unknown', region: 'unknown', geo: data };\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\tswitch(method) {\r\n\t\t\t\t\t\t\t\tcase 'cloudways':\r\n\t\t\t\t\t\t\t\t\tif (data.success && data.message) result.country = data.message;\r\n\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t\tcase 'db_ip':\r\n\t\t\t\t\t\t\t\t\tif (data.countryCode?.length === 2) result.country = data.countryCode;\r\n\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t\tcase 'ip_api':\r\n\t\t\t\t\t\t\t\t\tif (data.country?.length === 2) {\r\n\t\t\t\t\t\t\t\t\t\tresult.country = data.country;\r\n\t\t\t\t\t\t\t\t\t\tresult.region = [data.region_code, data.region];\r\n\t\t\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t\tcase 'ipdata':\r\n\t\t\t\t\t\t\t\t\tif (data.country_code?.length === 2) {\r\n\t\t\t\t\t\t\t\t\t\tresult.country = data.country_code;\r\n\t\t\t\t\t\t\t\t\t\tresult.region = [data.region_code, data.region];\r\n\t\t\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t\tcase 'cf_worker':\r\n\t\t\t\t\t\t\t\t\tif (data.country && data.country !== 'XX') result.country = data.country;\r\n\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t\tcase 'cf_default':\r\n\t\t\t\t\t\t\t\tcase 'cf_non_user':\r\n\t\t\t\t\t\t\t\t\tlet match = /loc=([A-Z]{2})/g.exec(data);\r\n\t\t\t\t\t\t\t\t\tif (match && match[1] !== 'XX') result.country = match[1];\r\n\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\tresolve(result);\r\n\t\t\t\t\t\t})\r\n\t\t\t\t\t\t.catch(err => {\r\n\t\t\t\t\t\t\tif (fp.main.debug) console.error('[FP] Geolocation error:', err);\r\n\t\t\t\t\t\t\treject(err);\r\n\t\t\t\t\t\t});\r\n\t\t\t\t\t});\r\n\t\t\t\t};\r\n\t\t\t";
         }
-        $output .= '</script><!--/noptimize-->';
+        $output .= 'FP.loaded("head_js");
+		</script><!--/noptimize-->';
         echo $output;
     }
 
     public function fupi_enqueue_js_helpers() {
-        if ( !empty( $this->main ) && !empty( $this->main['save_settings_file'] ) ) {
-            $file_url = trailingslashit( wp_upload_dir()['baseurl'] ) . 'wpfp/js/head.js';
-            $file_path = trailingslashit( wp_upload_dir()['basedir'] ) . 'wpfp/js/head.js';
-            // if $file_url starts with "http:" but FUPI_URL starts with httpS, then replace it with "https:"
-            if ( substr( $file_url, 0, 5 ) === 'http:' && substr( FUPI_URL, 0, 6 ) === 'https:' ) {
-                $file_url = 'https:' . substr( $file_url, 5 );
-            }
-            /* ^ */
-            wp_enqueue_script(
-                'fupi-helpers-js',
-                $file_url,
-                array(),
-                filemtime( $file_path ),
-                false
-            );
-            // can delete fp_cookies when ?tracking=off
-        } else {
-            /* ^ */
-            wp_enqueue_script(
-                'fupi-helpers-js',
-                FUPI_URL . 'public/common/fupi-helpers.js',
-                array(),
-                $this->version,
-                false
-            );
-            // can delete fp_cookies when ?tracking=off
-        }
+        /* ^ */
+        wp_enqueue_script(
+            'fupi-helpers-js',
+            FUPI_URL . 'public/common/fupi-helpers.js',
+            array(),
+            $this->version,
+            [
+                'in_footer' => false,
+                'strategy'  => 'async',
+            ]
+        );
+        // can delete fp_cookies when ?tracking=off
         /* _ */
         wp_enqueue_script(
             'fupi-helpers-footer-js',
             FUPI_URL . 'public/common/fupi-helpers-footer.js',
             array('fupi-helpers-js'),
             $this->version,
-            true
+            [
+                'in_footer' => true,
+                'strategy'  => 'async',
+            ]
         );
         // jquery was set as dependancy before 7.2.2
     }

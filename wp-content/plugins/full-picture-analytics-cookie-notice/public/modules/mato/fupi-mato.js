@@ -1,4 +1,4 @@
-;(function(window){
+function fupi_mato(){
 
 	if ( ! fp.mato ) return;
 
@@ -179,14 +179,15 @@
 
 		let script_src = fp.mato.src ? fp.mato.src : fp.mato.url + 'matomo.js';
 
-		FP.getScript( script_src, false, {'async':true} );
+		FP.getScript( script_src, mark_as_loaded, {'async':true} );
 
 		
-		
-		// LOAD FOOTER SCRIPTS
-		fp.loaded.push('mato');
-		if ( fp.main.debug ) console.log('[FP] Matomo loaded');
-		FP.runFn( 'FP.fns.load_mato_footer' );
 	}
 
-})(window);
+	function mark_as_loaded(){
+		FP.loaded('mato','mato','[FP] Matomo loaded');
+	}
+
+};
+
+FP.load('mato', 'fupi_mato', ['head_helpers']);

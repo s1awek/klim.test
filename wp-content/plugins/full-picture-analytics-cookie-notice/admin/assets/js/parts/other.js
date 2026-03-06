@@ -38,19 +38,28 @@
 (()=>{
 
 	// ADD "EXTERNAL" DASHICON TO LINKS AND SET THEM TO OPEN IN A NEW TAB
-
 	window.addEventListener( 'DOMContentLoaded', ()=>{
 
 		let links = FP.findAll('#fupi_main_col a');
 
 		links.forEach( link => {
-			if ( ! link.href.includes(document.location.host) && ! link.classList.contains('fupi_vid') && ! link.classList.contains('fupi_vid_btn') ) {
+			if ( ! link.classList.contains('no_external_icon') && ! link.href.includes(document.location.host) && ! link.classList.contains('fupi_vid') && ! link.classList.contains('fupi_vid_btn') ) {
 				if ( ! link.target ) link.target = '_blank';
 				link.insertAdjacentHTML('beforeend', ' <span class="dashicons dashicons-external"></span>');
 			}
 		})
-
 	})
+
+	// ADD UTM PARAMS TO LINKS TO WP FP
+	if ( ! window.location.href.includes('wpfullpicture') ) {
+		window.addEventListener( 'click', e=>{
+			let link = e.target.closest('a[href]');
+			if ( link && link.matches('#fupi_content a[href]') && link.href.includes('wpfullpicture.com') && fupi_version && fupi_licence ) {
+				link.href += '?utm_source=wpfp_plugin&utm_medium=wp_admin&utm_term=' + fupi_licence + '&utm_content=v_' + fupi_version;
+			}		
+		})
+	}
+
 })();
 
 (()=>{

@@ -1,115 +1,87 @@
-=== Pixel Manager for WooCommerce – Track Conversions and Analytics, Google Ads, TikTok and more ===
+=== Pixel Manager for WooCommerce – Conversion Tracking, Google Ads, GA4, TikTok, Dynamic Remarketing ===
 Contributors: alekv, wolfbaer, freemius
-Tags: woocommerce, google analytics, google ads, facebook pixel, conversion tracking
+Tags: conversion tracking, google ads, google analytics, facebook pixel, woocommerce
 Requires at least: 3.7
 Tested up to: 6.9
 Requires PHP: 7.3
-Stable tag: 1.54.1
+Stable tag: 1.58.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Track visitors and conversions for WooCommerce Google Analytics GA4, Google Ads, Meta (Facebook, Instagram), TikTok, Microsoft, and many more!
+Conversion tracking for WooCommerce. Google Ads, GA4, Meta/Facebook Pixel, TikTok & more. Recover 30% more conversions with server-side tracking!
 
 == Description ==
 
-Boost your sales and cut advertising costs with the Pixel Manager, a plugin that excels in precise e-commerce tracking.
+The Pixel Manager is the most complete conversion tracking plugin for WooCommerce. Set up Google Ads conversion tracking, Google Analytics GA4 e-commerce tracking, Meta/Facebook Pixel, TikTok Pixel, and more – in minutes, not hours. No coding required.
 
-🚀 Endorsed by Google’s Tag Team – a big deal, right?
+Unlike Google Tag Manager (GTM), which requires significant technical expertise to configure WooCommerce e-commerce tracking correctly, the Pixel Manager provides a turnkey solution with over 12 years of development. It automatically handles edge cases like payment gateway redirects, order duplication prevention, and consent mode – all the things that take hours to get right with manual tag management.
 
-> This plugin was recommended to us by Google’s Tag Implementation Team. That should say enough.
+🚀 **Endorsed by Google's Tag Team**
+
+> This plugin was recommended to us by Google's Tag Implementation Team. That should say enough.
 
 [says @dpackert24](https://wordpress.org/support/topic/simple-easy-to-use-does-what-it-says-on-the-tin/)
+
+> This plugin was demonstrated to me by a Google Tagging Support person. 'nough said 🙂
+
+[says @galbaras](https://wordpress.org/support/topic/simple-functional-free/)
+
+> We're using this for our biggest clients and it's working great!
+
+[says @wodobo](https://wordpress.org/support/topic/were-using-this-for-our-biggest-clients-and-its-working-great/)
 
 > Pixel Manager for WooCommerce is the go-to plugin for both tech wizards and casual users.
 
 [says @chxz](https://wordpress.org/support/topic/the-go-to-plugin-tracking-everything/)
 
-This plugin tracks WooCommerce shop visitors and collects valuable data for conversion optimization of your shop and paid ads, dynamic remarketing, and reporting. It's designed to boost sales and cut advertising costs through precise e-commerce tracking.
+**What makes the Pixel Manager different?**
 
-The Pixel Manager integrates smoothly with platforms like Google Analytics, Google Ads, Meta (Facebook, Instagram), Hotjar, Microsoft (Pro), and TikTok (Pro).
+Most WooCommerce tracking plugins only handle the basics: firing a conversion pixel on the thank you page. The Pixel Manager goes much further. It tracks the entire e-commerce customer journey – from product impressions and add-to-cart events through checkout and purchase – across all major advertising and analytics platforms simultaneously. This gives you complete data for conversion optimization, dynamic remarketing audience building, and accurate ROAS reporting.
+
+The Pro version adds server-side tracking (Conversion API / CAPI) that sends conversion data directly from your server to advertising platforms. This bypasses browser limitations like ad blockers, Safari ITP cookie restrictions, and network issues – typically recovering up to 30% more conversions that browser-only tracking misses. Our unique Automatic Conversion Recovery (ACR) feature goes even further by automatically identifying and recovering missed conversions nightly.
 
 [youtube https://www.youtube.com/watch?v=BW0Tzyu2HaU]
 
-<strong>Key Benefits</strong>
+**Key Benefits**
 
-&#9989; User-friendly and intuitive.
-&#9989; Customizable filters for even more precise tracking.
-&#9989; GDPR-aligned with advanced data privacy features.
-&#9989; Standardized data output across platforms.
-&#9989; In-depth payment gateway reports – goodbye conversion drops.
-&#9989; Lightweight JavaScript library for a speedy site.
-&#9989; Auto Conversion Recovery (ACR) – catch those lost conversions (Pro).
+&#9989; Easy setup – just enter your tracking IDs and you're done.
+&#9989; Accurate e-commerce event tracking across all platforms.
+&#9989; GDPR and CCPA compliant with Google Consent Mode v2.
+&#9989; Works with 15+ consent management platforms out of the box.
+&#9989; Lightweight – won't slow down your WooCommerce store.
+&#9989; Payment Gateway Accuracy Report – diagnose conversion tracking drops.
+&#9989; Automatic Conversion Recovery (ACR) – recover lost conversions (Pro).
 
-This plugin goes beyond basic setup, offering comprehensive tracking of all e-commerce activities. Advanced features like Google Analytics Enhanced E-Commerce and dynamic remarketing events are included, with the pro version adding Meta CAPI, TikTok Events API, and much more.
+**Free Tracking Pixels**
 
-<strong>Why the Pixel Manager?</strong>
+* Google Ads Pixel – conversion value tracking, dynamic remarketing, cart item data
+* Google Analytics Pixel (GA4) – full Enhanced E-Commerce tracking
+* Meta Ads Pixel (Facebook Pixel) – remarketing events and custom audiences
+* Hotjar Pixel – heatmaps and session recordings
 
-Accuracy, simplicity, innovation.
+**Free Features**
 
-There is an extensive feature range in the free and especially the pro version.
+* Google Tag Gateway for Advertisers – first-party tracking through Google's servers
+* Google Consent Mode v2 – full compliance with EU, UK, and US privacy regulations
+* Google Ads Dynamic Remarketing – build audiences based on product interactions
+* Google Ads Cart Item Tracking – feed cart data to Smart Shopping and Performance Max campaigns
+* Google Shopping New Customer Parameter – optimize for new customer acquisition
+* GA4 Enhanced E-Commerce – track product impressions, add to cart, checkout steps, and purchases
+* Meta Remarketing Events – ViewContent, AddToCart, InitiateCheckout, Purchase
+* Basic Order Duplication Prevention – avoid counting the same conversion twice
+* Customizable filters – fine-tune tracking output for your specific setup
+* Lazy-loaded product list support – works with infinite scroll and AJAX product loading
+* [Payment Gateway Accuracy Report](https://sweetcode.com/docs/pmw/diagnostics?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs&utm_content=payment-gateway-accuracy-report#payment-gateway-tracking-accuracy-report) – identify which payment gateways cause conversion tracking drops
 
-Unique tools like the [Payment Gateway Accuracy Report](https://sweetcode.com/docs/wpm/diagnostics?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs&utm_content=payment-gateway-accuracy-report#payment-gateway-tracking-accuracy-report) and [ACR](https://sweetcode.com/docs/wpm/features/acr?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs&utm_content=acr) (Pro).
+Have a look at the full feature list over [here](https://sweetcode.com/docs/pmw/features).
 
-<strong>News</strong>
-
-[youtube https://www.youtube.com/watch?v=1_SoAVwU-Mw]
-
-<strong>Plugin Integrations</strong>
-
-* Google Ads Pixel
-* Google Analytics Pixel (GA4)
-* HotJar Pixel
-* Meta Ads Pixel
-* LinkedIn Ads Pixel (Pro)
-* Microsoft Ads Pixel (Pro)
-* Outbrain Ads Pixel (Pro)
-* Pinterest Ads Pixel (Pro)
-* Reddit Ads Pixel (Pro)
-* Snapchat Ads Pixel (Pro)
-* Taboola Ads Pixel (Pro)
-* TikTok Ads Pixel (Pro)
-* X (Twitter) Ads Pixel (Pro)
-
-<strong>Highlights</strong>
-
-* Google Tag Gateway for Advertisers
-* Google Consent Mode v2
-* Effective order duplication prevention
-* Dynamic remarketing audience collection
-* Google Ads Cart Data tracking
-* Consent management platform compatibility
-* Google Analytics Enhanced E-Commerce
-* [Payment Gateway Accuracy Report](https://sweetcode.com/docs/wpm/diagnostics?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs&utm_content=payment-gateway-accuracy-report#payment-gateway-tracking-accuracy-report)
-* Google Ads Enhanced Conversions (Pro)
-* Server-side tracking for many platforms (Pro)
-* Meta Conversion API (Pro)
-* [Automatic Conversion Recovery (ACR)](https://sweetcode.com/docs/wpm/features/acr?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs&utm_content=acr) (Pro)
-
-<strong>Free Features</strong>
-
-* Google Tag Gateway for Advertisers
-* Google Consent Mode v2
-* Google Ads Conversion Value Tracking
-* Google Ads Dynamic Remarketing
-* Google Ads Cart Item Tracking
-* Google Shopping New Customer Parameter
-* GA4 Enhanced E-Commerce
-* Meta Pixel (Facebook Pixel)
-* Meta Remarketing Events
-* Hotjar Pixel
-* Basic Order Duplication Prevention
-* Many useful filters that help tweak the plugin output
-* Works with lazy loaded product lists
-* [Payment gateway accuracy report](https://sweetcode.com/docs/wpm/diagnostics?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs&utm_content=payment-gateway-accuracy-report#payment-gateway-tracking-accuracy-report)
-
-Have a look at the full feature list over [here](https://sweetcode.com/docs/wpm/features).
-
-<strong>Premium Pixels</strong>
+**Premium Tracking Pixels**
 
 * Adroll Ads
 * Contentsquare Statistics
+* CrazyEgg Analytics
 * LinkedIn Ads
-* Microsoft Ads
+* Microsoft Ads (Bing Ads)
 * Outbrain Ads
 * Pinterest Ads
 * Reddit Ads
@@ -117,35 +89,39 @@ Have a look at the full feature list over [here](https://sweetcode.com/docs/wpm/
 * Taboola Ads
 * TikTok Ads
 * X (Twitter) Ads
-* VWO (Visual Website Optimizer) AB-testing tool
+* VWO (Visual Website Optimizer) – A/B testing
 
-<strong>Premium Features</strong>
+**Premium Features**
 
-* [Automatic Conversion Recovery (ACR)](https://sweetcode.com/docs/wpm/features/acr?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs&utm_content=acr)
+* [Automatic Conversion Recovery (ACR)](https://sweetcode.com/docs/pmw/features/acr?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs&utm_content=acr) – automatically recover missed conversions nightly
+* Server-side tracking (CAPI) – Meta, TikTok, Pinterest, Snapchat, Reddit, GA4 Measurement Protocol
 * Advanced Order Duplication Prevention
-* Google Ads Enhanced Conversions
-* Google Ads Conversion Adjustments
-* Meta CAPI (Facebook CAPI)
-* Pinterest APIC
-* Snapchat CAPI
-* Scroll Tracking
+* Google Ads Enhanced Conversions – first-party data for improved attribution
+* Google Ads Conversion Adjustments – send refund data back to Google Ads
+* Scroll Tracking – measure how far visitors scroll on your pages
 * Automatic Phone and Link Click Tracking
 
-Have a look at the full feature list over [here](https://sweetcode.com/docs/wpm/features).
+Have a look at the full feature list over [here](https://sweetcode.com/docs/pmw/features).
 
-Are you interested in buying the [Pro version](https://sweetcode.com)? Come and visit us [here](https://sweetcode.com).
+**Ready to recover lost conversions and get accurate tracking data?** Visit [sweetcode.com](https://sweetcode.com) to learn more about the Pro version.
 
-<strong>Documentation</strong>
+**Documentation**
 
-Link to the full documentation of the plugin: [Open the documentation](https://sweetcode.com/docs/wpm/?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs)
+Comprehensive setup guides, troubleshooting, and API references: [Open the documentation](https://sweetcode.com/docs/pmw/?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs)
 
-<strong>Consent Management</strong>
+**News**
 
-The plugin uses data from several Consent Management plugins to manage approvals and disapproval for injecting of marketing pixels.
+[youtube https://www.youtube.com/watch?v=1_SoAVwU-Mw]
 
-It works with the following Consent Management plugins out of the box:
+**Consent Management**
 
+The Pixel Manager integrates with all major Consent Management Platforms (CMPs) to ensure your tracking pixels respect visitor consent choices. It supports Google Consent Mode v2, including region-specific consent defaults for the EU, UK, and US states with privacy regulations.
+
+Compatible consent management plugins:
+
+* [Beautiful and Responsive Cookie Consent](https://wordpress.org/plugins/beautiful-and-responsive-cookie-consent/)
 * [Cookiebot](https://wordpress.org/plugins/cookiebot/)
+* [Cookie Confirm](https://cookieconfirm.com/)
 * [Cookie Script](https://wordpress.org/plugins/cookie-script-com/)
 * [Complianz GDPR/CCPA Cookie Consent](https://wordpress.org/plugins/complianz-gdpr/)
 * [Cookie Notice](https://wordpress.org/plugins/cookie-notice/)
@@ -159,19 +135,19 @@ It works with the following Consent Management plugins out of the box:
 * [WP Consent API](https://wordpress.org/plugins/wp-consent-api/)
 * [WP Cookie Consent](https://wordpress.org/plugins/gdpr-cookie-consent/)
 
-Please read the following for additional [setup information](https://sweetcode.com/docs/wpm/consent-management/platforms?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs&utm_content=cookie-consent-plugins)
+Please read the following for additional [setup information](https://sweetcode.com/docs/pmw/consent-management/platforms?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs&utm_content=cookie-consent-plugins)
 
-<strong>Requirements</strong>
+**Requirements**
 
-[List of requirements](https://sweetcode.com/docs/wpm/setup/requirements?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs&utm_content=requirements)
+[List of requirements](https://sweetcode.com/docs/pmw/setup/requirements?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs&utm_content=requirements)
 
-<strong>Security Review</strong>
+**Security Review**
 
 Although we follow security best practices, we wanted to ensure that we didn't miss anything. So, we had the plugin reviewed by [Patchstack](https://patchstack.com/), a cybersecurity company specializing in WordPress security.
 
 The summary of their report was: "We were unable to detect any vulnerabilities that would impact the security status of the plugin in a serious way."
 
-<strong>Managed Vulnerability Disclosure Program</strong>
+**Managed Vulnerability Disclosure Program**
 
 We are committed to ensuring the security of our customers and their data. If you believe you have found a security vulnerability in the Pixel Manager for WooCommerce, we encourage you to report it through Patchstack our security partner. Patchstack runs a managed Vulnerability Disclosure Program (mVDP) that helps us receive, triage, and respond to reported vulnerabilities. Patchstack also provides a reward for the responsible disclosure of security vulnerabilities. [Report a vulnerability](https://patchstack.com/database/vdp/woocommerce-google-adwords-conversion-tracking-tag)
 
@@ -186,17 +162,45 @@ We are committed to ensuring the security of our customers and their data. If yo
 4. In the WordPress admin panel go to WooCommerce and then into the 'Google Ads Conversion Tracking' menu. Please enter the conversion ID and the conversion label into their respective fields.
 
 5. Head over to our documentation and follow our installation guides. Here are some of our most popular guides:
- * [Google Ads](https://sweetcode.com/docs/wpm/plugin-configuration/google-ads)
- * [Google Analytics](https://sweetcode.com/docs/wpm/plugin-configuration/google-analytics)
- * [Meta (Facebook)](https://sweetcode.com/docs/wpm/plugin-configuration/meta)
+ * [Google Ads](https://sweetcode.com/docs/pmw/plugin-configuration/google-ads)
+ * [Google Analytics](https://sweetcode.com/docs/pmw/plugin-configuration/google-analytics)
+ * [Meta (Facebook)](https://sweetcode.com/docs/pmw/plugin-configuration/meta)
 
-6. And read through our [FAQ](https://sweetcode.com/docs/wpm/faq).
+6. And read through our [FAQ](https://sweetcode.com/docs/pmw/faq).
 
 == Frequently Asked Questions ==
 
+= How does Pixel Manager compare to Google Tag Manager (GTM)? =
+
+While Google Tag Manager is free, it requires significant technical expertise and many hours of configuration to set up proper WooCommerce e-commerce tracking. You need to create custom data layers, configure triggers and tags for each platform, handle consent mode integration manually, and test extensively to avoid tracking errors. The Pixel Manager provides a turnkey alternative that's optimized specifically for WooCommerce with over 12 years of development. It automatically configures the correct e-commerce events, handles edge cases like payment gateway redirects and order deduplication, and includes unique features like Automatic Conversion Recovery (ACR) and the Payment Gateway Accuracy Report that GTM cannot replicate. Most users find Pixel Manager saves dozens of hours compared to manual GTM setup, while delivering more accurate conversion data.
+
+= What is server-side tracking (Conversion API / CAPI) and why does it matter? =
+
+Server-side tracking sends conversion data directly from your WooCommerce server to advertising platforms like Meta (Facebook), TikTok, Pinterest, Snapchat, Reddit, and Google Analytics 4 – rather than relying solely on browser-based pixels. This results in more reliable, accurate tracking because it works even when browser tracking is limited by ad blockers, Safari ITP cookie restrictions, browser privacy settings, VPNs, or network issues. Our Pro version typically recovers up to 30% more conversions compared to browser-only tracking, directly improving your campaign optimization and ROAS calculations.
+
+= How does Automatic Conversion Recovery (ACR) work? =
+
+ACR is our unique Pro feature that automatically recovers conversions missed due to tracking issues – whether from payment gateway redirects (like PayPal), browser limitations, ad blockers, or network problems. It runs nightly using the WordPress Action Scheduler, identifies WooCommerce orders that weren't properly tracked by your advertising pixels, and sends the conversion data to your advertising platforms retroactively (within the allowed attribution windows). This can recover approximately 50% of otherwise lost conversions, directly improving your Google Ads, Meta, and TikTok campaign performance.
+
+= Does the Pixel Manager support Google Consent Mode v2? =
+
+Yes. The Pixel Manager fully supports Google Consent Mode v2, including the new `ad_user_data` and `ad_personalization` parameters required by Google since March 2024. It also supports region-specific consent defaults for the EU, UK, and 11+ US states with privacy regulations. The plugin integrates with 15+ consent management platforms (CMPs) out of the box, automatically adjusting tracking behavior based on visitor consent choices. This ensures your WooCommerce store is compliant with GDPR, CCPA, and other privacy regulations while still collecting the maximum amount of conversion data allowed.
+
+= What WooCommerce e-commerce events does the Pixel Manager track? =
+
+The Pixel Manager tracks the complete e-commerce customer journey: product list views (impressions), product detail views, add to cart, remove from cart, begin checkout, add payment info, and purchase events. These events are sent simultaneously to all configured tracking pixels (Google Ads, GA4, Meta, TikTok, etc.) with standardized product data including product ID, name, category, brand, price, and quantity. This comprehensive event tracking powers Google Analytics GA4 Enhanced E-Commerce reports, Google Ads Smart Shopping and Performance Max campaigns, Meta dynamic remarketing ads, and TikTok product catalog campaigns.
+
+= Can I use the Pixel Manager to track Google Ads conversions on WooCommerce? =
+
+Yes. The Pixel Manager makes Google Ads conversion tracking setup on WooCommerce straightforward. Simply enter your Google Ads Conversion ID and Conversion Label, and the plugin automatically tracks purchase conversions with accurate order values, fires dynamic remarketing events for audience building, sends cart item data to optimize Performance Max and Shopping campaigns, tracks the Google Shopping new customer parameter for new customer acquisition campaigns, and supports Enhanced Conversions (Pro) for improved attribution using first-party data.
+
+= Will the Pixel Manager slow down my WooCommerce store? =
+
+No. Performance is a core design priority. The back-end code is small and efficient with fast, cached database queries. Larger tasks like ACR processing run during off-peak hours using the WordPress Action Scheduler. The front-end JavaScript library is compiled, tree-shaken to only load code for active pixels, minified, and pre-compressed with gzip and brotli. The Pro version adds lazy loading of the tracking library to further reduce impact on page load time. Many users report the Pixel Manager is faster than alternative tracking plugins and significantly lighter than a comparable Google Tag Manager setup.
+
 = Is there detailed documentation for the plugin? =
 
-Yes. Head over to this link: [Documentation](https://sweetcode.com/docs/wpm/?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs)
+Yes. Head over to this link: [Documentation](https://sweetcode.com/docs/pmw/?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs)
 
 = How do I check if the plugin is working properly? =
 
@@ -250,19 +254,9 @@ To illustrate its broad compatibility, here are a few examples of third-party pl
 
 Rest assured, this is just a small sample, and the Pixel Manager should integrate smoothly with almost all other plugins you may use.
 
-= Will the Pixel Manager slow down my site? =
-
-No. The plugin is very lightweight and fast.
-
-* The back-end features are small and efficient.
-* Database queries are designed to be fast and are cached where possible.
-* Larger tasks are executed during nighttime using the Action Scheduler.
-* The front-end JavaScript library is compiled, minified, and pre-compressed with gzip and brotli.
-* The pro version even allows lazy loading of the JavaScript library.
-
 = Do you have videos that show how to set up the plugin and get most out of it? =
 
-Yes, they are part of the step by step documentation. Head over to this link: [Documentation](https://sweetcode.com/docs/wpm/)
+Yes, they are part of the step by step documentation. Head over to this link: [Documentation](https://sweetcode.com/docs/pmw/)
 
 = I get a fatal error and I am running old versions of WordPress and/or WooCommerce. What can I do? =
 
@@ -270,7 +264,7 @@ As this is a free plugin we don't support old versions of WordPress and WooComme
 
 = I am using an offsite payment gateway and the conversions are not being tracked. What can I do? =
 
-We don't support if an offsite payment gateway is in use. The reason is that those cases can be complex and time consuming to solve. We don't want to cover this for a free plugin. We do not recommend offsite payment gateways anyway. A visitor can stop the redirection manually which prevents at least some conversions to be tracked. Also offsite payment gateways are generally bad for the conversion rate.
+Offsite payment gateways (like PayPal Standard) redirect visitors away from your WooCommerce store during checkout, which can prevent browser-based conversion tracking from firing. The free version cannot fully solve this, but the Pro version's Automatic Conversion Recovery (ACR) feature specifically addresses this problem by detecting untracked orders and sending the conversion data server-side. We generally recommend using direct payment gateways (like Stripe, PayPal Commerce Platform, or Mollie) for the best tracking accuracy and higher conversion rates.
 
 = I've done everything right in the test, but it still doesn't work. What can I do? =
 
@@ -304,6 +298,59 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 1.58.0  =
+*Release date - 02.03.2026*
+
+* New: Added unified IP exclusion filter (`pmw_ip_exclusion_list`) to block specific IPs and CIDR ranges from all tracking — browser pixels, browser-initiated S2S, server-side purchase events, and SSP proxy
+* New: Declared compatibility with WooCommerce Product Instance Caching (experimental feature in WooCommerce 10.5+)
+* Tweak: Added support for suppressed Google Ads and GA4 tags in the Google Tag Gateway Proxy
+
+= 1.57.0  =
+*Release date - 24.02.2026*
+
+* New: Implemented account created event tracking
+* New: Added Abilities API integration 
+* Tweak: Implement cross-tab session synchronization for improved data consistency
+* Tweak: Added modern styling and impact indicators to opportunity cards
+* Tweak: Bumped up WC version compatibility to 10.5
+* Tweak: Enhanced GTG Proxy: Improved config resilience, reduced unnecessary health check requests, and added periodic config refresh
+* Tweak: Implemented REST API for saving settings via AJAX; refactored admin tabs and enhance section rendering
+* Tweak: Update styles for impact badges and add Google Automated Discounts and Customer Reviews opportunities
+
+= 1.56.0  =
+*Release date - 02.02.2026*
+
+* Tweak: Google Tag Gateway Proxy: Improved handling of config file
+
+= 1.55.1  =
+*Release date - 29.01.2026*
+
+* Fix: Fixed the bug which did not save the dismissed button click in the database for the trial notification
+
+= 1.55.0  =
+*Release date - 26.01.2026*
+
+* Tweak: Activated an opportunity notification for the Google Tag Gateway Proxy feature
+* Tweak: Updated pixel registry adapter capabilities for consistency with the decentralized architecture
+* Tweak: Added filter to control output of cart item data inline script for theme compatibility
+* Tweak: Refactored the internal event handling system for better maintainability
+* Tweak: Large refactor which renamed wpm to pmw
+* Tweak: Enhanced event handling for product variations and improve conditional triggers
+* Tweak: Enhanced active opportunities notification with impact level breakdown and improved styling
+* Tweak: Revamped rating notice UI and logic for better user experience
+* Tweak: Enhanced opportunities header with statistics and dismissal tracking
+* Tweak: Added backup section styles and improve table row highlighting
+* Tweak: Updated documentation links to use the new path structure
+* Tweak: Added Cookie Confirm CMP integration
+* Tweak: Added support for Beautiful and Responsive Cookie Consent plugin
+* Tweak: Updated script behavior for tracking on specific pages when Flying Press is active
+* Tweak: Enhanced race condition protection when renaming temporary config file in GTG_Proxy
+* Tweak: Improved proxy URL handling based on GTG handler type in Pixel Manager
+* Tweak: Updated GTG handler detection logic to rely on session cache and remove unnecessary server-side checks
+* Tweak: Updated GTG proxy config cache handling on activation and improve config file management
+* Fix: Add back view_cart event listener
+* Fix: Prevent division by zero for free orders in order value calculation
+
 = 1.54.1  =
 *Release date - 15.12.2025*
 
@@ -314,7 +361,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Tweak: Admin UX improvements in the settings page.
 * Tweak: Refactored opportunity card output: sort by impact level and streamline dismissed opportunities
 * Tweak: Enhanced client IP address handling
-* Tweak: Add external object cache detection and enhance debug info output
+* Tweak: Added external object cache detection and enhanced debug info output
 * Tweak: Enhanced transient handling: add verification for transient storage to improve reliability with external object caches
 
 = 1.53.0  =

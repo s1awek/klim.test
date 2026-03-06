@@ -17,14 +17,8 @@ switch( $section_id ){
 		</div>
 
 		<div id="fupi_installed_info" class="fupi_installation_status fupi_hidden">
-			<img src="' . FUPI_URL . 'admin/assets/img/success_ico.png" aria-hidden="true"> <p>' . esc_html__( 'Well done! Google Ads is installed', 'full-picture-analytics-cookie-notice' ) . '<br><span class="fupi_small">' . esc_html__( 'The data is sent to Google Tag ID', 'full-picture-analytics-cookie-notice' ) . ' ' . $conv_id . '</span>.</p>
+			<img src="' . FUPI_URL . 'admin/assets/img/success_ico.png" aria-hidden="true"> <p>' . esc_html__( 'Well done! Google Ads is installed', 'full-picture-analytics-cookie-notice' ) . '<br><span class="fupi_small">' . esc_html__( 'The data is sent to the Google Tag ID', 'full-picture-analytics-cookie-notice' ) . ' ' . $conv_id . '</span>.</p>
 		</div>' . $how_to_useit;
-	break;
-
-	// LOADING
-
-	case 'fupi_gads_loading':
-		$ret_text = '<p>' . esc_html__( 'Here you can change when and where this tool loads. This is all optional.', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
 	// PRIVACY

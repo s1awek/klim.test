@@ -134,7 +134,7 @@ if ( ! class_exists( 'Wt_Bfcm_Twenty_Twenty_Five' ) ) {
 							esc_html__( 'Did you know?', 'product-import-export-for-woo' ),
 							sprintf(
 								// translators: 1: a tag opening, 2: a tag closing.
-								__( 'With the %1$s Smart Coupons %2$s plugin, you can create Buy One Get One offers and advanced coupons that boost sales during BFCM.', 'product-import-export-for-woo' ),
+								__( 'With the %1$s Smart Coupons %2$s plugin, you can create advanced coupons and Buy One Get One Offers for your WooCommerce store.', 'product-import-export-for-woo' ),
 								'<a href="' . esc_url( $campaign_url ) . '" target="_blank"><b>',
 								'</b></a>'
 							),
@@ -232,7 +232,7 @@ if ( ! class_exists( 'Wt_Bfcm_Twenty_Twenty_Five' ) ) {
 		public function is_show_banner() {
 
 			// Check if the current date is less than the start date then wait for the start date.
-			if ( ! class_exists( 'Wt_Import_Export_For_Woo_Basic' ) || ! method_exists( 'Wt_Import_Export_For_Woo_Basic', 'is_bfcm_season' ) || ! Wt_Import_Export_For_Woo_Basic::is_bfcm_season() ) {
+			if ( ! class_exists( 'Wt_Import_Export_For_Woo_Product_Basic' ) || ! method_exists( 'Wt_Import_Export_For_Woo_Product_Basic', 'is_bfcm_season' ) || ! Wt_Import_Export_For_Woo_Product_Basic::is_bfcm_season() ) {
 				return self::$show_banner = false;
 			}
 

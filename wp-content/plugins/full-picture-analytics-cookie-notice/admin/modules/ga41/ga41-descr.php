@@ -20,12 +20,6 @@ switch( $section_id ){
 		</div>' . $how_to_useit;
 	break;
 
-	// LOADING
-	
-	case 'fupi_ga41_loading':
-		$ret_text = '<p>' . esc_html__( 'Here you can change when and where this tool loads. This is all optional.', 'full-picture-analytics-cookie-notice') . '</p>';
-	break;
-
 	// DATA COLLECTION
 
 	case 'fupi_ga41_basic':

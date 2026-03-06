@@ -8,7 +8,7 @@ $this->data['iframeblock'] = [
     'setup' => [
         [ 
             'warning',
-            sprintf( esc_html__('Go to the Consent Banner module > Control iframes and set up blocking content embedded from other sites. It will display an image placeholder until visitors agree to being tracked. %1$sSee how it works and learn more%2$s', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-iframes-manager-works-and-how-to-set-it-up/">', '</a>' )
+            sprintf( esc_html__('Go to the Consent Management module > Control iframes and set up blocking content embedded from other sites. %1$sSee how it works and learn more%2$s', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-iframes-manager-works-and-how-to-set-it-up/">', '</a>' )
         ]
     ],
     'pp comments' => [ 
@@ -25,7 +25,7 @@ if ( ! empty( $this->cook['control_other_iframes'] ) && ! empty( $this->cook['if
 
         $this->data['iframeblock']['setup'][] = [ 
             'warning', 
-            'Content from ' . $rules['iframe_url'] . esc_html__(' is set to load without waiting for tracking consent. Are you sure it does not track your visitors? If not, set it to load after consent in the Consent Banner > Control iframes.', 'full-picture-analytics-cookie-notice') 
+            sprintf( esc_html__( 'Content from %1$s is set to load without waiting for tracking consent. Are you sure it does not track your visitors? If not, set it to load after consent in the Consent Management > Control iframes.', 'full-picture-analytics-cookie-notice'), $rules['iframe_url'] ) 
         ];
     };
 }

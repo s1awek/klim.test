@@ -48,6 +48,7 @@ switch( $section_id ){
 				<ol class="fupi_checked_list">
 					<li>' . esc_html__( 'purchase', 'full-picture-analytics-cookie-notice') . '</li>
 					<li>' . esc_html__( 'checkout', 'full-picture-analytics-cookie-notice') . '</li>
+					<li>' . esc_html__( 'product view', 'full-picture-analytics-cookie-notice') . '</li>
 					<li>' . esc_html__( 'add to cart', 'full-picture-analytics-cookie-notice') . '</li>
 					<li>' . esc_html__( 'remove from cart', 'full-picture-analytics-cookie-notice') . '</li>
 					<li>' . esc_html__( 'add to wishlist (if you set it up on the WooCommerce Tracking page)', 'full-picture-analytics-cookie-notice') . '</li>

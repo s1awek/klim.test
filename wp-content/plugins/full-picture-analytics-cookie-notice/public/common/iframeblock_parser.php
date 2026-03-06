@@ -78,7 +78,7 @@ $new_html = preg_replace_callback( '/<body([^>]*)>(.*?)<\/body>/is', function( $
                     $placeholder = ! empty( $iframe_settings['image_url'] ) ? ' data-placeholder="' . esc_url( $iframe_settings['image_url'] ) . '"': '';
                     $privacy    = ! empty( $iframe_settings['privacy_url'] ) ? ' data-privacy="' . esc_url( $iframe_settings['privacy_url'] ) . '"' : '';
     
-                    $ret_val = '<div class="fupi_blocked_iframe" data-stats="' . $stats . '" data-market="' . $market . '" data-pers="' . $pers . '" ' . $placeholder . $privacy . $name . '><div class="fupi_iframe_data" ' . $iframe[1] . '>' . $iframe[2] . '</div></div><!--noptimize--><script data-no-optimize="1" nowprocket>FP.manageIframes();</script><!--/noptimize-->';
+                    $ret_val = '<div class="fupi_blocked_iframe" data-stats="' . $stats . '" data-market="' . $market . '" data-pers="' . $pers . '" ' . $placeholder . $privacy . $name . '><div class="fupi_iframe_data" ' . $iframe[1] . '>' . $iframe[2] . '</div></div>';
 
                 };
             }

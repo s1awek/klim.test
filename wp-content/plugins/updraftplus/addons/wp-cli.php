@@ -12,12 +12,14 @@ Latest Change: 1.14.6
 
 if (!defined('UPDRAFTPLUS_DIR')) die('No direct access allowed');
 
-if (!defined('WP_CLI') || !WP_CLI || !class_exists('WP_CLI_Command')) return;
+if (!defined('WP_CLI') || !WP_CLI) return;
+
+updraft_try_include_file('udaddons/updraftplus-cli-command-base.php', 'require_once');
 
 /**
  * Implements Updraftplus CLI all commands
  */
-class UpdraftPlus_CLI_Command extends WP_CLI_Command {
+class UpdraftPlus_CLI_Command extends UpdraftPlus_CLI_Command_Base {
 	
 	/**
 	 * Constructor

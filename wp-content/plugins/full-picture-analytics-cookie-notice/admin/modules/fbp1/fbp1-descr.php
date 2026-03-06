@@ -12,7 +12,7 @@ switch( $section_id ){
 
 		$ret_text = '
 		<div id="fupi_not_installed_info" class="fupi_installation_status fupi_hidden">
-			<img src="' . FUPI_URL . 'admin/assets/img/almost_ico.png" aria-hidden="true"> <p>' . sprintf( esc_html__( '%1$s is not installed', 'full-picture-analytics-cookie-notice' ), 'Facebook Pixel' ) . '<br><span class="fupi_small">' . esc_html__( 'To install it, please fill in the required field below', 'full-picture-analytics-cookie-notice' ) . '</span>.</p>
+			<img src="' . FUPI_URL . 'admin/assets/img/almost_ico.png" aria-hidden="true"> <p>' . sprintf( esc_html__( '%1$s is not installed', 'full-picture-analytics-cookie-notice' ), 'Meta Pixel' ) . '<br><span class="fupi_small">' . sprintf( esc_html__( 'To install Meta Pixel fill in the required field below and add a domain verification meta tag in the %1$sGeneral Settings%2$s.', 'full-picture-analytics-cookie-notice' ), '<a href="' . admin_url('admin.php?page=full_picture_main') . '" target="_blank">', '</a>' ) . '</span>.</p>
 		</div>
 		<div id="fupi_installed_info" class="fupi_installation_status fupi_hidden">
 			<img src="' . FUPI_URL . 'admin/assets/img/success_ico.png" aria-hidden="true"> <p>' . esc_html__( 'Well done! Meta Pixel is installed', 'full-picture-analytics-cookie-notice' ) . '<br><span class="fupi_small">' . esc_html__( 'The data is sent to a dataset with an ID ', 'full-picture-analytics-cookie-notice' ) . $pixel_id . '</span>.</p>

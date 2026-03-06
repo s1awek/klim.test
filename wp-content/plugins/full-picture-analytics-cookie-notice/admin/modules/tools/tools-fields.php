@@ -244,7 +244,7 @@ $tools_fields = array(
     // PostHog
     array(
         'type'          => 'toggle',
-        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/posthog_fav.png" aria-hidden="true">PostHog</div>',
+        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/posthog_fav.png" aria-hidden="true">PostHog <span style="font-size: .9em; display: block;">(' . esc_html__( 'basic integration', 'full-picture-analytics-cookie-notice' ) . ')</span></div>',
         'field_id'      => 'posthog',
         'option_arr_id' => $option_arr_id,
         'tags'          => 'stats heat surveys',
@@ -257,7 +257,7 @@ $tools_fields = array(
     // Simple Analytics
     array(
         'type'          => 'toggle',
-        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/simple_analytics-fav.png" aria-hidden="true">Simple Analytics</div>',
+        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/simple_analytics-fav.png" aria-hidden="true">Simple Analytics <span style="font-size: .9em; display: block;">(' . esc_html__( 'basic integration', 'full-picture-analytics-cookie-notice' ) . ')</span></div>',
         'field_id'      => 'simpl',
         'option_arr_id' => $option_arr_id,
         'tags'          => 'stats nocook server proxy',
@@ -272,15 +272,15 @@ $tools_fields = array(
 			<p>' . sprintf( esc_html__( '%1$sLearn more about this module%2$s', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/module/simple-analytics/" class="button-primary">', '</a>' ) . '</p>
 			<p>' . sprintf( esc_html__( '%1$sVisit Simple Analytics website%2$s', 'full-picture-analytics-cookie-notice' ), '<a href="https://www.simpleanalytics.com" class="button-secondary">', '</a>' ) . '</p>',
     ),
-    // Custom scripts
+    // Custom integrations
     array(
         'type'          => 'toggle',
-        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/custom_scr_ico.png" aria-hidden="true">' . esc_html__( 'Custom scripts', 'full-picture-analytics-cookie-notice' ) . '</div>',
+        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/custom_scr_ico.png" aria-hidden="true">' . esc_html__( 'Custom Integrations', 'full-picture-analytics-cookie-notice' ) . '</div>',
         'field_id'      => 'cscr',
         'class'         => 'fupi_tagman',
         'option_arr_id' => $option_arr_id,
-        'el_data_name'  => 'Custom scripts',
-        'popup'         => '<p>' . esc_html__( 'Custom scripts module is an easy way to install other tracking tools to your website. Out of the box it works with the consent banner module, geolocation and other modules and functions.', 'full-picture-analytics-cookie-notice' ) . '</p>
+        'el_data_name'  => 'Custom Integrations',
+        'popup'         => '<p>' . esc_html__( 'This module lets you easily install tools that track your visitors and use them in compliance with privacy regulations. You can install analytics tools, live chat applications, scripts from CRM or marketing automation/email platforms and others.', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<p>' . sprintf( esc_html__( '%1$sLearn more about this module%2$s', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/module/custom-scripts/" class="button-primary">', '</a>' ) . '</p>',
     ),
     // GTM
@@ -293,8 +293,8 @@ $tools_fields = array(
         'el_data_name'  => 'GTM',
         'tags'          => 'woo',
         'popup2'        => '<p>' . esc_html__( 'GTM is an advanced tool for installing tracking tools and adding extra features to the ones that are already installed.', 'full-picture-analytics-cookie-notice' ) . '<p>
-			<p class="fupi_warning_text">' . esc_html__( 'Unlike tools installed with the "Custom scripts" module, tools installed with GTM require extra effort to work with the Consent Banner and the Geolocation modules.', 'full-picture-analytics-cookie-notice' ) . '<p>
-			<p>' . esc_html__( 'If you only want to install something, then using the "Custom scripts" module will be much easier.', 'full-picture-analytics-cookie-notice' ) . '<p>
+			<p class="fupi_warning_text">' . esc_html__( 'Unlike tools installed with the "Custom Integrations" module, tools installed with GTM require extra effort to work with the consent banner and geolocation.', 'full-picture-analytics-cookie-notice' ) . '<p>
+			<p>' . esc_html__( 'If you only want to install something, then using the "Custom Integrations" module will be much easier.', 'full-picture-analytics-cookie-notice' ) . '<p>
 			<p>' . sprintf( esc_html__( '%1$sLearn more about this module%2$s', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/module/google-tag-manager/" class="button-primary">', '</a>' ) . '</p>
 			<p>' . sprintf( esc_html__( '%1$sVisit Google Tag Manager website%2$s', 'full-picture-analytics-cookie-notice' ), '<a href="https://marketingplatform.google.com/about/tag-manager/" class="button-secondary">', '</a>' ) . '</p>',
     ),
@@ -315,7 +315,7 @@ $tools_fields = array_merge( $tools_fields, $extra_tools_fields );
 // ) );
 $privacy_fields = array(array(
     'type'           => 'toggle',
-    'label'          => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/cookie_icon.png" aria-hidden="true">' . esc_html__( 'Consent Banner', 'full-picture-analytics-cookie-notice' ) . '</div>',
+    'label'          => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/cookie_icon.png" aria-hidden="true">' . esc_html__( 'Consent Management', 'full-picture-analytics-cookie-notice' ) . '</div>',
     'field_id'       => 'cook',
     'el_class'       => 'fupi_condition',
     'el_data_target' => 'fupi_cook_cond',
@@ -326,7 +326,7 @@ $privacy_fields = array(array(
     'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/privex_ico.png" aria-hidden="true">' . esc_html__( 'Records of Consent', 'full-picture-analytics-cookie-notice' ) . '</div>',
     'field_id'      => 'proofrec',
     'class'         => 'fupi_sub fupi_do_not_hide fupi_cook_cond fupi_disabled',
-    'under field'   => esc_html__( 'Enable consent banner', 'full-picture-analytics-cookie-notice' ),
+    'under field'   => esc_html__( 'Enable Consent Management', 'full-picture-analytics-cookie-notice' ),
     'option_arr_id' => $option_arr_id,
     'popup'         => '<p>' . esc_html__( 'This module allows you to record proofs of visitors\' choices in the consent banner.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 ), array(
@@ -357,39 +357,49 @@ $privacy_fields = array_merge( $privacy_fields, $priv_tools_fields );
 // ) );
 $woo_disabled_class = ( function_exists( 'WC' ) ? '' : ' fupi_disabled fupi_do_not_hide' );
 $woo_disabled_text = ( function_exists( 'WC' ) ? false : esc_html__( 'Requires: WooCommerce plugin', 'full-picture-analytics-cookie-notice' ) );
-$extensions_fields = array(array(
-    'type'          => 'toggle',
-    'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/reports_ico.png" aria-hidden="true">' . esc_html__( 'Analytics Dashboards', 'full-picture-analytics-cookie-notice' ) . '</div>',
-    'field_id'      => 'reports',
-    'option_arr_id' => $option_arr_id,
-    'popup'         => '<p>' . esc_html__( 'This extension lets you add to your WP admin, analytics & marketing dashboards created with Google Looker Studio, Databox or similar platforms.', 'full-picture-analytics-cookie-notice' ) . '</p>
+$extensions_fields = array(
+    array(
+        'type'          => 'toggle',
+        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/reports_ico.png" aria-hidden="true">' . esc_html__( 'Analytics Dashboards', 'full-picture-analytics-cookie-notice' ) . '</div>',
+        'field_id'      => 'reports',
+        'option_arr_id' => $option_arr_id,
+        'popup'         => '<p>' . esc_html__( 'This extension lets you add to your WP admin, analytics & marketing dashboards created with Google Looker Studio, Databox or similar platforms.', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<p>' . sprintf( esc_html__( '%1$sLearn more about this module%2$s', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/module/analytics-dashboards/" class="button-primary">', '</a>' ) . '</p>',
-), array(
-    'type'          => 'toggle',
-    'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/woo_fav.png" aria-hidden="true">' . esc_html__( 'WooCommerce Tracking', 'full-picture-analytics-cookie-notice' ) . '</div>',
-    'field_id'      => 'woo',
-    'option_arr_id' => $option_arr_id,
-    'class'         => $woo_disabled_class,
-    'under field'   => $woo_disabled_text,
-    'popup'         => '<p>' . esc_html__( 'This extension lets you track WooCommerce events and product data with your installed tracking tools (all extended integrations and the GTM module support it).', 'full-picture-analytics-cookie-notice' ) . '</p>
+    ),
+    array(
+        'type'          => 'toggle',
+        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/woo_fav.png" aria-hidden="true">' . esc_html__( 'WooCommerce Tracking', 'full-picture-analytics-cookie-notice' ) . '</div>',
+        'field_id'      => 'woo',
+        'option_arr_id' => $option_arr_id,
+        'class'         => $woo_disabled_class,
+        'under field'   => $woo_disabled_text,
+        'popup'         => '<p>' . esc_html__( 'This extension lets you track WooCommerce events and product data with your installed tracking tools (all extended integrations and the GTM module support it).', 'full-picture-analytics-cookie-notice' ) . '</p>
 			<p>' . sprintf( esc_html__( '%1$sLearn more about this module%2$s', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/module/woocommerce-tracking/" class="button-primary">', '</a>' ) . '</p>',
-), array(
-    'type'          => 'toggle',
-    'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/adv_triggers_ico.png" aria-hidden="true">' . esc_html__( 'Custom triggers + Visitor Scoring', 'full-picture-analytics-cookie-notice' ) . '</div>',
-    'field_id'      => 'atrig',
-    'option_arr_id' => $option_arr_id,
-    'class'         => 'fupi_do_not_hide fupi_adv',
-    'must_have'     => 'pro_round',
-    'popup'         => '<p>' . esc_html__( 'Here you can define triggers for custom events and set up visitor scoring rules. You can use it for:', 'full-picture-analytics-cookie-notice' ) . '</p>
-			<ol>
-				<li>' . esc_html__( 'measuring the quality of traffic sources and ad campaigns,', 'full-picture-analytics-cookie-notice' ) . '</li>
-				<li>' . esc_html__( 'counting how many users are on different stages of customer journeys,', 'full-picture-analytics-cookie-notice' ) . '</li>
-				<li>' . esc_html__( 'creating ultra-specific custom audiences for retargeting campaigns,', 'full-picture-analytics-cookie-notice' ) . '</li>
-				<li>' . esc_html__( 'and many other.', 'full-picture-analytics-cookie-notice' ) . '</li>
-			</ol>
-			<p>' . esc_html__( 'The module works with Google Analytics, Google Ads, Google Tag Manager, Meta Pixel, Plausible and Matomo.', 'full-picture-analytics-cookie-notice' ) . '</p>
-			<p>' . sprintf( esc_html__( '%1$sLearn more about this module%2$s', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/module/advanced-triggers/" class="button-primary">', '</a>' ) . '</p>',
-));
+    ),
+    array(
+        'type'           => 'toggle',
+        'label'          => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/adv_triggers_ico.png" aria-hidden="true">' . esc_html__( 'Custom Triggers', 'full-picture-analytics-cookie-notice' ) . '</div>',
+        'field_id'       => 'atrig',
+        'option_arr_id'  => $option_arr_id,
+        'class'          => 'fupi_do_not_hide fupi_adv',
+        'el_class'       => 'fupi_condition',
+        'el_data_target' => 'fupi_atrig_cond',
+        'must_have'      => 'pro_round',
+        'popup'          => '<p>' . esc_html__( 'Here you can define triggers for firing custom events and measuring visitor scores.', 'full-picture-analytics-cookie-notice' ) . '</p>
+		<p>' . sprintf( esc_html__( '%1$sLearn more about this module%2$s', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/module/advanced-triggers/" class="button-primary">', '</a>' ) . '</p>',
+    ),
+    array(
+        'type'          => 'toggle',
+        'label'         => '<div class="fupi_field_title_wrap"><img class="fupi_label_icon" src="' . FUPI_URL . 'admin/assets/img/replace_ico.png" aria-hidden="true">' . esc_html__( 'Reactions', 'full-picture-analytics-cookie-notice' ) . '</div>',
+        'field_id'      => 'reactions',
+        'option_arr_id' => $option_arr_id,
+        'class'         => 'fupi_sub fupi_do_not_hide fupi_atrig_cond fupi_disabled fupi_adv',
+        'must_have'     => 'pro_round',
+        'under field'   => esc_html__( 'Enable Custom Triggers module', 'full-picture-analytics-cookie-notice' ),
+        'popup'         => '<p>' . esc_html__( 'Use this module to trigger JavaScript functions and change classes of HTML elements, after visitors perform specific actions.', 'full-picture-analytics-cookie-notice' ) . '</p>
+				<p>' . sprintf( esc_html__( '%1$sLearn more about this module%2$s', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/module/reactions/" class="button-primary">', '</a>' ) . '</p>',
+    )
+);
 $ext_tools_fields = apply_filters( 'fupi_add_ext_module_switch', [] );
 // ! ADDON
 $extensions_fields = array_merge( $extensions_fields, $ext_tools_fields );

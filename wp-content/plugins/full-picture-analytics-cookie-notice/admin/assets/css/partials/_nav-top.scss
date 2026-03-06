@@ -7,20 +7,19 @@
 }
 
 .top_menu_section{
-    padding: 10px;
-    display: flex;
-    flex-wrap: wrap;
+    padding: 3px;
     box-sizing: border-box;
     flex: 0 0 auto;
-    background: #cfd8e2;
+    background: #1d4d96;
+    border-radius: 20px;
 }
 
     .fupi_top_nav_link{
         border-width: 0;
-        flex: 0 0 auto;
-        padding: 10px;
+        display: block;
+        padding: 8px 18px;
         text-decoration: none;
-        color: #000;
+        color: #fff;
         text-align: center;
         font-size: 15px;
         cursor: pointer;
@@ -30,8 +29,12 @@
             background-color: #fff;
             color: #222;
         }
-        + .fupi_top_nav_link{
-            margin-left: -5px;
+        &.fupi_current{
+            background-color: #fff;
+            color: #222;
+        }
+        >.dashicons{
+            margin: -3px 0;
         }
     }
 
@@ -40,11 +43,11 @@
     }
 
     #fupi_top_setup_info{
-        display: flex;
-        gap: 10px 30px;
         align-self: center;
         font-size: 15px;
-        margin-right: auto;
+        a {
+            display: block;
+        }
         strong{
             text-transform: uppercase;
             font-size: 14px;
@@ -55,31 +58,27 @@
     }
 
 @media screen and (max-width: 1099px){
+
     #fupi_top_setup_info{
         order: 1;
-        text-align: center;
         padding: 10px;
     }
     #fupi_pro_nav{
         order: 2;
-        padding: 0;
-        background-color: transparent;
     }
     #fupi_top_nav{
-        border-radius: 18px;
         margin-top: 15px;
         flex: 0 0 100%;
         order: 3;
         justify-content: center;
     }
+        #fupi_pro_nav{
+            align-self: flex-start;
+        }
         #fupi_get_pro_link{
             flex: 1 1 auto;
             padding: 10px 20px;
         }
-
-    #fupi_mobile_nav_toggle_button{
-        order: 4;
-    }
 }
 
 @media screen and (min-width: 1100px){
@@ -92,47 +91,22 @@
         .top_menu_section{
             border-radius: 100px;
             justify-content: space-evenly;
-            padding: 3px;
+            display: flex;
+            flex-wrap: wrap;
+            box-sizing: border-box;
         }
             .fupi_top_nav_link{
+                display: inline-block;
                 padding: 12px 18px;
             }
-}
-
-//
-// TOGGLING MENUS ON MOBILE
-//
-
-#fupi_mobile_nav_toggle_button{
-	display: none;
+        
+        #fupi_top_setup_info{
+            display: flex;
+            gap: 10px 30px;
+        }
 }
 
 @media screen and (max-width: 1099px){
-
-	#fupi_mobile_nav_toggle_button{
-        flex: 0 0 100%;
-		display: block;
-        border-radius: 100px;
-	}
-
-    #fupi_side_menu{
-        overflow: auto;
-    }
-
-	#fupi_side_menu:not(.fupi_show_mobile_menu){
-		.fupi_sidenav_section{
-			margin-top: 0;
-			>h3, >a{
-				display: none;
-			}
-			&:not(:has(.fupi_current)){
-				.fupi_alt_style{
-					display: none !important;
-				}
-			}
-		}
-	}
-
     #fupi_sidenav_banner{
         display: none;
     }

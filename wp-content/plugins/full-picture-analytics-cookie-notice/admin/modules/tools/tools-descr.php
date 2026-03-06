@@ -9,8 +9,7 @@ switch( $section_id ){
 	case 'fupi_tools_integrations':
 
 		$ret_text = [ 'content' => '
-			<p style="text-align: center;">' . esc_html__( 'Use these modules to install the tracking tools you need', 'full-picture-analytics-cookie-notice') . '</p>
-			<div class="fupi_descr_buttons_wrappers">
+			<div class="fupi_descr_buttons_wrappers" style="margin-top: 30px">
 				<button type="button" id="fupi_toggle_filters_section" class="button-secondary">' . esc_html__('Filter by features','full-picture-analytics-cookie-notice') . '</button>
 			</div>
 			<div id="fupi_tools_filters">
@@ -23,7 +22,7 @@ switch( $section_id ){
 
 					<button class="fupi_filter_btn button fupi_tooltip" type="button" data-tag="woo">' . esc_html__('WooCommerce tracking','full-picture-analytics-cookie-notice') . ' <span class="fupi_tooltiptext">' . esc_html__('Tracking store events, like purchases, product views, etc.','full-picture-analytics-cookie-notice') . '</span></button>
 
-					<button class="fupi_filter_btn button fupi_tooltip" type="button" data-tag="proxy">' . esc_html__('Domain proxing','full-picture-analytics-cookie-notice') . ' <span class="fupi_tooltiptext">' . esc_html__('More accurate tracking that bypasses ad blockers','full-picture-analytics-cookie-notice') . '</span></button>
+					<button class="fupi_filter_btn button fupi_tooltip" type="button" data-tag="proxy">' . esc_html__('Domain proxying','full-picture-analytics-cookie-notice') . ' <span class="fupi_tooltiptext">' . esc_html__('More accurate tracking that bypasses ad blockers','full-picture-analytics-cookie-notice') . '</span></button>
 
 					<button class="fupi_filter_btn button fupi_tooltip" type="button" data-tag="server">' . esc_html__('Server-side tracking','full-picture-analytics-cookie-notice') . ' <span class="fupi_tooltiptext">' . esc_html__('Much more accurate tracking that bypasses ad blockers (Pro only)','full-picture-analytics-cookie-notice') . '</span></button>
 
@@ -39,22 +38,6 @@ switch( $section_id ){
 			</div>',
 		];
 
-	break;
-
-	// PRIVACY
-
-	case 'fupi_tools_privacy':
-		$ret_text = [
-			'content' => '<p>' . esc_html__( 'Track visitors in compliance with GDPR, PiPEDA, CCPA and other privacy laws.', 'full-picture-analytics-cookie-notice') . '</p>',
-		];
-	break;
-
-	// EXTENSIONS
-
-	case 'fupi_tools_ext':
-		$ret_text = [
-			'content' => '<p>' . esc_html__( 'Add extra features to other modules.', 'full-picture-analytics-cookie-notice') . '</p>',
-		];
 	break;
 };
 

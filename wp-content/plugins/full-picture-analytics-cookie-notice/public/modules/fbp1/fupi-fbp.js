@@ -1,4 +1,4 @@
-;(function(window){
+function fupi_fbp(){
 
 	function getEventTimeInSecs(diff){
 		let d = new Date();
@@ -44,10 +44,12 @@
 				if ( age_in_days < 90 ) {
 					fp.fbp.fbc = fbc;
 				} else {
+					FP.deleteCookie('_fbc');
 					makeFBC( now );
 				}
 
 			} else {
+				FP.deleteCookie('_fbc');
 				makeFBC( now ); // Fallback for malformed cookies
 			}
 		}
@@ -174,9 +176,9 @@
 
     function load_fbp() {
 
+		set_fbp_fbc();
 		load_pixel();
 		
-		set_fbp_fbc();
 		set_user_data();
 		set_custom_data();
 
@@ -187,9 +189,9 @@
 		// Track Search
 		if ( fpdata.page_type == 'Search' ) FP.track_fbp_evt( false, 'Search', false, { 'search_string' : fpdata.search_query } );
 
-		fp.loaded.push( 'fbp' );
-		if ( fp.main.debug ) console.log('[FP] Meta Pixel loaded');
-		FP.runFn( 'FP.fns.load_fbp_footer' );
+		FP.loaded('fbp', 'fbp', '[FP] Meta Pixel loaded');
     }
 	
-})(window);
+};
+
+FP.load('fbp', 'fupi_fbp', ['head_helpers']);

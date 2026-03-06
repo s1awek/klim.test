@@ -165,9 +165,9 @@ if ( ! defined( 'WPINC' ) ) {
 						$to_process=(isset($form_data['post_type_form_data']) && isset($form_data['post_type_form_data']['item_type']) ? $form_data['post_type_form_data']['item_type'] : '');
 						if($to_process!="")
 						{
-							if(Wt_Import_Export_For_Woo_Admin_Basic::module_exists($action_type))
+							if(Wt_Import_Export_For_Woo_Product_Admin_Basic::module_exists($action_type))
 							{
-								$action_module_id=Wt_Import_Export_For_Woo_Basic::get_module_id($action_type);
+								$action_module_id=Wt_Import_Export_For_Woo_Product_Basic::get_module_id($action_type);
 								$url=admin_url('admin.php?page='.$action_module_id.'&wt_iew_rerun='.$history_item['id']);
 								?>
 									 | <a href="<?php echo esc_url($url);?>" target="_blank"><?php esc_html_e("Re-Run", 'product-import-export-for-woo');?></a>
@@ -175,9 +175,9 @@ if ( ! defined( 'WPINC' ) ) {
 							}
 						}
 					}
-					if($action_type=='import' && Wt_Import_Export_For_Woo_Admin_Basic::module_exists($action_type))
+					if($action_type=='import' && Wt_Import_Export_For_Woo_Product_Admin_Basic::module_exists($action_type))
 					{
-						$action_module_obj=Wt_Import_Export_For_Woo_Basic::load_modules($action_type);
+						$action_module_obj=Wt_Import_Export_For_Woo_Product_Basic::load_modules($action_type);
 						$log_file_name=$action_module_obj->get_log_file_name($history_item['id']);
 						$log_file_path=$action_module_obj->get_file_path($log_file_name);
 						if(file_exists($log_file_path))
@@ -187,7 +187,7 @@ if ( ! defined( 'WPINC' ) ) {
 						<?php
 						}
 					}
-                                        if($action_type=='export' && Wt_Import_Export_For_Woo_Admin_Basic::module_exists($action_type))
+                                        if($action_type=='export' && Wt_Import_Export_For_Woo_Product_Admin_Basic::module_exists($action_type))
 					{
                                             $export_download_url=wp_nonce_url(admin_url('admin.php?wt_iew_export_download=true&file='.$history_item['file_name']), WT_IEW_PLUGIN_ID_BASIC);
 						?>

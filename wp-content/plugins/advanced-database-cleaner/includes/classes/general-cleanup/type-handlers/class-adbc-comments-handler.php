@@ -20,6 +20,9 @@ abstract class ADBC_Cleanup_Comments_Handler_Base extends ADBC_Abstract_Cleanup_
 		global $wpdb;
 		return $wpdb->comments;
 	}
+	protected function table_suffix() {
+		return 'comments';
+	}
 	protected function pk() {
 		return 'comment_ID';
 	}

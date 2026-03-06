@@ -15,6 +15,11 @@
         display: none !important;
     }
 
+    // hide even "do not hide modules" on the tools page
+    #fupi_settings_form tr.fupi_hidden.fupi_do_not_hide{
+        display: none !important;
+    }
+
     // hide side nav links
     a.fupi_sidenav_item[href*="full_picture_gtag"],
     a.fupi_sidenav_item[href*="full_picture_gtm"],

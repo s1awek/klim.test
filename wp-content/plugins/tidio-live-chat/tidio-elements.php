@@ -8,7 +8,7 @@ if (!defined('WPINC')) {
  * Plugin Name: Tidio Chat
  * Plugin URI: http://www.tidio.com
  * Description: Tidio Live Chat - live chat boosted with chatbots for your online business. Integrates with your website in less than 20 seconds.
- * Version: 6.0.31
+ * Version: 7.0.0
  * Requires at least: 4.7
  * Requires PHP: 7.2
  * Author: Tidio LLC
@@ -20,44 +20,38 @@ if (!defined('WPINC')) {
  * Update URI: https://wordpress.org/plugins/tidio-live-chat/
  */
 
-define('TIDIOCHAT_VERSION', '6.0.31');
+define('TIDIOCHAT_VERSION', '7.0.0');
 define('AFFILIATE_CONFIG_FILE_PATH', get_template_directory() . '/tidio_affiliate_ref_id.txt');
 
 require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
 
-use TidioLiveChat\Encryption\Service\EncryptionServiceFactory;
 use TidioLiveChat\IntegrationState;
+use TidioLiveChat\Routing;
 use TidioLiveChat\TidioLiveChat;
 
-/**
- * @return void
- */
-function initializeTidioLiveChat()
-{
+$container = new \TidioLiveChat\Container();
+
+// Load plugin data
+add_action('init', static function () use ($container) {
     if (!empty($_GET['tidio_chat_version'])) {
         echo TIDIOCHAT_VERSION;
         exit;
     }
 
-    $container = new \TidioLiveChat\Container();
     $tidioLiveChat = new TidioLiveChat($container);
     $tidioLiveChat->load();
-}
+});
 
-add_action('init', 'initializeTidioLiveChat');
+// Turn on async loading
+register_activation_hook(__FILE__, static function () use ($container) {
+    /** @var IntegrationState $integrationState */
+    $integrationState = $container->get(IntegrationState::class);
+    $integrationState->turnOnAsyncLoading();
+});
 
-$encryptionService = (new EncryptionServiceFactory())->create();
-register_activation_hook(__FILE__, [new IntegrationState($encryptionService), 'turnOnAsyncLoading']);
-
-/**
- * @param string $plugin
- * @return void
- */
-function redirectToTidioPluginPage($plugin)
-{
-    if ($plugin == plugin_basename(__FILE__)) {
+// Redirect to tidio plugin page after activation
+add_action('activated_plugin', static function ($plugin)  {
+    if ($plugin === plugin_basename(__FILE__)) {
         exit(wp_safe_redirect(admin_url('admin.php?page=tidio-live-chat')));
     }
-}
-
-add_action('activated_plugin', 'redirectToTidioPluginPage');
+});

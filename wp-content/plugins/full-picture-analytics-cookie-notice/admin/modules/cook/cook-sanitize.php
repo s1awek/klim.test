@@ -80,24 +80,36 @@ if ( ! empty( $input ) ) foreach( $input as $key => $value ) {
 
 					foreach( $value as $i => $section ){
 						
-						if ( empty( $section['url_part'] ) || empty( $section['id'] ) ) continue;
+						if ( empty( $section['rules'] ) || empty( $section['id'] ) ) continue;
 						
-						$clean_val[$i]['url_part'] = trim( sanitize_text_field( $section['url_part'] ) );
 						$clean_val[$i]['id'] = sanitize_key( $section['id'] );
 
 						// Make title if not provided by the user
 						
 						$clean_val[$i]['title'] = empty( $section['title'] ) ? 'Script ' . $section['id'] : trim( sanitize_text_field( $section['title'] ) );
-						// if ( ! empty( $section['title'] ) ) 	$clean_val[$i]['title'] = trim( sanitize_text_field( $section['title'] ) ); // previous
 
-						// checkboxes
+						// RULES
+                
+						$j = 0;
+
+						foreach ( $section['rules'] as $rule ) {
+
+							// save only full rules
+							if ( ! empty( $rule['block_by'] ) && ! empty( $rule['unique'] ) ) {
+								$clean_val[$i]['rules'][$j]['block_by'] = sanitize_key( $rule['block_by'] );
+								$clean_val[$i]['rules'][$j]['unique'] = trim( sanitize_text_field( $rule['unique'] ) );
+							}
+
+							$j++;
+						}
+
+						// REQUIRES
 						$clean_val[$i]['stats'] 		= ! empty( $section['stats'] );
                         $clean_val[$i]['market'] 		= ! empty( $section['market'] );
                         $clean_val[$i]['pers'] 			= ! empty( $section['pers'] );
+						$clean_val[$i]['always'] 		= ! empty( $section['always'] );
 						$clean_val[$i]['force_load'] 	= ! empty( $section['force_load'] );
 
-						if ( ! empty( $section['block_by'] ) ) 	$clean_val[$i]['block_by'] = sanitize_key( $section['block_by'] );
-						if ( ! empty( $section['name'] ) ) 		$clean_val[$i]['name'] = trim( sanitize_text_field( $section['name'] ) );
 						if ( ! empty( $section['pp_url'] ) ) 	$clean_val[$i]['pp_url'] = trim( sanitize_url( $section['pp_url'] ) );
 						
 						if ( ! empty( $section['method'] ) && ! empty( $section['countries'] ) ) {

@@ -10,8 +10,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-if(!class_exists('Wt_Import_Export_For_Woo_Basic_Export_Ajax')){
-class Wt_Import_Export_For_Woo_Basic_Export_Ajax
+if(!class_exists('Wt_Import_Export_For_Woo_Product_Basic_Export_Ajax')){
+class Wt_Import_Export_For_Woo_Product_Basic_Export_Ajax
 {
 	public $step='';
 	public $steps=array();
@@ -52,7 +52,7 @@ class Wt_Import_Export_For_Woo_Basic_Export_Ajax
 	public function get_steps($out)
 	{
 		//sleep(3);
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce verification already done in the Wt_Import_Export_For_Woo_Basic_Export_Ajax:ajax_main() method, input is sanitized via Wt_Iew_Sh::sanitize_item() on the next line
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce verification already done in the Wt_Import_Export_For_Woo_Product_Basic_Export_Ajax:ajax_main() method, input is sanitized via Wt_Iew_Sh::sanitize_item() on the next line
 		$steps = isset($_POST['steps']) ? wp_unslash($_POST['steps']) : array();
 		$steps = is_array($steps) ? $steps : array($steps);
 		$steps = Wt_Iew_Sh::sanitize_item($steps, 'text_arr');
@@ -163,7 +163,7 @@ class Wt_Import_Export_For_Woo_Basic_Export_Ajax
 	*/
 	public function upload($out)
 	{
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification already done in the Wt_Import_Export_For_Woo_Basic_Export_Ajax:ajax_main() method
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification already done in the Wt_Import_Export_For_Woo_Product_Basic_Export_Ajax:ajax_main() method
 		$export_id=(isset($_POST['export_id']) ? intval(wp_unslash($_POST['export_id'])) : 0);
 		$out=$this->export_obj->process_upload('upload', $export_id, $this->to_export);
 		if($out['response']===true)
@@ -184,16 +184,16 @@ class Wt_Import_Export_For_Woo_Basic_Export_Ajax
 	*/
 	public function export($out)
 	{
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification already done in the Wt_Import_Export_For_Woo_Basic_Export_Ajax:ajax_main() method
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification already done in the Wt_Import_Export_For_Woo_Product_Basic_Export_Ajax:ajax_main() method
 		$offset = isset($_POST['offset']) ? intval(wp_unslash($_POST['offset'])) : 0;
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification already done in the Wt_Import_Export_For_Woo_Basic_Export_Ajax:ajax_main() method
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification already done in the Wt_Import_Export_For_Woo_Product_Basic_Export_Ajax:ajax_main() method
 		$export_id = isset($_POST['export_id']) ? intval(wp_unslash($_POST['export_id'])) : 0;
 		$file_name = '';
 
 		if($export_id == 0) { /* first batch */
 		
 			/* process form data */
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce verification already done in the Wt_Import_Export_For_Woo_Basic_Export_Ajax:ajax_main() method, input is sanitized via Wt_Iew_IE_Basic_Helper::sanitize_formdata() later in the process
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce verification already done in the Wt_Import_Export_For_Woo_Product_Basic_Export_Ajax:ajax_main() method, input is sanitized via Wt_Iew_IE_Basic_Helper::sanitize_formdata() later in the process
 			$form_data_raw = isset($_POST['form_data']) ? wp_unslash($_POST['form_data']) : array();
 			$unserialized_data = is_array($form_data_raw) ? 
 				array_map(function($item) {
@@ -202,7 +202,7 @@ class Wt_Import_Export_For_Woo_Basic_Export_Ajax
 				json_decode($form_data_raw, true);
 			
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$form_data = (isset($_POST['form_data']) ? Wt_Import_Export_For_Woo_Basic_Common_Helper::process_formdata($unserialized_data) : array());
+			$form_data = (isset($_POST['form_data']) ? Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::process_formdata($unserialized_data) : array());
 			
 			//sanitize form data
 			$form_data = Wt_Iew_IE_Basic_Helper::sanitize_formdata($form_data, $this->export_obj);
@@ -276,18 +276,18 @@ class Wt_Import_Export_For_Woo_Basic_Export_Ajax
 				}		
 			}			
 
-			$tb = $wpdb->prefix. Wt_Import_Export_For_Woo_Basic::$template_tb;
+			$tb = $wpdb->prefix. Wt_Import_Export_For_Woo_Product_Basic::$template_tb;
 			
 			/* process form data */
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce verification already done in the Wt_Import_Export_For_Woo_Basic_Export_Ajax:ajax_main() method, input is sanitized via Wt_Iew_IE_Basic_Helper::sanitize_formdata() later in the process
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce verification already done in the Wt_Import_Export_For_Woo_Product_Basic_Export_Ajax:ajax_main() method, input is sanitized via Wt_Iew_IE_Basic_Helper::sanitize_formdata() later in the process
 			$form_data_raw = isset($_POST['form_data']) ? wp_unslash($_POST['form_data']) : array();
 			$unserialized_data = is_array($form_data_raw) ? 
 					array_map(function($item) {
 						return is_string($item) ? json_decode($item, true) : $item;
 					}, $form_data_raw) : 
 					json_decode($form_data_raw, true);
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification already done in the Wt_Import_Export_For_Woo_Basic_Export_Ajax:ajax_main() method
-			$form_data = isset($_POST['form_data']) ? Wt_Import_Export_For_Woo_Basic_Common_Helper::process_formdata($unserialized_data) : array();
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification already done in the Wt_Import_Export_For_Woo_Product_Basic_Export_Ajax:ajax_main() method
+			$form_data = isset($_POST['form_data']) ? Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::process_formdata($unserialized_data) : array();
 
 			//sanitize form data
 			$form_data = Wt_Iew_IE_Basic_Helper::sanitize_formdata($form_data, $this->export_obj);
@@ -572,8 +572,8 @@ class Wt_Import_Export_For_Woo_Basic_Export_Ajax
 	{
 		$template_data = $this->get_mapping_template_by_id($id);
 		if($template_data) {
-			$decoded_data = Wt_Import_Export_For_Woo_Basic_Common_Helper::decode_template_data($template_data['data']); 
-			$decoded_form_data = Wt_Import_Export_For_Woo_Basic_Common_Helper::process_formdata($decoded_data);
+			$decoded_data = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::decode_template_data($template_data['data']); 
+			$decoded_form_data = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::process_formdata($decoded_data);
 			$this->selected_template_form_data = !is_array($decoded_form_data) ? array() : $decoded_form_data;
 		}
 	}
@@ -584,7 +584,7 @@ class Wt_Import_Export_For_Woo_Basic_Export_Ajax
 	protected function get_mapping_template_by_name($name)
 	{
 		global $wpdb;
-		$tb=$wpdb->prefix. Wt_Import_Export_For_Woo_Basic::$template_tb;
+		$tb=$wpdb->prefix. Wt_Import_Export_For_Woo_Product_Basic::$template_tb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Custom plugin table query for template lookup, caching not required, table name is safely constructed with known prefix
 		return $wpdb->get_row($wpdb->prepare("SELECT * FROM $tb WHERE template_type=%s AND item_type=%s AND name=%s", 'export', $this->to_export, $name), ARRAY_A);
 	}
@@ -595,7 +595,7 @@ class Wt_Import_Export_For_Woo_Basic_Export_Ajax
 	protected function get_mapping_template_by_id($id)
 	{
 		global $wpdb;
-		$tb=$wpdb->prefix.Wt_Import_Export_For_Woo_Basic::$template_tb;
+		$tb=$wpdb->prefix.Wt_Import_Export_For_Woo_Product_Basic::$template_tb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Custom plugin table query for template retrieval by ID, caching not required, table name is safely constructed with known prefix
 		return $wpdb->get_row($wpdb->prepare("SELECT * FROM $tb WHERE template_type=%s AND item_type=%s AND id=%d", 'export', $this->to_export, $id), ARRAY_A);
 	}
@@ -610,7 +610,7 @@ class Wt_Import_Export_For_Woo_Basic_Export_Ajax
 			return;
 		}		
 		global $wpdb;
-		$tb=$wpdb->prefix.Wt_Import_Export_For_Woo_Basic::$template_tb;
+		$tb=$wpdb->prefix.Wt_Import_Export_For_Woo_Product_Basic::$template_tb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Custom plugin table query for listing all export templates, caching not required for admin interface, table name is safely constructed with known prefix
 		$val=$wpdb->get_results($wpdb->prepare("SELECT * FROM $tb WHERE template_type=%s AND item_type=%s ORDER BY id DESC", 'export', $this->to_export), ARRAY_A);	
 

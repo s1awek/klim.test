@@ -30,18 +30,10 @@ class Fupi_PIN_public {
 
     public function enqueue_scripts(){
 
-        $head_args = [ 'in_footer' => false ];
-        $footer_args = [ 'in_footer' => true ];
-
-        if ( ! empty( $this->main ) && isset( $this->main['async_scripts'] ) ) {
-            $head_args['strategy'] = 'defer';
-            $footer_args['strategy'] = 'defer';
-        }
-
         $woo_is_enabled = ! empty( $this->tools['woo'] ) && function_exists('WC');
         $reqs = $woo_is_enabled ? array('fupi-helpers-js', 'fupi-helpers-footer-js', 'fupi-woo-js', 'fupi-pin-head-js') : array('fupi-helpers-js', 'fupi-helpers-footer-js', 'fupi-pin-head-js');
 
-        /* ^ */ wp_enqueue_script( 'fupi-pin-head-js', FUPI_URL . 'public/modules/pin/fupi-pin.js', array( 'fupi-helpers-js' ), FUPI_VERSION, $head_args );
-        /* _ */ if ( $woo_is_enabled ) wp_enqueue_script( 'fupi-pin-footer-js', FUPI_URL . 'public/modules/pin/fupi-pin-footer.js', $reqs, FUPI_VERSION, $footer_args );
+        /* ^ */ wp_enqueue_script( 'fupi-pin-head-js', FUPI_URL . 'public/modules/pin/fupi-pin.js', array( 'fupi-helpers-js' ), FUPI_VERSION, [ 'in_footer' => false, 'strategy' => 'async' ] );
+        /* _ */ if ( $woo_is_enabled ) wp_enqueue_script( 'fupi-pin-footer-js', FUPI_URL . 'public/modules/pin/fupi-pin-footer.js', $reqs, FUPI_VERSION, [ 'in_footer' => true, 'strategy' => 'async' ] );
     }
 }

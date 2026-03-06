@@ -23,7 +23,7 @@ if (!defined('ABSPATH')) {
 							 * @since 2.4.8
 							 * Black Friday Cyber Monday banner offer
 							 */
-							if (true === Wt_Import_Export_For_Woo_Basic::is_bfcm_season()) {
+							if (true === Wt_Import_Export_For_Woo_Product_Basic::is_bfcm_season()) {
 
 							?><div class="wtier-bfcm-banner-2024-offer" style="position: absolute; top: 0;right: 0;">
 									<svg width="31" height="40" viewBox="0 0 31 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -78,7 +78,7 @@ if (!defined('ABSPATH')) {
 							 * @since 2.4.8
 							 * Black Friday Cyber Monday banner offer
 							 */
-							if (true === Wt_Import_Export_For_Woo_Basic::is_bfcm_season()) {
+							if (true === Wt_Import_Export_For_Woo_Product_Basic::is_bfcm_season()) {
 
 							?><div class="wtier-bfcm-banner-2024-offer" style="position: absolute; top: 0;right: 0;">
 									<svg width="31" height="40" viewBox="0 0 31 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -133,7 +133,7 @@ if (!defined('ABSPATH')) {
 							 * @since 2.4.8
 							 * Black Friday Cyber Monday banner offer
 							 */
-							if (true === Wt_Import_Export_For_Woo_Basic::is_bfcm_season()) {
+							if (true === Wt_Import_Export_For_Woo_Product_Basic::is_bfcm_season()) {
 
 							?><div class="wtier-bfcm-banner-2024-offer" style="position: absolute; top: 0;right: 0;">
 									<svg width="31" height="40" viewBox="0 0 31 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -186,7 +186,7 @@ if (!defined('ABSPATH')) {
 				 * @since 2.4.8
 				 * Black Friday Cyber Monday banner offer
 				 */
-				if (true === Wt_Import_Export_For_Woo_Basic::is_bfcm_season()) {
+				if (true === Wt_Import_Export_For_Woo_Product_Basic::is_bfcm_season()) {
 
 				?><div class="wtier-bfcm-banner-2024-offer" style="position: absolute; top:-8px ;right: 0;">
 						<svg width="31" height="40" viewBox="0 0 31 40" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -5,8 +5,7 @@ FP.fns.add_cegg_tag = ( tag ) => {
 	if ( fp.main.debug ) console.log( '[FP] CrazyEgg tag: ' + tag );
 }
 
-FP.fns.cegg_woo_events = ()=>{
-	
+function fupi_cegg_woo_footer(){	
 	// TRACK IMPRESSIONS
 
 	function track_woo_impress( caller_id ) {
@@ -33,6 +32,8 @@ FP.fns.cegg_woo_events = ()=>{
 	FP.addAction( ['woo_add_to_cart'], () =>{
 		FP.fns.add_cegg_tag( 'add to cart' );
 	} );
+
+	if ( fp.woo.cart_to_track ) FP.fns.add_cegg_tag( 'add to cart' ); // when ATC is tracked in cart
 
 	FP.addAction( ['woo_add_to_wishlist'], data => {
 		FP.fns.add_cegg_tag( 'add to wishlist' );
@@ -64,11 +65,13 @@ FP.fns.cegg_woo_events = ()=>{
 			})
 		};
 	}
+
+	FP.loaded('cegg_woo_footer');
 };
 
 // STANDARD EVENTS
 
-FP.fns.cegg_standard_events = ()=>{
+function fupi_cegg_footer(){
 
 	// TAG OUTBOUND LINKS
 
@@ -152,12 +155,10 @@ FP.fns.cegg_standard_events = ()=>{
 			if ( name ) FP.fns.add_cegg_tag( 'Element click: ' + name );
 		})
 	}
+
+	FP.loaded('cegg_footer');
 };
 
-FP.fns.load_cegg_footer = function() {
-	FP.fns.cegg_standard_events();
-	if ( fp.loaded.includes('woo') ) FP.fns.cegg_woo_events();
-}
-
 // INIT FOOTER SCRIPTS
-FP.enqueueFn( 'FP.fns.load_cegg_footer' );
+FP.load('cegg_footer', 'fupi_cegg_footer', ['cegg', 'footer_helpers']);
+FP.load('cegg_woo_footer', 'fupi_cegg_woo_footer', ['cegg', 'footer_helpers', 'woo']);

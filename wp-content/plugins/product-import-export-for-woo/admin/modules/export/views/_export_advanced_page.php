@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 	<form class="wt_iew_export_advanced_form">
 		<table class="form-table wt-iew-form-table wt-iew-export-filter-table">
 			<?php
-			Wt_Import_Export_For_Woo_Basic_Common_Helper::field_generator($advanced_screen_fields, $advanced_form_data);
+			Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::field_generator($advanced_screen_fields, $advanced_form_data);
 			?>
 		</table>
 	</form>

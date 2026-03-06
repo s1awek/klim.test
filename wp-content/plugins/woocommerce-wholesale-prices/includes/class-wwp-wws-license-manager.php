@@ -147,7 +147,7 @@ if ( ! class_exists( 'WWP_WWS_License_Manager' ) ) {
 
             // phpcs:disable WordPress.Security.NonceVerification.Recommended
             if ( isset( $_GET['tab'] ) ) {
-                $tab = $_GET['tab'];
+                $tab = sanitize_key( wp_unslash( $_GET['tab'] ) );
             } elseif ( ! isset( $_GET['tab'] ) && self::DEFAULT_PLUGIN === $key ) {
                 $tab = self::DEFAULT_PLUGIN;
             } else {
@@ -181,7 +181,7 @@ if ( ! class_exists( 'WWP_WWS_License_Manager' ) ) {
 
             // phpcs:disable WordPress.Security.NonceVerification.Recommended
             if ( isset( $_GET['tab'] ) ) {
-                $tab = $_GET['tab'];
+                $tab = sanitize_key( wp_unslash( $_GET['tab'] ) );
             } elseif ( ! isset( $_GET['tab'] ) && self::DEFAULT_PLUGIN === $key ) {
                 $tab = self::DEFAULT_PLUGIN;
             } else {
@@ -215,7 +215,7 @@ if ( ! class_exists( 'WWP_WWS_License_Manager' ) ) {
 
             // phpcs:disable WordPress.Security.NonceVerification.Recommended
             if ( isset( $_GET['tab'] ) ) {
-                $tab = $_GET['tab'];
+                $tab = sanitize_key( wp_unslash( $_GET['tab'] ) );
             } elseif ( ! isset( $_GET['tab'] ) && self::DEFAULT_PLUGIN === $key ) {
                 $tab = self::DEFAULT_PLUGIN;
             } else {

@@ -4,7 +4,7 @@ $option_arr_id = 'fupi_cook';
 $field_disabled = 'fupi_disabled';
 $must_have_html = '<div class="fupi_must_have_pro_ico_round fupi_tooltip"><span class="dashicons dashicons-lock"></span><span class="fupi_tooltiptext">' . esc_html__( 'Requires Pro licence', 'full-picture-analytics-cookie-notice' ) . '</span></div>';
 // EXTRA MESSAGE IF THE PP IS NOT PUBLISHED
-$priv_policy_url_text = '<p style="color: red;">' . esc_html__( 'Attention. Your privacy policy page is either not published or its ID is not set in the settings of the Consent Banner module', 'full-picture-analytics-cookie-notice' ) . '</p>';
+$priv_policy_url_text = '<p style="color: red;">' . esc_html__( 'Attention. Your privacy policy page is either not published or its ID is not set in the settings of the Consent Banner section', 'full-picture-analytics-cookie-notice' ) . '</p>';
 if ( !empty( $this->settings['pp_id'] ) ) {
     $pp_id = (int) $this->settings['pp_id'];
     if ( get_post_status( $pp_id ) == 'publish' ) {
@@ -25,7 +25,8 @@ $cook_fields = array(array(
         'notify' => esc_html__( 'Notification mode', 'full-picture-analytics-cookie-notice' ),
     ),
     'default'       => 'optin',
-    'under field'   => '<p>' . esc_html__( 'Enable the Geolocation module to choose geolocation-based modes.', 'full-picture-analytics-cookie-notice' ) . '</strong></p>',
+    'popup2_id'     => 'fupi_modes_info_popup',
+    'under field'   => '<p>' . esc_html__( 'Opt-in mode is required in 60+ countries and accepted in all the other ones.', 'full-picture-analytics-cookie-notice' ) . ' ' . esc_html__( 'Enable the Geolocation in the General Settings to see other modes.', 'full-picture-analytics-cookie-notice' ) . '</strong></p>',
 ));
 $theme_compat_notice = '';
 if ( $is_oceanWP_theme ) {
@@ -46,13 +47,20 @@ $cook_fields = array_merge( $cook_fields, array(
         'under field'   => '<p>' . esc_html__( 'You must save changes before you can start customizing.', 'full-picture-analytics-cookie-notice' ) . '</p>',
     ),
     array(
+        'type'          => 'number',
+        'label'         => esc_html__( 'Privacy policy page ID', 'full-picture-analytics-cookie-notice' ),
+        'field_id'      => 'pp_id',
+        'option_arr_id' => $option_arr_id,
+        'popup2'        => '<p>' . sprintf( esc_html__( 'Provide the ID of the privacy policy page that is published and chosen %1$son this page%2$s. If you have a multilingual site, this must be the ID of the page in the main language.', 'full-picture-analytics-cookie-notice' ), '<a href="/wp-admin/options-privacy.php" target="_blank">', '</a>' ) . '</p>
+		<p>' . sprintf( esc_html__( 'To find the ID, start editing the page with your privacy policy. The ID will be in its URL.', 'full-picture-analytics-cookie-notice' ), '<a href="/wp-admin/options-privacy.php" target="_blank">', '</a>' ) . '</p>',
+    ),
+    array(
         'type'          => 'page_search',
         'field_id'      => 'hide_on_pages',
-        'label'         => esc_html__( 'Hide consent banner on these pages', 'full-picture-analytics-cookie-notice' ),
+        'class'         => 'fupi_join',
+        'label'         => esc_html__( 'Hide the banner on these pages', 'full-picture-analytics-cookie-notice' ),
         'option_arr_id' => $option_arr_id,
-        'popup2'        => '<p>' . esc_html__( 'By default, WP Full Picture hides consent banner on the privacy policy page.', 'full-picture-analytics-cookie-notice' ) . '</p>
-		<p class="fupi_warning_text">' . esc_html__( 'Hiding the banner only hides it visually. It does not automatically give consent to tracking.', 'full-picture-analytics-cookie-notice' ) . '</p>
-		<p class="fupi_warning_text">' . esc_html__( 'In this field you can only provide the IDs of pages - not posts, categories, or pages used as categories (e.g. blog archive page).', 'full-picture-analytics-cookie-notice' ) . '</p>',
+        'under field'   => '<p>' . esc_html__( 'WP Full Picture hides consent banner on the privacy policy page. Here you can add more pages. Hiding the banner only hides it visually. It does not automatically give consent to tracking.', 'full-picture-analytics-cookie-notice' ) . '</p>',
     ),
     array(
         'type'          => 'text',
@@ -73,13 +81,6 @@ $cook_fields = array_merge( $cook_fields, array(
         'option_arr_id' => $option_arr_id,
         'after field'   => esc_html__( 'Breaks GDPR. Best used on dev sites.', 'full-picture-analytics-cookie-notice' ),
         'popup3'        => '<p>' . esc_html__( 'When you enable this setting, visitors who already consented, will not be asked for consent every time you enable new tracking tools or change your privacy policy. This will break GDPR, so we recommend to use it only on development sites or while setting up tracking.', 'full-picture-analytics-cookie-notice' ) . '</p>',
-    ),
-    array(
-        'type'          => 'number',
-        'label'         => esc_html__( 'Privacy policy page ID', 'full-picture-analytics-cookie-notice' ),
-        'field_id'      => 'pp_id',
-        'option_arr_id' => $option_arr_id,
-        'popup2'        => '<p>' . sprintf( esc_html__( 'Provide the ID of the privacy policy page that is published and chosen %1$son this page%2$s. If you have a multilingual site, this must be the ID of the page in the main language.', 'full-picture-analytics-cookie-notice' ), '<a href="/wp-admin/options-privacy.php" target="_blank">', '</a>' ) . '</p>',
     )
 ) );
 // SCRIPT BLOCKING
@@ -94,33 +95,40 @@ $scr_fields = array(
         'required'    => true,
     ),
     array(
-        'label'    => esc_html__( 'Control loading of', 'full-picture-analytics-cookie-notice' ),
-        'type'     => 'select',
-        'field_id' => 'block_by',
-        'options'  => array(
-            'content'   => esc_html__( 'Script with unique text content', 'full-picture-analytics-cookie-notice' ),
-            'src'       => esc_html__( 'Script with a specific filename or URL', 'full-picture-analytics-cookie-notice' ),
-            'link_href' => esc_html__( 'HTML <link> tag with a specific filename or URL', 'full-picture-analytics-cookie-notice' ),
-            'img_src'   => esc_html__( 'Image with a specific filename or URL', 'full-picture-analytics-cookie-notice' ),
-        ),
-        'class'    => 'fupi_col_30',
+        'label'             => esc_html__( 'This tool adds the following elements to the HTML', 'full-picture-analytics-cookie-notice' ),
+        'type'              => 'r3',
+        'field_id'          => 'rules',
+        'option_arr_id'     => $option_arr_id,
+        'is_repeater'       => true,
+        'class'             => 'fupi_fullwidth_tr fupi_simple_r3 ',
+        'btns_class'        => 'fupi_push_right',
+        'start_sub_section' => true,
+        'end_sub_section'   => true,
+        'fields'            => array(array(
+            'type'     => 'select',
+            'field_id' => 'block_by',
+            'options'  => array(
+                'src'       => esc_html__( '<script> tag with a URL that contains...', 'full-picture-analytics-cookie-notice' ),
+                'content'   => esc_html__( '<script> tag with code that contains...', 'full-picture-analytics-cookie-notice' ),
+                'link_href' => esc_html__( '<link> tag with a URL that contains...', 'full-picture-analytics-cookie-notice' ),
+                'img_src'   => esc_html__( '<img> tag with a URL that contains', 'full-picture-analytics-cookie-notice' ),
+            ),
+            'class'    => 'fupi_col_40',
+        ), array(
+            'type'        => 'text',
+            'field_id'    => 'unique',
+            'placeholder' => esc_html__( 'unique value', 'full-picture-analytics-cookie-notice' ),
+            'required'    => true,
+            'class'       => 'fupi_col_60',
+        )),
     ),
     array(
-        'type'     => 'text',
-        'field_id' => 'url_part',
-        'label'    => esc_html__( 'Filename, full URL, URL part or unique text content', 'full-picture-analytics-cookie-notice' ),
-        'required' => true,
-        'class'    => 'fupi_col_50',
-    ),
-    array(
-        'label'    => esc_html__( 'Script ID', 'full-picture-analytics-cookie-notice' ),
-        'type'     => 'text',
+        'type'     => 'hidden',
         'field_id' => 'id',
         'required' => true,
-        'class'    => 'fupi_col_20',
     ),
     array(
-        'label'             => esc_html__( 'What is visitor\'s data used for?', 'full-picture-analytics-cookie-notice' ),
+        'label'             => esc_html__( 'This tool uses visitor\'s data for:', 'full-picture-analytics-cookie-notice' ),
         'type'              => 'label',
         'field_id'          => 'types_label',
         'start_sub_section' => true,
@@ -130,26 +138,20 @@ $scr_fields = array(
         'type'     => 'checkbox',
         'field_id' => 'stats',
         'label'    => esc_html__( 'Statistics', 'full-picture-analytics-cookie-notice' ),
-        'class'    => 'fupi_col_20',
+        'class'    => 'fupi_col_20 fupi_inline_label',
     ),
     array(
         'type'     => 'checkbox',
         'field_id' => 'market',
         'label'    => esc_html__( 'Marketing', 'full-picture-analytics-cookie-notice' ),
-        'class'    => 'fupi_col_20',
+        'class'    => 'fupi_col_20 fupi_inline_label',
     ),
     array(
         'type'            => 'checkbox',
         'field_id'        => 'pers',
         'label'           => esc_html__( 'Personalisation', 'full-picture-analytics-cookie-notice' ),
-        'class'           => 'fupi_col_20',
+        'class'           => 'fupi_col_20 fupi_inline_label',
         'end_sub_section' => true,
-    ),
-    array(
-        'label'    => esc_html__( 'Tool\'s privacy policy URL (for use in [fp_info] shortcode)', 'full-picture-analytics-cookie-notice' ),
-        'type'     => 'url',
-        'field_id' => 'pp_url',
-        'class'    => 'fupi_col_50_grow',
     )
 );
 $geo_fields = array(array(
@@ -162,16 +164,28 @@ $geo_fields = array(array(
 ));
 $scr_fields = array_merge( $scr_fields, $geo_fields );
 $scr_fields = array_merge( $scr_fields, array(array(
-    'label'    => esc_html__( 'Temporarily stop WP Full Picture from managing this script (blocking, conditional-loading, etc.)', 'full-picture-analytics-cookie-notice' ),
-    'type'     => 'checkbox',
-    'field_id' => 'force_load',
-    'class'    => 'fupi_col_66_grow',
+    'label'    => esc_html__( 'Tool\'s privacy policy URL (for use in [fp_info] shortcode)', 'full-picture-analytics-cookie-notice' ),
+    'type'     => 'url',
+    'field_id' => 'pp_url',
+    'class'    => 'fupi_col_100',
+), array(
+    'type'        => 'toggle',
+    'field_id'    => 'always',
+    'label'       => esc_html__( 'Never load', 'full-picture-analytics-cookie-notice' ),
+    'after field' => esc_html__( 'Removes all the above elements from the HTML', 'full-picture-analytics-cookie-notice' ),
+    'class'       => 'fupi_col_60 fupi_inline_label',
+), array(
+    'label'       => esc_html__( 'Disable', 'full-picture-analytics-cookie-notice' ),
+    'type'        => 'toggle',
+    'after field' => esc_html__( 'Temporarily stop controling this tool', 'full-picture-analytics-cookie-notice' ),
+    'field_id'    => 'force_load',
+    'class'       => 'fupi_col_60 fupi_inline_label fupi_red_switch',
 )) );
 $sections = array(
     // Consent Banner
     array(
         'section_id'    => 'fupi_cook_main',
-        'section_title' => esc_html__( 'Consent banner settings', 'full-picture-analytics-cookie-notice' ),
+        'section_title' => esc_html__( 'Consent banner', 'full-picture-analytics-cookie-notice' ),
         'fields'        => $cook_fields,
     ),
     // SCRIPT BLOCKING
@@ -180,33 +194,44 @@ $sections = array(
         'section_title' => esc_html__( 'Control tracking tools', 'full-picture-analytics-cookie-notice' ),
         'fields'        => array(array(
             'type'          => 'multi checkbox',
-            'label'         => esc_html__( 'Control tracking tools installed outside WP FP', 'full-picture-analytics-cookie-notice' ),
+            'label'         => esc_html__( 'Automatically control tracking tools and plugins', 'full-picture-analytics-cookie-notice' ),
             'field_id'      => 'scrblk_auto_rules',
             'option_arr_id' => $option_arr_id,
             'options'       => array(
-                'jetpack' => esc_html__( 'Jetpack Stats (from the Jetpack plugin)', 'full-picture-analytics-cookie-notice' ),
+                'jetpack'  => esc_html__( 'Jetpack Stats (from the Jetpack plugin)', 'full-picture-analytics-cookie-notice' ),
+                'pys'      => esc_html__( 'Tools loaded by PixelYourSite plugin (read info)', 'full-picture-analytics-cookie-notice' ),
+                'pixelman' => esc_html__( 'Tools loaded by Pixel Manager for WooCommerce plugin (read info)', 'full-picture-analytics-cookie-notice' ),
             ),
             'under field'   => '<label><input type="checkbox" checked disabled>' . esc_html__( 'Google Analytics (always enabled, via Consent Mode v2)', 'full-picture-analytics-cookie-notice' ) . '</label>
 					<div class="fupi_spacer"></div>
 					<input type="checkbox" checked disabled>' . esc_html__( 'Google Ads (always enabled, via Consent Mode v2)', 'full-picture-analytics-cookie-notice' ) . '</label>
 					<div class="fupi_spacer"></div>
 					<input type="checkbox" checked disabled>' . esc_html__( 'Microsoft Advertising (always enabled, via MS EUT Consent Mode)', 'full-picture-analytics-cookie-notice' ) . '</label>',
+            'popup2'        => '<h3>PixelYourSite</h3>
+					<p>' . esc_html__( 'WP Full Picture loads tracking tools integrated via PixelYourSite when the visitor agrees to ALL uses of their personal data (statistics, marketing and personalisation).', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<h3>Pixel Manager for WooCommerce</h3>
+					<p>' . esc_html__( 'Consent Management features in PMW conflict with the ones built in WP FP. Disable them for correct tracking. Go to Pixel Manager settings > Consent Management > disable Consent Mode v2.', 'full-picture-analytics-cookie-notice' ) . '</p>',
         ), array(
             'type'           => 'toggle',
-            'label'          => esc_html__( 'Control other tools', 'full-picture-analytics-cookie-notice' ),
+            'label'          => esc_html__( 'Control other tracking tools', 'full-picture-analytics-cookie-notice' ),
             'field_id'       => 'control_other_tools',
             'el_class'       => 'fupi_condition',
             'el_data_target' => 'fupi_manual_blockscr_cond',
             'option_arr_id'  => $option_arr_id,
+            'under field'    => sprintf(
+                esc_html__( 'Read %1$show to set it up%2$s or %3$sask us for help in the support forum%2$s.', 'full-picture-analytics-cookie-notice' ),
+                '<a href="https://wpfullpicture.com/support/documentation/manual-setup-guide-for-the-tracking-tools-manager-module/" target="_blank">',
+                '</a>',
+                '<a href="https://wordpress.org/support/plugin/full-picture-analytics-cookie-notice/" target="_blank">'
+            ),
         ), array(
             'type'          => 'r3',
-            'label'         => esc_html__( 'Manually set up what tools to control', 'full-picture-analytics-cookie-notice' ),
+            'label'         => '',
             'field_id'      => 'scrblk_manual_rules',
             'option_arr_id' => $option_arr_id,
-            'class'         => 'fupi_sub fupi_fullwidth_tr fupi_disabled fupi_manual_blockscr_cond',
+            'class'         => 'fupi_join fupi_fullwidth_tr fupi_disabled fupi_manual_blockscr_cond',
             'is_repeater'   => true,
             'fields'        => $scr_fields,
-            'before field'  => '<a href="https://wpfullpicture.com/support/documentation/manual-setup-guide-for-the-tracking-tools-manager-module/" target="_blank">' . esc_html__( 'See the video tutorial how to set it up', 'full-picture-analytics-cookie-notice' ) . '</a>',
         )),
     ),
     // IFRAME BLOCKING
@@ -234,6 +259,7 @@ $sections = array(
                 'el_class'       => 'fupi_condition',
                 'el_data_target' => 'fupi_manual_iframes_cond',
                 'option_arr_id'  => $option_arr_id,
+                'popup'          => '<p>' . esc_html__( 'Use this function to control iframes which do not need unique placeholders (e.g. maps) and are not loaded dynamically (e.g. in popups).', 'full-picture-analytics-cookie-notice' ) . '</p><p>' . sprintf( esc_html__( 'To manage these iframes use %1$sthe shortcode method or the HTML method%2$s', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-block-iframes-manually/" target="_blank">', '</a>' ) . '</p>',
             ),
             array(
                 'type'          => 'r3',
@@ -282,22 +308,22 @@ $sections = array(
                         'class'             => 'fupi_col_40',
                     ),
                     array(
-                        'type'     => 'checkbox',
+                        'type'     => 'toggle',
                         'label'    => esc_html__( 'Statistics', 'full-picture-analytics-cookie-notice' ),
                         'field_id' => 'stats',
-                        'class'    => 'fupi_col_20',
+                        'class'    => 'fupi_col_20 fupi_inline_label',
                     ),
                     array(
-                        'type'     => 'checkbox',
+                        'type'     => 'toggle',
                         'label'    => esc_html__( 'Marketing', 'full-picture-analytics-cookie-notice' ),
                         'field_id' => 'market',
-                        'class'    => 'fupi_col_20',
+                        'class'    => 'fupi_col_20 fupi_inline_label',
                     ),
                     array(
-                        'type'            => 'checkbox',
+                        'type'            => 'toggle',
                         'label'           => esc_html__( 'Personalisation', 'full-picture-analytics-cookie-notice' ),
                         'field_id'        => 'pers',
-                        'class'           => 'fupi_col_20',
+                        'class'           => 'fupi_col_20 fupi_inline_label',
                         'end_sub_section' => true,
                     )
                 ),

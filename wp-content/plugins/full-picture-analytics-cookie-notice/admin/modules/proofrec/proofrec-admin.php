@@ -264,7 +264,7 @@ class Fupi_PROOFREC_admin {
                         add_settings_error(
                             'fupi_proofrec',
                             'settings_updated',
-                            esc_attr__( 'ConsentsDB registration failed. To register ConsentsDB you must first publish a privacy policy page and save its ID in the settings of the Consent Banner module.', 'full-picture-analytics-cookie-notice' ),
+                            esc_attr__( 'ConsentsDB registration failed. To register ConsentsDB you must first publish a privacy policy page and save its ID in the settings of the Consent Management module.', 'full-picture-analytics-cookie-notice' ),
                             'error'
                         );
                     } else {

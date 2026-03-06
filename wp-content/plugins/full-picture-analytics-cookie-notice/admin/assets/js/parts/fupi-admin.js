@@ -10,4 +10,5 @@
 ;// @prepros-prepend number-field.js
 ;// @prepros-prepend events-builder.js
 ;// @prepros-prepend other.js
+;// @prepros-prepend conflict-checker.js
 ;// @prepros-prepend sticky-side-nav.js

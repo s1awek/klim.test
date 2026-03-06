@@ -9,18 +9,17 @@ class Fupi_MAIN_public {
 
     public function __construct() {
         $this->settings = get_option( 'fupi_main' );
-        if ( $this->settings === false ) {
-            return;
-        }
         $this->tools = get_option( 'fupi_tools' );
         $this->ver = get_option( 'fupi_versions' );
-        add_action( 'wp_head', array($this, 'fupi_add_meta_tags'), -5 );
-        add_action( 'init', array($this, 'add_fpinfo_shortcode') );
-        // check if it is safe to move it before the "return" above
         if ( !empty( $this->ver['debug'] ) ) {
             add_action( 'wp_enqueue_scripts', array($this, 'enqueue_scripts') );
             add_action( 'wp_footer', array($this, 'fupi_add_setup_console_html') );
         }
+        add_action( 'init', array($this, 'add_fpinfo_shortcode') );
+        if ( $this->settings === false ) {
+            return;
+        }
+        add_action( 'wp_head', array($this, 'fupi_add_meta_tags'), -5 );
     }
 
     public function add_fpinfo_shortcode() {
@@ -59,8 +58,9 @@ class Fupi_MAIN_public {
             $output .= '<button type="button" id="fupi_console_close_btn" class="fupi_console_toggle_btn"><span class="dashicons dashicons-no-alt"></span><span class="fupi_srt">' . esc_html__( 'Close Panel', 'full-picture-analytics-cookie-notice' ) . '</span></button>';
             // PANEL - WHEN TESTING IS DISABLED
             $output .= '<div id="fupi_console_step1">
-                        <p style="margin-top: 0 !important; font-size: 16px;"><strong>' . esc_html__( 'Test configuration of WP Full Picture and installed tracking tools', 'full-picture-analytics-cookie-notice' ) . '</strong></p>
+                        <p style="margin-top: 0 !important; font-size: 16px;"><strong>' . esc_html__( 'Test your tracking setup', 'full-picture-analytics-cookie-notice' ) . '</strong></p>
                         <p>' . esc_html__( 'Make sure to keep your ad blocker disabled during tests.', 'full-picture-analytics-cookie-notice' ) . '</p>
+                        <p>' . esc_html__( 'Testing information will be displayed in the browser console after you start testing.', 'full-picture-analytics-cookie-notice' ) . '</p>
                     </div>';
             // PANEL - WHEN TESTING IS ENABLED
             $output .= '<div id="fupi_console_step2">
@@ -71,7 +71,7 @@ class Fupi_MAIN_public {
             // BUTTONS
             $output .= '<div id="fupi_console_buttons">
 
-                        <a class="fupi_secondary_button" href="https://wpfullpicture.com/support/documentation/debug-mode-features/">' . esc_html__( 'Go to documentation', 'full-picture-analytics-cookie-notice' ) . ' <span class="dashicons dashicons-external"></span></a>
+                        <a class="fupi_secondary_button" href="https://wpfullpicture.com/support/documentation/debug-mode-features/" target="_blank">' . esc_html__( 'Learn how to test', 'full-picture-analytics-cookie-notice' ) . ' <span class="dashicons dashicons-external"></span></a>
 
                         <button type="button" id="fupi_start_test" class="fupi_test_reset_btn fupi_primary_button">' . esc_html__( 'Start testing', 'full-picture-analytics-cookie-notice' ) . '</button>';
             // BUTTONS SHOW ONLY WHEN CONSENT BANNER IS ENABLED
@@ -111,7 +111,10 @@ class Fupi_MAIN_public {
                 FUPI_URL . 'public/modules/main/js/fupi-setup-console.js',
                 array('fupi-helpers-js'),
                 FUPI_VERSION,
-                true
+                [
+                    'in_footer' => true,
+                    'strategy'  => 'async',
+                ]
             );
         }
     }

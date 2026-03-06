@@ -51,7 +51,7 @@ if ( $has_auto_rules || $has_manual_rules ) {
             $delimiter = count( $req_consents ) == 2 ? ' and ' : ', ';
             
             // Build descr
-            $descr = 'Tracking tool with ' . $rules['block_by'] . '="' . $rules['url_part'] . '" and title/ID "' . $title . '"';
+            $descr = 'Tracking tool "' . $title . '"';
             
             // Don\'t forget to add "force_load" check
 

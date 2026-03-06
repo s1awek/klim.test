@@ -8,7 +8,7 @@ $this->data['cscr']['top comments'] = [
 ];
 
 $this->data['cscr']['pre-setup'][] = [ 
-    esc_html__('Move JavaScript snippets that install any tools that track your visitors to the "Custom scripts" module.', 'full-picture-analytics-cookie-notice')
+    esc_html__('Move JavaScript snippets that install any tools that track your visitors to the "Custom integrations" module.', 'full-picture-analytics-cookie-notice')
 ];
 
 $found_issues = false;

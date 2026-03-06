@@ -40,6 +40,8 @@ class  Fupi_Updater {
             $this->update_to_9_2();
             $this->update_to_9_3_0();
             $this->update_to_9_4_0();
+            $this->update_to_10_0_0();
+            $this->update_to_10_0_1();
         }
         
         if ( $restore_backup || $options_changed ) {
@@ -54,7 +56,7 @@ class  Fupi_Updater {
 
             add_filter( 'fupi_updating_many_options', '__return_false' );
 
-            $this->regenerate_files(); // after every update
+            // $this->regenerate_files(); // after every update
             $this->send_plugin_settings_to_cdb();
             $this->clear_cache(); // after every update
 
@@ -179,25 +181,6 @@ class  Fupi_Updater {
             include_once FUPI_PATH . '/includes/class-fupi-get-gdpr-status.php';
             $gdpr_checker = new Fupi_compliance_status_checker();
             $gdpr_checker->send_and_return_status();
-        }
-    }
-
-    // REGENERATE FILES
-
-    private function regenerate_files(){
-
-        $this->get_fupi_options( ['fupi_main', 'fupi_tools', 'fupi_cscr'] );
-
-        $gen_head_js = ! empty( $this->o['fupi_main']['save_settings_file' ] );
-        $gen_cscr_file = ! empty( $this->o['fupi_tools']['cscr'] ) && ! empty ( $this->o['fupi_main']['save_cscr_file'] );
-
-        if ( $gen_head_js || $gen_cscr_file ) {
-
-            include_once FUPI_PATH . '/admin/common/generate-files.php';
-            $generator = new Fupi_Generate_Files();
-
-            if ( $gen_head_js ) $generator->make_head_js_file( 'updater', false );
-            if ( $gen_cscr_file ) $generator->make_cscr_js_files( false );
         }
     }
 
@@ -417,7 +400,35 @@ class  Fupi_Updater {
                 }
             }
         }
+    }
 
+    private function update_to_10_0_0(){
+        if ( version_compare( $this->prev_version, '9.4.3.12' ) != -1 ) return;
+
+        $this->get_fupi_options( ['fupi_cook', 'fupi_fbp1'] );
+
+        if ( ! empty( $this->o['fupi_cook']['scrblk_manual_rules'] ) ) {
+            foreach( $this->o['fupi_cook']['scrblk_manual_rules'] as $i => $tool_rule ) {
+                $this->o['fupi_cook']['scrblk_manual_rules'][$i]['rules'] = array(
+                    array(
+                        'block_by' => $tool_rule['block_by'],
+                        'unique' => $tool_rule['url_part'],
+                    )
+                );
+            }
+        }
+
+        if ( ! empty ( $this->o['fupi_fbp1']['capi_token'] ) ) {
+            $this->o['fupi_fbp1']['track_pageview_capi'] = true;
+        }
+    }
+
+    private function update_to_10_0_1(){
+        if ( version_compare( $this->prev_version, '10.0.0.1' ) != -1 ) return;
+
+        $this->get_fupi_options( ['fupi_gtm'] );
+
+        $this->o['fupi_gtm']['datalayer'] = empty( $this->o['fupi_gtm']['datalayer'] ) ? 'default' : 'fupi_dataLayer';
     }
 
     private function restore_options_from_backup(){

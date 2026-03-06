@@ -10,6 +10,7 @@ class Fupi_Build_Side_Nav {
     private $menu_html = '';
     private $extra_html = '';
     private $active_slug;
+    private $links_in_menu = 0;
 
     public function __construct( $modules, $active_slug ) {
 
@@ -46,14 +47,25 @@ class Fupi_Build_Side_Nav {
         foreach( $this->modules_data as $module ){
 
             if ( ! $module['is_avail'] || ! $module['has_admin_page'] ) continue;
-            
-            // SKIP if module is not active
-            if ( ! isset( $this->tools[$module['id']] ) && ! isset( $module['always_enabled'] ) ) continue;
-            
-            // SKIP Woo if the plugin is deactivated
-            if ( $module['id'] == 'woo' && ! class_exists( 'woocommerce' ) ) continue;
 
-            $filtered_modules[] = $module;
+            if ( $module['id'] == 'tools' ) continue;
+
+            // if currrent module is General settings, then only display it
+            if ( $this->active_slug == 'main' ){
+                if ( $module['id'] == 'main' ){
+                    $filtered_modules[] = $module;
+                }
+
+            // otherwise display all modules that are NOT General Settings
+            } else {
+                // SKIP if module is not active
+                if ( ! isset( $this->tools[$module['id']] ) && ! isset( $module['always_enabled'] ) ) continue;
+                
+                // SKIP Woo if the plugin is deactivated
+                if ( $module['id'] == 'woo' && ! class_exists( 'woocommerce' ) ) continue;
+                
+                $filtered_modules[] = $module;
+            }
         }
 
         $this->modules_data = $filtered_modules;
@@ -91,6 +103,7 @@ class Fupi_Build_Side_Nav {
         return '';
     }
 
+    // this builds a single section with all links inside it
     private function build_section_html( $section_type, $modules_arr ){
         
         $module_url = get_admin_url() . 'admin.php?page=full_picture_';
@@ -111,8 +124,6 @@ class Fupi_Build_Side_Nav {
 
                     if ( $this->active_slug == $module['id'] ) {
                         $section_html .= '<div class="fupi_sidenav_item fupi_sidenav_section_title fupi_current">' . $this->get_icon( $module ) . $this->get_title( $module ) . '</div>';
-                    } else {
-                        $section_html .= '<a class="fupi_sidenav_item fupi_sidenav_section_title" href="'. $module_url .'tools">' . $this->get_icon( $module ) . $this->get_title( $module ) . '</a>';
                     }
                     
                     continue; // go to the next module
@@ -157,23 +168,13 @@ class Fupi_Build_Side_Nav {
                 } else {
                     $sticky_link_class = '';
                     $section_links++;
+                    $this->links_in_menu++;
                 }
 
                 $section_html .= '<a class="fupi_sidenav_item ' . $sticky_link_class . '" href="'. $module_url . $module['id'] . '">' . $this->get_icon( $module ) . $this->get_title( $module ) . '</a>';
             }
 
         } // END foreach
-
-        // ADD LINKS TO STATIC PAGES
-
-        if ( $section_type == 'priv') {
-            
-            if ( $this->active_slug == 'gdpr_setup_helper' ) {
-                $section_html .= '<div class="fupi_sidenav_item fupi_current fupi_alt_style"><img src="' . FUPI_URL . '/admin/assets/img/info_ico2.png" aria-hidden="true"> <span class="fupi_sidenav_title">' . esc_html__('GDPR setup info', 'full-picture-analytics-cookie-notice') . '</span></div>';
-            } else {
-                $section_html .= '<a class="fupi_sidenav_item fupi_alt_style" href="' . admin_url('admin.php?page=full_picture_tools&tab=gdpr_setup_helper') . '"><img src="' . FUPI_URL . '/admin/assets/img/info_ico2.png" aria-hidden="true"> <span class="fupi_sidenav_title">' . esc_html__('GDPR setup info', 'full-picture-analytics-cookie-notice') . '</span></a>';
-            }
-        }
         
         if ( $section_links > 0 ) {
             $this->menu_html .= $section_html . '</div>';
@@ -189,30 +190,29 @@ class Fupi_Build_Side_Nav {
 
     private function add_extra_html(){
 
+        if ( $this->active_slug != 'main' && $this->links_in_menu == 0 ) {
+            $this->extra_html = '<div>Enable some modules. Links to their settings will show up here.</div>';
+        };
+
         if ( fupi_fs()->is_not_paying() ) {
 
-            // Define date range (October 31, 2025 to November 30, 2025)
-            $start_date = strtotime('2025-10-31 00:00:00');
-            $end_date = strtotime('2025-12-07 23:59:59');
-            $current_time = current_time('timestamp');
-
-            $this->extra_html = '<div id="fupi_sidenav_banner">
-                <div id="fupi_sidenav_banner_unlock_icon"><span class="dashicons dashicons-unlock"></span></div>
-                <h3>' . esc_html__('Unlock all PRO features', 'full-picture-analytics-cookie-notice') . '</h3>
-                <a href="https://wpfullpicture.com/pricing/" class="button-primary">' . esc_html__('Get PRO', 'full-picture-analytics-cookie-notice') . '<span class="dashicons dashicons-arrow-right"></span></a>
-                <a href="https://wpfullpicture.com/free-vs-pro/" style="color: lightblue; text-align: center; display: block;">' . esc_html__('Compare Free and PRO', 'full-picture-analytics-cookie-notice') . '</a>
+            $this->extra_html = '<div id="fupi_sidenav_banner" class="fupi_getpro_banner">
+                <div id="fupi_getpro_banner_unlock_icon"><span class="dashicons dashicons-performance"></span></div>
+                <h3>' . esc_html__('Does this website make money?', 'full-picture-analytics-cookie-notice') . '</h3>
+                <p>' . esc_html__('Optimize your marketing and improve conversion rates with WP Full Picture PRO', 'full-picture-analytics-cookie-notice') . '</p>
+                <a href="https://wpfullpicture.com/free-vs-pro/" class="button-primary" target="_blank">' . esc_html__('Learn more', 'full-picture-analytics-cookie-notice') . '</a>
+                <a href="https://wpfullpicture.com/pricing/" target="_blank" style="color: lightblue; text-align: center; display: block;">' . esc_html__('View pricing', 'full-picture-analytics-cookie-notice') . '</a>
             </div>';
             
             // Show BF DEAL notification if current date is within the range
-            if ( $current_time >= $start_date && $current_time <= $end_date ) {
-                $this->extra_html = '<div id="fupi_sidenav_banner">
-                    <div id="fupi_sidenav_banner_unlock_icon"><span class="dashicons dashicons-unlock"></span></div>
-                    <h3>' . esc_html__('Black Friday deal!', 'full-picture-analytics-cookie-notice') . '</h3>
-                    <p style="color: #efefef; font-size: 15px; text-align: center;">' . esc_html__('Last days of our Black Friday deal!', 'full-picture-analytics-cookie-notice') . '</p>
-                    <a href="https://wpfullpicture.com/pricing/" class="button-primary">' . esc_html__('Check prices', 'full-picture-analytics-cookie-notice') . '<span class="dashicons dashicons-arrow-right"></span></a>
-                    <a href="https://wpfullpicture.com/free-vs-pro/" style="color: lightblue; text-align: center; display: block;">' . esc_html__('Compare Free and PRO', 'full-picture-analytics-cookie-notice') . '</a>
-                </div>';
-            }
+
+            // $start_date = strtotime('2025-10-31 00:00:00');
+            // $end_date = strtotime('2025-12-06 23:59:59');
+            // $current_time = current_time('timestamp');
+            
+            // if ( $current_time >= $start_date && $current_time <= $end_date ) {
+            //     $this->extra_html = '';
+            // }
         }
     }
 

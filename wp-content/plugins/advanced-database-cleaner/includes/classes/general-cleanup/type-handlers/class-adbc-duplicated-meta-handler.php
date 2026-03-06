@@ -13,6 +13,7 @@ abstract class ADBC_Cleanup_Duplicated_Meta_Handler_Base extends ADBC_Abstract_C
 	// Required, all duplicated meta subclasses must supply
 	abstract protected function items_type();
 	abstract protected function table();
+	abstract protected function table_suffix();
 	abstract protected function pk();
 	abstract protected function meta_type(); // meta type for delete_metadata_by_mid(), 'post', 'comment', 'user', or 'term'
 
@@ -88,6 +89,9 @@ class ADBC_Cleanup_Duplicated_Postmeta_Handler extends ADBC_Cleanup_Duplicated_M
 		global $wpdb;
 		return $wpdb->postmeta;
 	}
+	protected function table_suffix() {
+		return 'postmeta';
+	}
 	protected function pk() {
 		return 'meta_id';
 	}
@@ -114,6 +118,9 @@ class ADBC_Cleanup_Duplicated_Commentmeta_Handler extends ADBC_Cleanup_Duplicate
 		global $wpdb;
 		return $wpdb->commentmeta;
 	}
+	protected function table_suffix() {
+		return 'commentmeta';
+	}
 	protected function pk() {
 		return 'meta_id';
 	}
@@ -139,6 +146,9 @@ class ADBC_Cleanup_Duplicated_Usermeta_Handler extends ADBC_Cleanup_Duplicated_M
 	protected function table() {
 		global $wpdb;
 		return $wpdb->usermeta;
+	}
+	protected function table_suffix() {
+		return 'usermeta';
 	}
 	protected function pk() {
 		return 'umeta_id';
@@ -227,6 +237,9 @@ class ADBC_Cleanup_Duplicated_Termmeta_Handler extends ADBC_Cleanup_Duplicated_M
 	protected function table() {
 		global $wpdb;
 		return $wpdb->termmeta;
+	}
+	protected function table_suffix() {
+		return 'termmeta';
 	}
 	protected function pk() {
 		return 'meta_id';

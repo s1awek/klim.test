@@ -21,6 +21,9 @@ abstract class ADBC_Cleanup_Tables_Handler extends ADBC_Abstract_Cleanup_Handler
 	protected function table() {
 		return ''; // not used
 	}
+	protected function table_suffix() {
+		return ''; // not used
+	}
 	protected function pk() {
 		return ''; // not used
 	}
@@ -71,7 +74,8 @@ class ADBC_Cleanup_Optimize_Tables_Handler extends ADBC_Cleanup_Tables_Handler {
 
 		// get only tables names
 		$to_optimize_tables = array_map( function ($table) {
-			return $table->table_name; }, $to_optimize_tables );
+			return $table->table_name;
+		}, $to_optimize_tables );
 
 		$not_optimized = ADBC_Tables::optimize_tables( $to_optimize_tables );
 

@@ -19,6 +19,7 @@ class Fupi_COOK_admin {
         add_action( 'fupi_register_setting_cook', array( $this, 'register_module_settings' ) );
         add_filter( 'fupi_cook_add_fields_settings', array( $this, 'add_fields_settings' ), 10, 1 );
         add_filter( 'fupi_cook_get_page_descr', array( $this, 'get_page_descr' ), 10, 2 );
+        add_filter( 'fupi_cook_get_faq_data', array( $this, 'get_faq_data' ), 10, 1 );
 
         // CUSTOMIZER
 		
@@ -43,6 +44,16 @@ class Fupi_COOK_admin {
         }
 
         return false;
+    }
+
+    // FAQ
+
+    public function get_faq_data( $empty_arr ){
+        include_once 'cook-faq.php';
+        return [ 
+            'q' => $questions, 
+            'a' => $answers 
+        ];
     }
 
     // CUSTOMIZER

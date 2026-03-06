@@ -62,7 +62,7 @@ class CurlHttpClient implements HttpClient
         curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Tidio WordPress plugin');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Tidio WordPress plugin ' . TIDIOCHAT_VERSION);
 
         $response = curl_exec($ch);
         $responseInfo = curl_getinfo($ch);
@@ -74,6 +74,7 @@ class CurlHttpClient implements HttpClient
         }
 
         $responseData = $this->parseResponseData($response, $responseInfo);
+        $this->log($responseInfo, $url, $responseData);
         $this->validateResponse($responseData, $responseInfo);
 
         return $responseData;
@@ -91,7 +92,7 @@ class CurlHttpClient implements HttpClient
         curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Tidio WordPress plugin');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Tidio WordPress plugin ' . TIDIOCHAT_VERSION);
 
         $response = curl_exec($ch);
         $responseInfo = curl_getinfo($ch);
@@ -103,6 +104,7 @@ class CurlHttpClient implements HttpClient
         }
 
         $responseData = $this->parseResponseData($response, $responseInfo);
+        $this->log($responseInfo, $url, $responseData);
         $this->validateResponse($responseData, $responseInfo);
 
         return $responseData;
@@ -140,6 +142,28 @@ class CurlHttpClient implements HttpClient
 
         if ($statusCode < 200 || $statusCode >= 300) {
             throw ErrorResponseException::withResponse($statusCode, $responseData);
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $responseInfo
+     * @param string $url
+     * @param array<string, mixed>|null $responseData
+     * @return void
+     */
+    private function log($responseInfo, $url, $responseData)
+    {
+        if (isset($responseInfo['http_code'])) {
+            $statusCode = $responseInfo['http_code'];
+
+            if ($statusCode > 299) {
+                $data = [
+                    'statusCode' => $statusCode,
+                    'path' => $url,
+                    'response' => $responseData,
+                ];
+                $this->logger->error('Invalid api response: ' . json_encode($data));
+            }
         }
     }
 }

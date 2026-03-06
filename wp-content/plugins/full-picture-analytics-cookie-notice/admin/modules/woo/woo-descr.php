@@ -7,10 +7,8 @@ switch( $section_id ){
 	// DEFAULT
 
 	case 'fupi_woo_main':
-		$ret_text = '<p>' . esc_html__('These settings apply to all tools which support WooCommerce Tracking module (have the "WooCommerce tracking" section in their settings pages). ', 'full-picture-analytics-cookie-notice' ) . '</p>';
-		// <div>
-		// 	<p class="fupi_warning_text">' . esc_html__('Make sure that the settings for taxes and product IDs are consistent with the product catalog/feed you send to Meta, Google Merchant Center, and other platforms. ', 'full-picture-analytics-cookie-notice' ) . '</p>
-		// </div>';
+		$ret_text = '<p>' . esc_html__('These settings apply to all tools which support WooCommerce Tracking module (have the "WooCommerce tracking" section in their settings pages). ', 'full-picture-analytics-cookie-notice' ) . '</p><p class="fupi_warning_text">' . '<p class="fupi_warning_text">' . esc_html__('If you send product data to Google Merchant Center, Meta and other platforms, then make sure that product prices and IDs you send is consistent with the settings below.', 'full-picture-analytics-cookie-notice' ) . '</p>';
+		
 	break;
 
 	case 'fupi_woo_adv':

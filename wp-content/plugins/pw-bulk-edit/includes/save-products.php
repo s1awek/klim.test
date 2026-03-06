@@ -72,13 +72,17 @@ final class PWBE_Save_Products {
                     $product->set_catalog_visibility( $field['value'] );
                     $product->save();
 
+                } else if ( $field['field'] == '_stock' && function_exists( 'wc_update_product_stock' ) ) {
+                    // Use wc_update_product_stock() instead of deprecated WC_Product::set_stock() (deprecated since WC 3.0).
+                    // Use intval() not absint() so negative stock (e.g. overselling) is preserved.
+                    wc_update_product_stock( $field['post_id'], '' !== $field['value'] ? intval( $field['value'] ) : null, 'set' );
                 } else {
                     if ( $field['value'] == PW_Bulk_Edit::NULL ) {
                         delete_post_meta( $field['post_id'], $field['field'] );
                     } else {
                         $set_property = 'set' . $field['field'];
                     	if ( method_exists( $product, $set_property ) ) {
-                        	$product->$set_property( $field['value'] );
+                            $product->$set_property( $field['value'] );
                             $product->save();
                         } else {
                         	update_post_meta( $field['post_id'], $field['field'], $field['value'] );

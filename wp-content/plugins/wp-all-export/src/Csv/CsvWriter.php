@@ -20,7 +20,7 @@ class CsvWriter
         $value = apply_filters('pmxe_csv_value', $value);
 
         if($this->csvStrategy == self::CSV_STRATEGY_DEFAULT) {
-            fputcsv($resource, $value, $delimiter);
+            fputcsv($resource, $value, $delimiter, '"', '\\');
         } else {
             CsvRcfWriter::fputcsv($resource, $value, $delimiter);
         }

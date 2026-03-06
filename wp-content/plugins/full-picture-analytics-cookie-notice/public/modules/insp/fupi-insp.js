@@ -1,4 +1,4 @@
-;(function(window){
+function fupi_insp_footer(){
 
 	if ( allow_loading_insp() ) { 
 		load_insp();
@@ -61,9 +61,9 @@
 
 		
 		
-		fp.loaded.push( 'insp' );
-		if ( fp.main.debug ) console.log('[FP] Inspectlet loaded');
-		FP.runFn( 'FP.fns.load_insp_footer' );
+		FP.loaded('insp','insp', '[FP] Inspectlet loaded');
 	}
 
-})(window);
+};
+
+FP.load('insp','fupi_insp_footer', ['head_helpers']);

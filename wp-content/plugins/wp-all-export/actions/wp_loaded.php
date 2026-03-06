@@ -16,7 +16,7 @@ function pmxe_wp_loaded() {
 
 		$cron_job_key = PMXE_Plugin::getInstance()->getOption('cron_job_key');
 
-		if ( $securityToken == substr(md5($cron_job_key . $_GET['export_id']), 0, 16) )
+		if ( hash_equals( substr( md5( $cron_job_key . $_GET['export_id'] ), 0, 16 ), $securityToken ) )
 		{
 			$export = new PMXE_Export_Record();
 

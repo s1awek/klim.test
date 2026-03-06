@@ -1,4 +1,4 @@
-FP.fns.pla_woo_events = () => {
+function fupi_pla_footer_woo(){
 
 	function track_pla_event( event_name, event_goal_id, payload ){
 		if ( typeof plausible !== 'undefined' ) plausible( event_goal_id, { 'props' : payload } );
@@ -35,6 +35,8 @@ FP.fns.pla_woo_events = () => {
 		FP.addAction( ['woo_add_to_cart'], data =>{
 			track_items( data, 'add to cart', fp.pla.track_woo_addtocart );
 		} );
+
+		if ( fp.woo.cart_to_track ) track_items( fp.woo.cart_to_track, 'add to cart', fp.pla.track_woo_addtocart ); // when ATC is tracked in cart
 	}
 	
 	if ( fp.pla.track_woo_addtowishlist ) {
@@ -137,9 +139,11 @@ FP.fns.pla_woo_events = () => {
 	}
 
 	if ( fp.pla.track_woo_purchases && fp.woo.order_data_ready ) track_purchase();
+
+	FP.loaded('pla_footer_woo');
 }
 
-FP.fns.pla_standard_events = () => {
+function fupi_pla_footer(){
 
 	// TRACK VIEWS OF ELEMENTS
 	// for performance: waits 250ms for dynamically generated content to finish
@@ -247,12 +251,9 @@ FP.fns.pla_standard_events = () => {
 			}
 		})
 	}
+
+	FP.loaded('pla_footer');
 }
 
-FP.fns.load_pla_footer = function() {
-	FP.fns.pla_standard_events();
-	if ( fp.loaded.includes('woo') ) FP.fns.pla_woo_events();
-}
-
-// INIT FOOTER SCRIPTS
-FP.enqueueFn( 'FP.fns.load_pla_footer' );
+FP.load('pla_footer', 'fupi_pla_footer', ['pla','footer_helpers']);
+FP.load('pla_footer_woo', 'fupi_pla_footer_woo', ['pla','footer_helpers', 'woo']);

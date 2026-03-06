@@ -19,6 +19,10 @@ class Fupi_GTOOLS_public {
 
     private $gtag_settings;
 
+    private $ga41_id;
+
+    private $gads_id;
+
     public function __construct() {
         $this->tools = get_option( 'fupi_tools' );
         $this->main = get_option( 'fupi_main' );
@@ -34,17 +38,19 @@ class Fupi_GTOOLS_public {
         if ( $this->gads_enabled ) {
             $this->gads_settings = get_option( 'fupi_gads' );
         }
+        $this->ga41_id = ( $this->ga41_enabled && !empty( $this->ga41_settings['id'] ) ? esc_attr( $this->ga41_settings['id'] ) : false );
+        $this->gads_id = ( $this->gads_enabled && !empty( $this->gads_settings['id'] ) ? esc_attr( $this->gads_settings['id'] ) : false );
+        if ( empty( $this->ga41_id ) && empty( $this->gads_id ) ) {
+            return;
+        }
         if ( $this->ga41_enabled || $this->gads_enabled ) {
             $this->gtag_settings = get_option( 'fupi_gtag' );
         }
-        if ( empty( $this->ga41_settings ) && empty( $this->gads_settings ) ) {
-            return;
-        }
-        $this->tools = get_option( 'fupi_tools' );
         $this->add_actions_and_filters();
     }
 
     private function add_actions_and_filters() {
+        add_action( 'wp_head', array($this, 'add_gtag_to_head'), 1 );
         add_action( 'wp_enqueue_scripts', array($this, 'enqueue_scripts') );
         add_filter(
             'fupi_modify_fp_object',
@@ -60,46 +66,63 @@ class Fupi_GTOOLS_public {
                 2
             );
         }
-        if ( !empty( $this->gtag_settings['custom_gateway'] ) ) {
-            add_action( 'wp_head', array($this, 'add_custom_gtag_gateway_async_script'), -1 );
-        }
     }
 
-    public function add_custom_gtag_gateway_async_script() {
-        echo '<script async="" src="' . trailingslashit( esc_attr( $this->gtag_settings['custom_gateway'] ) ) . '"></script>';
+    public function add_gtag_to_head() {
+        $gtag_added = false;
+        if ( empty( $this->gtag_settings['custom_gateway'] ) ) {
+            // LOAD CLASSIC GTAG SCRIPT
+            $script_id = false;
+            if ( !empty( $this->ga41_id ) ) {
+                $script_id = $this->ga41_id;
+            } else {
+                // Fix missing AW-
+                if ( !empty( $this->gads_id ) && !str_contains( $this->gads_id, 'AW-' ) && !str_contains( $this->gads_id, 'GT-' ) && !str_contains( $this->gads_id, 'G-' ) ) {
+                    $script_id = 'AW-' . $this->gads_id;
+                } else {
+                    $script_id = $this->gads_id;
+                }
+            }
+            if ( !empty( $script_id ) ) {
+                // ! Datalayer is already created in JS helpers
+                echo '<script id="fupi_gtag_script" async src="https://www.googletagmanager.com/gtag/js?id=' . $script_id . '" onload="FP.loaded(\'gtag_file\')"></script>';
+                $gtag_added = true;
+            }
+        } else {
+        }
+        if ( $gtag_added ) {
+            // make sure we have gtag
+            echo '<script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+            </script>';
+        }
     }
 
     public function enqueue_scripts() {
-        $is_woo_enabled = $reqs = !empty( $this->tools['woo'] ) && function_exists( 'WC' );
-        $reqs = ( $is_woo_enabled ? array('fupi-helpers-js', 'fupi-woo-js') : array('fupi-helpers-js') );
-        $head_args = [
-            'in_footer' => false,
-        ];
-        $footer_args = [
-            'in_footer' => true,
-        ];
-        if ( !empty( $this->main ) && isset( $this->main['async_scripts'] ) ) {
-            $head_args['strategy'] = 'defer';
-            $footer_args['strategy'] = 'defer';
-        }
         // GTG
         if ( $this->ga41_enabled || $this->gads_enabled ) {
-            $footer_req_gtg = ( $is_woo_enabled ? array('fupi-helpers-js', 'fupi-helpers-footer-js', 'fupi-woo-js') : array('fupi-helpers-js', 'fupi-helpers-footer-js') );
             /* ^ */
             wp_enqueue_script(
                 'fupi-gtg-head-js',
                 FUPI_URL . 'public/modules/gtools/fupi-gtg.js',
                 array('fupi-helpers-js'),
                 FUPI_VERSION,
-                $head_args
+                [
+                    'in_footer' => false,
+                    'strategy'  => 'async',
+                ]
             );
             /* _ */
             wp_enqueue_script(
                 'fupi-gtg-footer-js',
                 FUPI_URL . 'public/modules/gtools/fupi-gtg-footer.js',
-                $footer_req_gtg,
+                array('fupi-helpers-js'),
                 FUPI_VERSION,
-                $footer_args
+                [
+                    'in_footer' => true,
+                    'strategy'  => 'async',
+                ]
             );
         }
     }

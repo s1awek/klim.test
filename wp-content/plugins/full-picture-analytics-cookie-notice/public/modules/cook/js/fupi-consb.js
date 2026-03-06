@@ -1,4 +1,4 @@
-(function() {
+function fupi_consb() {
 
 	'use strict';
 
@@ -54,7 +54,7 @@
 				show_notice();
 			};
 			
-			if ( FP.manageIframes ) FP.manageIframes(); // unblock iframes
+			if ( FP.loadIframes ) FP.loadIframes(); // unblock iframes
 
 			add_events_to_ok_button();
 			show_notice_on_link_click();
@@ -255,6 +255,22 @@
 			fpdata.cookies.stats ? window.clarity('consent') : window.clarity('consent', false);
 		}
 
+		// Pixel Manager
+		if ( fp.notice.scrblk_auto_rules && fp.notice.scrblk_auto_rules.includes('pixelman') ){
+			window._pmwq = window._pmwq || [];
+			window._pmwq.push(function() {
+				if ( fpdata.cookies && !! window?.pmw?.consent?.api?.updateSelectively ) {
+					pmw.consent.api.updateSelectively({
+						statistics: fpdata.cookies.stats,
+						marketing: fpdata.cookies.marketing,
+						preferences: fpdata.cookies.personalisation,
+						necessary: true,
+					});
+					console.log("[FP] Updated tracking consents for Pixel Manager");
+				}
+			});
+		}
+
 		if ( fp.main.debug ) console.log('[FP] Consents updated', permissions);
 	}	
 
@@ -326,7 +342,6 @@
 			var html_el = document.getElementsByTagName( 'html' )[0];
 			if ( ! html_el.classList.contains('fupi_infobox') ) {
 				html_el.classList.add('fupi_scroll_lock');
-				document.body.style.overflowY = 'hidden';
 			}
 		}
 	}
@@ -335,7 +350,6 @@
 		if ( fp.notice.scroll_lock ) {
 			var html_el = document.getElementsByTagName( 'html' )[0];
 			html_el.classList.remove('fupi_scroll_lock');
-			document.body.style.overflowY = 'auto';
 		}
 	}
 
@@ -481,7 +495,7 @@
 
 				// save cookies and fire events
 				if ( fp.main.track_current_user ) accept_all_cookies_and_fire_custom_event();
-				if ( FP.manageIframes ) FP.manageIframes(); // unblock iframes
+				if ( FP.loadIframes ) FP.loadIframes(); // unblock iframes
 			});
 		}
 
@@ -497,7 +511,7 @@
 
 				// save cookies and fire events
 				if ( fp.main.track_current_user ) accept_stats_cookies_and_fire_custom_event();
-				if ( FP.manageIframes ) FP.manageIframes(); // unblock iframes
+				if ( FP.loadIframes ) FP.loadIframes(); // unblock iframes
 			})
 		}
 
@@ -528,7 +542,7 @@
 
 				// save cookies and fire events
 				if ( fp.main.track_current_user ) accept_chosen_cookies_and_fire_custom_events();
-				if ( FP.manageIframes ) FP.manageIframes();
+				if ( FP.loadIframes ) FP.loadIframes();
 			});
 		}
 
@@ -638,7 +652,7 @@
 			update_tools_consents();
 		}
 
-		if ( FP.manageIframes ) FP.manageIframes(); // unblock iframes
+		if ( FP.loadIframes ) FP.loadIframes(); // unblock iframes
 	}
 
 	// ACCESSIBLE SWITCH
@@ -937,4 +951,12 @@
 		if ( ! a11y_buttons_ready ) a11y_buttons();
 	}
 
-})();
+	FP.loaded('cons_banner');
+
+};
+
+if ( fp.main.is_bricks_builder ) {
+	FP.load('cons_banner', 'fupi_consb', ['footer_helpers', 'consb_html']);
+} else {
+	FP.load('cons_banner', 'fupi_consb', ['footer_helpers', 'consb_html', 'iframes_blocker']);
+}

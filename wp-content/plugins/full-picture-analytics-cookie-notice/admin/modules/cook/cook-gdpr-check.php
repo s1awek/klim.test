@@ -44,7 +44,7 @@ if ( ! empty( $this->cook ) ){
     // when geo is disabled, the mode is set in the setting "enable_scripts_after"
     } else {
 
-        $optin_info_text = esc_html__('Usually, between 20% and 30% of website visitors decline tracking. Analytics tools which require tracking consents will not track those people. Other tools will work normally.', 'full-picture-analytics-cookie-notice');
+        $optin_info_text = esc_html__('Usually, between 20% and 30% of website visitors decline tracking. Analytics tools which require tracking consents will not track them. Other tools will work normally.', 'full-picture-analytics-cookie-notice');
 
         if ( isset ( $this->cook['enable_scripts_after'] ) ) {
 
@@ -74,7 +74,7 @@ if ( ! empty( $this->cook ) ){
 // Privacy policy page
 if ( empty ( $this->pp_ok ) ) {
     // $status = 'alert';
-    $this->data['cook']['setup'][] = [ 'alert', sprintf( esc_html__('Make sure that the Privacy policy page is published, set %1$son this page%2$s and in the settings of the Consent Banner module.', 'full-picture-analytics-cookie-notice'), '<a href="/wp-admin/options-privacy.php" target="_blank">', '</a>' ) ];
+    $this->data['cook']['setup'][] = [ 'alert', sprintf( esc_html__('Make sure that the Privacy policy page is published, set %1$son this page%2$s and in the settings of the Consent Management module.', 'full-picture-analytics-cookie-notice'), '<a href="/wp-admin/options-privacy.php" target="_blank">', '</a>' ) ];
 }
 
 // Text for pre-selected switches

@@ -10,7 +10,7 @@
  * Plugin Name:       CTX Feed
  * Plugin URI:        https://webappick.com/
  * Description:       Easily generate woocommerce product feed for any marketing channel like Google Shopping(Merchant), Facebook Remarketing, Bing, eBay & more. Support 100+ Merchants.
- * Version:           6.6.17
+ * Version:           6.6.24
  * Author:            WebAppick
  * Author URI:        https://webappick.com/
  * License:           GPL v2
@@ -20,7 +20,7 @@
  *
  * WP Requirement & Test
  * Requires at least: 4.4
- * Tested up to: 6.8
+ * Tested up to: 6.9
  * Requires PHP: 5.6
  * Requires Plugins: woocommerce
  *
@@ -265,7 +265,7 @@ if ( ! function_exists( 'woo_feed_make_batch_feed' ) ) {
 		check_ajax_referer( 'wpf_feed_nonce' );
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			woo_feed_log_debug_message( 'User doesnt have enough permission.' );
-			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ) );
+			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ),403 );
 			die();
 		}
 		if ( ! isset( $_REQUEST['feed'] ) ) {
@@ -340,7 +340,7 @@ if ( ! function_exists( 'woo_feed_save_feed_file' ) ) {
 		check_ajax_referer( 'wpf_feed_nonce' );
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			woo_feed_log_debug_message( 'User doesnt have enough permission.' );
-			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ) );
+			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ),403 );
 			die();
 		}
 		if ( ! isset( $_REQUEST['feed'] ) ) {
@@ -494,7 +494,7 @@ if ( ! function_exists( 'woo_feed_generate_batch_data' ) ) {
 	 * @return bool
 	 */
 	function woo_feed_generate_batch_data( $info, $feedSlug ) {
-		// parse rules.
+        // parse rules.
 		$info = woo_feed_parse_feed_rules( isset( $info['feedrules'] ) ? $info['feedrules'] : $info );
 
 		try {
@@ -581,6 +581,7 @@ if ( ! function_exists( 'woo_feed_generate_new_feed' ) ) {
 	}
 }
 if ( ! function_exists( 'woo_feed_manage_feed' ) ) {
+
 	/**
 	 * Manage Feeds
 	 */
@@ -684,7 +685,7 @@ if ( ! function_exists( 'feed_merchant_view' ) ) {
 		check_ajax_referer( 'wpf_feed_nonce' );
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			woo_feed_log_debug_message( 'User doesnt have enough permission.' );
-			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ) );
+			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ) ,403);
 			die();
 		}
 		global $feedRules, $wooFeedDropDown, $merchant, $provider;
@@ -724,7 +725,7 @@ if ( ! function_exists( 'woo_feed_get_facebook_categories' ) ) {
 		check_ajax_referer( 'wpf_feed_nonce' );
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			woo_feed_log_debug_message( 'User doesnt have enough permission.' );
-			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ) );
+			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ),403 );
 			wp_die();
 		}
 		$wooFeedDropDown = new Woo_Feed_Dropdown();
@@ -744,7 +745,7 @@ if ( ! function_exists( 'woo_feed_get_google_categories' ) ) {
 		check_ajax_referer( 'wpf_feed_nonce' );
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			woo_feed_log_debug_message( 'User doesnt have enough permission.' );
-			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ) );
+			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ),403 );
 			wp_die();
 		}
 		$wooFeedDropDown = new Woo_Feed_Dropdown();
@@ -764,7 +765,7 @@ if ( ! function_exists( 'woo_feed_get_ssh2_status' ) ) {
 		check_ajax_referer( 'wpf_feed_nonce' );
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			woo_feed_log_debug_message( 'User doesnt have enough permission.' );
-			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ) );
+			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ),403 );
 			wp_die();
 		}
 		if ( extension_loaded( 'ssh2' ) ) {
@@ -790,7 +791,7 @@ if ( ! function_exists( 'woo_feed_update_feed_status' ) ) {
 		check_ajax_referer( 'wpf_feed_nonce' );
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			woo_feed_log_debug_message( 'User doesnt have enough permission.' );
-			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ) );
+			wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ),403 );
 			wp_die();
 		}
 

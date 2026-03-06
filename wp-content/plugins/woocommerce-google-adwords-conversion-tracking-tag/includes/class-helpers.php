@@ -75,7 +75,7 @@ class Helpers {
     }
 
     public static function is_allowed_notification_page( $page ) {
-        $allowed_pages = ['page_wpm', 'index.php', 'dashboard'];
+        $allowed_pages = ['page_pmw', 'index.php', 'dashboard'];
         foreach ( $allowed_pages as $allowed_page ) {
             if ( strpos( $page, $allowed_page ) !== false ) {
                 return true;
@@ -1077,6 +1077,20 @@ class Helpers {
             }
         }
         return $log_files;
+    }
+
+    /**
+     * Check if the current page is a cart, checkout, or purchase confirmation page.
+     *
+     * @return bool True if on cart, checkout, or order-received page.
+     */
+    public static function is_cart_or_checkout_page() {
+        // WooCommerce functions may not be available yet
+        if ( !function_exists( 'is_cart' ) || !function_exists( 'is_checkout' ) ) {
+            return false;
+        }
+        // is_checkout() returns true for both checkout and order-received (thank you) page
+        return is_cart() || is_checkout();
     }
 
 }

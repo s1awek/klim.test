@@ -1,7 +1,7 @@
 // WOO EVENTS
 
 
-FP.fns.fbp_woo_events = () => {
+function fupi_fbp_footer_woo(){
 
 	// TRACK IMPRESSIONS
 
@@ -118,6 +118,8 @@ FP.fns.fbp_woo_events = () => {
 		track_items( data, 'AddToCart' );
 	} );
 
+	if ( fp.woo.cart_to_track ) track_items( fp.woo.cart_to_track, 'AddToCart' ); // when ATC is tracked in cart
+
 	FP.addAction( ['woo_add_to_wishlist'], data => {
 		track_items( data, 'AddToWishlist');
 	} );
@@ -181,11 +183,13 @@ FP.fns.fbp_woo_events = () => {
 			})
 		};
 	}
+
+	FP.loaded('fbp_footer_woo');
 };
 
 // STANDARD EVENTS
 
-FP.fns.fbp_standard_events = () => {
+function fupi_fbp_footer(){
 		
 	// TRACK OUTBOUND LINKS
 
@@ -322,12 +326,9 @@ FP.fns.fbp_standard_events = () => {
 			}
 		})
 	}
+
+	FP.loaded('fbp_footer');
 };
 
-FP.fns.load_fbp_footer = function() {
-	FP.fns.fbp_standard_events();
-	if ( fp.loaded.includes('woo') ) FP.fns.fbp_woo_events();
-}
-
-// INIT FOOTER SCRIPTS
-FP.enqueueFn( 'FP.fns.load_fbp_footer' );
+FP.load('fbp_footer', 'fupi_fbp_footer', ['fbp', 'footer_helpers']);
+FP.load('fbp_footer_woo', 'fupi_fbp_footer_woo', ['fbp', 'footer_helpers','woo']);

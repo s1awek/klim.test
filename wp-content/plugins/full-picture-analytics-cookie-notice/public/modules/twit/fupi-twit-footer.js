@@ -6,7 +6,7 @@ FP.fns.track_twit_evt = ( event_name, event_id, payload = false ) => {
 	if ( fp.main.debug ) console.log('[FP] X / Twitter "' + event_name + '" event (event id: ' + event_id + '): ', payload);
 };
 
-FP.fns.twit_woo_events = () => {
+function fupi_twit_footer_woo(){
 
 	// HELPERS
 
@@ -111,6 +111,8 @@ FP.fns.twit_woo_events = () => {
 		FP.addAction( ['woo_add_to_cart'], data =>{
 			track_items( data, 'add to cart', fp.twit.track_woo_addtocart );
 		} );
+
+		if ( fp.woo.cart_to_track ) track_items( fp.woo.cart_to_track, 'add to cart', fp.twit.track_woo_addtocart ); // when ATC is tracked in cart
 	}
 
 	if ( fp.twit.track_woo_addtowishlist ) {
@@ -165,9 +167,11 @@ FP.fns.twit_woo_events = () => {
 			})
 		};
 	}
+
+	FP.loaded('twit_footer_woo');
 }
 
-FP.fns.twit_standard_events = () => {
+function fupi_twit_footer(){
 
 	// TRACK VIEWS OF ELEMENTS
 	// for performance: waits 250ms for dynamically generated content to finish
@@ -212,12 +216,9 @@ FP.fns.twit_standard_events = () => {
 			if ( evt_id ) FP.fns.track_twit_evt( 'page element click', evt_id, {} );
 		})
 	}
+
+	FP.loaded('twit_footer');
 }
 
-FP.fns.load_twit_footer = function() {
-	FP.fns.twit_standard_events();
-	if ( fp.loaded.includes('woo') ) FP.fns.twit_woo_events();
-}
-
-// INIT FOOTER SCRIPTS
-FP.enqueueFn( 'FP.fns.load_twit_footer' );
+FP.load('twit_footer', 'fupi_twit_footer', ['twit','footer_helpers']);
+FP.load('twit_footer_woo', 'fupi_twit_footer_woo', ['twit','footer_helpers','woo']);

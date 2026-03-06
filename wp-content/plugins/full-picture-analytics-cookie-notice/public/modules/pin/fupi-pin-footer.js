@@ -1,6 +1,4 @@
-FP.fns.load_pin_footer = function() {
-	
-    if ( ! fp.loaded.includes('woo') ) return;
+function fupi_pin_footer_woo() {
 
     function add_brand( item, prod ){
 		if ( prod.brand && prod.brand.length > 0 ) item['product_brand'] = prod.brand[0];
@@ -127,6 +125,8 @@ FP.fns.load_pin_footer = function() {
 		track_items( data );
 	} );
 
+	if ( fp.woo.cart_to_track ) track_items( fp.woo.cart_to_track ); // when ATC is tracked in cart
+
 	// TRACK ORDER 
     // ! this event is labeled as "checkout" !
 
@@ -171,7 +171,9 @@ FP.fns.load_pin_footer = function() {
 
 	// track order
 	if ( fp.woo.order_data_ready ) track_purchase();
+
+	FP.loaded('pin_footer_woo');
 }
 
 // INIT FOOTER SCRIPTS
-FP.enqueueFn( 'FP.fns.load_pin_footer' );
+FP.load('pin_footer_woo', 'fupi_pin_footer_woo', ['pin', 'footer_helpers']);

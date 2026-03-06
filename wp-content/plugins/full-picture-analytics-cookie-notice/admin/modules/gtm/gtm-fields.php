@@ -19,14 +19,17 @@ $sections = array(
 				'label_for' 		=> $option_arr_id . '[id]',
 				'placeholder'		=> 'GTM-0000000',
 				'popup'				=> '<p>' . sprintf ( esc_html__('To install Google Tag Manager\'s container on this site, please paste the Container ID in the form. Please %1$sfollow this guide%2$s if you do not know where to find this ID.', 'full-picture-analytics-cookie-notice' ), '<a href="https://www.optimizesmart.com/how-to-get-google-tag-manager-container-id/" target="_blank">','</a>' ) . '</p>',
-			),	
+			),
 			array(
-				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Rename dataLayer', 'full-picture-analytics-cookie-notice' ),
-				'after field'		=> esc_html__( 'Recommended in most situations', 'full-picture-analytics-cookie-notice' ),
+				'type'	 			=> 'radio',
+				'label' 			=> esc_html__( 'DataLayer name', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'datalayer',
+				'options'			=> array(
+					'fupi_datalayer'	=> esc_html__( 'fupi_dataLayer (recommended)', 'full-picture-analytics-cookie-notice' ),
+					'default'			=> esc_html__( 'dataLayer', 'full-picture-analytics-cookie-notice' ),
+				),
 				'option_arr_id'		=> $option_arr_id,
-				'popup2'				=> '<p>' . esc_html__( 'Google Analytics, Ads and Tag Manager use the same datalayer which may lead to duplicate events. Enable this option to rename the dataLayer that GTM uses to fupi_datalayer and prevent it.', 'full-picture-analytics-cookie-notice') . '</p>'
+				'popup'				=> '<p>' . esc_html__( 'Google Analytics, Ads and Tag Manager use the same datalayer which may lead to duplicate events. Prevent it by renaming it to fupi_datalayer.', 'full-picture-analytics-cookie-notice') . '</p>',
 			),
 		),
 	),
@@ -89,7 +92,7 @@ $sections = array(
 				'placeholder'		=> 'e.g. pdf, doc, docx, xls, xlsx, txt',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[track_file_downl]',
-				'under field'		=> esc_html__( 'Enter coma separated list of file formats (extensions) you want to track', 'full-picture-analytics-cookie-notice'),
+				'under field'		=> esc_html__( 'Enter comma separated list of file formats (extensions) you want to track', 'full-picture-analytics-cookie-notice'),
 			),
 			array(
 				'type'	 			=> 'r3',
@@ -278,7 +281,7 @@ $sections = array(
 									'string'			=> esc_html__( 'Text', 'full-picture-analytics-cookie-notice' ),
 									'number'			=> esc_html__( 'Number', 'full-picture-analytics-cookie-notice' ),
 									'bool'				=> esc_html__( 'true/false', 'full-picture-analytics-cookie-notice' ),
-									'path'			=> esc_html__( 'Path to a JS value', 'full-picture-analytics-cookie-notice' ),
+									'path'			=> esc_html__( 'Path to a JS variable', 'full-picture-analytics-cookie-notice' ),
 								),
 							),
 							array(
@@ -449,7 +452,7 @@ $sections = array(
 				'field_id' 			=> 'clear_woo_data',
 				'must_have'			=> 'woo',
 				'option_arr_id'		=> $option_arr_id,
-				'after field'		=> sprintf( esc_html__( 'Not recommended. %1$sLearn more%2$s', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/why-full-picture-clears-product-arrays-in-the-datalayer-before-pushing-new-ones/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">', '</a>' ),
+				'after field'		=> sprintf( esc_html__( 'Not recommended. %1$sLearn more%2$s', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/why-full-picture-clears-product-arrays-in-the-datalayer-before-pushing-new-ones/" target="_blank">', '</a>' ),
 			),
 			array(
 				'type'	 			=> 'toggle',

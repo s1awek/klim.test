@@ -4,7 +4,7 @@
  * Plugin Name:       WP Full Picture
  * Plugin URI:        https://wpfullpicture.com/
  * Description:       Install the best tracking tools and manage tracking consents with one plugin. Google Analytics, GTM, Meta pixel, WooCommerce and more.
- * Version:           9.4.2
+ * Version:           10.0.2
  * Requires at least: 5.4
  * Requires PHP:      7.4
  * Author:            Krzysztof Planeta
@@ -20,7 +20,7 @@ if ( !defined( 'ABSPATH' ) ) {
 if ( function_exists( 'fupi_fs' ) ) {
     fupi_fs()->set_basename( false, __FILE__ );
 } else {
-    define( 'FUPI_VERSION', '9.4.2' );
+    define( 'FUPI_VERSION', '10.0.2' );
     define( 'FUPI_URL', plugin_dir_url( __FILE__ ) );
     define( 'FUPI_PATH', __DIR__ );
     // DO NOT REMOVE THIS IF, IT IS ESSENTIAL FOR THE `function_exists` CALL ABOVE TO PROPERLY WORK.
@@ -33,17 +33,17 @@ if ( function_exists( 'fupi_fs' ) ) {
                 // Include Freemius SDK.
                 require_once dirname( __FILE__ ) . '/freemius/start.php';
                 $fupi_fs = fs_dynamic_init( array(
-                    'id'             => '5405',
-                    'slug'           => 'full-picture-analytics-cookie-notice',
-                    'premium_slug'   => 'full-picture-premium',
-                    'type'           => 'plugin',
-                    'public_key'     => 'pk_2aee883bf3a3ae5559a119e92c744',
-                    'is_premium'     => false,
-                    'premium_suffix' => 'Premium',
-                    'has_addons'     => false,
-                    'has_paid_plans' => true,
-                    'anonymous_mode' => !function_exists( 'fupi_premium_test__premium_only' ),
-                    'menu'           => array(
+                    'id'               => '5405',
+                    'slug'             => 'full-picture-analytics-cookie-notice',
+                    'premium_slug'     => 'full-picture-premium',
+                    'type'             => 'plugin',
+                    'public_key'       => 'pk_2aee883bf3a3ae5559a119e92c744',
+                    'is_premium'       => false,
+                    'premium_suffix'   => 'Premium',
+                    'has_addons'       => false,
+                    'has_paid_plans'   => true,
+                    'anonymous_mode'   => !function_exists( 'fupi_premium_test__premium_only' ),
+                    'menu'             => array(
                         'slug'        => 'full_picture_tools',
                         'first-path'  => 'admin.php?page=full_picture_tools',
                         'contact'     => false,
@@ -51,7 +51,8 @@ if ( function_exists( 'fupi_fs' ) ) {
                         'affiliation' => false,
                         'pricing'     => false,
                     ),
-                    'is_live'        => true,
+                    'is_live'          => true,
+                    'is_org_compliant' => true,
                 ) );
             }
             return $fupi_fs;
@@ -96,6 +97,11 @@ if ( function_exists( 'fupi_fs' ) ) {
     }
 
     add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'fupi_plugin_settings_link' );
+    add_action( 'before_woocommerce_init', function () {
+        if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+            \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+        }
+    } );
     /**
      * The core plugin class that is used to define internationalization,
      * admin-specific hooks, and public-facing site hooks.

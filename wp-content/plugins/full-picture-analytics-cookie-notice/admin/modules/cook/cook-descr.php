@@ -13,13 +13,14 @@ switch( $section_id ){
     break;
 
     case 'fupi_cook_scriptblock':
-        $ret_text = '<p>' . esc_html__('Use these settings if you have any tracking tools installed outside WP FP. This way, your consent banner will load them according to GDPR and other privacy regulations.','full-picture-analytics-cookie-notice') . '</p>
-        <p class="fupi_warning_text">' . esc_html__( 'Attention. Before you enable any of the options below, make sure that your caching tool/plugin does NOT combine or minify javascript files. Otherwise, you may break your website (user-facing). ', 'full-picture-analytics-cookie-notice' ) . '</p>';
+        $ret_text = '<p>' . esc_html__('The banner controls the loading of all tracking tools installed with WP FP\'s modules as well as Google Analytics and Ads, installed with other plugins. Use options below to control other tools that you use  on this site.','full-picture-analytics-cookie-notice') . '</p>
+        <h3>' . esc_html__('Attention','full-picture-analytics-cookie-notice') . '</h3>
+        <p class="fupi_warning_text">' . esc_html__( 'This banner uses Google Consent Mode v2 and Microsoft UET Consent Mode. Please disable these modes in any other plugins that you have on this site to avoid conflicts.', 'full-picture-analytics-cookie-notice' ) . '</p>
+        <p class="fupi_warning_text">' . esc_html__( 'Make sure your caching tool/plugin does NOT combine JavaScript files. Otherwise, your website may break.', 'full-picture-analytics-cookie-notice' ) . '</p>';
     break;
 
     case 'fupi_cook_iframes':
-        $ret_text = '<p>' . sprintf( esc_html__('YouTube videos, maps and other content loaded from other websites, can track your visitors. Use iframe blocking to display an image placeholder instead of this content until visitors agree to tracking %1$sSee example%2$s.','full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-iframes-manager-works-and-how-to-set-it-up/" target="_blank">', '</a>' ) . '</p>
-        <p class="fupi_warning_text">' . sprintf( esc_html__( 'To manage iframes with unique placeholders (e.g. maps) or those loaded dynamically (e.g. videos in popups), please use %1$sthe shortcode method or the HTML method%2$s', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-block-iframes-manually/" target="_blank">', '</a>' ) . '</p>';
+        $ret_text = '<p>' . sprintf( esc_html__('YouTube videos, maps and other content loaded from other websites, can track your visitors. Use options below to display an image placeholder instead of this content until visitors agree to tracking %1$sSee example%2$s.','full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-iframes-manager-works-and-how-to-set-it-up/" target="_blank">', '</a>' ) . '</p>';
     break;
 };
 

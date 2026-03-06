@@ -18,6 +18,9 @@ class ADBC_Cleanup_Expired_Transients_Handler extends ADBC_Abstract_Cleanup_Hand
 	protected function table() {
 		return ''; // not used
 	}
+	protected function table_suffix() {
+		return ''; // not used
+	}
 	protected function pk() {
 		return ''; // not used
 	}
@@ -34,7 +37,7 @@ class ADBC_Cleanup_Expired_Transients_Handler extends ADBC_Abstract_Cleanup_Hand
 		return true;
 	}
 	protected function sortable_columns() {
-		return [
+		return [ 
 			'id',
 			'name',
 			'value',
@@ -129,8 +132,8 @@ class ADBC_Cleanup_Expired_Transients_Handler extends ADBC_Abstract_Cleanup_Hand
 
 		$site_id = get_current_blog_id();
 
-		$templates = [
-			[
+		$templates = [ 
+			[ 
 				'sql' => "
 					SELECT  a.option_id  AS id,
 					        a.option_name AS name,
@@ -153,7 +156,7 @@ class ADBC_Cleanup_Expired_Transients_Handler extends ADBC_Abstract_Cleanup_Hand
 				'name_col' => 'a.option_name',
 				'value_col' => 'a.option_value',
 			],
-			[
+			[ 
 				'sql' => "
 					SELECT  a.option_id  AS id,
 					        a.option_name AS name,
@@ -179,7 +182,7 @@ class ADBC_Cleanup_Expired_Transients_Handler extends ADBC_Abstract_Cleanup_Hand
 		];
 
 		if ( is_multisite() && is_main_site( $site_id ) ) {
-			$templates[] = [
+			$templates[] = [ 
 				'sql' => "
 					SELECT  a.meta_id    AS id,
 							a.meta_key   AS name,
@@ -216,22 +219,44 @@ class ADBC_Cleanup_Expired_Transients_Handler extends ADBC_Abstract_Cleanup_Hand
 	}
 
 	/** Overridable helper methods */
-	protected function build_branches_for_site( $site_id, $args, $maybe_order_by, $sub_limit ) {
+	protected function build_branches_for_site( $site_id, $args, $maybe_order_by, $sub_limit, $needs_collation_fix = false ) {
 
 		global $wpdb;
 
 		ADBC_Sites::instance()->switch_to_blog_id( $site_id );
 
 		$branches = [];
+
+		$collation = ! empty( $wpdb->collate ) ? $wpdb->collate : 'utf8mb4_unicode_ci';
+
 		foreach ( $this->get_expired_templates() as $template ) {
 
 			$search = $this->search_sql( $args, $template );
 			$size = $this->size_sql( $args, $template );
 
-			$sql = "
+			$inner_sql = "
 				{$template['sql']}
 				{$search}
 				{$size}
+			";
+
+			if ( $needs_collation_fix ) {
+				$inner_sql = "
+					SELECT
+						id,
+						CONVERT(name USING utf8mb4) COLLATE {$collation} AS name,
+						CONVERT(value USING utf8mb4) COLLATE {$collation} AS value,
+						CONVERT(timeout USING utf8mb4) COLLATE {$collation} AS timeout,
+						site_id,
+						CONVERT(found_in USING utf8mb4) COLLATE {$collation} AS found_in,
+						CONVERT(autoload USING utf8mb4) COLLATE {$collation} AS autoload,
+						size
+					FROM ( {$inner_sql} ) AS t
+				";
+			}
+
+			$sql = "
+				{$inner_sql}
 				{$maybe_order_by}
 				LIMIT %d
 			";
@@ -257,8 +282,8 @@ class ADBC_Cleanup_Expired_Transients_Handler extends ADBC_Abstract_Cleanup_Hand
 
 		$site_id = get_current_blog_id();
 
-		$templates = [
-			[
+		$templates = [ 
+			[ 
 				// normal transients in options
 				'sql' => "
 					SELECT
@@ -283,7 +308,7 @@ class ADBC_Cleanup_Expired_Transients_Handler extends ADBC_Abstract_Cleanup_Hand
 				'name_col' => 'a.option_name',
 				'value_col' => 'a.option_value',
 			],
-			[
+			[ 
 				// site transients in options (edge case in multisite)
 				'sql' => "
 					SELECT
@@ -311,7 +336,7 @@ class ADBC_Cleanup_Expired_Transients_Handler extends ADBC_Abstract_Cleanup_Hand
 		];
 
 		if ( is_multisite() && is_main_site( $site_id ) ) {
-			$templates[] = [
+			$templates[] = [ 
 				'sql' => "
 					SELECT
 						COUNT(*) AS count,
@@ -377,7 +402,7 @@ class ADBC_Cleanup_Expired_Transients_Handler extends ADBC_Abstract_Cleanup_Hand
 	protected function add_composite_id( &$rows ) {
 
 		foreach ( $rows as &$row ) {
-			$row['composite_id'] = [
+			$row['composite_id'] = [ 
 				'site_id' => (int) $row['site_id'],
 				'items_type' => $this->items_type(),
 				'id' => (int) $row['id'],
@@ -709,6 +734,8 @@ class ADBC_Cleanup_Expired_Transients_Handler extends ADBC_Abstract_Cleanup_Hand
 
 		$branch_batch_size = $offset + $per_page;
 
+		$needs_collation_fix = ! ADBC_Database::is_collaction_unified( 'options', true, $site_arg );
+
 		// ---- Build branches ---------------------------------------------
 		$branches = [];
 		foreach ( ADBC_Sites::instance()->get_sites_list( $site_arg ) as $site ) {
@@ -719,7 +746,8 @@ class ADBC_Cleanup_Expired_Transients_Handler extends ADBC_Abstract_Cleanup_Hand
 					$site['id'],
 					$args, // pass whole arg set for WHERE glue
 					$maybe_order_by, // pass sorting column and order or null
-					$branch_batch_size  // pass limit for this branch
+					$branch_batch_size,  // pass limit for this branch
+					$needs_collation_fix
 				)
 			);
 
@@ -741,7 +769,6 @@ class ADBC_Cleanup_Expired_Transients_Handler extends ADBC_Abstract_Cleanup_Hand
 		return $this->add_composite_id( $rows );
 
 	}
-
 
 }
 

@@ -1,4 +1,4 @@
-;(function(window){
+function fupi_tik(){
 
 	if ( allow_loading_tik() ) { 
 		load_tik();
@@ -21,9 +21,9 @@
 		  ttq.page();
 		}(window, document, 'ttq');
 
-		fp.loaded.push('tik');
-		if ( fp.main.debug ) console.log('[FP] TikTok loaded');
-		FP.runFn( 'FP.fns.load_tik_footer' );
+		FP.loaded('tik','tik','[FP] TikTok loaded');
 	}
 
-})(window, document);
+};
+
+FP.load('tik', 'fupi_tik', ['head_helpers']);

@@ -1,12 +1,10 @@
-;(function(window){
+function fupi_mads(){
 
 	if ( allow_loading_mads() ) { 
 		load_mads();
 	} else {
 		document.addEventListener('fp_load_scripts', ()=>{ if ( allow_loading_mads() ) load_mads(); } );
 	};
-
-	// FUNCTIONS
 
 	function allow_loading_mads(){
 		return FP.isAllowedToLoad( 'mads', ['stats', 'marketing'], ['id'] ); // module id in fp.XX, required cookie permission, setting name with required data (like in fp.gtm.setting_name)
@@ -21,9 +19,8 @@
 		
 		
 		// LOAD FOOTER SCRIPTS
-		fp.loaded.push('mads');
-		if ( fp.main.debug ) console.log('[FP] MS Ads loaded');
-		FP.runFn( 'FP.fns.load_mads_footer' );
+		FP.loaded('mads', 'mads', '[FP] MS Ads loaded');
 	}
+};
 
-})(window);
+FP.load('mads','fupi_mads',['head_helpers']);

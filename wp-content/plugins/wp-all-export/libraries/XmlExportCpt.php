@@ -110,7 +110,7 @@ final class XmlExportCpt
                         break;
                     case 'title':
                         $val = apply_filters('pmxe_post_title', pmxe_filter($entry->post_title, $fieldSnippet));
-                        wp_all_export_write_article($article, $element_name, ($preview) ? trim(preg_replace('~[\r\n]+~', ' ', htmlspecialchars($val))) : $val, $entry->ID);
+                        wp_all_export_write_article($article, $element_name, ($preview) ? trim(preg_replace('~[\r\n]+~', ' ', htmlspecialchars((string) $val))) : $val, $entry->ID);
                         break;
                     case 'content':
                         $postContent = $entry->post_content;
@@ -145,7 +145,7 @@ final class XmlExportCpt
                         }
 
                         $val = apply_filters('pmxe_post_content', pmxe_filter($postContent, $fieldSnippet), $entry->ID);
-                        wp_all_export_write_article($article, $element_name, ($preview) ? trim(preg_replace('~[\r\n]+~', ' ', htmlspecialchars($val))) : $val);
+                        wp_all_export_write_article($article, $element_name, ($preview) ? trim(preg_replace('~[\r\n]+~', ' ', htmlspecialchars((string) $val))) : $val);
                         break;
 
                     // Media Attachments
@@ -289,7 +289,7 @@ final class XmlExportCpt
                         break;
                     case 'excerpt':
                         $val = apply_filters('pmxe_post_excerpt', pmxe_filter($entry->post_excerpt, $fieldSnippet), $entry->ID);
-                        wp_all_export_write_article($article, $element_name, ($preview) ? trim(preg_replace('~[\r\n]+~', ' ', htmlspecialchars($val))) : $val);
+                        wp_all_export_write_article($article, $element_name, ($preview) ? trim(preg_replace('~[\r\n]+~', ' ', htmlspecialchars((string) $val))) : $val);
                         break;
                     case 'cf':
                         if (!empty($fieldValue)) {
@@ -326,7 +326,7 @@ final class XmlExportCpt
                                     }
                                 }
                                 $val = pmxe_filter($val, $fieldSnippet);
-                                wp_all_export_write_article($article, $element_name, ($preview) ? trim(preg_replace('~[\r\n]+~', ' ', htmlspecialchars($val))) : $val);
+                                wp_all_export_write_article($article, $element_name, ($preview) ? trim(preg_replace('~[\r\n]+~', ' ', htmlspecialchars((string) $val))) : $val);
                             }
 
                             if (empty($cur_meta_values)) {

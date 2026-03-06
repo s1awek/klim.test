@@ -9,7 +9,7 @@
 
 	document.addEventListener('keyup', e=>{
 		if ( e.target.dataset.dataformat && e.target.dataset.dataformat == 'key' ){
-			let reg = /^\d/, // digit at the begining
+			let reg = /^\d/, // digit at the beginning
 				reg2 = /[^\w]/gi, // not a special char or underscore
 				txt = e.target.value;
 

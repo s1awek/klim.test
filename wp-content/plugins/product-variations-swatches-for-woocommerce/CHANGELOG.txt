@@ -1,3 +1,9 @@
+/**1.1.16 - 2026.03.06**/
+- Updated: VillaTheme support
+
+/**1.1.15 - 2026.01.23**/
+- Updated: VillaTheme support
+
 /**1.1.14 - 2025.11.22**/
 - Added: Option to set the separator and color for the selected attribute label
 - Updated: Compatibility with PHP 8.2 and WC 10.3

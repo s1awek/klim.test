@@ -80,7 +80,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
                     } else {
                         $msg = 'Product imported successfully.';
                     }
-                    $this->import_results[$row] = array('row'=>$row, 'message'=>$msg, 'status'=>true, 'status_msg' => __( 'Success', 'product-import-export-for-woo' ), 'post_id'=>$result['id'], 'post_link' => Wt_Import_Export_For_Woo_Basic_Product::get_item_link_by_id($result['id'])); 
+                    $this->import_results[$row] = array('row'=>$row, 'message'=>$msg, 'status'=>true, 'status_msg' => __( 'Success', 'product-import-export-for-woo' ), 'post_id'=>$result['id'], 'post_link' => Wt_Import_Export_For_Woo_Product_Basic_Product::get_item_link_by_id($result['id'])); 
                     Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - ".$msg);                    
                     $success++;
                 }else{
@@ -291,9 +291,9 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
                 }
                 if ('description' == $column || 'post_content' == $column) {
                     
-                    $enable_chatgpt = Wt_Import_Export_For_Woo_Basic_Common_Helper::get_advanced_settings('enable_chatgpt');
+                    $enable_chatgpt = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::get_advanced_settings('enable_chatgpt');
                     if( 1 == $enable_chatgpt ){
-                        $gpt_key = Wt_Import_Export_For_Woo_Basic_Common_Helper::get_advanced_settings('chatgpt_api_key');
+                        $gpt_key = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::get_advanced_settings('chatgpt_api_key');
                         if('' !== $gpt_key && empty( $value ) && !$this->merge ){ // ChatGPT key is entered, product description column is empty and it's not an update.
                             $start_description = isset( $mapped_data['post_title'] ) ? $mapped_data['post_title'] : $value;
                             $this->item_data['description'] = $this->generate_product_description_using_openai($start_description, $gpt_key);

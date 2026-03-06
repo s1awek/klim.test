@@ -39,17 +39,7 @@ $sections = array(
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . sprintf( esc_html__( 'This will load the tracking script for administrators, bots, excluded users, people browsing from excluded locations and people who didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
-			),
-			array(
-				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Track without waiting for consent', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'disreg_cookies',
-				'must_have'			=> 'cook',
-				'class'				=> 'fupi_load_opts fupi_adv',
-				'option_arr_id'		=> $option_arr_id,
-				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . esc_html__( 'Visitors will still be able to turn off tracking by declining tracking / cookies.', 'full-picture-analytics-cookie-notice' ) . '</p>'
+				<p>' . sprintf( esc_html__( 'This will load the tracking script for administrators, bots, excluded users, people browsing from excluded locations and people who didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/">', '</a>' ) . '</p>',
 			),
 			array(
 				'type'	 			=> 'r3',
@@ -60,7 +50,7 @@ $sections = array(
 				'class'				=> 'fupi_load_opts fupi_adv',
 				'must_have'			=> 'pro geo',
 				'is_repeater'		=> false,
-				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
+				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by commas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 				'fields'			=> array(
 					array(
 						'type'				=> 'select',
@@ -118,7 +108,7 @@ $sections = array(
 					<p>' . esc_html__( 'Identification is done with User ID (for logged-in users) or Hotjar ID (for other visitors)', 'full-picture-analytics-cookie-notice') . '</p>
 					<p>' . esc_html__( 'To be able to identify users you need to:', 'full-picture-analytics-cookie-notice') . '</p>
 					<ol>
-						<li class="fupi_warning_text">' . esc_html__( 'If your visitors come from a country where they have to consent before they are tracked, then you should enable consent banner in optin or an automatic mode and add to your privacy policy information about sending user information to Hotjar.', 'full-picture-analytics-cookie-notice') . '</li>
+						<li class="fupi_warning_text">' . esc_html__( 'If your visitors come from a country where they have to consent before they are tracked, then you should use consent banner in optin or an automatic mode and add to your privacy policy information about sending user information to Hotjar.', 'full-picture-analytics-cookie-notice') . '</li>
 						<li>' . esc_html__( 'Visit', 'full-picture-analytics-cookie-notice') . ' <a href="https://insights.hotjar.com/settings/user-attributes">' . esc_html__( 'this page', 'full-picture-analytics-cookie-notice') . '</a> ' . esc_html__( 'in your Hotjar dashboard.', 'full-picture-analytics-cookie-notice') . '</li>
 						<li>' . esc_html__( 'Select a website where you want to start tracking users (Not available on all plans!)', 'full-picture-analytics-cookie-notice') . '</li>
 						<li>' . esc_html__( 'Return to this settings page', 'full-picture-analytics-cookie-notice') . '</li>
@@ -196,7 +186,7 @@ $sections = array(
 				'placeholder'		=> esc_html__('e.g. pdf, doc, docx, xls, xlsx, txt', 'full-picture-analytics-cookie-notice'),
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[tag_file_downl]',
-				'under field'		=> esc_html__( 'Enter a coma-separated list of formats of files that you want to track.', 'full-picture-analytics-cookie-notice' ),
+				'under field'		=> esc_html__( 'Enter a comma-separated list of formats of files that you want to track.', 'full-picture-analytics-cookie-notice' ),
 			),
 			array(
 				'type'	 			=> 'toggle',

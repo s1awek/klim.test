@@ -9,6 +9,9 @@ if (!defined('WPINC')) {
 use TidioLiveChat\IntegrationState;
 use TidioLiveChat\TidioLiveChat;
 use TidioLiveChat\Translation\I18n;
+use function esc_html;
+use function menu_page_url;
+use function sprintf;
 
 class AdminActionLink
 {
@@ -37,20 +40,20 @@ class AdminActionLink
      */
     public function addPluginActionLinks($links, $file)
     {
-        if (
-            !$this->isPluginConfigurationFile($file) ||
-            !$this->integrationState->isPluginIntegrated()
-        ) {
+        if (!$this->isPluginConfigurationFile($file)) {
             return $links;
         }
 
-        $links[] = $this->prepareClearAccountDataActionLink();
-        $links[] = $this->prepareToggleAsyncLoadingActionLink();
         $links[] = sprintf(
             '<a href="%s">%s</a>',
             menu_page_url(AdminDashboard::TIDIO_SYSTEM_INFO_PAGE, false),
             esc_html(I18n::_t('System Info'))
         );
+
+        if ($this->integrationState->isPluginIntegrated()) {
+            $links[] = $this->prepareClearAccountDataActionLink();
+            $links[] = $this->prepareToggleAsyncLoadingActionLink();
+        }
 
         return $links;
     }

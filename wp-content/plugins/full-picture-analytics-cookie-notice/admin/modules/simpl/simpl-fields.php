@@ -31,7 +31,7 @@ $sections = array(
 				'label_for' 		=> $option_arr_id . '[src]',
 				'placeholder'		=> 'https://simple.example.com/',
 				'popup'				=> '<p>' . esc_html__( 'Here you can paste the custom URL that you configured to bypass ad-blockers. If you are not sure what it means, go to your Simple Analytics dashboard > "Settings" > "Bypass Ad-blockers" section and see if any custom domain was entered there.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . sprintf( esc_html__( 'Enter https:// at the begining of your address and put "/" at the end, for example %1$shttps://simple.example.com/%2$s', 'full-picture-analytics-cookie-notice' ), '<b>', '</b>' ) . '</p>',
+				<p>' . sprintf( esc_html__( 'Enter https:// at the beginning of your address and put "/" at the end, for example %1$shttps://simple.example.com/%2$s', 'full-picture-analytics-cookie-notice' ), '<b>', '</b>' ) . '</p>',
 			),
 			array(
 				'type'	 			=> 'text',
@@ -70,7 +70,7 @@ $sections = array(
 				'el_class'			=> 'fupi_condition fupi_condition_reverse',
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
-				'popup2'			=> sprintf( esc_html__( 'When this setting is enabled, Simple Analytics will load for all visitors - even for bots, logged in administrators and excluded users and locations (with the geolocation module). %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ),
+				'popup2'			=> sprintf( esc_html__( 'When this setting is enabled, Simple Analytics will load for all visitors - even for bots, logged in administrators and excluded users and locations (with the geolocation module). %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/">', '</a>' ),
 			),
 			array(
 				'type'	 			=> 'r3',
@@ -96,7 +96,7 @@ $sections = array(
 						'placeholder'		=> esc_html__('e.g. GB, DE, FR, AU, etc.', 'full-picture-analytics-cookie-notice'),
 					),
 				),
-				'popup'				=> sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '. ' . esc_html__('If visitor\'s country is not recognized, Simple Analytics will load as usual.', 'full-picture-analytics-cookie-notice' ),
+				'popup'				=> sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by commas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '. ' . esc_html__('If visitor\'s country is not recognized, Simple Analytics will load as usual.', 'full-picture-analytics-cookie-notice' ),
 			)
 		),
 	),

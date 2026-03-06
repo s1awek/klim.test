@@ -31,9 +31,10 @@ class WidgetLoader
             return;
         }
 
-        add_action('wp_head', [$this,'addPreconnectLink']);
+        add_action('wp_head', [$this, 'addPreconnectLink']);
         if ($this->integrationState->isAsyncLoadingTurnedOn()) {
-            add_action('wp_footer', [$this, 'enqueueScriptsAsync'], PHP_INT_MAX);
+            $widgetFooterPriority = apply_filters('tidio_widget_footer_priority', 1000);
+            add_action('wp_footer', [$this, 'enqueueScriptsAsync'], $widgetFooterPriority);
             return;
         }
 

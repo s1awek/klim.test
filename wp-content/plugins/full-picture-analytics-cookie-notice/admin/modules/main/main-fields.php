@@ -14,8 +14,8 @@ $other_settings = array(
 		'label' 			=> esc_html__( 'Send email notification when the plugin is deactivated', 'full-picture-analytics-cookie-notice' ),
 		'field_id' 			=> 'deactiv_email',
 		'option_arr_id'		=> $option_arr_id,
-		'placeholder'		=> esc_html__( 'e.g. john@example.com, peter@example.com, etc.', 'full-picture-analytics-cookie-notice' ),
-		'under field' 		=> esc_html__('Enter a coma separated list of email addresses where you want to send the email.','full-picture-analytics-cookie-notice'),
+		'placeholder'		=> sprintf( esc_html__( 'e.g. %1$s, etc.', 'full-picture-analytics-cookie-notice' ), 'john@example.com, peter@example.com' ),
+		'under field' 		=> esc_html__('Enter a comma separated list of email addresses where you want to send the email.','full-picture-analytics-cookie-notice'),
 	),
 	array(
 		'type' 				=> 'text',
@@ -93,7 +93,7 @@ $sections = array(
 	
 	array(
 		'section_id' => 'fupi_main_no_track',
-		'section_title' => esc_html__( 'Tracking exclusions', 'full-picture-analytics-cookie-notice' ),
+		'section_title' => esc_html__( 'Do not track', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
 			array(
 				'type'	 			=> 'text',
@@ -125,6 +125,78 @@ $sections = array(
 				'label_for' 		=> $option_arr_id . '[disable_for_roles]',
 				'default'			=> 'administrator',
 				'under field'		=> esc_html__( 'Site administrators are never tracked. To make them temporarily trackable, please enable the Setup Helper in the top menu and enable testing in the front-end of your site.', 'full-picture-analytics-cookie-notice' ),
+			),
+		)
+	),
+
+	// GEOLOCATION
+	
+	array(
+		'section_id' => 'fupi_main_geo',
+		'section_title' => esc_html__( 'Geolocation', 'full-picture-analytics-cookie-notice' ),
+		'fields' => array(
+			array(
+				'type'	 			=> 'select',
+				'label' 			=> esc_html__( 'Geolocation provider', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'geo',
+				'option_arr_id'		=> $option_arr_id,
+				'class'				=> 'fupi_adv',
+				'must_have'			=> 'pro',
+				'el_class'			=> 'fupi_condition',
+				'el_data_target'	=> 'fupi_geo_cond',
+				'options' 			=> array(
+					''					=> esc_html__( 'Disabled', 'full-picture-analytics-cookie-notice'),
+					'cf_non_user'		=> esc_html__( 'Cloudflare (for not-registered users)', 'full-picture-analytics-cookie-notice'),
+					'cf_default'		=> esc_html__( 'Cloudflare (for registered users)', 'full-picture-analytics-cookie-notice'),
+					'cf_worker'			=> esc_html__( 'Cloudflare (Worker method)', 'full-picture-analytics-cookie-notice'),
+					'ip_api'			=> 'ipapi',
+					'ipdata'			=> 'ipdata',
+					'db_ip'				=> 'DB-IP',
+					'cloudways'			=> 'Cloudways Geo IP',
+				),
+				'default'			=> 'none',
+				'under field'		=> '<p>' . esc_html__( 'All providers on this list offer free services but some of them require registration or extra setup.','full-picture-analytics-cookie-notice') . '</p>
+				<ul>
+					<li><a href="https://www.cloudflare.com/en-gb/">Cloudflare</a> ' . esc_html__( '(default) - Geolocation of visitor\'s country, free, registration not required', 'full-picture-analytics-cookie-notice') . '</li>
+					<li><a href="https://www.cloudflare.com/en-gb/">Cloudflare</a> '. esc_html__( '(for registered users) - Geolocation of visitor\'s country, free, registration required', 'full-picture-analytics-cookie-notice') . '</li>
+					<li><a href="https://www.cloudflare.com/en-gb/">Cloudflare</a> '. esc_html__( '(Worker method) - Geolocation of visitor\'s country, free, registration and extra setup required', 'full-picture-analytics-cookie-notice') . '</li>
+					<li><a href="https://ipapi.co/">ipapi</a> - '. esc_html__( 'Geolocation of visitor\'s country & region, free and paid, free is limited to 1000 checks/day, registration not required', 'full-picture-analytics-cookie-notice') . '</li>
+					<li><a href="http://ipdata.co/">ipdata</a> - '. esc_html__( 'Geolocation of visitor\'s country & region, free and paid, registration is always required, the free plan is limited to 1500 checks/day and non-commercial use', 'full-picture-analytics-cookie-notice') . '</li>
+					<li><a href="https://db-ip.com/">DB_IP</a> - '. esc_html__( 'Geolocation of visitor\'s country, does not require registration (paid plans are not yet supported)', 'full-picture-analytics-cookie-notice') . '</li>
+					<li><a href="https://www.cloudways.com/en/">Cloudways</a> - '. esc_html__( 'Geolocation of visitor\'s country. Only for Cloudways customers. Extra setup required. Attention! Some caching configurations may cache geo lookup result!', 'full-picture-analytics-cookie-notice') . '</li>
+				</ul>',
+			),
+				array(
+					'type'	 			=> 'text',
+					'label' 			=> esc_html__( 'Cloudflare Worker URL', 'full-picture-analytics-cookie-notice' ),
+					'class'				=> 'fupi_sub fupi_adv fupi_geo_cond fupi_cond_val_cf_worker fupi_disabled',
+					'must_have'			=> 'pro',
+					'field_id' 			=> 'cf_worker_url',
+					'option_arr_id'		=> $option_arr_id,
+					'label_for' 		=> $option_arr_id . '[cf_worker_url]',
+					'placeholder'		=> '',
+					'under field' 		=> sprintf(esc_html__('Enter worker script URL. %1s Learn how to find it%2s.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/geolocation/" target="_blank">', '</a>'),
+				),
+				array(
+					'type'	 			=> 'text',
+					'label' 			=> esc_html__( 'ipdata API key', 'full-picture-analytics-cookie-notice' ),
+					'class'				=> 'fupi_sub fupi_geo_cond fupi_cond_val_ipdata fupi_disabled fupi_adv',
+					'must_have'			=> 'pro',
+					'field_id' 			=> 'ipdata_api_key',
+					'option_arr_id'		=> $option_arr_id,
+					'label_for' 		=> $option_arr_id . '[ipdata_api_key]',
+				),
+			array(
+				'type'	 			=> 'number',
+				'label' 			=> esc_html__( 'Remember visitor\'s location for', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'remember_geo',
+				'class'				=> 'fupi_adv',
+				'must_have'			=> 'pro',
+				'option_arr_id'		=> $option_arr_id,
+				'label_for' 		=> $option_arr_id . '[show_to_countries]',
+				'default'			=> '30',
+				'after field'		=> 'days',
+				'popup' 			=> '<p>' . esc_html__( 'Default is 30 days. Set to a lower number if your visitors often browse from different countries. If set to 0, location will be checked at the beginning of each session. If a location wasn\'t found it will be checked again at the beginning of the next session and remembered for the specified number of days.', 'full-picture-analytics-cookie-notice') . '</p>',
 			),
 		)
 	),
@@ -162,78 +234,6 @@ $sections = array(
 		),
 	),
 
-	// GEOLOCATION
-	
-	array(
-		'section_id' => 'fupi_main_geo',
-		'section_title' => esc_html__( 'Geolocation', 'full-picture-analytics-cookie-notice' ),
-		'fields' => array(
-			array(
-				'type'	 			=> 'select',
-				'label' 			=> esc_html__( 'Geolocation provider', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'geo',
-				'option_arr_id'		=> $option_arr_id,
-				'class'				=> 'fupi_adv',
-				'must_have'			=> 'pro',
-				'el_class'			=> 'fupi_condition',
-				'el_data_target'	=> 'fupi_geo_cond',
-				'options' 			=> array(
-					''					=> esc_html__( 'Disabled', 'full-picture-analytics-cookie-notice'),
-					'cf_non_user'		=> esc_html__( 'Cloudflare (for not-registered users)', 'full-picture-analytics-cookie-notice'),
-					'cf_default'		=> esc_html__( 'Cloudflare (for registered users)', 'full-picture-analytics-cookie-notice'),
-					'cf_worker'			=> esc_html__( 'Cloudflare (Worker method)', 'full-picture-analytics-cookie-notice'),
-					'ip_api'			=> 'ipapi',
-					'ipdata'			=> 'ipdata',
-					'db_ip'				=> 'DB-IP',
-					'cloudways'			=> 'Cloudways Geo IP',
-				),
-				'default'			=> 'none',
-				'under field'		=> '<p>' . esc_html__( 'All providers on this list offer free services but some of them require registration or extra setup.','full-picture-analytics-cookie-notice') . '</p>
-				<ul>
-					<li><a href="https://www.cloudflare.com/en-gb/">Cloudflare</a> ' . esc_html__( '(default) - Geolocation of visitor\'s country, free, registration not required', 'full-picture-analytics-cookie-notice') . '</li>
-					<li><a href="https://www.cloudflare.com/en-gb/">Cloudflare</a> '. esc_html__( '(for regisered users) - Geolocation of visitor\'s country, free, registration required', 'full-picture-analytics-cookie-notice') . '</li>
-					<li><a href="https://www.cloudflare.com/en-gb/">Cloudflare</a> '. esc_html__( '(Worker method) - Geolocation of visitor\'s country, free, registration and extra setup required', 'full-picture-analytics-cookie-notice') . '</li>
-					<li><a href="https://ipapi.co/">ipapi</a> - '. esc_html__( 'Geolocation of visitor\'s country & region, free and paid, free is limited to 1000 checks/day, registration not required', 'full-picture-analytics-cookie-notice') . '</li>
-					<li><a href="http://ipdata.co/">ipdata</a> - '. esc_html__( 'Geolocation of visitor\'s country & region, free and paid, registration is always required, free is limited to 1500 checks/day and non-commercial use', 'full-picture-analytics-cookie-notice') . '</li>
-					<li><a href="https://db-ip.com/">DB_IP</a> - '. esc_html__( 'Geolocation of visitor\'s country, does not require registration (paid plans are not yet supported)', 'full-picture-analytics-cookie-notice') . '</li>
-					<li><a href="https://www.cloudways.com/en/">Cloudways</a> - '. esc_html__( 'Geolocation of visitor\'s country. Only for Cloudways customers. Extra setup required. Attention! Some caching configurations may cache geo lookup result!', 'full-picture-analytics-cookie-notice') . '</li>
-				</ul>',
-			),
-				array(
-					'type'	 			=> 'text',
-					'label' 			=> esc_html__( 'Cloudflare Worker URL', 'full-picture-analytics-cookie-notice' ),
-					'class'				=> 'fupi_sub fupi_adv fupi_geo_cond fupi_cond_val_cf_worker fupi_disabled',
-					'must_have'			=> 'pro',
-					'field_id' 			=> 'cf_worker_url',
-					'option_arr_id'		=> $option_arr_id,
-					'label_for' 		=> $option_arr_id . '[cf_worker_url]',
-					'placeholder'		=> '',
-					'under field' 		=> sprintf(esc_html__('Enter worker script URL. %1s Learn how to find it%2s.', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/geolocation/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">', '</a>'),
-				),
-				array(
-					'type'	 			=> 'text',
-					'label' 			=> esc_html__( 'ipdata API key', 'full-picture-analytics-cookie-notice' ),
-					'class'				=> 'fupi_sub fupi_geo_cond fupi_cond_val_ipdata fupi_disabled fupi_adv',
-					'must_have'			=> 'pro',
-					'field_id' 			=> 'ipdata_api_key',
-					'option_arr_id'		=> $option_arr_id,
-					'label_for' 		=> $option_arr_id . '[ipdata_api_key]',
-				),
-			array(
-				'type'	 			=> 'number',
-				'label' 			=> esc_html__( 'Remember visitor\'s location for', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'remember_geo',
-				'class'				=> 'fupi_adv',
-				'must_have'			=> 'pro',
-				'option_arr_id'		=> $option_arr_id,
-				'label_for' 		=> $option_arr_id . '[show_to_countries]',
-				'default'			=> '30',
-				'after field'		=> 'days',
-				'popup' 			=> '<p>' . esc_html__( 'Default is 30 days. Set to a lower number if your visitors often browse from different countries. If set to 0, location will be checked at the begining of each session. If a location wasn\'t found it will be checked again at the begining of the next session and remembered for the specified number of days.', 'full-picture-analytics-cookie-notice') . '</p>',
-			),
-		)
-	),
-
 	// IMPORT/EXPORT SETTINGS
 	array(
 		'section_id' => 'fupi_main_importexport',
@@ -246,32 +246,6 @@ $sections = array(
 		'section_id' => 'fupi_main_perf',
 		'section_title' => esc_html__( 'Performance', 'full-picture-analytics-cookie-notice' ),
 		'fields' => array(
-			array(
-				'type' 				=> 'toggle',
-				'label' 			=> esc_html__( 'Defer non-critical scripts', 'full-picture-analytics-cookie-notice' ),
-				'field_id' 			=> 'async_scripts',
-				'class'				=> 'fupi_adv',
-				'option_arr_id'		=> $option_arr_id,
-				'popup2'		 	=> '<p class="fupi_warning_text">'. esc_html__('Do not defer WP FP\'s scripts using a different plugin or solution. Not all WP FP\'s scripts can be safely deferred.', 'full-picture-analytics-cookie-notice') . '</p>' 
-			),
-			array(
-				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__('Save main JS functions in a file', 'full-picture-analytics-cookie-notice'),
-				'field_id' 			=> 'save_settings_file',
-				'class'				=> 'fupi_adv',
-				'option_arr_id'		=> $option_arr_id,
-				'popup'				=> '<p>'. esc_html__('If you enable this option, WP FP will save some of its main JavaScript functions in a file, instead of printing them directly in the HTML.', 'full-picture-analytics-cookie-notice') . '</p>',
-			),
-			array(
-				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__('Save Custom Scripts in a file (beta)', 'full-picture-analytics-cookie-notice'),
-				'field_id' 			=> 'save_cscr_file',
-				'class'				=> 'fupi_adv',
-				'option_arr_id'		=> $option_arr_id,
-				'popup3'			=> '<p>'. esc_html__('If you enable this option, WP FP will save scripts from the Custom Scripts module in a file, instead of printing them directly in the HTML.', 'full-picture-analytics-cookie-notice') . '</p>
-				<p class="fupi_warning_text">'. sprintf( esc_html__('Attention. All scripts in a file will be wrapped in a function. This means that all variables that should be accessible via "window" object, will not be accessible this way unless you change them from e.g. "var variable_name" to "window.variable_name".', 'full-picture-analytics-cookie-notice'),'<a href="https://wordpress.org/support/plugin/full-picture-analytics-cookie-notice/" target="_blank">', '</a>' ). '</p>
-				<p>'. sprintf( esc_html__('This feature is in beta. Please report issues in %1$sthe support forum%2$s.', 'full-picture-analytics-cookie-notice'),'<a href="https://wordpress.org/support/plugin/full-picture-analytics-cookie-notice/" target="_blank">', '</a>' ). '</p>',
-			),
 			array(
 				'type' 				=> 'toggle',
 				'label' 			=> esc_html__( 'Enable WP Rocket compatibility settings', 'full-picture-analytics-cookie-notice' ),

@@ -3,7 +3,7 @@ FP.fns.track_tik_evt = ( event_name, payload = false ) => {
 	if ( fp.main.debug ) console.log('[FP] TikTok "' + event_name + '" event: ', payload );
 };
 
-FP.fns.tik_woo_events = () => {
+function fupi_tik_footer_woo(){
 	
 	function get_item( prod, qty ){
 
@@ -109,6 +109,8 @@ FP.fns.tik_woo_events = () => {
 		track_items( data, 'AddToCart' );
 	} );
 
+	if ( fp.woo.cart_to_track ) track_items( fp.woo.cart_to_track, 'AddToCart' ); // when ATC is tracked in cart
+
 	FP.addAction( ['woo_add_to_wishlist'], data => {
 		track_items( data, 'AddToWishlist');
 	} );
@@ -157,9 +159,11 @@ FP.fns.tik_woo_events = () => {
 			})
 		};
 	}
+
+	FP.loaded('tik_footer_woo');
 }
 
-FP.fns.tik_standard_events = function() {
+function fupi_tik_footer(){
 
 	// CLICKS ON EMAIL & TEL LINKS
 
@@ -212,12 +216,9 @@ FP.fns.tik_standard_events = function() {
 			}
 		})
 	}
+
+	FP.loaded('tik_footer');
 }
 
-FP.fns.load_tik_footer = () => {
-	FP.fns.tik_standard_events();
-	if ( fp.loaded.includes('woo') ) FP.fns.tik_woo_events();
-}
-
-// INIT FOOTER SCRIPTS
-FP.enqueueFn( 'FP.fns.load_tik_footer' );
+FP.load('tik_footer', 'fupi_tik_footer', ['footer_helpers', 'tik']);
+FP.load('tik_footer_woo', 'fupi_tik_footer_woo', ['footer_helpers', 'tik', 'woo']);

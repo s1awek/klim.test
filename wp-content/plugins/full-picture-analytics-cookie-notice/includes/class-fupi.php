@@ -102,6 +102,8 @@ class Fupi {
         $this->loader->add_action( 'wp_ajax_fupi_search_pages', $plugin_admin, 'fupi_search_pages_callback' );
         // AJAX UPDATES OF GENERAL SETTINGS
         $this->loader->add_action( 'wp_ajax_fupi_update_modes', $plugin_admin, 'fupi_update_main_options_callback' );
+        // AJAX CONFLICT CHECKER
+        $this->loader->add_action( 'wp_ajax_fupi_check_conflicts', $plugin_admin, 'fupi_check_conflicts_callback' );
     }
 
     //

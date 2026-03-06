@@ -1,8 +1,11 @@
+// body[class*="wp-full-picture_page"],
+// body[class*="toplevel_page_full_picture"]{
+// 	background: #e9f2f7;
+// }
 
 #fupi_nav_col{
 	font-size: 14px;
 	text-align: left;
-	background: #203B52;
 	border-radius: 20px;
 }
 
@@ -14,12 +17,19 @@
 	}
 }
 
+#fupi_side_menu{
+	margin-top: 30px;
+}
+
 .fupi_sidenav_section{
 	+ .fupi_sidenav_section{
 		margin-top: 30px;
 	}
 }
 
+.fupi_sidenav_item:not(h3):not(.fupi_has_subnav){
+	margin: 0 12px 0 3px;
+}
 .fupi_sidenav_item:not(h3){
 	font-size: 14px;
 	display: block;
@@ -29,12 +39,12 @@
 	text-align: left;
 	text-decoration: none;
 	box-sizing: border-box;
-	color: #cdf1ff;
+	color: #111;
 	margin: 2px 3px;
 	border-radius: 16px;
 	&:not(.fupi_has_subnav){
 		&:focus, &:hover{
-			background-color: #fff;
+			background-color: #ffffff;// #bcddf1;
 			color: #222;
 		}
 	}
@@ -69,17 +79,19 @@
 		}	
 	}
 	&.fupi_current{
-		background: #eef8ff;
 		flex-wrap: wrap;
 		color: #111;
 		>.fupi_sidenav_title{
 			font-weight: 500;
 		}
+		&:not(:has(.fupi_sidenav_sub_item)){
+			background-color: #fff; //#bcddf1;
+		}
 	}
 }
 
 .fupi_sidenav_section_title{
-	color: #fff;
+	color: #000;
 	padding-left: 15px;
 	font-weight: 500 !important;
 	text-transform: uppercase;
@@ -120,14 +132,14 @@
 		cursor: pointer;
 		&:focus,
 		&:hover{
-			background-color: #bcddf1;
+			background-color: #ffffff;//#bcddf1;
 		}
 		&.active{
-			background-color: #bcddf1;
+			background-color: #fff; //#bcddf1;
 		}
-		+ .fupi_sidenav_sub_item{
-			margin-top: 2px;
-		}
+		// + .fupi_sidenav_sub_item{
+		// 	margin-top: 2px;
+		// }
 	}
 
 //
@@ -135,11 +147,20 @@
 //
 
 #fupi_sidenav_banner{
-	padding: 30px 20px 20px;
 	margin: 60px 3px 3px;
+}
+
+@media screen and (min-width: 1100px){
+	#fupi_sidenav_banner{
+		margin: 60px 15px 3px 0;
+	}
+}
+
+.fupi_getpro_banner{
+	padding: 30px 10px 20px;
 	border-radius: 20px;
 	position: relative;
-	background: #355577;
+	background: #2b2b2b;
 	h3{
 		font-size: 16px;
 		color: #fff;
@@ -148,13 +169,19 @@
 		padding: 0;
 		text-align: center;
 	}
+	p{
+		color: rgba(255, 255, 255, .9);
+		font-size: 15px;
+		line-height: 1.3;
+		text-align: center;
+	}
 }
 
 //
 // "BUY PRO" BANNER
 //
 
-#fupi_sidenav_banner{
+.fupi_getpro_banner{
 	.button-primary{
 		text-align: center;
 		width: 100%;
@@ -167,7 +194,7 @@
 		}
 	}
 }
-	#fupi_sidenav_banner_unlock_icon{
+	#fupi_getpro_banner_unlock_icon{
 		position: absolute;
 		top: -25px;
 		left: 50%;
@@ -177,9 +204,10 @@
 		height: 40px;
 		text-align: center;
 		line-height: 30px;
-		background-color: #6eabde;
+		background-color: #9e3e9f;
 		border-radius: 100%;
 		margin-left: -20px;
+		// transform: scaleX(-1);
 		.dashicons{
 			width: 30px;
 			height: 30px;

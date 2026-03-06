@@ -9,24 +9,6 @@
 		fupi_settings_tables.forEach( table => table.classList.add('fupi_table_grid') );
 	}
 
-	// Add an "Advanced integrations" headline
-
-	let fupi_first_module		= FP.findFirst('.fupi_table_grid tr'),
-		fupi_adv_headline_html = FP.findFirst('.fupi_adv_headline_html_template');
-
-	if ( fupi_first_module && fupi_adv_headline_html ){
-		fupi_first_module.insertAdjacentHTML( 'beforebegin', fupi_adv_headline_html.innerHTML );
-	}
-
-	// Add a "Basic integrations" headline
-
-	let fupi_basic_module		= FP.findFirst('tr.fupi_basic'),
-		fupi_basic_headline_html = FP.findFirst('.fupi_basic_headline_html_template');
-
-	if ( fupi_basic_module && fupi_basic_headline_html ){
-		fupi_basic_module.insertAdjacentHTML( 'beforebegin', fupi_basic_headline_html.innerHTML );
-	}
-
 	// Add a "Tag Managers" headline
 
 	let fupi_tagman_module		= FP.findFirst('tr.fupi_tagman'),

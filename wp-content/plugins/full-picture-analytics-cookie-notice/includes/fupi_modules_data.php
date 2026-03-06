@@ -1,6 +1,6 @@
 <?php $fupi_modules = [
     // order is important - modules will show up in this order in the side menu (except the 1st one which is hardcoded to always go 1st)!
-    [   
+    [
         'name' => 'Modules',
         'id' => 'tools',
         'is_avail' => true,
@@ -8,7 +8,7 @@
         'has_admin_page' => true,
         'is_addon' => false,
         'type' => 'home',
-        'icon' => 'ext_ico2',
+        'icon' => 'ext_ico',
         'always_enabled' => true,
     ],
     [ 
@@ -283,14 +283,14 @@
         'pp' => 'https://x.com/en/privacy',
     ],
     [ 
-        'name' => 'Custom Scripts',
+        'name' => 'Custom Integrations',
         'id' => 'cscr', 
         'is_avail' => true, 
         'is_premium' => false, 
         'has_admin_page' => true, 
         'is_addon' => false,
         'type' => 'integr',
-        'icon' => 'custom_scr_ico2',
+        'icon' => 'custom_scr_ico',
         'load_in_customizer' => true,
         'check_gdpr' => 'always',
     ],
@@ -308,7 +308,7 @@
         // 'dashicon' => 'dashicons-arrow-right-alt2',
     ],
     [ 
-        'name' => 'Consent Banager',
+        'name' => 'Consent Management',
         'id' => 'cook', 
         'is_avail' => true, 
         'is_premium' => false, 
@@ -316,7 +316,7 @@
         'is_addon' => false,
         'type' => 'priv', 
         'check_gdpr' => 'always',
-        'icon' => 'cookie_icon2',
+        'icon' => 'cookie_icon',
         'load_in_customizer' => true,
     ],
     [ 
@@ -327,7 +327,7 @@
         'has_admin_page' => true,
         'is_addon' => false,
         'type' => 'priv', 
-        'icon' => 'privex_ico2',
+        'icon' => 'privex_ico',
         'check_gdpr' => 'always',
     ],
     [ 
@@ -338,7 +338,7 @@
         'has_admin_page' => false,
         'is_addon' => false,
         'type' => 'priv', 
-        'icon' => 'fonts_ico2',
+        'icon' => 'fonts_ico',
         'check_gdpr' => 'always',
     ],
     [ 
@@ -359,16 +359,26 @@
         'is_premium' => false, 
         'has_admin_page' => true,
         'is_addon' => false,
-        'icon' => 'reports_ico2',
+        'icon' => 'reports_ico',
         'type' => 'ext',
     ],
     [ 
-        'name' => 'Custom triggers + Visitor Scoring',
+        'name' => 'Custom Triggers',
         'id' => 'atrig', 
         'is_avail' => fupi_fs()->can_use_premium_code(), 
         'is_premium' => true, 
         'has_admin_page' => true, 
-        'icon' => 'adv_triggers_ico2',
+        'icon' => 'adv_triggers_ico',
+        'is_addon' => false,
+        'type' => 'ext', 
+    ],
+    [ 
+        'name' => 'Reactions',
+        'id' => 'reactions', 
+        'is_avail' => fupi_fs()->can_use_premium_code(), 
+        'is_premium' => true, 
+        'has_admin_page' => true, 
+        'icon' => 'replace_ico',
         'is_addon' => false,
         'type' => 'ext', 
     ],

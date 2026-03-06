@@ -20,8 +20,8 @@
  * @subpackage Wt_Import_Export_For_Woo/admin
  * @author     Webtoffee <info@webtoffee.com>
  */
-if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
-	class Wt_Import_Export_For_Woo_Admin_Basic
+if (!class_exists('Wt_Import_Export_For_Woo_Product_Admin_Basic')) {
+	class Wt_Import_Export_For_Woo_Product_Admin_Basic
 	{
 
 		/**
@@ -96,7 +96,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 		 */
 		public function enqueue_styles()
 		{
-			if (Wt_Import_Export_For_Woo_Basic_Common_Helper::wt_is_screen_allowed()) {
+			if (Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_is_screen_allowed()) {
 				wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/wt-import-export-for-woo-admin.css', array(), $this->version, 'all');
 			}
 		}
@@ -108,7 +108,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 		 */
 		public function enqueue_scripts()
 		{
-			if (Wt_Import_Export_For_Woo_Basic_Common_Helper::wt_is_screen_allowed()) {
+			if (Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_is_screen_allowed()) {
 				/* enqueue scripts */
 				if (!function_exists('is_plugin_active')) {
 					include_once(ABSPATH . 'wp-admin/includes/plugin.php');
@@ -121,6 +121,17 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 					wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/wt-import-export-for-woo-admin.js', array('jquery'), $this->version, false);
 					wp_enqueue_script(WT_IEW_PLUGIN_ID_BASIC . '-tiptip', WT_P_IEW_PLUGIN_URL . 'admin/js/tiptip.js', array('jquery'), WT_P_IEW_VERSION, false);
 				}
+
+				// Enqueue design system extensions script
+				// This extends the design system library functionality for multi-plugin compatibility
+				// without modifying the core design system library
+				wp_enqueue_script(
+					$this->plugin_name . '_ds_extensions',
+					plugin_dir_url(__FILE__) . 'js/wt-ds-extensions.js',
+					array('jquery', 'wbte_pimpexp_ds_js'),
+					$this->version,
+					true
+				);
 
 				// Localize script with AJAX URL and nonce
 				wp_localize_script($this->plugin_name . '_wbftHeaderScripts', 'wt_piew_params', array(
@@ -240,6 +251,12 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 		 */
 		public function admin_menu()
 		{
+			// Only register menus once if multiple basic plugins are active
+			if (defined('WT_IEW_ADMIN_MENU_REGISTERED') || defined('WT_IEW_BASIC_STARTED') ) {
+				return;
+			}
+			define('WT_IEW_ADMIN_MENU_REGISTERED', true);
+			
 			$menus = array(
 				'general-settings' => array(
 					'menu',
@@ -313,7 +330,11 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 
 		public function admin_settings_page()
 		{
-			include(plugin_dir_path(__FILE__) . 'partials/wt-import-export-for-woo-admin-display.php');
+			// Only display settings page once if multiple basic plugins are active
+			if (!defined('WT_IEW_ADMIN_SETTINGS_PAGE_DISPLAYED')) {
+				define('WT_IEW_ADMIN_SETTINGS_PAGE_DISPLAYED', true);
+				include(plugin_dir_path(__FILE__) . 'partials/wt-import-export-for-woo-admin-display.php');
+			}
 		}
 
 
@@ -325,8 +346,11 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 		}
 		public function admin_scheduled_job_page()
 		{
-
-			include(plugin_dir_path(__FILE__) . 'partials/wt-import-export-for-woo-admin-schedule-job.php');
+			// Only display banner once if multiple basic plugins are active
+			if (!defined('WT_IEW_SCHEDULE_JOB_BANNER_DISPLAYED')) {
+				define('WT_IEW_SCHEDULE_JOB_BANNER_DISPLAYED', true);
+				include(plugin_dir_path(__FILE__) . 'partials/wt-import-export-for-woo-admin-schedule-job.php');
+			}
 		}
 
 
@@ -342,9 +366,9 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 			);
 
 			if (Wt_Iew_Sh::check_write_access(WT_IEW_PLUGIN_ID_BASIC)) {
-				$advanced_settings = Wt_Import_Export_For_Woo_Basic_Common_Helper::get_advanced_settings();
-				$advanced_fields = Wt_Import_Export_For_Woo_Basic_Common_Helper::get_advanced_settings_fields();
-				$validation_rule = Wt_Import_Export_For_Woo_Basic_Common_Helper::extract_validation_rules($advanced_fields);
+				$advanced_settings = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::get_advanced_settings();
+				$advanced_fields = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::get_advanced_settings_fields();
+				$validation_rule = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::extract_validation_rules($advanced_fields);
 				$new_advanced_settings = array();
 				foreach ($advanced_fields as $key => $value) {
 					$form_field_name = isset($value['field_name']) ? $value['field_name'] : '';
@@ -363,7 +387,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 					$new_advanced_settings[$checkbox_item] = isset($new_advanced_settings[$checkbox_item]) ? $new_advanced_settings[$checkbox_item] : 0;
 				}
 
-				Wt_Import_Export_For_Woo_Basic_Common_Helper::set_advanced_settings($new_advanced_settings);
+				Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::set_advanced_settings($new_advanced_settings);
 				$out['status'] = true;
 				$out['msg'] = __('Settings Updated', 'product-import-export-for-woo');
 				do_action('wt_iew_after_advanced_setting_update_basic', $new_advanced_settings);
@@ -390,7 +414,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Admin_Basic')) {
 				if (isset($_POST['template_id'])) { // @codingStandardsIgnoreLine.
 					global $wpdb;
 					$template_id = absint(wp_unslash($_POST['template_id'])); // @codingStandardsIgnoreLine.
-					$tb = $wpdb->prefix . Wt_Import_Export_For_Woo_Basic::$template_tb;
+					$tb = $wpdb->prefix . Wt_Import_Export_For_Woo_Product_Basic::$template_tb;
 					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 					$wpdb->query($wpdb->prepare("DELETE FROM {$tb} WHERE id=%d", $template_id)); // @codingStandardsIgnoreLine.
 					$out['status'] = true;

@@ -9,8 +9,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-if(!class_exists('Wt_Import_Export_For_Woo_Basic_Import_Ajax')){
-class Wt_Import_Export_For_Woo_Basic_Import_Ajax
+if(!class_exists('Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax')){
+class Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax
 {
 	public $step='';
 	public $steps=array();
@@ -60,7 +60,7 @@ class Wt_Import_Export_For_Woo_Basic_Import_Ajax
 	public function get_steps($out)
 	{
 		//sleep(3);
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification already done in the Wt_Import_Export_For_Woo_Basic_Import_Ajax:ajax_main() method
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification already done in the Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax:ajax_main() method
 		$steps=isset($_POST['steps']) ? (is_array($_POST['steps']) ? array_map('sanitize_text_field', wp_unslash($_POST['steps'])) : array(sanitize_text_field(wp_unslash($_POST['steps'])))) : array();
 		$steps=Wt_Iew_Sh::sanitize_item($steps, 'text_arr');
 		$page_html=array();
@@ -98,10 +98,10 @@ class Wt_Import_Export_For_Woo_Basic_Import_Ajax
 	*/
 	public function delete_import_file($out)
 	{
-		// phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- Nonce verification already done in the Wt_Import_Export_For_Woo_Basic_Import_Ajax:ajax_main() method
+		// phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- Nonce verification already done in the Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax:ajax_main() method
 		$file_url=(isset($_POST['file_url']) ? sanitize_url(wp_unslash($_POST['file_url'])) : '');
         $mapping_profile=(isset($_POST['mapping_profile']) ? sanitize_text_field(wp_unslash($_POST['mapping_profile'])) : '');
-		// phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- Nonce verification already done in the Wt_Import_Export_For_Woo_Basic_Import_Ajax:ajax_main() method	
+		// phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- Nonce verification already done in the Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax:ajax_main() method	
 		$out['file_url']=$file_url;
 		if($file_url!="") {
 			if(!$mapping_profile){
@@ -119,9 +119,16 @@ class Wt_Import_Export_For_Woo_Basic_Import_Ajax
 	*/
 	public function upload_import_file($out)
 	{
-		// phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- Nonce verification already done in the Wt_Import_Export_For_Woo_Basic_Import_Ajax:ajax_main() method
+		// phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- Nonce verification already done in the Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax:ajax_main() method
 		if(isset($_FILES['wt_iew_import_file']))
 		{
+			// Initialize status and msg if not already set
+			if (!isset($out['status'])) {
+				$out['status'] = 0;
+			}
+			if (!isset($out['msg'])) {
+				$out['msg'] = '';
+			}
 			$is_file_type_allowed=false;
 			$uploaded_file_name=isset($_FILES['wt_iew_import_file']['name']) ? sanitize_file_name(wp_unslash($_FILES['wt_iew_import_file']['name'])) : '';
 			$ext=isset($uploaded_file_name) ? pathinfo($uploaded_file_name, PATHINFO_EXTENSION) : '';
@@ -199,6 +206,9 @@ class Wt_Import_Export_For_Woo_Basic_Import_Ajax
                             $out['status'] = 0;
                              $out['msg'] = __('Unable to move uploaded file.', 'product-import-export-for-woo');
                         }
+                    } else {
+                        $out['status'] = 0;
+                        $out['msg'] = __('File upload failed. Please try again.', 'product-import-export-for-woo');
                     }
 
                     /**
@@ -219,8 +229,12 @@ class Wt_Import_Export_For_Woo_Basic_Import_Ajax
 				// translators: %s is the list of allowed file types.
 				$out['msg']=sprintf(__('Invalid file type. Only %s is allowed.', 'product-import-export-for-woo'), implode(", ", array_values($this->import_obj->allowed_import_file_type)));
 			}
+		} else {
+			// No file was uploaded
+			$out['status'] = 0;
+			$out['msg'] = __('No file was uploaded. Please select a file to upload.', 'product-import-export-for-woo');
 		}
-		// phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- Nonce verification already done in the Wt_Import_Export_For_Woo_Basic_Import_Ajax:ajax_main() method
+		// phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- Nonce verification already done in the Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax:ajax_main() method
 		return $out;
 	}
 
@@ -238,7 +252,7 @@ class Wt_Import_Export_For_Woo_Basic_Import_Ajax
 					return is_string($item) ? json_decode($item, true) : $item;
 				}, $form_data_raw) : 
 				json_decode($form_data_raw, true);	
-		$form_data = isset($_POST['form_data']) ? Wt_Import_Export_For_Woo_Basic_Common_Helper::process_formdata($unserialized_data) : array();
+		$form_data = isset($_POST['form_data']) ? Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::process_formdata($unserialized_data) : array();
 				
 		// Download file with validated data
 		$response = $this->import_obj->download_remote_file($form_data);
@@ -470,7 +484,7 @@ class Wt_Import_Export_For_Woo_Basic_Import_Ajax
 						return is_string($item) ? json_decode($item, true) : $item;
 					}, $form_data_raw) : 
 					json_decode($form_data_raw, true);		
-			$form_data = isset($_POST['form_data']) ? Wt_Import_Export_For_Woo_Basic_Common_Helper::process_formdata($unserialized_data) : array();
+			$form_data = isset($_POST['form_data']) ? Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::process_formdata($unserialized_data) : array();
 
 			//sanitize form data
 			$form_data=Wt_Iew_IE_Basic_Helper::sanitize_formdata($form_data, $this->import_obj);
@@ -581,7 +595,7 @@ class Wt_Import_Export_For_Woo_Basic_Import_Ajax
 				}		
 			}			
 
-			$tb = $wpdb->prefix.Wt_Import_Export_For_Woo_Basic::$template_tb;
+			$tb = $wpdb->prefix.Wt_Import_Export_For_Woo_Product_Basic::$template_tb;
 			
 			/* process form data */
 			// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Missing -- Sanitized by Wt_Iew_Sh::sanitize_item().
@@ -593,7 +607,7 @@ class Wt_Import_Export_For_Woo_Basic_Import_Ajax
 						return is_string($item) ? json_decode($item, true) : $item;
 					}, $form_data_raw) : 
 					json_decode($form_data_raw, true);
-			$form_data = isset($unserialized_data) ? Wt_Import_Export_For_Woo_Basic_Common_Helper::process_formdata($unserialized_data) : array();
+			$form_data = isset($unserialized_data) ? Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::process_formdata($unserialized_data) : array();
 
 			//sanitize form data
 			$form_data = Wt_Iew_IE_Basic_Helper::sanitize_formdata($form_data, $this->import_obj);
@@ -944,8 +958,8 @@ class Wt_Import_Export_For_Woo_Basic_Import_Ajax
 	{
 		$template_data = $this->get_mapping_template_by_id($id);
 		if($template_data) {
-			$decoded_data = Wt_Import_Export_For_Woo_Basic_Common_Helper::decode_template_data($template_data['data']);
-			$decoded_form_data = Wt_Import_Export_For_Woo_Basic_Common_Helper::process_formdata($decoded_data);
+			$decoded_data = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::decode_template_data($template_data['data']);
+			$decoded_form_data = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::process_formdata($decoded_data);
 			$this->selected_template_form_data = !is_array($decoded_form_data) ? array() : $decoded_form_data;
 		}
 	}
@@ -957,7 +971,7 @@ class Wt_Import_Export_For_Woo_Basic_Import_Ajax
 	protected function get_mapping_template_by_name($name)
 	{
 		global $wpdb;
-		$tb=$wpdb->prefix.Wt_Import_Export_For_Woo_Basic::$template_tb;
+		$tb=$wpdb->prefix.Wt_Import_Export_For_Woo_Product_Basic::$template_tb;
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return $wpdb->get_row($wpdb->prepare("SELECT * FROM $tb WHERE template_type=%s AND item_type=%s AND name=%s",array('import', $this->to_import, $name)), ARRAY_A); // @codingStandardsIgnoreLine
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -970,7 +984,7 @@ class Wt_Import_Export_For_Woo_Basic_Import_Ajax
 	protected function get_mapping_template_by_id($id)
 	{
 		global $wpdb;
-		$tb=$wpdb->prefix.Wt_Import_Export_For_Woo_Basic::$template_tb;
+		$tb=$wpdb->prefix.Wt_Import_Export_For_Woo_Product_Basic::$template_tb;
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return $wpdb->get_row($wpdb->prepare("SELECT * FROM $tb WHERE template_type=%s AND item_type=%s AND id=%d",array('import', $this->to_import, $id)), ARRAY_A); // @codingStandardsIgnoreLine
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -986,7 +1000,7 @@ class Wt_Import_Export_For_Woo_Basic_Import_Ajax
 			return;
 		}		
 		global $wpdb;
-		$tb=$wpdb->prefix.Wt_Import_Export_For_Woo_Basic::$template_tb;
+		$tb=$wpdb->prefix.Wt_Import_Export_For_Woo_Product_Basic::$template_tb;
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$val=$wpdb->get_results($wpdb->prepare("SELECT * FROM $tb WHERE template_type=%s AND item_type=%s ORDER BY id DESC", array('import', $this->to_import)), ARRAY_A); // @codingStandardsIgnoreLine
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching

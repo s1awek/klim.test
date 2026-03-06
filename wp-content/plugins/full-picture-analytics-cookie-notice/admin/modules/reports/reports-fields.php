@@ -29,6 +29,7 @@ $sections = array(
 						'type'				=> 'textarea',
 						'label'				=> esc_html__( 'Dashboard\'s <iframe> code (embed code)', 'full-picture-analytics-cookie-notice' ),
 						'class'				=> 'fupi_col_100',
+						'el_class'			=> 'fupi_textarea_with_code',
 						'field_id'			=> 'iframe',
 						'format'			=> 'htmlentities',
 						'required'			=> true,

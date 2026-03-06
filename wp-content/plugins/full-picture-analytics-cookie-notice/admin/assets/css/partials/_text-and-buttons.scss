@@ -1,16 +1,16 @@
 // TYPOGRAPHY
 
-@font-face {
-	font-family: 'Merriweather2';
-	src: url('../fonts/Merriweather-Regular.otf') format('opentype');
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
+// @font-face {
+// 	font-family: 'Merriweather2';
+// 	src: url('../fonts/Merriweather-Regular.otf') format('opentype');
+// 	font-weight: 400;
+// 	font-style: normal;
+// 	font-display: swap;
+// }
 
 #fupi_content{
-	h2{
-		font-family: "Merriweather2", serif;
+	h2, h3{
+		font-weight: 600;
 	}
 	h3{
 		line-height: 1.2;
@@ -56,17 +56,17 @@
 		margin: 0;
 		padding: 1em 20px 0;
 		font-size: 24px;
-		font-weight: 400;
 	}
 }
 
 @media screen and (min-width: 1100px){
 	#fupi_settings_form{
 		h2{
-			font-size: 32px;
+			font-size: 30px;
 			letter-spacing: -.2px;
+			color: #344a5b;
 			& + table{
-				margin-top: 30px;
+				margin-top: 20px;
 			}
 		}
 	}

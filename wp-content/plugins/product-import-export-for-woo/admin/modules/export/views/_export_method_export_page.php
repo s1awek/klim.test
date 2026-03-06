@@ -4,9 +4,11 @@ if (!defined('ABSPATH')) {
 }
 ?>
 <div class="wt_iew_export_main">
-    
-    <div id="product-type-notice" style="display:block;">
-        <?php
+    <?php
+    if ( ! empty( $this->to_export ) && 'product' === $this->to_export ) {
+    ?>
+        <div id="product-type-notice" style="display:block;">
+            <?php
             // Define unsupported types to check
             $unsupported_types = array(
                 'variable'     => 'Variable',
@@ -61,7 +63,10 @@ if (!defined('ABSPATH')) {
                 <?php
             }
             ?>
-    </div>
+        </div>
+    <?php 
+    }
+    ?>
     
 	<p><?php echo esc_html($step_info['description']); ?></p>
 	

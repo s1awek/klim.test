@@ -39,17 +39,7 @@ $sections = array(
 				'el_data_target'	=> 'fupi_load_opts',
 				'option_arr_id'		=> $option_arr_id,
 				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . sprintf( esc_html__( 'This will load the tracking script for administrators, bots, excluded users, people browsing from excluded locations and people who didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/?utm_source=fp_admin&utm_medium=fp_link">', '</a>' ) . '</p>',
-			),
-			array(
-				'type'	 			=> 'toggle',
-				'label' 			=> esc_html__( 'Track without waiting for consent', 'full-picture-analytics-cookie-notice' ),
-				'class'				=> 'fupi_load_opts fupi_adv',
-				'must_have'			=> 'cook',
-				'field_id' 			=> 'disreg_cookies',
-				'option_arr_id'		=> $option_arr_id,
-				'popup3'			=> '<p style="color: red">' . esc_html__( 'Use only for installation verification or testing. It breaks GDPR and similar laws.', 'full-picture-analytics-cookie-notice' ) . '</p>
-				<p>' . esc_html__( 'Visitors will still be able to turn off tracking by declining tracking / cookies.', 'full-picture-analytics-cookie-notice' ) . '</p>'
+				<p>' . sprintf( esc_html__( 'This will load the tracking script for administrators, bots, excluded users, people browsing from excluded locations and people who didn\'t agree to tracking. %1$sLearn more%2$s.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://wpfullpicture.com/support/documentation/validation-mode/">', '</a>' ) . '</p>',
 			),
 			array(
 				'type'	 			=> 'r3',
@@ -59,7 +49,7 @@ $sections = array(
 				'class'				=> 'fupi_load_opts fupi_adv',
 				'must_have'			=> 'pro geo',
 				'is repeater'		=> false,
-				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by comas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
+				'popup'				=> '<p>' . sprintf( esc_html__('Enter a list of 2-character %1$scountry codes%2$s separated by commas.', 'full-picture-analytics-cookie-notice' ), '<a target="_blank" href="https://www.iban.com/country-codes">', '</a>' ) . '</p><p>'. esc_html__('Location is checked using the method chosen in the settings of the Geolocation module.', 'full-picture-analytics-cookie-notice' ) . '</p>',
 				'fields'			=> array(
 					array(
 						'type'				=> 'select',
@@ -135,7 +125,7 @@ $sections = array(
 				'placeholder'		=> 'pdf, doc, docx, xls, xlsx, txt',
 				'option_arr_id'		=> $option_arr_id,
 				'label_for' 		=> $option_arr_id . '[tag_file_downl]',
-				'under field'		=> esc_html__( 'Enter coma separated list of file formats you want to track', 'full-picture-analytics-cookie-notice'),
+				'under field'		=> esc_html__( 'Enter comma separated list of file formats you want to track', 'full-picture-analytics-cookie-notice'),
 			),
 			array(
 				'type'	 			=> 'toggle',

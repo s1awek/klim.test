@@ -11,7 +11,7 @@ switch( $section_id ){
 	// DO NOT TRACK
 
 	case 'fupi_main_no_track':
-		$ret_text = '<p>' . esc_html__( 'Here you can choose what users you do not want to track. This will work on all the tools installed with WP FP modules and those controlled by the Consent Banner. Tools installed with GTM need extra work (more info in that module)', 'full-picture-analytics-cookie-notice') . '</p>';
+		$ret_text = '<p>' . esc_html__( 'Here you can choose what users you do not want to track. This will work on all the tools installed with WP FP modules and those controlled by the Consent Management module. Tools installed with GTM need extra work (more info in that module)', 'full-picture-analytics-cookie-notice') . '</p>';
 	break;
 
 	// BASIC SETTINGS
@@ -29,7 +29,7 @@ switch( $section_id ){
 	// META TAGS
 
     case 'fupi_main_meta':
-        $ret_text = '<p>' . esc_html__('Verify website ownership in various platforms.', 'full-picture-analytics-cookie-notice' ) . '</p>';
+        $ret_text = '<p>' . esc_html__('Here you can paste Meta tag that you got from Google, Meta and other platforms. Meta tags are usually used to verify website ownership.', 'full-picture-analytics-cookie-notice' ) . '</p>';
     break;
 
 	// PERFORMANCE
@@ -126,7 +126,7 @@ switch( $section_id ){
 	// GEO
 
 	case 'fupi_main_geo':
-		$ret_text = '<p>' . esc_html__( 'Use geolocation to load tracking tools in specific regions and adjust how the Consent Banner works across different locations.', 'full-picture-analytics-cookie-notice') . '</p>
+		$ret_text = '<p>' . esc_html__( 'Enable geolocation to load tracking tools in specific regions and adjust how the consent banner works in different countries.', 'full-picture-analytics-cookie-notice') . '</p>
 		<ol> 
 			<li><a href="https://wpfullpicture.com/support/documentation/geolocation/">' . esc_html__('How to choose the right geolocation service', 'full-picture-analytics-cookie-notice') . '</a></li>
 			<li><a href="https://wpfullpicture.com/support/documentation/geolocation-information-for-developers/">' . esc_html__('For developers', 'full-picture-analytics-cookie-notice') . '</a></li>
@@ -142,8 +142,8 @@ switch( $section_id ){
 			'classes' => 'fupi_descr_standard_width',
 			'content' => '<div class="fupi_cols" style="text-align: left; margin-top: 20px;">
 				<div class="fupi_col_50">
-					<p>' . sprintf( esc_html__('%1$s[fp_info]%2$s shortcode displays tools which use visitor\'s personal information for collecting statistics, marketing or personalisation. The list automatically updates when you enable/disable tools on this site that do it.', 'full-picture-analytics-cookie-notice' ), '<code>', '</code>' ) . '</p>
-					<p>' . esc_html__('The list only contains tools that you installed with or control with WP Full Picture. The only exception are tools installed with the GTM module. Use the form below to provide information about them and other tools that may be missing from the list.', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<p>' . sprintf( esc_html__('Shortcode %1$s[fp_info]%2$s is intended for use in a privacy policy. It lists all tools that are installed or %3$scontrolled%4$s with WP Full Picture, and that track visitor\'s personal information for statistics, marketing or personalisation.', 'full-picture-analytics-cookie-notice' ), '<code>', '</code>', '<a href="https://wpfullpicture.com/support/documentation/how-to-control-tracking-tools-installed-outside-wp-fp/">', '</a>' ) . '</p>
+					<p>' . esc_html__('The list updates automatically, as you enable or disable new tools, but it does not include tools added with Google Tag Manager. Use the form below to add to this list tools installed with GTM.', 'full-picture-analytics-cookie-notice' ) . '</p>
 				</div>
 				<div class="fupi_col_50" style="border: 2px solid #ccc; padding: 0 20px 20px; box-sizing: border-box; margin-top: 1em;">
 					<p><strong style="text-transform: uppercase; font-size: 13px; letter-spacing: 1px;">' . esc_html__('Preview', 'full-picture-analytics-cookie-notice' ) . '</strong></p>

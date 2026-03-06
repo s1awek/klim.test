@@ -2,38 +2,50 @@
 
 $option_arr_id = 'fupi_cscr';
 $footer_scr_fields = array();
-$scr_fields = array(array(
-    'label'       => esc_html__( 'Name*', 'full-picture-analytics-cookie-notice' ),
-    'type'        => 'text',
-    'el_class'    => 'fupi_internal_title',
-    'field_id'    => 'title',
-    'class'       => 'fupi_col_100',
-    'required'    => true,
-    'under field' => esc_html__( 'This is displayed by the [fp_info] shortcode, in the "GDPR setup info" page and in proofs of visitors\' consents.', 'full-picture-analytics-cookie-notice' ),
-), array(
-    'type'     => 'hidden',
-    'field_id' => 'id',
-    'required' => true,
-    'class'    => 'fupi_col_20',
-), array(
-    'label'       => esc_html__( '(Required) Script only - no HTML', 'full-picture-analytics-cookie-notice' ),
-    'type'        => 'textarea',
-    'field_id'    => 'scr',
-    'class'       => 'fupi_col_100',
-    'el_class'    => 'fupi_textarea_with_code',
-    'required'    => true,
-    'format'      => 'htmlentities',
-    'under field' => sprintf(
-        esc_html__( '%1$s%5$s tags will be automatically removed (or replaced) from the code above. %6$sLearn more%7$s.%2$s', 'full-picture-analytics-cookie-notice' ),
-        '<p>',
-        '</p>',
-        '<strong>',
-        '</strong>',
-        '&lt;script>',
-        '<a href="https://wpfullpicture.com/support/documentation/how-to-add-custom-scripts-in-a-privacy-respecting-way/?utm_source=fp_admin&utm_medium=fp_link" target="_blank">',
-        '</a>'
+$scr_fields = array(
+    array(
+        'label'       => esc_html__( 'Name*', 'full-picture-analytics-cookie-notice' ),
+        'type'        => 'text',
+        'el_class'    => 'fupi_internal_title',
+        'field_id'    => 'title',
+        'class'       => 'fupi_col_100',
+        'required'    => true,
+        'under field' => esc_html__( 'This is displayed by the [fp_info] shortcode, on the "GDPR setup helper" page and in proofs of visitors\' consents.', 'full-picture-analytics-cookie-notice' ),
     ),
-));
+    // array(
+    // 	'type'				=> 'button',
+    // 	'el_class'			=> 'fupi_fields_toggle_btn',
+    // 	'screen_reader_text'=> esc_html__('Show fields', 'full-picture-analytics-cookie-notice' ),
+    // 	'icon'				=> 'dashicons dashicons-arrow-down-alt2',
+    // 	'field_id'			=> 'toggle_btn',
+    // 	'class'				=> 'fupi_col_20',
+    // ),
+    array(
+        'type'     => 'hidden',
+        'field_id' => 'id',
+        'required' => true,
+        'class'    => 'fupi_col_20',
+    ),
+    array(
+        'label'       => esc_html__( '(Required) Script only - no HTML', 'full-picture-analytics-cookie-notice' ),
+        'type'        => 'textarea',
+        'field_id'    => 'scr',
+        'class'       => 'fupi_col_100',
+        'el_class'    => 'fupi_textarea_with_code',
+        'required'    => true,
+        'format'      => 'htmlentities',
+        'under field' => sprintf(
+            esc_html__( '%1$s%5$s tags will be automatically removed (or replaced) from the code above. %6$sLearn more%7$s.%2$s', 'full-picture-analytics-cookie-notice' ),
+            '<p>',
+            '</p>',
+            '<strong>',
+            '</strong>',
+            '&lt;script>',
+            '<a href="https://wpfullpicture.com/support/documentation/how-to-add-custom-scripts-in-a-privacy-respecting-way/" target="_blank">',
+            '</a>'
+        ),
+    ),
+);
 // ADD HTML FIELD ONLY TO FOOTER
 $html_field = array(array(
     'label'       => esc_html__( '(Optional) HTML', 'full-picture-analytics-cookie-notice' ),
@@ -42,7 +54,7 @@ $html_field = array(array(
     'el_class'    => 'fupi_textarea_with_html',
     'class'       => 'fupi_col_100',
     'format'      => 'htmlentities',
-    'under field' => esc_html__( 'HTML added in this field will be loaded on the page before the script. Attention! Make sure you enter HTML without errors. Buggy HTML may break the page.', 'full-picture-analytics-cookie-notice' ),
+    'under field' => esc_html__( 'HTML is added to the page before the script.', 'full-picture-analytics-cookie-notice' ),
 ));
 $footer_scr_fields = array_merge( $scr_fields, $html_field );
 // ADD FPINFO FIELDS TO TOP AND FOOTER FIELDS
@@ -94,7 +106,7 @@ if ( isset( $this->tools['cook'] ) ) {
     $footer_scr_fields = array_merge( $footer_scr_fields, $cook_scr_fields );
 } else {
     $cook_scr_fields = array(array(
-        'label'             => esc_html__( 'Enable the Consent Banner module to load this script according to privacy regulations', 'full-picture-analytics-cookie-notice' ),
+        'label'             => esc_html__( 'Enable the Consent Management module to load this script according to privacy regulations', 'full-picture-analytics-cookie-notice' ),
         'type'              => 'label',
         'field_id'          => 'label_cook_text',
         'class'             => 'fupi_col_100',
@@ -153,7 +165,7 @@ $load_fields = array(array(
     'label'    => esc_html__( 'Disable script', 'full-picture-analytics-cookie-notice' ),
     'type'     => 'toggle',
     'field_id' => 'disable',
-    'class'    => 'fupi_col_20 fupi_inline_label',
+    'class'    => 'fupi_col_20 fupi_inline_label fupi_red_switch',
 ));
 $scr_fields = array_merge( $scr_fields, $load_fields );
 $footer_scr_fields = array_merge( $footer_scr_fields, $load_fields );

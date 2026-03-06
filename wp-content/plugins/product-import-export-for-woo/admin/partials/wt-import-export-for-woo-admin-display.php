@@ -22,7 +22,7 @@ $wf_img_path=WT_P_IEW_PLUGIN_URL.'images/';
         {
             $tab_head_arr['wt-debug']='Debug';
         }
-        Wt_Import_Export_For_Woo_Basic::generate_settings_tabhead($tab_head_arr);
+        Wt_Import_Export_For_Woo_Product_Basic::generate_settings_tabhead($tab_head_arr);
         ?>
     </div>
     <div class="wt-iew-tab-container">

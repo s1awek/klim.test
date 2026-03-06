@@ -8,7 +8,7 @@ $this->data['blockscr'] = [
     'setup' => [
         [ 
             'warning',
-            esc_html__('Go to the Consent Banner module > Control other tracking tool. There, you will be able to set up blocking tools until visitors agree to tracking. .', 'full-picture-analytics-cookie-notice'),
+            esc_html__('Go to the Consent Management module > Control tracking tools. There, you will be able to set up blocking tools until visitors agree to tracking.', 'full-picture-analytics-cookie-notice'),
         ],
     ],
     'pp comments' => [ 
@@ -44,12 +44,12 @@ if ( ! empty( $this->cook['control_other_tools'] ) && ! empty( $this->cook['scrb
         if ( $force_loaded  ) {
             $this->data['blockscr']['setup'][] = [
                 'alert', 
-                sprintf( esc_html__('Tracking tool with %1$s="%2$s" and title/ID "%3$s" requires tracking consents but is set to load without waiting for tracking consent.', 'full-picture-analytics-cookie-notice'), $rules['block_by'],  $rules['url_part'], $title )
+                sprintf( esc_html__('Tracking tool "%1$s" requires tracking consents but is set to load without waiting for tracking consent.', 'full-picture-analytics-cookie-notice'), $title )
             ];
         } else {
             $this->data['blockscr']['setup'][] = [
                 'warning', 
-                sprintf( esc_html__('Tracking tool with %1$s="%2$s" and title/ID "%3$s" is set to load without waiting for tracking consent. Are you sure it does not track your visitors? If not, set it to load after consent in the Consent Banner > Control other tracking tools.', 'full-picture-analytics-cookie-notice'), $rules['block_by'],  $rules['url_part'], $title )
+                sprintf( esc_html__('Tracking tool "%1$s" is set to load without waiting for tracking consent. Are you sure it does not track your visitors? If not, set it to load after consent in the Consent Management > Control tracking tools.', 'full-picture-analytics-cookie-notice'), $title )
             ];
         }
 

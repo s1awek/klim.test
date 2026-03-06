@@ -35,6 +35,14 @@ abstract class ADBC_Abstract_Cleanup_Handler implements ADBC_Cleanup_Type_Handle
 
 	/**
 	 * These methods must be implemented by subclasses to provide the necessary
+	 * information about the table suffix used by this handler.
+	 * 
+	 * @return string
+	 */
+	abstract protected function table_suffix();
+
+	/**
+	 * These methods must be implemented by subclasses to provide the necessary
 	 * information about the primary key of the table used by this handler.
 	 * 
 	 * @return string
@@ -308,14 +316,22 @@ abstract class ADBC_Abstract_Cleanup_Handler implements ADBC_Cleanup_Type_Handle
 	 * 
 	 * @return array An array containing the SQL branch for the specified site.
 	 */
-	protected function build_branches_for_site( $site_id, $args, $maybe_order_by, $sub_limit ) {
+	protected function build_branches_for_site( $site_id, $args, $maybe_order_by, $sub_limit, $needs_collation_fix = false ) {
 
 		global $wpdb;
 
 		// Build all select columns
 		$columns[] = "main.{$this->pk()}";
-		$columns[] = "main.{$this->name_column()}";
-		$columns[] = "{$this->truncated_value()} AS {$this->value_column()}";
+
+		if ( $needs_collation_fix ) {
+			$collation = ! empty( $wpdb->collate ) ? $wpdb->collate : 'utf8mb4_unicode_ci';
+			$columns[] = "CONVERT(main.{$this->name_column()} USING utf8mb4) COLLATE {$collation} AS {$this->name_column()}";
+			$columns[] = "CONVERT({$this->truncated_value()} USING utf8mb4) COLLATE {$collation} AS {$this->value_column()}";
+		} else {
+			$columns[] = "main.{$this->name_column()}";
+			$columns[] = "{$this->truncated_value()} AS {$this->value_column()}";
+		}
+
 		$columns[] = "{$this->size_expression()} AS size";
 		$columns[] = "{$site_id} AS site_id";
 		$columns = array_merge( $columns, $this->extra_select() ); // extra select columns
@@ -587,6 +603,8 @@ abstract class ADBC_Abstract_Cleanup_Handler implements ADBC_Cleanup_Type_Handle
 		$branch_batch_size = $offset + $per_page;
 		$branches = [];
 
+		$needs_collation_fix = ! ADBC_Database::is_collaction_unified( $this->table_suffix(), false, $site_arg );
+
 		foreach ( $sites as $site ) {
 
 			ADBC_Sites::instance()->switch_to_blog_id( $site['id'] );
@@ -603,7 +621,8 @@ abstract class ADBC_Abstract_Cleanup_Handler implements ADBC_Cleanup_Type_Handle
 					$site['id'],
 					$args, // pass whole arg set for WHERE glue
 					$maybe_order_by, // pass sorting column and order or null
-					$branch_batch_size  // pass limit for this branch
+					$branch_batch_size,  // pass limit for this branch
+					$needs_collation_fix
 				)
 			);
 

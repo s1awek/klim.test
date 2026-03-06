@@ -1,9 +1,8 @@
-commit 076f2849886cfc81f3f6b79b581ff85365157a1a
+commit c287a3a905614e06a5473ae1f31000e758747b1b
 Author: David Anderson <DavidAnderson684@users.noreply.github.com>
-Date:   Wed Nov 12 15:00:21 2025 +0000
+Date:   Mon Jan 19 21:14:18 2026 +0000
 
-    update changelog
+    tweak
 
-changes/2044-restore-connect-to-your-account-link-to-open-the-premium-extensions-tab.txt
-src/readme.txt
-branch: 2055-add-product-registration-link-when-product-key-wp_option-present
+gulpfile.js
+branch: 2080-deprecated-http_response_header-error

@@ -4,7 +4,7 @@ if (!defined('WPINC')) {
 }
 
 global $wpdb;
-$tb = $wpdb->prefix . Wt_Import_Export_For_Woo_Basic::$template_tb;
+$tb = $wpdb->prefix . Wt_Import_Export_For_Woo_Product_Basic::$template_tb;
 // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $val = $wpdb->get_results("SELECT * FROM $tb ORDER BY id DESC", ARRAY_A);
 // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching

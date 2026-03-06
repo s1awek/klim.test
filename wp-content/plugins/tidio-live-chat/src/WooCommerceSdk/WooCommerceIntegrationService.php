@@ -63,7 +63,7 @@ class WooCommerceIntegrationService
             get_home_url(),
             http_build_query([
                 'app_name' => TidioLiveChat::TIDIO_PLUGIN_NAME,
-                'scope' => 'read',
+                'scope' => 'read_write',
                 'user_id' => $this->integrationState->getProjectPublicKey(),
                 'return_url' => AdminRouting::getEndpointForIntegrateWooCommerceAction(),
                 'callback_url' => $callbackUrl

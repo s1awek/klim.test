@@ -1,4 +1,4 @@
-;(function(window){
+function fupi_pin(){
 
 	if ( allow_loading_pin() ) { 
 		load_pin();
@@ -42,9 +42,9 @@
 			});
 		}
 
-		fp.loaded.push( 'pin' );
-		if ( fp.main.debug ) console.log('[FP] Pinterest loaded');
-		FP.runFn( 'FP.fns.load_pin_footer' );
+		FP.loaded('pin','pin','[FP] Pinterest loaded');
 	}
 
-})(window);
+};
+
+FP.load('pin', 'fupi_pin', ['head_helpers'])

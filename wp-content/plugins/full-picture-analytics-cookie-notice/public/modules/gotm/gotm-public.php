@@ -31,18 +31,10 @@ class Fupi_GOTM_public {
 
     public function enqueue_scripts(){
 
-        $head_args = [ 'in_footer' => false ];
-        $footer_args = [ 'in_footer' => true ];
-
-        if ( ! empty( $this->main ) && isset( $this->main['async_scripts'] ) ) {
-            $head_args['strategy'] = 'defer';
-            $footer_args['strategy'] = 'defer';
-        }
-
         $reqs = ! empty( $this->tools['woo'] ) && function_exists('WC') ? array('fupi-helpers-js', 'fupi-helpers-footer-js', 'fupi-woo-js', 'fupi-gotm-head-js') : array('fupi-helpers-js', 'fupi-helpers-footer-js', 'fupi-gotm-head-js');
 
-        /* ^ */ wp_enqueue_script( 'fupi-gotm-head-js', FUPI_URL . 'public/modules/gotm/fupi-gotm.js', array( 'fupi-helpers-js' ), FUPI_VERSION, $head_args );
-        /* _ */ wp_enqueue_script( 'fupi-gotm-footer-js', FUPI_URL . 'public/modules/gotm/fupi-gotm-footer.js', $reqs, FUPI_VERSION, $footer_args );
+        /* ^ */ wp_enqueue_script( 'fupi-gotm-head-js', FUPI_URL . 'public/modules/gotm/fupi-gotm.js', array( 'fupi-helpers-js' ), FUPI_VERSION, [ 'in_footer' => false, 'strategy' => 'async' ] );
+        /* _ */ wp_enqueue_script( 'fupi-gotm-footer-js', FUPI_URL . 'public/modules/gotm/fupi-gotm-footer.js', $reqs, FUPI_VERSION, [ 'in_footer' => true, 'strategy' => 'async' ] );
     }
 
     public function add_gtm_noscript_fallback(){

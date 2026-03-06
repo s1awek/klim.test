@@ -169,7 +169,7 @@ if ( ! empty( $this->tools['proofrec'] ) && ! empty ( $this->proofrec['storage_l
     echo '<div id="fupi_settings_form">
         <h2>' . esc_html__('Latest consents', 'full-picture-analytics-cookie-notice' ) . '</h2>
         <div class="fupi_section_descr fupi_el">
-            <p>' . esc_html__('Please, enable the opion to store consents in the email account.', 'full-picture-analytics-cookie-notice' ) . '</p>
+            <p>' . esc_html__('Please, enable the option to store consents in the email account.', 'full-picture-analytics-cookie-notice' ) . '</p>
         </div>
     </div>';
 }

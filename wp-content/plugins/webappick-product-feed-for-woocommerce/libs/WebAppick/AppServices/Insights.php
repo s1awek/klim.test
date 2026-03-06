@@ -557,6 +557,10 @@ class Insights {
 	 */
 	public function handle_optIn_optOut() {
 		if ( isset( $_REQUEST['_wpnonce'] ) && ( isset( $_GET[ $this->client->getSlug() . '_tracker_optIn' ] ) || isset( $_GET[ $this->client->getSlug() . '_tracker_optOut' ] ) ) ) {
+			// Verify user has permission to manage options
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return;
+			}
 			check_admin_referer( $this->client->getSlug() . '_insight_action' );
 			if ( isset( $_GET[ $this->client->getSlug() . '_tracker_optIn' ] ) && 'true' == $_GET[ $this->client->getSlug() . '_tracker_optIn' ] ) {
 				$this->optIn();
@@ -858,6 +862,13 @@ class Insights {
 	 * @return void
 	 */
 	public function uninstall_reason_submission() {
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            woo_feed_log_debug_message( 'User doesnt have enough permission.' );
+            wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ),403 );
+            die();
+        }
+
 		check_ajax_referer( $this->client->getSlug() . '_insight_action' );
 		if ( ! isset( $_POST['reason_id'] ) ) {
 			wp_send_json_error( esc_html__( 'Invalid Request', 'woo-feed' ) );
@@ -905,6 +916,13 @@ class Insights {
 	 * @return void
 	 */
 	public function support_ticket_submission() {
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            woo_feed_log_debug_message( 'User doesnt have enough permission.' );
+            wp_send_json_error( esc_html__( 'Unauthorized Action.', 'woo-feed' ),403 );
+            die();
+        }
+
 		check_ajax_referer( $this->client->getSlug() . '_insight_action' );
 		if ( empty( $this->ticketTemplate ) || empty( $this->ticketRecipient ) || empty( $this->supportURL ) ) {
 			wp_send_json_error(

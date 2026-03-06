@@ -3,6 +3,7 @@
 namespace SweetCode\Pixel_Manager\Admin\Opportunities\Free;
 
 use SweetCode\Pixel_Manager\Admin\Documentation;
+use SweetCode\Pixel_Manager\Admin\Environment;
 use SweetCode\Pixel_Manager\Admin\Opportunities\Opportunity;
 use SweetCode\Pixel_Manager\Options;
 
@@ -17,18 +18,31 @@ class Google_Gtag_Gateway_For_Advertisers extends Opportunity {
 
 	public static function available() {
 
-		// Temporarily disabled - we don't want to recommend this in the current release
-		return false;
-
 		// Google tag gateway for advertisers must be disabled
 		if (Options::get_google_tag_gateway_measurement_path()) {
 			return false;
 		}
 
-		// Since 1.53.0, the built-in proxy makes the Google Tag Gateway available to everyone
-		// No Cloudflare or other external infrastructure required
+		// Only show if Cloudflare is available (plugin active or server behind Cloudflare)
+		if (!self::is_cloudflare_available()) {
+			return false;
+		}
 
 		return true;
+	}
+
+	/**
+	 * Check if Cloudflare is available for use.
+	 *
+	 * The Google Tag Gateway works best with Cloudflare because it can handle
+	 * all requests at the CDN level, reducing server load.
+	 *
+	 * @return bool True if Cloudflare is available, false otherwise
+	 *
+	 * @since 1.48.0
+	 */
+	private static function is_cloudflare_available() {
+		return Environment::is_cloudflare_active() || Environment::is_server_behind_cloudflare();
 	}
 
 	public static function card_data() {

@@ -64,7 +64,7 @@ if ( !empty( $recipe['must_have'] ) ) {
                     $pp_is_ok = get_post_status( $pp_id ) == 'publish';
                 }
                 if ( !$pp_is_ok ) {
-                    $must_have_parts[] = esc_html__( 'Save Privacy Policy page ID in the Consent Banner settings', 'full-picture-analytics-cookie-notice' );
+                    $must_have_parts[] = esc_html__( 'Save Privacy Policy page ID in the settings of the Consent Management module', 'full-picture-analytics-cookie-notice' );
                 }
                 // check for missing admin capabilities
             } else {
@@ -222,7 +222,7 @@ switch ( $recipe['type'] ) {
         $multiple_attr = ( $recipe['type'] == 'email' ? 'multiple' : '' );
         if ( $recipe['type'] == 'number' ) {
             printf( '<div class="fupi_number_field_wrap">
-			<button type="button" class="fupi_number_decrease"><span class="dashicons dashicons-minus"></span></button>' );
+			<button type="button" class="fupi_number_decrease fupi_number_btn"><span class="dashicons dashicons-minus"></span></button>' );
         }
         printf(
             '<input type="' . $recipe['type'] . '" name="%1$s" id="%1$s" placeholder="%2$s" value="%3$s" class="%4$s" data-target="%5$s" %6$s %7$s %8$s/>',
@@ -236,7 +236,7 @@ switch ( $recipe['type'] ) {
             $multiple_attr
         );
         if ( $recipe['type'] == 'number' ) {
-            printf( '<button type="button" class="fupi_number_increase"><span class="dashicons dashicons-plus-alt2"></span></button></div>' );
+            printf( '<button type="button" class="fupi_number_increase fupi_number_btn"><span class="dashicons dashicons-plus-alt2"></span></button></div>' );
         }
         break;
     // =======
@@ -456,25 +456,28 @@ switch ( $recipe['type'] ) {
     // =======
     case 'button':
         $button_text = ( !empty( $recipe['button_text'] ) ? esc_attr( $recipe['button_text'] ) : '' );
+        $screen_reader_text = ( !empty( $recipe['screen_reader_text'] ) ? '<span class="screen-reader-text">' . esc_attr( $recipe['screen_reader_text'] ) . '</span>' : '' );
         $icon = ( !empty( $recipe['icon'] ) ? '<span class="' . esc_attr( $recipe['icon'] ) . '"></span> ' : '' );
         $href = ( !empty( $recipe['href'] ) ? esc_attr( $recipe['href'] ) : '' );
         $target = ( !empty( $recipe['target'] ) ? 'target="' . esc_attr( $recipe['target'] ) . '"' : '' );
         $popup_target = ( !empty( $recipe['popup_target'] ) ? 'data-popup="' . esc_attr( $recipe['popup_target'] ) . '"' : '' );
         if ( !empty( $href ) ) {
             printf(
-                '<a href="%1$s" %2$s class="%3$s">%4$s%5$s</a>',
+                '<a href="%1$s" %2$s class="%3$s">%4$s%5$s%6$s</a>',
                 $href,
                 $target,
                 $el_class,
                 $icon,
-                $button_text
+                $button_text,
+                $screen_reader_text
             );
         } else {
             printf(
-                '<button type="button" class="%1$s" %4$s>%2$s%3$s</button>',
+                '<button type="button" class="%1$s" %5$s>%2$s%3$s%4$s</button>',
                 $el_class,
                 $icon,
                 $button_text,
+                $screen_reader_text,
                 $popup_target
             );
         }
@@ -580,24 +583,32 @@ switch ( $recipe['type'] ) {
                 }
             }
             // Add "Reached Lead Score X" options
+            $score_levels = [
+                '10',
+                '20',
+                '30',
+                '40',
+                '50'
+            ];
+            // default
             if ( !empty( $atrig_opts['lead_scoring_levels'] ) ) {
                 $trimmed_string = trim( $atrig_opts['lead_scoring_levels'] );
                 $split_array = explode( ',', $trimmed_string );
                 $score_levels = array_map( 'trim', $split_array );
-                if ( count( $score_levels ) > 0 ) {
-                    foreach ( $score_levels as $level ) {
-                        $selected = selected( $saved_value, $trigger['id'], false );
-                        if ( !empty( $selected ) ) {
-                            $selected_trigger_active = true;
-                        }
-                        $level_txt = esc_attr__( 'Reached lead score ', 'full-picture-analytics-cookie-notice' ) . $level;
-                        $options_markup .= sprintf(
-                            '<option value="fp_leadscore_%1$s" %2$s>%3$s</option>',
-                            $level,
-                            selected( $saved_value, 'fp_leadscore_' . $level, false ),
-                            $level_txt
-                        );
+            }
+            if ( count( $score_levels ) > 0 ) {
+                foreach ( $score_levels as $level ) {
+                    $selected = selected( $saved_value, $trigger['id'], false );
+                    if ( !empty( $selected ) ) {
+                        $selected_trigger_active = true;
                     }
+                    $level_txt = esc_attr__( 'Reached lead score ', 'full-picture-analytics-cookie-notice' ) . $level;
+                    $options_markup .= sprintf(
+                        '<option value="fp_leadscore_%1$s" %2$s>%3$s</option>',
+                        $level,
+                        selected( $saved_value, 'fp_leadscore_' . $level, false ),
+                        $level_txt
+                    );
                 }
             }
         }
@@ -690,7 +701,9 @@ switch ( $recipe['type'] ) {
         break;
     // =======
     case 'hidden':
-        printf( '<input type="hidden" name="%1$s" id="%1$s" value="%2$s"/>', $field_id, $saved_value );
+        // Use saved value if available, otherwise use default from recipe
+        $field_value = ( $saved_value ? $saved_value : (( isset( $recipe['default'] ) ? $recipe['default'] : '' )) );
+        printf( '<input type="hidden" name="%1$s" id="%1$s" value="%2$s"/>', $field_id, $field_value );
         break;
     // =======
     case 'empty':

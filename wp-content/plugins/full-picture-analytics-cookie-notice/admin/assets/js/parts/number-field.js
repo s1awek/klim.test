@@ -12,6 +12,12 @@
 		} else {
 			num_field.value = old_val - ( num_field.step || 1 );
 		}
+
+		// check if this is a condition field and trigger it
+		if ( num_field.classList.contains('fupi_condition') ) {
+			const event = new Event('change', { bubbles: true });
+  			num_field.dispatchEvent(event);
+		}
 	}
 
 	document.addEventListener('click', e=>{

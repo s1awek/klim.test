@@ -163,8 +163,8 @@ class Wt_Import_Export_For_Woo_Basic_Product_Bulk_Export {
                         continue;
                     }
 
-                    $meta_value = Wt_Import_Export_For_Woo_Basic_Common_Helper::wt_unserialize_safe($value[0]); 
-                    // Wt_Import_Export_For_Woo_Basic_Common_Helper::wt_unserialize_safe
+                    $meta_value = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_unserialize_safe($value[0]); 
+                    // Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_unserialize_safe
 
                     if (is_array($meta_value)) {
                         $meta_value = json_encode($meta_value);
@@ -194,7 +194,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Bulk_Export {
                 // Product attributes
                 if (isset($meta_data['_product_attributes'][0])) {
 
-                    $attributes = Wt_Import_Export_For_Woo_Basic_Common_Helper::wt_unserialize_safe($meta_data['_product_attributes'][0]);
+                    $attributes = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_unserialize_safe($meta_data['_product_attributes'][0]);
                     if (!empty($attributes) && is_array($attributes)) {
                         foreach ($attributes as $key => $attribute) {
                             if (!$key) {
@@ -226,7 +226,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Bulk_Export {
                             }
 
                             $attribute_data = $attribute['position'] . '|' . $attribute['is_visible'] . '|' . $attribute['is_variation'];
-                            $_default_attributes = isset($meta_data['_default_attributes'][0]) ? Wt_Import_Export_For_Woo_Basic_Common_Helper::wt_unserialize_safe($meta_data['_default_attributes'][0]) : '';
+                            $_default_attributes = isset($meta_data['_default_attributes'][0]) ? Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_unserialize_safe($meta_data['_default_attributes'][0]) : '';
 
                             if (is_array($_default_attributes)) {
                                 // $_default_attribute = isset($_default_attributes[$key]) ? $_default_attributes[$key] : '';
@@ -318,7 +318,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Bulk_Export {
                             $product_image_gallery = isset($meta_data['_product_image_gallery'][0]) ? $meta_data['_product_image_gallery'][0] : '';
                             $images = array(); // Ensure $images is always an array
                             if (is_serialized($product_image_gallery)) { 
-                                $images = Wt_Import_Export_For_Woo_Basic_Common_Helper::wt_unserialize_safe($product_image_gallery);
+                                $images = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_unserialize_safe($product_image_gallery);
                                 if( ! is_array( $images ) ) { 
                                     $images = explode(',', $product_image_gallery); 
                                 } 
@@ -363,7 +363,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Bulk_Export {
                         if ('file_paths' == $column || 'downloadable_files' == $column) {
                             $file_paths_to_export = array();
                             if (!function_exists('wc_get_filename_from_url')) {
-                                $file_paths = Wt_Import_Export_For_Woo_Basic_Common_Helper::wt_unserialize_safe($meta_data['_file_paths'][0]);
+                                $file_paths = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_unserialize_safe($meta_data['_file_paths'][0]);
 
                                 if ($file_paths) {
                                     foreach ($file_paths as $file_path) {
@@ -374,7 +374,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Bulk_Export {
                                 $file_paths_to_export = implode(' | ', $file_paths_to_export);
                                 $row[] = self::format_data($file_paths_to_export);
                             } elseif (isset($meta_data['_downloadable_files'][0])) {
-                                $file_paths = Wt_Import_Export_For_Woo_Basic_Common_Helper::wt_unserialize_safe($meta_data['_downloadable_files'][0]);
+                                $file_paths = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_unserialize_safe($meta_data['_downloadable_files'][0]);
 
                                 if (is_array($file_paths) || is_object($file_paths)) {
                                     foreach ($file_paths as $file_path) {
@@ -717,7 +717,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Bulk_Export {
 
         if (!empty($results)) {
             foreach ($results as $_product_attributes) {
-                $attributes = Wt_Import_Export_For_Woo_Basic_Common_Helper::wt_unserialize_safe($_product_attributes);
+                $attributes = Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_unserialize_safe($_product_attributes);
                 if (!empty($attributes) && is_array($attributes)) {
                     foreach ($attributes as $key => $attribute) {
                         if (!$key) {

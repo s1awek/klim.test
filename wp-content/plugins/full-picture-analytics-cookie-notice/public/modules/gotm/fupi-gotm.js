@@ -1,9 +1,6 @@
-FP.fns.load_gtm = () => {
-	
-	if ( fp.loading.includes('gtm') ) return;
-	fp.loading.push('gtm');
+function fupi_head_gtm(){
 
-	// !!! Datalayer is created in head-js.php
+	// !!! Datalayer is created in JS helpers
 
 	var data_o = {
 		'event' : 'fp_staticData',
@@ -96,9 +93,7 @@ FP.fns.load_gtm = () => {
 	
 
 	// mark as loaded
-	fp.loaded.push('gtm');
-	if ( fp.main.debug ) console.log('[FP] GTM loaded');
-	FP.runFn( 'FP.fns.load_gotm_footer' );
+	FP.loaded('gtm', 'gtm', '[FP] GTM loaded');
 }
 
-if ( fp.gtm && fp.gtm.id ) FP.fns.load_gtm();
+if ( fp.gtm && fp.gtm.id ) FP.load('gtm', 'fupi_head_gtm', ['head_helpers']);

@@ -190,18 +190,3 @@
 	};
 
 })();
-
-// TOGGLE MENU O MOBILES
-
-(()=>{
-
-	$toggle_menu_btn = FP.findID('fupi_mobile_nav_toggle_button');
-
-	if ( ! $toggle_menu_btn ) return;
-
-	$menu = FP.findID('fupi_side_menu');
-
-	$toggle_menu_btn.addEventListener('click', () => {
-		$menu.classList.toggle('fupi_show_mobile_menu');
-	});
-})();

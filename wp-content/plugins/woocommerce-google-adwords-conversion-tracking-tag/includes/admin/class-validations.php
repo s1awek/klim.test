@@ -552,6 +552,30 @@ class Validations {
 			}
 		}
 
+		// Validate CrazyEgg account number
+		if (isset($input['crazyegg']['account_number'])) {
+
+			// Trim space, newlines and quotes
+			$input['crazyegg']['account_number'] = Helpers::trim_string($input['crazyegg']['account_number']);
+
+			// Extract account number from full script tag if pasted
+			// Pattern: //script.crazyegg.com/pages/scripts/0131/9772.js -> 01319772
+			if (preg_match('/script\.crazyegg\.com\/pages\/scripts\/(\d+)\/(\d+)\.js/', $input['crazyegg']['account_number'], $matches)) {
+				$input['crazyegg']['account_number'] = $matches[1] . $matches[2];
+			} else {
+				// Strip all non-digits (handles formats like 0131/9772 or 0131-9772)
+				$input['crazyegg']['account_number'] = preg_replace('/\D/', '', $input['crazyegg']['account_number']);
+			}
+
+			if (!self::is_crazyegg_account_number($input['crazyegg']['account_number'])) {
+				$input['crazyegg']['account_number']
+					= Options::get_crazyegg_account_number()
+					? Options::get_crazyegg_account_number()
+					: '';
+				add_settings_error('wgact_plugin_options', 'invalid-crazyegg-account-number', esc_html__('You have entered an invalid CrazyEgg account number. It must be exactly 8 digits.', 'woocommerce-google-adwords-conversion-tracking-tag'));
+			}
+		}
+
 		// Validate Reddit advertiser ID
 		if (isset($input['pixels']['reddit']['advertiser_id'])) {
 
@@ -887,6 +911,7 @@ class Validations {
 					],
 				],
 			],
+			'ssp'        => isset(Options::get_options()['ssp']) ? Options::get_options()['ssp'] : [],
 		];
 
 		// in case the form field input is missing
@@ -993,6 +1018,13 @@ class Validations {
 	public static function is_hotjar_site_id( $string ) {
 
 		$re = '/^\d{6,9}$/m';
+
+		return self::validate_with_regex($re, $string);
+	}
+
+	public static function is_crazyegg_account_number( $string ) {
+
+		$re = '/^\d{8}$/m';
 
 		return self::validate_with_regex($re, $string);
 	}

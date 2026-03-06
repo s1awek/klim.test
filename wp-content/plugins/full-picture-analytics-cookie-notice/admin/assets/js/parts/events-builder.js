@@ -36,17 +36,23 @@
 
     // CUSTOM EVENTS BUILDER - clear sections that contain not existing (expired) trigger
 
-    let builder_sections = FP.findAll('.fupi_events_builder .fupi_r3_section');
-
-    builder_sections.forEach( section => {
+    let builders = FP.findAll('.fupi_events_builder');
+    
+    builders.forEach( builder => {
         
-        let atrig_select = FP.findFirst( '.fupi_field_type_atrig_select select', section );
+        let builder_sections = FP.findAll('.fupi_r3_section', builder);
 
-        if ( atrig_select && ! atrig_select.value ){
-            let minus_button = FP.findFirst( '.fupi_btn_remove', section );
-            if ( minus_button ) minus_button.click();
-        }
-    } );
+        builder_sections.forEach( section => {
+            
+            let atrig_select = FP.findFirst( '.fupi_field_type_atrig_select select', section );
+    
+            if ( atrig_select && ! atrig_select.value ){
+                let minus_button = FP.findFirst( '.fupi_btn_remove', section );
+                if ( minus_button ) minus_button.click();
+            }
+        } );
+    })
+
 
 })();
 
@@ -60,7 +66,7 @@
         
         let metadata_select = FP.findFirst( '.fupi_field_type_custom_meta_select select', section );
 
-        if ( ! metadata_select.value ){
+        if ( metadata_select && ! metadata_select.value ){
             let minus_button = FP.findFirst( '.fupi_btn_remove', section );
             if ( minus_button ) minus_button.click();
         }

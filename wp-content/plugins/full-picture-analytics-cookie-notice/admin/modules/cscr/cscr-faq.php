@@ -11,9 +11,9 @@
     </div>
     
     <div id="fupi_testing_popup" class="fupi_popup_content">
-        <p>' . esc_html__('To test if your custom scripts load correctly:', 'full-picture-analytics-cookie-notice' ) . '</p>
+        <p>' . esc_html__('To test if your integrations load correctly:', 'full-picture-analytics-cookie-notice' ) . '</p>
         <ol>
-            <li>' . esc_html__('If you have geolocation enabled, make sure that your script is set to load in the country you are in.', 'full-picture-analytics-cookie-notice' ) . '</li>
+            <li>' . esc_html__('If you enabled geolocation, make sure that your script is set to load in the country you are in.', 'full-picture-analytics-cookie-notice' ) . '</li>
             <li>' . esc_html__('Turn off your ad blocker (if you have any)', 'full-picture-analytics-cookie-notice' ) . '</li>
             <li>' . esc_html__('Enable the setup helper in the top menu', 'full-picture-analytics-cookie-notice' ) . '</li>
             <li>' . esc_html__('Visit your website', 'full-picture-analytics-cookie-notice' ) . '</li>

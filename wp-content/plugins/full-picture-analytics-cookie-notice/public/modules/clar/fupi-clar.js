@@ -1,4 +1,4 @@
-;(function(window){
+function fupi_clar(){
 
 	if ( allow_loading_clar() ) { 
 		load_clar();
@@ -57,9 +57,8 @@
 		
 		
 
-		fp.loaded.push('clar');
-		if ( fp.main.debug ) console.log('[FP] MS Clarity loaded');
-		FP.runFn( 'FP.fns.load_clar_footer' );
+		FP.loaded('clar', 'clar','[FP] MS Clarity loaded');
 	}
+};
 
-})(window);
+FP.load('clar', 'fupi_clar', ['head_helpers'])

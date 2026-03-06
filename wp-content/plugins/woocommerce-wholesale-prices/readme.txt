@@ -2,9 +2,9 @@
 Contributors: jkohlbach, RymeraWebCo, smub
 Tags: woocommerce wholesale, b2b, wholesale pricing, catalog mode, dynamic pricing
 Requires at least: 4.2
-Tested up to: 6.8
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.2.5
+Stable tag: 2.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,31 @@ See plenty of screenshots for this plugin and others at:
 [https://wholesalesuiteplugin.com/woocommerce-wholesale-prices-premium/](https://wholesalesuiteplugin.com/woocommerce-wholesale-prices-premium/)
 
 == Changelog ==
+
+= 2.2.7 =
+- Bug Fix: JavaScript Console Error Cannot read properties of undefined
+- Bug Fix: Unable to filter product wholesale price if using General Discount Rules
+- Bug Fix: Privilege escalation via REST API settings endpoint allows shop managers to write arbitrary cross-plugin options
+- Improvement: Fully support wholesale price filtering for logged in wholesale customers
+
+= 2.2.6 =
+- Bug Fix: Incorrect Wholesale Order Meta on Subscription Orders and Subscriptions
+- Bug Fix: PHP 8.0+ Fatal Error TypeError in REST API Wholesale Products Controller
+- Bug Fix: Security Issues - Security Audit Findings
+- Bug Fix: Security Vulnerabilities
+- Bug Fix: Timeout Issue When You Have Large Orders
+- Bug Fix: [Critical] SQL Injection Risk in Dynamic Query Construction
+- Bug Fix: [Critical] SQL Injection Vulnerability - Multisite activation/deactivation
+- Bug Fix: [High] Cross-Site Scripting (XSS) Vulnerability
+- Bug Fix: [High] Missing Input Sanitization in GET Parameters
+- Bug Fix: [High] Missing Input Sanitization in Product Query Filter
+- Bug Fix: [Medium] Missing Input Sanitization in REST API
+- Bug Fix: [Medium] Potential XSS in Unescaped Output
+- Bug Fix: [Medium] SQL Injection Risk in Grouped Product Query
+- Feature: Add 'SaveTo Wishlist Lite' plugin in 'About' page and in 'Promo Box' of Dashboard as well.
+- Feature: Dashboard Tech Stack Transition With Promo Box Feature
+- Improvement: Create Wholesale Quotes Promotion Page And Include Promo Box In About Page
+- Improvement: New generator meta tag
 
 = 2.2.5 =
 - Bug Fix: Percentage Discounts Removed When Updating Product Data via Quick Edit

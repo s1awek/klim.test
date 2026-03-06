@@ -28,17 +28,9 @@ class Fupi_PLA_public {
 
     public function enqueue_scripts(){
 
-        $head_args = [ 'in_footer' => false ];
-        $footer_args = [ 'in_footer' => true ];
-
-        if ( ! empty( $this->main ) && isset( $this->main['async_scripts'] ) ) {
-            $head_args['strategy'] = 'defer';
-            $footer_args['strategy'] = 'defer';
-        }
-
         $reqs = ! empty( $this->tools['woo'] ) && function_exists('WC') ? array('fupi-helpers-js', 'fupi-helpers-footer-js', 'fupi-woo-js', 'fupi-pla-head-js') : array('fupi-helpers-js', 'fupi-helpers-footer-js', 'fupi-pla-head-js');
 
-        /* ^ */ wp_enqueue_script( 'fupi-pla-head-js', FUPI_URL . 'public/modules/pla/fupi-pla.js', array( 'fupi-helpers-js' ), FUPI_VERSION, $head_args );
-        /* _ */ wp_enqueue_script( 'fupi-pla-footer-js', FUPI_URL . 'public/modules/pla/fupi-pla-footer.js', $reqs, FUPI_VERSION, $footer_args );
+        /* ^ */ wp_enqueue_script( 'fupi-pla-head-js', FUPI_URL . 'public/modules/pla/fupi-pla.js', array( 'fupi-helpers-js' ), FUPI_VERSION, [ 'in_footer' => false, 'strategy' => 'async' ] );
+        /* _ */ wp_enqueue_script( 'fupi-pla-footer-js', FUPI_URL . 'public/modules/pla/fupi-pla-footer.js', $reqs, FUPI_VERSION, [ 'in_footer' => true, 'strategy' => 'async' ] );
     }
 }

@@ -28,7 +28,8 @@
     $adv_mode_class_suffix    = $user_adv_mode ? 'on' : 'off';
     
     // show welcome message if fupi_tools is empty
-    $welcome_popup_id = $module_id === 'tools' && ( empty ( $this->tools ) || count( $this->tools ) == 0 ) ? 'fupi_first_steps_popup' : '';
+    $welcome_popup_id = $module_id === 'tools' && $adv_mode_class_suffix == 'off' && ( empty ( $this->tools ) || count( $this->tools ) == 0 ) ? 'fupi_first_steps_popup' : '';
+    // $welcome_popup_id = '';
     
     // Addons
 
@@ -49,7 +50,7 @@
     
     $wp_nonce           = wp_create_nonce( 'wp_rest' );
     
-    // FIX to prevent double sanitizing settings (double-encoding HTML entities which makes scripts unusable) in General settings (meta tags), Custom Scripts and Reports modules
+    // FIX to prevent double sanitizing settings (double-encoding HTML entities which makes scripts unusable) in General settings (meta tags), Custom Integrations and Reports modules
     // https://core.trac.wordpress.org/ticket/21989)
     
     if ( $module_id == 'main' ) {
@@ -60,13 +61,16 @@
         $fupi_cscr = get_option('fupi_cscr');
         if ( $fupi_cscr === false ) add_option('fupi_cscr', array());
     }
+
+    if ( $module_id == 'reactions' ) {
+        $fupi_reactions = get_option('fupi_reactions');
+        if ( $fupi_reactions === false ) add_option('fupi_reactions', array());
+    }
     
     if ( $module_id == 'reports' ) {
         $fupi_reports = get_option('fupi_reports');
         if ( $fupi_reports === false ) add_option('fupi_reports', array());
     }
-
-    if ( $active_slug == 'gdpr_setup_helper' ) $module_id = 'status';
 ?>
 
 <style>
@@ -89,20 +93,6 @@
         <?php include_once 'parts/fupi-page_part-guides.php'; ?>
 
         <?php if ( $module_id == 'tools' ) { ?>
-            <div class="fupi_adv_headline_html_template fupi_tools_integr_section" style="display: none;">
-                <div class="fupi_tools_integr_headline">
-                    <div class="fupi_tools_integr_headline_title"><?php esc_html_e( 'Extended integrations','full-picture-analytics-cookie-notice' ) ?></div>
-                    <p><?php esc_html_e( 'Extended integrations let you use basic and advanced functions of tracking tools.','full-picture-analytics-cookie-notice' ) ?></p>
-                </div>
-            </div>
-
-            <div class="fupi_basic_headline_html_template fupi_tools_integr_section" style="display: none;">
-                <div class="fupi_tools_integr_headline">
-                    <div class="fupi_tools_integr_headline_title"><?php esc_html_e( 'Basic integrations','full-picture-analytics-cookie-notice' ) ?></div>
-                    <p><?php esc_html_e( 'Basic integrations let you use only basic functions of tracking tools.','full-picture-analytics-cookie-notice' ) ?></p>
-                </div>
-            </div>
-
             <div class="fupi_tagman_headline_html_template fupi_tools_integr_section" style="display: none;">
                 <div class="fupi_tools_integr_headline">
                     <div class="fupi_tools_integr_headline_title"><?php esc_html_e( 'Tag Managers','full-picture-analytics-cookie-notice' ) ?></div>
@@ -128,9 +118,7 @@
             
             // Show GDPR setup helper or standard content
             
-            if ( $active_slug == 'gdpr_setup_helper' ) { 
-                include_once 'parts/fupi-page-part-status.php';   
-            } if ( $active_slug == 'consents_list' ) {
+            if ( $active_slug == 'consents_list' ) {
                 include_once 'parts/fupi-page_part-consents_list.php';
             } else { ?>
                 <form id="fupi_settings_form" data-activetab="<?php echo $active_slug ?>" action="options.php" method="post">
