@@ -33,7 +33,7 @@ abstract class AbstractQuery implements PriceQuery {
 		HistoricalPriceHydrator $hydrator,
 		Settings $settings,
 		ClockInterface $clock,
-		CurrencyResolver $currency_resolver = null
+		?CurrencyResolver $currency_resolver = null
 	) {
 		$this->wpdb              = $wpdb;
 		$this->hydrator          = $hydrator;
@@ -42,7 +42,7 @@ abstract class AbstractQuery implements PriceQuery {
 		$this->currency_resolver = $currency_resolver ?? new RawDefaultCurrencyResolver();
 	}
 
-	protected function create_query_builder( string $alias = null ): QueryBuilder {
+	protected function create_query_builder( ?string $alias = null ): QueryBuilder {
 		return ( new QueryBuilder( $this->wpdb ) )
 			->select( $alias ?? '*' )
 			->from( Schema::price_logger_table_name(), $alias );

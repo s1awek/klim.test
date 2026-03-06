@@ -32,7 +32,7 @@ class HistoricalPrice {
 		\DateTimeInterface $created,
 		bool $reduced_price = false,
 		?\DateTimeInterface $changed = null,
-		string $currency = null
+		?string $currency = null
 	) {
 		$this->id            = $id;
 		$this->product_id    = $product_id;

@@ -42,7 +42,7 @@ class PriceRepository implements Repository {
 		$this->currency_resolver = new RawDefaultCurrencyResolver();
 	}
 
-	protected function create_query_builder( string $alias = null ): QueryBuilder {
+	protected function create_query_builder( ?string $alias = null ): QueryBuilder {
 		return ( new QueryBuilder( $this->wpdb ) )
 			->select( $alias ?? '*' )
 			->from( Schema::price_logger_table_name(), $alias );

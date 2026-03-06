@@ -6,7 +6,7 @@ namespace WPDesk\Omnibus\Core\Utils;
 class NumberFormatter extends \NumberFormatter {
 
 	public function __construct( $locale = null, $style = \NumberFormatter::DECIMAL, $pattern = null ) {
-		parent::__construct( $locale ?: get_locale(), $style );
+		parent::__construct( $locale ?: get_locale() ?? 'en_US', $style );
 	}
 
 	/**

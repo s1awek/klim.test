@@ -43,7 +43,7 @@ class InterceptionPersister {
 		Repository $repository,
 		HistoricalPricePersister $persister,
 		LoggerInterface $logger,
-		AvailableCurrencies $currencies = null
+		?AvailableCurrencies $currencies = null
 	) {
 		$this->interceptors = $interceptors;
 		$this->repository   = $repository;

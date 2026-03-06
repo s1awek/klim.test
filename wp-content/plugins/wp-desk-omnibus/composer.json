@@ -40,7 +40,7 @@
 	},
 	"require-dev": {
 		"10up/wp_mock": "^1.0",
-		"php-di/php-di": "^6.3",
+		"wpdesk/php-di": "^6.3",
 		"phpunit/phpunit": "^9",
 		"psr/clock": "^1.0",
 		"wpdesk/phpstan-rules": "^1",
@@ -82,6 +82,6 @@
 			"url": "https://gitlab.wpdesk.dev/api/v4/group/wpdesk/-/packages/composer/"
 		}
 	},
-	"version": "2.2.16",
+	"version": "2.2.18",
 	"type": "wordpress-plugin"
 }
