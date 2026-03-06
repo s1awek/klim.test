@@ -1,3 +1,6 @@
+--- 3.20.5 ---
+NEW: WooCommerce 10.5 compatibility.
+
 --- 3.20.4 ---
 NEW: WordPress 6.9 compatibility.
 NEW: WooCommerce 10.4 compatibility.

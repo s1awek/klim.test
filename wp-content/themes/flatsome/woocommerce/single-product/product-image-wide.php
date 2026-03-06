@@ -12,8 +12,8 @@
  *
  * @see              https://woocommerce.com/document/template-structure/
  * @package          WooCommerce\Templates
- * @version          9.7.0
- * @flatsome-version 3.19.10
+ * @version          10.5.0
+ * @flatsome-version 3.20.5
  */
 
 use Automattic\WooCommerce\Enums\ProductType;
@@ -72,7 +72,7 @@ if(is_rtl()) $rtl = 'true';
     if ( $post_thumbnail_id ) {
       $html  = flatsome_wc_get_gallery_image_html( $post_thumbnail_id, true, 'full' );
     } else {
-		$wrapper_classname = $product->is_type( fl_woocommerce_version_check( '9.7.0' ) ? ProductType::VARIABLE : 'variable' ) && ! empty( $product->get_available_variations( 'image' ) ) ?
+		$wrapper_classname = $product->is_type( fl_woocommerce_version_check( '9.7.0' ) ? ProductType::VARIABLE : 'variable' ) && ! empty( $product->get_visible_children() ) && '' !== $product->get_price() ?
 			'woocommerce-product-gallery__image woocommerce-product-gallery__image--placeholder' :
 			'woocommerce-product-gallery__image--placeholder';
 		$html              = sprintf( '<div class="%s">', esc_attr( $wrapper_classname ) );
