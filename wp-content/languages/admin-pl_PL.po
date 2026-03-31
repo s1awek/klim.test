@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the WordPress - 6.9.x - Development - Administration package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-11-22 18:35:25+0000\n"
+"PO-Revision-Date: 2026-03-07 22:09:59+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3638,7 +3638,7 @@ msgstr "Wyłącz automatyczne aktualizacje"
 #: wp-admin/includes/class-wp-plugins-list-table.php:629
 #: wp-admin/includes/class-wp-ms-themes-list-table.php:485
 msgid "Enable Auto-updates"
-msgstr "Włącz automatyczne akutalizacje"
+msgstr "Włącz automatyczne aktualizacje"
 
 #. translators: %s: Number of plugins.
 #. translators: %s: Number of themes.
