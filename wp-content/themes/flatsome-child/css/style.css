@@ -510,6 +510,33 @@ div.star-rating {
   background: rgb(126, 126, 126);
 }
 
+/* Buttony kolorów — nigdy nie wyszarzone */
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-disable,
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-out-of-stock,
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-out-of-stock-attribute {
+  opacity: 1 !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+/* Nadpisanie opacity na dzieciach wrapa (plugin image_design + select warianty) */
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-out-of-stock .vi-wpvs-option,
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-out-of-stock-attribute .vi-wpvs-option,
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-disable .vi-wpvs-option,
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-out-of-stock-attribute > *,
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-out-of-stock > * {
+  opacity: 1 !important;
+}
+
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-disable::before,
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-disable::after,
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-out-of-stock::before,
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-out-of-stock::after,
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-out-of-stock-attribute::before,
+[data-wpvs_attribute_name="attribute_pa_kolor"] .vi-wpvs-option-wrap.vi-wpvs-option-wrap-out-of-stock-attribute::after {
+  display: none !important;
+}
+
 span.reg-text-wrap {
   display: flex;
   flex-direction: column;
