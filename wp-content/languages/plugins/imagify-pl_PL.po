@@ -2,12 +2,12 @@
 # This file is distributed under the same license as the Plugins - Imagify Image Optimization – Optimize Images | Compress Images | Convert WebP | Convert AVIF - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-06-06 12:49:01+0000\n"
+"PO-Revision-Date: 2026-03-29 16:18:16+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.1\n"
+"X-Generator: GlotPress/4.0.3\n"
 "Language: pl\n"
 "Project-Id-Version: Plugins - Imagify Image Optimization – Optimize Images | Compress Images | Convert WebP | Convert AVIF - Stable (latest release)\n"
 
@@ -269,15 +269,15 @@ msgstr "Ulepsz"
 msgid "Expand your image quota and eliminate upload limits."
 msgstr "Zwiększ limit obrazków i zlikwiduj ograniczenia przesyłania."
 
-#: views/page-settings.php:117
+#: views/page-settings.php:118
 msgid "Beyond Imagify, there's a whole family of plugins designed to help you build better, faster, and safer websites. Each one is crafted with our unique blend of expertise, simplicity, and outstanding support. Combine our plugins below to build incredible WordPress websites!"
 msgstr "Poza Imagify istnieje cała rodzina wtyczek zaprojektowanych, aby pomóc ci budować lepsze, szybsze i bezpieczniejsze witryny. Każda z nich została stworzona z naszą unikalną mieszanką wiedzy, prostoty i wyjątkowego wsparcia. Połącz nasze wtyczki poniżej, aby budować niesamowite witryny WordPress!"
 
-#: views/page-settings.php:114
+#: views/page-settings.php:115
 msgid "Build better, faster, safer"
 msgstr "Buduj lepiej, szybciej i bezpieczniej"
 
-#: views/page-settings.php:113
+#: views/page-settings.php:114
 msgid "Our Plugins"
 msgstr "Nasze wtyczki"
 
@@ -1314,7 +1314,7 @@ msgstr "Aby kontynuować optymalizację obrazów, możesz uaktualnić swoją sub
 msgid "This coupon is not valid with this plan."
 msgstr "Ten kupon nie jest ważny z tym planem."
 
-#: inc/classes/class-imagify-settings.php:400
+#: inc/classes/class-imagify-settings.php:380
 msgid "Please consider writing more inclusive code."
 msgstr "Rozważ napisanie bardziej włączającego kodu."
 
@@ -1837,11 +1837,11 @@ msgstr "Wystąpił błąd (%s)."
 msgid "Could not initialize a new cURL handle."
 msgstr "Nie można zainicjować nowego uchwytu cURL."
 
-#: views/page-settings.php:173
+#: views/page-settings.php:174
 msgid "Display Partner Links"
 msgstr "Wyświetlaj linki partnerskie"
 
-#: views/page-settings.php:160
+#: views/page-settings.php:161
 msgid "Partners"
 msgstr "Partenrzy"
 
@@ -1902,7 +1902,7 @@ msgstr[2] "%s Zoptymalizowanych plików multimedialnych"
 msgid "Every %d Minutes"
 msgstr "Co %d minut"
 
-#: inc/classes/class-imagify-views.php:247
+#: inc/classes/class-imagify-views.php:226
 msgid "Optimize your media files"
 msgstr "Optymalizacja twoich plików multimedialnych"
 
@@ -1956,7 +1956,7 @@ msgstr "Zoptymalizowane"
 msgid "This media is not supported."
 msgstr "Ten nośnik nie jest obsługiwany."
 
-#: inc/classes/class-imagify-admin-ajax-post.php:1291
+#: inc/classes/class-imagify-admin-ajax-post.php:1309
 #: inc/functions/i18n.php:113 inc/functions/i18n.php:262
 msgid "Your API key is not valid!"
 msgstr "Twój klucz API jest nieważny!"
@@ -1971,28 +1971,28 @@ msgstr "Optymalizacja tego rozmiaru nie jest dozwolona. Zaktualizuj ustawienia I
 msgid "No thumbnail sizes selected"
 msgstr "Nie wybrano rozmiaru miniatur"
 
-#: views/part-settings-files-tree-row.php:45
+#: views/part-settings-files-tree-row.php:43
 msgctxt "checkbox label"
 msgid "Add Folder"
 msgstr "Dodaj folder"
 
-#: views/part-settings-files-tree-row.php:43
+#: views/part-settings-files-tree-row.php:41
 msgid "Folder Added"
 msgstr "Folder dodany"
 
 #. translators: %s is a folder path.
-#: views/part-settings-files-tree-row.php:17
+#: views/part-settings-files-tree-row.php:15
 msgid "Select the folder \"%s\"."
 msgstr "Wybierz folder \"%s\"."
 
 #. translators: %s is a folder path.
-#: views/part-settings-files-tree-row.php:15
+#: views/part-settings-files-tree-row.php:13
 msgid "Open/Close the folder \"%s\"."
 msgstr "Otwórz / Zamknij folder \"%s\"."
 
 #. translators: %s is a folder path.
+#: views/part-settings-files-tree-row.php:8
 #: views/part-settings-files-tree-row.php:10
-#: views/part-settings-files-tree-row.php:12
 msgid "The folder \"%s\" is already selected."
 msgstr "Katalog \"%s\" został już zaznaczony."
 
@@ -2185,7 +2185,7 @@ msgstr "Już zoptymalizowano"
 msgid "The operation failed."
 msgstr "Błąd operacji."
 
-#: inc/classes/class-imagify-admin-ajax-post.php:1299
+#: inc/classes/class-imagify-admin-ajax-post.php:1317
 #: inc/functions/i18n.php:114 inc/functions/i18n.php:263
 msgid "You have used all your credits!"
 msgstr "Wykorzystałeś wszystkie kredyty!"
@@ -2246,38 +2246,38 @@ msgid "With no extension, this file cannot be optimized."
 msgstr "Bez rozszerzenia, ten plik nie może być zoptymalizowany."
 
 #. translators: 1 is the opening of a link, 2 is the closing of this link.
-#: inc/classes/class-imagify-views.php:313
+#: inc/classes/class-imagify-views.php:292
 msgid "You can re-optimize your media files more finely directly in the %1$smedia management%2$s."
 msgstr "Możesz dokładniej ponownie zoptymalizować pliki multimedialne bezpośrednio w %1$szarządzaniu multimediami%2$s."
 
-#: inc/classes/class-imagify-views.php:311
+#: inc/classes/class-imagify-views.php:290
 msgid "Custom folders"
 msgstr "Foldery niestandardowe"
 
 #. translators: 1 is the opening of a link, 2 is the closing of this link.
-#: inc/classes/class-imagify-views.php:299
+#: inc/classes/class-imagify-views.php:278
 msgid "You can also re-optimize your media files from your %1$sMedia Library%2$s screen."
 msgstr "Możesz także ponownie zoptymalizować pliki multimedialne na ekranie %1$sBiblioteka multimediów%2$s."
 
-#: inc/classes/class-imagify-views.php:297 views/part-settings-library.php:10
+#: inc/classes/class-imagify-views.php:276 views/part-settings-library.php:10
 msgid "Media Library"
 msgstr "Biblioteka multimediów"
 
-#: inc/classes/class-imagify-views.php:165
-#: inc/classes/class-imagify-views.php:199
+#: inc/classes/class-imagify-views.php:143
+#: inc/classes/class-imagify-views.php:177
 msgid "Other Media"
 msgstr "Inne multimedia"
 
-#: inc/classes/class-imagify-views.php:165
-#: inc/classes/class-imagify-views.php:199 views/part-files-list-header.php:5
+#: inc/classes/class-imagify-views.php:143
+#: inc/classes/class-imagify-views.php:177 views/part-files-list-header.php:5
 msgid "Other Media optimized by Imagify"
 msgstr "Inne multimedia optymalizowane przez Imagify"
 
-#: inc/classes/class-imagify-settings.php:626
+#: inc/classes/class-imagify-settings.php:606
 msgid "Unselect All"
 msgstr "Odznacz wszystko"
 
-#: inc/classes/class-imagify-settings.php:618
+#: inc/classes/class-imagify-settings.php:598
 msgid "Select All"
 msgstr "Wybierz wszystko"
 
@@ -2606,8 +2606,8 @@ msgstr "To nie jest poprawny adres e-mail."
 msgid "Empty email address."
 msgstr "Pusty adres e-mail."
 
-#: classes/Bulk/Bulk.php:524 classes/Bulk/Bulk.php:547
-#: classes/Bulk/Bulk.php:571 inc/classes/class-imagify-admin-ajax-post.php:272
+#: classes/Bulk/Bulk.php:528 classes/Bulk/Bulk.php:551
+#: classes/Bulk/Bulk.php:575 inc/classes/class-imagify-admin-ajax-post.php:272
 #: inc/classes/class-imagify-admin-ajax-post.php:305
 #: inc/classes/class-imagify-admin-ajax-post.php:338
 #: inc/classes/class-imagify-admin-ajax-post.php:371
@@ -2770,7 +2770,7 @@ msgstr "Typ MIME nie jest obsługiwany."
 msgid "This size could not be retrieved from Amazon S3."
 msgstr "Nie można pobrać tego rozmiaru z Amazon S3."
 
-#: inc/classes/class-imagify-abstract-cron.php:162
+#: inc/classes/class-imagify-abstract-cron.php:134
 msgid "Once Weekly"
 msgstr "Raz na tydzień"
 
@@ -2937,7 +2937,7 @@ msgid "New Filesize:"
 msgstr "Nowy rozmiar pliku:"
 
 #: classes/Admin/AdminBar.php:136 views/part-settings-custom-folders.php:150
-#: views/part-settings-files-tree-row.php:25
+#: views/part-settings-files-tree-row.php:23
 msgid "Loading..."
 msgstr "Ładowanie..."
 
@@ -3089,7 +3089,7 @@ msgstr "Automatycznie optymalizuj obrazy przy wgrywaniu"
 
 #: classes/Optimization/File.php:647 inc/deprecated/deprecated.php:629
 #: inc/functions/i18n.php:109 inc/functions/i18n.php:258
-#: views/page-settings.php:164
+#: views/page-settings.php:165
 msgid "More info?"
 msgstr "Więcej informacji?"
 
@@ -3186,7 +3186,7 @@ msgstr "Zapisz klucz API, który otrzymałeś e-mailem lub możesz go uzyskać n
 
 #: views/notice-welcome-steps.php:28
 msgid "Enter your API Key"
-msgstr "Wprowadź klucz API"
+msgstr "Wpisz swój klucz API"
 
 #: views/notice-welcome-steps.php:21
 msgid "Sign up, It's FREE!"
@@ -3290,12 +3290,12 @@ msgid "Upgrade your account to continue optimizing your images."
 msgstr "Uaktualnij swoje konto, aby kontynuować optymalizację obrazów."
 
 #: classes/Admin/AdminBar.php:71 classes/Admin/AdminSubscriber.php:81
-#: inc/classes/class-imagify-views.php:202 views/part-settings-header.php:5
+#: inc/classes/class-imagify-views.php:180 views/part-settings-header.php:5
 #: views/part-settings-header.php:14
 msgid "Settings"
 msgstr "Ustawienia"
 
-#: inc/classes/class-imagify-settings.php:409
+#: inc/classes/class-imagify-settings.php:389
 msgid "<strong>ERROR</strong>: options page not found."
 msgstr "<strong>BŁĄD</strong>: nie znaleziono strony opcji."
 
@@ -3319,9 +3319,9 @@ msgstr "Imagify"
 
 #: classes/Admin/AdminBar.php:82 classes/Admin/AdminSubscriber.php:72
 #: inc/3rd-party/nextgen-gallery/inc/admin/menu.php:18
-#: inc/classes/class-imagify-views.php:153
-#: inc/classes/class-imagify-views.php:196
-#: inc/classes/class-imagify-views.php:206
+#: inc/classes/class-imagify-views.php:131
+#: inc/classes/class-imagify-views.php:174
+#: inc/classes/class-imagify-views.php:184
 #: views/part-bulk-optimization-header.php:3
 #: views/part-bulk-optimization-header.php:13
 msgid "Bulk Optimization"

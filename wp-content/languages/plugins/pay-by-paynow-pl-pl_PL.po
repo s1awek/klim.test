@@ -2,12 +2,12 @@
 # This file is distributed under the same license as the Plugins - Pay by paynow.pl - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-06-03 15:21:00+0000\n"
+"PO-Revision-Date: 2026-04-01 06:41:17+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.1\n"
+"X-Generator: GlotPress/4.0.3\n"
 "Language: pl\n"
 "Project-Id-Version: Plugins - Pay by paynow.pl - Stable (latest release)\n"
 
@@ -87,11 +87,11 @@ msgstr "paynow.pl - płatności portfelami cyfrowymi"
 msgid "Digital wallets"
 msgstr "Portfele cyfrowe"
 
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:243
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:252
 msgid "A data validation error occurred. Check the correctness of the entered data"
 msgstr "Wystąpił błąd walidacji danych. Sprawdź poprawność wpisanych danych"
 
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:240
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:249
 msgid "Invalid email address entered. Check the correctness of the entered data"
 msgstr "Podano nieprawidłowy adres e-mail. Sprawdź poprawność wpisanych danych"
 
@@ -133,28 +133,28 @@ msgstr "Włącz aby pokazać metody płatności na stronie zamówienia"
 msgid "Show payment methods"
 msgstr "Pokaż metody płatności"
 
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:790
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:799
 msgid "Incorrect API signature key format (sandbox)"
 msgstr "Niepoprawny format klucza obliczania podpisu (sandbox)"
 
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:786
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:795
 msgid "Incorrect API key format (sandbox)"
 msgstr "Niepoprawny format klucza dostępu do API (sandbox)"
 
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:782
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:791
 msgid "Incorrect API signature key format (production)"
 msgstr "Niepoprawny format klucza obliczania podpisu (produkcja)"
 
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:778
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:787
 msgid "Incorrect API key format (production)"
 msgstr "Niepoprawny format klucza dostępu do API (produkcja)"
 
 #. translators: %s: Payment ID
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:719
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:728
 msgid "New payment created for order - %s."
 msgstr "Utworzono nową płatność dla zamówienia - %s."
 
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:469
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:478
 msgid "Transaction confirmed, but order already paid. Transaction ID: "
 msgstr "Transakcja potwierdzona, ale zamówienie zostało już opłacone. Identyfikator transakcji:"
 
@@ -167,12 +167,12 @@ msgid "You will be redirected to payment provider page."
 msgstr "Zostaniesz przekierowany na stronę dostawcy płatności."
 
 #. translators: %s: Error message
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:295
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:304
 msgid "An error occurred during the refund process - %s"
 msgstr "Podczas zwrotu wystąpił błąd. Skontaktuj się z obsługą sklepu lub spróbuj ponownie - %s."
 
 #. translators: %s: Payment ID
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:284
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:293
 msgid "Refund request processed correctly - %s"
 msgstr "Żądanie zwrotu środków zostało przetworzone poprawnie - %s"
 
@@ -180,15 +180,18 @@ msgstr "Żądanie zwrotu środków zostało przetworzone poprawnie - %s"
 msgid "Please enter correct BLIK code"
 msgstr "Podaj kod BLIK"
 
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:192
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:196
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:197
 msgid "BLIK code already used"
 msgstr "Kod BLIK został już wykorzystany"
 
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:189
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:192
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:193
 msgid "BLIK code has expired"
 msgstr "Kod BLIK wygasł"
 
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:186
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:188
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:189
 msgid "Wrong BLIK code"
 msgstr "Błędny kod BLIK"
 
@@ -202,7 +205,7 @@ msgid "BLIK payment"
 msgstr "Płatność BLIKIEM"
 
 #. translators: %s: Payment ID
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:542
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:551
 msgid "Payment has been abandoned - %s."
 msgstr "Płatność została porzucona - %s."
 
@@ -247,7 +250,7 @@ msgstr "Klucz obliczania podpisu"
 #: includes/settings/pay-by-paynow-pl-settings.php:56
 #: includes/settings/pay-by-paynow-pl-settings.php:79
 msgid "Api Key"
-msgstr "Klucz dostępu do API"
+msgstr "Klucz API"
 
 #: includes/settings/pay-by-paynow-pl-settings.php:53
 msgid "Production authentication keys are available in <i>My Business > Paynow > Settings > Shops and payment points > Authentication data</i> in mBank's online banking."
@@ -375,39 +378,39 @@ msgid "Order No: "
 msgstr "Zamówienie: "
 
 #. translators: %s: Payment ID
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:538
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:547
 msgid "Payment has been expired - %s."
 msgstr "Płatność utraciła ważność - %s."
 
 #. translators: %s: Payment ID
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:534
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:543
 msgid "An error occurred during the payment process and the payment could not be completed - %s."
 msgstr "Podczas płatności wystąpił błąd. Skontaktuj się z obsługą sklepu lub spróbuj ponownie - %s."
 
 #. translators: %s: Payment ID
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:736
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:745
 msgid "Payment has been authorized by the buyer - %s."
 msgstr "Płatność została zatwierdzona przez kupującego - %s."
 
 #. translators: %s: Payment ID
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:527
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:536
 msgid "Payment has not been authorized by the buyer - %s."
 msgstr "Płatność nie została zatwierdzona przez kupującego - %s."
 
 #. translators: %s: Payment ID
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:523
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:532
 msgid "Awaiting payment authorization - %s."
 msgstr "Płatność oczekuje na autoryzację - %s."
 
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:305
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:314
 msgid "Refund process failed. Please check logs for more information"
 msgstr "Nie udało się zlecić zwrotu. Sprawdź logi aby uzyskać więcej informacji."
 
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:253
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:262
 msgid "Refund can't be processed. Please check logs for more information"
 msgstr "Zwrot nie może zostać zlecony. Sprawdź logi aby uzyskać więcej informacji."
 
-#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:198
+#: includes/abstract/class-wc-gateway-pay-by-paynow-pl.php:204
 msgid "An error occurred during the payment process and the payment could not be completed."
 msgstr "Podczas płatności wystąpił błąd. Skontaktuj się z obsługą sklepu lub spróbuj ponownie."
 
