@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'wpdesk/wpdesk-omnibus',
-        'pretty_version' => '2.2.18',
-        'version' => '2.2.18.0',
-        'reference' => 'f6da89444ff3abf6e169c25ae87dd5e87b8667eb',
+        'pretty_version' => '2.2.19',
+        'version' => '2.2.19.0',
+        'reference' => 'e62423b80af15be99636b631fe4a60f9b12e09e0',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -29,9 +29,9 @@
             'dev_requirement' => false,
         ),
         'wpdesk/wpdesk-omnibus' => array(
-            'pretty_version' => '2.2.18',
-            'version' => '2.2.18.0',
-            'reference' => 'f6da89444ff3abf6e169c25ae87dd5e87b8667eb',
+            'pretty_version' => '2.2.19',
+            'version' => '2.2.19.0',
+            'reference' => 'e62423b80af15be99636b631fe4a60f9b12e09e0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

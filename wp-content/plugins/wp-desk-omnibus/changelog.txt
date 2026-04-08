@@ -1,5 +1,11 @@
 # WP Desk Omnibus Changelog
 
+## [2.2.19] - 2026-03-18
+### Added
+- Support for WooCommerce 10.6
+### Fixed
+- Omnibus background actions were registered too early in some context like direct running of wp-cron.php.
+
 ## [2.2.18] - 2026-02-10
 ### Fixed
 - Rare fatal error when locale is missing or unset.

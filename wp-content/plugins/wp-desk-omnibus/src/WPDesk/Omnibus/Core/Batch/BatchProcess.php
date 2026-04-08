@@ -28,12 +28,11 @@ class BatchProcess implements Hookable {
 	}
 
 	public function hooks(): void {
+		$this->processor->process();
 		add_action( 'admin_init', [ $this, 'initialize' ] );
 	}
 
 	public function initialize(): void {
-		$this->processor->process();
-
 		if ( did_action( 'action_scheduler_init' ) ) {
 			$this->schedule();
 		} else {
