@@ -45,6 +45,12 @@ jQuery(function ($) {
         .removeClass('vi-wpvs-option-wrap-disable');
     });
 
+    // Buttony rozmiarów — zawsze aktywne (usuwamy disable po każdej aktualizacji wariantów)
+    $('form.variations_form').on('woocommerce_update_variation_values', function () {
+      $('[data-wpvs_attribute_name="attribute_pa_rozmiar"] .vi-wpvs-option-wrap')
+        .removeClass('vi-wpvs-option-wrap-disable');
+    });
+
     $('.single_variation_wrap').on('show_variation', function (event, variation) {
       const isNew = variation['_mycheckbox'];
       const badge = '<div class="new-color-badge">Nowy kolor!</div>';
