@@ -157,9 +157,9 @@ $plugins=array(
         'description'   => __('Automatically generate and send professional PDF invoices, packing slips, and credit notes for every WooCommerce order. Customize document templates, include tax details, and allow customers to easily download or print order documents.', 'product-import-export-for-woo'),
         'image_url'     => 'wt_ipc_logo.png',
         'premium_url'   => 'https://www.webtoffee.com/product/woocommerce-pdf-invoices-packing-slips/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=PDF_invoice',
-        'basic_url'     => '',
+        'basic_url'     => 'https://wordpress.org/plugins/print-invoices-packing-slip-labels-for-woocommerce/',
         'pro_plugin'    => 'wt-woocommerce-invoice-addon/wt-woocommerce-invoice-addon.php',
-        'basic_plugin'  => '',
+        'basic_plugin'  => 'print-invoices-packing-slip-labels-for-woocommerce/print-invoices-packing-slip-labels-for-woocommerce.php',
     ),
     'wt_sdd_addon' => array(
         'title'         => __('WooCommerce Shipping Labels, Dispatch Labels and Delivery Notes', 'product-import-export-for-woo'),
@@ -211,9 +211,9 @@ $plugins=array(
         'description'   => __('Show personalized product recommendations with 10+ popular recommendations templates. Recommend upsells, cross-sells, best-sellers, frequently bought together, and more to increase the average order value and improve the shopping experience.', 'product-import-export-for-woo'),
         'image_url'     => 'product-recommendation.png',
         'premium_url'   => 'https://www.webtoffee.com/product/woocommerce-product-recommendations/?utm_source=other_solution_page&utm_medium=free_plugin&utm_campaign=Product_Recommendations',
-        'basic_url'     => '',
+        'basic_url'     => 'https://wordpress.org/plugins/wt-woocommerce-related-products/',
         'pro_plugin'    => 'wt-woocommerce-product-recommendations/wt-woocommerce-product-recommendations.php',
-        'basic_plugin'  => '', 
+        'basic_plugin'  => 'wt-woocommerce-related-products/custom-related-products.php', 
     ),    
 );
 

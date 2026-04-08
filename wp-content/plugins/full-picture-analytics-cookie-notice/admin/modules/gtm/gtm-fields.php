@@ -21,6 +21,27 @@ $sections = array(
 				'popup'				=> '<p>' . sprintf ( esc_html__('To install Google Tag Manager\'s container on this site, please paste the Container ID in the form. Please %1$sfollow this guide%2$s if you do not know where to find this ID.', 'full-picture-analytics-cookie-notice' ), '<a href="https://www.optimizesmart.com/how-to-get-google-tag-manager-container-id/" target="_blank">','</a>' ) . '</p>',
 			),
 			array(
+				'type'	 			=> 'toggle',
+				'label' 			=> esc_html__( 'Do not load GTM container (only push dataLayer events)', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'no_container',
+				'must_have'			=> 'pro',
+				'option_arr_id'		=> $option_arr_id,
+				'popup2'			=> '<p>' . esc_html__( 'Enable this function if you want to use sGTM via Stape.io or a different service.', 'full-picture-analytics-cookie-notice') . '</p>
+				<p>' . sprintf( esc_html__( 'Learn %1$show to use sGTM hosted by Stape.io%2$s', 'full-picture-analytics-cookie-notice'), '<a href="https://wpfullpicture.com/support/documentation/how-to-use-sgtm-from-stape-io/" target="_blank">', '</a>' ) . '</p>',
+			),
+			array(
+				'type'	 			=> 'select',
+				'label' 			=> esc_html__( 'Push data to DL in format compatible with:', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'compat',
+				'must_have'			=> 'pro',
+				'class'				=> 'fupi_sub',
+				'option_arr_id'		=> $option_arr_id,
+				'options'			=> array(
+					''					=> esc_html__( 'Choose service', 'full-picture-analytics-cookie-notice' ),
+					'stape'			=> esc_html__( 'Stape.io', 'full-picture-analytics-cookie-notice' ),
+				),
+			),
+			array(
 				'type'	 			=> 'radio',
 				'label' 			=> esc_html__( 'DataLayer name', 'full-picture-analytics-cookie-notice' ),
 				'field_id' 			=> 'datalayer',

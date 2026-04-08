@@ -49,7 +49,7 @@
 				<?php endif; ?>
 			</div>
 		</div>
-		<a class="button button-primary button-hero wpallimport-large-button wpallimport-notify-read-more" href="https://www.wpallimport.com/documentation/problems-with-import-files/#problem-with-file" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>
+		<a class="button wpallimport-large-button wpallimport-notify-read-more" href="https://www.wpallimport.com/documentation/problems-with-import-files/#problem-with-file" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>
 	</div>
 
 	<?php

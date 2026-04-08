@@ -1521,5 +1521,43 @@ if ( ! class_exists( 'WWP_Helper_Functions' ) ) {
                 && isset( $_POST['nonce'] )
                 && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), $nonce_action );
         }
+
+        /**
+         * Collect wholesale prices per role from a variable product's child variations.
+         *
+         * Iterates through all child variation IDs, loads each child product, and
+         * collects the `{role_key}_wholesale_price` meta value into an array keyed
+         * by role. Returns an associative array where keys are role keys and values
+         * are arrays of floats representing the wholesale prices found.
+         *
+         * @since 2.2.8
+         *
+         * @param array $children        Array of child variation product IDs.
+         * @param array $wholesale_roles Array of registered wholesale roles keyed by role key.
+         *
+         * @return array Associative array of role_key => float[] wholesale prices.
+         */
+        public static function get_wholesale_prices_per_role_from_variations( $children, $wholesale_roles ) {
+
+            $prices_per_role = array();
+
+            foreach ( $children as $child_id ) {
+                $child_product = wc_get_product( $child_id );
+
+                if ( ! $child_product ) {
+                    continue;
+                }
+
+                foreach ( $wholesale_roles as $role_key => $role ) {
+                    $child_wholesale_price = $child_product->get_meta( $role_key . '_wholesale_price' );
+
+                    if ( is_numeric( $child_wholesale_price ) && $child_wholesale_price > 0 ) {
+                        $prices_per_role[ $role_key ][] = (float) $child_wholesale_price;
+                    }
+                }
+            }
+
+            return $prices_per_role;
+        }
     }
 }

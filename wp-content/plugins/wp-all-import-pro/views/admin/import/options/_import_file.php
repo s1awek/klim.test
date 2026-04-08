@@ -12,7 +12,7 @@
 				<h4><?php _e("Contact your host and have them check your server's error log.", "wp-all-import-pro"); ?></h4>
 			</div>
 		</div>
-		<a class="button button-primary button-hero wpallimport-large-button wpallimport-notify-read-more" href="https://www.wpallimport.com/documentation/problems-with-import-files/" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>
+		<a class="button wpallimport-large-button wpallimport-notify-read-more" href="https://www.wpallimport.com/documentation/problems-with-import-files/" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>
 	</div>
 
 	<div class="rad4 first-step-errors error-file-validation" <?php if ( ! empty($upload_validation) ): ?> style="display:block;" <?php endif; ?>>
@@ -29,7 +29,7 @@
 				</h4>
 			</div>
 		</div>
-		<a class="button button-primary button-hero wpallimport-large-button wpallimport-notify-read-more" href="https://www.wpallimport.com/documentation/problems-with-import-files/#problem-with-file" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>
+		<a class="button wpallimport-large-button wpallimport-notify-read-more" href="https://www.wpallimport.com/documentation/problems-with-import-files/#problem-with-file" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>
 	</div>
 
 	<div class="wpallimport-content-section">
@@ -58,12 +58,12 @@
 							</a>
 						</div>
 
-						<input type="hidden" value="<?php echo $post['type']; ?>" name="new_type"/>
+						<input type="hidden" value="<?php echo esc_attr($post['type']); ?>" name="new_type"/>
 
 						<div class="wpallimport-upload-type-container" rel="upload_type">
 							<div id="plupload-ui" class="wpallimport-file-type-options">
 					            <div>
-					                <input type="hidden" name="filepath" value="<?php if ('upload' == $import->type) echo $import->path; ?>" id="filepath"/>
+					                <input type="hidden" name="filepath" value="<?php if ('upload' == $import->type) echo esc_attr($import->path); ?>" id="filepath"/>
 					                <a id="select-files" href="javascript:void(0);"/><?php _e('Click here to select file from your computer...', 'wp-all-import-pro'); ?></a>
 					                <div id="progressbar" class="wpallimport-progressbar">
 					                	<?php if ('upload' == $import->type) _e( '<span>Upload Complete</span> - '.basename($import->path).' 100%', 'wp-all-import-pro'); ?>
@@ -193,7 +193,7 @@
                                            value="<?php echo ( ! empty($import->options['ftp_path'])) ? esc_attr($import->options['ftp_path']) : ''; ?>"
                                            placeholder="<?php _e('FTP file path', 'wp-all-import-pro'); ?>"/>
 
-                                    <a class="wpallimport-ftp-builder rad4 button button-primary button-hero wpallimport-large-button wpai-ftp-select-file-button"
+                                    <a class="wpallimport-ftp-builder rad4 button wpallimport-large-button wpai-ftp-select-file-button"
                                        href="javascript:void(0);">
                                         <div class="easing-spinner"
                                              style="display: none; left: 36px !important; top: 2px;">

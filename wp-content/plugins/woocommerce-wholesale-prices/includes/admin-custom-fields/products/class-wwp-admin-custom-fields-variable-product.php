@@ -655,26 +655,31 @@ if ( ! class_exists( 'WWP_Admin_Custom_Fields_Variable_Product' ) ) {
             $main_variable_children = $main_variable_product->get_children();
             if ( ! empty( $main_variable_children ) ) {
 
-                $wholesale_child_prices = array();
-                foreach ( $main_variable_children as $main_variable_child ) {
-                    foreach ( $wholesale_roles as $role_key => $role ) {
-                        $child_product         = wc_get_product( $main_variable_child );
-                        $child_wholesale_price = $child_product->get_meta( $role_key . '_wholesale_price' );
+                // WWPP-147 : Delete the meta that is set when setting discount on per product category level.
+                foreach ( $wholesale_roles as $role_key => $role ) {
+                    $main_variable_product->delete_meta_data( $role_key . '_have_wholesale_price_set_by_product_cat' );
+                }
 
-                        // WWPP-147 : Delete the meta that is set when setting discount on per product category level.
-                        $main_variable_product->delete_meta_data( $role_key . '_have_wholesale_price_set_by_product_cat' );
+                $wholesale_prices_per_role = WWP_Helper_Functions::get_wholesale_prices_per_role_from_variations( $main_variable_children, $wholesale_roles );
 
-                        if ( is_numeric( $child_wholesale_price ) && $child_wholesale_price > 0 ) {
-                            $wholesale_child_prices[ $role_key ] = $child_wholesale_price;
-                            do_action( 'wwp_set_have_wholesale_price_meta_prod_cat_wholesale_discount', $post_id, $role_key );
-                        }
+                // Fire action for each role that has at least one variation with a wholesale price.
+                foreach ( $wholesale_roles as $role_key => $role ) {
+                    if ( ! empty( $wholesale_prices_per_role[ $role_key ] ) ) {
+                        do_action( 'wwp_set_have_wholesale_price_meta_prod_cat_wholesale_discount', $post_id, $role_key );
                     }
                 }
 
-                if ( ! empty( $wholesale_child_prices ) ) {
-                    $main_variable_product->update_meta_data( $role_key . '_have_wholesale_price', 'yes' );
-                } else {
-                    $main_variable_product->update_meta_data( $role_key . '_have_wholesale_price', 'no' );
+                foreach ( $wholesale_roles as $role_key => $role ) {
+                    if ( ! empty( $wholesale_prices_per_role[ $role_key ] ) ) {
+                        $prices = $wholesale_prices_per_role[ $role_key ];
+                        $main_variable_product->update_meta_data( $role_key . '_have_wholesale_price', 'yes' );
+                        $main_variable_product->update_meta_data( $role_key . '_min_wholesale_price', min( $prices ) );
+                        $main_variable_product->update_meta_data( $role_key . '_max_wholesale_price', max( $prices ) );
+                    } else {
+                        $main_variable_product->update_meta_data( $role_key . '_have_wholesale_price', 'no' );
+                        $main_variable_product->delete_meta_data( $role_key . '_min_wholesale_price' );
+                        $main_variable_product->delete_meta_data( $role_key . '_max_wholesale_price' );
+                    }
                 }
             }
             // phpcs:enable WordPress.Security.NonceVerification.Missing

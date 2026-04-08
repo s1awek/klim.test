@@ -158,6 +158,11 @@ class ADBC_Settings extends ADBC_Singleton {
 				'validator_class' => 'ADBC_Settings_Validator',
 				'validator_method' => 'is_valid_date'
 			],
+			'ltd_migration_reminder_date' => [ 
+				'default' => '01/01/2000', // Past date so notice shows until user dismisses or delays
+				'validator_class' => 'ADBC_Settings_Validator',
+				'validator_method' => 'is_valid_date'
+			],
 			'free_migration_done' => [ 
 				'default' => '0',
 				'validator_class' => 'ADBC_Common_Validator',

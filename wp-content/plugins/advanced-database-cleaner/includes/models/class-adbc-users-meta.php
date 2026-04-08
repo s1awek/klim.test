@@ -371,13 +371,31 @@ class ADBC_Users_Meta {
 	}
 
 	/**
-	 * Delete grouped users meta. Users meta are grouped by site ID as key.
-	 * 
-	 * @param array $selected_items Grouped selected users meta to delete.
-	 * 
+	 * Delete grouped users meta.
+	 *
+	 * @param array $selected_items Selected users meta to delete.
+	 *
 	 * @return array An array of users meta names that were not processed (not deleted).
 	 */
 	public static function delete_users_meta( $selected_items ) {
+
+		$cleanup_method = ADBC_Settings::instance()->get_setting( 'sql_or_native_cleanup_method' );
+
+		if ( $cleanup_method === 'native' ) {
+			return self::delete_users_meta_native( $selected_items );
+		}
+
+		return self::delete_users_meta_sql( $selected_items );
+
+	}
+
+	/**
+	 * Deletes users meta using WordPress native delete logic (current logic, unchanged).
+	 *
+	 * @param array $selected_items
+	 * @return array Not processed users meta names.
+	 */
+	protected static function delete_users_meta_native( $selected_items ) {
 
 		global $wpdb;
 
@@ -396,6 +414,39 @@ class ADBC_Users_Meta {
 				$not_processed[] = $selected['name'];
 
 		}
+
+		return $not_processed;
+
+	}
+
+	/**
+	 * Deletes users meta using direct SQL (bulk delete by umeta_id).
+	 *
+	 * @param array $selected_items
+	 * @return array Not processed users meta names.
+	 */
+	protected static function delete_users_meta_sql( $selected_items ) {
+
+		global $wpdb;
+
+		$not_processed = [];
+
+		$ids = [];
+		foreach ( $selected_items as $selected )
+			$ids[] = $selected['id'];
+
+		$placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+
+		// Bulk delete.
+		$sql = "DELETE FROM {$wpdb->usermeta} WHERE umeta_id IN ($placeholders)";
+		$sql = $wpdb->prepare( $sql, ...$ids );
+		$wpdb->query( $sql );
+
+		// Identify any remaining rows (not processed) deterministically (names == meta_key).
+		$check_sql = "SELECT meta_key FROM {$wpdb->usermeta} WHERE umeta_id IN ($placeholders)";
+		$check_sql = $wpdb->prepare( $check_sql, ...$ids );
+
+		$not_processed = $wpdb->get_col( $check_sql );
 
 		return $not_processed;
 

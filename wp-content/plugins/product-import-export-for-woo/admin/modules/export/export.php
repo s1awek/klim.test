@@ -120,17 +120,17 @@ class Wt_Import_Export_For_Woo_Product_Basic_Export
 	}
 	
 	
-		/**
-		 * 	Dismiss pro ad banner after exporting download
-		 */
-		public function iew_export_dismiss_adbanner() {
+	/**
+	 * 	Dismiss pro ad banner after exporting download
+	 */
+	public function iew_export_dismiss_adbanner() {
 
-			if (Wt_Iew_Sh::check_write_access(WT_IEW_PLUGIN_ID_BASIC)) {
-				update_option('wt_ier_pro_banner_dismissed', true);
-			}
+		if (Wt_Iew_Sh::check_write_access(WT_IEW_PLUGIN_ID_BASIC)) {
+			update_option('wt_ier_pro_banner_dismissed', true);
 		}
+	}
 
-		public function get_defaults()
+	public function get_defaults()
 	{	
 		$this->default_export_method= Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::get_advanced_settings('default_export_method');
 		$this->default_batch_count=Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::get_advanced_settings('default_export_batch');
@@ -202,9 +202,9 @@ class Wt_Import_Export_For_Woo_Product_Basic_Export
 				'val'=>1,
 				'chk'=>'true'
 			),
-                );
+        );
 
-            return $fields;
+        return $fields;
 	}
 
 	/**
@@ -306,8 +306,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Export
 
 				if ( $should_return ) {
 					return;
-				}
-		
+				}		
 			}
 			
 			$this->get_steps();
@@ -340,33 +339,33 @@ class Wt_Import_Export_For_Woo_Product_Basic_Export
 	}
 
 	public function get_filter_screen_fields($filter_form_data) {
-            $filter_screen_fields = array(
-                'limit' => array(
-                    'label' => __("Limit", 'product-import-export-for-woo'),
-                    'value' => '',
-                    'type' => 'number',
-                    'field_name' => 'limit',
-                    'placeholder' => 'Unlimited',
-                    'help_text' => __('The actual number of records you want to export. e.g. A limit of 500 with an offset 10 will export records from 11th to 510th position.', 'product-import-export-for-woo'),
-                    'attr' => array('step' => 1, 'min' => 0),
-                    'validation_rule' => array('type' => 'absint')
-                ),
-                'offset' => array(
-                    'label' => __("Offset", 'product-import-export-for-woo'),
-                    'value' => '',
-                    'field_name' => 'offset',
-                    'placeholder' => __('0', 'product-import-export-for-woo'),
-                    'help_text' => __('Specify the number of records that should be skipped from the beginning of the database. e.g. An offset of 10 skips the first 10 records.', 'product-import-export-for-woo'),
-                    'type' => 'number',
-                    'attr' => array('step' => 1, 'min' => 0),
-                    'validation_rule' => array('type' => 'absint')
-                ),
-            );
-            $filter_screen_fields = apply_filters('wt_iew_exporter_alter_filter_fields_basic', $filter_screen_fields, $this->to_export, $filter_form_data);
-            return $filter_screen_fields;
-        }
+        $filter_screen_fields = array(
+            'limit' => array(
+                'label' => __("Limit", 'product-import-export-for-woo'),
+                'value' => '',
+                'type' => 'number',
+                'field_name' => 'limit',
+                'placeholder' => 'Unlimited',
+                'help_text' => __('The actual number of records you want to export. e.g. A limit of 500 with an offset 10 will export records from 11th to 510th position.', 'product-import-export-for-woo'),
+                'attr' => array('step' => 1, 'min' => 0),
+                'validation_rule' => array('type' => 'absint')
+            ),
+            'offset' => array(
+                'label' => __("Offset", 'product-import-export-for-woo'),
+                'value' => '',
+                'field_name' => 'offset',
+                'placeholder' => __('0', 'product-import-export-for-woo'),
+                'help_text' => __('Specify the number of records that should be skipped from the beginning of the database. e.g. An offset of 10 skips the first 10 records.', 'product-import-export-for-woo'),
+                'type' => 'number',
+                'attr' => array('step' => 1, 'min' => 0),
+                'validation_rule' => array('type' => 'absint')
+            ),
+        );
+        $filter_screen_fields = apply_filters('wt_iew_exporter_alter_filter_fields_basic', $filter_screen_fields, $this->to_export, $filter_form_data);
+        return $filter_screen_fields;
+    }
 
-        public function get_advanced_screen_fields($advanced_form_data)
+    public function get_advanced_screen_fields($advanced_form_data)
 	{
 		$file_into_arr=array('local'=>__('Local', 'product-import-export-for-woo'));
 
@@ -704,7 +703,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Export
 		$file_as=(isset($this->allowed_export_file_type[$file_as]) ? $file_as : 'csv');
 
 		
-		$generated_file_name=$this->to_export.'_export_'.current_time('Y-m-d-h-i-s').'.'.$file_as;
+		$generated_file_name = sanitize_file_name( $this->to_export . '-export-' . current_time('Y-m-d-H-i-s') . '.' . $file_as );
 
 		if($export_id==0) //first batch then create a history entry
 		{
@@ -775,20 +774,20 @@ class Wt_Import_Export_For_Woo_Product_Basic_Export
 		}else
 		{
 
-				include_once WT_P_IEW_PLUGIN_PATH.'admin/classes/class-csvwriter.php';
-				$writer=new Wt_Import_Export_For_Woo_Basic_Csvwriter($file_path, $offset, $csv_delimiter, $this->use_bom);
+			include_once WT_P_IEW_PLUGIN_PATH.'admin/classes/class-csvwriter.php';
+			$writer=new Wt_Import_Export_For_Woo_Basic_Csvwriter($file_path, $offset, $csv_delimiter, $this->use_bom);
 
                                                 
-                        /**
-			*	Alter export data before writing to file.
-			*	@param 	array 	$export_data  		data to export
-			*	@param 	int 	$offset  			current offset
-			*	@param 	boolean $is_last_offset 	is current offset is last one
-			*	@param 	string 	$file_as 			file type to write Eg: XML, CSV
-			*	@param 	string 	$to_export 			Post type
-			*	@param 	string 	$csv_delimiter 		CSV delimiter. In case of CSV export
-			*	@return array 	$export_data 		Altered export data
-			*/
+           	/**
+			 *	Alter export data before writing to file.
+			 *	@param 	array 	$export_data  		data to export
+			 *	@param 	int 	$offset  			current offset
+			 *	@param 	boolean $is_last_offset 	is current offset is last one
+			 *	@param 	string 	$file_as 			file type to write Eg: XML, CSV
+			 *	@param 	string 	$to_export 			Post type
+			 *	@param 	string 	$csv_delimiter 		CSV delimiter. In case of CSV export
+			 *	@return array 	$export_data 		Altered export data
+			 */
 			$export_data=apply_filters('wt_iew_alter_export_data_basic', $export_data, $offset, $is_last_offset, $file_as, $this->to_export, $csv_delimiter);                        
 			$writer->write_to_file($export_data, $offset, $is_last_offset, $this->to_export);
 		}
@@ -821,19 +820,18 @@ class Wt_Import_Export_For_Woo_Product_Basic_Export
 				$out['finished']=1; //finished
 
 				$msg = __('Export file processing completed', 'product-import-export-for-woo');
-                                $msg.='<span class="wt_iew_popup_close" style="line-height:10px;width:auto" onclick="wt_iew_basic_export.hide_export_info_box();">X</span>';
+                $msg.='<span class="wt_iew_popup_close" style="line-height:10px;width:auto" onclick="wt_iew_basic_export.hide_export_info_box();">X</span>';
+                
+                $msg.='<span class="wt_iew_info_box_finished_text" style="font-size: 10px; display:block">';
+                if(Wt_Import_Export_For_Woo_Product_Admin_Basic::module_exists('history'))
+                {
+                        $history_module_id= Wt_Import_Export_For_Woo_Product_Basic::get_module_id('history');
+                        $history_page_url=admin_url('admin.php?page='.$history_module_id);
+                        $msg.=__('You can manage exports from History section.', 'product-import-export-for-woo');
+                }
                                 
-                                $msg.='<span class="wt_iew_info_box_finished_text" style="font-size: 10px; display:block">';
-                                if(Wt_Import_Export_For_Woo_Product_Admin_Basic::module_exists('history'))
-                                {
-                                        $history_module_id= Wt_Import_Export_For_Woo_Product_Basic::get_module_id('history');
-                                        $history_page_url=admin_url('admin.php?page='.$history_module_id);
-                                        $msg.=__('You can manage exports from History section.', 'product-import-export-for-woo');
-                                }
-                                
-                                $msg.='<a class="button button-secondary" style="margin-top:10px;" onclick="wt_iew_basic_export.hide_export_info_box();" target="_blank" href="'.$out['file_url'].'" >'.__('Download file', 'product-import-export-for-woo').'</a></span>';
-				if( 0 == $total_records && isset( $export_data['no_post'] ) ){
-					
+                $msg.='<a class="button button-secondary" style="margin-top:10px;" onclick="wt_iew_basic_export.hide_export_info_box();" target="_blank" href="'.$out['file_url'].'" >'.__('Download file', 'product-import-export-for-woo').'</a></span>';
+				if( 0 == $total_records && isset( $export_data['no_post'] ) ) {					
 					$out['no_post'] = true;
 					$msg = $export_data['no_post'];                    
 				}

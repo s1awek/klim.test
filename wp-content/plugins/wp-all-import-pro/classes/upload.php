@@ -322,11 +322,16 @@ if ( ! class_exists( 'PMXI_Upload' ) ) {
 
 			if ( empty( $this->errors->errors ) ) {
 
-				if ( '' == $feed_type and ! preg_match( '%\W(xml|csv|zip|gz|xls|xlsx)$%i', trim( $this->file ) ) ) {
-					$feed_type = wp_all_import_get_remote_file_name( trim( $this->file ) );
+				// Always re-detect feed type from the URL. This corrects stale
+				// values in the database (e.g. an AWIN gzip feed stored as 'csv'
+				// because the original import wizard saved the inner content type
+				// instead of the archive type).
+				$detected_type = wp_all_import_get_remote_file_name( trim( $this->file ) );
+				if ( $detected_type && $detected_type !== $feed_type ) {
+					$feed_type = $detected_type;
 				}
 
-				if ( 'zip' == $feed_type or empty( $feed_type ) and preg_match( '%\W(zip)$%i', trim( $this->file ) ) ) {
+				if ( 'zip' === $feed_type || ( empty( $feed_type ) && preg_match( '%\W(zip)$%i', trim( $this->file ) ) ) ) {
 
 					$tmpname = $this->uploadsPath . '/' . wp_unique_filename( $this->uploadsPath, md5( basename( $this->file ) ) . '.zip' );
 
@@ -342,89 +347,19 @@ if ( ! class_exists( 'PMXI_Upload' ) ) {
 						}
 					}
 
-					if ( ! class_exists( 'WpaiPclZip' ) ) {
-						include_once PMXI_Plugin::ROOT_DIR . '/libraries/wpaipclzip.lib.php';
-					}
+					$zipResult       = $this->extract_zip( $tmpname );
+					$filePath        = $zipResult['filePath'];
+					$csv_path        = $zipResult['csv_path'];
+					$templates       = $zipResult['templates'];
+					$templateOptions = $zipResult['templateOptions'];
+					$bundle          = $zipResult['bundle'];
+					$bundleFiles     = $zipResult['bundleFiles'];
+					$source          = array(
+						'name' => basename( parse_url( $this->file, PHP_URL_PATH ) ),
+						'type' => 'url',
+						'path' => $feed_xpath,
+					);
 
-					$archive = new WpaiPclZip( $tmpname );
-
-					// Get allowed file extensions (whitelist approach)
-					$allowed_extensions = wp_all_import_get_allowed_zip_extensions();
-
-					// Attempt to extract files with whitelist restrictions
-					$v_result_list = $archive->extract( WPAI_PCLZIP_OPT_PATH, $this->uploadsPath, WPAI_PCLZIP_OPT_REPLACE_NEWER, WPAI_PCLZIP_OPT_EXTRACT_DIR_RESTRICTION, $this->uploadsPath, WPAI_PCLZIP_OPT_EXTRACT_WHITELIST_RESTRICTIONS, $allowed_extensions );
-					if ( empty( $v_result_list ) || ! is_array( $v_result_list ) && $v_result_list < 1 ) {
-						$this->errors->add( 'form-validation', __( 'WP All Import couldn\'t find a file to import inside your ZIP.<br/><br/>Either the .ZIP file is broken, or doesn\'t contain a file with an extension of  XML, CSV, PSV, DAT, or TXT. <br/>Please attempt to unzip your .ZIP file on your computer to ensure it is a valid .ZIP file which can actually be unzipped, and that it contains a file which WP All Import can import.', 'wp-all-import-pro' ) );
-					} else {
-						$filePath = '';
-						if ( ! empty( $v_result_list ) ) {
-							foreach ( $v_result_list as $unzipped_file ) {
-								if ( $unzipped_file['status'] == 'ok' and preg_match( '%\W(php)$%i', trim( $unzipped_file['stored_filename'] ) ) ) {
-									unlink( $unzipped_file['filename'] );
-									continue;
-								}
-								if ( $unzipped_file['status'] == 'ok' and preg_match( '%\W(xml|csv|txt|dat|psv|json|xls|xlsx|gz)$%i', trim( $unzipped_file['stored_filename'] ) ) and strpos( $unzipped_file['stored_filename'], 'readme.txt' ) === false ) {
-									if ( strpos( basename( $unzipped_file['stored_filename'] ), 'WP All Import Template' ) === 0 || strpos( basename( $unzipped_file['stored_filename'] ), 'templates_' ) === 0 ) {
-										$templates        = file_get_contents( $unzipped_file['filename'] );
-										$decodedTemplates = json_decode( $templates, true );
-										$templateOptions  = empty( $decodedTemplates[0] ) ? current( $decodedTemplates ) : $decodedTemplates;
-									} else {
-										if ( $filePath == '' ) {
-											$filePath = $unzipped_file['filename'];
-										}
-										if ( ! in_array( $unzipped_file['filename'], $bundleFiles ) ) {
-											$bundleFiles[ basename( $unzipped_file['filename'] ) ] = $unzipped_file['filename'];
-										}
-									}
-								}
-							}
-						}
-
-						if ( count( $bundleFiles ) > 1 ) {
-							if ( ! empty( $decodedTemplates ) ) {
-								foreach ( $decodedTemplates as $cpt => $tpl ) {
-									$fileFormats    = $this->get_xml_file( $bundleFiles[ basename( $tpl[0]['source_file_name'] ) ] );
-									$bundle[ $cpt ] = $fileFormats['xml'];
-								}
-							}
-							if ( ! empty( $bundle ) ) {
-								$filePath = current( $bundle );
-							}
-						}
-
-						if ( $this->uploadsPath === false ) {
-							$this->errors->add( 'form-validation', __( 'WP All Import can\'t access your WordPress uploads folder.', 'wp-all-import-pro' ) );
-						}
-
-						if ( empty( $filePath ) ) {
-							$zip    = new \ZipArchive();
-							$result = $zip->open( trim( $tmpname ) );
-							if ( $result ) {
-								for ( $i = 0; $i < $zip->numFiles; $i++ ) {
-									$fileName = $zip->getNameIndex( $i );
-									if ( preg_match( '%\W(xml|csv|txt|dat|psv|json|xls|xlsx|gz)$%i', trim( $fileName ) ) ) {
-										$filePath = $this->uploadsPath . '/' . $fileName;
-										$fp       = fopen( $filePath, 'w' );
-										fwrite( $fp, $zip->getFromIndex( $i ) );
-										fclose( $fp );
-										break;
-									}
-								}
-								$zip->close();
-							} else {
-								$this->errors->add( 'form-validation', __( 'WP All Import couldn\'t find a file to import inside your ZIP.<br/><br/>Either the .ZIP file is broken, or doesn\'t contain a file with an extension of  XML, CSV, PSV, DAT, or TXT. <br/>Please attempt to unzip your .ZIP file on your computer to ensure it is a valid .ZIP file which can actually be unzipped, and that it contains a file which WP All Import can import.', 'wp-all-import-pro' ) );
-							}
-						}
-						// Detect if file is very large
-						$source      = array(
-							'name' => basename( parse_url( $this->file, PHP_URL_PATH ) ),
-							'type' => 'url',
-							'path' => $feed_xpath,
-						);
-						$fileFormats = $this->get_xml_file( $filePath );
-						$csv_path    = $fileFormats['csv'];
-						$filePath    = $fileFormats['xml'];
-					}
 					if ( file_exists( $tmpname ) ) {
 						wp_all_import_remove_source( $tmpname, false );
 					}
@@ -494,7 +429,7 @@ if ( ! class_exists( 'PMXI_Upload' ) ) {
 					$sql      = new PMXI_SQLParser( $localSQLPath, $this->uploadsPath );
 					$filePath = $sql->parse();
 					wp_all_import_remove_source( $localSQLPath, false );
-				} elseif ( preg_match( '%\W(xls|xlsx)$%i', $feed_type ) || preg_match( '%\W(xls|xlsx)$%i', strtok( trim( $this->file ), '?' ) ) || preg_match( '%\W(xls|xlsx)$%i', trim( $this->file ) ) ) {
+				} elseif ( in_array( $feed_type, array( 'xls', 'xlsx' ), true ) ) {
 
 					$source = array(
 						'name' => basename( $this->file ),
@@ -502,21 +437,22 @@ if ( ! class_exists( 'PMXI_Upload' ) ) {
 						'path' => $feed_xpath,
 					);
 					// copy remote file in binary mode
-					$localXLSPath = wp_all_import_get_url( $this->file, $this->uploadsPath, 'xls' );
+					$localXLSPath = wp_all_import_get_url( $this->file, $this->uploadsPath, $feed_type );
 					include_once PMXI_Plugin::ROOT_DIR . '/libraries/XmlImportXLSParse.php';
 					$xls      = new PMXI_XLSParser( $localXLSPath, $this->uploadsPath );
 					$filePath = $xls->parse();
 					wp_all_import_remove_source( $localXLSPath, false );
+					$this->root_element = 'node';
 				} else {
-					if ( 'gz' == $feed_type or '' == $feed_type and preg_match( '%\W(gz|gzip)$%i', trim( $this->file ) ) ) {
+					$is_known_gz = in_array( $feed_type, array( 'gz', 'gzip' ), true ) || ( '' == $feed_type && preg_match( '%\W(gz|gzip)$%i', trim( $this->file ) ) );
+					if ( $is_known_gz ) {
+						// URL is known to be gzip from extension/path — download + decompress in one step.
 						$fileInfo = wp_all_import_get_gz( $this->file, 0, $this->uploadsPath );
 					} else {
-						$headers = wp_all_import_get_feed_type( $this->file );
-						if ( $headers['Content-Type'] and in_array( $headers['Content-Type'], array( 'gz', 'gzip' ) ) or $headers['Content-Encoding'] and in_array( $headers['Content-Encoding'], array( 'gz', 'gzip' ) ) ) {
-							$fileInfo = wp_all_import_get_gz( $this->file, 0, $this->uploadsPath, $headers );
-						} else {
-							$fileInfo = wp_all_import_get_url( $this->file, $this->uploadsPath, $headers['Content-Type'], $headers['Content-Encoding'], true );
-						}
+						// Download first, detect type from magic bytes — avoids a separate HEAD request
+						// which can fail rate-limited feeds. Content-Encoding: gzip (transport encoding)
+						// is automatically decompressed by WordPress HTTP API during download.
+						$fileInfo = wp_all_import_get_url( $this->file, $this->uploadsPath, false, false, true );
 					}
 
 					if ( ! is_wp_error( $fileInfo ) && false !== $fileInfo ) {
@@ -531,7 +467,36 @@ if ( ! class_exists( 'PMXI_Upload' ) ) {
 							'path' => $feed_xpath,
 						);
 						$fileInfo['type'] = apply_filters( 'wp_all_import_feed_type', $fileInfo['type'], $this->file );
-						// detect CSV or XML
+						// Update feed_type from detection so it flows into the return array.
+						if ( ! empty( $fileInfo['type'] ) ) {
+							$feed_type = $fileInfo['type'];
+						}
+						// Known-gz path: wp_all_import_get_gz already decompressed and
+						// returned the inner type (csv/xml). Pin feed_type back to 'gz'
+						// so the import record stores the correct archive type.
+						if ( $is_known_gz ) {
+							$feed_type = 'gz';
+						}
+
+						// If magic bytes detected gzip, decompress locally and re-detect
+						// the inner type so the switch can route it (csv, xml, etc.).
+						if ( in_array( $fileInfo['type'], array( 'gz', 'gzip' ), true ) ) {
+							$localGzPath = $filePath;
+							$gzResult    = wp_all_import_get_gz( $localGzPath, 0, $this->uploadsPath );
+							wp_all_import_remove_source( $localGzPath, false );
+							if ( ! is_wp_error( $gzResult ) && false !== $gzResult ) {
+								$filePath           = $gzResult['localPath'];
+								$fileInfo['type']   = $gzResult['type'];
+								$fileInfo['localPath'] = $gzResult['localPath'];
+								// Pin feed_type to 'gz' — inner type routes the switch,
+								// but the archive type must persist for the import record.
+								$feed_type = 'gz';
+							} else {
+								$this->errors->add( 'form-validation', __( 'Failed to decompress gzip file.', 'wp-all-import-pro' ) );
+							}
+						}
+
+						// Route based on detected file type.
 						switch ( $fileInfo['type'] ) {
 							case 'csv':
 								include_once PMXI_Plugin::ROOT_DIR . '/libraries/XmlImportCsvParse.php';
@@ -546,6 +511,19 @@ if ( ! class_exists( 'PMXI_Upload' ) ) {
 								$filePath           = $csv->xml_path;
 								$this->is_csv       = $csv->is_csv;
 								$this->root_element = 'node';
+								break;
+							case 'xls':
+							case 'xlsx':
+								include_once PMXI_Plugin::ROOT_DIR . '/libraries/XmlImportXLSParse.php';
+								$xls         = new PMXI_XLSParser( $filePath, $this->uploadsPath );
+								$parsed_path = $xls->parse();
+								wp_all_import_remove_source( $fileInfo['localPath'], false );
+								if ( ! empty( $parsed_path ) ) {
+									$filePath           = $parsed_path;
+									$this->root_element = 'node';
+								} else {
+									$this->errors->add( 'form-validation', __( 'Could not parse the XLS/XLSX file.', 'wp-all-import-pro' ) );
+								}
 								break;
 							case 'json':
 								$json_str = file_get_contents( $filePath );
@@ -570,6 +548,21 @@ if ( ! class_exists( 'PMXI_Upload' ) ) {
 								include_once PMXI_Plugin::ROOT_DIR . '/libraries/XmlImportSQLParse.php';
 								$sql      = new PMXI_SQLParser( $filePath, $this->uploadsPath );
 								$filePath = $sql->parse();
+								break;
+							case 'zip':
+								$zipResult       = $this->extract_zip( $filePath );
+								wp_all_import_remove_source( $filePath, false );
+								$filePath        = $zipResult['filePath'];
+								$csv_path        = $zipResult['csv_path'];
+								$templates       = $zipResult['templates'];
+								$templateOptions = $zipResult['templateOptions'];
+								$bundle          = $zipResult['bundle'];
+								$bundleFiles     = $zipResult['bundleFiles'];
+								$source          = array(
+									'name' => basename( parse_url( $this->file, PHP_URL_PATH ) ),
+									'type' => 'url',
+									'path' => $feed_xpath,
+								);
 								break;
 							default:
 								# code...
@@ -939,6 +932,102 @@ if ( ! class_exists( 'PMXI_Upload' ) ) {
 				'taxonomy_type'      => ( ! empty( $options['taxonomy_type'] ) ) ? $options['taxonomy_type'] : false,
 				'gravity_form_title' => ( ! empty( $options['gravity_form_title'] ) ) ? $options['gravity_form_title'] : false,
 			);
+		}
+
+		/**
+		 * Extract a ZIP archive and locate the importable file inside it.
+		 *
+		 * @param string $zipPath Local path to the ZIP file.
+		 * @return array { filePath, csv_path, source, templates, templateOptions, bundle, bundleFiles }
+		 */
+		protected function extract_zip( $zipPath ) {
+			$result = array(
+				'filePath'        => '',
+				'csv_path'        => '',
+				'templates'       => '',
+				'templateOptions' => array(),
+				'bundle'          => array(),
+				'bundleFiles'     => array(),
+			);
+
+			if ( ! class_exists( 'WpaiPclZip' ) ) {
+				include_once PMXI_Plugin::ROOT_DIR . '/libraries/wpaipclzip.lib.php';
+			}
+
+			$archive            = new WpaiPclZip( $zipPath );
+			$allowed_extensions = wp_all_import_get_allowed_zip_extensions();
+			$v_result_list      = $archive->extract( WPAI_PCLZIP_OPT_PATH, $this->uploadsPath, WPAI_PCLZIP_OPT_REPLACE_NEWER, WPAI_PCLZIP_OPT_EXTRACT_DIR_RESTRICTION, $this->uploadsPath, WPAI_PCLZIP_OPT_EXTRACT_WHITELIST_RESTRICTIONS, $allowed_extensions );
+
+			if ( empty( $v_result_list ) || ! is_array( $v_result_list ) && $v_result_list < 1 ) {
+				$this->errors->add( 'form-validation', __( 'WP All Import couldn\'t find a file to import inside your ZIP.<br/><br/>Either the .ZIP file is broken, or doesn\'t contain a file with an extension of  XML, CSV, PSV, DAT, or TXT. <br/>Please attempt to unzip your .ZIP file on your computer to ensure it is a valid .ZIP file which can actually be unzipped, and that it contains a file which WP All Import can import.', 'wp-all-import-pro' ) );
+				return $result;
+			}
+
+			$decodedTemplates = null;
+			foreach ( $v_result_list as $unzipped_file ) {
+				if ( $unzipped_file['status'] == 'ok' and preg_match( '%\W(php)$%i', trim( $unzipped_file['stored_filename'] ) ) ) {
+					@unlink( $unzipped_file['filename'] );
+					continue;
+				}
+				if ( $unzipped_file['status'] == 'ok' and preg_match( '%\W(xml|csv|txt|dat|psv|json|xls|xlsx|gz)$%i', trim( $unzipped_file['stored_filename'] ) ) and strpos( $unzipped_file['stored_filename'], 'readme.txt' ) === false ) {
+					if ( strpos( basename( $unzipped_file['stored_filename'] ), 'WP All Import Template' ) === 0 || strpos( basename( $unzipped_file['stored_filename'] ), 'templates_' ) === 0 ) {
+						$result['templates']       = file_get_contents( $unzipped_file['filename'] );
+						$decodedTemplates          = json_decode( $result['templates'], true );
+						$result['templateOptions'] = empty( $decodedTemplates[0] ) ? current( $decodedTemplates ) : $decodedTemplates;
+					} else {
+						if ( $result['filePath'] == '' ) {
+							$result['filePath'] = $unzipped_file['filename'];
+						}
+						if ( ! in_array( $unzipped_file['filename'], $result['bundleFiles'] ) ) {
+							$result['bundleFiles'][ basename( $unzipped_file['filename'] ) ] = $unzipped_file['filename'];
+						}
+					}
+				}
+			}
+
+			if ( count( $result['bundleFiles'] ) > 1 ) {
+				if ( ! empty( $decodedTemplates ) ) {
+					foreach ( $decodedTemplates as $cpt => $tpl ) {
+						$fileFormats              = $this->get_xml_file( $result['bundleFiles'][ basename( $tpl[0]['source_file_name'] ) ] );
+						$result['bundle'][ $cpt ] = $fileFormats['xml'];
+					}
+				}
+				if ( ! empty( $result['bundle'] ) ) {
+					$result['filePath'] = current( $result['bundle'] );
+				}
+			}
+
+			if ( $this->uploadsPath === false ) {
+				$this->errors->add( 'form-validation', __( 'WP All Import can\'t access your WordPress uploads folder.', 'wp-all-import-pro' ) );
+			}
+
+			if ( empty( $result['filePath'] ) ) {
+				$zip    = new \ZipArchive();
+				$opened = $zip->open( trim( $zipPath ) );
+				if ( $opened ) {
+					for ( $i = 0; $i < $zip->numFiles; $i++ ) {
+						$fileName = $zip->getNameIndex( $i );
+						if ( preg_match( '%\W(xml|csv|txt|dat|psv|json|xls|xlsx|gz)$%i', trim( $fileName ) ) ) {
+							$result['filePath'] = $this->uploadsPath . '/' . $fileName;
+							$fp                 = fopen( $result['filePath'], 'w' );
+							fwrite( $fp, $zip->getFromIndex( $i ) );
+							fclose( $fp );
+							break;
+						}
+					}
+					$zip->close();
+				} else {
+					$this->errors->add( 'form-validation', __( 'WP All Import couldn\'t find a file to import inside your ZIP.<br/><br/>Either the .ZIP file is broken, or doesn\'t contain a file with an extension of  XML, CSV, PSV, DAT, or TXT. <br/>Please attempt to unzip your .ZIP file on your computer to ensure it is a valid .ZIP file which can actually be unzipped, and that it contains a file which WP All Import can import.', 'wp-all-import-pro' ) );
+				}
+			}
+
+			if ( ! empty( $result['filePath'] ) ) {
+				$fileFormats        = $this->get_xml_file( $result['filePath'] );
+				$result['csv_path'] = $fileFormats['csv'];
+				$result['filePath'] = $fileFormats['xml'];
+			}
+
+			return $result;
 		}
 
 		protected function get_xml_file( $filePath ) {

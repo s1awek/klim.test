@@ -5,7 +5,7 @@ Tags: clean, database, optimize, performance, postmeta
 Requires at least: 5.0.0
 Requires PHP: 7.0
 Tested up to: 6.9
-Stable tag: 4.0.6
+Stable tag: 4.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -249,6 +249,20 @@ This section describes how to install the plugin. In general, there are 3 ways t
 21. Settings page
 
 == Changelog ==
+
+= 4.0.7 – 07/03/2026 =
+- New: Added support for both SQL and native deletion methods in the Options, Transients, Postmeta, and Usermeta modules
+- New: [Pro-Lifetime] Implemented a scan credits system in the new Pro plugin version
+- Fix: Resolved conflict issues when different plugin versions are activated at the same time
+- Fix: General Cleanup data now refreshes correctly when clicking the eye icon after changing the "Keep last" value
+- Fix: Resolved "Invalid setting key" error when saving settings (Nginx edge case)
+- Fix: Fixed issue where the plugin menu could disappear in some cases when version conflicts occur
+- Tweak: [Pro-Lifetime] Implement data migration between the new Pro version and the old Pro version
+- Tweak: Added links to notification popups for easier navigation
+- Tweak: Added Remote Scan balance to the top bar of the plugin interface
+- Tweak: Improved license activation/deactivation handling by refreshing balances and preventing unauthorized actions
+- Tweak: Added several known usermeta and postmeta entries to the internal dictionaries
+- Tweak: General code improvements and CSS enhancements
 
 = 4.0.6 – 28/01/2026 =
 - Fix: Some SQL queries did not run when database tables had different collations in Multisite setups.

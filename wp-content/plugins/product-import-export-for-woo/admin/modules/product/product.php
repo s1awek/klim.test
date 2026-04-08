@@ -84,7 +84,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product {
     
 	
 	
-        /**
+    /**
      * Product list page bulk export action add to action list
      * 
      */
@@ -110,7 +110,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product {
      */
     public function wt_process_products_bulk_actions() {
         global $typenow;
-        if ($typenow == 'product') {
+        if ( 'product' === $typenow ) {
             // get the action list
             $wp_list_table = _get_list_table('WP_Posts_List_Table');
             $action = $wp_list_table->current_action();
@@ -121,13 +121,13 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product {
             check_admin_referer('bulk-posts');
 
             if (isset($_REQUEST['post'])) {
-                $prod_ids = array_map('absint', $_REQUEST['post']);
+                $prod_ids = array_map( 'absint', wp_unslash( $_REQUEST['post'] ) );
             }
             if (empty($prod_ids)) {
                 return;
             }
 
-            if ($action == 'wt_ier_download_products') {
+            if ( 'wt_ier_download_products' === $action ) {
                 include_once( 'export/class-wt-prodimpexpcsv-basic-exporter.php' );
 
                 Wt_Import_Export_For_Woo_Basic_Product_Bulk_Export::do_export('product', $prod_ids);
@@ -139,23 +139,23 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product {
 	
 	
     /**
-    *   Altering advanced step description
-    */
+     *   Altering advanced step description
+     */
     public function importer_steps($steps, $base)
     {
-        if($this->module_base==$base)
+        if($this->module_base === $base)
         {
-            $steps['advanced']['description']=__('Use advanced options from below to decide updates to existing products, batch import count. You can also save the template file for future imports.', 'product-import-export-for-woo');
+            $steps['advanced']['description'] = __('Use advanced options from below to decide updates to existing products, batch import count. You can also save the template file for future imports.', 'product-import-export-for-woo');
         }
         return $steps;
     }
 
     public function importer_do_import($import_data, $base, $step, $form_data, $selected_template_data, $method_import, $batch_offset, $is_last_batch) {        
-        if ($this->module_base != $base) {
+        if ($this->module_base !== $base) {
             return $import_data;
         }
             
-        if(0 == $batch_offset){                        
+        if ( 0 === (int) $batch_offset ) {                        
             $memory = size_format(wt_let_to_num_basic(ini_get('memory_limit')));
             $wp_memory = size_format(wt_let_to_num_basic(WP_MEMORY_LIMIT));                      
             Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->module_base, 'import', '---[ New import started at '.gmdate('Y-m-d H:i:s').' ] PHP Memory: ' . $memory . ', WP Memory: ' . $wp_memory);
@@ -207,8 +207,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product {
 		if(isset($data_row['no_post'])){
 			$export_data['no_post'] = $data_row['no_post'];
 		}
-
-        
+      
         return $export_data;
     }
         
@@ -506,6 +505,36 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product {
         return apply_filters('wt_iew_allowed_product_statuses', array_combine($product_statuses, $product_statuses));
     }
 
+    /**
+     * Get product statuses with translated labels for UI display
+     *
+     * @return array Associative array of status => label
+     */
+    public static function get_product_statuses_with_labels() {
+
+        // Get allowed statuses from existing method (respects filter)
+        $allowed_statuses = self::get_product_statuses();
+
+        // Return only allowed statuses with their labels
+        $result = array();
+        foreach ( $allowed_statuses as $status => $value ) {
+            if ( function_exists( 'get_post_status_object' ) ) {
+                $status_object = get_post_status_object( $status );
+                if ( $status_object && isset( $status_object->label ) ) {
+                    $result[ $status ] = $status_object->label;
+                } else {
+                    // Fallback: use status key if object doesn't exist or has no label
+                    $result[ $status ] = $status;
+                }
+            } else {
+                // Fallback: use status key if function doesn't exist
+                $result[ $status ] = $status;
+            }
+        }
+
+        return $result;
+    }
+
     public static function get_product_sort_columns() {    
 //        $sort_columns = array('post_parent', 'ID', 'post_author', 'post_date', 'post_title', 'post_name', 'post_modified', 'menu_order', 'post_modified_gmt', 'rand', 'comment_count');
         $sort_columns = array('ID'=>'ID', 'name'=>'post_title', 'type'=>'Product Type', 'date'=>'post_date', 'modified'=>'post_modified');
@@ -545,41 +574,41 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product {
         $icon_url = plugins_url('admin/wt-ds/icons/icons/right-arrow-3.svg', __FILE__);
 
         return '<div id="product-type-notice" style="margin-top: 10px; display: block; width: 850px; height: auto; top: 210px; left: 117px;">
-    <div class="notice notice-warning" style="width: 92.5%; max-width: 810px; margin-left: 0px; display: inline-flex; padding: 16px 18px 16px 26px; justify-content: flex-end; align-items: center; border-radius: 8px; border: 1px solid #F5F9FF; background-color: #F5F9FF; box-sizing: border-box;">
-        <div style="display: flex; flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; width: 100%;">
-            <!-- Title -->
-            <div style="padding-bottom: 10px; align-self: stretch; color: #2A3646; font-size: 14px; font-family: Inter; font-weight: 600; line-height: 16px; word-wrap: break-word;">
-                ' . __('Upgrade to premium 💎', 'product-import-export-for-woo') . '
-            </div>
+            <div class="notice notice-warning" style="width: 92.5%; max-width: 810px; margin-left: 0px; display: inline-flex; padding: 16px 18px 16px 26px; justify-content: flex-end; align-items: center; border-radius: 8px; border: 1px solid #F5F9FF; background-color: #F5F9FF; box-sizing: border-box;">
+                <div style="display: flex; flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; width: 100%;">
+                    <!-- Title -->
+                    <div style="padding-bottom: 10px; align-self: stretch; color: #2A3646; font-size: 14px; font-family: Inter; font-weight: 600; line-height: 16px; word-wrap: break-word;">
+                        ' . __('Upgrade to premium 💎', 'product-import-export-for-woo') . '
+                    </div>
 
-            <!-- Description -->
-            <div style="width: 100%; max-width: 679px; padding-bottom: 10px;">
-                <span style="color: #2A3646; font-size: 13px; font-family: Inter; font-weight: 400; ">' . __('We\'ve detected hidden WooCommerce metadata & custom product fields in your store. Unlock full access to export them seamlessly.', 'product-import-export-for-woo') . '</span>
-            </div>
+                    <!-- Description -->
+                    <div style="width: 100%; max-width: 679px; padding-bottom: 10px;">
+                        <span style="color: #2A3646; font-size: 13px; font-family: Inter; font-weight: 400; ">' . __('We\'ve detected hidden WooCommerce metadata & custom product fields in your store. Unlock full access to export them seamlessly.', 'product-import-export-for-woo') . '</span>
+                    </div>
 
-            <!-- Button -->
-                <a href="https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin&utm_medium=export_hidden_meta_tab&utm_campaign=Product_import_export" target="_blank" style="
-                    width: auto;
-                    height: 18px;
-                font-family:  \'Inter\', sans-serif;
-                    font-weight: 600;
-                    font-size: 12px;
-                    line-height: 100%;
-                    color: #2B28E9;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 4px;
-                    gap: 5px;
-                    text-decoration: none;
-                    margin-top: 0px;
-                ">
-                    ' . __('Upgrade now', 'product-import-export-for-woo') . ' <span style="font-size: 14px;">→</span>
-                </a>
+                    <!-- Button -->
+                        <a href="https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin&utm_medium=export_hidden_meta_tab&utm_campaign=Product_import_export" target="_blank" style="
+                            width: auto;
+                            height: 18px;
+                        font-family:  \'Inter\', sans-serif;
+                            font-weight: 600;
+                            font-size: 12px;
+                            line-height: 100%;
+                            color: #2B28E9;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 4px;
+                            gap: 5px;
+                            text-decoration: none;
+                            margin-top: 0px;
+                        ">
+                            ' . __('Upgrade now', 'product-import-export-for-woo') . ' <span style="font-size: 14px;">→</span>
+                        </a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-';
+        ';
     }
 
     
@@ -954,8 +983,6 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product {
             $out[$fieldk] = $fieldv;
         }
 
-		
-
         return $out;
     }
     
@@ -1087,10 +1114,10 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product {
         }
 
         /* altering help text of default fields */
-	$fields['limit']['label']=__('Total number of products to export', 'product-import-export-for-woo'); 
-	$fields['limit']['help_text']=__('Exports specified number of products. e.g. Entering 500 with a skip count of 10 will export products from 11th to 510th position.', 'product-import-export-for-woo');
-	$fields['offset']['label']=__('Skip first <i>n</i> products', 'product-import-export-for-woo');
-	$fields['offset']['help_text']=__('Skips specified number of products from the beginning of the database. e.g. Enter 10 to skip first 10 products from export.', 'product-import-export-for-woo');
+    	$fields['limit']['label']=__('Total number of products to export', 'product-import-export-for-woo'); 
+    	$fields['limit']['help_text']=__('Exports specified number of products. e.g. Entering 500 with a skip count of 10 will export products from 11th to 510th position.', 'product-import-export-for-woo');
+    	$fields['offset']['label']=__('Skip first <i>n</i> products', 'product-import-export-for-woo');
+    	$fields['offset']['help_text']=__('Skips specified number of products from the beginning of the database. e.g. Enter 10 to skip first 10 products from export.', 'product-import-export-for-woo');
 
         
         $fields['product'] = array(
@@ -1151,7 +1178,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product {
             'label' => __( 'Product status', 'product-import-export-for-woo' ),
             'placeholder' => __( 'Any status', 'product-import-export-for-woo' ),
             'field_name' => 'product_status',
-            'sele_vals' => self::get_product_statuses(),
+            'sele_vals' => self::get_product_statuses_with_labels(),
             'help_text' => __( 'Filter products by their status.', 'product-import-export-for-woo' ),
             'type' => 'multi_select',
             'css_class' => 'wc-enhanced-select',
@@ -1168,8 +1195,6 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product {
             'css_class' => 'wc-enhanced-select',
             'validation_rule' => array('type'=>'text_arr')
         );
-
- 
 
         return $fields;
     }

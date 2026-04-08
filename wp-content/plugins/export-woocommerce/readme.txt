@@ -2,8 +2,8 @@
 Contributors: wpcodefactory, omardabbas, karzin, anbinder, kousikmukherjeeli
 Tags: woocommerce, export
 Requires at least: 4.4
-Tested up to: 6.8
-Stable tag: 2.3.2
+Tested up to: 6.9
+Stable tag: 2.3.3
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -59,6 +59,14 @@ When exporting products and/or orders, you can add one additional product and/or
 3. Start by visiting plugin settings at "WPFactory > Export".
 
 == Changelog ==
+
+= 2.3.3 - 12/03/2026 =
+* Fix - Fixed "High-Performance Order Storage (HPOS)" compatibility warning.
+* Dev - WPFactory Admin Menu - Library updated (to v1.0.9).
+* Dev - WPFactory Recommendations - Library updated (to v1.0.9).
+* Dev - Key Manager - Library updated (to v1.0.8).
+* WC tested up to: 10.6.
+* Tested up to: 6.9.
 
 = 2.3.2 - 24/09/2025 =
 * WC tested up to: 10.2.

@@ -621,6 +621,11 @@ class Wt_Import_Export_For_Woo_Basic_Product_Export {
                         $row[$column] = do_shortcode($product->$column);
                     } elseif ('post_title' === $column) {
                         $row[$column] = sanitize_text_field($product->$column);
+                    } elseif ('post_status' === $column) {
+                        // Export human-readable label (e.g. "Scheduled") to match filter UI, not raw slug ("future")
+                        $status_slug = $product->$column;
+                        $statuses_with_labels = Wt_Import_Export_For_Woo_Product_Basic_Product::get_product_statuses_with_labels();
+                        $row[$column] = isset( $statuses_with_labels[ $status_slug ] ) ? $statuses_with_labels[ $status_slug ] : $status_slug;
                     } else {
                         $row[$column] = self::format_data($product->$column);
                     }

@@ -4,7 +4,7 @@ Tags: woocommerce wholesale, b2b, wholesale pricing, catalog mode, dynamic prici
 Requires at least: 4.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.2.7
+Stable tag: 2.2.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,10 @@ See plenty of screenshots for this plugin and others at:
 [https://wholesalesuiteplugin.com/woocommerce-wholesale-prices-premium/](https://wholesalesuiteplugin.com/woocommerce-wholesale-prices-premium/)
 
 == Changelog ==
+
+= 2.2.7.1 =
+- Bug Fix: Price Filter Doesn’t Work for Variable Products When Logged in as a Wholesale Customer
+- Bug Fix: WWP_Dashboard Ant Design CSS Loads Globally on All Admin Pages, Breaking Third-Party Page Builders (e.g. Avada)
 
 = 2.2.7 =
 - Bug Fix: JavaScript Console Error Cannot read properties of undefined

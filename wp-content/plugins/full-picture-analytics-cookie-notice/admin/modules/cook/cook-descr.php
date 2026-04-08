@@ -15,8 +15,10 @@ switch( $section_id ){
     case 'fupi_cook_scriptblock':
         $ret_text = '<p>' . esc_html__('The banner controls the loading of all tracking tools installed with WP FP\'s modules as well as Google Analytics and Ads, installed with other plugins. Use options below to control other tools that you use  on this site.','full-picture-analytics-cookie-notice') . '</p>
         <h3>' . esc_html__('Attention','full-picture-analytics-cookie-notice') . '</h3>
-        <p class="fupi_warning_text">' . esc_html__( 'This banner uses Google Consent Mode v2 and Microsoft UET Consent Mode. Please disable these modes in any other plugins that you have on this site to avoid conflicts.', 'full-picture-analytics-cookie-notice' ) . '</p>
-        <p class="fupi_warning_text">' . esc_html__( 'Make sure your caching tool/plugin does NOT combine JavaScript files. Otherwise, your website may break.', 'full-picture-analytics-cookie-notice' ) . '</p>';
+        <ol>
+            <li><p class="fupi_warning_text">' . esc_html__( 'This banner uses Google Consent Mode v2 and Microsoft UET Consent Mode. To avoid conflicts, please check if any other of your plugins use these modes and disable them there.', 'full-picture-analytics-cookie-notice' ) . '</p></li>
+            <li><p class="fupi_warning_text">' . esc_html__( 'Make sure your caching tool/plugin does NOT combine JavaScript files. Otherwise, your website may break.', 'full-picture-analytics-cookie-notice' ) . '</p></li>
+        </ol>';
     break;
 
     case 'fupi_cook_iframes':

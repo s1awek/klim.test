@@ -3,8 +3,8 @@ Contributors: chrisplaneta
 Donate link: https://wpfullpicture.com/
 Tags: Consent mode, Analytics, GDPR, GTM, Google Ads
 Requires at least: 5.4.0
-Tested up to: 6.9.1
-Stable tag: 10.0.2
+Tested up to: 6.9.4
+Stable tag: 10.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,7 +107,7 @@ It tracks key actions like:
 - Completed purchases
 - Coupon usage and more
 
-Every event includes detailed product information for accurate conversion tracking and smarter ad targeting — without sharing personal information.
+Every event includes detailed product information for accurate conversion tracking and smarter ad targeting.
 
 **[PRO]** The Pro version adds:
 
@@ -117,7 +117,7 @@ Every event includes detailed product information for accurate conversion tracki
 
 ## 📈 STATISTICS IN WP ADMIN
 
-With WP Full Picture, you can embed reports and dashboards from Google Looker Studio, Databox, and other data-dashboard platforms directly in your WP admin. Sweet. See your marketing performance right where you work — inside your WordPress dashboard.
+With WP Full Picture, you can embed reports with statistics from Google Looker Studio, Databox, and other BI platforms - directly in your WP admin.
 
 ## 💎 WP FULL PICTURE FREE vs PRO
 
@@ -137,9 +137,9 @@ WP Full Picture is modular, which means it only loads what is necessary. Adition
 
 Yes. We tested it with Gutenberg, Elementor, Bricks, Breakdance.
 
-Only Bricks requires (one small tweak)[https://wpfullpicture.com/support/documentation/how-to-fix-tracking-issues-in-bricks-builder/] to track interactions with WooCommerce product lists.
+Only Bricks requires [one small tweak](https://wpfullpicture.com/support/documentation/how-to-fix-tracking-issues-in-bricks-builder/) to track interactions with WooCommerce product lists.
 
-= Can I only use WP Full Picture's consent banner with other analytics plugins? =
+= Can I use WP Full Picture's consent banner with other tracking plugins and tools? =
 
 Yes. You can use it to control tracking scripts installed by other plugins and load them according to privacy laws. 
 
@@ -195,7 +195,7 @@ No. WP Full Picture is focused on tracking and privacy. To generate a product ca
 
 = Does WP Full Picture display statistics in the dashboard? =
 
-Yes. WP Full Picture lets you display in your WP admin panel reports and dashboards created in Google Looker Studio, Databox and other similar services. 
+Yes. WP Full Picture lets you display in your WP admin panel reports and dashboards created in Google Looker Studio, Databox and other similar platforms. 
 
 These platforms allow you to create advanced reports with aggregated data from various analytics and marketing tools, Google spreadsheets and even WooCommerce data.
 
@@ -210,12 +210,25 @@ These platforms allow you to create advanced reports with aggregated data from v
 
 == Changelog ==
 
+= 10.1.1 (11-03-2026) =
+
+* [Update] [Woo] Added a few extra rules to better track ATC buttons on single product pages that use Ajax
+* [Fix] [Woo] Fixed a bug that showed on sam configs, and prevented tracking "add to cart" events on cart pages
+
+= 10.1.0 (11-03-2026) =
+
+* [New] [Pro] Added support for Stape's sGTM plugin
+* [New] [Pro] [MS clarity] You can now send custom events/tags
+* [New] [Woo] You can now track add to cart events on single products which originated after clicks in "add to cart + options (beta)" block (variable and grouped products are not supported yet)
+* [Other] [Woo] removed unused code and made function names clearly describe their purpose
+* [Update] Moved Consent Mode 2 related settings to the inline JS, to have it fire before any other script
+* [Other] Changes to in-admin texts
+
 = 10.0.2 (25-02-2026) =
 
 * [Update] Visual fixes in the admin pages for WP 7.0
 * [Fix] Fixed typos in some field descriptions
 * [Other] README.txt update
-
 
 = 10.0.1 (18-02-2026) =
 

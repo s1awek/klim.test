@@ -698,12 +698,30 @@ class ADBC_Posts_Meta {
 
 	/**
 	 * Delete grouped posts meta. Posts meta are grouped by site ID as key.
-	 * 
+	 *
 	 * @param array $grouped_selected Grouped selected posts meta to delete.
-	 * 
+	 *
 	 * @return array An array of posts meta names that were not processed (not deleted).
 	 */
 	public static function delete_posts_meta( $grouped_selected ) {
+
+		$cleanup_method = ADBC_Settings::instance()->get_setting( 'sql_or_native_cleanup_method' );
+
+		if ( $cleanup_method === 'native' ) {
+			return self::delete_posts_meta_native( $grouped_selected );
+		}
+
+		return self::delete_posts_meta_sql( $grouped_selected );
+
+	}
+
+	/**
+	 * Deletes posts meta using WordPress native delete logic (current logic, unchanged).
+	 *
+	 * @param array $grouped_selected
+	 * @return array Not processed posts meta names.
+	 */
+	protected static function delete_posts_meta_native( $grouped_selected ) {
 
 		global $wpdb;
 
@@ -728,9 +746,58 @@ class ADBC_Posts_Meta {
 			}
 
 			ADBC_Sites::instance()->restore_blog();
+
 		}
 
 		return $not_processed;
+
+	}
+
+	/**
+	 * Deletes posts meta using direct SQL (bulk delete by meta_id) for each site.
+	 *
+	 * @param array $grouped_selected
+	 * @return array Not processed posts meta names.
+	 */
+	protected static function delete_posts_meta_sql( $grouped_selected ) {
+
+		global $wpdb;
+
+		$not_processed = [];
+
+		foreach ( $grouped_selected as $site_id => $group ) {
+
+			$ids = [];
+			foreach ( $group as $selected )
+				$ids[] = $selected['id'];
+
+			ADBC_Sites::instance()->switch_to_blog_id( $site_id );
+
+			$placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+
+			// Bulk delete.
+			$sql = "DELETE FROM {$wpdb->postmeta} WHERE meta_id IN ($placeholders)";
+			$sql = $wpdb->prepare( $sql, ...$ids );
+			$wpdb->query( $sql );
+
+			// Identify any remaining rows (not processed) deterministically (get names directly).
+			$check_sql = "SELECT meta_key FROM {$wpdb->postmeta} WHERE meta_id IN ($placeholders)";
+			$check_sql = $wpdb->prepare( $check_sql, ...$ids );
+
+			$remaining_keys = $wpdb->get_col( $check_sql );
+
+			if ( ! empty( $remaining_keys ) ) {
+				foreach ( $remaining_keys as $meta_key ) {
+					$not_processed[] = $meta_key;
+				}
+			}
+
+			ADBC_Sites::instance()->restore_blog();
+
+		}
+
+		return $not_processed;
+
 	}
 
 	/**

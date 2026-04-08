@@ -69,7 +69,7 @@ class ADBC_Automation_Endpoints {
 
 		try {
 
-			$task_details = $request->get_params();
+			$task_details = $request->get_json_params();
 
 			if ( ADBC_VERSION_TYPE === 'FREE' && is_array( $task_details ) && isset( $task_details['operations'] ) && is_array( $task_details['operations'] ) ) {
 				foreach ( $task_details['operations'] as $items_type => $keep_last_config ) {
@@ -119,7 +119,7 @@ class ADBC_Automation_Endpoints {
 				return ADBC_Rest::error( 'Invalid task ID.', ADBC_Rest::BAD_REQUEST );
 			}
 
-			$task_details = $request->get_params();
+			$task_details = $request->get_json_params();
 
 			$is_valid = ADBC_Automation_Validator::validate_task_structure( $task_details );
 			if ( $is_valid === false ) {

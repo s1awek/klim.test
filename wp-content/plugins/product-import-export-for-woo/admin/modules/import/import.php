@@ -35,17 +35,17 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 	public $form_data=array();
 	public $temp_import_file='';
 	private $to_process='';
-        public $allowed_import_file_type_mime=array();
-        public $step_need_validation_filter=array();     
-		public $allowed_mime_types = array();
+    public $allowed_import_file_type_mime=array();
+    public $step_need_validation_filter=array();     
+	public $allowed_mime_types = array();
 
-		private $skip_from_evaluation_array = array();
-    	private $decimal_columns = array();
-    	
-    	/**
-    	 * Post types this plugin handles
-    	 */
-    	private static $handled_post_types = array('product', 'product_review', 'product_categories', 'product_tags');
+	private $skip_from_evaluation_array = array();
+	private $decimal_columns = array();
+	
+	/**
+	 * Post types this plugin handles
+	 */
+	private static $handled_post_types = array('product', 'product_review', 'product_categories', 'product_tags');
 
 	public function __construct()
 	{
@@ -115,32 +115,32 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 	}
 
 	/**
-	*	Fields for advanced settings
-	*
-	*/
+	 *	Fields for advanced settings
+	 *
+	 */
 	public function advanced_setting_fields($fields)
 	{
 		
-                $fields['maximum_execution_time'] = array(
-                        'label' => __("Maximum execution time", 'product-import-export-for-woo'),
-                        'type' => 'number',
-                        'value' => ini_get('max_execution_time'), /* Default max_execution_time settings value */
-                        'field_name' => 'maximum_execution_time',
-                        'field_group' => 'advanced_field',
-                        'help_text' => __('The maximum execution time, in seconds(eg:- 300, 600, 1800, 3600). If set to zero, no time limit is imposed. Increasing this will reduce the chance of export/import timeouts.', 'product-import-export-for-woo'),
-                        'validation_rule' => array('type' => 'int'),
-                );            
-                $fields['enable_import_log']=array(
-						'label'=>__("Generate Import log", 'product-import-export-for-woo'),
-						'type' => 'checkbox',
-						'checkbox_fields' => array( 1 => __( 'Enable', 'product-import-export-for-woo' ) ),
-						'value' =>1,
-						'field_name'=>'enable_import_log',
-						'field_group'=>'advanced_field',			
-						// translators: %1$s is opening link tag, %2$s is closing link tag
-						'help_text'=>sprintf(__('You can view the logs in the %1$sImport Logs%2$s section or in History > View logs.', 'product-import-export-for-woo'), '<a href="' . admin_url('admin.php?page=wt_import_export_for_woo_basic_history_log') . '"><b>', '</b></a>'),
-						'validation_rule'=>array('type'=>'absint'),
-				);
+        $fields['maximum_execution_time'] = array(
+                'label' => __("Maximum execution time", 'product-import-export-for-woo'),
+                'type' => 'number',
+                'value' => ini_get('max_execution_time'), /* Default max_execution_time settings value */
+                'field_name' => 'maximum_execution_time',
+                'field_group' => 'advanced_field',
+                'help_text' => __('The maximum execution time, in seconds(eg:- 300, 600, 1800, 3600). If set to zero, no time limit is imposed. Increasing this will reduce the chance of export/import timeouts.', 'product-import-export-for-woo'),
+                'validation_rule' => array('type' => 'int'),
+        );            
+        $fields['enable_import_log']=array(
+				'label'=>__("Generate Import log", 'product-import-export-for-woo'),
+				'type' => 'checkbox',
+				'checkbox_fields' => array( 1 => __( 'Enable', 'product-import-export-for-woo' ) ),
+				'value' => 0,
+				'field_name'=>'enable_import_log',
+				'field_group'=>'advanced_field',			
+				// translators: %1$s is opening link tag, %2$s is closing link tag
+				'help_text'=>sprintf(__('You can view the logs in the %1$sImport Logs%2$s section or in History > View logs.', 'product-import-export-for-woo'), '<a href="' . admin_url('admin.php?page=wt_import_export_for_woo_basic_history_log') . '"><b>', '</b></a>'),
+				'validation_rule'=>array('type'=>'absint'),
+		);
 		$import_methods=array_map(function($vl){ return $vl['title']; }, $this->import_methods);
 		$fields['default_import_method']=array(
 			'label'=>__("Default Import method", 'product-import-export-for-woo'),
@@ -160,15 +160,13 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 			'validation_rule'=>array('type'=>'absint'),
 			'attr' => array('min' => 1, 'max' => 50),
 		);
-                
 
-                
 		return $fields;
 	}
 
 	/**
-	*	Fields for Import advanced step
-	*/
+	 *	Fields for Import advanced step
+	 */
 	public function get_advanced_screen_fields($advanced_form_data)
 	{
 		$advanced_screen_fields=array(
@@ -190,8 +188,8 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 	}
 
 	/**
-	*	Fields for Import method step
-	*/
+	 *	Fields for Import method step
+	 */
 	public function get_method_import_screen_fields($method_import_form_data)
 	{
 		$file_from_arr=array(
@@ -262,14 +260,12 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 			'after_form_field'=>'<input type="text" class="wt_iew_custom_delimiter" name="wt_iew_delimiter" value="," />',//Always pass safe data.
 		);
 
-
-
 		return $method_import_screen_fields;
 	}
 
 	/**
-	* Adding admin menus
-	*/
+	 * Adding admin menus
+	 */
 	public function add_admin_pages($menus)
 	{
 		$first = array_slice($menus, 0, 3, true);
@@ -292,13 +288,13 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 	}
 
 	/**
-	* 	Import page
-	*/
+	 * 	Import page
+	 */
 	public function admin_settings_page()
 	{
 		/**
-		*	Check it is a rerun call
-		*/
+		 *	Check it is a rerun call
+		 */
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This is for rerun functionality, nonce verification is handled in the main ajax handler
 		$requested_rerun_id=(isset($_GET['wt_iew_rerun']) ? absint($_GET['wt_iew_rerun']) : 0);
 		$this->_process_rerun($requested_rerun_id);
@@ -310,19 +306,24 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 			{
 				$this->temp_import_file=$response['file_name'];
 
-				/* delete temp files other than the current temp file of same rerun id, if exists */
-				$file_path=$this->get_file_path();
-   				$temp_files = glob($file_path.'/rerun_'.$this->rerun_id.'_*');
-   				if(count($temp_files)>1) /* Other than the current temp file */
-   				{
-   					foreach($temp_files as $key => $temp_file)
-   					{
-   						if(basename($temp_file)!=$this->temp_import_file)
-   						{
-   							@unlink($temp_file); //delete it
-   						}
-   					}
-   				} 
+				// Delete temp files other than the current temp file of same rerun id, if exists.
+				$file_path    = $this->get_file_path();
+				$temp_files   = array();
+				$temp_files_1 = glob( $file_path . '/rerun_' . $this->rerun_id . '_*' );
+				$temp_files   = is_array( $temp_files_1 ) ? $temp_files_1 : array();
+				$temp_files_2 = glob( $file_path . '/rerun-' . $this->rerun_id . '-*' );
+   				
+				if ( is_array( $temp_files_2 ) ) {
+					$temp_files = array_merge( $temp_files, $temp_files_2 );	
+				}
+
+				if(count($temp_files)>1){ /* Other than the current temp file */				
+					foreach($temp_files as $key => $temp_file) {
+						if(basename($temp_file)!== $this->temp_import_file ) {
+							wp_delete_file($temp_file); //delete it
+						}
+					}
+				} 
    				
 			}else /* unable to create temp file, then abort the rerun request */
 			{
@@ -336,8 +337,8 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 
 
 	/**
-	*	Validating and Processing rerun action
-	*/
+	 *	Validating and Processing rerun action
+	 */
 	protected function _process_rerun($rerun_id)
 	{
 		if($rerun_id>0)
@@ -388,12 +389,12 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 
 		wp_enqueue_style(WT_IEW_PLUGIN_ID_BASIC.'-jquery-ui', WT_P_IEW_PLUGIN_URL.'admin/css/jquery-ui.css', array(), WT_P_IEW_VERSION, 'all');
 		
-                /* check the history module is available */
-                $history_module_obj=Wt_Import_Export_For_Woo_Product_Basic::load_modules('history');
-                if(!is_null($history_module_obj))
-                {
-                    wp_enqueue_script(Wt_Import_Export_For_Woo_Product_Basic::get_module_id('history'),WT_P_IEW_PLUGIN_URL.'admin/modules/history/assets/js/main.js', array('jquery'), WT_P_IEW_VERSION, false);
-                }
+        /* check the history module is available */
+        $history_module_obj=Wt_Import_Export_For_Woo_Product_Basic::load_modules('history');
+        if(!is_null($history_module_obj))
+        {
+            wp_enqueue_script(Wt_Import_Export_For_Woo_Product_Basic::get_module_id('history'),WT_P_IEW_PLUGIN_URL.'admin/modules/history/assets/js/main.js', array('jquery'), WT_P_IEW_VERSION, false);
+        }
                 
 		$file_extensions=array_keys($this->allowed_import_file_type_mime);
 		$file_extensions=array_map(function($vl){
@@ -481,9 +482,9 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 	}
 
 	/**
-	* 
-	* Enqueue select2 library, if woocommerce available use that
-	*/
+	 * 
+	 * Enqueue select2 library, if woocommerce available use that
+	 */
 	protected function add_select2_lib()
 	{
 		/* enqueue scripts */
@@ -503,9 +504,9 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 	}
 
 	/**
-	* Get steps
-	*
-	*/
+	 * Get steps
+	 *
+	 */
 	public function get_steps()
 	{
 		if($this->import_method=='quick') /* if quick import then remove some steps */
@@ -522,9 +523,9 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 	}
 
 	/**
-	* Download and save file into web server
-	*
-	*/
+	 * Download and save file into web server
+	 *
+	 */
 	public function download_remote_file($form_data)
 	{
 		$out = array(
@@ -683,24 +684,24 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 	public function get_temp_file_name($ext)
 	{
 		/* adding rerun prefix is to easily identify rerun temp files */
-		$rerun_prefix=($this->rerun_id>0 ? 'rerun_'.$this->rerun_id.'_' : '');
-		return $rerun_prefix.'temp_'.$this->to_import.'_'.time().'.'.$ext;
+		$rerun_prefix = ( $this->rerun_id > 0 ? 'rerun-' . $this->rerun_id . '-' : '' );
+		return sanitize_file_name( $rerun_prefix . 'temp-' . $this->to_import . '-' . time() . '.' . $ext );
 	}
 
 	/**
-	* 	Get given file url.
-	*	If file name is empty then URL will return
-	*/
+	 * 	Get given file url.
+	 *	If file name is empty then URL will return
+	 */
 	public static function get_file_url($file_name="")
 	{
 		return WP_CONTENT_URL.self::$import_dir_name.'/'.$file_name;
 	}
 
 	/**
-	*	Checks the file extension is in allowed list
-	*	@param string File name/ URL
-	*	@return boolean 
-	*/
+	 *	Checks the file extension is in allowed list
+	 *	@param string File name/ URL
+	 *	@return boolean 
+	 */
 	public function is_extension_allowed($file_url)
 	{
 		$ext_arr=explode('.', $file_url);
@@ -713,10 +714,10 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 	}
 
 	/**
-	*	Delete import file
-	*	@param string File path/ URL
-	*	@return boolean
-	*/
+	 *	Delete import file
+	 *	@param string File path/ URL
+	 *	@return boolean
+	 */
 	public function delete_import_file($file_url)
 	{
 		$file_path_arr=explode("/", $file_url);
@@ -734,9 +735,9 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 	}
 
 	/**
-	* 	Get given temp file path.
-	*	If file name is empty then file path will return
-	*/
+	 * 	Get given temp file path.
+	 *	If file name is empty then file path will return
+	 */
 	public static function get_file_path($file_name="")
 	{
 		global $wp_filesystem;
@@ -775,11 +776,12 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 	}
 
 	/**
-	* Download and create a temp file. And create a history entry
-	* @param   string   $step       the action to perform, here 'download'
-	*
-	* @return array 
-	*/
+	 * Download and create a temp file. And create a history entry
+	 * 
+	 * @param   string   $step       the action to perform, here 'download'
+	 *
+	 * @return array 
+	 */
 	public function process_download($form_data, $step, $to_process, $import_id=0, $offset=0)
 	{
 		$out=array(
@@ -856,20 +858,19 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 		}
 
 		/**
-		* In XML import we need to convert the file into CSV before processing 
-		* It may be a batched processing for larger files
-		*/
+		 * In XML import we need to convert the file into CSV before processing 
+		 * It may be a batched processing for larger files
+		 */
 		$ext_arr=explode('.', $this->temp_import_file);
 
-			$out=$this->_set_import_file_processing_finished($file_path, $import_id);
-		return $out;
+		return $this->_set_import_file_processing_finished($file_path, $import_id);
 	}
 
 	/**
-	*	If the file type is not CSV (Eg: XML) Then the delimiter must be ",". 
-	*	Because we are converting XML to CSV
-	*
-	*/
+	 *	If the file type is not CSV (Eg: XML) Then the delimiter must be ",". 
+	 *	Because we are converting XML to CSV
+	 *
+	 */
 	protected function _set_csv_delimiter($form_data, $import_id)
 	{
 		$form_data['method_import_form_data']['wt_iew_delimiter']=",";
@@ -1005,8 +1006,8 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 		
 		
 
-			include_once WT_P_IEW_PLUGIN_PATH.'admin/classes/class-csvreader.php';
-			$reader=new Wt_Import_Export_For_Woo_Basic_Csvreader($csv_delimiter);
+		include_once WT_P_IEW_PLUGIN_PATH.'admin/classes/class-csvreader.php';
+		$reader=new Wt_Import_Export_For_Woo_Basic_Csvreader($csv_delimiter);
 
 
 		/* important: prepare deafult mapping formdata for quick import */
@@ -1103,7 +1104,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 		if($is_last_offset) //finished
 		{
 			/* delete the temp file */
-			@unlink($file_path);
+			wp_delete_file($file_path);
 
 			$log_summary_msg=$this->generate_log_summary($out, $is_last_offset);
 
@@ -1177,13 +1178,17 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 			$this->to_import=(isset($_POST['to_import']) ? sanitize_text_field(wp_unslash($_POST['to_import'])) : '');	
 		}
 
+		$out = array(
+			'status' => 0,
+			'msg' => __('Error', 'product-import-export-for-woo'),
+		);
+
 		if ( $this->to_import && ! in_array( $this->to_import, self::$handled_post_types ) ) {
 			return;
 		}
 		
 		include_once plugin_dir_path(__FILE__).'classes/class-import-ajax.php';
-		if(Wt_Iew_Sh::check_write_access(WT_IEW_PLUGIN_ID_BASIC))
-		{
+		if ( Wt_Iew_Sh::check_write_access( WT_IEW_PLUGIN_ID_BASIC ) ) {
 			/**
 			*	Check it is a rerun call
 			*/
@@ -1207,7 +1212,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 					return;
 				}
 			}
-			
+
 			$this->get_steps();
 
 			$ajax_obj=new Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax($this, $this->to_import, $this->steps, $this->import_method, $this->selected_template, $this->rerun_id);
@@ -1216,11 +1221,6 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 			
 			$allowed_ajax_actions=array('get_steps', 'validate_file', 'get_meta_mapping_fields', 'save_template', 'save_template_as', 'update_template', 'download', 'import', 'upload_import_file', 'delete_import_file');
 
-			$out=array(
-				'status'=>0,
-				'msg'=>__('Error', 'product-import-export-for-woo'),
-			);
-
 			if(method_exists($ajax_obj, $import_action) && in_array($import_action, $allowed_ajax_actions))
 			{
 				$out=$ajax_obj->{$import_action}($out);
@@ -1228,8 +1228,12 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 
 			if($data_type=='json')
 			{
-				echo json_encode($out);
+				echo wp_json_encode($out);
 			}
+		} else {
+			// translators: %1$s is the opening link tag, %2$s is the closing link tag.
+			$out['msg'] =  sprintf( __( 'Access denied. This may be due to an expired nonce. Please reload the page and try again. If the issue persists, please refer to our %1$stroubleshooting guide%2$s.', 'product-import-export-for-woo' ), '<a href="' . esc_url( WT_IEW_DEBUG_BASIC_TROUBLESHOOT ) . '" target="_blank">', '</a>' );
+			echo wp_json_encode( $out );
 		}
 		exit();
 	}

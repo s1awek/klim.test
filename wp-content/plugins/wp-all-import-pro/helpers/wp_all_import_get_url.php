@@ -28,7 +28,7 @@ if (!function_exists('wp_all_import_get_url')) {
 
         if ( ! $is_curl_download_only ){
 
-            $file = ($contentEncoding == 'gzip') ? @fopen($filePath) : @fopen($filePath, "rb");
+            $file = @fopen($filePath, "rb");
 
             if (is_resource($file)) {
 
@@ -36,11 +36,11 @@ if (!function_exists('wp_all_import_get_url')) {
                 $first_chunk = TRUE;
                 while (!@feof($file)) {
                     $chunk = @fread($file, 1024);
-                    if (!$type and $first_chunk and (strpos($chunk, "<?") !== FALSE or strpos($chunk, "<rss") !== FALSE) or strpos($chunk, "xmlns") !== FALSE) {
+                    if (!$type && $first_chunk && (strpos($chunk, "<?") !== FALSE || strpos($chunk, "<rss") !== FALSE || strpos($chunk, "xmlns") !== FALSE)) {
                         $type = 'xml';
-                    } elseif (!$type and $first_chunk) {
+                    } elseif (!$type && $first_chunk) {
                         $type = 'csv';
-                    } // if it's a 1st chunk, then chunk <? symbols to detect XML file
+                    }
                     $first_chunk = FALSE;
 		                 @fwrite($fp, $chunk);
                 }
@@ -89,21 +89,43 @@ if (!function_exists('wp_all_import_get_url')) {
             if ( ! is_wp_error($request) && false !== $request ) {
 
                 if ( ! $type ) {
-                    if ($contentEncoding == 'gzip') {
-                        $file = @fopen($localPath);
-                    } else {
-                        $file = @fopen($localPath, "rb");
+                    // Check magic bytes to detect binary file formats before text-sniffing.
+                    $magic = @file_get_contents($localPath, false, null, 0, 8);
+                    if ($magic !== false && strlen($magic) >= 2) {
+                        if ($magic[0] === "\x1f" && $magic[1] === "\x8b") {
+                            $type = 'gz';
+                        } elseif (strlen($magic) >= 4 && $magic[0] === "\x50" && $magic[1] === "\x4b" && $magic[2] === "\x03" && $magic[3] === "\x04") {
+                            // ZIP magic bytes — check if it's actually an XLSX (OOXML) file
+                            // by looking for the Excel-specific workbook entry inside the ZIP.
+                            $type = 'zip';
+                            if (class_exists('ZipArchive')) {
+                                $zip_check = new ZipArchive();
+                                if ($zip_check->open($localPath) === true) {
+                                    if ($zip_check->locateName('xl/workbook.xml') !== false) {
+                                        $type = 'xlsx';
+                                    }
+                                    $zip_check->close();
+                                }
+                            }
+                        } elseif (strlen($magic) >= 8 && $magic[0] === "\xD0" && $magic[1] === "\xCF" && $magic[2] === "\x11" && $magic[3] === "\xE0"
+                            && $magic[4] === "\xA1" && $magic[5] === "\xB1" && $magic[6] === "\x1A" && $magic[7] === "\xE1") {
+                            // OLE2 Compound Document — also matches .doc/.ppt, but those are
+                            // uncommon in import feeds. PhpSpreadsheet will reject non-Excel files.
+                            $type = 'xls';
+                        }
                     }
-                    while (!@feof($file)) {
+                }
+                if ( ! $type ) {
+                    $file = @fopen($localPath, "rb");
+                    if (is_resource($file)) {
                         $chunk = @fread($file, 1024);
-                        if (strpos($chunk, "<?") !== FALSE or strpos($chunk, "<rss") !== FALSE or strpos($chunk, "xmlns") !== FALSE) {
+                        if ($chunk !== false && (strpos($chunk, "<?") !== FALSE || strpos($chunk, "<rss") !== FALSE || strpos($chunk, "xmlns") !== FALSE)) {
                             $type = 'xml';
                         } else {
                             $type = 'csv';
-                        } // if it's a 1st chunk, then chunk <? symbols to detect XML file
-                        break;
+                        }
+                        @fclose($file);
                     }
-                    @fclose($file);
                 }
             } else {
                 return $request;

@@ -849,12 +849,29 @@ class ADBC_Transients {
 
 	/**
 	 * Delete transients.
-	 * 
+	 *
 	 * @param array $grouped_selected Selected transients to delete grouped by site ID.
-	 * 
 	 * @return array An array of transients names that were not processed.
 	 */
 	public static function delete_transients( $grouped_selected ) {
+
+		$cleanup_method = ADBC_Settings::instance()->get_setting( 'sql_or_native_cleanup_method' );
+
+		if ( $cleanup_method === 'native' ) {
+			return self::delete_transients_native( $grouped_selected );
+		}
+
+		return self::delete_transients_sql( $grouped_selected );
+
+	}
+
+	/**
+	 * Deletes transients using the current WordPress native delete logic (unchanged).
+	 *
+	 * @param array $grouped_selected
+	 * @return array Not processed transients names.
+	 */
+	protected static function delete_transients_native( $grouped_selected ) {
 
 		$not_processed = [];
 
@@ -924,6 +941,109 @@ class ADBC_Transients {
 					}
 
 				}
+
+			}
+
+			ADBC_Sites::instance()->restore_blog();
+
+		}
+
+		return $not_processed;
+
+	}
+
+	/**
+	 * Deletes transients using direct SQL (bulk) for each site.
+	 *
+	 * @param array $grouped_selected
+	 * @return array Not processed transients names.
+	 */
+	protected static function delete_transients_sql( $grouped_selected ) {
+
+		global $wpdb;
+
+		$not_processed = [];
+
+		foreach ( $grouped_selected as $site_id => $group ) {
+
+			$option_keys = [];
+			$sitemeta_keys = [];
+
+			foreach ( $group as $selected ) {
+
+				$full_name = $selected['name'];     // full option / meta key
+				$found_in = $selected['found_in']; // 'options' | 'sitemeta'
+
+				// site_transient
+				if ( strpos( $full_name, '_site_transient_' ) === 0 ) {
+
+					$base_name = substr( $full_name, 16 );
+					$timeout_key = "_site_transient_timeout_{$base_name}";
+
+					if ( is_multisite() && $found_in === 'sitemeta' ) {
+						$sitemeta_keys[] = $full_name;
+						$sitemeta_keys[] = $timeout_key;
+					} else {
+						$option_keys[] = $full_name;
+						$option_keys[] = $timeout_key;
+					}
+
+					continue;
+
+				}
+
+				// transient
+				if ( strpos( $full_name, '_transient_' ) === 0 ) {
+
+					$base_name = substr( $full_name, 11 );
+					$timeout_key = "_transient_timeout_{$base_name}";
+
+					$option_keys[] = $full_name;
+					$option_keys[] = $timeout_key;
+
+				}
+
+			}
+
+			ADBC_Sites::instance()->switch_to_blog_id( $site_id );
+
+			// Bulk delete from options.
+			if ( ! empty( $option_keys ) ) {
+
+				$placeholders = implode( ',', array_fill( 0, count( $option_keys ), '%s' ) );
+
+				$sql = "DELETE FROM {$wpdb->options} WHERE option_name IN ($placeholders)";
+				$sql = $wpdb->prepare( $sql, ...$option_keys );
+				$wpdb->query( $sql );
+
+				$check_sql = "SELECT option_name FROM {$wpdb->options} WHERE option_name IN ($placeholders)";
+				$check_sql = $wpdb->prepare( $check_sql, ...$option_keys );
+
+				$remaining = $wpdb->get_col( $check_sql );
+
+				if ( ! empty( $remaining ) )
+					foreach ( $remaining as $name )
+						$not_processed[] = $name;
+
+			}
+
+			// Bulk delete from sitemeta.
+			if ( ! empty( $sitemeta_keys ) ) {
+
+				$placeholders = implode( ',', array_fill( 0, count( $sitemeta_keys ), '%s' ) );
+
+				$sql = "DELETE FROM {$wpdb->sitemeta} WHERE meta_key IN ($placeholders)";
+				$sql = $wpdb->prepare( $sql, ...$sitemeta_keys );
+				$wpdb->query( $sql );
+
+				$check_sql = "SELECT meta_key FROM {$wpdb->sitemeta} WHERE meta_key IN ($placeholders)";
+				$check_sql = $wpdb->prepare( $check_sql, ...$sitemeta_keys );
+
+				$remaining = $wpdb->get_col( $check_sql );
+
+				if ( ! empty( $remaining ) )
+					foreach ( $remaining as $name )
+						$not_processed[] = $name;
 
 			}
 

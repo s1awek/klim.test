@@ -752,12 +752,40 @@ class ADBC_Options {
 
 	/**
 	 * Delete grouped options. Options are grouped by site ID as key.
-	 * 
+	 *
+	 * Expected input shape:
+	 * [
+	 *   1 => [ [ 'id' => 123, 'name' => 'foo' ], ... ],
+	 *   2 => [ [ 'id' => 456, 'name' => 'bar' ], ... ],
+	 * ]
+	 *
 	 * @param array $grouped_selected Grouped selected options to delete.
-	 * 
-	 * @return array An array of options names that were not processed (not deleted).
+	 * @return array An array of option names that were not processed (not deleted).
 	 */
 	public static function delete_options( $grouped_selected ) {
+
+		$cleanup_method = ADBC_Settings::instance()->get_setting( 'sql_or_native_cleanup_method' );
+
+		if ( $cleanup_method === 'native' ) {
+			return self::delete_options_native( $grouped_selected );
+		}
+
+		return self::delete_options_sql( $grouped_selected );
+
+	}
+
+	/**
+	 * Deletes options using WordPress native delete_option() where safe.
+	 *
+	 * Important edge case:
+	 * delete_option() effectively operates on a sanitized option name; if the stored option_name has
+	 * leading/trailing spaces, delete_option( $name ) can be misleading (it will not target the exact row).
+	 * For such cases, we fall back to SQL-by-ID even in "native" mode to avoid leaving undeletable rows.
+	 *
+	 * @param array $grouped_selected
+	 * @return array Not processed option names.
+	 */
+	protected static function delete_options_native( $grouped_selected ) {
 
 		global $wpdb;
 
@@ -789,9 +817,56 @@ class ADBC_Options {
 			}
 
 			ADBC_Sites::instance()->restore_blog();
+
 		}
 
 		return $not_processed;
+
+	}
+
+	/**
+	 * Deletes options using direct SQL (bulk delete by option_id) for each site.
+	 *
+	 * @param array $grouped_selected
+	 * @return array Not processed option names.
+	 */
+	protected static function delete_options_sql( $grouped_selected ) {
+
+		global $wpdb;
+
+		$not_processed = [];
+
+		foreach ( $grouped_selected as $site_id => $group ) {
+
+			$ids = [];
+			foreach ( $group as $selected )
+				$ids[] = $selected['id'];
+
+			ADBC_Sites::instance()->switch_to_blog_id( $site_id );
+
+			$placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+
+			// Bulk delete.
+			$sql = "DELETE FROM {$wpdb->options} WHERE option_id IN ($placeholders)";
+			$sql = $wpdb->prepare( $sql, ...$ids );
+			$wpdb->query( $sql );
+
+			// Identify any remaining rows (not processed) deterministically.
+			$check_sql = "SELECT option_name FROM {$wpdb->options} WHERE option_id IN ($placeholders)";
+			$check_sql = $wpdb->prepare( $check_sql, ...$ids );
+
+			$remaining_names = $wpdb->get_col( $check_sql );
+
+			if ( ! empty( $remaining_names ) )
+				foreach ( $remaining_names as $opt_name )
+					$not_processed[] = $opt_name;
+
+			ADBC_Sites::instance()->restore_blog();
+
+		}
+
+		return $not_processed;
+
 	}
 
 	/**

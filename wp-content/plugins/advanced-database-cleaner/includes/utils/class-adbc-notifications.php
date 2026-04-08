@@ -85,6 +85,24 @@ class ADBC_Notifications extends ADBC_Singleton {
 			"save" => true,
 			"global" => false,
 		],
+		"pro_remote_scan_upsell" => [ 
+			"type" => "info",
+			"message" => "",
+			"is_critical" => false,
+			"dismissible" => true,
+			"save" => true,
+			"global" => false,
+			"condition" => [ 'ADBC_Notifications', 'should_show_pro_remote_scan_upsell' ]
+		],
+		"ltd_migration_notice" => [ 
+			"type" => "info",
+			"message" => "",
+			"is_critical" => false,
+			"dismissible" => true,
+			"save" => true,
+			"global" => true,
+			"condition" => [ 'ADBC_Notifications', 'should_show_ltd_migration_notice' ]
+		],
 
 	];
 
@@ -123,7 +141,8 @@ class ADBC_Notifications extends ADBC_Singleton {
 	 */
 	public function get_all_non_dismissed() {
 		return array_filter( $this->notifications, function ($n) {
-			return ! $n['dismissed']; } );
+			return ! $n['dismissed'];
+		} );
 	}
 
 	/**
@@ -133,7 +152,8 @@ class ADBC_Notifications extends ADBC_Singleton {
 	 */
 	public function get_warnings() {
 		return array_filter( $this->get_all_non_dismissed(), function ($n) {
-			return $n['type'] === 'warning'; } );
+			return $n['type'] === 'warning';
+		} );
 	}
 
 	/**
@@ -143,7 +163,8 @@ class ADBC_Notifications extends ADBC_Singleton {
 	 */
 	public function get_local_notifications() {
 		return array_filter( $this->get_all_non_dismissed(), function ($n) {
-			return ! $n['global'] && $n['type'] !== 'warning'; } );
+			return ! $n['global'] && $n['type'] !== 'warning';
+		} );
 	}
 
 	/**
@@ -153,7 +174,8 @@ class ADBC_Notifications extends ADBC_Singleton {
 	 */
 	public function get_global_notifications() {
 		return array_filter( $this->get_all_non_dismissed(), function ($n) {
-			return $n['global'] && $n['type'] !== 'warning'; } );
+			return $n['global'] && $n['type'] !== 'warning';
+		} );
 	}
 
 	/**
@@ -357,6 +379,46 @@ class ADBC_Notifications extends ADBC_Singleton {
 	}
 
 	/**
+	 * Whether to show the Pro remote scan upsell in the scan modal.
+	 * Only for Pro version (lifetime plan) users; dismissed when they redeem/sync credits.
+	 *
+	 * @return bool True if ADBC_IS_PRO_VERSION.
+	 */
+	private static function should_show_pro_remote_scan_upsell() {
+		return defined( 'ADBC_IS_PRO_VERSION' ) && ADBC_IS_PRO_VERSION === true;
+	}
+
+	/**
+	 * Whether to show the LTD migration (V4 upgrade) global notice.
+	 * Shows when reminder date is not set or 7+ days have passed since "Remind me in a week".
+	 *
+	 * @return bool True if the notice should show.
+	 */
+	private static function should_show_ltd_migration_notice() {
+
+		// Return false if we are not in pro version, because the notice is only for pro users.
+		if ( ! ADBC_IS_PRO_VERSION )
+			return false;
+
+		$reminder_date = ADBC_Settings::instance()->get_setting( 'ltd_migration_reminder_date' );
+
+		$timestamp = DateTime::createFromFormat( 'd/m/Y', $reminder_date );
+
+		return ( time() - $timestamp->getTimestamp() ) >= 7 * DAY_IN_SECONDS;
+	}
+
+	/**
+	 * Delay the LTD migration notice by 7 days (remind me in a week).
+	 *
+	 * @return bool True on success.
+	 */
+	public function delay_ltd_migration_notice() {
+		// Set the LTD migration reminder date to today.
+		ADBC_Settings::instance()->update_settings( [ 'ltd_migration_reminder_date' => date( 'd/m/Y' ) ] );
+		return $this->delete_notification( 'ltd_migration_notice' );
+	}
+
+	/**
 	 * Delay the rating notice by 7 days.
 	 *
 	 * @return bool True if the notice was delayed, false otherwise.
@@ -374,8 +436,8 @@ class ADBC_Notifications extends ADBC_Singleton {
 	 */
 	public static function old_data_import_available() {
 
-		// If we are in premium, return false.
-		if ( ADBC_VERSION_TYPE === 'FREE' )
+		// If we are in free or pro, return false.
+		if ( ADBC_VERSION_TYPE === 'FREE' || ADBC_IS_PRO_VERSION === true )
 			return false;
 
 		// If the free migration is not done, check all available migration data.

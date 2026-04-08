@@ -11,10 +11,12 @@ const translations = [
   __("Collapse sidebar", "advanced-database-cleaner"),
   __("Expand sidebar", "advanced-database-cleaner"),
   __("Free", "advanced-database-cleaner"),
+  __("Pro-lifetime", "advanced-database-cleaner"),
   __("Premium", "advanced-database-cleaner"),
   __("By", "advanced-database-cleaner"),
   __("Support", "advanced-database-cleaner"),
   __("Docs", "advanced-database-cleaner"),
+  __("Pro - lifetime", "advanced-database-cleaner"),
   __("Please activate your license key to receive plugin updates.", "advanced-database-cleaner"),
   __("Activate now", "advanced-database-cleaner"),
   __(
@@ -278,6 +280,11 @@ const translations = [
     "The remote server is under maintenance. Please try again later.",
     "advanced-database-cleaner"
   ),
+  __("Invalid credit code. Please check and try again.", "advanced-database-cleaner"),
+  __(
+    "This credit code has already been redeemed. Please close this pop-up and click the 'Refresh credits info' button to refresh your credit balance",
+    "advanced-database-cleaner"
+  ),
   __("Invalid or empty system information", "advanced-database-cleaner"),
   __("Generated on:", "advanced-database-cleaner"),
   __("[Server time]", "advanced-database-cleaner"),
@@ -296,6 +303,22 @@ const translations = [
   __("In", "advanced-database-cleaner"),
   __("Never expires", "advanced-database-cleaner"),
   __("No", "advanced-database-cleaner"),
+  __("Current Database Size", "advanced-database-cleaner"),
+  __(
+    "You must first activate your plugin license before synchronizing your balance.",
+    "advanced-database-cleaner"
+  ),
+  __("Go to License", "advanced-database-cleaner"),
+  __(
+    "No remote scan credits available. Buy or redeem credits to use remote scan.",
+    "advanced-database-cleaner"
+  ),
+  __(
+    "Remote scan daily limit reached. Wait for reset or upgrade for higher limits.",
+    "advanced-database-cleaner"
+  ),
+  __("Remote Scan Credits", "advanced-database-cleaner"),
+  __("Remote Scan Credits:", "advanced-database-cleaner"),
   __("Not supported!", "advanced-database-cleaner"),
   __("Cancel", "advanced-database-cleaner"),
   __("Don't forget to make a backup of your database first!", "advanced-database-cleaner"),
@@ -823,7 +846,7 @@ const translations = [
   __("Other settings to configure the plugin behavior.", "advanced-database-cleaner"),
   __("Remote scan credits", "advanced-database-cleaner"),
   __(
-    "Daily credit balance for enhancing local scan accuracy via remote server analysis. Each credit enables one request to improve detection of tables, options, and other elements linked to specific plugins and themes.",
+    "Enhancing local scan accuracy via remote server analysis. Each credit enables one request to improve detection of tables, options, and other elements linked to specific plugins and themes.",
     "advanced-database-cleaner"
   ),
   __("Table name", "advanced-database-cleaner"),
@@ -975,8 +998,40 @@ const translations = [
     "advanced-database-cleaner"
   ),
   __("Send this correction anonymously to the plugin server?", "advanced-database-cleaner"),
+  __("No credits found associated with your license.", "advanced-database-cleaner"),
+  __("Failed to sync balance.", "advanced-database-cleaner"),
+  __("Synchronize balance", "advanced-database-cleaner"),
   __(
-    "Daily credit balance for enhancing local scan accuracy via remote server analysis. Each credit enables one request to improve detection of tables, options, and other elements linked to specific plugins and themes.",
+    "You must first activate your plugin license before synchronizing your balance.",
+    "advanced-database-cleaner"
+  ),
+  __("Go to settings to activate license", "advanced-database-cleaner"),
+  __("Synchronizing your balance...", "advanced-database-cleaner"),
+  sprintf(
+    /* translators: %d: number of remaining credits */
+    __("You have %d remaining credits to use.", "advanced-database-cleaner"),
+    variable
+  ),
+  __("Your balance has been synchronized.", "advanced-database-cleaner"),
+  __("OK", "advanced-database-cleaner"),
+  __("Please enter a credit code.", "advanced-database-cleaner"),
+  __("An error occurred.", "advanced-database-cleaner"),
+  __("Failed to update balance.", "advanced-database-cleaner"),
+  __("Redeem credit code", "advanced-database-cleaner"),
+  __(
+    "You must first activate your plugin license before redeeming a credit code.",
+    "advanced-database-cleaner"
+  ),
+  __("Credit code", "advanced-database-cleaner"),
+  __("Enter your credit code", "advanced-database-cleaner"),
+  __("Redeeming...", "advanced-database-cleaner"),
+  __("Redeem", "advanced-database-cleaner"),
+  __("Where to find my credit codes?", "advanced-database-cleaner"),
+  __("Done", "advanced-database-cleaner"),
+  __("Updating balance...", "advanced-database-cleaner"),
+  __("Update balance", "advanced-database-cleaner"),
+  __(
+    "Enhancing local scan accuracy via remote server analysis. Each credit enables one request to improve detection of tables, options, and other elements linked to specific plugins and themes.",
     "advanced-database-cleaner"
   ),
   __("Show original value", "advanced-database-cleaner"),
@@ -1101,15 +1156,37 @@ const translations = [
   ),
   __("Save settings", "advanced-database-cleaner"),
   __("Today's usage", "advanced-database-cleaner"),
+  __("Total credits used:", "advanced-database-cleaner"),
+  sprintf(
+    // translators: %s is the number of remaining credits
+    __("(You have %s credits left)", "advanced-database-cleaner"),
+    variable
+  ),
+  __("(You have used all your credits)", "advanced-database-cleaner"),
   __("Credits used today:", "advanced-database-cleaner"),
-  __("Credits reset in:", "advanced-database-cleaner"),
+  __("Daily limit will reset in:", "advanced-database-cleaner"),
+  __("Last info refresh:", "advanced-database-cleaner"),
   __("Refreshing...", "advanced-database-cleaner"),
-  __("Last refresh:", "advanced-database-cleaner"),
+  __("Refresh credits info", "advanced-database-cleaner"),
+  __("Buy credits", "advanced-database-cleaner"),
+  __(
+    "You have reached your daily limit for remote server requests. Please wait for your credits to reset.",
+    "advanced-database-cleaner"
+  ),
   __(
     "You have reached your daily limit for remote server requests. Please wait for your credits to reset or upgrade your license for a higher limit.",
     "advanced-database-cleaner"
   ),
   __("Upgrade my license", "advanced-database-cleaner"),
+  __(
+    "You have used all your total credits. Buy more credits or redeem a credit code to continue using the remote scan.",
+    "advanced-database-cleaner"
+  ),
+  __(
+    "No credits found for your Pro license. Please buy or redeem credits to use the remote scan feature.",
+    "advanced-database-cleaner"
+  ),
+  __("Where to track my credits usage?", "advanced-database-cleaner"),
   sprintf(
     /* translators: 1: minimum value, 2: maximum value */
     __("Value must be between %1$s and %2$s", "advanced-database-cleaner"),
@@ -1207,6 +1284,8 @@ const translations = [
     "The plugin will begin by scanning items against your local files, then it will anonymously send the scan results to a secure remote database for more accurate results.",
     "advanced-database-cleaner"
   ),
+  __("Buy V4 bundled with remote scan", "advanced-database-cleaner"),
+  __("Use credits", "advanced-database-cleaner"),
   __("Selected", "advanced-database-cleaner"),
   __(
     "A scan is already in progress. Please reload the page to see the current scan status.",
@@ -1219,6 +1298,27 @@ const translations = [
   ),
   __("Scan type", "advanced-database-cleaner"),
   __("Recommended", "advanced-database-cleaner"),
+  __(
+    "The remote scan is a powerful feature that enhances largely the accuracy of the scan results. Since it costs ongoing charges to maintain, it is not included in the lifetime plan. There are two ways to use it:",
+    "advanced-database-cleaner"
+  ),
+  __(
+    "You can upgrade to the full Version 4, which includes the Remote Scan and Cloud features, available on an annual subscription.",
+    "advanced-database-cleaner"
+  ),
+  __(
+    "As a lifetime license holder, you'll receive a permanent 50% discount, applied to your first purchase and all future renewals.",
+    "advanced-database-cleaner"
+  ),
+  __("Get the full version 4", "advanced-database-cleaner"),
+  __(
+    "Buy credits to use the Remote Scan feature and pay only when you need it. Or simply redeem a credit code if you already have one.",
+    "advanced-database-cleaner"
+  ),
+  __(
+    "Please activate your plugin license first to perform a remote scan.",
+    "advanced-database-cleaner"
+  ),
   __("Items to scan", "advanced-database-cleaner"),
   __("Override manual corrections?", "advanced-database-cleaner"),
   __(

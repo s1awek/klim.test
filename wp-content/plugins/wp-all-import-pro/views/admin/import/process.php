@@ -73,14 +73,14 @@
 				<h4>
 					<?php printf(__('The file you are importing has %s records, but WP All Import only created <span class="inserted_count"></span> %s. It detected the other records in this import file as duplicates. This could be because they actually are duplicates or it could be because your Unique Identifier is not unique for each record.<br><br>If your import file has no duplicates and you want to import all %s records, you should delete everything that was just imported and then edit your Unique Identifier so it\'s unique for each item.', 'wp-all-import-pro'), $update_previous->count, $custom_type->labels->name, $update_previous->count); ?>
 				</h4>
-				<input type="button" class="button button-primary button-hero wpallimport-large-button wpallimport-delete-and-edit" rel="<?php echo esc_url(add_query_arg(array('id' => $update_previous->id, 'page' => 'pmxi-admin-manage', 'action' => 'delete_and_edit', '_wpnonce_delete-and-edit' => wp_create_nonce('delete-and-edit')), $this->baseUrl)); ?>" value="<?php _e('Delete & Edit', 'wp-all-import-pro'); ?>"/>
+				<input type="button" class="button wpallimport-large-button wpallimport-delete-and-edit" rel="<?php echo esc_url(add_query_arg(array('id' => $update_previous->id, 'page' => 'pmxi-admin-manage', 'action' => 'delete_and_edit', '_wpnonce_delete-and-edit' => wp_create_nonce('delete-and-edit')), $this->baseUrl)); ?>" value="<?php _e('Delete & Edit', 'wp-all-import-pro'); ?>"/>
 			</div>
 			<div class="wpallimport-content-section wpallimport-console wpallimport-orders-complete-warning">
 				<h3><?php printf(__('<span class="skipped_records_count">%s</span> orders were skipped during this import', 'wp-all-import-pro'), $update_previous->skipped); ?></h3>
 				<h4>
 					<?php printf(__('WP All Import is unable to import an order when it cannot match the products or customer specified. <a href="%s" style="margin: 0;">See the import log</a> for a list of which orders were skipped and why.', 'wp-all-import-pro'), esc_url(add_query_arg(array('id' => $update_previous->id, 'page' => 'pmxi-admin-history', 'action' => 'log', 'history_id' => PMXI_Plugin::$session->history_id, '_wpnonce' => wp_create_nonce( '_wpnonce-download_log' )), $this->baseUrl))); ?>
 				</h4>
-				<input type="button" class="button button-primary button-hero wpallimport-large-button wpallimport-delete-and-edit" rel="<?php echo esc_url(add_query_arg(array('id' => $update_previous->id, 'page' => 'pmxi-admin-manage', 'action' => 'delete_and_edit', '_wpnonce_delete-and-edit' => wp_create_nonce('delete-and-edit')), $this->baseUrl)); ?>" value="<?php _e('Delete & Edit', 'wp-all-import-pro'); ?>"/>
+				<input type="button" class="button wpallimport-large-button wpallimport-delete-and-edit" rel="<?php echo esc_url(add_query_arg(array('id' => $update_previous->id, 'page' => 'pmxi-admin-manage', 'action' => 'delete_and_edit', '_wpnonce_delete-and-edit' => wp_create_nonce('delete-and-edit')), $this->baseUrl)); ?>" value="<?php _e('Delete & Edit', 'wp-all-import-pro'); ?>"/>
 			</div>
 <!--			<h3 class="wpallimport-complete-success">--><?php //printf(__('WP All Import successfully imported your file <span>%s</span> into your WordPress installation!','wp-all-import-pro'), (PMXI_Plugin::$session->source['type'] != 'url') ? basename(PMXI_Plugin::$session->source['path']) : PMXI_Plugin::$session->source['path'])?><!--</h3>						-->
 			<?php if ($ajax_processing): ?>
@@ -106,7 +106,7 @@
 				<h4><?php _e("Check out our guide on increasing import speed.", "wp-all-import-pro"); ?></h4>
 			</div>
 		</div>
-		<a class="button button-primary button-hero wpallimport-large-button wpallimport-speed-up-notify-read-more" href="http://www.wpallimport.com/documentation/troubleshooting/slow-imports/" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>
+		<a class="button wpallimport-large-button wpallimport-speed-up-notify-read-more" href="http://www.wpallimport.com/documentation/troubleshooting/slow-imports/" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>
 		<span><?php _e('opens in new tab', 'wp-all-import-pro'); ?></span>
 	</div>
 
@@ -131,7 +131,7 @@
 					<?php endif; ?>
 				</div>
 			</div>
-			<input type="submit" id="wpallimport-try-again" style="position: absolute; top: 30%; right: 10px; display: block; padding-top: 1px;" value="<?php _e('Continue Import','wp-all-import-pro');?>" class="button button-primary button-hero wpallimport-large-button">
+			<input type="submit" id="wpallimport-try-again" style="position: absolute; top: 30%; right: 10px; display: block; padding-top: 1px;" value="<?php _e('Continue Import','wp-all-import-pro');?>" class="button wpallimport-large-button">
 			<span class="wp_all_import_restart_import"><?php printf(__("with <span id='wpallimport-new-records-per-iteration'>%s</span> records per iteration", 'wp-all-import-pro'), ((ceil($update_previous->options['records_per_request']/2)) ? ceil($update_previous->options['records_per_request']/2) : 1)); ?></span>
 		</div>
 	</div>
@@ -151,7 +151,7 @@
 					<h4 style="width: 78%; line-height: 25px;"><?php _e("Ask your host to check your server's error log. They will be able to determine why your server is terminating the import process.", "wp-all-import-pro"); ?></h4>
 				</div>
 			</div>
-			<a style="position: absolute; top: 35%; right: 10px; display: block; padding-top: 1px;" class="button button-primary button-hero wpallimport-large-button" href="http://www.wpallimport.com/documentation/troubleshooting/terminated-imports/" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>
+			<a style="position: absolute; top: 35%; right: 10px; display: block; padding-top: 1px;" class="button wpallimport-large-button" href="http://www.wpallimport.com/documentation/troubleshooting/terminated-imports/" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>
 		</div>
 	</span>
 	<a href="http://soflyy.com/" target="_blank" class="wpallimport-created-by"><?php _e('Created by', 'wp-all-import-pro'); ?> <span></span></a>

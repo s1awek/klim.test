@@ -13,6 +13,8 @@ class Fupi_Public {
 
     public $woo;
 
+    public $gtm;
+
     public $proofrec;
 
     protected $cook;
@@ -32,6 +34,7 @@ class Fupi_Public {
         $this->cook = get_option( 'fupi_cook' );
         $this->woo = get_option( 'fupi_woo' );
         $this->proofrec = get_option( 'fupi_proofrec' );
+        $this->gtm = get_option( 'fupi_gtm' );
         $this->ver = get_option( 'fupi_versions' );
     }
 
@@ -119,7 +122,7 @@ class Fupi_Public {
         // add queueing functions
         $output .= '
 			fp.load_queue = {};
-			
+
 			FP.getInner = function (vals, splitter = ".") {
         
 				let args = Array.isArray(vals) ? vals : vals.split(splitter).map( arg => arg.trim() ),
@@ -138,19 +141,19 @@ class Fupi_Public {
 
 				if ( ! fp.load_queue[slug] ) {
 					fp.load_queue[slug] = {
-						\'state\' : \'waiting\', 
-						\'cb\' : cb_s,
-						\'req_a\' : req_a
+						"state" : "waiting", 
+						"cb" : cb_s,
+						"req_a" : req_a
 					}
 				}
 
 				if ( cb_s ) {
 
 					// make sure we only load things that are not loading or have loaded
-					if ( fp.load_queue[slug].state == \'waiting\' ) {
+					if ( fp.load_queue[slug].state == "waiting" ) {
 				
 						// check if all deps are loaded
-						let deps_loaded = req_a.every( el => fp.load_queue[el] && fp.load_queue[el].state == \'loaded\' );
+						let deps_loaded = req_a.every( el => fp.load_queue[el] && fp.load_queue[el].state == "loaded" );
 					
 						if ( deps_loaded ) {
 							let fn = FP.getInner( cb_s, ".");
@@ -166,7 +169,7 @@ class Fupi_Public {
 			
 			FP.loaded = ( slug, marker = false, text = false ) => {
 
-				fp.load_queue[slug] = {state : \'loaded\'};
+				fp.load_queue[slug] = {state : "loaded"};
 				// if (fp.main.debug) console.log( text || "[FP] " + slug + " loaded " );
 
 				if ( marker ) fp.loaded.push( marker ); // for consent banner reloading
@@ -178,9 +181,89 @@ class Fupi_Public {
 					}
 				}
 			};
+
+			FP.readCookie = name => {
+				var nameEQ = name + "=";
+				var ca = document.cookie.split(";");
+				for (var i = 0; i < ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == " ") {c = c.substring(1, c.length);}
+					if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+				};
+				return null;
+			};
 			
-			FP.manageIframes = ()=>{};';
-        // DO NOT REMOVE. This function is added by the script transformer on the site and some people may have it on their sites
+			FP.manageIframes = ()=>{}; // DO NOT REMOVE for backwards compat
+			
+			// SET INITIAL CONSENTS
+			
+			FP.set_gtag_consents = ( tag_name, type, stats = false, pers = false, market = false ) =>{
+
+				window[tag_name]("consent", type, {
+					"ad_storage": market ? "granted" : "denied",
+					"ad_user_data" : market ? "granted" : "denied",
+					"ad_personalization" : market ? "granted" : "denied",
+					"analytics_storage": stats ? "granted" : "denied",
+					"personalization_storage": pers ? "granted" : "denied",
+					"functionality_storage": pers || stats || market ? "granted" : "denied",
+					"security_storage": "granted",
+				});
+
+				if ( type == "update" ) {
+					if ( tag_name == "gtag" ) {
+						window.dataLayer.push( {
+							"event" : "fp_privacyPreferencesChanged",
+							"fp_visitorPrivacyPreferences" : fpdata.cookies,
+						} );
+					} else {
+						window.fupi_dataLayer.push( {
+							"event" : "fp_privacyPreferencesChanged",
+							"fp_visitorPrivacyPreferences" : fpdata.cookies,
+						} );
+					}
+				}
+			}
+			
+			let cookies = FP.readCookie("fp_cookie"),
+				track_me = FP.readCookie("fp_track_me");
+
+			fpdata.cookies = cookies ? JSON.parse(cookies) : false;
+			if ( track_me === "1" ) fp.main.track_current_user = true;
+
+			fpdata.consents = {
+				"can_track_stats" : false,
+				"can_track_pers" : false,
+				"can_track_market" : false,
+			};
+
+			// Consents for gtag, gtm and MS EUT
+
+			// Set GTAG dataLayer with denied consents
+			window.dataLayer = window.dataLayer || [];
+			window.gtag = function(){window.dataLayer.push(arguments);}
+			FP.set_gtag_consents("gtag", "default");
+
+			// Set Gtag url_passthrough
+			if ( fp?.gtag?.url_passthrough && fp.notice.enabled && ( fp.notice.mode == "optin" || fp.notice.mode == "optout" ) ) {
+				window.gtag("set", "url_passthrough", true);
+			};
+
+			// MS Ads datalayer with denied consents
+			window.uetq = window.uetq || [];
+			window.uetq.push( "consent", "default", {
+				"ad_storage": "denied"
+			});
+
+			// Set a separate dataLayer for the GTM (if enabled by the user) with denied consents
+
+			if ( fp.gtm ) {
+				fp.gtm.datalayer = ! fp.gtm.datalayer || fp.gtm.datalayer == "default" ? "dataLayer" : "fupi_dataLayer";
+				if ( fp.gtm.datalayer == "fupi_dataLayer" ){
+					window.fupi_dataLayer = window.fupi_dataLayer || [];
+					window.fupi_gtm_gtag = function(){window.fupi_dataLayer.push(arguments);} // gtag used for consents
+					FP.set_gtag_consents("fupi_gtm_gtag", "default");
+				}
+			};';
         if ( !empty( $this->main['geo'] ) ) {
             $output .= "FP.fetchGeo = (method, options = {}) => {\r\n\t\t\t\t\treturn new Promise((resolve, reject) => {\r\n\t\t\t\t\t\tlet fetchUrl, fetchOptions = {};\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\tswitch(method) {\r\n\t\t\t\t\t\t\tcase 'cloudways':\r\n\t\t\t\t\t\t\t\tfetchUrl = options.ajaxUrl;\r\n\t\t\t\t\t\t\t\tfetchOptions = {\r\n\t\t\t\t\t\t\t\t\tmethod: 'POST',\r\n\t\t\t\t\t\t\t\t\tcredentials: 'same-origin',\r\n\t\t\t\t\t\t\t\t\theaders: new Headers({'Content-Type': 'application/x-www-form-urlencoded'}),\r\n\t\t\t\t\t\t\t\t\tbody: 'action=fupi_ajax_geo__premium_only&method=cloudways'\r\n\t\t\t\t\t\t\t\t};\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tcase 'db_ip':\r\n\t\t\t\t\t\t\t\tfetchUrl = 'https://api.db-ip.com/v2/free/self';\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tcase 'ip_api':\r\n\t\t\t\t\t\t\t\tfetchUrl = 'https://ipapi.co/json/';\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tcase 'ipdata':\r\n\t\t\t\t\t\t\t\tfetchUrl = 'https://api.ipdata.co/?api-key=' + options.apiKey;\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tcase 'cf_worker':\r\n\t\t\t\t\t\t\t\tfetchUrl = options.workerUrl;\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tcase 'cf_default':\r\n\t\t\t\t\t\t\t\tfetchUrl = '/cdn-cgi/trace';\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tcase 'cf_non_user':\r\n\t\t\t\t\t\t\t\tfetchUrl = 'https://www.cloudflare.com/cdn-cgi/trace';\r\n\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\tdefault:\r\n\t\t\t\t\t\t\t\treject(new Error('Unknown geolocation method'));\r\n\t\t\t\t\t\t\t\treturn;\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\twindow.fetch(fetchUrl, fetchOptions)\r\n\t\t\t\t\t\t.then(response => (method === 'cf_default' || method === 'cf_non_user') ? response.text() : response.json())\r\n\t\t\t\t\t\t.then(data => {\r\n\t\t\t\t\t\t\tlet result = { country: 'unknown', region: 'unknown', geo: data };\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\tswitch(method) {\r\n\t\t\t\t\t\t\t\tcase 'cloudways':\r\n\t\t\t\t\t\t\t\t\tif (data.success && data.message) result.country = data.message;\r\n\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t\tcase 'db_ip':\r\n\t\t\t\t\t\t\t\t\tif (data.countryCode?.length === 2) result.country = data.countryCode;\r\n\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t\tcase 'ip_api':\r\n\t\t\t\t\t\t\t\t\tif (data.country?.length === 2) {\r\n\t\t\t\t\t\t\t\t\t\tresult.country = data.country;\r\n\t\t\t\t\t\t\t\t\t\tresult.region = [data.region_code, data.region];\r\n\t\t\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t\tcase 'ipdata':\r\n\t\t\t\t\t\t\t\t\tif (data.country_code?.length === 2) {\r\n\t\t\t\t\t\t\t\t\t\tresult.country = data.country_code;\r\n\t\t\t\t\t\t\t\t\t\tresult.region = [data.region_code, data.region];\r\n\t\t\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t\tcase 'cf_worker':\r\n\t\t\t\t\t\t\t\t\tif (data.country && data.country !== 'XX') result.country = data.country;\r\n\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t\tcase 'cf_default':\r\n\t\t\t\t\t\t\t\tcase 'cf_non_user':\r\n\t\t\t\t\t\t\t\t\tlet match = /loc=([A-Z]{2})/g.exec(data);\r\n\t\t\t\t\t\t\t\t\tif (match && match[1] !== 'XX') result.country = match[1];\r\n\t\t\t\t\t\t\t\t\tbreak;\r\n\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\tresolve(result);\r\n\t\t\t\t\t\t})\r\n\t\t\t\t\t\t.catch(err => {\r\n\t\t\t\t\t\t\tif (fp.main.debug) console.error('[FP] Geolocation error:', err);\r\n\t\t\t\t\t\t\treject(err);\r\n\t\t\t\t\t\t});\r\n\t\t\t\t\t});\r\n\t\t\t\t};\r\n\t\t\t";
         }
@@ -362,7 +445,7 @@ class Fupi_Public {
                 if ( $event_type == 'send' ) {
                     $requests_a = apply_filters(
                         'fupi_prepare_' . $event_id . '_server_request_data',
-                        [],
+                        $requests_a,
                         $event_payload,
                         $userIP
                     );

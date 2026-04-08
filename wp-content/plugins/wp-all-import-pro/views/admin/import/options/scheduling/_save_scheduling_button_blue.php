@@ -2,7 +2,7 @@
 function renderButton($buttonText, $isWizard, $continue = false, $saveOnly = false)
 {
     ?>
-    <div class="wpai-save-scheduling-button-blue button button-primary button-hero wpallimport-large-button <?php if($saveOnly) {?> save_only <?php } ?> <?php if($continue || $saveOnly) { ?> wpallimport-button-small-blue <?php } ?>"
+    <div class="wpai-save-scheduling-button-blue button wpallimport-large-button <?php if($saveOnly) {?> save_only <?php } ?> <?php if($continue || $saveOnly) { ?> wpallimport-button-small-blue <?php } ?>"
          style="position: relative; <?php if ($saveOnly) { ?> width: 135px; background-image: none; <?php } else if ($continue) { ?> width: 135px; <?php } else { ?>width: 285px; <?php } ?> margin-left: 5px;"
     >
         <div class="save-text"

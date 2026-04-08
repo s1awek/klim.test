@@ -68,7 +68,7 @@ class ADBC_Migration {
 		if ( $data_type === 'all' || $data_type === 'pro' ) {
 
 			// Check if there are manual corrections if we are in premium
-			if ( ADBC_VERSION_TYPE === 'PREMIUM' && ADBC_Common_Utils::is_pro_exists() ) {
+			if ( ADBC_VERSION_TYPE === 'PREMIUM' && ADBC_Common_Utils::is_old_pro_exists() ) {
 				if ( self::is_old_manual_corrections_exists() ) {
 					$available_data[] = 'manual_corrections';
 				}
@@ -80,7 +80,7 @@ class ADBC_Migration {
 			}
 
 			// Check if there are installed pro version
-			if ( ADBC_VERSION_TYPE === 'PREMIUM' && ADBC_Common_Utils::is_pro_exists() ) {
+			if ( ADBC_VERSION_TYPE === 'PREMIUM' && ADBC_Common_Utils::is_old_pro_exists() ) {
 				$available_data[] = 'pro_exists';
 			}
 
@@ -214,7 +214,7 @@ class ADBC_Migration {
 
 			// Migrate manual corrections if any and if we are in premium
 			if ( ADBC_VERSION_TYPE === 'PREMIUM' && array_search( 'manual_corrections', $items_to_migrate ) !== false ) {
-				$results['manual_corrections_success'] = ADBC_Common_Utils::is_pro_exists() ? self::migrate_manual_corrections() : 0;
+				$results['manual_corrections_success'] = ADBC_Common_Utils::is_old_pro_data_exists() ? self::migrate_manual_corrections() : 0;
 			}
 
 			// Uninstall old versions if requested
@@ -224,14 +224,18 @@ class ADBC_Migration {
 
 		}
 
-		// In premium, dismiss the migration available notification; and delete the old free version data if there's no old version installed
-		if ( ADBC_VERSION_TYPE === 'PREMIUM' ) {
+		// In premium, dismiss the migration available notification; and delete the old versions data depending on their existence
+		if ( ADBC_VERSION_TYPE === 'PREMIUM' && ADBC_IS_PRO_VERSION === false ) {
 
 			ADBC_Notifications::instance()->dismiss_notification( 'migration_available' );
 
-			if ( ! ADBC_Common_Utils::is_pro_exists() && ! ADBC_Common_Utils::is_old_free_exists() ) {
-				self::delete_old_free_version_data();
-			}
+			$old_free_exists = ADBC_Common_Utils::is_old_free_exists();
+			$old_pro_exists = ADBC_Common_Utils::is_old_pro_exists();
+
+			if ( $old_free_exists && ! $old_pro_exists )
+				self::delete_old_pro_data();
+			elseif ( ! $old_free_exists && ! $old_pro_exists )
+				self::delete_all_old_data();
 
 		}
 
@@ -256,7 +260,8 @@ class ADBC_Migration {
 
 				// Don't migrate if the premium already migrated
 				if ( ADBC_Common_Utils::is_premium_exists() && adbc_notifications::instance()->is_notification_dismissed( 'migration_available' ) ) {
-					self::delete_old_free_version_data();
+					if ( ! ADBC_Common_Utils::is_old_pro_exists() )
+						self::delete_all_old_data();
 					return;
 				}
 
@@ -264,13 +269,74 @@ class ADBC_Migration {
 
 				ADBC_Settings::instance()->update_settings( [ 'free_migration_done' => '1' ] );
 
-				if ( ! ADBC_Common_Utils::is_pro_exists() )
-					self::delete_old_free_version_data();
+				if ( ! ADBC_Common_Utils::is_old_pro_exists() )
+					self::delete_all_old_data();
 
 			}
 
 		} catch (Exception $e) {
 			return ADBC_Logging::log_error( 'ADBC Migration: Failed to migrate free data - ' . $e->getMessage() );
+		}
+
+	}
+
+	/**
+	 * Run the pro migration.
+	 *
+	 * @return void
+	 */
+	public static function run_pro_migration() {
+
+		try {
+
+			// Migrate and activate the license key if the old license key exists and it's not already activated in the current new pro version
+			if ( ! isset( ADBC_License_Manager::get_license_data( false )['key'] ) && self::is_old_license_exists() ) {
+
+				$old_license_key = get_option( 'aDBc_edd_license_key' );
+
+				// If the old license key is empty, don't migrate
+				if ( empty( $old_license_key ) ) {
+					return;
+				}
+
+				// Send activation request to EDD to activate this old license in the current version
+				ADBC_License_Manager::activate_license( $old_license_key );
+
+				// delete the old license key
+				delete_option( 'aDBc_edd_license_key' );
+
+			}
+
+			// old pro data doesn't exist, or premium exists don't migrate
+			if ( ! ADBC_Common_Utils::is_old_pro_data_exists() || ADBC_Common_Utils::is_premium_exists() ) {
+
+				// delete old pro data if old free exists or delete all old data if old free doesn't exist
+				if ( ADBC_Common_Utils::is_old_free_exists() )
+					self::delete_old_pro_data();
+				else
+					self::delete_all_old_data();
+
+				return;
+
+			}
+
+			// run the migration for all data
+			self::run( [ 'manual_corrections', 'automation_tasks', 'keep_last' ] );
+
+			// Mark the free migration as done
+			ADBC_Settings::instance()->update_settings( [ 'free_migration_done' => '1' ] );
+
+			// Dismiss the migration available notification
+			ADBC_Notifications::instance()->dismiss_notification( 'migration_available' );
+
+			// delete old pro data if old free exists or delete all old data if old free doesn't exist
+			if ( ADBC_Common_Utils::is_old_free_exists() )
+				self::delete_old_pro_data();
+			else
+				self::delete_all_old_data();
+
+		} catch (Exception $e) {
+			return ADBC_Logging::log_error( 'ADBC Migration: Failed to migrate pro data - ' . $e->getMessage() );
 		}
 
 	}
@@ -283,6 +349,8 @@ class ADBC_Migration {
 	 * @return int 0 if failed, 1 if success, 2 if some of the cleaning tasks were not migrated
 	 */
 	private static function migrate_cleaning_tasks( $cleaning_tasks ) {
+
+		$existing_tasks = ADBC_Automation::instance()->tasks();
 
 		$total_migrated_cleaning_tasks = 0;
 
@@ -300,6 +368,10 @@ class ADBC_Migration {
 				'operations' => self::migrate_old_operations( $old_task_details['elements_to_clean'] ),
 				'active' => false, // Always deactivate the task
 			];
+
+			if ( self::is_task_already_exists( $new_task, $existing_tasks ) ) {
+				continue;
+			}
 
 			if ( ADBC_Automation::instance()->create( $new_task ) !== null )
 				$total_migrated_cleaning_tasks++;
@@ -324,6 +396,8 @@ class ADBC_Migration {
 	 */
 	private static function migrate_optimization_tasks( $optimization_tasks ) {
 
+		$existing_tasks = ADBC_Automation::instance()->tasks();
+
 		$total_migrated_optimization_tasks = 0;
 
 		foreach ( $optimization_tasks as $old_task_name => $old_task_details ) {
@@ -341,6 +415,10 @@ class ADBC_Migration {
 				'active' => false, // Always deactivate the task
 			];
 
+			if ( self::is_task_already_exists( $new_task, $existing_tasks ) ) {
+				continue;
+			}
+
 			if ( ADBC_Automation::instance()->create( $new_task ) !== null )
 				$total_migrated_optimization_tasks++;
 
@@ -352,6 +430,26 @@ class ADBC_Migration {
 
 		// If all optimization tasks were migrated, return 1, otherwise if it's mixed, return 2
 		return $total_migrated_optimization_tasks === count( $optimization_tasks ) ? 1 : 2;
+
+	}
+
+	/**
+	 * Check if a task with the same name, type, frequency, start datetime and operations already exists in the existing tasks.
+	 * 
+	 * @param array $new_task The new task to check.
+	 * @param array $existing_tasks The existing tasks to check against.
+	 * 
+	 * @return bool True if a task with the same name, type, frequency, start datetime and operations already exists, false if it doesn't
+	 */
+	private static function is_task_already_exists( $new_task, $existing_tasks ) {
+
+		foreach ( $existing_tasks as $existing_task ) {
+			if ( $existing_task['name'] === $new_task['name'] && $existing_task['type'] === $new_task['type'] && $existing_task['frequency'] === $new_task['frequency'] && $existing_task['start_datetime'] === $new_task['start_datetime'] && $existing_task['operations'] == $new_task['operations'] ) {
+				return true;
+			}
+		}
+
+		return false;
 
 	}
 
@@ -522,7 +620,7 @@ class ADBC_Migration {
 
 		if ( ADBC_Common_Utils::is_old_free_exists() )
 			$plugins_files[] = 'advanced-database-cleaner/advanced-db-cleaner.php';
-		if ( ADBC_Common_Utils::is_pro_exists() )
+		if ( ADBC_Common_Utils::is_old_pro_exists() )
 			$plugins_files[] = 'advanced-database-cleaner-pro/advanced-db-cleaner.php';
 
 		$final_success = [];
@@ -548,7 +646,7 @@ class ADBC_Migration {
 		}
 
 		// Remove the old version data from the database.
-		self::delete_old_free_version_data();
+		self::delete_all_old_data();
 
 		$number_of_successes = count( array_filter( $final_success, function ($result) {
 			return $result === 1;
@@ -889,6 +987,77 @@ class ADBC_Migration {
 		wp_unschedule_hook( 'aDBc_clean_scheduler' );
 		wp_unschedule_hook( 'aDBc_optimize_scheduler' );
 
+	}
+
+	/**
+	 * Delete the old pro version data.
+	 * 
+	 * @return void
+	 */
+	private static function delete_old_pro_data() {
+
+		// Delete folder containing scan results
+		$aDBc_security_code = get_option( 'aDBc_security_folder_code' );
+		$aDBc_upload_dir = wp_upload_dir();
+		$aDBc_upload_dir = str_replace( '\\', '/', $aDBc_upload_dir['basedir'] ) . '/adbc_uploads_' . $aDBc_security_code;
+
+		if ( file_exists( $aDBc_upload_dir ) ) {
+			$dir = opendir( $aDBc_upload_dir );
+			while ( ( $file = readdir( $dir ) ) !== false ) {
+				if ( $file != '.' && $file != '..' ) {
+					unlink( $aDBc_upload_dir . "/" . $file );
+				}
+			}
+			closedir( $dir );
+			rmdir( $aDBc_upload_dir );
+		}
+
+		// Delete the old pro version options
+		$array_items = array( 'options', 'tables', 'tasks' );
+
+		foreach ( $array_items as $item ) {
+
+			delete_option( 'aDBc_temp_last_iteration_' . $item );
+			delete_option( 'aDBc_temp_still_searching_' . $item );
+			delete_option( 'aDBc_temp_last_item_line_' . $item );
+			delete_option( 'aDBc_temp_last_file_line_' . $item );
+			delete_option( 'aDBc_last_search_ok_' . $item );
+			delete_option( 'aDBc_temp_total_files_' . $item );
+			delete_option( 'aDBc_temp_maybe_scores_' . $item );
+			delete_option( 'aDBc_temp_currently_scanning_' . $item );
+			delete_option( 'aDBc_temp_progress_scan_' . $item );
+			delete_option( 'aDBc_temp_progress_files_preparation_' . $item );
+			delete_option( 'aDBc_temp_last_collected_file_path_' . $item );
+			delete_option( 'aDBc_temp_items_to_scan_' . $item );
+			delete_option( 'aDBc_temp_scan_type_' . $item );
+			delete_option( 'aDBc_temp_current_scan_step_' . $item );
+
+		}
+
+		delete_option( 'aDBc_security_folder_code' );
+		delete_option( 'aDBc_edd_license_key' );
+		delete_option( 'aDBc_edd_license_status' );
+
+	}
+
+	/**
+	 * Delete all old versions data.
+	 * 
+	 * @return void
+	 */
+	private static function delete_all_old_data() {
+		self::delete_old_pro_data();
+		self::delete_old_free_version_data();
+	}
+
+	/**
+	 * Check if the old license exists.
+	 * 
+	 * @return bool True if the old license exists, false if it doesn't
+	 */
+	private static function is_old_license_exists() {
+		$old_edd_license_key_exists = get_option( 'aDBc_edd_license_key' );
+		return $old_edd_license_key_exists !== false && $old_edd_license_key_exists !== '' && get_option( 'aDBc_settings' ) !== false;
 	}
 
 }

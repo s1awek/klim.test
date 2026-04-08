@@ -198,9 +198,10 @@ $sections = array(
             'field_id'      => 'scrblk_auto_rules',
             'option_arr_id' => $option_arr_id,
             'options'       => array(
-                'jetpack'  => esc_html__( 'Jetpack Stats (from the Jetpack plugin)', 'full-picture-analytics-cookie-notice' ),
-                'pys'      => esc_html__( 'Tools loaded by PixelYourSite plugin (read info)', 'full-picture-analytics-cookie-notice' ),
+                'stape'    => esc_html__( 'Stape Conversion Tracking plugin', 'full-picture-analytics-cookie-notice' ),
+                'pys'      => sprintf( esc_html__( 'Tools loaded by PixelYourSite plugin %1$s(read info)%2$s', 'full-picture-analytics-cookie-notice' ), '<span style="color: red;">', '</span>' ),
                 'pixelman' => esc_html__( 'Tools loaded by Pixel Manager for WooCommerce plugin (read info)', 'full-picture-analytics-cookie-notice' ),
+                'jetpack'  => esc_html__( 'Jetpack Stats (from the Jetpack plugin)', 'full-picture-analytics-cookie-notice' ),
             ),
             'under field'   => '<label><input type="checkbox" checked disabled>' . esc_html__( 'Google Analytics (always enabled, via Consent Mode v2)', 'full-picture-analytics-cookie-notice' ) . '</label>
 					<div class="fupi_spacer"></div>
@@ -209,6 +210,11 @@ $sections = array(
 					<input type="checkbox" checked disabled>' . esc_html__( 'Microsoft Advertising (always enabled, via MS EUT Consent Mode)', 'full-picture-analytics-cookie-notice' ) . '</label>',
             'popup2'        => '<h3>PixelYourSite</h3>
 					<p>' . esc_html__( 'WP Full Picture loads tracking tools integrated via PixelYourSite when the visitor agrees to ALL uses of their personal data (statistics, marketing and personalisation).', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<p>' . esc_html__( 'To control PYS, go to PixelYourSite settings > "Google Tag Settings" page and do the following changes:', 'full-picture-analytics-cookie-notice' ) . '</p>
+					<ol>
+						<li>' . esc_html__( 'change the default dataLayer name to "dataLayer",', 'full-picture-analytics-cookie-notice' ) . '</li>
+						<li>' . esc_html__( 'disable option "Fire Google tags with consent mode granted".', 'full-picture-analytics-cookie-notice' ) . '</li>
+					</ol>
 					<h3>Pixel Manager for WooCommerce</h3>
 					<p>' . esc_html__( 'Consent Management features in PMW conflict with the ones built in WP FP. Disable them for correct tracking. Go to Pixel Manager settings > Consent Management > disable Consent Mode v2.', 'full-picture-analytics-cookie-notice' ) . '</p>',
         ), array(

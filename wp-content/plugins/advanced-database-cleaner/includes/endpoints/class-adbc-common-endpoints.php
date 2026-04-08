@@ -142,6 +142,36 @@ class ADBC_Common_Endpoints {
 	}
 
 	/**
+	 * Delay the LTD migration notice by 7 days (remind me in a week).
+	 *
+	 * @return WP_REST_Response The response indicating success or failure.
+	 */
+	public static function delay_ltd_migration_notice( WP_REST_Request $request_data ) {
+
+		try {
+
+			// get params
+			$notification_key = sanitize_key( $request_data->get_param( 'notificationKey' ) );
+
+			// Check if the notification key is valid
+			if ( $notification_key !== 'ltd_migration_notice' ) {
+				return ADBC_Rest::error( 'Invalid notification key.', ADBC_Rest::BAD_REQUEST );
+			}
+
+			// Delay the LTD migration notice
+			if ( ! ADBC_Notifications::instance()->delay_ltd_migration_notice() ) {
+				return ADBC_Rest::error( 'Failed to delay the LTD migration notice.', ADBC_Rest::BAD_REQUEST );
+			}
+
+			// Return success response
+			return ADBC_Rest::success( '' );
+		} catch (Exception $e) {
+			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
+		}
+
+	}
+
+	/**
 	 * Get all schedule frequencies.
 	 * 
 	 * @return WP_REST_Response The response.

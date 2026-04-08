@@ -32,6 +32,13 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 	private $icon_svg = "";
 
 	/**
+	 * Option key used to persist conflict notices across redirects/requests.
+	 *
+	 * @var string
+	 */
+	private static $conflict_notice_option_key = 'adbc_conflict_notice';
+
+	/**
 	 * Store original plugin links before other plugins modify them
 	 */
 	private $original_plugin_meta_links = [];
@@ -122,6 +129,7 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 				'nonce' => wp_create_nonce( 'wp_rest' ),
 				'version' => ADBC_PLUGIN_VERSION,
 				'version_type' => ADBC_VERSION_TYPE,
+				'is_pro_version' => ADBC_IS_PRO_VERSION ? '1' : '0',
 				'settings' => ADBC_Settings::instance()->get_settings( false ), // Send none sensitive settings.
 				'license_data' => ADBC_VERSION_TYPE === "PREMIUM" ? ADBC_License_Manager::get_license_data() : [], // Send masked license key.
 				'warnings' => ADBC_Notifications::instance()->get_warnings(),
@@ -154,11 +162,30 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 		if ( empty( $global_notifications ) )
 			return;
 
-		// Enqueue the rating js code and style
-		wp_enqueue_style( 'adbc-global-style', ADBC_PLUGIN_ABSOLUTE_URL . '/assets/css/rating-msg-style.css', [], ADBC_PLUGIN_VERSION );
-		wp_enqueue_script( 'adbc-global-script', ADBC_PLUGIN_ABSOLUTE_URL . '/assets/js/rating-msg-js.js', [], ADBC_PLUGIN_VERSION, true );
+		$has_rating = isset( $global_notifications['rating_notice'] );
+		$has_ltd = isset( $global_notifications['ltd_migration_notice'] );
 
-		// Localize script with necessary data
+		// Only enqueue shared assets if at least one of our custom global notices is active.
+		if ( ! $has_rating && ! $has_ltd )
+			return;
+
+		// Single combined CSS/JS for all global notices (rating + LTD migration).
+		wp_enqueue_style(
+			'adbc-global-style',
+			ADBC_PLUGIN_ABSOLUTE_URL . '/assets/css/global-style.css',
+			array(),
+			ADBC_PLUGIN_VERSION
+		);
+
+		wp_enqueue_script(
+			'adbc-global-script',
+			ADBC_PLUGIN_ABSOLUTE_URL . '/assets/js/global-js.js',
+			array( 'jquery' ),
+			ADBC_PLUGIN_VERSION,
+			true
+		);
+
+		// Single localized object shared by all notice JS.
 		wp_localize_script(
 			'adbc-global-script',
 			'adbc_global_settings',
@@ -483,6 +510,59 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 					esc_html__( 'Dismiss', 'advanced-database-cleaner' )
 				);
 
+			} elseif ( $key === 'ltd_migration_notice' ) {
+
+				$upgrade_url = 'https://sigmaplugin.com/upgrade-to-full-v4?utm_source=pro-v4-notification&utm_medium=adbc-pro&utm_campaign=plugins&utm_content=upgrade-to-v4';
+
+				$message_intro = sprintf(
+					/* translators: 1: opening <a> tag, 2: closing </a> tag */
+					__( 'Your %1$sAdvanced DB Cleaner Pro%2$s has been upgraded to version 4.x, a major update featuring a new architecture, a redesigned interface, and many new features.', 'advanced-database-cleaner' ),
+					'<a href="admin.php?page=advanced_db_cleaner" class="adbc-ltd-text-link">',
+					'</a>'
+				);
+
+				if ( is_multisite() )
+					$message_intro = esc_html__( 'Your "Advanced DB Cleaner Pro" has been upgraded to version 4.x, a major update featuring a new architecture, a redesigned interface, and many new features.', 'advanced-database-cleaner' );
+
+				$phrase1 = sprintf(
+					/* translators: 1: opening <strong> tag, 2: closing </strong> tag */
+					esc_html__(
+						'We have introduced a new Remote Scan feature, designed to detect orphaned database items with much higher accuracy. Because this feature requires ongoing infrastructure and maintenance costs, %1$sit is not included in the lifetime plan%2$s.',
+						'advanced-database-cleaner'
+					),
+					'<strong>',
+					'</strong>'
+				);
+
+				$phrase2 = esc_html__( 'To access it, we created a separate plugin version under an annual pricing model, bundled with the Remote Scan feature and upcoming AI and cloud capabilities. As a lifetime customer, you can benefit from a 50% discount on the first purchase and all renewals (discount available for a limited time).', 'advanced-database-cleaner' );
+
+				echo '<div id="adbc-ltd-migration-notice" class="adbc-ltd-migration-notice">';
+				echo '<div class="adbc-ltd-icon">';
+				echo '<svg id="fi_8606859" enable-background="new 0 0 500 500" height="80" viewBox="0 0 500 500" width="80" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="m350.8 245.46c2.85 6.65 4.75 12.35 7.6 19 1.9 5.7 3.8 13.3 5.7 19.95 3.8 8.55 11.4 34.2 10.45 42.75-.95 7.6 1.9 19 0 21.85-1.9 5.7-6.65 12.35-12.35 13.3 0-2.85 1.9-5.7 1.9-9.5.95-12.35 0-19.95-2.85-31.35-3.8-13.3-19.95-56.05-24.7-70.31l-21.85-49.4c-7.6-16.15-16.15-30.4-23.75-47.5-6.65-18.05-23.75-45.6-38.95-55.1 0-2.85 12.35-10.45 17.1-8.55s10.45 9.5 12.35 13.3c3.8 6.65 6.65 9.5 10.45 16.15 3.8 5.7 6.65 11.4 9.5 17.1 6.65 10.45 13.3 22.8 19 34.2 4.75 12.35 9.5 24.7 15.2 37.05s10.45 23.75 15.2 37.06zm-7.6-61.76c.95 4.75 7.6 19.95 10.45 24.7 1.9 3.8 3.8 8.55 5.7 12.35s2.85 9.5 5.7 12.35c14.26-9.5 12.36-51.3-21.85-49.4zm-246.07 57.95c0 3.8 14.25 42.75 16.15 48.45 6.65 16.15 12.35 33.25 19 48.45 35.15-1.9 41.8-.95 79.81 0 12.35.95 75.06 11.4 86.46 13.3 13.3 1.9 27.55 7.6 40.85 9.5.95 0 6.65-5.7 6.65-5.7 3.8-3.8.95-23.75-.95-29.45-3.8-13.3-7.6-22.8-11.4-34.2-1.9-5.7-3.8-10.45-5.7-17.1-4.75-14.25-15.2-35.15-20.9-48.45-6.65-16.15-5.7-15.2-14.25-31.35-5.7-10.45-10.45-19-15.2-29.45-4.75-12.35-6.65-18.05-15.2-30.4-4.75-6.65-16.15-21.85-22.8-23.75-5.7 4.75-17.1 24.7-30.4 38-6.65 5.7-12.35 11.4-17.1 17.1-6.65 6.65-11.4 9.5-19 15.2-6.65 3.8-12.35 9.5-18.05 15.2l-47.5 37.05c-3.82 2.85-7.62 4.75-10.47 7.6zm17.1 98.81c-1.9 1.9-13.3 2.85-17.1 3.8-5.7.95-10.45 2.85-16.15 4.75-10.45 2.85-21.85 5.7-32.3 8.55-4.75.95-11.4 2.85-18.05 2.85-3.8-.95-3.8-1.9-5.7-4.75-1.9-1.9-3.8-2.85-4.75-4.75-11.4-14.25-21.85-43.7-19.95-61.76 1.9-12.35 6.65-18.05 17.1-22.8 24.7-10.45 37.05-8.55 48.45-12.35 4.75-.95 11.4-3.8 15.2-4.75l32.3 87.41c1.9 3.8 1.9 2.85.95 3.8zm114.96-186.21c5.7-1.9 10.45 2.85 10.45 7.6-.95 3.8-5.7 9.5-8.55 11.4-10.45 11.4-7.6 7.6-19 21.85-9.5 10.45-13.3 11.4-21.85 19.95l-21.85 17.1c-5.7 2.85-12.35-.95-11.4-7.6 0-4.75 5.7-8.55 8.55-11.4l22.8-18.05c7.6-6.65 11.4-13.3 19.95-21.85 2.85-2.85 6.65-5.7 9.5-9.5 3.8-4.75 6.65-7.6 11.4-9.5zm120.67-102.61c-4.75 1.9-4.75 4.75-5.7 12.35-.95 6.65-4.75 27.55-2.85 33.25.95 4.75 6.65 7.6 11.4 5.7 5.7-1.9 4.75-6.65 4.75-13.3.95-7.6 4.75-27.55 3.8-32.3-1.9-4.75-5.7-7.6-11.4-5.7zm110.2 271.72-14.25-15.2c-3.8-2.85-11.4-11.4-15.2-13.3-8.55-.95-14.25 6.65-9.5 13.3l13.3 13.3c4.75 4.75 15.2 20.9 23.75 12.35 3.8-3.8 1.9-5.7 1.9-10.45zm23.76-159.61c-5.7 1.9-7.6 4.75-12.35 6.65s-11.4 2.85-16.15 3.8c-17.1 3.8-7.6 19.95 1.9 18.05 2.85-.95 2.85-1.9 6.65-2.85 2.85-.95 4.75-.95 7.6-1.9 5.7-1.9 9.5-2.85 14.25-5.7 3.8-3.8 9.5-2.85 9.5-10.45 0-5.7-5.7-9.5-11.4-7.6zm-43.71-80.76c-5.7 2.85-5.7 5.7-9.5 11.4-2.85 3.8-5.7 7.6-8.55 11.4-1.9 2.85-6.65 9.5-6.65 13.3 0 6.65 5.7 10.45 11.4 8.55 3.8-.95 5.7-7.6 8.55-11.4 3.8-5.7 15.2-19.95 15.2-24.7 0-5.7-4.75-11.4-10.45-8.55zm18.05 157.71c-4.75.95-8.55 5.7-5.7 11.4s33.25 16.15 40.85 14.25c4.75-.95 8.55-6.65 5.7-11.4-1.9-5.7-10.45-2.85-26.6-10.45-4.75-1.9-8.54-5.7-14.25-3.8zm-410.43 36.11c-9.5 3.8-17.1 5.7-23.75 9.5-10.45 6.65-4.75 19.95 6.65 15.2 3.8-1.9 7.6-2.85 11.4-4.75s7.6-2.85 12.35-4.75c9.5-3.8 5.7-19-6.65-15.2zm14.25 95.01c.95-.95 0 0 1.9-.95l15.2-4.75c4.75-.95 12.35-3.8 17.1-4.75.95.95 2.85 6.65 5.7 11.4 1.9 3.8 4.75 7.6 6.65 11.4 8.55 15.2 5.7 9.5 14.25 21.85 3.8 4.75 13.3 17.1 15.2 20.9 1.9 5.7 2.85 8.55-1.9 12.35-6.65 5.7-16.15 7.6-25.65 9.5-6.65.95-9.5-1.9-12.35-5.7-4.75-6.65-9.5-15.2-13.3-21.85-3.8-8.55-8.55-15.2-12.35-23.75-1.9-4.75-9.5-20.9-10.45-25.65z" fill="#5EA500" fill-rule="evenodd"></path></svg>';
+				echo '</div>';
+				echo '<div class="adbc-ltd-content">';
+				echo '<span class="adbc-ltd-title">' . esc_html__( 'Advanced DB Cleaner Pro V4 is finally here!', 'advanced-database-cleaner' ) . '</span>';
+				echo '<p class="adbc-ltd-text">' . wp_kses_post( $message_intro ) . '</p>';
+				echo '<div style="background-color:#EFF6FF;padding:16px 20px;margin:10px 0px;border-radius:4px;border:1.5px solid #3b82f6;box-shadow:0 4px 4px rgba(0,0,0,0.06);">';
+				echo '<p style="margin:0 0 8px 0;font-weight:700;font-size:14px;color:#FF6900;letter-spacing:0.05em;">ⓘ IMPORTANT!</p>';
+				echo '<ul class="adbc-ltd-list"><li>' . $phrase1 . '</li><li>' . $phrase2 . '</li></ul>';
+				echo '</div>';
+				echo '<div class="adbc-ltd-buttons">';
+				echo '<a href="' . esc_url( $upgrade_url ) . '" target="_blank" class="button button-primary adbc-ltd-btn-primary">';
+				echo '<span class="dashicons dashicons-arrow-right-alt" style="margin-top:5px;margin-right:5px;"></span>';
+				echo '<b>' . esc_html__( 'How to get to the full version - 50% OFF forever', 'advanced-database-cleaner' ) . '</b>';
+				echo '</a>';
+				echo '<a href="#" id="adbc-ltd-btn-remind-me" class="button adbc-ltd-btn-secondary">';
+				echo '<span class="dashicons dashicons-clock" style="margin-top:5px;margin-right:5px;"></span>';
+				echo esc_html__( 'Remind me in a week', 'advanced-database-cleaner' );
+				echo '</a>';
+				echo '</div>';
+				echo '</div>';
+				echo '<div class="adbc-ltd-dismiss">';
+				echo '<a href="#" title="' . esc_attr__( 'Dismiss', 'advanced-database-cleaner' ) . '"><span class="dashicons dashicons-dismiss"></span></a>';
+				echo '</div>';
+				echo '</div>';
+
 			} else {
 				// Standard notification rendering. For now, we are not rendering these notifications in the admin area.
 				// $type = esc_attr( $notification['type'] );
@@ -563,11 +643,17 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 	}
 
 	/**
-	 * Prevent conflict between free, pro and premium versions
-	 * 
-	 * @return bool True if deactivated a conflicting version, false otherwise
+	 * Detect and handle conflicts between free, pro and premium versions.
+	 *
+	 * @return bool True if a conflict was detected and handled, false otherwise.
 	 */
 	public static function has_conflict() {
+
+		// If a conflict notice was stored in a previous request (for example during activation redirect),
+		// ensure it is rendered on the first available admin page.
+		if ( get_option( self::$conflict_notice_option_key, '' ) !== '' ) {
+			add_action( 'all_admin_notices', [ self::class, 'render_scheduled_conflict_notice' ] );
+		}
 
 		if ( ! function_exists( 'deactivate_plugins' ) )
 			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
@@ -581,7 +667,7 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 			$network_wide = function_exists( 'is_plugin_active_for_network' ) && is_plugin_active_for_network( 'advanced-database-cleaner/advanced-db-cleaner.php' );
 			deactivate_plugins( 'advanced-database-cleaner/advanced-db-cleaner.php', true, $network_wide );
 			ADBC_Common_Utils::old_plugin_version_deactivation_cleaning();
-			add_action( 'all_admin_notices', [ self::class, 'free_conflict_notice' ] );
+			self::schedule_conflict_notice( 'free_premium' );
 
 			return true;
 
@@ -592,7 +678,18 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 			$network_wide = function_exists( 'is_plugin_active_for_network' ) && is_plugin_active_for_network( 'advanced-database-cleaner-pro/advanced-db-cleaner.php' );
 			deactivate_plugins( 'advanced-database-cleaner-pro/advanced-db-cleaner.php', true, $network_wide );
 			ADBC_Common_Utils::old_plugin_version_deactivation_cleaning();
-			add_action( 'all_admin_notices', [ self::class, 'pro_conflict_notice' ] );
+			self::schedule_conflict_notice( 'pro_premium' );
+
+			return true;
+
+		}
+
+		if ( $pro_active && $free_active ) {
+
+			$network_wide = function_exists( 'is_plugin_active_for_network' ) && is_plugin_active_for_network( 'advanced-database-cleaner/advanced-db-cleaner.php' );
+			deactivate_plugins( 'advanced-database-cleaner/advanced-db-cleaner.php', true, $network_wide );
+			ADBC_Common_Utils::old_plugin_version_deactivation_cleaning();
+			self::schedule_conflict_notice( 'free_pro' );
 
 			return true;
 
@@ -603,13 +700,68 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 	}
 
 	/**
+	 * Persist a conflict notice so it is reliably displayed even after redirects.
+	 *
+	 * @param string $type Conflict type identifier.
+	 * @return void
+	 */
+	private static function schedule_conflict_notice( $type ) {
+
+		// Store the last conflict type; it will be rendered (and cleared) on the next admin page load.
+		update_option( self::$conflict_notice_option_key, $type, false );
+
+		// Also attempt to render it in the current request when possible.
+		add_action( 'all_admin_notices', [ self::class, 'render_scheduled_conflict_notice' ] );
+	}
+
+	/**
+	 * Render the stored conflict notice (if any) and clear it.
+	 *
+	 * @return void
+	 */
+	public static function render_scheduled_conflict_notice() {
+
+		$type = get_option( self::$conflict_notice_option_key, '' );
+
+		if ( $type === '' ) {
+			return;
+		}
+
+		// Clear immediately so the notice is shown only once.
+		delete_option( self::$conflict_notice_option_key );
+
+		switch ( $type ) {
+			case 'free_premium':
+				self::free_premium_conflict_notice();
+				break;
+			case 'pro_premium':
+				self::pro_premium_conflict_notice();
+				break;
+			case 'free_pro':
+				self::free_pro_conflict_notice();
+				break;
+		}
+	}
+
+	/**
 	 * Display a notice if the free version was deactivated due to the premium version activation.
 	 * 
 	 * @return void
 	 */
-	public static function free_conflict_notice() {
-		echo '<div class="error"><p>';
+	public static function free_premium_conflict_notice() {
+		echo '<div class="notice notice-warning"><p>';
 		esc_html_e( 'The free version of Advanced DB Cleaner has been de-activated since the premium version is active.', 'advanced-database-cleaner' );
+		echo "</p></div>";
+	}
+
+	/**
+	 * Display a notice if the free version was deactivated due to the pro version activation.
+	 * 
+	 * @return void
+	 */
+	public static function free_pro_conflict_notice() {
+		echo '<div class="notice notice-warning"><p>';
+		esc_html_e( 'The free version of Advanced DB Cleaner has been de-activated since the pro version is active.', 'advanced-database-cleaner' );
 		echo "</p></div>";
 	}
 
@@ -618,8 +770,8 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 	 * 
 	 * @return void
 	 */
-	public static function pro_conflict_notice() {
-		echo '<div class="error"><p>';
+	public static function pro_premium_conflict_notice() {
+		echo '<div class="notice notice-warning"><p>';
 		esc_html_e( 'The pro version of Advanced DB Cleaner has been de-activated since the newest premium version is active.', 'advanced-database-cleaner' );
 		echo "</p></div>";
 	}

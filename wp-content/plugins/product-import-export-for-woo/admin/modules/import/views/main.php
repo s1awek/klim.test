@@ -39,7 +39,7 @@ select[name=wt_iew_file_from]{visibility: hidden;}
 			<span class="wt_iew_popup_hd_label"><?php esc_html_e('Import progress', 'product-import-export-for-woo');?></span>
 			<div class="wt_iew_popup_close">X</div>
 		</div>
-		<div class="wt_iew_import_progress_content"  style="max-height:620px;overflow: auto;">
+		<div class="wt_iew_import_progress_content"  style="max-height:620px;">
 					<table id="wt_iew_import_progress" class="widefat_importer widefat wt_iew_import_progress wp-list-table fixed striped history_list_tb log_list_tb">
 						<thead>
 							<tr>
@@ -62,7 +62,7 @@ select[name=wt_iew_file_from]{visibility: hidden;}
 			<p id="dynamic-cta-content" style="font-size: 13px; font-weight: 400; padding:0px 20px;">
 			</p>
 			</div>
-	<div class="wt-iew-import-completed" style="display:none;border-top: 1px outset;">
+	<div class="wt-iew-import-completed" style="display:none;">
 		<h3><?php esc_html_e('Import Completed', 'product-import-export-for-woo'); ?><span style="color:green" class="dashicons dashicons-yes-alt"></span></h3>
 		<div class="wt-iew-import-results">
 			<div class="wt-iew-import-result-row">
@@ -81,7 +81,9 @@ select[name=wt_iew_file_from]{visibility: hidden;}
 		<div style="float:right;">
 			<div style="float:right;">
 				<a target="_blank" href="#" class="button button-primary wt_iew_view_imported_items" data-log-file="" style="display:none"  type="button" style="margin-right:10px;"><?php esc_html_e( 'View Item', 'product-import-export-for-woo' );?></a>
-				<button class="button button-primary wt_iew_view_log_btn" data-log-file="" style="display:none"  type="button" style="margin-right:10px;"><?php esc_html_e( 'View Log', 'product-import-export-for-woo' );?></button>
+				<?php if ( 1 === (int) Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::get_advanced_settings( 'enable_import_log' ) ) : ?>
+					<button class="button button-primary wt_iew_view_log_btn" data-log-file="" type="button" style="display:none;margin-right:10px;"><?php esc_html_e( 'View Log', 'product-import-export-for-woo' ); ?></button>
+				<?php endif; ?>
 				<button class="button button-primary wt_iew_popup_cancel_btn"  type="button" style="margin-right:10px;"><?php esc_html_e( 'Cancel', 'product-import-export-for-woo' );?></button>
 				<button class="button button-primary wt_iew_popup_close_btn" style="display:none"  type="button" style="margin-right:10px;"><?php esc_html_e( 'Close', 'product-import-export-for-woo' );?></button>
 			</div>

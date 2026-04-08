@@ -111,17 +111,6 @@ function fupi_top_helpers(){
 		d.cookie = name + "=" + value + expires + "; path=" + path + "; sameSite=strict";
 	};
 
-    FP.readCookie = name => {
-		var nameEQ = name + "=";
-		var ca = d.cookie.split(';');
-		for (var i = 0; i < ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0) == ' ') {c = c.substring(1, c.length);}
-			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-		};
-		return null;
-	};
-
     FP.deleteCookie = name => { FP.setCookie(name, "", -1); };
 
     FP.getUrlParamByName = ( name, url = false ) => {
@@ -292,7 +281,7 @@ function fupi_top_helpers(){
 				// update if the user made a choice in the past
 				if ( fp.main.track_current_user && fpdata.cookies ){
 
-					set_gtag_consents( tag_name, "update", fpdata?.cookies?.stats, fpdata?.cookies?.personalisation, fpdata?.cookies?.marketing );
+					FP.set_gtag_consents( tag_name, "update", fpdata?.cookies?.stats, fpdata?.cookies?.personalisation, fpdata?.cookies?.marketing );
 					if ( fp.main.debug ) console.log("[FP] Google consents set to user choices");
 				
 				// if no choice was made in the past
@@ -301,7 +290,7 @@ function fupi_top_helpers(){
 					// agree to all if consent banner is disabled or is in optout or notification mode
 					if ( ! ( fp.notice.enabled && fp.notice.mode == "optin" ) ) {
 
-						set_gtag_consents( tag_name, "update", true, true, true );
+						FP.set_gtag_consents( tag_name, "update", true, true, true );
 						if ( fp.main.debug ) console.log("[FP] All Google consents granted");
 
 					};
@@ -725,60 +714,10 @@ function fupi_top_helpers(){
 		};
 	}
 
-	function set_gtag_consents( tag_name, type, stats = false, pers = false, market = false ){
-		window[tag_name]("consent", type, {
-			"ad_storage": market ? "granted" : "denied",
-			"ad_user_data" : market ? "granted" : "denied",
-			"ad_personalization" : market ? "granted" : "denied",
-			"analytics_storage": stats ? "granted" : "denied",
-			"personalization_storage": pers ? "granted" : "denied",
-			"functionality_storage": pers || stats || market ? "granted" : "denied",
-			"security_storage": "granted",
-		});
-	}
-
     // GET VARS
 
 	let magic_keyw = FP.getUrlParamByName( fp.main.magic_keyword ),
-		ga4_debug = FP.getUrlParamByName("ga4_debug"),
-		cookies = FP.readCookie("fp_cookie"),
-		track_me = FP.readCookie("fp_track_me");
-
-	// SET BASIC VARS
-
-	fpdata.cookies = cookies ? JSON.parse(cookies) : false;
-	if ( track_me === "1" ) fp.main.track_current_user = true;
-
-	set_consents_in_fpdata();
-
-	// SET INITIAL GTAG, GTM AND MS ADS STUFF
-
-	// Set GTAG dataLayer with denied consents
-	window.dataLayer = window.dataLayer || [];
-	window.gtag = function(){window.dataLayer.push(arguments);}
-	set_gtag_consents("gtag", "default");
-
-	// Set Gtag url_passthrough
-	if ( fp?.gtag?.url_passthrough && fp.notice.enabled && ( fp.notice.mode == "optin" || fp.notice.mode == "optout" ) ) {
-		window.gtag("set", "url_passthrough", true);
-	};
-
-	// MS Ads datalayer with denied consents
-	window.uetq = window.uetq || [];
-	window.uetq.push( "consent", "default", {
-		"ad_storage": "denied"
-	});
-
-    // Set a separate dataLayer for the GTM (if enabled by the user) with denied consents
-
-	if ( fp.gtm ) {
-		fp.gtm.datalayer = ! fp.gtm.datalayer || fp.gtm.datalayer == "default" ? "dataLayer" : "fupi_dataLayer";
-		if ( fp.gtm.datalayer == "fupi_dataLayer" ){
-			window[fp.gtm.datalayer] = window[fp.gtm.datalayer] || [];
-			window.fupi_gtm_gtag = function(){window[fp.gtm.datalayer].push(arguments);} // gtag used for consents
-			set_gtag_consents("fupi_gtm_gtag", "default");
-		}
-	};
+		ga4_debug = FP.getUrlParamByName("ga4_debug");
 
 	// UPDATE COOKIE DATA - fupi_cookies and fpdata.cookies
 
