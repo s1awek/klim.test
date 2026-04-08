@@ -2,12 +2,12 @@
 # This file is distributed under the same license as the Plugins - Flexible Checkout Fields for WooCommerce &#8211; WooCommerce Checkout Manager - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-07-08 07:32:07+0000\n"
+"PO-Revision-Date: 2026-04-07 11:52:23+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.1\n"
+"X-Generator: GlotPress/4.0.3\n"
 "Language: pl\n"
 "Project-Id-Version: Plugins - Flexible Checkout Fields for WooCommerce &#8211; WooCommerce Checkout Manager - Stable (latest release)\n"
 
@@ -148,7 +148,7 @@ msgstr "Jeśli masz chwilę, prosimy, daj nam znać, dlaczego wyłączasz wtyczk
 msgid "You are deactivating %1$s plugin"
 msgstr "Wyłączasz wtyczkę %1$s"
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:285
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:310
 msgid "The &#8220;%1$s&#8221; plugin requires at least %2$s version of %3$s to work correctly. Please update it to its latest release."
 msgstr "Do poprawnego działania wtyczki &#8222;%1$s&#8221; wymagana jest wtyczka %3$s w wersji co najmniej %2$s. Proszę zaktualizować do najnowszej wersji."
 
@@ -205,60 +205,60 @@ msgstr "Podany adres URL nie jest prawidłowy dla pola %1$s."
 msgid "The e-mail address provided is not valid for the %1$s field."
 msgstr "Podany adres e-mail nie jest prawidłowy dla pola %1$s."
 
-#: src/Tracker/DeactivationTracker.php:119
+#: src/Tracker/DeactivationTracker.php:135
 msgid "Please tell us what made you click this option."
 msgstr "Napisz proszę, co skłoniło cię do wybrania tej opcji."
 
-#: src/Tracker/DeactivationTracker.php:110
+#: src/Tracker/DeactivationTracker.php:126
 #: vendor_prefixed/wpdesk/wp-wpdesk-deactivation-modal/src/Model/DefaultFormOptions.php:21
 msgid "It's a temporary deactivation (I'm just debugging an issue)"
 msgstr "Dezaktywacja jest tymczasowa (debuguję problem)"
 
-#: src/Tracker/DeactivationTracker.php:103
+#: src/Tracker/DeactivationTracker.php:119
 msgid "What is the reason for that?"
 msgstr "Z jakiego powodu nie jest już potrzebna?"
 
-#: src/Tracker/DeactivationTracker.php:101
+#: src/Tracker/DeactivationTracker.php:117
 msgid "The plugin is no longer needed"
 msgstr "Wtyczka nie jest już potrzebna"
 
-#: src/Tracker/DeactivationTracker.php:94
+#: src/Tracker/DeactivationTracker.php:110
 msgid "Please write what plugin is it and what was the reason for choosing it."
 msgstr "Napisz proszę, o jaką wtyczkę chodzi i pod jakim względem okazała się lepsza."
 
-#: src/Tracker/DeactivationTracker.php:85
+#: src/Tracker/DeactivationTracker.php:101
 msgid "Please write what function is missing."
 msgstr "Napisz proszę, jakiej funkcji brakuje."
 
-#: src/Tracker/DeactivationTracker.php:83
+#: src/Tracker/DeactivationTracker.php:99
 msgid "The plugin does not meet all the requirements"
 msgstr "Wtyczka nie spełnia wszystkich moich potrzeb"
 
-#: src/Tracker/DeactivationTracker.php:76
+#: src/Tracker/DeactivationTracker.php:92
 msgid "How can we do it better? Please write what was problematic."
 msgstr "Jak możemy to poprawić? Napisz, co sprawiło tobie problem."
 
 #. translators: %1$s: anchor opening tag, %2$s: anchor closing tag, %3$s:
 #. anchor opening tag, %4$s: anchor closing tag
-#: src/Tracker/DeactivationTracker.php:70
+#: src/Tracker/DeactivationTracker.php:86
 msgid "Check %1$sthe documentation%2$s or contact us on %3$sthe support forum%4$s for help."
 msgstr "Przeczytaj %1$sdokumentację%2$s lub skontaktuj się z nami na %3$sforum pomocy technicznej%4$s."
 
-#: src/Tracker/DeactivationTracker.php:67
+#: src/Tracker/DeactivationTracker.php:83
 msgid "The plugin is difficult to use"
 msgstr "Wtyczka jest trudna w obsłudze"
 
-#: src/Tracker/DeactivationTracker.php:60
+#: src/Tracker/DeactivationTracker.php:76
 msgid "Please tell us what was the problem."
 msgstr "Napisz proszę, na czym polegał problem."
 
 #. translators: %1$s: anchor opening tag, %2$s: anchor closing tag, %3$s:
 #. anchor opening tag, %4$s: anchor closing tag
-#: src/Tracker/DeactivationTracker.php:54
+#: src/Tracker/DeactivationTracker.php:70
 msgid "Contact us on %1$sthe support forum%2$s or read %3$sthe plugin FAQ%4$s for help."
 msgstr "Skontaktuj się z nami na %1$sforum pomocy technicznej%2$s lub przeczytaj %3$sFAQ wtyczki%4$s."
 
-#: src/Tracker/DeactivationTracker.php:51
+#: src/Tracker/DeactivationTracker.php:67
 msgid "The plugin does not work properly"
 msgstr "Wtyczka nie działa prawidłowo"
 
@@ -544,39 +544,39 @@ msgstr "Formatowanie na stronach/w e-mailach"
 msgid "Pages/e-mails"
 msgstr "Strony/e-maile"
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:501
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:541
 msgid "The &#8220;%s&#8221; plugin cannot run without %s PHP setting set to %s. Please contact your host and ask them to set %s."
 msgstr "Wtyczka &#8222;%s&#8221; nie może zostać włączona bez %s, aby ustawić %s. Proszę skontaktować się z administratorem, aby ustawić %s."
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:476
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:516
 msgid "The &#8220;%s&#8221; plugin cannot run without %s PHP module installed. Please contact your host and ask them to install %s."
 msgstr "Wtyczka &#8222;%s&#8221; nie może działać bez modułu PHP: %s. Proszę skontaktować się z hostingodawcą w celu zainstalowania %s."
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:434
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:474
 msgid "The &#8220;%s&#8221; plugin requires activating %s plugin. <a href=\"%s\">Activate %s</a>"
 msgstr "Wtyczka &#8220;%s&#8221; wymaga włączenia wtyczki %s. <a href=\"%s\">Włącz %s</a>"
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:428
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:468
 msgid "The &#8220;%s&#8221; plugin requires free %s plugin. <a href=\"%s\">Install %s</a>"
 msgstr "Wtyczka &#8220;%s&#8221; wymaga bezpłatnej wtyczki %s. <a href=\"%s\">Zainstaluj %s →</a>"
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:391
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:416
 msgid "The &#8220;%s&#8221; plugin cannot run without %s active. Please install and activate %s plugin."
 msgstr "Wtyczka &#8222;%s&#8221; nie może działać bez włączenia %s. Zainstaluj i włącz wtyczkę %s."
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:198
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:215
 msgid "The &#8220;%s&#8221; plugin cannot run without OpenSSL module version at least %s. Please update OpenSSL module."
 msgstr "Wtyczka &#8222;%s&#8221; nie może działać bez OpenSSL co najmniej w wersji %s. Proszę zaktualizować moduł OpenSSL."
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:195
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:212
 msgid "The &#8220;%s&#8221; plugin cannot run on WooCommerce versions older than %s. Please update WooCommerce."
 msgstr "Wtyczka &#8222;%s&#8221; nie może działać z WooCommerce w wersji starszej niż %s. Proszę zaktualizować WooCommerce."
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:192
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:209
 msgid "The &#8220;%s&#8221; plugin cannot run on WordPress versions older than %s. Please update WordPress."
 msgstr "Wtyczka &#8220;%s&#8221; nie działa z wersją WordPress’a starszą niż %s. Skontaktuj się proszę z administratorem strony, aby zaktualizować wersję."
 
-#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:189
+#: vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php:206
 msgid "The &#8220;%s&#8221; plugin cannot run on PHP versions older than %s. Please contact your host and ask them to upgrade."
 msgstr "Wtyczka &#8222;%s&#8221; nie może działać w wersji PHP starszej niż %s. Skontaktuj się z administratorem hostingu i poproś o aktualizację."
 
@@ -719,7 +719,7 @@ msgstr "Domyślna"
 msgid "You successfully opted out of collecting usage data by WP Desk. If you change your mind, you can always opt in later in the plugin's quick links."
 msgstr "Zrezygnowałeś z gromadzenia danych użytkowania przez WP Desk. Jeśli zmienisz zdanie, zawsze możesz wyrazić zgodę później, korzystając z szybkich łączy wtyczki."
 
-#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/class-wpdesk-tracker.php:160
+#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/class-wpdesk-tracker.php:164
 msgid "Submit &amp; Deactivate"
 msgstr "Wyślij i wyłącz"
 
@@ -736,7 +736,7 @@ msgstr "Pomiń i wyłącz"
 msgid "Kindly tell us the reason so we can improve"
 msgstr "Napisz jaka jest przyczyna, abyśmy mogli poprawić wtyczkę"
 
-#: src/Tracker/DeactivationTracker.php:117
+#: src/Tracker/DeactivationTracker.php:133
 #: vendor_prefixed/wpdesk/wp-wpdesk-deactivation-modal/src/Model/DefaultFormOptions.php:22
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-deactivate.php:93
 msgid "Other"
@@ -761,7 +761,7 @@ msgstr "Wtyczka była potrzebna tylko przez krótki okres"
 msgid "What's the plugin's name?"
 msgstr "Jaka jest nazwa tej wtyczki?"
 
-#: src/Tracker/DeactivationTracker.php:92
+#: src/Tracker/DeactivationTracker.php:108
 #: vendor_prefixed/wpdesk/wp-wpdesk-deactivation-modal/src/Model/DefaultFormOptions.php:18
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-deactivate.php:48
 msgid "I found a better plugin"
@@ -789,7 +789,7 @@ msgstr "Wyłączasz wtyczkę %s."
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-connect.php:83
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-notice.php:27
 msgid "Find out more &raquo;"
-msgstr "Wyszukaj więcej &raquo;"
+msgstr "Dowiedz się więcej &raquo;"
 
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/views/tracker-connect.php:78
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-connect.php:70
@@ -884,11 +884,6 @@ msgstr "Wygląd"
 msgid "General"
 msgstr "Ogólne"
 
-#. Author URI of the plugin
-#: flexible-checkout-fields.php
-msgid "https://www.wpdesk.net/"
-msgstr "https://www.wpdesk.pl/"
-
 #. Author of the plugin
 #: flexible-checkout-fields.php
 msgid "WP Desk"
@@ -898,11 +893,6 @@ msgstr "WP Desk"
 #: flexible-checkout-fields.php
 msgid "Manage your WooCommerce checkout fields. Change order, labels, placeholders and add new fields."
 msgstr "Zarządzaj polami formularza WooCommerce. Zmień kolejność, etykiety, teksty zastępcze i dodaj nowe pola."
-
-#. Plugin URI of the plugin
-#: flexible-checkout-fields.php
-msgid "https://www.wpdesk.net/products/flexible-checkout-fields-pro-woocommerce/"
-msgstr "https://www.wpdesk.net/products/flexible-checkout-fields-pro-woocommerce/"
 
 #. Plugin Name of the plugin
 #: flexible-checkout-fields.php classes/settings.php:35 classes/settings.php:38
