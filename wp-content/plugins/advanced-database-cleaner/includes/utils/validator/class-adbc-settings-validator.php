@@ -173,7 +173,7 @@ class ADBC_Settings_Validator {
 		if ( ! is_array( $api_scan_balance ) )
 			return false;
 		foreach ( $api_scan_balance as $scan_key => $value ) {
-			if ( ! in_array( $scan_key, array( 'quota', 'usage', 'ttl', 'updated_at' ), true ) )
+			if ( ! in_array( $scan_key, array( 'quota', 'usage', 'ttl', 'total_quota', 'total_consumed', 'updated_at' ), true ) )
 				return false;
 			if ( ! is_int( $value ) && $value < 0 )
 				return false;

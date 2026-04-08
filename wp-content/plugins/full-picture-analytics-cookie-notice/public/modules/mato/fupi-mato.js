@@ -11,7 +11,7 @@ function fupi_mato(){
 	document.addEventListener('fupi_consents_changed', function (e) {
 		if ( fp.mato.no_cookies && fpdata.cookies.stats ) {
 			if ( fp.main.debug ) console.log('[FP] Matomo - cookie permissions have been updated. Matomo is now running in cookie mode');
-			_paq.push(['setCookieConsentGiven']);
+			if ( !! _paq ) _paq.push(['setCookieConsentGiven']);
 		}
 	});
 

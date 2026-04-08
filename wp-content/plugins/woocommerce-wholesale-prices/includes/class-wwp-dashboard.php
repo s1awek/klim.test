@@ -146,6 +146,12 @@ if ( ! class_exists( 'WWP_Dashboard' ) ) {
                 return;
             }
 
+            // Only load on the wholesale dashboard page.
+            $screen = get_current_screen();
+            if ( ! $screen || 'toplevel_page_wholesale-suite' !== $screen->id ) {
+                return;
+            }
+
             // Load vue scripts.
             $app = new Vite_App(
                 'wwp-dashboard-app-scripts',

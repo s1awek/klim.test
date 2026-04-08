@@ -8,6 +8,10 @@ if ( ! defined( 'ABSPATH' ) )
 if ( ! defined( 'ADBC_VERSION_TYPE' ) )
 	file_exists( __DIR__ . '/includes/premium' ) ? define( 'ADBC_VERSION_TYPE', 'PREMIUM' ) : define( 'ADBC_VERSION_TYPE', 'FREE' );
 
+// Is this version the pro version based on the slug of the plugin folder.
+if ( ! defined( 'ADBC_IS_PRO_VERSION' ) )
+	basename( __DIR__ ) === 'advanced-database-cleaner-pro' ? define( 'ADBC_IS_PRO_VERSION', true ) : define( 'ADBC_IS_PRO_VERSION', false );
+
 // Plugin folder name.
 if ( ! defined( 'ADBC_PLUGIN_DIR_NAME' ) )
 	define( 'ADBC_PLUGIN_DIR_NAME', dirname( plugin_basename( __FILE__ ) ) );

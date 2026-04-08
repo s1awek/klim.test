@@ -221,8 +221,7 @@ function fupi_consb() {
 
 	function update_tools_consents(){
 
-		let dataLayer = window.dataLayer || window.fupi_dataLayer,
-			permissions = {
+		let permissions = {
 				'analytics_storage': fpdata.cookies.stats ? 'granted' : 'denied',
 				'personalization_storage' : fpdata.cookies.personalisation ? 'granted' : 'denied',
 				'ad_storage' : fpdata.cookies.marketing ? 'granted' : 'denied',
@@ -237,15 +236,24 @@ function fupi_consb() {
 			'can_track_market' : fpdata.cookies.marketing || false,
 		}
 
-		// Google
+		// update in dataLayer
 
 		window.gtag( 'consent', 'update', permissions );
-		if ( fp.gtm && fp.gtm.datalayer == 'fupi_dataLayer' && window.fupi_gtm_gtag ) window.fupi_gtm_gtag( 'consent', 'update', permissions );
-
-		if ( dataLayer ) dataLayer.push( {
+		window.dataLayer.push( {
 			'event' : 'fp_privacyPreferencesChanged',
 			'fp_visitorPrivacyPreferences' : fpdata.cookies,
 		} );
+
+		// update in fupi_dataLayer
+		
+		if ( window.fupi_gtm_gtag ) window.fupi_gtm_gtag( 'consent', 'update', permissions );
+
+		if ( window.fupi_dataLayer ) {
+			window.fupi_dataLayer.push( {
+				'event' : 'fp_privacyPreferencesChanged',
+				'fp_visitorPrivacyPreferences' : fpdata.cookies,
+			} );
+		}
 
 		// MS Ads
 		window.uetq.push( 'consent', 'update', {'ad_storage': permissions['ad_storage'] } );
@@ -776,6 +784,7 @@ function fupi_consb() {
 		FP.updateSessionData();
 
 		if ( needs_a_reload ) {
+			update_tools_consents();
 			maybe_wait_to_reload_page();
 		} else {
 			FP.sendEvt( 'fp_load_scripts' );
@@ -811,11 +820,11 @@ function fupi_consb() {
 
 		FP.updateSessionData();
 
+		FP.sendEvt('fupi_consents_changed', 'declined');
+		update_tools_consents();
+		
 		if ( needs_a_reload ) {
 			maybe_wait_to_reload_page();
-		} else {
-			FP.sendEvt('fupi_consents_changed', 'declined');
-			update_tools_consents();
 		}
 	}
 

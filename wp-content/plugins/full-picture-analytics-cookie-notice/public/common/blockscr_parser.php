@@ -45,6 +45,33 @@ if ( ! empty( $this->cook['scrblk_auto_rules'] ) ) {
                     'pers'          => true,
                 );
             break;
+
+            // STAPE.io
+
+            case 'stape':
+     
+                if ( defined( 'GTM_SERVER_SIDE_DATA_LAYER_CUSTOM_EVENT_NAME' ) ) {
+        
+                    $stape_url = get_option('gtm_server_side_web_container_url', true);
+                
+                    if ( ! empty ( $stape_url )) {
+                
+                        $tools_to_block[] = array(
+                            'id'            => 'auto_stape_plugin',
+                            'rules'         => array(
+                                array( 
+                                    'block_by' => 'content', 
+                                    'unique' => esc_url( $stape_url ),
+                                ),
+                            ),
+                            'url_part'      => '',
+                            'stats'         => false,
+                            'market'        => false,
+                            'pers'          => false,
+                        );
+                    }
+                }
+            break;
         }
     }
 }

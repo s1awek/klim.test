@@ -89,14 +89,14 @@ msgstr "À propos de Wholesale Suite"
 msgid "Access our self-service help documentation via the Knowledge Base. You'll find answers and solutions for a wide range of well know situations. You'll also find a Getting Started guide here for the plugin."
 msgstr "Accédez à notre documentation self-service via la Base de Connaissances. Vous trouverez des réponses et des solutions pour un large éventail de situations connues. Vous trouverez également là un Guide de Mise en Route pour l’extension."
 
-#: includes/class-wwp-dashboard.php:389
-#: includes/class-wwp-dashboard.php:413
-#: includes/class-wwp-dashboard.php:437
-#: includes/class-wwp-dashboard.php:461
-#: includes/class-wwp-dashboard.php:485
-#: includes/class-wwp-dashboard.php:509
-#: includes/class-wwp-dashboard.php:533
-#: includes/class-wwp-dashboard.php:882
+#: includes/class-wwp-dashboard.php:395
+#: includes/class-wwp-dashboard.php:419
+#: includes/class-wwp-dashboard.php:443
+#: includes/class-wwp-dashboard.php:467
+#: includes/class-wwp-dashboard.php:491
+#: includes/class-wwp-dashboard.php:515
+#: includes/class-wwp-dashboard.php:539
+#: includes/class-wwp-dashboard.php:888
 msgid "Activate"
 msgstr "Activer"
 
@@ -112,13 +112,13 @@ msgstr "Activer l’extension"
 msgid "Activate this plugin"
 msgstr "Activer cette extension"
 
-#: includes/class-wwp-dashboard.php:390
-#: includes/class-wwp-dashboard.php:414
-#: includes/class-wwp-dashboard.php:438
-#: includes/class-wwp-dashboard.php:462
-#: includes/class-wwp-dashboard.php:486
-#: includes/class-wwp-dashboard.php:510
-#: includes/class-wwp-dashboard.php:534
+#: includes/class-wwp-dashboard.php:396
+#: includes/class-wwp-dashboard.php:420
+#: includes/class-wwp-dashboard.php:444
+#: includes/class-wwp-dashboard.php:468
+#: includes/class-wwp-dashboard.php:492
+#: includes/class-wwp-dashboard.php:516
+#: includes/class-wwp-dashboard.php:540
 #: includes/class-wwp-helper-functions.php:1306
 msgid "Active"
 msgstr "Actif"
@@ -155,7 +155,7 @@ msgstr "Advanced Coupons  (Installer l'extension gratuite)"
 msgid "Advanced Coupons extends your coupon features so you can market you store better."
 msgstr "Advanced Coupons étend les fonctionnalités de vos codes promo afin d’améliorer les ventes de votre boutique."
 
-#: includes/class-wwp-dashboard.php:375
+#: includes/class-wwp-dashboard.php:381
 #: views/view-wwp-about-page.php:32
 msgid "Advanced Coupons for WooCommerce (Free Plugin)"
 msgstr "Advanced Coupons pour WooCommerce (extension gratuite)"
@@ -254,7 +254,7 @@ msgstr "Cliquez ici pour l'installer à partir du dépôt WordPress.org &rarr;"
 msgid "Click here to register as a wholesale customer"
 msgstr "Cliquez ici pour vous inscrire en tant que client grossiste"
 
-#: includes/class-wwp-dashboard.php:883
+#: includes/class-wwp-dashboard.php:889
 msgid "Click to activate the plugin."
 msgstr "Cliquez pour activer cette extension."
 
@@ -271,7 +271,7 @@ msgstr "Paramétrer Wholesale Lead Capture"
 msgid "Configure Wholesale Order Form"
 msgstr "Configurer Wholesale Order Form"
 
-#: includes/class-wwp-dashboard.php:874
+#: includes/class-wwp-dashboard.php:880
 msgid "Contact Support"
 msgstr "Conctater le support"
 
@@ -297,8 +297,8 @@ msgid "Customizable emails"
 msgstr "E‑mails personnalisables"
 
 #: includes/class-wwp-admin-menu.php:108
-#: includes/class-wwp-dashboard.php:194
-#: includes/class-wwp-dashboard.php:861
+#: includes/class-wwp-dashboard.php:200
+#: includes/class-wwp-dashboard.php:867
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
@@ -413,7 +413,7 @@ msgstr "Découvrez les différences entre vos anciens codes promo et les codes p
 msgid "Extends your coupon features so you can market your store better."
 msgstr "Augmentez les fonctionnalités de vos codes promo afin d'améliorer vos ventes."
 
-#: includes/class-wwp-dashboard.php:377
+#: includes/class-wwp-dashboard.php:383
 #: views/view-wwp-about-page.php:33
 msgid "Extends your coupon features so you can market your store better. Adds cart conditions (coupon rules), buy one get one (BOGO) deals, url coupons, coupon categories and loads more. Install this free plugin."
 msgstr "Étendez les fonctionnalités de vos codes promo pour rendre meilleur le marketing de votre boutique. Ajoute des conditions de panier (règles de codes promo), des offres Achetez X, Obtenez Y (BOGO), des URL de codes promo, les catégories de codes promo et plus encore. Installez cette extension gratuite."
@@ -461,13 +461,13 @@ msgid "FREE GUIDE: How To Setup Wholesale On Your WooCommerce Store"
 msgstr "GUIDE GRATUIT : Comment mettre en oeuvre la vente en gros dans votre boutique Woocommerce"
 
 #: includes/class-wwp-admin-settings.php:1340
-#: includes/class-wwp-dashboard.php:382
-#: includes/class-wwp-dashboard.php:406
-#: includes/class-wwp-dashboard.php:430
-#: includes/class-wwp-dashboard.php:454
-#: includes/class-wwp-dashboard.php:478
-#: includes/class-wwp-dashboard.php:502
-#: includes/class-wwp-dashboard.php:526
+#: includes/class-wwp-dashboard.php:388
+#: includes/class-wwp-dashboard.php:412
+#: includes/class-wwp-dashboard.php:436
+#: includes/class-wwp-dashboard.php:460
+#: includes/class-wwp-dashboard.php:484
+#: includes/class-wwp-dashboard.php:508
+#: includes/class-wwp-dashboard.php:532
 #: views/view-wwp-upgrade-upsell.php:24
 msgid "Free Plugin"
 msgstr "Extension Gratuite"
@@ -572,7 +572,7 @@ msgstr "Obtenir de l’aide"
 msgid "Getting Started"
 msgstr "Bien démarrer"
 
-#: includes/class-wwp-dashboard.php:871
+#: includes/class-wwp-dashboard.php:877
 msgid "Getting Started Guides"
 msgstr "Guides de démarrage"
 
@@ -719,13 +719,13 @@ msgstr "Installer maintenant"
 msgid "Install Plugin"
 msgstr "Installer l'extension"
 
-#: includes/class-wwp-dashboard.php:391
-#: includes/class-wwp-dashboard.php:415
-#: includes/class-wwp-dashboard.php:439
-#: includes/class-wwp-dashboard.php:463
-#: includes/class-wwp-dashboard.php:487
-#: includes/class-wwp-dashboard.php:511
-#: includes/class-wwp-dashboard.php:535
+#: includes/class-wwp-dashboard.php:397
+#: includes/class-wwp-dashboard.php:421
+#: includes/class-wwp-dashboard.php:445
+#: includes/class-wwp-dashboard.php:469
+#: includes/class-wwp-dashboard.php:493
+#: includes/class-wwp-dashboard.php:517
+#: includes/class-wwp-dashboard.php:541
 #: includes/class-wwp-script-loader.php:472
 #: views/view-wwp-about-page.php:36
 #: views/view-wwp-about-page.php:48
@@ -739,7 +739,7 @@ msgstr "Installer l'extension"
 msgid "Installed"
 msgstr "Installé"
 
-#: includes/class-wwp-dashboard.php:232
+#: includes/class-wwp-dashboard.php:238
 msgid "Invalid Request."
 msgstr "Requête invalide."
 
@@ -774,19 +774,19 @@ msgstr "Clé"
 msgid "Knowledge Base"
 msgstr "Base de connaissance"
 
-#: includes/class-wwp-dashboard.php:314
+#: includes/class-wwp-dashboard.php:320
 msgid "Last 1 year"
 msgstr "Année dernière"
 
-#: includes/class-wwp-dashboard.php:312
+#: includes/class-wwp-dashboard.php:318
 msgid "Last 14 days"
 msgstr "15 derniers jours"
 
-#: includes/class-wwp-dashboard.php:311
+#: includes/class-wwp-dashboard.php:317
 msgid "Last 30 days"
 msgstr "30 derniers jours"
 
-#: includes/class-wwp-dashboard.php:313
+#: includes/class-wwp-dashboard.php:319
 msgid "Last 7 days"
 msgstr "7 derniers jours"
 
@@ -805,7 +805,7 @@ msgstr "Apprenez comment gérer précisément les prix de vos produits pour la v
 msgid "Learn More"
 msgstr "En savoir plus"
 
-#: includes/class-wwp-dashboard.php:889
+#: includes/class-wwp-dashboard.php:895
 msgid "Learn More &rarr;"
 msgstr "En savoir plus &rarr;"
 
@@ -837,7 +837,7 @@ msgstr "Licence"
 msgid "Locations"
 msgstr "Emplacements"
 
-#: includes/class-wwp-wholesale-prices.php:1384
+#: includes/class-wwp-wholesale-prices.php:1411
 msgid "Login to see prices"
 msgstr "Connectez-vous pour voir les prix"
 
@@ -903,7 +903,7 @@ msgstr "Nom"
 msgid "No"
 msgstr "Non"
 
-#: includes/class-wwp-dashboard.php:884
+#: includes/class-wwp-dashboard.php:890
 msgid "No Data"
 msgstr "Aucune donnée"
 
@@ -1078,7 +1078,7 @@ msgstr "Acheter et installer Wholesale Lead Capture"
 msgid "Purchase & Install Wholesale Order Form"
 msgstr "Acheter et installer Wholesale Order Form"
 
-#: includes/class-wwp-dashboard.php:872
+#: includes/class-wwp-dashboard.php:878
 msgid "Read Documentation"
 msgstr "Lire la documentation"
 
@@ -1222,7 +1222,7 @@ msgstr "Définissez le prix de gros via un % global, un % par catégorie ou au n
 #: includes/class-wwp-admin-menu.php:215
 #: includes/class-wwp-admin-settings.php:588
 #: includes/class-wwp-bootstrap.php:340
-#: includes/class-wwp-dashboard.php:873
+#: includes/class-wwp-dashboard.php:879
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -1283,7 +1283,7 @@ msgstr "Précise le format dans lequel le prix des produits à variations est af
 msgid "Status:"
 msgstr "État :"
 
-#: includes/class-wwp-dashboard.php:270
+#: includes/class-wwp-dashboard.php:276
 msgid "Successfully activated"
 msgstr "Activé avec succès"
 
@@ -1343,7 +1343,7 @@ msgstr "Le prix de gros du produit."
 msgid "The selected wholesale roles and pricing that should show to non-wholesale customers on the front end."
 msgstr "Les rôles de gros sélectionnés et les prix qui doivent être montrés aux clients non grossistes sur le front-end."
 
-#: includes/class-wwp-dashboard.php:863
+#: includes/class-wwp-dashboard.php:869
 msgid "The stats will only count orders that are in processing or completed status."
 msgstr "Ces statistiques ne compteront que les commandes à l’état En cours ou Terminé."
 
@@ -1400,7 +1400,7 @@ msgstr "Plus de 20 000 boutiques lui font confiance"
 msgid "Unable to %s. Invalid wholesale price."
 msgstr "Impossible de %s. Prix de gros invalide."
 
-#: includes/class-wwp-dashboard.php:275
+#: includes/class-wwp-dashboard.php:281
 msgid "Unable to activate"
 msgstr "Activation impossible"
 
@@ -1408,7 +1408,7 @@ msgstr "Activation impossible"
 msgid "Upgrade"
 msgstr "Mettre à niveau"
 
-#: includes/class-wwp-dashboard.php:885
+#: includes/class-wwp-dashboard.php:891
 msgid "Upgrade Now"
 msgstr "Mettre à niveau maintenant"
 
@@ -1434,7 +1434,7 @@ msgstr "Affichage du prix des produits à variations"
 msgid "Version"
 msgstr "Version"
 
-#: includes/class-wwp-dashboard.php:868
+#: includes/class-wwp-dashboard.php:874
 msgid "View Order"
 msgstr "Voir la commande"
 
@@ -1486,9 +1486,9 @@ msgstr "Système d’approbation des clients grossistes"
 msgid "Wholesale Customer"
 msgstr "Client grossiste"
 
-#: includes/class-wwp-dashboard.php:349
-#: includes/class-wwp-dashboard.php:878
-#: includes/class-wwp-dashboard.php:920
+#: includes/class-wwp-dashboard.php:355
+#: includes/class-wwp-dashboard.php:884
+#: includes/class-wwp-dashboard.php:926
 #: includes/class-wwp-lead-capture.php:110
 #: includes/class-wwp-settings.php:929
 #: includes/I18n/settings.php:62
@@ -1501,9 +1501,9 @@ msgid "Wholesale Lead Capture provides a dedicated wholesale registration & logi
 msgstr "Wholesale Lead Capture apporte un formulaire d’inscription et de connexion dédié à vos clients grossites, un système d’approbation avancé des inscription et des seuqences de mail afin que vous puissiez accueillir facilement vos nouveaux clients grossistes."
 
 #: includes/class-wwp-admin-settings.php:1057
-#: includes/class-wwp-dashboard.php:341
-#: includes/class-wwp-dashboard.php:877
-#: includes/class-wwp-dashboard.php:925
+#: includes/class-wwp-dashboard.php:347
+#: includes/class-wwp-dashboard.php:883
+#: includes/class-wwp-dashboard.php:931
 #: includes/class-wwp-order-form.php:109
 #: includes/class-wwp-script-loader.php:716
 #: includes/class-wwp-settings.php:922
@@ -1524,7 +1524,7 @@ msgstr "Wholesale Order Form vous permet d’ajouter des formulaires efficaces e
 msgid "Wholesale Ordering"
 msgstr "Commandes en gros"
 
-#: includes/class-wwp-dashboard.php:864
+#: includes/class-wwp-dashboard.php:870
 msgid "Wholesale Orders"
 msgstr "Commandes en gros"
 
@@ -1566,8 +1566,8 @@ msgstr "Texte du prix de gros"
 #: includes/class-wwp-wholesale-price-for-non-wholesale-customers.php:99
 #: includes/class-wwp-wholesale-price-for-non-wholesale-customers.php:130
 #: includes/class-wwp-wholesale-price-grouped-product.php:181
-#: includes/class-wwp-wholesale-prices.php:604
-#: includes/class-wwp-wholesale-prices.php:1478
+#: includes/class-wwp-wholesale-prices.php:631
+#: includes/class-wwp-wholesale-prices.php:1505
 msgid "Wholesale Price:"
 msgstr "Prix de gros :"
 
@@ -1582,9 +1582,9 @@ msgstr "Prix de gros :"
 msgid "Wholesale Prices"
 msgstr "Prix de gros"
 
-#: includes/class-wwp-dashboard.php:333
-#: includes/class-wwp-dashboard.php:876
-#: includes/class-wwp-dashboard.php:915
+#: includes/class-wwp-dashboard.php:339
+#: includes/class-wwp-dashboard.php:882
+#: includes/class-wwp-dashboard.php:921
 #: includes/class-wwp-settings.php:907
 #: includes/I18n/settings.php:45
 #: views/view-wwp-getting-started-page.php:197
@@ -1600,7 +1600,7 @@ msgstr "Wholesale Prices Premium apporte une très grande palette de fonctionnal
 msgid "Wholesale Prices Settings"
 msgstr "Paramètre des prix de gros"
 
-#: includes/class-wwp-dashboard.php:865
+#: includes/class-wwp-dashboard.php:871
 msgid "Wholesale Revenue"
 msgstr "Revenues de ventes en gros"
 
@@ -1666,7 +1666,7 @@ msgstr "Wholesale Suite for WooCommerce"
 msgid "Wholesale Suite is brought to you by the same team that's behind the best coupon feature plugin for WooCommerce, Advanced Coupons. We've also been in the WordPress space for over a decade."
 msgstr "Wholesale Suite vous est proposé par la même équipe qui est derrière l’extension aux meilleures fonctionnalités de codes promo pour WooCommerce: Advanced Coupons. Nous sommes aussi dans l'univers WordPress depuis plus d'une décennie."
 
-#: includes/class-wwp-dashboard.php:880
+#: includes/class-wwp-dashboard.php:886
 msgid "Wholesale Suite Plugins:"
 msgstr "Extensions de la suite Wholesale :"
 
@@ -1696,7 +1696,7 @@ msgstr "Extension WooCommerce fournissant une fonctionnalité de prix de gros"
 msgid "WooCommerce Wholesale Lead Capture"
 msgstr "WooCommerce Wholesale Lead Capture"
 
-#: includes/class-wwp-dashboard.php:261
+#: includes/class-wwp-dashboard.php:267
 msgid "WooCommerce Wholesale Lead Capture plugin."
 msgstr "Extension WooCommerce Wholesale Lead Capture."
 
@@ -1706,7 +1706,7 @@ msgstr "Extension WooCommerce Wholesale Lead Capture."
 msgid "WooCommerce Wholesale Order Form"
 msgstr "WooCommerce Wholesale Order Form"
 
-#: includes/class-wwp-dashboard.php:258
+#: includes/class-wwp-dashboard.php:264
 msgid "WooCommerce Wholesale Order Form plugin."
 msgstr "Extension WooCommerce Wholesale Order Form."
 
@@ -1731,7 +1731,7 @@ msgstr "WooCommerce Wholesale Prices se décline en deux versions - la version g
 msgid "WooCommerce Wholesale Prices Premium"
 msgstr "WooCommerce Wholesale Prices Premium"
 
-#: includes/class-wwp-dashboard.php:264
+#: includes/class-wwp-dashboard.php:270
 msgid "WooCommerce Wholesale Prices Premium plugin."
 msgstr "Extension WooCommerce Wholesale Prices Premium."
 
@@ -1800,25 +1800,25 @@ msgid "Choose Price Type%1$sFixed (default)%1$sPercentage"
 msgstr ""
 
 #: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-simple-product.php:956
-#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:871
+#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:876
 msgid "Sale Discount (%)"
 msgstr ""
 
 #: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-simple-product.php:959
-#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:874
+#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:879
 msgid "The percentage amount discounted from the wholesale price"
 msgstr ""
 
 #. translators: %s: currency symbol
 #: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-simple-product.php:973
-#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:890
+#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:895
 #, php-format
 msgid "Wholesale Sale Price (%1$s)"
 msgstr ""
 
 #. translators: %s: currency symbol
 #: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-simple-product.php:975
-#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:890
+#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:895
 msgid "Schedule"
 msgstr ""
 
@@ -1827,13 +1827,13 @@ msgid "Sale price dates"
 msgstr ""
 
 #: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-simple-product.php:982
-#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:899
+#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:904
 msgctxt "placeholder"
 msgid "From&hellip;"
 msgstr ""
 
 #: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-simple-product.php:983
-#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:903
+#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:908
 msgctxt "placeholder"
 msgid "To&hellip;"
 msgstr ""
@@ -1848,15 +1848,15 @@ msgid "The sale will start at 00:00:00 of \"From\" date and end at 23:59:59 of \
 msgstr ""
 
 #. translators: %s: currency symbol
-#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:890
+#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:895
 msgid "Cancel schedule"
 msgstr ""
 
-#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:898
+#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:903
 msgid "Sale start date"
 msgstr ""
 
-#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:902
+#: includes/admin-custom-fields/products/class-wwp-admin-custom-fields-variable-product.php:907
 msgid "Sale end date"
 msgstr ""
 
@@ -2068,7 +2068,7 @@ msgstr ""
 msgid "Currently using: %1$sFree Version%2$s"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:315
+#: includes/class-wwp-dashboard.php:321
 msgid "Custom"
 msgstr ""
 
@@ -2446,7 +2446,7 @@ msgstr ""
 msgid "Are you sure want to clear the cache?"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:946
+#: includes/class-wwp-dashboard.php:952
 msgid "Update Available"
 msgstr ""
 
@@ -2549,7 +2549,7 @@ msgstr ""
 msgid "Wholesale Payments"
 msgstr ""
 
-#: includes/class-wwp-wholesale-prices.php:1530
+#: includes/class-wwp-wholesale-prices.php:1557
 msgid "Wholesale Prices data."
 msgstr ""
 
@@ -2735,12 +2735,12 @@ msgstr ""
 msgid "WC Vendors Marketplace"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:447
+#: includes/class-wwp-dashboard.php:453
 #: views/view-wwp-about-page.php:88
 msgid "WC Vendors (Free Plugin)"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:449
+#: includes/class-wwp-dashboard.php:455
 #: views/view-wwp-about-page.php:89
 msgid "Easiest way to create your multivendor marketplace and earn commission from every sale. Create a WooCommerce marketplace with multi-seller, product vendor & multi vendor commissions."
 msgstr ""
@@ -2749,12 +2749,12 @@ msgstr ""
 msgid "Product Feed Pro"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:423
+#: includes/class-wwp-dashboard.php:429
 #: views/view-wwp-about-page.php:72
 msgid "Product Feed Pro (Free Plugin)"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:425
+#: includes/class-wwp-dashboard.php:431
 #: views/view-wwp-about-page.php:73
 msgid "Helps you generate and manage product feeds for various marketing channels, such as Google Shopping, Facebook, and more, to optimize your eCommerce store's visibility and sales."
 msgstr ""
@@ -2763,12 +2763,12 @@ msgstr ""
 msgid "Invoice Gateway for WooCommerce"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:471
+#: includes/class-wwp-dashboard.php:477
 #: views/view-wwp-about-page.php:100
 msgid "Invoice Gateway for WooCommerce (Free Plugin)"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:473
+#: includes/class-wwp-dashboard.php:479
 #: views/view-wwp-about-page.php:101
 msgid "Accept orders via a special invoice payment gateway method which lets your customer enter their order without upfront payment. Then just issue an invoice from your accounting system and paste in the number."
 msgstr ""
@@ -2777,12 +2777,12 @@ msgstr ""
 msgid "Store Toolkit"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:495
+#: includes/class-wwp-dashboard.php:501
 #: views/view-wwp-about-page.php:116
 msgid "Store Toolkit for WooCommerce (Free Plugin)"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:497
+#: includes/class-wwp-dashboard.php:503
 #: views/view-wwp-about-page.php:117
 msgid "A growing set of commonly-used WooCommerce admin tools such as deleting WooCommerce data in bulk, such as products, orders, coupons, and customers. It also adds extra small features, order filtering, and more."
 msgstr ""
@@ -2815,18 +2815,18 @@ msgstr ""
 msgid "Thank you for choosing Wholesale Suite! the most complete wholesale solution for building wholesale sales into your existing WooCommerce driven store."
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:170
+#: includes/class-wwp-dashboard.php:176
 #: views/view-wwp-about-page.php:60
 msgid "StoreAgent AI"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:399
+#: includes/class-wwp-dashboard.php:405
 #: views/view-wwp-about-page.php:60
 msgid "StoreAgent AI for WooCommerce (Free Plugin)"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:172
-#: includes/class-wwp-dashboard.php:401
+#: includes/class-wwp-dashboard.php:178
+#: includes/class-wwp-dashboard.php:407
 #: views/view-wwp-about-page.php:61
 msgid "Get AI Agents for WooCommerce with StoreAgent.ai, the free AI-powered plugin designed to automate tasks, personalize customer interactions, and optimize your eCommerce operations."
 msgstr ""
@@ -2987,51 +2987,21 @@ msgstr ""
 msgid "Role name must be between 1 and 255 characters."
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:380
-#: includes/class-wwp-dashboard.php:383
-#: includes/class-wwp-dashboard.php:404
-#: includes/class-wwp-dashboard.php:407
-#: includes/class-wwp-dashboard.php:428
-#: includes/class-wwp-dashboard.php:431
-#: includes/class-wwp-dashboard.php:452
-#: includes/class-wwp-dashboard.php:455
-#: includes/class-wwp-dashboard.php:476
-#: includes/class-wwp-dashboard.php:479
-#: includes/class-wwp-dashboard.php:500
-#: includes/class-wwp-dashboard.php:503
-#: includes/class-wwp-dashboard.php:524
-#: includes/class-wwp-dashboard.php:527
+#: includes/class-wwp-dashboard.php:386
+#: includes/class-wwp-dashboard.php:389
+#: includes/class-wwp-dashboard.php:410
+#: includes/class-wwp-dashboard.php:413
+#: includes/class-wwp-dashboard.php:434
+#: includes/class-wwp-dashboard.php:437
+#: includes/class-wwp-dashboard.php:458
+#: includes/class-wwp-dashboard.php:461
+#: includes/class-wwp-dashboard.php:482
+#: includes/class-wwp-dashboard.php:485
+#: includes/class-wwp-dashboard.php:506
+#: includes/class-wwp-dashboard.php:509
+#: includes/class-wwp-dashboard.php:530
+#: includes/class-wwp-dashboard.php:533
 msgid "Recommended"
-msgstr ""
-
-#: includes/class-wwp-dashboard.php:388
-#: includes/class-wwp-dashboard.php:412
-#: includes/class-wwp-dashboard.php:436
-#: includes/class-wwp-dashboard.php:460
-#: includes/class-wwp-dashboard.php:484
-#: includes/class-wwp-dashboard.php:508
-#: includes/class-wwp-dashboard.php:532
-msgid "Install & Activate"
-msgstr ""
-
-#: includes/class-wwp-dashboard.php:392
-#: includes/class-wwp-dashboard.php:416
-#: includes/class-wwp-dashboard.php:440
-#: includes/class-wwp-dashboard.php:464
-#: includes/class-wwp-dashboard.php:488
-#: includes/class-wwp-dashboard.php:512
-#: includes/class-wwp-dashboard.php:536
-msgid "Installing & Activating..."
-msgstr ""
-
-#: includes/class-wwp-dashboard.php:393
-#: includes/class-wwp-dashboard.php:417
-#: includes/class-wwp-dashboard.php:441
-#: includes/class-wwp-dashboard.php:465
-#: includes/class-wwp-dashboard.php:489
-#: includes/class-wwp-dashboard.php:513
-#: includes/class-wwp-dashboard.php:537
-msgid "Activating..."
 msgstr ""
 
 #: includes/class-wwp-dashboard.php:394
@@ -3041,58 +3011,88 @@ msgstr ""
 #: includes/class-wwp-dashboard.php:490
 #: includes/class-wwp-dashboard.php:514
 #: includes/class-wwp-dashboard.php:538
+msgid "Install & Activate"
+msgstr ""
+
+#: includes/class-wwp-dashboard.php:398
+#: includes/class-wwp-dashboard.php:422
+#: includes/class-wwp-dashboard.php:446
+#: includes/class-wwp-dashboard.php:470
+#: includes/class-wwp-dashboard.php:494
+#: includes/class-wwp-dashboard.php:518
+#: includes/class-wwp-dashboard.php:542
+msgid "Installing & Activating..."
+msgstr ""
+
+#: includes/class-wwp-dashboard.php:399
+#: includes/class-wwp-dashboard.php:423
+#: includes/class-wwp-dashboard.php:447
+#: includes/class-wwp-dashboard.php:471
+#: includes/class-wwp-dashboard.php:495
+#: includes/class-wwp-dashboard.php:519
+#: includes/class-wwp-dashboard.php:543
+msgid "Activating..."
+msgstr ""
+
+#: includes/class-wwp-dashboard.php:400
+#: includes/class-wwp-dashboard.php:424
+#: includes/class-wwp-dashboard.php:448
+#: includes/class-wwp-dashboard.php:472
+#: includes/class-wwp-dashboard.php:496
+#: includes/class-wwp-dashboard.php:520
+#: includes/class-wwp-dashboard.php:544
 msgid "Installed & Activated"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:395
-#: includes/class-wwp-dashboard.php:419
-#: includes/class-wwp-dashboard.php:443
-#: includes/class-wwp-dashboard.php:467
-#: includes/class-wwp-dashboard.php:491
-#: includes/class-wwp-dashboard.php:515
-#: includes/class-wwp-dashboard.php:539
+#: includes/class-wwp-dashboard.php:401
+#: includes/class-wwp-dashboard.php:425
+#: includes/class-wwp-dashboard.php:449
+#: includes/class-wwp-dashboard.php:473
+#: includes/class-wwp-dashboard.php:497
+#: includes/class-wwp-dashboard.php:521
+#: includes/class-wwp-dashboard.php:545
 msgid "Activated"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:519
+#: includes/class-wwp-dashboard.php:525
 #: views/view-wwp-about-page.php:144
 msgid "SaveTo Wishlist Lite for WooCommerce (Free Plugin)"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:521
+#: includes/class-wwp-dashboard.php:527
 #: views/view-wwp-about-page.php:145
 msgid "A simple, powerful WooCommerce wishlist plugin to help customers save products they love and buy later."
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:862
+#: includes/class-wwp-dashboard.php:868
 msgid "Quick Stats"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:866
+#: includes/class-wwp-dashboard.php:872
 msgid "Top Wholesale Customers"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:867
+#: includes/class-wwp-dashboard.php:873
 msgid "Recent Wholesale Orders"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:869
+#: includes/class-wwp-dashboard.php:875
 msgid "View All Wholesale Orders"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:870
+#: includes/class-wwp-dashboard.php:876
 msgid "Helpful Resources"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:875
+#: includes/class-wwp-dashboard.php:881
 msgid "License Activation Status"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:879
+#: includes/class-wwp-dashboard.php:885
 msgid "View Licenses"
 msgstr ""
 
-#: includes/class-wwp-dashboard.php:881
+#: includes/class-wwp-dashboard.php:887
 msgid "Deactivated Plugins"
 msgstr ""
 

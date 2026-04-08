@@ -65,7 +65,7 @@
 							<?php endif;?>
 						</div>
 					</div>
-					<a class="button button-primary button-hero wpallimport-large-button wpallimport-notify-read-more" href="https://www.wpallimport.com/documentation/problems-with-import-files/" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>
+					<a class="button wpallimport-large-button wpallimport-notify-read-more" href="https://www.wpallimport.com/documentation/problems-with-import-files/" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>
 				</div>
 
 				<form class="<?php echo ! $isWizard ? 'edit' : 'options' ?>" method="post" enctype="multipart/form-data" autocomplete="off" <?php echo ! $isWizard ? 'style="overflow:visible;"' : '' ?> id="wpai-submit-confirm-form">

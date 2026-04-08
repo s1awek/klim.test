@@ -131,9 +131,9 @@ function fupi_woo(){
 				prod_data = JSON.parse ( el.dataset.data ),
 				prod_type = el.dataset.type || prod_data.type,
 				prod_wrap = false,
-				closest_form_element = el.closest("form.cart");
+				closest_form_element = el.closest("form.cart, form.wp-block-add-to-cart-with-options");
 
-			// add prod data to fprada.woo.products
+			// add prod data to fpdata.woo.products
 			fpdata.woo.products[id] = fpdata.woo.products[id] ? { ...fpdata.woo.products[id], ...prod_data } : prod_data;
 			
 			// mark as processed
@@ -375,24 +375,55 @@ function fupi_woo(){
 		if ( FP.isClickTarget( '.single_add_to_cart_button:not(.disabled), .single_add_to_cart_button:not(.disabled) *' ) ) {
 			
 			let form_el = fpdata.clicked.element.closest('form.cart');
+				form_found = false;
 
-			// if no form element
+			// if no classic form element
 			if ( ! form_el ) {
 
-				// this is a single button
-				if ( fpdata.clicked.element?.href && fpdata.clicked.element.href.includes('add-to-cart=') ) {
-					
-					let prod_id = FP.getUrlParamByName( 'add-to-cart', fpdata.clicked.element.href );
+				let atc_plus_opts_form = fpdata.clicked.element.closest('form.wp-block-add-to-cart-with-options')
 
-					if ( fpdata.woo.products[prod_id] ) {
+				// if this is a form element from "Add to cart + options (beta) block"
+				if ( atc_plus_opts_form ){
+
+					let atc_single_btn = FP.findFirst('.add_to_cart_button.product_type_simple', atc_plus_opts_form)
+
+					// check what type of product is being clicked
+					if ( atc_single_btn ) {
 						
-						let qty_from_url = FP.getUrlParamByName( 'quantity', fpdata.clicked.element.href ),
-							qty = qty_from_url || 1,
-							prod = fpdata.woo.products[prod_id],
-							value = Math.round( prod.price * qty * 100 ) / 100;
+						// we can get prod id from the button itself
+						let prod_id = atc_single_btn.dataset.product_id,
+							prod = prod_id ? fpdata.woo.products[prod_id] : false;
+						
+						if ( prod ) {
 
-						FP.doActions( 'woo_add_to_cart', { 'products' : [[prod, qty]], 'value': value } );
-						FP.setCookie( 'fp_last_atc', prod_id, 0 );
+							let qty_el = FP.findFirst( '.qty', atc_plus_opts_form ),
+								qty = qty_el ? qty_el.value : 1,
+								value = Math.round( prod.price * qty * 100 ) / 100;
+
+							FP.doActions( 'woo_add_to_cart', { 'products' : [[prod, qty]], 'value': value } );
+						}
+
+					} else {
+						if ( fp.main.debug ) console.log('[FP] At the moment only tracking single products is supported in the "Add to cart + Options (beta) block!');
+					}
+
+				} else {
+					
+					// this is a single button
+					if ( fpdata.clicked.element?.href && fpdata.clicked.element.href.includes('add-to-cart=') ) {
+						
+						let prod_id = FP.getUrlParamByName( 'add-to-cart', fpdata.clicked.element.href );
+	
+						if ( fpdata.woo.products[prod_id] ) {
+							
+							let qty_from_url = FP.getUrlParamByName( 'quantity', fpdata.clicked.element.href ),
+								qty = qty_from_url || 1,
+								prod = fpdata.woo.products[prod_id],
+								value = Math.round( prod.price * qty * 100 ) / 100;
+	
+							FP.doActions( 'woo_add_to_cart', { 'products' : [[prod, qty]], 'value': value } );
+							FP.setCookie( 'fp_last_atc', prod_id, 0 );
+						}
 					}
 				}
 			
@@ -443,9 +474,10 @@ function fupi_woo(){
 			// track simple product
 			} else if ( form_el ) {
 
-				let prod_id = FP.findFirst( '.single_add_to_cart_button', form_el ).value;
+				let atc_btn = FP.findFirst( '.single_add_to_cart_button', form_el ),
+					prod_id = atc_btn?.value || atc_btn.dataset?.prod_id || atc_btn.dataset?.prodid || atc_btn.dataset?.product_id || atc_btn.dataset?.pid;
 
-				if ( fpdata.woo.products[prod_id] ) {
+				if ( !! prod_id && fpdata.woo.products[prod_id] ) {
 
 					let qty_el = FP.findFirst( 'input.qty', form_el ),
 						qty = qty_el && qty_el.value && qty_el.value > 0 ? parseInt( qty_el.value ) : 1,
@@ -500,6 +532,8 @@ function fupi_woo(){
 			
 			fpdata.woo.cart = cart_data;
 			cart_data_el.classList.add('fupi_ready'); // Mark as processed
+
+			if ( fpdata.page_type == "Woo Cart" && fpdata.woo.cart.items && fp.woo.where_track_addtocart === 'in_cart' ) do_addToCart_in_cart();
 		}
 	};
 
@@ -562,7 +596,7 @@ function fupi_woo(){
 	setTimeout( prepare_classic_cart, 300 );
 
 	// Bind event handler immediately (no timeout)
-	jQuery(document).ready(function($) {
+	if ( jQuery ) jQuery(document).ready(function($) {
 		$('body').on('updated_cart_totals', function(){
 			prepare_classic_cart(true);
 			compare_old_and_new_carts();
@@ -584,9 +618,10 @@ function fupi_woo(){
 	function do_addToCart_in_cart(){
 		
 		// check if there is an "fp_woo_cart" cookie with FP.readCookie() function
-		let fp_woo_cart_cookie = FP.readCookie('fp_woo_cart');
-		let added = [];
-		let added_val = 0;
+		let fp_woo_cart_cookie = FP.readCookie('fp_woo_cart'),
+			added = [],
+			added_val = 0,
+			cart_to_track = {};
 		
 		// if there is a cookie
 		if ( fp_woo_cart_cookie ) {
@@ -611,7 +646,7 @@ function fupi_woo(){
 			// Track added products
 			if ( added.length > 0 ) {
 				added_val = Math.round( added_val * 100 ) / 100;
-				fp.woo.cart_to_track = { 'products' : added, 'value' : added_val };
+				cart_to_track = { 'products' : added, 'value' : added_val };
 			}
 		
 		// if there is no cookie
@@ -623,13 +658,12 @@ function fupi_woo(){
 				added.push( [prod, prod.qty] );
 			}
 			
-			fp.woo.cart_to_track = { 'products' : added, 'value' : fpdata.woo.cart.value };
+			cart_to_track = { 'products' : added, 'value' : fpdata.woo.cart.value };
 		}
 		
 		update_cart_cookie();
+		FP.doActions( 'woo_add_to_cart', cart_to_track );
 	}
-
-	if ( fpdata.page_type == "Woo Cart" && fpdata.woo.cart.items && fp.woo.where_track_addtocart === 'in_cart' ) do_addToCart_in_cart();
 
 	// TRACK ADD TO WISHLIST
 
@@ -684,11 +718,20 @@ function fupi_woo(){
 		}
 	};
 
-	// BLOCK CART & MINI CART
-
 	function add_block_hooks(){
 
-		// Stable replacement using wp.data to subscribe to cart changes
+		// "All products" block (deprecated but still used on some sites)
+		if ( window.wp && window.wp.hooks ) window.wp.hooks.addAction(
+			"experimental__woocommerce_blocks-product-list-render",
+			"fupi-tracking",
+			( {products, listName } ) => {
+				if ( products.length > 0 && listName == 'woocommerce/all-products' ) {
+					fp.woo.products_from_all_products_block = products;
+				}
+			}
+		);
+
+		// Use wp.data to subscribe to product changes in the BIG cart block
 		if ( window.wp && window.wp.data && window.wp.data.select( 'wc/store/cart' ) ) {
 			
 			const { subscribe } = wp.data;
@@ -745,18 +788,6 @@ function fupi_woo(){
 				// Update previous items for next change
 				previousCartItems = newCartItems;
 			} );
-
-			// "All products" block
-			wp.hooks.addAction(
-				"experimental__woocommerce_blocks-product-list-render",
-				"fupi-tracking",
-				( {products, listName } ) => {
-
-					if ( products.length > 0 && listName == 'woocommerce/all-products' ) {
-						fp.woo.products_from_all_products_block = products;
-					}
-				}
-			);
 		}
 
 		// Helper function to normalize product data from the store item

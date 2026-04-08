@@ -756,7 +756,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
                 if (!$attribute_key )
                     return;
 
-                if('variation' ==  $this->item_data['type']){
+                if ( isset( $this->item_data['type'] ) && 'variation' ===  $this->item_data['type'] ) {
                     $this->item_data['raw_attributes'][$attribute_key]['value'] = $this->wt_parse_seperation_field($value,'|');
                 }
                 return;
@@ -841,7 +841,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
                 $this->item_data['raw_attributes'][$attribute_key]['name'] = trim(str_replace('attribute:', '', $column));
                 $this->item_data['raw_attributes'][$attribute_key]['taxonomy'] = 0; 
             } 
-            if('variation' !=  $this->item_data['type']){
+            if ( isset( $this->item_data['type'] ) && 'variation' !==  $this->item_data['type'] ) {
                 $this->item_data['raw_attributes'][$attribute_key]['value'] = $this->wt_parse_seperation_field($value,'|'); 
             }            
             
@@ -1322,7 +1322,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
      */
     public function wt_parse_published_field( $value ) {	
 
-        $product_status = strtolower($value);
+        $product_status = strtolower( trim( $value ) );
 
         // Status is mapped from a special published field.
         if (in_array($product_status, array(1, '1', TRUE, 'true', 'publish'), TRUE)) {
@@ -1331,11 +1331,20 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
             $product_status = 'draft';
         } 
 
-        if (!in_array($product_status, array('publish', 'private', 'draft', 'pending', 'future', 'inherit', 'trash'))) {
-            $product_status = 'publish';
+        // Accept known slugs directly.
+        if ( in_array( $product_status, array( 'publish', 'private', 'draft', 'pending', 'future', 'inherit', 'trash' ), true ) ) {
+            return $product_status;
         }
 
-        return $product_status;
+        // Accept human-readable labels (e.g. "Scheduled" for "future") for CSV exported with labels.
+        $statuses_with_labels = Wt_Import_Export_For_Woo_Product_Basic_Product::get_product_statuses_with_labels();
+        foreach ( $statuses_with_labels as $slug => $label ) {
+            if ( $product_status === strtolower( $label ) ) {
+                return $slug;
+            }
+        }
+
+        return 'publish';
 
     }
     

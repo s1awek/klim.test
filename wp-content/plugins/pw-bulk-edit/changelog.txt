@@ -1,3 +1,6 @@
+= 2.140 =
+* Compatibility with WooCommerce 10.6.
+
 = 2.139 =
 * Allow negative number for product stock.
 

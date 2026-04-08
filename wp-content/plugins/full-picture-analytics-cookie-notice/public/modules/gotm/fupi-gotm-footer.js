@@ -1,9 +1,14 @@
-FP.fns.push_to_gtm_dl = ( evt_name, payload ) => {
+FP.fns.push_to_gtm_dl = ( payload ) => {
+
+	let evt_suffix = fp.gtm.compat && fp.gtm.compat == 'stape' ? '_stape' : '';
+
+	payload.event = payload.event + evt_suffix;
+
 	// (optional) Do not clear the "ecommerce" obj before each push
 	if ( ! fp.gtm['clear_woo_data'] ) window[fp.gtm.datalayer].push({ ecommerce: null });
 
 	window[fp.gtm.datalayer].push( payload );
-	if ( fp.main.debug ) console.log( '[FP] GTM event ' + evt_name + ':', payload );
+	if ( fp.main.debug ) console.log( '[FP] GTM event ' + payload.event + ':', payload );
 };
 
 function fupi_footer_gtm_woo(){
@@ -99,7 +104,7 @@ function fupi_footer_gtm_woo(){
 				
 			};
 			
-			FP.fns.push_to_gtm_dl( 'view_item_list', teasers_payload_o );
+			FP.fns.push_to_gtm_dl( teasers_payload_o );
 		};
 
 		if ( single_arr.length > 0 ) {
@@ -118,7 +123,7 @@ function fupi_footer_gtm_woo(){
 				}
 			};
 
-			FP.fns.push_to_gtm_dl( impress_evt_name , single_payload_o );
+			FP.fns.push_to_gtm_dl( single_payload_o );
 		}
 	};
 
@@ -152,7 +157,7 @@ function fupi_footer_gtm_woo(){
 			}
 		};
 
-		FP.fns.push_to_gtm_dl( 'view_item' , payload_o );
+		FP.fns.push_to_gtm_dl( payload_o );
 	}
 
 	FP.addAction( ['woo_variant_view'], woo_variant_view );
@@ -199,7 +204,7 @@ function fupi_footer_gtm_woo(){
 			},
 		};
 
-		FP.fns.push_to_gtm_dl( event_name , payload_o );
+		FP.fns.push_to_gtm_dl( payload_o );
 	}
 
 	FP.addAction( ['woo_teaser_click'], data => {
@@ -264,7 +269,7 @@ function fupi_footer_gtm_woo(){
 			payload_o['shipping'] = fpdata.woo.order.shipping;
 		}
 		
-		FP.fns.push_to_gtm_dl( event_name, payload_o );
+		FP.fns.push_to_gtm_dl( payload_o );
 	}
 
 	// track order
@@ -388,6 +393,7 @@ function fupi_footer_gtm(){
 					fp.gtm.track_scroll = fp.gtm.track_scroll.filter( function( point ){ return point > reachedPoint } );
 					// track scroll
 					window[fp.gtm.datalayer].push( {
+						'event' : 'fp_scrollDepth',
 						'fp_scrollDepth' : reachedPoint,
 						'fp_visitorActivityTime_total' : fpdata.activity.total,
 					} );

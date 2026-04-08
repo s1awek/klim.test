@@ -21,7 +21,7 @@ class ADBC_Settings_Endpoints {
 
 		try {
 
-			$settings = $settings->get_params();
+			$settings = $settings->get_json_params();
 
 			// Iterate through the settings array and validate each key and value.
 			foreach ( $settings as $key => $value ) {

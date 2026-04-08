@@ -105,34 +105,33 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product_Tags {
     }
     
     public static function wt_let_to_num( $size ) {
-            $l   = substr( $size, -1 );
-            $ret = (int) substr( $size, 0, -1 );
-            switch ( strtoupper( $l ) ) {
-                    case 'P':
-                            $ret *= 1024;
-                            // No break.
-                    case 'T':
-                            $ret *= 1024;
-                            // No break.
-                    case 'G':
-                            $ret *= 1024;
-                            // No break.
-                    case 'M':
-                            $ret *= 1024;
-                            // No break.
-                    case 'K':
-                            $ret *= 1024;
-                            // No break.
-            }
-            return $ret;
+        $l   = substr( $size, -1 );
+        $ret = (int) substr( $size, 0, -1 );
+        switch ( strtoupper( $l ) ) {
+            case 'P':
+                    $ret *= 1024;
+                    // No break.
+            case 'T':
+                    $ret *= 1024;
+                    // No break.
+            case 'G':
+                    $ret *= 1024;
+                    // No break.
+            case 'M':
+                    $ret *= 1024;
+                    // No break.
+            case 'K':
+                    $ret *= 1024;
+                    // No break.
+        }
+        return $ret;
     }
 
     public function exporter_do_export($export_data, $base, $step, $form_data, $selected_template_data, $method_export, $batch_offset) {
         if ($this->module_base != $base) {
             return $export_data;
         }
-        
-        
+             
         switch ($method_export) {
             case 'quick':
                 $this->set_export_columns_for_quick_export($form_data);  
@@ -215,12 +214,12 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product_Tags {
     }
 
     public static function get_tags_sort_columns() {
-            $sort_columns = array(
-                'id' => __('Tag ID', 'product-import-export-for-woo'),
-                'name' => __('Tag name', 'product-import-export-for-woo'),
-                'slug' => __('Tag slug', 'product-import-export-for-woo'),
-            );
-            return apply_filters('wt_iew_allowed_tags_sort_columns', $sort_columns);
+        $sort_columns = array(
+            'id' => __('Tag ID', 'product-import-export-for-woo'),
+            'name' => __('Tag name', 'product-import-export-for-woo'),
+            'slug' => __('Tag slug', 'product-import-export-for-woo'),
+        );
+        return apply_filters('wt_iew_allowed_tags_sort_columns', $sort_columns);
     }
 
     public static function get_tags_post_columns() {
@@ -326,14 +325,14 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product_Tags {
         );
         
         $fields['order_by'] = array(
-                'label' => __('Sort', 'product-import-export-for-woo'),
-                'placeholder' => __('ASC', 'product-import-export-for-woo'),
-                'field_name' => 'order_by',
-                'sele_vals' => array('ASC' => 'Ascending', 'DESC' => 'Descending'),
-                'help_text' => __('Defaulted to Ascending. Applicable to above selected columns in the order specified.', 'product-import-export-for-woo'),
-                'type' => 'select',
-                'css_class' => '',
-            );
+            'label' => __('Sort', 'product-import-export-for-woo'),
+            'placeholder' => __('ASC', 'product-import-export-for-woo'),
+            'field_name' => 'order_by',
+            'sele_vals' => array('ASC' => 'Ascending', 'DESC' => 'Descending'),
+            'help_text' => __('Defaulted to Ascending. Applicable to above selected columns in the order specified.', 'product-import-export-for-woo'),
+            'type' => 'select',
+            'css_class' => '',
+        );
 
         return $fields;
     }
@@ -354,8 +353,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product_Tags {
         }        
         $out = array();
         
-        
-        
+               
         $out['merge'] = array(
             'label' => __("If the tag exists in the store", 'product-import-export-for-woo'),
             'type' => 'radio',

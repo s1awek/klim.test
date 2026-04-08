@@ -3,7 +3,7 @@
  * Plugin Name:       Advanced Database Cleaner
  * Plugin URI:        https://sigmaplugin.com/downloads/wordpress-advanced-database-cleaner
  * Description:       The most advanced Database Cleaner for WordPress. Clean database by deleting orphaned items such as old "revisions", "old drafts", optimize database, and more.
- * Version:           4.0.6
+ * Version:           4.0.7
  * Author:            SigmaPlugin
  * Author URI:        https://sigmaplugin.com
  * Contributors:      symptote
@@ -21,11 +21,33 @@ if ( ! defined( 'ABSPATH' ) )
 if ( ! is_main_site() )
 	return;
 
+/*************************************************************************************
+ * Check for conflicts with other versions and stop loading if a conflict is detected. 
+ ************************************************************************************/
+if ( function_exists( 'is_plugin_active' ) === false )
+	include_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+// Free should not run if Pro or Premium is active.
+if ( basename( dirname( __FILE__ ) ) === 'advanced-database-cleaner' ) {
+	if ( is_plugin_active( 'advanced-database-cleaner-pro/advanced-db-cleaner.php' ) ||
+		is_plugin_active( 'advanced-database-cleaner-premium/advanced-db-cleaner.php' ) )
+		return;
+}
+
+// Pro should not run if Premium is active.
+if ( basename( dirname( __FILE__ ) ) === 'advanced-database-cleaner-pro' ) {
+	if ( is_plugin_active( 'advanced-database-cleaner-premium/advanced-db-cleaner.php' ) )
+		return;
+}
+/*************************************************************************************
+ * End of conflicts check
+ ************************************************************************************/
+
 if ( ! defined( "ADBC_MAIN_PLUGIN_FILE_PATH" ) )
 	define( "ADBC_MAIN_PLUGIN_FILE_PATH", __FILE__ );
 
 if ( ! defined( 'ADBC_PLUGIN_VERSION' ) )
-	define( 'ADBC_PLUGIN_VERSION', '4.0.6' );
+	define( 'ADBC_PLUGIN_VERSION', '4.0.7' );
 
 class ADBC_Advanced_DB_Cleaner {
 
@@ -34,20 +56,8 @@ class ADBC_Advanced_DB_Cleaner {
 		// Load the classes files on demand
 		spl_autoload_register( [ $this, 'loader' ] );
 
-		// Prevent conflicts with other versions
-		if ( ADBC_Admin_Init::has_conflict() )
-			return;
-
 		// Load constants early so activation hooks have access to them
 		include_once 'constants.php';
-
-		// Register activation and deactivation hooks
-		register_activation_hook( __FILE__, [ 'ADBC_Admin_Init', 'activate' ] );
-		register_deactivation_hook( __FILE__, [ 'ADBC_Admin_Init', 'deactivate' ] );
-
-		if ( ADBC_VERSION_TYPE === "FREE" ) {
-			add_action( 'init', [ 'ADBC_Migration', 'run_free_migration' ] );
-		}
 
 		// Menus, scripts and custom styles
 		add_action( 'admin_menu', [ 'ADBC_Admin_Init', '_add_admin_menu' ] );
@@ -55,14 +65,28 @@ class ADBC_Advanced_DB_Cleaner {
 			add_action( 'network_admin_menu', [ 'ADBC_Admin_Init', '_add_network_admin_menu' ] );
 		add_action( 'admin_enqueue_scripts', [ 'ADBC_Admin_Init', '_enqueue_scripts' ] );
 
+		// Prevent conflicts with other versions
+		if ( ADBC_Admin_Init::has_conflict() )
+			return;
+
+		// Register activation and deactivation hooks
+		register_activation_hook( __FILE__, [ 'ADBC_Admin_Init', 'activate' ] );
+		register_deactivation_hook( __FILE__, [ 'ADBC_Admin_Init', 'deactivate' ] );
+
 		// Register all routes
 		add_action( 'rest_api_init', [ 'ADBC_Routes', 'register_all_routes' ] );
 
 		// Init
-		add_action( 'init', [ 'ADBC_Admin_Init', 'create_adbc_uploads_folder_with_its_content' ] );
-		add_action( 'init', [ 'ADBC_Admin_Init', 'ensure_automation_integrity' ] );
-		add_action( 'init', [ 'ADBC_Admin_Init', 'load_general_cleanup_handlers' ] );
-		add_action( 'init', [ 'ADBC_Admin_Init', 'load_text_domain' ] );
+		add_action( 'init', [ 'ADBC_Admin_Init', 'load_text_domain' ], 10 );
+		add_action( 'init', [ 'ADBC_Admin_Init', 'create_adbc_uploads_folder_with_its_content' ], 11 );
+		add_action( 'init', [ 'ADBC_Admin_Init', 'load_general_cleanup_handlers' ], 12 );
+		add_action( 'init', [ 'ADBC_Admin_Init', 'ensure_automation_integrity' ], 13 );
+
+		if ( ADBC_VERSION_TYPE === "FREE" )
+			add_action( 'init', [ 'ADBC_Migration', 'run_free_migration' ], 14 );
+
+		if ( ADBC_IS_PRO_VERSION === true )
+			add_action( 'init', [ 'ADBC_Migration', 'run_pro_migration' ], 15 );
 
 		// Show global notifications
 		add_action( 'all_admin_notices', [ 'ADBC_Admin_Init', 'maybe_show_global_notifications' ] );
@@ -76,7 +100,7 @@ class ADBC_Advanced_DB_Cleaner {
 			add_action( 'rest_api_init', [ 'ADBC_Premium_Routes', 'register_routes' ] );
 
 			// Analytics cron hook scheduler
-			add_action( 'init', [ 'ADBC_Analytics', 'check_and_schedule_cron' ] );
+			add_action( 'init', [ 'ADBC_Analytics', 'check_and_schedule_cron' ], 16 );
 
 			// Analytics cron hook
 			add_action( 'adbc_cron_analytics', [ 'ADBC_Analytics', '_run_analytics_cron' ] );

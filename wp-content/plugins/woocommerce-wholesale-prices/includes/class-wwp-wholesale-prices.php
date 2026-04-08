@@ -42,6 +42,33 @@ class WWP_Wholesale_Prices {
      */
     private $_wwp_wholesale_roles;
 
+    /**
+     * Wholesale role key stored for use in posts_clauses filter callback.
+     *
+     * @since  2.2.8
+     * @access private
+     * @var string
+     */
+    private $wholesale_price_filter_role_key = '';
+
+    /**
+     * Minimum wholesale price stored for use in posts_clauses filter callback.
+     *
+     * @since  2.2.8
+     * @access private
+     * @var float
+     */
+    private $wholesale_price_filter_min = 0;
+
+    /**
+     * Maximum wholesale price stored for use in posts_clauses filter callback.
+     *
+     * @since  2.2.8
+     * @access private
+     * @var float
+     */
+    private $wholesale_price_filter_max = 0;
+
     /*
     |--------------------------------------------------------------------------
     | Class Methods
@@ -1667,8 +1694,8 @@ CSS;
      */
     private function build_wholesale_price_filter_meta_query( $role_key, $min_price, $max_price ) {
 
-        $meta_key            = $role_key . '_wholesale_price';
-        $meta_key_variations = $role_key . '_variations_with_wholesale_price';
+        $meta_key     = $role_key . '_wholesale_price';
+        $meta_key_min = $role_key . '_min_wholesale_price';
 
         $meta_query = array(
             'relation' => 'OR',
@@ -1679,10 +1706,19 @@ CSS;
                 'type'    => 'NUMERIC',
             ),
             array(
-                'key'     => $meta_key_variations,
-                'value'   => array( $min_price, $max_price ),
-                'compare' => 'BETWEEN',
-                'type'    => 'NUMERIC',
+                'relation' => 'AND',
+                array(
+                    'key'     => $role_key . '_min_wholesale_price',
+                    'value'   => $max_price,
+                    'compare' => '<=',
+                    'type'    => 'DECIMAL(10,2)',
+                ),
+                array(
+                    'key'     => $role_key . '_max_wholesale_price',
+                    'value'   => $min_price,
+                    'compare' => '>=',
+                    'type'    => 'DECIMAL(10,2)',
+                ),
             ),
         );
 
@@ -1712,7 +1748,7 @@ CSS;
                         'compare' => 'NOT EXISTS',
                     ),
                     array(
-                        'key'     => $meta_key_variations,
+                        'key'     => $meta_key_min,
                         'compare' => 'NOT EXISTS',
                     ),
                 );
@@ -1783,12 +1819,23 @@ CSS;
     }
 
     /**
-     * Configure Maximum/Minimum Values in WooCommerce Product Queries for Compatibility with the HUSKY – Products Filter Professional for WooCommerce Plugin.
+     * Hook into WooCommerce product queries for wholesale-aware price filtering.
      *
+     * When a wholesale customer uses the price filter widget, WooCommerce's default
+     * `product_query_post_clauses` filter compares against retail prices from the
+     * `wc_product_meta_lookup` table, excluding products that only have wholesale prices.
+     * This method disables WooCommerce's retail-price clause via the
+     * `woocommerce_enable_post_clause_filtering` filter — preserving attribute filtering,
+     * price sorting, and rating filtering that also live in
+     * `product_query_post_clauses()` — and registers our own SQL-based
+     * `posts_clauses` callback that understands wholesale pricing.
+     *
+     * @since 2.2.8 Replaced meta_query approach with direct SQL posts_clauses for correct
+     *              wholesale price filtering against the lookup table.
      * @since 2.2.7 Added general discount and category-level wholesale price filtering support.
      *
      * @param object $product_query WooCommerce product query object.
-     * @param object $wc_object     WooCommerce product query object.
+     * @param object $wc_object     WooCommerce query object.
      *
      * @return void
      */
@@ -1807,8 +1854,160 @@ CSS;
                 return;
             }
 
-            $product_query->set( 'meta_query', $this->build_wholesale_price_filter_meta_query( $role_key, $min_price, $max_price ) ); //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+            // Disable WooCommerce's retail-price-based clause inside price_filter_post_clauses()
+            // while preserving attribute filtering, price sorting, and rating filtering that
+            // also live in product_query_post_clauses().
+            add_filter( 'woocommerce_enable_post_clause_filtering', '__return_false' );
+
+            // Store filter state on the instance so our posts_clauses callback can access it.
+            $this->wholesale_price_filter_role_key = $role_key;
+            $this->wholesale_price_filter_min      = $min_price;
+            $this->wholesale_price_filter_max      = $max_price;
+
+            // Register our wholesale-aware posts_clauses filter.
+            add_filter( 'posts_clauses', array( $this, 'wholesale_price_filter_post_clauses' ), 10, 2 );
         }
+    }
+
+    /**
+     * Build the posts_clauses WHERE fragment for wholesale price filtering.
+     *
+     * Appends an AND (...OR...) clause that matches products satisfying ANY of:
+     *   1. Simple products whose per-product wholesale price falls within the range.
+     *   2. Variable products whose wholesale price range overlaps the filter range.
+     *   3. Products with no per-product wholesale price that receive a general role
+     *      discount whose reverse-calculated retail price falls within the range
+     *      (only when a general discount is configured for the role).
+     *
+     * Self-removes from the posts_clauses filter after executing to prevent stale
+     * state if subsequent queries fire posts_clauses.
+     *
+     * @since 2.2.8
+     *
+     * @param array    $args     SQL clause fragments (where, join, orderby, etc.).
+     * @param WP_Query $wp_query The current WP_Query instance.
+     *
+     * @return array Modified clause fragments.
+     */
+    public function wholesale_price_filter_post_clauses( $args, $wp_query ) {
+        global $wpdb;
+
+        // Self-remove to prevent stale state if subsequent queries fire posts_clauses.
+        remove_filter( 'posts_clauses', array( $this, 'wholesale_price_filter_post_clauses' ), 10 );
+
+        // Mirror WooCommerce's own guard: only run on queries that opted in.
+        if ( ! $wp_query->is_main_query() ) {
+            return $args;
+        }
+
+        $role_key  = $this->wholesale_price_filter_role_key;
+        $min_price = $this->wholesale_price_filter_min;
+        $max_price = $this->wholesale_price_filter_max;
+
+        // Reset instance state to prevent stale data on any unexpected re-entry.
+        $this->wholesale_price_filter_role_key = '';
+        $this->wholesale_price_filter_min      = 0;
+        $this->wholesale_price_filter_max      = 0;
+
+        // Meta key components — role_key is already sanitized via sanitize_key().
+        // No esc_sql() needed here; $wpdb->prepare() with %s handles escaping.
+        $meta_key_simple  = $role_key . '_wholesale_price';
+        $meta_key_var_min = $role_key . '_min_wholesale_price';
+        $meta_key_var_max = $role_key . '_max_wholesale_price';
+
+        // Condition 1: Simple products with a per-product wholesale price in range.
+        $condition1 = $wpdb->prepare(
+            "EXISTS (
+                SELECT 1 FROM {$wpdb->postmeta} wwp_pm
+                WHERE wwp_pm.post_id = {$wpdb->posts}.ID
+                AND wwp_pm.meta_key = %s
+                AND wwp_pm.meta_value + 0 BETWEEN %f AND %f
+            )",
+            $meta_key_simple,
+            $min_price,
+            $max_price
+        );
+
+        // Condition 2: Variable products whose wholesale price range overlaps the filter range.
+        // The range [stored_min, stored_max] overlaps [min_price, max_price] when
+        // stored_min <= max_price AND stored_max >= min_price.
+        $condition2 = $wpdb->prepare(
+            "EXISTS (
+                SELECT 1 FROM {$wpdb->postmeta} wwp_vmin
+                INNER JOIN {$wpdb->postmeta} wwp_vmax
+                    ON wwp_vmin.post_id = wwp_vmax.post_id
+                WHERE wwp_vmin.post_id = {$wpdb->posts}.ID
+                AND wwp_vmin.meta_key = %s
+                AND wwp_vmax.meta_key = %s
+                AND wwp_vmin.meta_value + 0 <= %f
+                AND wwp_vmax.meta_value + 0 >= %f
+            )",
+            $meta_key_var_min,
+            $meta_key_var_max,
+            $max_price,
+            $min_price
+        );
+
+        $conditions = array( $condition1, $condition2 );
+
+        // Condition 3: Products with no per-product wholesale price that benefit from a
+        // general role discount. Reverse-calculate the retail range that maps onto the
+        // requested wholesale range and match against the lookup table.
+        $general_discount = self::get_general_discount_for_role( $role_key );
+
+        if ( $general_discount > 0 ) {
+            $multiplier = 1 - ( $general_discount / 100 );
+
+            // Guard against 100% discount (division by zero).
+            if ( $multiplier > 0 ) {
+                $adjusted_min = $min_price / $multiplier;
+                $adjusted_max = $max_price / $multiplier;
+
+                $condition3 = $wpdb->prepare(
+                    "EXISTS (
+                        SELECT 1 FROM {$wpdb->prefix}wc_product_meta_lookup wc_lookup
+                        WHERE wc_lookup.product_id = {$wpdb->posts}.ID
+                        AND NOT ( %f < wc_lookup.min_price OR %f > wc_lookup.max_price )
+                        AND NOT EXISTS (
+                            SELECT 1 FROM {$wpdb->postmeta} wwp_excl
+                            WHERE wwp_excl.post_id = {$wpdb->posts}.ID
+                            AND wwp_excl.meta_key IN ( %s, %s )
+                        )
+                    )",
+                    $adjusted_max,
+                    $adjusted_min,
+                    $meta_key_simple,
+                    $meta_key_var_min
+                );
+
+                $conditions[] = $condition3;
+            }
+        }
+
+        $sql = '( ' . implode( ' OR ', $conditions ) . ' )';
+
+        /**
+         * Filter the wholesale price filter SQL fragment appended to posts_clauses.
+         *
+         * Allows premium plugins (e.g. WWPP) to extend the WHERE condition with
+         * additional OR clauses for category-level wholesale pricing or other custom rules.
+         *
+         * @warning The returned value is appended verbatim to the SQL WHERE clause.
+         *          Callers MUST use $wpdb->prepare() for all dynamic values to prevent
+         *          SQL injection.
+         *
+         * @since 2.2.8
+         *
+         * @param string $sql       The SQL OR-group string (without leading AND).
+         * @param string $role_key  The wholesale role key.
+         * @param float  $min_price The minimum wholesale price filter value.
+         * @param float  $max_price The maximum wholesale price filter value.
+         */
+        $sql = apply_filters( 'wwp_wholesale_price_filter_post_clauses', $sql, $role_key, $min_price, $max_price );
+
+        $args['where'] .= " AND {$sql}";
+
+        return $args;
     }
 
     /**
@@ -1998,12 +2197,127 @@ CSS;
     }
 
     /**
+     * Migrate variable products to store per-role min/max wholesale price meta.
+     *
+     * Runs once on `init` (guarded by the `wwp_variable_price_range_version` option).
+     * Iterates all variable products that previously stored variation IDs under the
+     * `_variations_with_wholesale_price` meta key and replaces that data with
+     * computed `_min_wholesale_price` / `_max_wholesale_price` values per wholesale
+     * role, enabling the range-overlap price filter query introduced in 2.2.8.
+     *
+     * @since  2.2.8
+     * @access public
+     *
+     * @return void
+     */
+    public function migrate_variable_product_wholesale_price_range() {
+
+        if ( get_option( 'wwp_variable_price_range_version' ) ) {
+            return;
+        }
+
+        $wholesale_roles = $this->_wwp_wholesale_roles->getAllRegisteredWholesaleRoles();
+
+        if ( empty( $wholesale_roles ) ) {
+            update_option( 'wwp_variable_price_range_version', '1.0' );
+            return;
+        }
+
+        $page  = 1;
+        $limit = 50;
+
+        do {
+            $variable_products = wc_get_products(
+                array(
+                    'type'   => 'variable',
+                    'limit'  => $limit,
+                    'page'   => $page,
+                    'return' => 'objects',
+                )
+            );
+
+            if ( empty( $variable_products ) ) {
+                break;
+            }
+
+            foreach ( $variable_products as $variable_product ) {
+                $children = $variable_product->get_children();
+
+                if ( empty( $children ) ) {
+                    continue;
+                }
+
+                $wholesale_prices_per_role = WWP_Helper_Functions::get_wholesale_prices_per_role_from_variations( $children, $wholesale_roles );
+
+                $needs_save = false;
+
+                foreach ( $wholesale_roles as $role_key => $role ) {
+                    if ( ! empty( $wholesale_prices_per_role[ $role_key ] ) ) {
+                        $prices = $wholesale_prices_per_role[ $role_key ];
+                        $variable_product->update_meta_data( $role_key . '_have_wholesale_price', 'yes' );
+                        $variable_product->update_meta_data( $role_key . '_min_wholesale_price', min( $prices ) );
+                        $variable_product->update_meta_data( $role_key . '_max_wholesale_price', max( $prices ) );
+                        $needs_save = true;
+                    } else {
+                        $variable_product->update_meta_data( $role_key . '_have_wholesale_price', 'no' );
+                        $variable_product->delete_meta_data( $role_key . '_min_wholesale_price' );
+                        $variable_product->delete_meta_data( $role_key . '_max_wholesale_price' );
+                        $needs_save = true;
+                    }
+                }
+
+                if ( $needs_save ) {
+                    $variable_product->save_meta_data();
+                }
+            }
+
+            $fetched = count( $variable_products );
+            ++$page;
+        } while ( $fetched === $limit );
+
+        update_option( 'wwp_variable_price_range_version', '1.0' );
+    }
+
+    /**
+     * Schedule the wholesale price range migration via Action Scheduler.
+     *
+     * Schedules a single async action `wwp_migrate_variable_price_range` using
+     * Action Scheduler so the migration runs in the background rather than
+     * blocking the `init` hook. If Action Scheduler is unavailable (e.g. WooCommerce
+     * is not yet loaded), the migration is run synchronously as a fallback.
+     *
+     * @since  2.2.8
+     * @access public
+     *
+     * @return void
+     */
+    public function schedule_wholesale_price_range_migration() {
+
+        if ( get_option( 'wwp_variable_price_range_version' ) ) {
+            return;
+        }
+
+        if ( ! function_exists( 'as_schedule_single_action' ) ) {
+            // Fallback: run synchronously if Action Scheduler is not available.
+            $this->migrate_variable_product_wholesale_price_range();
+            return;
+        }
+
+        if ( ! as_has_scheduled_action( 'wwp_migrate_variable_price_range' ) ) {
+            as_schedule_single_action( time(), 'wwp_migrate_variable_price_range' );
+        }
+    }
+
+    /**
      * Execute model.
      *
      * @since  1.5.0
      * @access public
      */
     public function run() {
+
+        add_action( 'init', array( $this, 'schedule_wholesale_price_range_migration' ) );
+        add_action( 'wwp_migrate_variable_price_range', array( $this, 'migrate_variable_product_wholesale_price_range' ) );
 
         // Apply wholesale price to archive and single product pages
         // On WC 3.x series, includes variation products.

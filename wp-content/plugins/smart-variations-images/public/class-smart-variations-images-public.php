@@ -346,14 +346,15 @@ class Smart_Variations_Images_Public {
      */
     public function register_scripts() : void {
         $version = $this->version;
+        $use_local = $this->options->use_local_cdn ?? true;
         $register_scripts = [
             'imagesloaded'                                => [
-                'src'     => '//unpkg.com/imagesloaded@4/imagesloaded.pkgd' . SMART_SCRIPT_DEBUG . '.js',
+                'src'     => ( $use_local ? self::get_asset_url( 'js/imagesloaded.pkgd' . SMART_SCRIPT_DEBUG . '.js' ) : '//unpkg.com/imagesloaded@4/imagesloaded.pkgd' . SMART_SCRIPT_DEBUG . '.js' ),
                 'deps'    => [],
                 'version' => $version,
             ],
             $this->plugin_name . '-swiper'                => [
-                'src'     => '//cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js',
+                'src'     => ( $use_local ? self::get_asset_url( 'js/swiper-bundle' . SMART_SCRIPT_DEBUG . '.js' ) : '//cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js' ),
                 'deps'    => [],
                 'version' => '11.0.0',
             ],
@@ -363,12 +364,12 @@ class Smart_Variations_Images_Public {
                 'version' => $version,
             ],
             $this->plugin_name . '-photoswipe'            => [
-                'src'     => '//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe' . SMART_SCRIPT_DEBUG . '.js',
+                'src'     => ( $use_local ? self::get_asset_url( 'js/photoswipe' . SMART_SCRIPT_DEBUG . '.js' ) : '//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe' . SMART_SCRIPT_DEBUG . '.js' ),
                 'deps'    => [],
                 'version' => '4.1.3',
             ],
             $this->plugin_name . '-photoswipe-ui-default' => [
-                'src'     => '//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default' . SMART_SCRIPT_DEBUG . '.js',
+                'src'     => ( $use_local ? self::get_asset_url( 'js/photoswipe-ui-default' . SMART_SCRIPT_DEBUG . '.js' ) : '//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default' . SMART_SCRIPT_DEBUG . '.js' ),
                 'deps'    => [$this->plugin_name . '-photoswipe'],
                 'version' => '4.1.3',
             ],
@@ -422,6 +423,7 @@ class Smart_Variations_Images_Public {
      */
     public function register_styles() : void {
         $version = $this->version;
+        $use_local = $this->options->use_local_cdn ?? true;
         $register_styles = [
             $this->plugin_name                              => [
                 'src'     => self::get_asset_url( 'css/smart-variations-images-public' . SMART_SCRIPT_DEBUG . '.css' ),
@@ -430,19 +432,19 @@ class Smart_Variations_Images_Public {
                 'has_rtl' => false,
             ],
             $this->plugin_name . '-swiper'                  => [
-                'src'     => '//cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
+                'src'     => ( $use_local ? self::get_asset_url( 'css/swiper-bundle' . SMART_SCRIPT_DEBUG . '.css' ) : '//cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css' ),
                 'deps'    => [],
                 'version' => '11.0.0',
                 'has_rtl' => false,
             ],
             $this->plugin_name . '-photoswipe'              => [
-                'src'     => '//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe' . SMART_SCRIPT_DEBUG . '.css',
+                'src'     => ( $use_local ? self::get_asset_url( 'css/photoswipe' . SMART_SCRIPT_DEBUG . '.css' ) : '//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe' . SMART_SCRIPT_DEBUG . '.css' ),
                 'deps'    => [],
                 'version' => $version,
                 'has_rtl' => false,
             ],
             $this->plugin_name . '-photoswipe-default-skin' => [
-                'src'     => '//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/default-skin/default-skin' . SMART_SCRIPT_DEBUG . '.css',
+                'src'     => ( $use_local ? self::get_asset_url( 'css/default-skin/default-skin' . SMART_SCRIPT_DEBUG . '.css' ) : '//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/default-skin/default-skin' . SMART_SCRIPT_DEBUG . '.css' ),
                 'deps'    => [$this->plugin_name . '-photoswipe'],
                 'version' => $version,
                 'has_rtl' => false,
@@ -450,7 +452,7 @@ class Smart_Variations_Images_Public {
         ];
         if ( svi_fs()->can_use_premium_code__premium_only() && $this->options->video ) {
             $register_styles['plyr'] = [
-                'src'     => '//cdnjs.cloudflare.com/ajax/libs/plyr/3.7.8/plyr.css',
+                'src'     => ( $use_local ? self::get_asset_url( 'css/plyr' . SMART_SCRIPT_DEBUG . '.css' ) : '//cdnjs.cloudflare.com/ajax/libs/plyr/3.7.8/plyr.css' ),
                 'deps'    => [],
                 'version' => $version,
                 'has_rtl' => false,

@@ -158,17 +158,33 @@ function wpai_wp_enqueue_code_editor( $args ) {
 		    $bn = wp_all_import_basename($filePath);
 			$type = (preg_match('%\W(csv|txt|dat|psv)$%i', $bn)) ? 'csv' : false;
 			if (!$type) $type = (preg_match('%\W(xml)$%i', $bn)) ? 'xml' : false;
-            if (!$type) $type = (preg_match('%\W(zip)$%i', $bn)) || (preg_match('%\W(get_bundle)$%i', $bn) && strpos($bn, 'export_id') !== false && strpos($bn, 'security_token') !== false) ? 'zip' : false;
-			if (!$type) $type = (preg_match('%\W(gz)$%i', $bn)) ? 'gz' : false;
+            if (!$type) $type = (preg_match('%\W(zip)$%i', $bn)) ? 'zip' : false;
+			if (!$type) $type = (preg_match('%\W(gz|gzip)$%i', $bn)) ? 'gz' : false;
+			if (!$type) $type = (preg_match('%\W(xlsx)$%i', $bn)) ? 'xlsx' : false;
+			if (!$type) $type = (preg_match('%\W(xls)$%i', $bn)) ? 'xls' : false;
 
             if(!$type){
-                $filePath = strtok($filePath, "?");
-                $bn = wp_all_import_basename($filePath);
+                $pathOnly = strtok($filePath, "?");
+                $bn = wp_all_import_basename($pathOnly);
                 $type = (preg_match('%\W(csv|txt|dat|psv)$%i', $bn)) ? 'csv' : false;
                 if (!$type) $type = (preg_match('%\W(xml)$%i', $bn)) ? 'xml' : false;
                 if (!$type) $type = (preg_match('%\W(zip)$%i', $bn)) ? 'zip' : false;
-                if (!$type) $type = (preg_match('%\W(gz)$%i', $bn)) ? 'gz' : false;
+                if (!$type) $type = (preg_match('%\W(gz|gzip)$%i', $bn)) ? 'gz' : false;
+                if (!$type) $type = (preg_match('%\W(xlsx)$%i', $bn)) ? 'xlsx' : false;
+                if (!$type) $type = (preg_match('%\W(xls)$%i', $bn)) ? 'xls' : false;
             }
+
+            // Check URL path segments for known type hints (e.g. AWIN-style /compression/gzip/).
+            if (!$type) {
+                $path = parse_url($filePath, PHP_URL_PATH);
+                if ($path) {
+                    $lastSegment = strtolower(basename(rtrim($path, '/')));
+                    if (in_array($lastSegment, array('gzip', 'gz'))) {
+                        $type = 'gz';
+                    }
+                }
+            }
+
 			return ($type) ? $type : false;
 		}
 	}

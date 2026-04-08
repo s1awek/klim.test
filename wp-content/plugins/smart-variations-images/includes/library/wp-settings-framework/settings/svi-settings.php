@@ -137,6 +137,13 @@ function wpsfsvi_svi_options_tab_main() {
                     'value' => array('1'),
                 )),
                 'default' => false,
+            ),
+            array(
+                'id'      => 'use_local_cdn',
+                'type'    => 'toggle',
+                'title'   => __( 'Use Local Assets', 'wc_svi' ),
+                'desc'    => __( 'Load PhotoSwipe, Plyr, Swiper, and imagesLoaded from local copies instead of CDN. This ensures GDPR compliance by not exposing visitor IPs to external services like Cloudflare. Recommended for EU users.', 'wc_svi' ),
+                'default' => true,
             )
         ),
     );

@@ -42,7 +42,7 @@ if ( ! empty( $input ) ) foreach( $input as $key => $value ) {
 						$clean_val[$j]['atrig_id'] = sanitize_key( $section['atrig_id'] );
 						$clean_val[$j]['evt_name'] = sanitize_text_field( $section['evt_name'] );
 						$clean_val[$j]['repeat'] = empty( $section['repeat'] ) ? 'no' :  sanitize_key( $section['repeat'] );
-						$clean_val[$j]['evt_val'] = (int) $section['evt_val'];
+						if (! empty ( $section['evt_val'] ) ) $clean_val[$j]['evt_val'] = (int) $section['evt_val'];
 
 						// Parameters
 
@@ -103,7 +103,10 @@ if ( ! empty( $input ) ) foreach( $input as $key => $value ) {
 					}
 				};
 				break;
-				
+
+			case 'compat':
+				$clean_val = sanitize_key( $value );
+				break;
 			case 'track_file_downl':
 			case 'track_scroll':
 			case 'id':

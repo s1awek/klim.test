@@ -1,7 +1,6 @@
 <?php
 
 $ret_text = '';
-$how_to_useit = '<p style="text-align: center;" class="fupi_warning_text"><button type="button" class="fupi_faux_link fupi_open_popup" data-popup="fupi_howtouseit_popup">' . esc_html__( 'How NOT to use GTM with WP Full Picture.', 'full-picture-analytics-cookie-notice' ) . ' <span class="fupi_open_popup_i">i</span></button></p>';
 
 switch( $section_id ){
 
@@ -14,8 +13,9 @@ switch( $section_id ){
 			<img src="' . FUPI_URL . 'admin/assets/img/almost_ico.png" aria-hidden="true"> <p>' . sprintf( esc_html__( '%1$s is not installed', 'full-picture-analytics-cookie-notice' ), 'Google Tag Manager' ) . '<br><span class="fupi_small">' . esc_html__( 'To install it, please fill in the required field below', 'full-picture-analytics-cookie-notice' ) . '</span>.</p>
 		</div>
 		<div id="fupi_installed_info" class="fupi_installation_status fupi_hidden">
-            <img src="' . FUPI_URL . 'admin/assets/img/success_ico.png" aria-hidden="true"> <p>' . esc_html__( 'Well done! GTM is installed.', 'full-picture-analytics-cookie-notice' ) . '<br><span class="fupi_small">' . esc_html__( 'The data is sent to the container ', 'full-picture-analytics-cookie-notice' ) . $gtm_id . '</span>.</p>
-        </div>' . $how_to_useit;
+            <img src="' . FUPI_URL . 'admin/assets/img/success_ico.png" aria-hidden="true"> <p>' . esc_html__( 'Well done! GTM is installed.', 'full-picture-analytics-cookie-notice' ) . '<br><span class="fupi_small">' . sprintf( esc_html__( '%1$sFollow this tutorial%2$s, if you want to use it together with server-side tracking GTM from Stape.', 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-use-sgtm-from-stape-io/" target="_blank">', '</a>' ) . '</span></p>
+        </div>
+		<p style="text-align: center;" class="fupi_warning_text"><button type="button" class="fupi_faux_link fupi_open_popup" data-popup="fupi_howtouseit_popup">' . esc_html__( 'How NOT to use GTM with WP Full Picture.', 'full-picture-analytics-cookie-notice' ) . ' <span class="fupi_open_popup_i">i</span></button></p>';
     break;
 
 	case 'fupi_gtm_loading':

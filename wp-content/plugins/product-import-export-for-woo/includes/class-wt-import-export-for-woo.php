@@ -84,7 +84,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Product_Basic')) {
 			if (defined('WT_P_IEW_VERSION')) {
 				$this->version = WT_P_IEW_VERSION;
 			} else {
-				$this->version = '2.6.1';
+				$this->version = '2.6.2';
 			}
 			$this->plugin_name = 'wt-import-export-for-woo-basic';
 			

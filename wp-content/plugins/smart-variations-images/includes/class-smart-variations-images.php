@@ -334,6 +334,8 @@ class Smart_Variations_Images {
             );
         }
         $this->loader->add_action( 'wp_ajax_woosvi_slugify', $plugin_public, 'woosvi_slugify' );
+        $this->loader->add_action( 'wp_ajax_sviloadProduct', $plugin_public, 'loadProductAjax' );
+        $this->loader->add_action( 'wp_ajax_nopriv_sviloadProduct', $plugin_public, 'loadProductAjax' );
         $this->loader->add_action( 'wp_ajax_loadProduct', $plugin_public, 'render_quick_view_frontend' );
         $this->loader->add_action( 'wp_ajax_nopriv_loadProduct', $plugin_public, 'render_quick_view_frontend' );
         $this->loader->add_action( 'svi_before_images', $plugin_public, 'run_integrations' );

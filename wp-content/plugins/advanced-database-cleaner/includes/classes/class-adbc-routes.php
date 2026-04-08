@@ -78,6 +78,7 @@ class ADBC_Routes {
 		self::register_route( '/get-column-value-from-table', 'get_column_value_from_table', WP_REST_Server::EDITABLE, ADBC_Common_Endpoints::class);
 		self::register_route( '/dismiss-notification', 'dismiss_notification', WP_REST_Server::EDITABLE, ADBC_Common_Endpoints::class);
 		self::register_route( '/delay-rating-notice', 'delay_rating_notice', WP_REST_Server::EDITABLE, ADBC_Common_Endpoints::class);
+		self::register_route( '/delay-ltd-migration-notice', 'delay_ltd_migration_notice', WP_REST_Server::EDITABLE, ADBC_Common_Endpoints::class);
 		self::register_route( '/get-all-schedule-frequencies', 'get_all_schedule_frequencies', WP_REST_Server::READABLE, ADBC_Common_Endpoints::class);
 		self::register_route( '/get-last-week-database-size-for-free-version', 'get_last_week_database_size_for_free_version', WP_REST_Server::READABLE, ADBC_Common_Endpoints::class);
 

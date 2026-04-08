@@ -145,20 +145,31 @@ body.wpallimport-plugin {
 	text-decoration: none;
 }
 .wpallimport-plugin .wpallimport-large-button{
-	box-shadow: none;
-	vertical-align:bottom !important;
-	height: 40px;
-	line-height: 39px;
-	/*margin-left: 10px;*/
-	background: url('../img/ui_4.0/continue.png') no-repeat 93% 50% #425f9a;
-	border: none;
+	display: inline-block;
+	box-sizing: border-box;
+	box-shadow: none !important;
+	vertical-align: bottom !important;
+	min-height: 46px;
+	line-height: 3.14285714;
+	padding: 0 36px;
+	background: url('../img/ui_4.0/continue.png') no-repeat 93% 50% #425f9a !important;
+	color: #fff !important;
+	border: none !important;
+	border-radius: 3px;
+	outline: none !important;
+	font-size: 14px;
+	font-weight: normal;
+	text-decoration: none;
+	cursor: pointer;
 }
 .wpallimport-plugin .wpallimport-large-button:hover,
 .wpallimport-plugin .wpallimport-large-button:active,
 .wpallimport-plugin .wpallimport-large-button:focus{
-	background: url('../img/ui_4.0/continue.png') no-repeat 93% 50% #425f9a;
-	border: none;
-	box-shadow: none;
+	background: url('../img/ui_4.0/continue.png') no-repeat 93% 50% #374f85 !important;
+	color: #fff !important;
+	border: none !important;
+	box-shadow: none !important;
+	outline: none !important;
 }
 
 /*@+ header */

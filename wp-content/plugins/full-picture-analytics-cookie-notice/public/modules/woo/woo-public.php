@@ -39,37 +39,33 @@ class Fupi_WOO_public {
             10,
             1
         );
-        // REGISTER BRAND
-        // if ( isset ( $this->settings['add_brand_tax'] ) ) {
-        // 	add_action( 'init', array( $this, 'register_woo_cpts' ) ); // ok
-        // }
         //
         // CLASSIC WOO ONLY
         //
         // teasers in product archives - ok
         // teasers in "Related products" and "You may also like" sections on a single product page
         // >>>> EXCEPTION <<< teasers in "You may also like" section on a single product page when FSE is enabled ("related products on the same page use blocks, which have totally different HTML)
-        add_action( 'woocommerce_before_shop_loop_item', array($this, 'fupi_woo_archive_teaser_data'), 50 );
+        add_action( 'woocommerce_before_shop_loop_item', array($this, 'output_classic_archive_teaser_data'), 50 );
         // teasers in widgets - ok
-        add_action( 'woocommerce_widget_product_item_end', array($this, 'fupi_woo_widget_teaser_data'), 9999 );
+        add_action( 'woocommerce_widget_product_item_end', array($this, 'output_widget_data'), 9999 );
         // mini cart - ok
         add_action(
             'woocommerce_after_mini_cart',
-            array($this, 'fupi_classic_mini_cart_data'),
+            array($this, 'output_classic_minicart_data'),
             10,
             3
         );
         // cart - ok
         add_action(
             'woocommerce_before_cart_contents',
-            array($this, 'fupi_cart_data'),
+            array($this, 'output_classic_cart_data'),
             10,
             3
         );
         // cart & mini cart - ok
         add_filter(
             'woocommerce_cart_item_name',
-            array($this, 'fupi_classic_cart_item_id'),
+            array($this, 'output_classic_cart_item_id'),
             10,
             3
         );
@@ -83,7 +79,7 @@ class Fupi_WOO_public {
         // teasers in woocommerce/product-top-rated
         add_filter(
             'woocommerce_blocks_product_grid_item_html',
-            array($this, 'fupi_woo_block_teasers'),
+            array($this, 'output_block_teasers_data'),
             999999,
             3
         );
@@ -94,7 +90,7 @@ class Fupi_WOO_public {
         // block woocommerce/cart (except the cross-sells !) - ok
         add_filter(
             'render_block',
-            array($this, 'fupi_woo_block_render_block_mod'),
+            array($this, 'output_prod_data_via_render_block_filter'),
             50,
             2
         );
@@ -102,22 +98,18 @@ class Fupi_WOO_public {
         // CLASSIC & BLOCKS (Blocks in a classic)
         //
         // single product - ok
-        add_action( 'woocommerce_after_add_to_cart_button', array($this, 'fupi_woo_prod_data'), 50 );
+        add_action( 'woocommerce_after_add_to_cart_button', array($this, 'output_classic_and_block_single_prod_data'), 50 );
         // grouped products - ok
         add_filter(
             'woocommerce_grouped_product_list_column_label',
-            array($this, 'fupi_woo_extra_group_prod_data'),
+            array($this, 'output_classic_and_block_group_prod_data'),
             50,
             2
         );
         // Any page - for adding products to cart with a URL parameter add-to-cart - ok
-        add_action( 'wp_footer', array($this, 'fupi_woo_add_to_cart_from_url'), 999 );
-        // add_action('woocommerce_add_to_cart', array( $this, 'fupi_woo_add_to_cart_action', 10, 6));
+        add_action( 'wp_footer', array($this, 'add_to_cart_from_url'), 999 );
         // checkout - checkout page and order confirmation page - ok
-        add_action( 'wp_head', array($this, 'fupi_woo_get_order_data'), 100 );
-        // TO DO:
-        // CROSS-SELL in cart. No hooks available right now (6.3.0)
-        // FEATURED PRODUCT BLOCK. No hooks available right now (6.3.0)
+        add_action( 'wp_head', array($this, 'output_checkout_data_in_head'), 100 );
     }
 
     public function check_if_woocommerce_loaded() {
@@ -130,7 +122,7 @@ class Fupi_WOO_public {
         wp_enqueue_script(
             'fupi-woo-js',
             FUPI_URL . 'public/modules/woo/fupi-woo.js',
-            array('jquery', 'wp-hooks'),
+            array('jquery'),
             FUPI_VERSION,
             [
                 'in_footer' => true,
@@ -261,16 +253,8 @@ class Fupi_WOO_public {
 
     private function get_brands( $postID ) {
         $brands_a = [];
-        $brands = false;
-        // if ( isset( $this->settings['add_brand_tax'] ) ) { // from WP FP
-        // 	$brands = get_the_terms( $postID, 'fupi_woo_brand' );
-        // } else
-        // if ( isset( $this->settings['brand_tax'] ) ) { // Custom
-        // 	$brands = get_the_terms( $postID, $this->settings['brand_tax'] );
-        // } else {
         $brands = get_the_terms( $postID, 'product_brand' );
         // in WooCommerce core
-        // }
         if ( $brands !== false && !is_wp_error( $brands ) && !empty( $brands ) ) {
             foreach ( $brands as $brand ) {
                 $brands_a[] = $brand->name;
@@ -499,7 +483,8 @@ class Fupi_WOO_public {
         }
     }
 
-    public function fupi_woo_get_order_data() {
+    // Output in head of the checkout page and order confirmation apge
+    public function output_checkout_data_in_head() {
         if ( function_exists( 'is_wc_endpoint_url' ) && is_checkout() ) {
             if ( is_wc_endpoint_url( 'order-received' ) ) {
                 $this->get_order_completed_data();
@@ -517,7 +502,7 @@ class Fupi_WOO_public {
 
     // CLASSIC CART ( block cart is handled by fupi_woo_block_render_mod() )
     // (we can't use <script>, because the output is filtered and removed)
-    public function fupi_cart_data() {
+    public function output_classic_cart_data() {
         // Action
         $cart = WC()->cart;
         if ( !empty( $cart ) && !$cart->is_empty() ) {
@@ -527,7 +512,7 @@ class Fupi_WOO_public {
     }
 
     // CLASSIC MINI CART
-    public function fupi_classic_mini_cart_data() {
+    public function output_classic_minicart_data() {
         $cart = WC()->cart;
         if ( !empty( $cart ) && !$cart->is_empty() ) {
             $cart_data = json_encode( $this->get_cart_data( $cart ) );
@@ -537,7 +522,7 @@ class Fupi_WOO_public {
 
     // CLASSIC MINI-CART ITEM
     // ( also added to all cart tables, but we use it only for the mini cart )
-    public function fupi_classic_cart_item_id( $item_name_html, $cart_item, $cart_item_key ) {
+    public function output_classic_cart_item_id( $item_name_html, $cart_item, $cart_item_key ) {
         $product_id = ( !empty( $cart_item['variation_id'] ) ? $cart_item['variation_id'] : $cart_item['product_id'] );
         if ( !empty( $product_id ) ) {
             return $item_name_html . "<span class='fupi_cart_item_data' style='display: none !important' data-product_id='{$product_id}'></span>";
@@ -547,7 +532,7 @@ class Fupi_WOO_public {
 
     // ARCHIVE TEASERS
     // action: woocommerce_before_shop_loop_item
-    public function fupi_woo_archive_teaser_data() {
+    public function output_classic_archive_teaser_data() {
         global $product;
         if ( empty( $product ) ) {
             return;
@@ -569,7 +554,6 @@ class Fupi_WOO_public {
             $list_name = ( empty( $woocommerce_loop['name'] ) ? ( empty( $woocommerce_loop['is_search'] ) ? 'woo products' : 'woo search' ) : 'woo ' . $woocommerce_loop['name'] );
         }
         echo "<i class='fupi_prod_data' style='display:none !important;' data-id='{$id}' data-list_name='{$list_name}' data-data='{$json_data}'></i>";
-        // echo "<!--noptimize--><script data-no-optimize='1' nowprocket class='fupi_prod_data fupi_no_defer' data-id='{$id}' data-list_name='{$list_name}'>FP.prepareProduct( 'teaser', {$id}, {$json_data} );</script><!--/noptimize-->";
     }
 
     // WOO BLOCKS
@@ -581,7 +565,7 @@ class Fupi_WOO_public {
     // teasers in woocommerce/product-top-rated
     // more info: https://docs.wpdebuglog.com/plugin/woocommerce/5.0.0/file/woocommerce--packages--woocommerce-blocks--src--BlockTypes--AbstractProductGrid.php/#
     // HTML for a product in a block is <li class=\"wc-block-grid__product\">...</li>
-    public function fupi_woo_block_teasers( $html, $data, $product ) {
+    public function output_block_teasers_data( $html, $data, $product ) {
         // FILTER
         if ( is_admin() ) {
             return $html;
@@ -597,7 +581,6 @@ class Fupi_WOO_public {
                 $parent_id
             ) ) );
             $script = "<i class='fupi_prod_data fupi_woo_block_teasers' style='display:none !important;' data-id='{$id}' data-data='{$json_data}'></i>";
-            // $script = "<!--noptimize--><script data-no-optimize='1' nowprocket class='fupi_prod_data fupi_no_defer fupi_woo_block_teasers' data-id='{$id}'>FP.prepareProduct( 'teaser', {$id}, {$json_data} );</script><!--/noptimize-->";
             return substr( $html, 0, -5 ) . $script . '</li>';
         }
         return $html;
@@ -609,7 +592,7 @@ class Fupi_WOO_public {
     // some blocks
     // fse product archives
     // related products (on single)
-    public function fupi_woo_block_render_block_mod( $block_content, $block_settings ) {
+    public function output_prod_data_via_render_block_filter( $block_content, $block_settings ) {
         if ( is_admin() || !$this->is_woo_enabled ) {
             return $block_content;
         }
@@ -628,7 +611,6 @@ class Fupi_WOO_public {
                     $parent_id
                 ) ) );
                 return $block_content . "<i class='fupi_prod_data fupi_woo_fse_block_teaser' style='display:none !important;' data-id='{$id}' data-data='{$prod_data}'></i>";
-                // return $block_content . "<script data-no-optimize='1' nowprocket class='fupi_prod_data fupi_no_defer fupi_woo_fse_block_teaser' data-id='{$id}'>FP.prepareProduct( 'teaser', {$id}, {$prod_data} );</script>"; // <!--noptimize--> comment removed in 7.5.1
             }
             // cart & mini cart blocks
             // data output on the cart page may double with data added by "fupi_classic_cart_data" fn above.
@@ -647,7 +629,7 @@ class Fupi_WOO_public {
     }
 
     // WIDGETS
-    public function fupi_woo_widget_teaser_data( $args ) {
+    public function output_widget_data( $args ) {
         $id = get_the_ID();
         $product = wc_get_product( $id );
         if ( empty( $product ) ) {
@@ -677,11 +659,10 @@ class Fupi_WOO_public {
             }
         }
         echo "<i class='fupi_prod_data' style='display:none !important;' data-id='{$id}' data-list_name='{$list_name}' data-data='{$json_data}'></i>";
-        // echo "<!--noptimize--><script data-no-optimize='1' nowprocket class='fupi_prod_data fupi_no_defer' data-id='{$id}' data-list_name='{$list_name}'>FP.prepareProduct( 'teaser', {$id}, {$json_data} );</script><!--/noptimize-->";
     }
 
     // SINGLE PRODUCTS - SIMPLE AND VARIABLE
-    public function fupi_woo_prod_data() {
+    public function output_classic_and_block_single_prod_data() {
         global $product;
         if ( empty( $product ) ) {
             return;
@@ -697,7 +678,6 @@ class Fupi_WOO_public {
             $parent_id
         ) ) );
         $output = "<i class='fupi_prod_data' style='display:none !important;' data-type='single' data-id='{$id}' data-data='{$prod_data}'></i>";
-        // $output = "FP.prepareProduct( 'single', {$id}, {$prod_data} );";
         // variants
         $variation_ids = $product->get_children();
         foreach ( $variation_ids as $variation_id ) {
@@ -712,15 +692,13 @@ class Fupi_WOO_public {
                 $id
             ) ) );
             $output .= "<i class='fupi_prod_data' style='display:none !important;' data-type='variant' data-id='{$variation_id}' data-data='{$variant_data}'></i>";
-            // $output .= "FP.prepareProduct( 'variant', {$variation_id}, {$variant_data} );";
         }
         echo $output;
-        // echo "<!--noptimize--><script data-no-optimize='1' nowprocket class='fupi_prod_data fupi_no_defer' data-id='{$id}'>{$output}</script><!--/noptimize-->";
     }
 
     // SINGLE PRODUCTS - GROUPED
     // ! adds product data next to the name of each sub-product
-    public function fupi_woo_extra_group_prod_data( $html, $product ) {
+    public function output_classic_and_block_group_prod_data( $html, $product ) {
         // Filter
         if ( is_admin() ) {
             return $html;
@@ -736,12 +714,9 @@ class Fupi_WOO_public {
             $parent_id
         ) ) );
         return "<i class='fupi_prod_data fupi_woo_group_item' style='display:none !important;' data-type='group_item' data-id='{$id}' data-data='{$prod_data}'></i>" . $html;
-        // return "<!--noptimize--><script data-no-optimize='1' nowprocket class='fupi_woo_group_item fupi_no_defer'>FP.prepareProduct( 'group_item', {$id}, {$prod_data} );</script><!--/noptimize-->" . $html;
     }
 
-    // public function fupi_woo_add_to_cart_action( $cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data ){
-    // }
-    public function fupi_woo_add_to_cart_from_url() {
+    public function add_to_cart_from_url() {
         if ( $this->is_woo_enabled && isset( $_GET['add-to-cart'] ) ) {
             $id = (int) $_GET['add-to-cart'];
             $product = wc_get_product( $id );
@@ -758,7 +733,4 @@ class Fupi_WOO_public {
         }
     }
 
-    // public function fupi_classic_checkout_custom_fields_admin_display__premium_only( $order ){
-    // 	echo '<p><strong>' . esc_html__( 'WP Full Picture extra order data' ) . ':</strong> ' . esc_html( serialize( $order->get_meta( 'fupi_extra_order_data', true ) ) ) . '</p>';
-    // }
 }

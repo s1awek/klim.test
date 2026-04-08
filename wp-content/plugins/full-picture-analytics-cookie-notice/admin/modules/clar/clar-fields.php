@@ -288,6 +288,54 @@ $sections = array(
 		)
 	),
 
+	// CUSTOM EVENTS
+
+	array(
+		'section_id' => 'fupi_clar_custom_events',
+		'section_title' => esc_html__( 'Tagging with custom events', 'full-picture-analytics-cookie-notice' ),
+		'fields' => array(
+			array(
+				'type'	 			=> 'r3',
+				'label' 			=> esc_html__( 'Track when specific conditions are met', 'full-picture-analytics-cookie-notice' ),
+				'field_id' 			=> 'custom_events',
+				'class'				=> 'fupi_adv fupi_events_builder fupi_fullwidth_tr',
+				'must_have'			=> 'pro atrig',
+				'option_arr_id'		=> $option_arr_id,
+				'is_repeater'		=> true,
+				'fields'			=> array(
+					array(
+						'label'				=> esc_html__( 'When this happens', 'full-picture-analytics-cookie-notice' ),
+						'type' 				=> 'atrig_select',
+						'field_id'			=> 'atrig_id',
+						'class'				=> 'fupi_col_50',
+						'required'			=> true,
+						'format'			=> 'key'
+					),
+					array(
+						'type'	 			=> 'select',
+						'label' 			=> esc_html__( '...for...', 'full-picture-analytics-cookie-notice' ),
+						'field_id' 			=> 'repeat',
+						'option_arr_id'		=> $option_arr_id,
+						'class'				=> 'fupi_col_20',
+						'options'			=> array(
+							'no'				=> esc_html__( 'The first time', 'full-picture-analytics-cookie-notice' ),
+							'yes'				=> esc_html__( 'Every time', 'full-picture-analytics-cookie-notice' ),
+						),
+					),
+					array(
+						'type'				=> 'text',
+						'label'				=> esc_html__( 'Tag recording with', 'full-picture-analytics-cookie-notice' ),
+						'placeholder'		=> esc_html__( 'Tag name (required)', 'full-picture-analytics-cookie-notice' ),
+						'field_id'			=> 'evt_name',
+						'el_class'			=> 'fupi_events_builder_evt',
+						'required'			=> true,
+						'class'				=> 'fupi_col_30_grow',
+					),
+				),
+			)
+		),
+	),
+
 	// WOOCOMMERCE
 
 	array(

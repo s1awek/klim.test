@@ -17,8 +17,12 @@ if ( ! function_exists('wp_all_import_get_gz')){
 		// Ensure we don't have a .php extension as it's often blocked on hosts in the uploads folder.
 		$localPath = str_replace('.php','.tmp', $localPath);
 
-		$fp = @fopen($localPath, 'w');			
-	    $file = @gzopen($filename, 'rb', $use_include_path);
+		$fp = @fopen($localPath, 'w');
+		// Skip gzopen for remote URLs — it uses PHP's URL fopen wrapper which
+		// is unreliable (hangs on slow servers, bypasses WP HTTP API filters).
+		// The get_file_curl fallback handles remote files via wp_remote_get.
+		$is_remote = preg_match('%^https?://%i', $filename);
+	    $file = $is_remote ? false : @gzopen($filename, 'rb', $use_include_path);
 
 	    if ($file) {
 	        $first_chunk = true;

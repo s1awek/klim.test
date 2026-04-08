@@ -168,7 +168,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Product_Admin_Basic')) {
 						'template_del_loader' => __('Deleting template...', 'product-import-export-for-woo'),
 						'value_empty' => __('Value is empty.', 'product-import-export-for-woo'),
 						// translators: %1$s is the opening link tag, %2$s is the closing link tag
-						'error' => sprintf(__('An unknown error has occurred! Refer to our %1$stroubleshooting guide%2$s for assistance.', 'product-import-export-for-woo'), '<a href="' . WT_IEW_DEBUG_BASIC_TROUBLESHOOT . '" target="_blank">', '</a>'),
+						'error' => sprintf(__('An unknown error has occurred! Refer to our %1$stroubleshooting guide%2$s for assistance.', 'product-import-export-for-woo'), '<a href="' . esc_url( WT_IEW_DEBUG_BASIC_TROUBLESHOOT ) . '" target="_blank">', '</a>'),
 						'success' => __('Success.', 'product-import-export-for-woo'),
 						'loading' => __('Loading...', 'product-import-export-for-woo'),
 						'sure' => __('Are you sure?', 'product-import-export-for-woo'),

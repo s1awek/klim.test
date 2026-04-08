@@ -38,6 +38,12 @@ switch( $section_id ){
 		$ret_text = '<p>' . esc_html__( 'Here you can tag session recordings with user actions and extra information.', 'full-picture-analytics-cookie-notice' ) . '</p>';
 	break;
 
+	// CUSTOM EVENTS
+	
+	case 'fupi_clar_custom_events':
+		$ret_text = '<p>' . sprintf( esc_html__( 'Here you can set up tagging recordings with custom events (set them up in %1$scustom triggers%2$s).' , 'full-picture-analytics-cookie-notice' ), '<a href="https://wpfullpicture.com/support/documentation/how-to-set-up-advanced-triggers/" target="_blank">', '</a>' ) . '</p>';
+	break;
+
 	// E-COMMERCE
 
 	case 'fupi_clar_ecomm':

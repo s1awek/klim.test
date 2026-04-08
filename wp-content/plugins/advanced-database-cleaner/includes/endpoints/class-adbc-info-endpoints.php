@@ -35,6 +35,9 @@ class ADBC_Info_Endpoints {
 				$parent_theme = $parent_theme_data->get( 'Name' ) . ' ' . $parent_theme_data->get( 'Version' );
 			}
 
+			$adbc_plugin_type = ADBC_VERSION_TYPE;
+			$adbc_plugin_type = ADBC_IS_PRO_VERSION ? 'PRO' : $adbc_plugin_type;
+
 			$data = array(
 				'wordpress' => array(
 					'title' => __( 'WordPress', 'advanced-database-cleaner' ),
@@ -67,7 +70,7 @@ class ADBC_Info_Endpoints {
 				'adbc' => array(
 					'title' => 'Advanced DB Cleaner',
 					'data' => array(
-						__( 'Version', 'advanced-database-cleaner' ) . ": " . ADBC_PLUGIN_VERSION . ' - ' . ADBC_VERSION_TYPE,
+						__( 'Version', 'advanced-database-cleaner' ) . ": " . ADBC_PLUGIN_VERSION . ' - ' . $adbc_plugin_type,
 						__( 'Installed on', 'advanced-database-cleaner' ) . ": " . ADBC_Common_Utils::format_date_friendly( $settings['installed_on'] ),
 						__( 'License status', 'advanced-database-cleaner' ) . ": " . ( ADBC_VERSION_TYPE === 'PREMIUM' ? ADBC_License_Manager::get_license_status() : 'adbc_hidden' ),
 						__( 'License plan', 'advanced-database-cleaner' ) . ": " . ( ADBC_VERSION_TYPE === 'PREMIUM' ? ADBC_License_Manager::get_plan_name() : 'adbc_hidden' ),
@@ -85,7 +88,6 @@ class ADBC_Info_Endpoints {
 						__( 'File line batches', 'advanced-database-cleaner' ) . ": " . $settings['file_lines_batch'],
 						__( 'File content chunks', 'advanced-database-cleaner' ) . ": " . $settings['file_content_chunks'],
 						__( 'Scan max execution time', 'advanced-database-cleaner' ) . ": " . $settings['scan_max_execution_time'],
-						__( 'Send corrections to server', 'advanced-database-cleaner' ) . ": " . ( $settings['send_corrections_to_server'] === '1' ? __( 'Yes', 'advanced-database-cleaner' ) : __( 'No', 'advanced-database-cleaner' ) ),
 						__( 'Analytics enabled', 'advanced-database-cleaner' ) . ": " . ( $settings['analytics_enabled'] === '1' ? __( 'Yes', 'advanced-database-cleaner' ) : __( 'No', 'advanced-database-cleaner' ) ),
 						__( 'Addons activity enabled', 'advanced-database-cleaner' ) . ": " . ( $settings['addons_activity_enabled'] === '1' ? __( 'Yes', 'advanced-database-cleaner' ) : __( 'No', 'advanced-database-cleaner' ) ),
 						__( 'Show tables with invalid prefix', 'advanced-database-cleaner' ) . ": " . ( $settings['show_tables_with_invalid_prefix'] === '1' ? __( 'Yes', 'advanced-database-cleaner' ) : __( 'No', 'advanced-database-cleaner' ) ),

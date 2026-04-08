@@ -483,7 +483,7 @@ class ADBC_Common_Utils {
 	 * 
 	 * @return bool True if the pro version is installed, false otherwise.
 	 */
-	public static function is_pro_exists() {
+	public static function is_old_pro_exists() {
 
 		// Ensure plugin functions are loaded
 		if ( ! function_exists( 'get_plugins' ) ) {
@@ -494,10 +494,25 @@ class ADBC_Common_Utils {
 
 		$pro_slug = 'advanced-database-cleaner-pro/advanced-db-cleaner.php';
 		if ( isset( $plugins[ $pro_slug ] ) ) {
-			return true;
+			$pro_version = $plugins[ $pro_slug ]['Version'];
+
+			// Compare version
+			if ( version_compare( $pro_version, '4.0.0', '<' ) ) {
+				return true;
+			}
+
 		}
 
 		return false;
+
+	}
+
+	public static function is_old_pro_data_exists() {
+
+		// We consider the old pro data exists if both the security folder and the settings options are not empty, as these are the main components of the old pro version data.
+		$security_folder = get_option( 'aDBc_security_folder_code' );
+		$settings = get_option( 'aDBc_settings' );
+		return ! empty( $security_folder ) && ! empty( $settings );
 
 	}
 

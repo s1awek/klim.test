@@ -57,6 +57,32 @@ if ( ! empty( $input ) ) foreach( $input as $key => $value ) {
 				};
 
 				break;
+
+			case 'custom_events':
+
+				$clean_val = [];
+
+				if ( is_array( $value ) ){
+
+					$i = 0;
+					$j = 0;
+					$max = count( $value );
+
+					for ( ; $i < $max; $i++) {
+
+						$section = $value[$i];
+
+						if ( empty( $section['atrig_id'] ) || empty( $section['evt_name'] ) ) continue;
+
+						$clean_val[$j]['atrig_id'] = sanitize_key( $section['atrig_id'] );
+						$clean_val[$j]['evt_name'] = sanitize_text_field( $section['evt_name'] );
+						$clean_val[$j]['repeat'] = empty( $section['repeat'] ) ? 'no' :  sanitize_key( $section['repeat'] );
+
+						$j++;
+					}
+				};
+				break;
+
 			case 'limit_country':
 
 				$clean_val = [];
