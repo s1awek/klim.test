@@ -107,3 +107,4 @@ wp-content/ewww/*.exe
 .vscode/settings.json
 wp-content/plugins/wp-mailhog-smtp/
 wp-content/plugins/updraftplus_backup/
+/.workspace/
