@@ -450,11 +450,6 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 
                 if ( is_array( $upload_result ) && !count($this->errors->errors)) {
                     $filePath  = $upload_result['filePath'];
-                    // Persist corrected feed_type so stale values don't recur.
-                    if ( ! empty( $upload_result['feed_type'] ) && $upload_result['feed_type'] !== $item->feed_type ) {
-                        $item->feed_type = $upload_result['feed_type'];
-                        $item->set(array('feed_type' => $item->feed_type))->update();
-                    }
                 }
 
 				if (empty($item->options['encoding'])){

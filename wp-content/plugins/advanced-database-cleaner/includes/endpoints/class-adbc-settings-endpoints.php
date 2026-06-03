@@ -43,6 +43,8 @@ class ADBC_Settings_Endpoints {
 					case 'analytics_enabled':
 					case 'show_tables_with_invalid_prefix':
 					case 'sidebar_is_expanded':
+					case 'prevent_taking_action_on_wp_items':
+					case 'show_confirmation_on_dangerous_actions':
 						if ( ! ADBC_Common_Validator::is_string_equals_0_or_1( "", $value ) )
 							return ADBC_Rest::error( "Invalid setting value.", ADBC_Rest::BAD_REQUEST );
 						break;
@@ -54,17 +56,17 @@ class ADBC_Settings_Endpoints {
 					case 'file_content_chunks':
 					case 'scan_max_execution_time':
 						if ( ! ADBC_Settings_Validator::is_scan_setting_valid( $sanitized_key, $value ) )
-							return ADBC_Rest::error( __( 'Please ensure that the scan settings respect the indicated min and max acceptable values.', 'advanced-database-cleaner' ), ADBC_Rest::BAD_REQUEST );
+							return ADBC_Rest::error( "Please ensure that the scan settings respect the indicated min and max acceptable values.", ADBC_Rest::BAD_REQUEST );
 						break;
 					case 'cpu_work_time_ms':
 					case 'cpu_rest_time_ms':
 						if ( ! ADBC_Settings_Validator::is_cpu_usage_time_valid( $sanitized_key, $value ) )
-							return ADBC_Rest::error( __( 'Please ensure that the CPU usage settings respect the indicated min and max acceptable values.', 'advanced-database-cleaner' ), ADBC_Rest::BAD_REQUEST );
+							return ADBC_Rest::error( "Please ensure that the CPU usage settings respect the indicated min and max acceptable values.", ADBC_Rest::BAD_REQUEST );
 						break;
 					case 'database_rows_batch':
 					case 'sql_or_native_cleanup_method':
 						if ( ! ADBC_Settings_Validator::is_performance_settings_valid( $sanitized_key, $value ) )
-							return ADBC_Rest::error( "Please ensure that the performance settings respect the indicated min and max acceptable values.", ADBC_Rest::BAD_REQUEST );
+							return ADBC_Rest::error( "Please ensure that the performance settings respect the acceptable values.", ADBC_Rest::BAD_REQUEST );
 						break;
 					default:
 						return ADBC_Rest::error( "This setting cannot be changed.", ADBC_Rest::BAD_REQUEST );

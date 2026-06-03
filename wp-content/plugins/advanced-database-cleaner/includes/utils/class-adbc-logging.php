@@ -59,7 +59,8 @@ class ADBC_Logging {
 		if ( ! ADBC_Files::instance()->is_readable_and_writable( self::DEBUG_LOG_FILE_PATH ) )
 			return false;
 
-		if ( ADBC_Files::instance()->size( self::DEBUG_LOG_FILE_PATH ) > self::DEBUG_LOG_FILE_MAX_SIZE ) {
+		$debug_log_file_size = ADBC_Files::instance()->size( self::DEBUG_LOG_FILE_PATH );
+		if ( $debug_log_file_size !== false && $debug_log_file_size > self::DEBUG_LOG_FILE_MAX_SIZE ) {
 			if ( ! self::clear_log() )
 				return false;
 		}
@@ -101,7 +102,8 @@ class ADBC_Logging {
 		if ( ! ADBC_Files::instance()->is_readable( $file_path ) )
 			return [ 'success' => false, 'message' => __( 'The Log file is not readable or does not exist.', 'advanced-database-cleaner' ) ];
 
-		if ( ADBC_Files::instance()->size( $file_path ) > $max_file_size ) {
+		$debug_log_file_size = ADBC_Files::instance()->size( $file_path );
+		if ( $debug_log_file_size !== false && $debug_log_file_size > $max_file_size ) {
 			return [ 
 				'success' => false,
 				'message' => sprintf(

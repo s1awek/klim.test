@@ -111,7 +111,7 @@ class WooCommerceWholeSalePrices {
     public $wwp_plugin_installer;
     // phpcs:enable
 
-    const VERSION = '2.2.7.1';
+    const VERSION = '2.2.8';
 
     /**
      * Class Methods
@@ -187,7 +187,7 @@ class WooCommerceWholeSalePrices {
         $this->wwp_plugin_installer                     = WWP_Plugin_Installer::instance();
 
         // REST API.
-        $this->wwp_rest_api = WWP_REST_API::instance( array() );
+        $this->wwp_rest_api = WWP_REST_API::instance();
     }
 
     /**
@@ -279,7 +279,7 @@ class WooCommerceWholeSalePrices {
      */
     public function admin_old_wholesale_settings_redirect() {
         // For wholesale prices tabs.
-        if ( isset( $_SERVER['REQUEST_URI'] ) && strpos( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), 'page=wc-settings&tab=wwp_settings' ) !== false ) {
+        if ( isset( $_SERVER['REQUEST_URI'] ) && str_contains( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), 'page=wc-settings&tab=wwp_settings' ) ) {
             wp_safe_redirect( admin_url( 'admin.php?page=wholesale-settings&tab=wholesale_prices' ) );
             exit;
         }

@@ -1,3 +1,14 @@
+--- 3.20.7 ---
+NEW: WordPress 7.0 compatibility.
+NEW: WooCommerce 10.8 compatibility.
+
+UPDATED: Ukrainian language files.
+
+--- 3.20.6 ---
+FIXED: Instagram Feed: Missing closing quote on follow link target attribute.
+
+Note: This release contains an enhanced security measure. We recommend updating your sites promptly for optimal protection.
+
 --- 3.20.5 ---
 NEW: WooCommerce 10.5 compatibility.
 

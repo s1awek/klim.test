@@ -322,13 +322,29 @@ if ( ! class_exists( 'PMXI_Upload' ) ) {
 
 			if ( empty( $this->errors->errors ) ) {
 
-				// Always re-detect feed type from the URL. This corrects stale
-				// values in the database (e.g. an AWIN gzip feed stored as 'csv'
-				// because the original import wizard saved the inner content type
-				// instead of the archive type).
+				// Re-detect feed type from URL analysis. We only override the stored
+				// value in two cases:
+				// 1. No feed type is stored yet (new import or blank value).
+				// 2. A stale 'csv' is stored but the URL extension/path clearly
+				//    indicates a different type — this corrects AWIN-style gzip feeds
+				//    (stored as 'csv' before gz detection was added) and also
+				//    self-heals records that were incorrectly set to 'csv' by the
+				//    overly-aggressive re-detection introduced in 5.0.5.
+				// When 'csv' is stored but URL detection returns false (opaque URL
+				// like .php?token=...), we clear feed_type to '' so the code falls
+				// through to header-based detection rather than trusting a potentially
+				// corrupted 'csv' value from 5.0.5.
 				$detected_type = wp_all_import_get_remote_file_name( trim( $this->file ) );
-				if ( $detected_type && $detected_type !== $feed_type ) {
+				if ( $detected_type && (
+					empty( $feed_type ) ||
+					( 'csv' === $feed_type && $detected_type !== 'csv' )
+				) ) {
 					$feed_type = $detected_type;
+				} elseif ( 'csv' === $feed_type && ! $detected_type ) {
+					// Opaque URL with stored 'csv' — cannot confirm from URL alone.
+					// Clear so header-based detection runs instead of blindly trusting
+					// a value that may have been corrupted by 5.0.5.
+					$feed_type = '';
 				}
 
 				if ( 'zip' === $feed_type || ( empty( $feed_type ) && preg_match( '%\W(zip)$%i', trim( $this->file ) ) ) ) {
@@ -448,11 +464,28 @@ if ( ! class_exists( 'PMXI_Upload' ) ) {
 					if ( $is_known_gz ) {
 						// URL is known to be gzip from extension/path — download + decompress in one step.
 						$fileInfo = wp_all_import_get_gz( $this->file, 0, $this->uploadsPath );
+					} elseif ( ! empty( $feed_type ) ) {
+						// Feed type is already known (e.g. 'xml', 'json' stored from a previous run).
+						// Pass it as a content-type hint so wp_all_import_get_url skips text-sniffing,
+						// which defaults to 'csv' for any content that isn't detected as XML — causing
+						// JSON feeds and non-standard XML to be incorrectly treated as CSV.
+						$fileInfo = wp_all_import_get_url( $this->file, $this->uploadsPath, $feed_type, false, true );
 					} else {
-						// Download first, detect type from magic bytes — avoids a separate HEAD request
-						// which can fail rate-limited feeds. Content-Encoding: gzip (transport encoding)
-						// is automatically decompressed by WordPress HTTP API during download.
-						$fileInfo = wp_all_import_get_url( $this->file, $this->uploadsPath, false, false, true );
+						// Feed type is unknown. Check Content-Type headers to identify the content
+						// before downloading, restoring the reliable detection from before 5.0.5.
+						// AWIN-style URLs are handled above via $is_known_gz, so the feeds reaching
+						// this path are opaque URLs where header inspection is the only reliable method.
+						$headers = wp_all_import_get_feed_type( $this->file );
+						$encoding = $headers['Content-Encoding'];
+						if ( is_array( $encoding ) ) {
+							$encoding = end( $encoding );
+						}
+						if ( ( $headers['Content-Type'] && in_array( $headers['Content-Type'], array( 'gz', 'gzip' ), true ) )
+							|| ( $encoding && in_array( $encoding, array( 'gz', 'gzip' ), true ) ) ) {
+							$fileInfo = wp_all_import_get_gz( $this->file, 0, $this->uploadsPath, $headers );
+						} else {
+							$fileInfo = wp_all_import_get_url( $this->file, $this->uploadsPath, $headers['Content-Type'], $headers['Content-Encoding'], true );
+						}
 					}
 
 					if ( ! is_wp_error( $fileInfo ) && false !== $fileInfo ) {

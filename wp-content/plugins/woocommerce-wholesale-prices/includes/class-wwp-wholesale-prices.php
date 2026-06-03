@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Model that houses the logic of wholesale prices.
  *
  * @since 1.3.0
+ * @since 2.2.8 Recalculate cart totals on woocommerce_add_to_cart for wholesale customers (issue #549). Add cart null-guard and re-entrancy guard on the recalc.
  */
 class WWP_Wholesale_Prices {
 
@@ -558,7 +559,7 @@ class WWP_Wholesale_Prices {
             // For wholesale price display suffix.
             $extra_args['base_price'] = $base_price;
 
-            if ( strpos( $wc_price_suffix, '{price_including_tax}' ) !== false ) {
+            if ( str_contains( $wc_price_suffix, '{price_including_tax}' ) ) {
 
                 $wholesale_price_incl_tax = WWP_Helper_Functions::wwp_formatted_price(
                     WWP_Helper_Functions::wwp_get_price_including_tax(
@@ -573,7 +574,7 @@ class WWP_Wholesale_Prices {
 
             }
 
-            if ( strpos( $wc_price_suffix, '{price_excluding_tax}' ) !== false ) {
+            if ( str_contains( $wc_price_suffix, '{price_excluding_tax}' ) ) {
 
                 $wholesale_price_excl_tax = WWP_Helper_Functions::wwp_formatted_price(
                     WWP_Helper_Functions::wwp_get_price_excluding_tax(
@@ -748,7 +749,7 @@ class WWP_Wholesale_Prices {
                         $wholesale_price = WWP_Helper_Functions::wwp_formatted_price( $min_price ) . ' - ' . WWP_Helper_Functions::wwp_formatted_price( $max_price );
                         $wc_price_suffix = get_option( 'woocommerce_price_display_suffix' );
 
-                        if ( strpos( $wc_price_suffix, '{price_including_tax}' ) === false && strpos( $wc_price_suffix, '{price_excluding_tax}' ) === false && ! $return_wholesale_price_only ) {
+                        if ( ! str_contains( $wc_price_suffix, '{price_including_tax}' ) && ! str_contains( $wc_price_suffix, '{price_excluding_tax}' ) && ! $return_wholesale_price_only ) {
 
                             $wsprice          = ! empty( $max_wholesale_price_without_taxing ) ? $max_wholesale_price_without_taxing : null;
                             $wholesale_price .= self::get_wholesale_price_suffix( $product, $user_wholesale_role, $wsprice, $return_wholesale_price_only, $extra_args );
@@ -1030,6 +1031,109 @@ class WWP_Wholesale_Prices {
     }
 
     /**
+     * Force cart totals recalculation when a wholesale customer adds a product to the cart.
+     *
+     * WooCommerce's WC_Cart::add_to_cart() does not invoke calculate_totals() before firing the
+     * woocommerce_add_to_cart action, so cart item line totals (line_subtotal, line_total,
+     * line_tax) are NULL at that point and the cart item's product data still reflects the
+     * regular price (the wholesale price is normally applied via woocommerce_before_calculate_totals).
+     * Third-party plugins that capture cart state on woocommerce_add_to_cart - such as FunnelKit
+     * Automations abandoned cart tracking - therefore see empty/zero values for wholesale customers.
+     *
+     * Hooking at priority 1 and triggering calculate_totals here runs the
+     * woocommerce_before_calculate_totals chain so wholesale prices are applied, and populates
+     * each cart item's line totals before any later listener on woocommerce_add_to_cart runs.
+     * The work is limited to wholesale customers to keep regular customers unaffected.
+     *
+     * Two defensive guards short-circuit the recalc:
+     * 1. WC()->cart null-guard - the woocommerce_add_to_cart action normally fires from inside
+     *    WC_Cart::add_to_cart() (so the cart exists), but a third-party plugin can invoke the
+     *    action manually without a session-loaded cart. Calling calculate_totals() on a missing
+     *    cart would fatal.
+     * 2. Re-entrancy guard - if a plugin's listener on the calculate_totals chain itself calls
+     *    WC_Cart::add_to_cart() (e.g. an auto-add upsell on woocommerce_before_calculate_totals),
+     *    triggering another calculate_totals() from within the chain risks corrupted state or
+     *    infinite recursion. Skip in that case.
+     *
+     * Also removes WC core's priority-20 calculate_totals callback (re-attached after our pass via
+     * the one-shot restore_wc_core_calculate_totals_hook) so wholesale add_to_cart only triggers
+     * a single recalc instead of two.
+     *
+     * @since  2.2.8 Force cart totals recalculation on woocommerce_add_to_cart for wholesale customers (issue #549). Includes WC()->cart null-guard and re-entrancy guard against recursive calculate_totals chains.
+     * @access public
+     *
+     * @return void
+     */
+    public function recalculate_cart_totals_for_wholesale_customer_on_add_to_cart() {
+
+        if ( empty( $this->_wwp_wholesale_roles->getUserWholesaleRole() ) ) {
+            return;
+        }
+
+        if ( ! ( WC()->cart instanceof WC_Cart ) ) {
+            return;
+        }
+
+        if (
+            doing_action( 'woocommerce_before_calculate_totals' ) ||
+            doing_action( 'woocommerce_after_calculate_totals' ) ||
+            doing_action( 'woocommerce_calculate_totals' )
+        ) {
+            return;
+        }
+
+        $removed_core_recalc = remove_action(
+            'woocommerce_add_to_cart',
+            array( WC()->cart, 'calculate_totals' ),
+            20
+        );
+
+        // Queue the restore before calling recalc so an exception unwinding
+        // out of the calculate_totals chain still leaves the restore registered
+        // for the next dispatch - the prio-20 callback gets re-attached then
+        // and the cart resumes recalculating instead of staying broken until
+        // the page reloads.
+        if ( $removed_core_recalc ) {
+            add_action(
+                'woocommerce_add_to_cart',
+                array( $this, 'restore_wc_core_calculate_totals_hook' ),
+                21,
+                0
+            );
+        }
+
+        $this->recalculate_cart_totals();
+    }
+
+    /**
+     * Re-attach WC core's priority-20 calculate_totals hook after our priority-1 dedup removed it.
+     *
+     * Self-removes so it only fires once per dispatch.
+     *
+     * @since  2.2.8
+     * @access public
+     *
+     * @return void
+     */
+    public function restore_wc_core_calculate_totals_hook() {
+
+        if ( WC()->cart instanceof WC_Cart ) {
+            add_action(
+                'woocommerce_add_to_cart',
+                array( WC()->cart, 'calculate_totals' ),
+                20,
+                0
+            );
+        }
+
+        remove_action(
+            'woocommerce_add_to_cart',
+            array( $this, 'restore_wc_core_calculate_totals_hook' ),
+            21
+        );
+    }
+
+    /**
      * Apply taxing accordingly to wholesale prices on shop page.
      * We will handle tax application to wholesale prices only on WWP if WWPP is not present.
      * If WWPP is present lets allow WWPP to handle this instead.
@@ -1156,9 +1260,7 @@ class WWP_Wholesale_Prices {
                         }
 
                         // Wholesale role key with uppercase letter fix.
-                        $pos = strpos( $meta['key'], strtolower( $role_key ) );
-
-                        if ( false !== $pos ) {
+                        if ( str_contains( $meta['key'], strtolower( $role_key ) ) ) {
                             $data['meta_data'][ $key ]['key'] = str_replace( strtolower( $role_key ), $role_key, $meta['key'] );
                         }
                     }
@@ -1236,7 +1338,13 @@ class WWP_Wholesale_Prices {
      * Therefore when wholesale user visits cart/checkout pages, we check if 'Disable Coupons For Wholesale Users' is
      * enabled. If so then we remove coupons to the cart.
      *
+     * Hooked into:
+     * - woocommerce_before_cart / woocommerce_before_checkout_form (legacy shortcode pages)
+     * - woocommerce_load_cart_from_session (block-based cart/checkout — fires on every cart-from-session load)
+     *
      * @since  1.11
+     * @since  2.2.8 Added empty-coupon guard, explicit calculate_totals()/set_session() to ensure the
+     *               cleared coupon list is persisted on block-based pages that don't fire the legacy hooks.
      * @access public
      */
     public function remove_coupons_for_wholesale_users_when_necessary() {
@@ -1245,7 +1353,12 @@ class WWP_Wholesale_Prices {
         $user_wholesale_role = ( is_array( $user_wholesale_role ) && ! empty( $user_wholesale_role ) ) ? $user_wholesale_role[0] : '';
 
         if ( get_option( 'wwpp_settings_disable_coupons_for_wholesale_users' ) === 'yes' && ! empty( $user_wholesale_role ) ) {
-            WC()->cart->remove_coupons();
+            $applied_coupons = WC()->cart->get_applied_coupons();
+            if ( ! empty( $applied_coupons ) ) {
+                WC()->cart->remove_coupons();
+                WC()->cart->calculate_totals();
+                WC()->cart->set_session();
+            }
         }
     }
 
@@ -2334,8 +2447,23 @@ CSS;
             1
         );
 
-        // this is called when cart/cart.php is called anywhere(this solves the divi theme builder issue-#768).
-        add_action( 'woocommerce_cart_loaded_from_session', array( $this, 'apply_product_wholesale_price_to_cart' ), 10, 1 );
+        add_action(
+            'woocommerce_add_to_cart',
+            array(
+                $this,
+                'recalculate_cart_totals_for_wholesale_customer_on_add_to_cart',
+            ),
+            1,
+            0
+        );
+
+        $is_divi = WWP_Helper_Functions::is_theme_active( 'divi' )
+            || WWP_Helper_Functions::is_plugin_active( 'divi-builder/divi-builder.php' );
+
+        if ( $is_divi ) { // run this only for divi related themes, child themes, or the standalone Divi Builder plugin (issue #768).
+            // this is called when cart/cart.php is called anywhere(this solves the divi theme builder issue-#768).
+            add_action( 'woocommerce_cart_loaded_from_session', array( $this, 'apply_product_wholesale_price_to_cart' ), 10, 1 );
+        }
 
         // We need to recalculate cart on loading widget cart to properly sync the cart item prices.
         add_action( 'woocommerce_before_mini_cart', array( $this, 'recalculate_cart_totals' ) );
@@ -2383,6 +2511,10 @@ CSS;
                 'remove_coupons_for_wholesale_users_when_necessary',
             )
         );
+
+        // Block-based cart/checkout don't fire woocommerce_before_cart / woocommerce_before_checkout_form,
+        // so hook the lower-level cart-loaded action to cover that case (see issue #880).
+        add_action( 'woocommerce_load_cart_from_session', array( $this, 'remove_coupons_for_wholesale_users_when_necessary' ) );
 
         // Filter the product price to hide the original price for wholesale users.
         add_filter( 'wwp_product_original_price', array( $this, 'filter_product_original_price_visibility' ), 10, 5 );

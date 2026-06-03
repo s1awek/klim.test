@@ -156,7 +156,7 @@ function wpai_wp_enqueue_code_editor( $args ) {
 	if ( ! function_exists('wp_all_import_get_remote_file_name') ) {
 		function wp_all_import_get_remote_file_name( $filePath ) {
 		    $bn = wp_all_import_basename($filePath);
-			$type = (preg_match('%\W(csv|txt|dat|psv)$%i', $bn)) ? 'csv' : false;
+			$type = (preg_match('%\W(csv|txt|dat|psv|tsv)$%i', $bn)) ? 'csv' : false;
 			if (!$type) $type = (preg_match('%\W(xml)$%i', $bn)) ? 'xml' : false;
             if (!$type) $type = (preg_match('%\W(zip)$%i', $bn)) ? 'zip' : false;
 			if (!$type) $type = (preg_match('%\W(gz|gzip)$%i', $bn)) ? 'gz' : false;
@@ -166,7 +166,7 @@ function wpai_wp_enqueue_code_editor( $args ) {
             if(!$type){
                 $pathOnly = strtok($filePath, "?");
                 $bn = wp_all_import_basename($pathOnly);
-                $type = (preg_match('%\W(csv|txt|dat|psv)$%i', $bn)) ? 'csv' : false;
+                $type = (preg_match('%\W(csv|txt|dat|psv|tsv)$%i', $bn)) ? 'csv' : false;
                 if (!$type) $type = (preg_match('%\W(xml)$%i', $bn)) ? 'xml' : false;
                 if (!$type) $type = (preg_match('%\W(zip)$%i', $bn)) ? 'zip' : false;
                 if (!$type) $type = (preg_match('%\W(gz|gzip)$%i', $bn)) ? 'gz' : false;

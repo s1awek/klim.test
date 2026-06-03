@@ -64,6 +64,7 @@ class Wt_Import_Export_For_Woo_Basic_Product_Import {
         
         foreach ($import_data as $key => $data) { 
             $row = $batch_offset+$key+1;
+            $this->merge = false;
             $this->is_product_exist = false;
             
             Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Row :$row - Parsing item.");            

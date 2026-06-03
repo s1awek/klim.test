@@ -166,6 +166,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product_Review_Export {
      
         public function hf_import_to_csv($comment, $comments) {
         $row = array();
+        $temp_product_id = '';
         
         $csv_columns = $this->parent_module->get_selected_column_names();
         $found_review_meta = $this->parent_module->wt_get_found_product_meta();
@@ -226,7 +227,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Product_Review_Export {
                 }
                 if ($column == 'product_title' && !empty($temp_product_id)) {
                     $temp_product_object = ( isset($temp_product_id) && version_compare( WC()->version, '3.0', '>=' ) ) ? wc_get_product($temp_product_id) : get_product($temp_product_id);
-                    $row[$column] = $temp_product_object->get_title();
+                    $row[$column] = is_a($temp_product_object, 'WC_Product') ? $temp_product_object->get_title() : '';
                     continue;
                 }
 

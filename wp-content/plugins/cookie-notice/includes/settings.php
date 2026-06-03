@@ -294,7 +294,7 @@ class Cookie_Notice_Settings {
 		$cn->defaults['general']['see_more_opt']['text'] = __( 'Privacy policy', 'cookie-notice' );
 
 		// set translation strings on plugin activation
-		if ( $cn->options['general']['translate'] === true ) {
+		if ( ! empty( $cn->options['general']['translate'] ) ) {
 			$cn->options['general']['translate'] = false;
 
 			$cn->options['general']['message_text'] = $cn->defaults['general']['message_text'];
@@ -334,13 +334,20 @@ class Cookie_Notice_Settings {
 		if ( current_action() === 'network_admin_menu' && ! Cookie_Notice()->is_plugin_network_active() )
 			return;
 
-		add_menu_page( __( 'Cookie Notice', 'cookie-notice' ), __( 'Privacy', 'cookie-notice' ), apply_filters( 'cn_manage_cookie_notice_cap', 'manage_options' ), 'cookie-notice', [ $this, 'options_page' ], 'none', '99.300' );
-		add_submenu_page( 'cookie-notice', __( 'Cookie Notice - Cookie Consent', 'cookie-notice' ), __( 'Cookie Consent', 'cookie-notice' ), apply_filters( 'cn_manage_cookie_notice_cap', 'manage_options' ), 'cookie-notice', [ $this, 'options_page' ] );
-		add_submenu_page( 'cookie-notice', __( 'Cookie Notice - Privacy Consent', 'cookie-notice' ), $this->mark_new( __( 'Privacy Consent', 'cookie-notice' ) ), apply_filters( 'cn_manage_cookie_notice_cap', 'manage_options' ), 'cookie-notice&tab=privacy-consent', [ $this, 'options_page' ] );
-		add_submenu_page( 'cookie-notice', __( 'Cookie Notice - Consent Logs', 'cookie-notice' ), __( 'Consent Logs', 'cookie-notice' ), apply_filters( 'cn_manage_cookie_notice_cap', 'manage_options' ), 'cookie-notice&tab=consent-logs', [ $this, 'options_page' ] );
+		$cap = apply_filters( 'cn_manage_cookie_notice_cap', 'manage_options' );
 
-		// highlight submenus
-		add_filter( 'submenu_file', [ $this, 'submenu_file' ], 10, 2 );
+		add_menu_page( __( 'Compliance by Hu-manity.co', 'cookie-notice' ), __( 'Compliance', 'cookie-notice' ), $cap, 'cookie-notice', [ $this, 'options_page' ], 'none', '99.300' );
+
+		// React mode: no submenus — React owns in-page tab navigation.
+		// Legacy mode: three submenus matching the PHP tab structure.
+		if ( Cookie_Notice()->options['general']['ui_mode'] === 'legacy' ) {
+			add_submenu_page( 'cookie-notice', __( 'Compliance - Cookie Consent', 'cookie-notice' ), __( 'Cookie Consent', 'cookie-notice' ), $cap, 'cookie-notice', [ $this, 'options_page' ] );
+			add_submenu_page( 'cookie-notice', __( 'Compliance - Privacy Consent', 'cookie-notice' ), $this->mark_new( __( 'Privacy Consent', 'cookie-notice' ) ), $cap, 'cookie-notice&tab=privacy-consent', [ $this, 'options_page' ] );
+			add_submenu_page( 'cookie-notice', __( 'Compliance - Consent Logs', 'cookie-notice' ), __( 'Consent Logs', 'cookie-notice' ), $cap, 'cookie-notice&tab=consent-logs', [ $this, 'options_page' ] );
+
+			// highlight submenus
+			add_filter( 'submenu_file', [ $this, 'submenu_file' ], 10, 2 );
+		}
 	}
 	
 	/**
@@ -386,27 +393,74 @@ class Cookie_Notice_Settings {
 		// get cookie compliance status
 		$status = $cn->get_status();
 
+		$ui_mode = $cn->options['general']['ui_mode'];
+
 		echo '
 		<div class="wrap">
-			<h2>' . esc_html__( 'Cookie Notice & Compliance for GDPR/CCPA', 'cookie-notice' ) . '</h2>';
+			<h2>' . esc_html__( 'Compliance by Hu-manity.co', 'cookie-notice' ) . '</h2>';
+
+		if ( $ui_mode === 'react' ) {
+			// Server-side fallback markup. React's createRoot().render() replaces
+			// these children on mount, so users only ever see this content if the
+			// JS bundle failed to load, was blocked, or threw before React could
+			// take over. The help block fades in via pure-CSS animation after 5s
+			// (no JS needed — survives a fully-failed bundle). Inline styles, so
+			// a CSS-load failure doesn't make the fallback ugly.
+			$support_url = esc_url( $cn->get_url( 'host' ) );
+
+			echo '
+			<style id="cn-react-fallback-styles">
+				#cn-react-root .cn-react-fallback { padding: 24px 28px; max-width: 640px; margin: 20px 0; background: #fff; border: 1px solid #c3c4c7; border-radius: 4px; font-size: 14px; line-height: 1.5; color: #1d2327; }
+				#cn-react-root .cn-react-fallback__heading { margin: 0 0 8px; font-size: 16px; font-weight: 600; }
+				#cn-react-root .cn-react-fallback__body { margin: 0 0 8px; }
+				#cn-react-root .cn-react-fallback__help { margin: 16px 0 0; padding: 12px 14px; background: #f6f7f7; border-left: 3px solid #d63638; opacity: 0; animation: cn-react-fallback-reveal 0.4s ease-in 5s forwards; }
+				#cn-react-root .cn-react-fallback__help-list { margin: 8px 0 0 18px; padding: 0; list-style: disc; }
+				#cn-react-root .cn-react-fallback__help-list li { margin: 4px 0; }
+				@keyframes cn-react-fallback-reveal { from { opacity: 0; transform: translateY( -4px ); } to { opacity: 1; transform: translateY( 0 ); } }
+			</style>
+			<div id="cn-react-root">
+				<div class="cn-react-fallback" role="status" aria-live="polite">
+					<p class="cn-react-fallback__heading">' . esc_html__( 'Loading Compliance dashboard…', 'cookie-notice' ) . '</p>
+					<p class="cn-react-fallback__body">' . esc_html__( 'This usually takes a second. If the page stays on this message, the admin UI failed to load.', 'cookie-notice' ) . '</p>
+					<noscript>
+						<p class="cn-react-fallback__body"><strong>' . esc_html__( 'JavaScript is required for this admin page.', 'cookie-notice' ) . '</strong> ' . esc_html__( 'Please enable JavaScript in your browser settings.', 'cookie-notice' ) . '</p>
+					</noscript>
+					<div class="cn-react-fallback__help">
+						<strong>' . esc_html__( 'Stuck on this screen?', 'cookie-notice' ) . '</strong>
+						<ul class="cn-react-fallback__help-list">
+							<li>' . esc_html__( 'A caching/optimizer plugin or CDN (Cloudflare Rocket Loader, WP Rocket, LiteSpeed, etc.) may be rewriting admin scripts.', 'cookie-notice' ) . '</li>
+							<li>' . esc_html__( 'A browser extension (ad-blocker, privacy tool) may be blocking the script.', 'cookie-notice' ) . '</li>
+							<li>' . esc_html__( 'Try opening this page in a private/incognito window with extensions disabled.', 'cookie-notice' ) . '</li>
+						</ul>
+						<p class="cn-react-fallback__body" style="margin-top:12px;">' . sprintf(
+							/* translators: %s: link to the Hu-manity support dashboard */
+							esc_html__( 'If the issue persists, %s.', 'cookie-notice' ),
+							'<a href="' . $support_url . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'open the Hu-manity dashboard to contact support', 'cookie-notice' ) . '</a>'
+						) . '</p>
+					</div>
+				</div>
+			</div>';
+		}
 
 		// get current tab
 		$tab = $this->current_tab;
 
-		echo '
-			<h2 class="nav-tab-wrapper cn-nav-tab-wrapper">';
-
-		foreach ( $this->tabs as $key => $label ) {
-			if ( $cn->is_network_admin() )
-				$tab_url = network_admin_url( 'admin.php?page=cookie-notice&tab=' . $key );
-			else
-				$tab_url = admin_url( 'admin.php?page=cookie-notice&tab=' . $key );
+		if ( $ui_mode === 'legacy' ) {
+			$base_url = $cn->is_network_admin()
+				? network_admin_url( 'admin.php?page=cookie-notice' )
+				: admin_url( 'admin.php?page=cookie-notice' );
 
 			echo '
-			<a class="nav-tab' . ( $tab === $key ? ' nav-tab-active' : '' ) . '" href="' . esc_url( $tab_url ) . '">' . esc_html( $label ) . '</a>';
-		}
+			<h2 class="nav-tab-wrapper cn-nav-tab-wrapper">';
 
-		echo '
+			foreach ( $this->tabs as $key => $label ) {
+				$tab_url = add_query_arg( [ 'tab' => $key ], $base_url );
+
+				echo '
+			<a class="nav-tab' . ( $tab === $key ? ' nav-tab-active' : '' ) . '" href="' . esc_url( $tab_url ) . '">' . esc_html( $label ) . '</a>';
+			}
+
+			echo '
 			</h2>
 			<div class="cookie-notice-settings">';
 
@@ -474,11 +528,11 @@ class Cookie_Notice_Settings {
 								<img id="cn-consent-logs-bg" src="' . esc_url( COOKIE_NOTICE_URL ) . '/img/privacy-consent-logs.png" alt="Privacy Consent Logs" />
 								<div id="cn-consent-logs-upgrade">
 									<div id="cn-consent-logs-modal">
-										<h2>' . esc_html__( 'Handle Privacy Consent Logs with Cookie Compliance', 'cookie-notice' ) . '</h2>
+										<h2>' . esc_html__( 'Handle Privacy Consent Logs with Compliance by Hu-manity.co', 'cookie-notice' ) . '</h2>
 										<p>' . esc_html__( 'Integrate your website forms with Privacy Consent.', 'cookie-notice' ) . '</p>
 										<p>' . esc_html__( 'Collect and export proof of consent of your users.', 'cookie-notice' ) . '</p>
 										<p>' . esc_html__( 'Gain confidence that you are processing personal data legally.', 'cookie-notice' ) . '</p>
-										<p><a href="' . esc_url( $upgrade_url ) . '" class="button button-primary button-hero cn-button">' . esc_html__( 'Upgrade to Cookie Compliance', 'cookie-notice' ) . '</a></p>
+										<p><a href="' . esc_url( $upgrade_url ) . '" class="button button-primary button-hero cn-button">' . esc_html__( 'Try Compliance by Hu-manity.co free', 'cookie-notice' ) . '</a></p>
 									</div>
 								</div>
 							</div>';
@@ -524,7 +578,7 @@ class Cookie_Notice_Settings {
 										<p>' . esc_html__( 'Automatically collect each cookie consent log.', 'cookie-notice' ) . '</p>
 										<p>' . esc_html__( 'Securely store and manage visitor consents.', 'cookie-notice' ) . '</p>
 										<p>' . esc_html__( 'Monitor consent activity directly in your WordPress dashboard.', 'cookie-notice' ) . '</p>
-										<p><a href="' . esc_url( $upgrade_url ) . '" class="button button-primary button-hero cn-button">' . esc_html__( 'Upgrade to Cookie Compliance', 'cookie-notice' ) . '</a></p>
+										<p><a href="' . esc_url( $upgrade_url ) . '" class="button button-primary button-hero cn-button">' . esc_html__( 'Try Compliance by Hu-manity.co free', 'cookie-notice' ) . '</a></p>
 									</div>
 								</div>
 							</div>';
@@ -541,7 +595,10 @@ class Cookie_Notice_Settings {
 			$this->display_options_page( $tab );
 
 		echo '
-			</div>
+			</div>';
+		} // end if ui_mode === 'legacy'
+
+		echo '
 			<div class="clear"></div>
 		</div>';
 	}
@@ -651,7 +708,7 @@ class Cookie_Notice_Settings {
 			echo '
 						<div class="cn-pricing-info">
 							<div class="cn-pricing-head">
-								<p>' . esc_html__( 'Your Cookie Compliance plan:', 'cookie-notice' ) . '</p>
+								<p>' . esc_html__( 'Your Compliance by Hu-manity.co plan:', 'cookie-notice' ) . '</p>
 								<h2>' . esc_html( $subscription === 'pro' ? __( 'Professional', 'cookie-notice' ) : __( 'Basic', 'cookie-notice' ) ) . '</h2>
 							</div>
 							<div class="cn-pricing-body">
@@ -679,11 +736,11 @@ class Cookie_Notice_Settings {
 		} else {
 				echo '
 						<h1><b>' . esc_html__( 'Protect your business', 'cookie-notice' ) . '</b></h1>
-						<h2>' . esc_html__( 'with Cookie Compliance&trade;', 'cookie-notice' ) . '</h2>
+						<h2>' . esc_html__( 'with Compliance by Hu-manity.co', 'cookie-notice' ) . '</h2>
 						<div class="cn-lead">
 							<p>' . esc_html__( 'Make your website compatible with the latest cookie and privacy requirements. Comply with GDPR, CCPA and other data privacy laws effectively.', 'cookie-notice' ) . '</p>
 						</div>
-						<img alt="' . esc_html__( 'Cookie Compliance dashboard', 'cookie-notice' ) . '" src="' . esc_url( COOKIE_NOTICE_URL ) . '/img/screen-compliance.png">
+						<img alt="' . esc_html__( 'Compliance by Hu-manity.co dashboard', 'cookie-notice' ) . '" src="' . esc_url( COOKIE_NOTICE_URL ) . '/img/screen-compliance.png">
 						<p><a href="https://cookie-compliance.co/?utm_campaign=learn+more&utm_source=wordpress&utm_medium=banner" class="button button-secondary button-hero cn-button" target="_blank">' . esc_html__( 'Learn more', 'cookie-notice' ) . '</a></p>';
 		}
 
@@ -698,23 +755,23 @@ class Cookie_Notice_Settings {
 				<div class="cn-toggle-container">
 					<label for="cn-faq-1" class="cn-toggle-item">
 						<input id="cn-faq-1" type="checkbox" />
-						<span class="cn-toggle-heading">' . esc_html__( 'Does the Cookie Notice make my site fully compliant with GDPR/CCPA and other privacy regulations?', 'cookie-notice' ) . '</span>
-						<span class="cn-toggle-body">' . esc_html__( 'It is not possible to provide the required technical compliance features using only a WordPress plugin. Features like consent record storage, purpose categories and script blocking that bring your site into full compliance with privacy regulations are only available through the Cookie Compliance integration.', 'cookie-notice' ) . '
+						<span class="cn-toggle-heading">' . esc_html__( 'Does Compliance by Hu-manity.co make my site fully compliant with GDPR/CCPA and other privacy regulations?', 'cookie-notice' ) . '</span>
+						<span class="cn-toggle-body">' . esc_html__( 'It is not possible to provide the required technical compliance features using only a WordPress plugin. Features like consent record storage, purpose categories and script blocking that bring your site into full compliance with privacy regulations are only available through the Compliance by Hu-manity.co integration.', 'cookie-notice' ) . '
 					</label>
 					<label for="cn-faq-2" class="cn-toggle-item">
 						<input id="cn-faq-2" type="checkbox" />
-						<span class="cn-toggle-heading">' . esc_html__( 'Does the Cookie Compliance integration make my site fully compliant with GDPR/CCPA?', 'cookie-notice' ) . '</span>
+						<span class="cn-toggle-heading">' . esc_html__( 'Does Compliance by Hu-manity.co make my site fully compliant with GDPR/CCPA?', 'cookie-notice' ) . '</span>
 						<span class="cn-toggle-body">' . esc_html__( 'Yes! The plugin + web application version includes technical compliance features to meet requirements for over 100 countries and legal jurisdictions.', 'cookie-notice' ) . '</span>
 					</label>
 					<label for="cn-faq-3" class="cn-toggle-item">
 						<input id="cn-faq-3" type="checkbox" />
-						<span class="cn-toggle-heading">' . esc_html__( 'Is Cookie Compliance free?', 'cookie-notice' ) . '</span>
-						<span class="cn-toggle-body">' . esc_html__( 'Yes, but with limits. Cookie Compliance includes both free and paid plans to choose from depending on your needs and your website monthly traffic.', 'cookie-notice' ) . '</span>
+						<span class="cn-toggle-heading">' . esc_html__( 'Is Compliance by Hu-manity.co free?', 'cookie-notice' ) . '</span>
+						<span class="cn-toggle-body">' . esc_html__( 'Yes, but with limits. Compliance by Hu-manity.co includes both free and paid plans to choose from depending on your needs and your website monthly traffic.', 'cookie-notice' ) . '</span>
 					</label>
 					<label for="cn-faq-4" class="cn-toggle-item">
 						<input id="cn-faq-4" type="checkbox" />
 						<span class="cn-toggle-heading">' . esc_html__( 'Where can I find pricing options?', 'cookie-notice' ) . '</span>
-						<span class="cn-toggle-body">' . esc_html__( 'You can learn more about the features and pricing by visiting the Cookie Compliance website here:', 'cookie-notice' ) . ' <a href="https://cookie-compliance.co/?utm_campaign=pricing+options&utm_source=wordpress&utm_medium=textlink" target="_blank">https://cookie-compliance.co</a></span>
+						<span class="cn-toggle-body">' . esc_html__( 'You can learn more about the features and pricing by visiting the Compliance by Hu-manity.co website here:', 'cookie-notice' ) . ' <a href="https://cookie-compliance.co/?utm_campaign=pricing+options&utm_source=wordpress&utm_medium=textlink" target="_blank">https://cookie-compliance.co</a></span>
 					</label>
 				</div>
 			</div>';
@@ -806,6 +863,7 @@ class Cookie_Notice_Settings {
 			// configuration section
 			add_settings_section( 'cookie_notice_configuration', esc_html__( 'Cookie Consent Settings', 'cookie-notice' ), '', 'cookie_notice_options', [ 'before_section' => '<div class="%s">', 'after_section' => '</div>', 'section_class' => 'cn-section-container misc-section' ] );
 			add_settings_field( 'cn_app_blocking', esc_html__( 'Autoblocking', 'cookie-notice' ), [ $this, 'cn_app_blocking' ], 'cookie_notice_options', 'cookie_notice_configuration' );
+			add_settings_field( 'cn_excluded_handles', esc_html__( 'Excluded Script Handles', 'cookie-notice' ), [ $this, 'cn_excluded_handles' ], 'cookie_notice_options', 'cookie_notice_configuration' );
 			add_settings_field( 'cn_sync_config', esc_html__( 'Pull Configuration', 'cookie-notice' ), [ $this, 'cn_sync_config' ], 'cookie_notice_options', 'cookie_notice_configuration' );
 			add_settings_field( 'cn_refuse_code', esc_html__( 'Scripts', 'cookie-notice' ), [ $this, 'cn_refuse_code' ], 'cookie_notice_options', 'cookie_notice_configuration' );
 			add_settings_field( 'cn_caching_compatibility', esc_html__( 'Caching Compatibility', 'cookie-notice' ), [ $this, 'cn_caching_compatibility' ], 'cookie_notice_options', 'cookie_notice_configuration' );
@@ -824,13 +882,15 @@ class Cookie_Notice_Settings {
 			add_settings_field( 'cn_app_key', esc_html__( 'App Key', 'cookie-notice' ), [ $this, 'cn_app_key' ], 'cookie_notice_options', 'cookie_notice_compliance' );
 
 			// configuration section
-			add_settings_section( 'cookie_notice_configuration', esc_html__( 'Cookie Notice Settings', 'cookie-notice' ), '', 'cookie_notice_options', [ 'before_section' => '<div class="%s">', 'after_section' => '</div>', 'section_class' => 'cn-section-container notice-section' ] );
+			add_settings_section( 'cookie_notice_configuration', esc_html__( 'Notice Settings', 'cookie-notice' ), '', 'cookie_notice_options', [ 'before_section' => '<div class="%s">', 'after_section' => '</div>', 'section_class' => 'cn-section-container notice-section' ] );
 			add_settings_field( 'cn_message_text', esc_html__( 'Message', 'cookie-notice' ), [ $this, 'cn_message_text' ], 'cookie_notice_options', 'cookie_notice_configuration' );
 			add_settings_field( 'cn_accept_text', esc_html__( 'Button text', 'cookie-notice' ), [ $this, 'cn_accept_text' ], 'cookie_notice_options', 'cookie_notice_configuration' );
 			add_settings_field( 'cn_see_more', esc_html__( 'Privacy policy', 'cookie-notice' ), [ $this, 'cn_see_more' ], 'cookie_notice_options', 'cookie_notice_configuration' );
 			add_settings_field( 'cn_refuse_opt', esc_html__( 'Refuse consent', 'cookie-notice' ), [ $this, 'cn_refuse_opt' ], 'cookie_notice_options', 'cookie_notice_configuration' );
 			add_settings_field( 'cn_revoke_opt', esc_html__( 'Revoke consent', 'cookie-notice' ), [ $this, 'cn_revoke_opt' ], 'cookie_notice_options', 'cookie_notice_configuration' );
+			add_settings_field( 'cn_app_blocking', esc_html__( 'Autoblocking', 'cookie-notice' ), [ $this, 'cn_app_blocking' ], 'cookie_notice_options', 'cookie_notice_configuration' );
 			add_settings_field( 'cn_refuse_code', esc_html__( 'Script blocking', 'cookie-notice' ), [ $this, 'cn_refuse_code' ], 'cookie_notice_options', 'cookie_notice_configuration' );
+			add_settings_field( 'cn_pro_features_locked', esc_html__( 'Pro Features', 'cookie-notice' ), [ $this, 'cn_pro_features_locked' ], 'cookie_notice_options', 'cookie_notice_configuration' );
 			add_settings_field( 'cn_redirection', esc_html__( 'Reloading', 'cookie-notice' ), [ $this, 'cn_redirection' ], 'cookie_notice_options', 'cookie_notice_configuration' );
 			add_settings_field( 'cn_on_scroll', esc_html__( 'On scroll', 'cookie-notice' ), [ $this, 'cn_on_scroll' ], 'cookie_notice_options', 'cookie_notice_configuration' );
 			add_settings_field( 'cn_on_click', esc_html__( 'On click', 'cookie-notice' ), [ $this, 'cn_on_click' ], 'cookie_notice_options', 'cookie_notice_configuration' );
@@ -841,7 +901,7 @@ class Cookie_Notice_Settings {
 			add_settings_field( 'cn_deactivation_delete', esc_html__( 'Deactivation', 'cookie-notice' ), [ $this, 'cn_deactivation_delete' ], 'cookie_notice_options', 'cookie_notice_configuration' );
 
 			// design section
-			add_settings_section( 'cookie_notice_design', esc_html__( 'Cookie Notice Design', 'cookie-notice' ), '', 'cookie_notice_options', [ 'before_section' => '<div class="%s">', 'after_section' => '</div>', 'section_class' => 'cn-section-container design-section' ] );
+			add_settings_section( 'cookie_notice_design', esc_html__( 'Notice Design', 'cookie-notice' ), '', 'cookie_notice_options', [ 'before_section' => '<div class="%s">', 'after_section' => '</div>', 'section_class' => 'cn-section-container design-section' ] );
 			add_settings_field( 'cn_position', esc_html__( 'Position', 'cookie-notice' ), [ $this, 'cn_position' ], 'cookie_notice_options', 'cookie_notice_design' );
 			add_settings_field( 'cn_hide_effect', esc_html__( 'Animation', 'cookie-notice' ), [ $this, 'cn_hide_effect' ], 'cookie_notice_options', 'cookie_notice_design' );
 			add_settings_field( 'cn_colors', esc_html__( 'Colors', 'cookie-notice' ), [ $this, 'cn_colors' ], 'cookie_notice_options', 'cookie_notice_design' );
@@ -944,28 +1004,28 @@ class Cookie_Notice_Settings {
 			case 'active':
 				echo '
 				<div id="cn_app_status">
-					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Cookie Notice', 'cookie-notice' ) . '</span>: <span class="cn-status cn-active"><span class="cn-icon"></span> ' . esc_html__( 'Active', 'cookie-notice' ) . '</span></div>
+					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Consent Banner', 'cookie-notice' ) . '</span>: <span class="cn-status cn-active"><span class="cn-icon"></span> ' . esc_html__( 'Active', 'cookie-notice' ) . '</span></div>
 					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Autoblocking', 'cookie-notice' ) . '</span>: <span class="cn-status ' . ( $threshold_exceeded ? 'cn-pending' : 'cn-active' ) . '"><span class="cn-icon"></span> ' . esc_html__( 'Active', 'cookie-notice' ) . '</span></div>
 					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Cookie Categories', 'cookie-notice' ) . '</span>: <span class="cn-status cn-active"><span class="cn-icon"></span> ' . esc_html__( 'Active', 'cookie-notice' ) . '</span></div>
 					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Cookie Consent Storage', 'cookie-notice' ) . '</span>: <span class="cn-status cn-active"><span class="cn-icon"></span> ' . esc_html__( 'Active', 'cookie-notice' ) . '</span></div>
 				</div>
 				<div id="cn_app_actions">
 					<a href="' . esc_url( $cn->get_url( 'host', '?utm_campaign=configure&utm_source=wordpress&utm_medium=button#/dashboard' ) ) . '" class="button button-primary button-hero cn-button" target="_blank">' . esc_html__( 'Log in & Configure', 'cookie-notice' ) . '</a>
-					<p class="description">' . esc_html__( 'Log in to the Cookie Compliance&trade; dashboard to explore, configure and manage its functionalities.', 'cookie-notice' ) . '</p>
+					<p class="description">' . esc_html__( 'Log in to the Compliance by Hu-manity.co dashboard to explore, configure and manage its functionalities.', 'cookie-notice' ) . '</p>
 				</div>';
 				break;
 
 			case 'pending':
 				echo '
 				<div id="cn_app_status">
-					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Cookie Notice', 'cookie-notice' ) . '</span>: <span class="cn-status cn-active"><span class="cn-icon"></span> ' . esc_html__( 'Active', 'cookie-notice' ) . '</span></div>
+					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Consent Banner', 'cookie-notice' ) . '</span>: <span class="cn-status cn-active"><span class="cn-icon"></span> ' . esc_html__( 'Active', 'cookie-notice' ) . '</span></div>
 					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Autoblocking', 'cookie-notice' ) . '</span>: <span class="cn-status cn-pending"><span class="cn-icon"></span> ' . esc_html__( 'Pending', 'cookie-notice' ) . '</span></div>
 					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Cookie Categories', 'cookie-notice' ) . '</span>: <span class="cn-status cn-pending"><span class="cn-icon"></span> ' . esc_html__( 'Pending', 'cookie-notice' ) . '</span></div>
 					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Cookie Consent Storage', 'cookie-notice' ) . '</span>: <span class="cn-status cn-pending"><span class="cn-icon"></span> ' . esc_html__( 'Pending', 'cookie-notice' ) . '</span></div>
 				</div>
 				<div id="cn_app_actions">
 					<a href="' . esc_url( $cn->get_url( 'host', '?utm_campaign=configure&utm_source=wordpress&utm_medium=button#/dashboard' ) ) . '" class="button button-primary button-hero cn-button" target="_blank">' . esc_html__( 'Log in & Configure', 'cookie-notice' ) . '</a>
-					<p class="description">' . esc_html__( 'Log in to the Cookie Compliance&trade; web application and complete the setup process.', 'cookie-notice' ) . '</p>
+					<p class="description">' . esc_html__( 'Log in to the Compliance by Hu-manity.co web application and complete the setup process.', 'cookie-notice' ) . '</p>
 				</div>';
 				break;
 
@@ -977,14 +1037,14 @@ class Cookie_Notice_Settings {
 
 				echo '
 				<div id="cn_app_status">
-					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Cookie Notice', 'cookie-notice' ) . '</span>: <span class="cn-status cn-active"><span class="cn-icon"></span> ' . esc_html__( 'Active', 'cookie-notice' ) . '</span></div>
+					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Consent Banner', 'cookie-notice' ) . '</span>: <span class="cn-status cn-active"><span class="cn-icon"></span> ' . esc_html__( 'Active', 'cookie-notice' ) . '</span></div>
 					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Autoblocking', 'cookie-notice' ) . '</span>: <span class="cn-status cn-inactive"><span class="cn-icon"></span> ' . esc_html__( 'Inactive', 'cookie-notice' ) . '</span></div>
 					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Cookie Categories', 'cookie-notice' ) . '</span>: <span class="cn-status cn-inactive"><span class="cn-icon"></span> ' . esc_html__( 'Inactive', 'cookie-notice' ) . '</span></div>
 					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Cookie Consent Storage', 'cookie-notice' ) . '</span>: <span class="cn-status cn-inactive"><span class="cn-icon"></span> ' . esc_html__( 'Inactive', 'cookie-notice' ) . '</span></div>
 				</div>
 				<div id="cn_app_actions">
-					<a href="' . esc_url( $url ) . '" class="button button-primary button-hero cn-button cn-run-welcome">' . esc_html__( 'Add Compliance features', 'cookie-notice' ) . '</a>
-					<p class="description">' . sprintf( esc_html__( 'Sign up to %s and add GDPR, CCPA and other international data privacy laws compliance features.', 'cookie-notice' ), '<a href="https://cookie-compliance.co/?utm_campaign=sign-up&utm_source=wordpress&utm_medium=textlink" target="_blank">Cookie Compliance&trade;</a>' ) . '</p>
+					<a href="' . esc_url( $url ) . '" class="button button-primary button-hero cn-button cn-run-welcome">' . esc_html__( 'Try Compliance by Hu-manity.co free', 'cookie-notice' ) . '</a>
+					<p class="description">' . sprintf( esc_html__( 'Sign up to %s and add GDPR, CCPA and other international data privacy laws compliance features.', 'cookie-notice' ), '<a href="https://cookie-compliance.co/?utm_campaign=sign-up&utm_source=wordpress&utm_medium=textlink" target="_blank">Compliance by Hu-manity.co</a>' ) . '</p>
 				</div>';
 				break;
 		}
@@ -1016,7 +1076,7 @@ class Cookie_Notice_Settings {
 				</div>
 				<div id="cn_app_actions">
 					<a href="' . esc_url( $cn->get_url( 'host', '?utm_campaign=configure&utm_source=wordpress&utm_medium=button#/dashboard' ) ) . '" class="button button-primary button-hero cn-button" target="_blank">' . esc_html__( 'Log in & Configure', 'cookie-notice' ) . '</a>
-					<p class="description">' . esc_html__( 'Log in to the Cookie Compliance&trade; dashboard to explore, configure and manage its functionalities.', 'cookie-notice' ) . '</p>
+					<p class="description">' . esc_html__( 'Log in to the Compliance by Hu-manity.co dashboard to explore, configure and manage its functionalities.', 'cookie-notice' ) . '</p>
 				</div>';
 				break;
 
@@ -1028,7 +1088,7 @@ class Cookie_Notice_Settings {
 				</div>
 				<div id="cn_app_actions">
 					<a href="' . esc_url( $cn->get_url( 'host', '?utm_campaign=configure&utm_source=wordpress&utm_medium=button#/dashboard' ) ) . '" class="button button-primary button-hero cn-button" target="_blank">' . esc_html__( 'Log in & Configure', 'cookie-notice' ) . '</a>
-					<p class="description">' . esc_html__( 'Log in to the Cookie Compliance&trade; web application and complete the setup process.', 'cookie-notice' ) . '</p>
+					<p class="description">' . esc_html__( 'Log in to the Compliance by Hu-manity.co web application and complete the setup process.', 'cookie-notice' ) . '</p>
 				</div>';
 				break;
 
@@ -1039,8 +1099,8 @@ class Cookie_Notice_Settings {
 					<div class="cn_compliance_status"><span class="cn-status-label">' . esc_html__( 'Privacy Consent Logs', 'cookie-notice' ) . '</span>: <span class="cn-status cn-inactive"><span class="cn-icon"></span> ' . esc_html__( 'Inactive', 'cookie-notice' ) . '</span></div>
 				</div>
 				<div id="cn_app_actions">
-					<a href="' . esc_url( $url ) . '" class="button button-primary button-hero cn-button cn-run-welcome">' . esc_html__( 'Add Compliance features', 'cookie-notice' ) . '</a>
-					<p class="description">' . sprintf( esc_html__( 'Sign up to %s and enable Privacy Consent support.', 'cookie-notice' ), '<a href="https://cookie-compliance.co/?utm_campaign=sign-up&utm_source=wordpress&utm_medium=textlink" target="_blank">Cookie Compliance&trade;</a>' ) . '</p>
+					<a href="' . esc_url( $url ) . '" class="button button-primary button-hero cn-button cn-run-welcome">' . esc_html__( 'Try Compliance by Hu-manity.co free', 'cookie-notice' ) . '</a>
+					<p class="description">' . sprintf( esc_html__( 'Sign up to %s and enable Privacy Consent support.', 'cookie-notice' ), '<a href="https://cookie-compliance.co/?utm_campaign=sign-up&utm_source=wordpress&utm_medium=textlink" target="_blank">Compliance by Hu-manity.co</a>' ) . '</p>
 				</div>';
 		}
 	}
@@ -1054,7 +1114,7 @@ class Cookie_Notice_Settings {
 		echo '
 		<div id="cn_app_id">
 			<input type="text" class="regular-text" name="cookie_notice_options[app_id]" value="' . esc_attr( Cookie_Notice()->options['general']['app_id'] ) . '" />
-			<p class="description">' . esc_html__( 'Enter your Cookie Compliance&trade; application ID.', 'cookie-notice' ) . '</p>
+			<p class="description">' . esc_html__( 'Enter your Compliance by Hu-manity.co application ID.', 'cookie-notice' ) . '</p>
 		</div>';
 	}
 
@@ -1067,7 +1127,7 @@ class Cookie_Notice_Settings {
 		echo '
 		<div id="cn_app_key">
 			<input type="password" class="regular-text" name="cookie_notice_options[app_key]" value="' . esc_attr( Cookie_Notice()->options['general']['app_key'] ) . '" />
-			<p class="description">' . esc_html__( 'Enter your Cookie Compliance&trade; application secret key.', 'cookie-notice' ) . '</p>
+			<p class="description">' . esc_html__( 'Enter your Compliance by Hu-manity.co application secret key.', 'cookie-notice' ) . '</p>
 		</div>';
 	}
 
@@ -1084,9 +1144,32 @@ class Cookie_Notice_Settings {
 
 		echo '
 		<div id="cn_app_blocking"' . ( $threshold_exceeded ? ' class="cn-option-disabled"' : '' ) . '>
-			<label><input type="checkbox" name="cookie_notice_options[app_blocking]" value="1" ' . checked( true, $cn->options['general']['app_blocking'], false ) . ' ' . disabled( $threshold_exceeded, true, false ) . ' />' . esc_html__( 'Enable to automatically block 3rd party scripts before user consent is set.', 'cookie-notice' ) . '</label>' .
-			( $threshold_exceeded ? '<p class="description"><span class="cn-warning">*</span> ' . esc_html__( 'This option has been temporarily disabled because your website has reached the usage limit for the Cookie Compliance Basic plan. It will become available again when the current visits cycle resets or you upgrade your website to a Professional plan.', 'cookie-notice' ) . '</p>' : '' ) .
+			<label>' .
+			( ! $threshold_exceeded ? '<input type="hidden" name="cookie_notice_options[app_blocking_rendered]" value="1" />' : '' ) .
+			'<input type="checkbox" name="cookie_notice_options[app_blocking]" value="1" ' . checked( true, $cn->options['general']['app_blocking'], false ) . ' ' . disabled( $threshold_exceeded, true, false ) . ' />' . esc_html__( 'Enable to automatically block 3rd party scripts before user consent is set.', 'cookie-notice' ) . '</label>' .
+			( $threshold_exceeded ? '<p class="description"><span class="cn-warning">*</span> ' . esc_html__( 'This option has been temporarily disabled because your website has reached the usage limit for the Compliance by Hu-manity.co Free Plan. It will become available again when the current visits cycle resets or you upgrade your website to a Professional plan.', 'cookie-notice' ) . '</p>' : '' ) .
 		'</div>';
+	}
+
+	/**
+	 * Excluded script handles textarea.
+	 *
+	 * @return void
+	 */
+	public function cn_excluded_handles() {
+		$cn = Cookie_Notice();
+
+		$value = ! empty( $cn->options['general']['excluded_handles'] )
+			? implode( "\n", $cn->options['general']['excluded_handles'] )
+			: '';
+
+		echo '
+		<div id="cn_excluded_handles">
+			<textarea name="cookie_notice_options[excluded_handles]" class="large-text" rows="4" cols="50" placeholder="elementor-frontend&#10;my-analytics-init">'
+				. esc_textarea( $value ) .
+			'</textarea>
+			<p class="description">' . esc_html__( 'Enter WordPress script handles to exclude from autoblocking, one per line. These scripts will be marked as Essential (Category 1) so they are never blocked.', 'cookie-notice' ) . '</p>
+		</div>';
 	}
 
 	/**
@@ -1152,7 +1235,7 @@ class Cookie_Notice_Settings {
 		echo '
 		<fieldset id="cn_conditional_display">
 			<label><input id="cn_conditional_display_opt" type="checkbox" name="cookie_notice_options[conditional_active]" value="1" ' . checked( true, $cn->options['general']['conditional_active'], false ) . ' />' . esc_html__( 'Enable conditional display of the banner.', 'cookie-notice' ) . '</label>
-			<div id="cn_conditional_display_opt_container"' . ( $cn->options['general']['conditional_active'] === false ? ' style="display: none"' : '' ) . ' class="cn_fieldset_content">
+			<div id="cn_conditional_display_opt_container"' . ( empty( $cn->options['general']['conditional_active'] ) ? ' style="display: none"' : '' ) . ' class="cn_fieldset_content">
 				<div>
 					<select name="cookie_notice_options[conditional_display]">';
 
@@ -1301,7 +1384,7 @@ class Cookie_Notice_Settings {
 		echo '
 		<fieldset>
 			<label><input id="cn_refuse_opt" type="checkbox" name="cookie_notice_options[refuse_opt]" value="1" ' . checked( true, $cn->options['general']['refuse_opt'], false ) . ' />' . esc_html__( 'Enable to give to the user the possibility to refuse third party non functional cookies.', 'cookie-notice' ) . '</label>
-			<div id="cn_refuse_opt_container"' . ( $cn->options['general']['refuse_opt'] === false ? ' style="display: none"' : '' ) . ' class="cn_fieldset_content">
+			<div id="cn_refuse_opt_container"' . ( empty( $cn->options['general']['refuse_opt'] ) ? ' style="display: none"' : '' ) . ' class="cn_fieldset_content">
 				<div id="cn_refuse_text">
 					<input type="text" class="regular-text" name="cookie_notice_options[refuse_text]" value="' . esc_attr( $cn->options['general']['refuse_text'] ) . '" />
 					<p class="description">' . esc_html__( 'The text of the button to refuse the consent.', 'cookie-notice' ) . '</p>
@@ -1338,6 +1421,38 @@ class Cookie_Notice_Settings {
 				</div>
 			</div>
 			<p class="description">' . esc_html__( 'Enter non functional cookies Javascript code here (for e.g. Google Analitycs) to be used after the visitor consent is given.', 'cookie-notice' ) . '</p>
+		</div>';
+	}
+
+	/**
+	 * Pro features locked callout (inactive/BASIC tier).
+	 * Shows Cookie Categories and Analytics as disabled with upgrade CTA.
+	 *
+	 * @return void
+	 */
+	public function cn_pro_features_locked() {
+		// get main instance
+		$cn = Cookie_Notice();
+
+		$base_url = $cn->is_network_admin()
+			? network_admin_url( 'admin.php?page=cookie-notice' )
+			: admin_url( 'admin.php?page=cookie-notice' );
+
+		$welcome_url = ( $cn->options['general']['ui_mode'] === 'react' )
+			? add_query_arg( [ 'cn_react_welcome' => '1' ], $base_url )
+			: add_query_arg( [ 'welcome' => '1' ], $base_url );
+
+		echo '
+		<div id="cn_pro_features_locked">
+			<div class="cn-pro-feature-item">
+				<label>' . esc_html__( 'Cookie Categories', 'cookie-notice' ) . ' <span class="cn-pro-lock">' . esc_html__( 'Pro', 'cookie-notice' ) . '</span></label>
+				<p class="description">' . esc_html__( 'Group cookies by purpose and let users consent selectively.', 'cookie-notice' ) . '</p>
+			</div>
+			<div class="cn-pro-feature-item">
+				<label>' . esc_html__( 'Analytics &amp; Consent Logs', 'cookie-notice' ) . ' <span class="cn-pro-lock">' . esc_html__( 'Pro', 'cookie-notice' ) . '</span></label>
+				<p class="description">' . esc_html__( 'Track consent rates, view logs, and generate compliance reports.', 'cookie-notice' ) . '</p>
+			</div>
+			<p><a href="' . esc_url( $welcome_url ) . '" class="button button-secondary cn-pro-upgrade-btn">' . esc_html__( 'Connect your site to unlock &#8594;', 'cookie-notice' ) . '</a></p>
 		</div>';
 	}
 
@@ -1410,7 +1525,7 @@ class Cookie_Notice_Settings {
 		echo '
 		<fieldset>
 			<label><input id="cn_see_more" type="checkbox" name="cookie_notice_options[see_more]" value="1" ' . checked( true, $cn->options['general']['see_more'], false ) . ' />' . esc_html__( 'Enable privacy policy link.', 'cookie-notice' ) . '</label>
-			<div id="cn_see_more_opt"' . ( $cn->options['general']['see_more'] === false ? ' style="display: none"' : '' ) . ' class="cn_fieldset_content">
+			<div id="cn_see_more_opt"' . ( empty( $cn->options['general']['see_more'] ) ? ' style="display: none"' : '' ) . ' class="cn_fieldset_content">
 				<input type="text" class="regular-text" name="cookie_notice_options[see_more_opt][text]" value="' . esc_attr( $cn->options['general']['see_more_opt']['text'] ) . '" />
 				<p class="description">' . esc_html__( 'The text of the privacy policy button.', 'cookie-notice' ) . '</p>
 				<div id="cn_see_more_opt_custom_link">';
@@ -1586,7 +1701,7 @@ class Cookie_Notice_Settings {
 		echo '
 		<fieldset>
 			<label><input id="cn_on_scroll" type="checkbox" name="cookie_notice_options[on_scroll]" value="1" ' . checked( true, $cn->options['general']['on_scroll'], false ) . ' />' . esc_html__( 'Enable to accept the notice when user scrolls.', 'cookie-notice' ) . '</label>
-			<div id="cn_on_scroll_offset"' . ( $cn->options['general']['on_scroll'] === false || $cn->options['general']['on_scroll'] == false ? ' style="display: none"' : '' ) . ' class="cn_fieldset_content">
+			<div id="cn_on_scroll_offset"' . ( empty( $cn->options['general']['on_scroll'] ) ? ' style="display: none"' : '' ) . ' class="cn_fieldset_content">
 				<input type="number" min="0" class="small-text" name="cookie_notice_options[on_scroll_offset]" value="' . esc_attr( $cn->options['general']['on_scroll_offset'] ) . '" /> <span>px</span>
 				<p class="description">' . esc_html__( 'Number of pixels user has to scroll to accept the notice and make it disappear.', 'cookie-notice' ) . '</p>
 			</div>
@@ -1803,6 +1918,59 @@ class Cookie_Notice_Settings {
 	}
 
 	/**
+	 * Refresh the stored csp_notice flag from a live .htaccess re-check, gated
+	 * by a transient so the file is read at most once per hour per scope.
+	 *
+	 * Why: the React admin save path does not invoke check_htaccess(), so the
+	 * stored flag goes stale once a customer fixes their .htaccess. Decoupling
+	 * the check from save side effects — render-time covers passive refresh;
+	 * on-demand callers (purge cache, sync config) pass force=true.
+	 *
+	 * @param bool $force Bypass the transient cache.
+	 * @return bool       Current invalid-CSP state (true = warning should show).
+	 */
+	public function refresh_csp_notice( $force = false ) {
+		$cn = Cookie_Notice();
+
+		if ( $cn->get_status() !== 'active' ) {
+			if ( ! empty( $cn->options['general']['csp_notice'] ) ) {
+				$cn->options['general']['csp_notice'] = false;
+
+				if ( $cn->is_network_admin() )
+					update_site_option( 'cookie_notice_options', $cn->options['general'] );
+				else
+					update_option( 'cookie_notice_options', $cn->options['general'] );
+			}
+
+			return false;
+		}
+
+		$network = $cn->is_network_admin();
+		$cached  = $network ? get_site_transient( 'cookie_notice_csp_check' ) : get_transient( 'cookie_notice_csp_check' );
+
+		if ( ! $force && $cached !== false )
+			return $cached === '1';
+
+		$invalid = $this->check_htaccess();
+
+		if ( $network )
+			set_site_transient( 'cookie_notice_csp_check', $invalid ? '1' : '0', HOUR_IN_SECONDS );
+		else
+			set_transient( 'cookie_notice_csp_check', $invalid ? '1' : '0', HOUR_IN_SECONDS );
+
+		if ( $cn->options['general']['csp_notice'] !== $invalid ) {
+			$cn->options['general']['csp_notice'] = $invalid;
+
+			if ( $network )
+				update_site_option( 'cookie_notice_options', $cn->options['general'] );
+			else
+				update_option( 'cookie_notice_options', $cn->options['general'] );
+		}
+
+		return $invalid;
+	}
+
+	/**
 	 * Check whether to display admin notices.
 	 *
 	 * @return void
@@ -1825,8 +1993,8 @@ class Cookie_Notice_Settings {
 			$allow_notice = true;
 
 		// display notice?
-		if ( $allow_notice && $pagenow === 'admin.php' && isset( $_GET['page'] ) && $_GET['page'] === 'cookie-notice' && $cn->get_status() === 'active' && $cn->options['general']['csp_notice'] ) {
-			add_settings_error( 'cn_cookie_notice_options', 'cookie_notice_csp_warning', esc_html__( "It looks like some of the Consent Security Policy (CSP) records in your website's .htaccess file may be causing Cookie Compliance loading problems. Make sure you allow loading of Cookie Compliance resources by adding the following record:", 'cookie-notice') . '<br><code>' .  esc_html__( "img-src data:; style-src 'unsafe-inline'; connect-src *.hu-manity.co; script-src 'unsafe-inline' *.hu-manity.co" ) . '</code>', 'error' );
+		if ( $allow_notice && $pagenow === 'admin.php' && isset( $_GET['page'] ) && $_GET['page'] === 'cookie-notice' && $cn->get_status() === 'active' && $this->refresh_csp_notice() ) {
+			add_settings_error( 'cn_cookie_notice_options', 'cookie_notice_csp_warning', esc_html__( "It looks like some of the Consent Security Policy (CSP) records in your website's .htaccess file may be causing Compliance by Hu-manity.co loading problems. Make sure you allow loading of Compliance by Hu-manity.co resources by adding the following record:", 'cookie-notice') . '<br><code>' .  esc_html__( "img-src data:; style-src 'unsafe-inline'; connect-src *.hu-manity.co; script-src 'unsafe-inline' *.hu-manity.co" ) . '</code>', 'error' );
 		}
 	}
 
@@ -1876,8 +2044,25 @@ class Cookie_Notice_Settings {
 					update_option( 'cookie_notice_status', $cn->defaults['data'] );
 			}
 
-			// app blocking
-			$input['app_blocking'] = isset( $input['app_blocking'] ) && ! $cn->threshold_exceeded();
+			// app blocking — checkbox: absent from POST when unchecked.
+			// If not submitted at all, preserve the existing DB value instead of defaulting
+			// to false. This prevents a legacy form save from zeroing out a value that was
+			// set via the React path (field partition: app_blocking is plugin-owned but the
+			// legacy form does not always render the checkbox, e.g. when connected). See #2272.
+			if ( isset( $input['app_blocking_rendered'] ) ) {
+				// Checkbox was rendered and enabled — honour the submitted value (absent = unchecked = false).
+				$input['app_blocking'] = isset( $input['app_blocking'] ) && ! $cn->threshold_exceeded();
+			} else {
+				// Checkbox not rendered (network admin, global_override sub-site) or threshold
+				// exceeded (disabled) — preserve the DB value via the preservation loop below.
+				unset( $input['app_blocking'] );
+			}
+			unset( $input['app_blocking_rendered'] );
+
+			// excluded script handles
+			$input['excluded_handles'] = isset( $input['excluded_handles'] )
+				? array_values( array_filter( array_map( 'sanitize_text_field', explode( "\n", $input['excluded_handles'] ) ) ) )
+				: $cn->defaults['general']['excluded_handles'];
 
 			// conditional display
 			$input['conditional_active'] = isset( $input['conditional_active'] );
@@ -1929,6 +2114,10 @@ class Cookie_Notice_Settings {
 			// debug mode
 			$input['debug_mode'] = isset( $input['debug_mode'] );
 
+			// ui_mode is managed exclusively by maybe_switch_ui_mode() via nonce-gated
+			// query param. It must not be processed here — the #2153 preservation loop
+			// carries the existing DB value through. See #2155.
+
 			// amp support
 			$input['amp_support'] = isset( $input['amp_support'] ) && cn_is_plugin_active( 'amp' );
 
@@ -1938,11 +2127,10 @@ class Cookie_Notice_Settings {
 			// caching compatibility
 			$input['caching_compatibility'] = isset( $input['caching_compatibility'] ) && ! empty( $active_plugins );
 
-			// display csp notice?
-			if ( $cn->get_status() === 'active' )
-				$input['csp_notice'] = $this->check_htaccess();
-			else
-				$input['csp_notice'] = false;
+			// csp_notice is refreshed on render and on-demand via refresh_csp_notice();
+			// preserve the existing stored value here so the legacy save path doesn't
+			// stomp it with a stale read.
+			$input['csp_notice'] = ! empty( $cn->options['general']['csp_notice'] );
 
 			// position
 			if ( isset( $input['position'] ) ) {
@@ -2215,6 +2403,22 @@ class Cookie_Notice_Settings {
 					do_action( 'wpml_register_single_string', 'Cookie Notice', 'Custom link', $input['see_more_opt']['link'] );
 			}
 
+			// Preserve any keys in the current DB options that validate_options() does not
+			// explicitly process (e.g. displayType, ui_mode, update_delay_date,
+			// update_threshold_date, update_notice_diss). Without this, WordPress's register_setting()
+			// replaces the entire cookie_notice_options row with $input, silently dropping these fields
+			// on every legacy form save. See #2153.
+			// Re-read from DB here (not from constructor snapshot) to avoid overwriting concurrent
+			// React changes made in another tab after this page loaded. See #2181.
+			$current_db_options = $is_network
+				? (array) get_site_option( 'cookie_notice_options', [] )
+				: (array) get_option( 'cookie_notice_options', [] );
+			foreach ( $current_db_options as $key => $value ) {
+				if ( ! array_key_exists( $key, $input ) ) {
+					$input[ $key ] = $value;
+				}
+			}
+
 			add_settings_error( 'cn_cookie_notice_options', 'save_cookie_notice_options', esc_html__( 'Settings saved.', 'cookie-notice' ), 'updated' );
 		} elseif ( isset( $_POST['reset_cookie_notice_options'] ) ) {
 			$input = $cn->defaults['general'];
@@ -2305,8 +2509,11 @@ class Cookie_Notice_Settings {
 	public function admin_enqueue_scripts( $page ) {
 		// get main instance
 		$cn = Cookie_Notice();
+		$is_network = $cn->is_network_admin();
 
 		if ( $page === 'toplevel_page_cookie-notice' ) {
+			$ui_mode = $cn->options['general']['ui_mode'];
+
 			wp_enqueue_script( 'cookie-notice-admin', COOKIE_NOTICE_URL . '/js/admin' . ( ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', [ 'jquery', 'wp-color-picker' ], $cn->defaults['version'] );
 
 			// prepare script data
@@ -2330,6 +2537,107 @@ class Cookie_Notice_Settings {
 			wp_add_inline_script( 'cookie-notice-admin', 'var cnArgs = ' . wp_json_encode( $script_data ) . ";\n", 'before' );
 
 			wp_enqueue_style( 'wp-color-picker' );
+
+			// React admin bundle.
+			// In CN_DEV_MODE use the file's mtime as the version so every deploy
+			// busts the browser cache automatically (the plugin version string only
+			// changes on official releases, causing stale bundles during testing).
+			$react_js_path  = COOKIE_NOTICE_PATH . 'assets/react-admin/' . Cookie_Notice::REACT_ADMIN_BUNDLE_BASENAME;
+			$react_css_path = COOKIE_NOTICE_PATH . 'assets/react-admin/cn-admin-react.css';
+			$react_ver      = ( defined( 'CN_DEV_MODE' ) && CN_DEV_MODE && file_exists( $react_js_path ) )
+				? filemtime( $react_js_path )
+				: $cn->defaults['version'];
+
+			if ( $ui_mode === 'react' ) {
+				wp_enqueue_script(
+					Cookie_Notice::REACT_ADMIN_HANDLE,
+					$cn->get_url( 'react-admin' ),
+					[],
+					$react_ver,
+					true
+				);
+
+				wp_enqueue_style(
+					Cookie_Notice::REACT_ADMIN_HANDLE,
+					COOKIE_NOTICE_URL . '/assets/react-admin/cn-admin-react.css',
+					[],
+					$react_ver
+				);
+
+				// Stamp optimizer/CDN exclusion attributes on the React admin script
+				// (main bundle + wp_localize_script inline 'before' block) so JS minifiers,
+				// concatenators, deferers, and CDN script-rewriters skip our IIFE bundle.
+				// Mirrors the banner-script protection in includes/frontend.php (commit 765e96b).
+				// Without this, Cloudflare Rocket Loader (which processes admin pages) and
+				// any "minify admin" toggles in optimizer plugins can break the bundle and
+				// white-screen the admin page.
+				add_filter( 'script_loader_tag', [ $this, 'add_react_admin_optimizer_attrs' ], 10, 2 );
+
+				// Pull fresh config from Designer API before localizing data.
+				// Ensures the React UI starts with the latest state, even if
+				// changes were made in the Admin Portal since the last cron sync.
+				if ( ! empty( $cn->options['general']['app_id'] ) ) {
+					$cn->welcome_api->get_app_config( '', true );
+				}
+
+				// Re-apply dev tier override — get_app_config() calls
+				// set_status_data() which re-reads from DB, overwriting
+				// the in-memory override set during init.
+				$cn->maybe_apply_dev_tier_override();
+
+				// Read notification rules from shared JSON config.
+				$cn_rules_json = file_get_contents( COOKIE_NOTICE_PATH . 'includes/notifications.json' );
+				$cn_rules_data = $cn_rules_json !== false ? json_decode( $cn_rules_json, true ) : null;
+				$cn_notification_rules = is_array( $cn_rules_data ) ? ( $cn_rules_data['rules'] ?? [] ) : [];
+
+				wp_localize_script( Cookie_Notice::REACT_ADMIN_HANDLE, Cookie_Notice::REACT_ADMIN_INLINE_KEYWORD, [
+					'ajaxURL'            => admin_url( 'admin-ajax.php' ),
+					'nonce'              => wp_create_nonce( 'cn_react_nonce' ),
+					'welcomeNonce'       => wp_create_nonce( 'cookie-notice-welcome' ),
+					'configureNonce'     => wp_create_nonce( 'cn_api_configure' ),
+					'registerNonce'      => wp_create_nonce( 'cn_api_register' ),
+					'loginNonce'         => wp_create_nonce( 'cn_api_login' ),
+					'paymentNonce'       => wp_create_nonce( 'cn_api_payment' ),
+					'uiMode'             => $ui_mode,
+					'network'            => $cn->is_network_admin(),
+					'status'             => $cn->get_status(),
+					'subscription'       => $cn->get_subscription(),
+					'app_id'             => $cn->options['general']['app_id'],
+					'version'            => $cn->defaults['version'],
+					'options'            => $cn->options['general'],
+					'siteUrl'            => home_url(),
+					'devMode'            => defined( 'CN_DEV_MODE' ) && CN_DEV_MODE && current_user_can( 'manage_options' ),
+					'welcomeDismissedAt'      => get_option( 'cookie_notice_welcome_dismissed', '' ),
+					'setupWizardComplete'     => (bool) get_option( 'cookie_notice_setup_wizard_complete', false ),
+					'selectedLaws'       => $cn->is_network_admin()
+						? get_site_option( 'cookie_notice_app_regulations', [] )
+						: get_option( 'cookie_notice_app_regulations', [] ),
+					'wpPages'            => array_map( function( $p ) {
+						return [ 'id' => $p->ID, 'title' => $p->post_title ];
+					}, get_pages( [ 'sort_column' => 'post_title' ] ) ?: [] ),
+				'siteLocale'         => get_locale(),
+				'detectedPlugins'    => cn_detect_active_plugins(),
+				'bannerDesign'       => $is_network
+					? get_site_option( 'cookie_notice_app_design', [] )
+					: get_option( 'cookie_notice_app_design', [] ),
+				'displayType'        => $cn->options['general']['displayType'] ?? 'floating',
+				'appUrl'             => Cookie_Notice()->get_url( 'host' ),
+				'lastSynced'         => ( function() use ( $is_network ) {
+					$blocking = $is_network
+						? get_site_option( 'cookie_notice_app_blocking', [] )
+						: get_option( 'cookie_notice_app_blocking', [] );
+					return ! empty( $blocking['lastUpdated'] ) ? $blocking['lastUpdated'] : '';
+				} )(),
+				'purgeNonce'         => wp_create_nonce( 'cn-purge-cache' ),
+				'notificationRules'  => $cn_notification_rules,
+				'ruleParams'         => array_map( function( $label, $key ) {
+					return [ 'value' => $key, 'label' => $label ];
+				}, $this->parameters, array_keys( $this->parameters ) ),
+				'ruleOperators'      => array_map( function( $label, $key ) {
+					return [ 'value' => $key, 'label' => $label ];
+				}, $this->operators, array_keys( $this->operators ) ),
+				] );
+			}
 		}
 
 		wp_enqueue_style( 'cookie-notice-admin', COOKIE_NOTICE_URL . '/css/admin' . ( ! ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '.min' : '' ) . '.css', [], $cn->defaults['version'] );
@@ -2339,6 +2647,32 @@ class Cookie_Notice_Settings {
 			wp_enqueue_script( 'cookie-notice-admin-pagination', COOKIE_NOTICE_URL . '/assets/pagination/pagination.js', [ 'jquery' ], '2.6.0' );
 			wp_enqueue_style( 'cookie-notice-admin-pagination', COOKIE_NOTICE_URL . '/assets/pagination/pagination.css', [], '2.6.0' );
 		}
+	}
+
+	/**
+	 * Stamp optimizer/CDN exclusion attributes on the React admin script tags.
+	 *
+	 * WP's script_loader_tag filter receives the combined output for a handle
+	 * (main <script src> tag plus any inline 'before'/'after' blocks added via
+	 * wp_localize_script / wp_add_inline_script), so a single regex pass covers
+	 * both the bundle and the cnReactData inline block.
+	 *
+	 * Mirrors banner protection in includes/frontend.php (commit 765e96b).
+	 *
+	 * @param string $tag    Combined script tag(s) for this handle.
+	 * @param string $handle Script handle being filtered.
+	 * @return string
+	 */
+	public function add_react_admin_optimizer_attrs( $tag, $handle ) {
+		// React admin asset exclusions — see Cookie_Notice::REACT_ADMIN_*.
+		if ( $handle !== Cookie_Notice::REACT_ADMIN_HANDLE )
+			return $tag;
+
+		$attrs = ' data-cfasync="false" data-nowprocket data-noptimize="1" data-no-optimize="1" nitro-exclude data-jetpack-boost="ignore"';
+
+		// Stamp every <script> opening tag in the combined output that doesn't
+		// already carry data-cfasync (idempotent if the filter runs twice).
+		return preg_replace( '/(<script\b)(?![^>]*\bdata-cfasync\b)/i', '$1' . $attrs, $tag );
 	}
 
 	/**
@@ -2434,6 +2768,10 @@ class Cookie_Notice_Settings {
 
 		// request for new config data
 		Cookie_Notice()->welcome_api->get_app_config( '', true );
+
+		// re-evaluate CSP state now that the operator clicked Purge — the next
+		// admin render should reflect any .htaccess change immediately.
+		$this->refresh_csp_notice( true );
 
 		// force new config on frontend
 		if ( Cookie_Notice()->is_network_options() )

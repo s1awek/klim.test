@@ -84,7 +84,7 @@ if ( ! class_exists( 'WWP_Admin_Settings' ) ) {
 
             global $wc_wholesale_prices;
 
-            if ( false === strpos( $hook_queue, 'page_wholesale-settings' ) ) {
+            if ( ! str_contains( $hook_queue, 'page_wholesale-settings' ) ) {
                 return;
             }
 
@@ -562,7 +562,7 @@ if ( ! class_exists( 'WWP_Admin_Settings' ) ) {
 
             if ( ! empty( $wp_filter ) && is_array( $wp_filter ) ) {
                 foreach ( array_keys( $wp_filter ) as $hook_name ) {
-                    if ( 0 === strpos( $hook_name, $prefix ) ) {
+                    if ( str_starts_with( $hook_name, $prefix ) ) {
                         $slug = substr( $hook_name, $prefix_length );
                         if ( ! empty( $slug ) ) {
                             $actions[] = $slug;

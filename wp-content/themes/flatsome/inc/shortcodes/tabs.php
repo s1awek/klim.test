@@ -57,8 +57,8 @@ function ux_tabgroup( $params, $content = null, $tag = '' ) {
 				$anchor = "tab_$id";
 			}
 			$active = $key == 0 ? ' active' : ''; // Set first tab active by default.
-			$tabs[] = '<li id="tab-'.$id.'" class="tab'.$active.' has-icon" role="presentation"><a href="#'.$anchor.'"'.($key != 0 ? ' tabindex="-1"' : '').' role="tab" aria-selected="'.($key == 0 ? 'true' : 'false').'" aria-controls="tab_'.$id.'"><span>' . wp_kses_post( $tab['title'] ) . '</span></a></li>';
-			$panes[] = '<div id="tab_'.$id.'" class="panel'.$active.' entry-content" role="tabpanel" aria-labelledby="tab-'.$id.'">'.do_shortcode( $tab['content'] ).'</div>';
+			$tabs[] = '<li id="' . esc_attr( 'tab-' . $id ) . '" class="tab' . $active . ' has-icon" role="presentation"><a href="#' . esc_attr( $anchor ) . '"' . ( $key != 0 ? ' tabindex="-1"' : '' ) . ' role="tab" aria-selected="' . ( $key == 0 ? 'true' : 'false' ) . '" aria-controls="' . esc_attr( 'tab_' . $id ) . '"><span>' . wp_kses_post( $tab['title'] ) . '</span></a></li>';
+			$panes[] = '<div id="' . esc_attr( 'tab_' . $id ) . '" class="panel' . $active . ' entry-content" role="tabpanel" aria-labelledby="' . esc_attr( 'tab-' . $id ) . '">' . do_shortcode( $tab['content'] ) . '</div>';
 			$i++;
 		}
 			if($title) $title = '<h4 class="uppercase text-' . esc_attr( $align ) . '">' . wp_kses_post( $title ) . '</h4>';

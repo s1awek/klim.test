@@ -68,6 +68,28 @@ if ( ! class_exists( 'WWP_Helper_Functions' ) ) {
         }
 
         /**
+         * Check if theme is active.
+         *
+         * @since  2.2.8
+         *
+         * @param string $theme_slug The theme slug.
+         * @return boolean
+         */
+        public static function is_theme_active( $theme_slug ) {
+            $theme_slug = strtolower( $theme_slug );
+            $stylesheet = strtolower( (string) get_option( 'stylesheet' ) );
+            $template   = strtolower( (string) get_option( 'template' ) );
+
+            if ( $stylesheet === $theme_slug || $template === $theme_slug ) {
+                return true;
+            }
+
+            // Match child theme variants (e.g. "divi-child") but not infixes (e.g. "subdivision").
+            return str_starts_with( $stylesheet, $theme_slug . '-' )
+                || str_starts_with( $template, $theme_slug . '-' );
+        }
+
+        /**
          * WWOF is active.
          *
          * @since  1.14
@@ -1033,7 +1055,7 @@ if ( ! class_exists( 'WWP_Helper_Functions' ) ) {
             $url = strtolower( trim( $url ) );
 
             // Need to get the host...so let's add the scheme so we can use parse_url.
-            if ( false === strpos( $url, 'http://' ) && false === strpos( $url, 'https://' ) ) {
+            if ( ! str_contains( $url, 'http://' ) && ! str_contains( $url, 'https://' ) ) {
                 $url = 'http://' . $url;
             }
 
@@ -1051,7 +1073,7 @@ if ( ! class_exists( 'WWP_Helper_Functions' ) ) {
 
                 $tlds_to_check = array( '.local', ':8888', ':8080', ':8081', '.invalid', '.example', '.test' );
                 foreach ( $tlds_to_check as $tld ) {
-                    if ( false !== strpos( $host, $tld ) ) {
+                    if ( str_contains( $host, $tld ) ) {
                         $is_local_url = true;
                         break;
                     }

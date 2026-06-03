@@ -67,11 +67,51 @@ class ADBC_Transients_Endpoints {
 			if ( ! is_array( $validation_answer ) )
 				return ADBC_Rest::error( $validation_answer, ADBC_Rest::BAD_REQUEST );
 
-			$cleaned_transients = ADBC_Hardcoded_Items::instance()->exclude_hardcoded_items_from_selected_items( $validation_answer, 'transients', "wp" );
+			$cleaned_transients = $validation_answer;
+
+			if ( ADBC_Settings::instance()->get_setting( 'prevent_taking_action_on_wp_items' ) === '1' ) {
+
+				$cleaned_transients = ADBC_Hardcoded_Items::instance()->exclude_hardcoded_items_from_selected_items( $validation_answer, 'transients', "wp" );
+
+				if ( ADBC_VERSION_TYPE === 'PREMIUM' )
+					$cleaned_transients = ADBC_Scan_Utils::exclude_r_wp_items_from_selected_items( $cleaned_transients, 'transients' );
+
+				if ( empty( $cleaned_transients ) )
+					return ADBC_Rest::error(
+						__( 'The selected transients could not have their autoload edited because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+						ADBC_Rest::BAD_REQUEST,
+						0,
+						[ 
+							"message_links" => [ 
+								[ 
+									"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+									"tab_id" => "settings",
+									"anchor_id" => "other_settings",
+									"setting_id" => "prevent_taking_action_on_wp_items"
+								]
+							]
+						]
+					);
+			}
 
 			$grouped = ADBC_Selected_Items_Validator::group_selected_items_by_site_id( $cleaned_transients );
-
 			$not_processed = ADBC_Transients::set_autoload_to_yes( $grouped );
+
+			if ( count( $cleaned_transients ) < count( $validation_answer ) )
+				return ADBC_Rest::success(
+					__( 'Some transients were updated successfully; others were skipped because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+					count( $not_processed ),
+					[ 
+						"message_links" => [ 
+							[ 
+								"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+								"tab_id" => "settings",
+								"anchor_id" => "other_settings",
+								"setting_id" => "prevent_taking_action_on_wp_items"
+							]
+						]
+					]
+				);
 
 			return ADBC_Rest::success( "", count( $not_processed ) );
 
@@ -98,9 +138,52 @@ class ADBC_Transients_Endpoints {
 			if ( ! is_array( $validation_answer ) )
 				return ADBC_Rest::error( $validation_answer, ADBC_Rest::BAD_REQUEST );
 
-			$cleaned_transients = ADBC_Hardcoded_Items::instance()->exclude_hardcoded_items_from_selected_items( $validation_answer, 'transients', "wp" );
+			$cleaned_transients = $validation_answer;
+
+			if ( ADBC_Settings::instance()->get_setting( 'prevent_taking_action_on_wp_items' ) === '1' ) {
+
+				$cleaned_transients = ADBC_Hardcoded_Items::instance()->exclude_hardcoded_items_from_selected_items( $validation_answer, 'transients', "wp" );
+
+				if ( ADBC_VERSION_TYPE === 'PREMIUM' )
+					$cleaned_transients = ADBC_Scan_Utils::exclude_r_wp_items_from_selected_items( $cleaned_transients, 'transients' );
+
+				if ( empty( $cleaned_transients ) )
+					return ADBC_Rest::error(
+						__( 'The selected transients could not have their autoload edited because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+						ADBC_Rest::BAD_REQUEST,
+						0,
+						[ 
+							"message_links" => [ 
+								[ 
+									"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+									"tab_id" => "settings",
+									"anchor_id" => "other_settings",
+									"setting_id" => "prevent_taking_action_on_wp_items"
+								]
+							]
+						]
+					);
+			}
+
 			$grouped = ADBC_Selected_Items_Validator::group_selected_items_by_site_id( $cleaned_transients );
 			$not_processed = ADBC_Transients::set_autoload_to_no( $grouped );
+
+			if ( count( $cleaned_transients ) < count( $validation_answer ) ) {
+				return ADBC_Rest::success(
+					__( 'Some transients were updated successfully; others were skipped because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+					count( $not_processed ),
+					[ 
+						"message_links" => [ 
+							[ 
+								"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+								"tab_id" => "settings",
+								"anchor_id" => "other_settings",
+								"setting_id" => "prevent_taking_action_on_wp_items"
+							]
+						]
+					]
+				);
+			}
 
 			return ADBC_Rest::success( "", count( $not_processed ) );
 
@@ -131,14 +214,57 @@ class ADBC_Transients_Endpoints {
 			if ( ! is_array( $validation_answer ) )
 				return ADBC_Rest::error( $validation_answer, ADBC_Rest::BAD_REQUEST );
 
-			$grouped = ADBC_Selected_Items_Validator::group_selected_items_by_site_id( $validation_answer );
+			$cleaned_transients = $validation_answer;
 
+			if ( ADBC_Settings::instance()->get_setting( 'prevent_taking_action_on_wp_items' ) === '1' ) {
+
+				$cleaned_transients = ADBC_Hardcoded_Items::instance()->exclude_hardcoded_items_from_selected_items( $validation_answer, 'transients', "wp" );
+
+				if ( ADBC_VERSION_TYPE === 'PREMIUM' )
+					$cleaned_transients = ADBC_Scan_Utils::exclude_r_wp_items_from_selected_items( $cleaned_transients, 'transients' );
+
+				if ( empty( $cleaned_transients ) )
+					return ADBC_Rest::error(
+						__( 'The selected transients could not be deleted because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+						ADBC_Rest::BAD_REQUEST,
+						0,
+						[ 
+							"message_links" => [ 
+								[ 
+									"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+									"tab_id" => "settings",
+									"anchor_id" => "other_settings",
+									"setting_id" => "prevent_taking_action_on_wp_items"
+								]
+							]
+						]
+					);
+			}
+
+			$grouped = ADBC_Selected_Items_Validator::group_selected_items_by_site_id( $cleaned_transients );
 			$not_processed = ADBC_Transients::delete_transients( $grouped );
 
 			// Delete the transients from the scan results
 			if ( ADBC_VERSION_TYPE === 'PREMIUM' ) {
-				$transients_names = array_column( $validation_answer, 'name' ); // Create an array containing only the transients names.
+				$transients_names = array_column( $cleaned_transients, 'name' ); // Create an array containing only the transients names.
 				ADBC_Scan_Utils::update_scan_results_file_after_deletion( 'transients', $transients_names, $not_processed );
+			}
+
+			if ( count( $cleaned_transients ) < count( $validation_answer ) ) {
+				return ADBC_Rest::success(
+					__( 'Some transients were deleted successfully; others were skipped because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+					count( $not_processed ),
+					[ 
+						"message_links" => [ 
+							[ 
+								"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+								"tab_id" => "settings",
+								"anchor_id" => "other_settings",
+								"setting_id" => "prevent_taking_action_on_wp_items"
+							]
+						]
+					]
+				);
 			}
 
 			return ADBC_Rest::success( "", count( $not_processed ) );

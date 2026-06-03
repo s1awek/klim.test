@@ -27,12 +27,16 @@ class ADBC_Routes {
 		self::register_route( '/get-tables-names', 'get_tables_names', WP_REST_Server::READABLE, ADBC_Tables_Endpoints::class);
 		self::register_route( '/optimize-tables', 'optimize_tables', WP_REST_Server::EDITABLE, ADBC_Tables_Endpoints::class);
 		self::register_route( '/repair-tables', 'repair_tables', WP_REST_Server::EDITABLE, ADBC_Tables_Endpoints::class);
+		self::register_route( '/refresh-counts-tables', 'refresh_counts_tables', WP_REST_Server::EDITABLE, ADBC_Tables_Endpoints::class);
+		self::register_route( '/convert-to-innodb-tables', 'convert_to_innodb_tables', WP_REST_Server::EDITABLE, ADBC_Tables_Endpoints::class);
 		self::register_route( '/empty-rows-tables', 'empty_rows_tables', WP_REST_Server::EDITABLE, ADBC_Tables_Endpoints::class);
 		self::register_route( '/delete-tables', 'delete_tables', WP_REST_Server::EDITABLE, ADBC_Tables_Endpoints::class);
 		self::register_route( '/count-total-not-scanned-tables', 'count_total_not_scanned_tables', WP_REST_Server::READABLE, ADBC_Tables_Endpoints::class);
 		self::register_route( '/count-total-tables-to-optimize', 'count_total_tables_to_optimize', WP_REST_Server::READABLE, ADBC_Tables_Endpoints::class);
 		self::register_route( '/count-total-tables-to-repair', 'count_total_tables_to_repair', WP_REST_Server::READABLE, ADBC_Tables_Endpoints::class);
 		self::register_route( '/count-total-tables-with-invalid-prefix', 'count_total_tables_with_invalid_prefix', WP_REST_Server::READABLE, ADBC_Tables_Endpoints::class);
+		self::register_route( '/get-table-rows', 'get_table_rows', WP_REST_Server::EDITABLE, ADBC_Tables_Endpoints::class);
+		self::register_route( '/get-table-structure', 'get_table_structure', WP_REST_Server::EDITABLE, ADBC_Tables_Endpoints::class);
 
 		// Options routes.
 		self::register_route( '/get-options-list', 'get_options_list', WP_REST_Server::EDITABLE, ADBC_Options_Endpoints::class);
@@ -68,6 +72,13 @@ class ADBC_Routes {
 		self::register_route( '/count-duplicated-users-meta', 'count_duplicated_users_meta', WP_REST_Server::READABLE, ADBC_Users_Meta_Endpoints::class);
 		self::register_route( '/count-unused-users-meta', 'count_unused_users_meta', WP_REST_Server::READABLE, ADBC_Users_Meta_Endpoints::class);
 
+		// Post_types routes.
+		self::register_route( '/get-post-types-list', 'get_post_types_list', WP_REST_Server::EDITABLE, ADBC_Post_Types_Endpoints::class);
+		self::register_route( '/list-posts-by-post-type', 'list_posts_by_post_type', WP_REST_Server::EDITABLE, ADBC_Post_Types_Endpoints::class);
+		self::register_route( '/delete-posts-by-post-type', 'delete_posts_by_post_type', WP_REST_Server::EDITABLE, ADBC_Post_Types_Endpoints::class);
+		self::register_route( '/count-total-not-scanned-post-types', 'count_total_not_scanned_post_types', WP_REST_Server::READABLE, ADBC_Post_Types_Endpoints::class);
+		self::register_route( '/count-total-large-non-public-post-types', 'count_total_large_non_public_post_types', WP_REST_Server::READABLE, ADBC_Post_Types_Endpoints::class);
+
 		// Cron_jobs routes.
 		self::register_route( '/get-cron-jobs-list', 'get_cron_jobs_list', WP_REST_Server::EDITABLE, ADBC_Cron_Jobs_Endpoints::class);
 		self::register_route( '/delete-cron-jobs', 'delete_cron_jobs', WP_REST_Server::EDITABLE, ADBC_Cron_Jobs_Endpoints::class);
@@ -97,6 +108,8 @@ class ADBC_Routes {
 		self::register_route( '/general-cleanup/set-keep-last', 'set_keep_last', WP_REST_Server::EDITABLE, ADBC_General_Cleanup_Endpoints::class);
 		self::register_route( '/general-cleanup/get-keep-last', 'get_keep_last', WP_REST_Server::READABLE, ADBC_General_Cleanup_Endpoints::class);
 		self::register_route( '/general-cleanup/delete-keep-last', 'delete_keep_last', WP_REST_Server::EDITABLE, ADBC_General_Cleanup_Endpoints::class);
+		self::register_route( '/general-cleanup/activate-auto-count', 'activate_auto_count', WP_REST_Server::EDITABLE, ADBC_General_Cleanup_Endpoints::class);
+		self::register_route( '/general-cleanup/deactivate-auto-count', 'deactivate_auto_count', WP_REST_Server::EDITABLE, ADBC_General_Cleanup_Endpoints::class);
 
 		// Automation routes.
 		self::register_route( '/automation/list-tasks', 'list_tasks', WP_REST_Server::EDITABLE, ADBC_Automation_Endpoints::class);

@@ -215,7 +215,7 @@ function flatsome_follow( $atts, $content = null, $tag = '' ) {
 		'threads'   => array(
 			'enabled'  => ! empty( $threads ),
 			'atts'     => array(
-				'href'       => $threads,
+				'href'       => esc_url( $threads ),
 				'data-label' => 'Threads',
 				'target'     => '_blank',
 				'rel'        => 'noopener nofollow',

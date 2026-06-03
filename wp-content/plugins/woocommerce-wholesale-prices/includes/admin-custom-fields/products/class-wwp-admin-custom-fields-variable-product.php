@@ -123,7 +123,7 @@ if ( ! class_exists( 'WWP_Admin_Custom_Fields_Variable_Product' ) ) {
          */
         public function execute_variation_custom_wholesale_bulk_actions( $bulk_action, $data, $product_id, $variations ) {
 
-            if ( strpos( $bulk_action, '_wholesale_price' ) !== false && is_array( $variations ) && isset( $data['value'] ) ) {
+            if ( str_contains( $bulk_action, '_wholesale_price' ) && is_array( $variations ) && isset( $data['value'] ) ) {
 
                 $all_wholesale_roles = $this->_wwp_wholesale_roles->getAllRegisteredWholesaleRoles();
                 $wholesale_role      = str_replace( '_wholesale_price', '', $bulk_action );

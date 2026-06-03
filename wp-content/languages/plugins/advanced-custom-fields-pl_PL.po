@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Advanced Custom Fields (ACF®) - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-14 08:38:38+0000\n"
+"PO-Revision-Date: 2026-05-27 04:18:05+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -902,6 +902,7 @@ msgstr "Nieprawidłowe argumenty żądania."
 #: includes/ajax/class-acf-ajax-local-json-diff.php:46
 #: includes/ajax/class-acf-ajax-query-users.php:42
 #: includes/ajax/class-acf-ajax-upgrade.php:33
+#: includes/ajax/class-acf-ajax-upgrade.php:40
 #: includes/ajax/class-acf-ajax-user-setting.php:47
 #: src/AI/GEO/FieldSettings.php:82
 msgid "Sorry, you do not have permission to do that."
@@ -1970,11 +1971,6 @@ msgstr "Relacje nie są równe"
 msgid "Relationship is equal to"
 msgstr "Relacje są równe"
 
-#: src/Blocks/Bindings.php:41
-msgctxt "The core ACF block binding source name for fields on the current page"
-msgid "ACF Fields"
-msgstr "Pola ACF"
-
 #: includes/admin/views/browse-fields-modal.php:24
 msgid "ACF PRO Feature"
 msgstr "Funkcja ACF PRO"
@@ -2094,10 +2090,6 @@ msgstr "To pole"
 msgid "Add fields"
 msgstr "Dodaj pola"
 
-#: includes/admin/post-types/admin-post-type.php:106
-msgid "Duplicate post type"
-msgstr "Duplikuj typ treści"
-
 #: includes/admin/post-types/admin-taxonomy.php:108
 msgid "Duplicate taxonomy"
 msgstr "Duplikuj taksonomię"
@@ -2165,6 +2157,10 @@ msgstr "Włączenie opcji dwukierunkowości pozwala na aktualizowanie wartości 
 #: includes/admin/views/global/form-top.php:69
 msgid "(Duplicated from %s)"
 msgstr "(zduplikowane z %s)"
+
+#: includes/admin/post-types/admin-post-type.php:106
+msgid "Duplicate post type"
+msgstr "Powiel typ treści"
 
 #: includes/fields/class-acf-field-page_link.php:505
 #: includes/fields/class-acf-field-post_object.php:418
@@ -5656,7 +5652,7 @@ msgstr "Wielkość kroku"
 
 #: includes/fields/class-acf-field-image.php:247
 #: includes/fields/class-acf-field-image.php:283
-#: includes/fields/class-acf-field-oembed.php:249
+#: includes/fields/class-acf-field-oembed.php:287
 msgid "Width"
 msgstr "Szerokość"
 
@@ -5785,7 +5781,7 @@ msgid "Post Taxonomy"
 msgstr "Taksonomia wpisu"
 
 #: includes/admin/views/upgrade/upgrade.php:94
-#: includes/ajax/class-acf-ajax-upgrade.php:43
+#: includes/ajax/class-acf-ajax-upgrade.php:57
 msgid "No updates available."
 msgstr "Brak dostępnych aktualizacji."
 
@@ -5887,7 +5883,7 @@ msgstr "Prawda / Fałsz"
 #: includes/fields/class-acf-field-google-map.php:230
 #: includes/fields/class-acf-field-image.php:258
 #: includes/fields/class-acf-field-image.php:294
-#: includes/fields/class-acf-field-oembed.php:261
+#: includes/fields/class-acf-field-oembed.php:299
 msgid "Height"
 msgstr "Wysokość"
 
@@ -5995,8 +5991,8 @@ msgstr "Grupa przycisków"
 msgid "oEmbed"
 msgstr "oEmbed"
 
-#: includes/fields/class-acf-field-oembed.php:246
-#: includes/fields/class-acf-field-oembed.php:258
+#: includes/fields/class-acf-field-oembed.php:284
+#: includes/fields/class-acf-field-oembed.php:296
 msgid "Embed Size"
 msgstr "Rozmiar osadzenia"
 
@@ -6531,7 +6527,7 @@ msgstr "Szerokość obrazka nie może przekraczać %dpx."
 msgid "Select Link"
 msgstr "Wybierz odnośnik"
 
-#: includes/fields/class-acf-field-oembed.php:206
+#: includes/fields/class-acf-field-oembed.php:244
 msgid "Enter URL"
 msgstr "Wpisz adres URL"
 

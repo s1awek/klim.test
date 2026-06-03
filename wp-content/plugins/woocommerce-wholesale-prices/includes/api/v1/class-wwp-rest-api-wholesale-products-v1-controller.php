@@ -335,7 +335,7 @@ class WWP_REST_Wholesale_Products_V1_Controller extends WC_REST_Products_Control
      */
     public static function is_wholesale_endpoint( $request ) {
 
-        return apply_filters( 'wwp_is_wholesale_endpoint', is_a( $request, 'WP_REST_Request' ) && strpos( $request->get_route(), 'wholesale/v1' ) !== false ? true : false, $request );
+        return apply_filters( 'wwp_is_wholesale_endpoint', is_a( $request, 'WP_REST_Request' ) && str_contains( $request->get_route(), 'wholesale/v1' ), $request );
     }
 
     /**

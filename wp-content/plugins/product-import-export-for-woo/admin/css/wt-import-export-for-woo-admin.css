@@ -135,6 +135,9 @@
 }
 
 .wt-iew-plugin-toolbar.bottom {
+  height: auto;
+  min-height: 40px;
+  overflow: hidden;
   margin-top: 12px;
   background: #f5f5f5;
   border-top: 1px solid #ddd;
@@ -221,6 +224,21 @@
   display: inline-block;
   font-weight: normal;
   margin-top: 0px;
+}
+
+.wt_iew_loader_info_box .button,
+.wt_iew_loader_info_box .button:focus {
+  color: #0073aa;
+  background-color: #fff;
+  border-color: #fff;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+.wt_iew_loader_info_box .button:hover {
+  color: #005a87;
+  background-color: #f5fafd;
+  border-color: #fff;
 }
 
 .wf-help-links li {

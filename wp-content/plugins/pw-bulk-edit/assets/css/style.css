@@ -61,6 +61,26 @@
 	color: #F1F1F1;
 }
 
+/* WP 7.0 uses transparent .button backgrounds; restore WP 6.9 gray on the blue filter bar. */
+.wp-core-ui .pwbe-filter-form #pwbe-search-button.button {
+	color: #2271b1;
+	border-color: #2271b1;
+	background: #f6f7f7;
+}
+
+.wp-core-ui .pwbe-filter-form #pwbe-search-button.button:hover {
+	background: #f0f0f1;
+	border-color: #0a4b78;
+	color: #0a4b78;
+}
+
+.wp-core-ui .pwbe-filter-form #pwbe-search-button.button:focus {
+	background: #f6f7f7;
+	border-color: #3582c4;
+	color: #0a4b78;
+	box-shadow: 0 0 0 1px #3582c4;
+}
+
 .pwbe-filter-error-heading {
 	color: #FF0000;
 	font-weight: 600;

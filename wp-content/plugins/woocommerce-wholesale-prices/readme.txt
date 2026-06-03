@@ -1,10 +1,10 @@
 === Wholesale Suite – B2B, Dynamic Pricing & WooCommerce Wholesale Prices ===
 Contributors: jkohlbach, RymeraWebCo, smub
 Tags: woocommerce wholesale, b2b, wholesale pricing, catalog mode, dynamic pricing
-Requires at least: 4.2
+Requires at least: 5.9
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.2.7.1
+Stable tag: 2.2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,23 @@ See plenty of screenshots for this plugin and others at:
 [https://wholesalesuiteplugin.com/woocommerce-wholesale-prices-premium/](https://wholesalesuiteplugin.com/woocommerce-wholesale-prices-premium/)
 
 == Changelog ==
+
+= 2.2.8 =
+- Bug Fix: Bug: WPay upsell nag cannot be permanently dismissed (nonce fails with page caching)
+- Bug Fix: Coupon applied as guest is not removed upon logging in as a wholesale customer
+- Bug Fix: FunnelKit integration gets Zero line totals on add-to-cart for wholesale customers
+- Bug Fix: Late $order->save() in WWP_Order amplifies analytics tax_total race condition
+- Bug Fix: License page has multiple UI/layout issues
+- Bug Fix: Recommend Wholesale Payment Banner X Close Button Not Working
+- Bug Fix: Variable product parent-level MOQ: wholesale price does not revert in Cart Block when quantity drops below minimum
+- Bug Fix: Wholesale Price Value Reverts To Original When Updating Other Fields
+- Feature: Add in-app landing page for Wholesale Reports when WWPP is inactive
+- Improvement: Add menu item redirect to Analytics->Wholesale to our Wholesale->Reports page
+- Improvement: Replace strpos() with str_contains() across the codebase
+
+= 2.2.7.2 =
+- Bug Fix: Registration field options not saved
+- Bug Fix: Select dropdowns in drawer edit form render behind the drawer due to z-index conflict
 
 = 2.2.7.1 =
 - Bug Fix: Price Filter Doesn’t Work for Variable Products When Logged in as a Wholesale Customer

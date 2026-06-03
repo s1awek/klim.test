@@ -1200,6 +1200,73 @@ class DropDownOptions {
 					$currencies = array_combine( $currencies, $currencies );
 					$options    = $currencies;
 				}
+			} elseif ( is_plugin_active( 'yaycurrency/yay-currency.php' ) || defined( 'YAY_CURRENCY_VERSION' ) ) {
+				// Yay Currency by YayCommerce - uses custom post type 'yay-currency-manage'
+				$yay_currencies = get_posts(
+					array(
+						'posts_per_page' => -1,
+						'post_type'      => 'yay-currency-manage',
+						'post_status'    => 'publish',
+						'order'          => 'ASC',
+						'orderby'        => 'menu_order',
+					)
+				);
+				if ( ! empty( $yay_currencies ) ) {
+					$currencies = [];
+					foreach ( $yay_currencies as $currency_post ) {
+						$currency_code = $currency_post->post_title;
+						$currencies[ $currency_code ] = $currency_code;
+					}
+					if ( ! empty( $currencies ) ) {
+						$options = $currencies;
+					}
+				}
+			} elseif ( is_plugin_active( 'x-currency/x-currency.php' ) || function_exists( 'x_currency_selected' ) ) {
+				// X-Currency by Crafium - uses custom database table 'x_currency'
+				$currencies = [];
+
+				// Get base currency first
+				if ( function_exists( 'x_currency_base_code' ) ) {
+					$base_currency_code = x_currency_base_code();
+					if ( ! empty( $base_currency_code ) ) {
+						$currencies[ $base_currency_code ] = $base_currency_code;
+					}
+				}
+
+				// Get active currencies from repository
+				if ( function_exists( 'x_currency_singleton' ) && class_exists( 'XCurrency\App\Repositories\CurrencyRepository' ) ) {
+					try {
+						$currency_repository = x_currency_singleton( 'XCurrency\App\Repositories\CurrencyRepository' );
+						if ( method_exists( $currency_repository, 'get' ) ) {
+							$x_currencies = $currency_repository->get();
+							if ( ! empty( $x_currencies ) ) {
+								foreach ( $x_currencies as $currency ) {
+									if ( isset( $currency->code ) ) {
+										$currencies[ $currency->code ] = $currency->code;
+									}
+								}
+							}
+						}
+					} catch ( \Exception $e ) {
+						// Fallback: try to get currencies from database directly.
+						global $wpdb;
+						$x_currencies = $wpdb->get_results(
+							$wpdb->prepare(
+								"SELECT code FROM {$wpdb->prefix}x_currency WHERE active = %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table prefix is safe.
+								1
+							)
+						);
+						if ( ! empty( $x_currencies ) ) {
+							foreach ( $x_currencies as $currency ) {
+								$currencies[ $currency->code ] = $currency->code;
+							}
+						}
+					}
+				}
+
+				if ( ! empty( $currencies ) ) {
+					$options = $currencies;
+				}
 			}
 		}
 

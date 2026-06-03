@@ -22,8 +22,8 @@ function flatsome_facebook_login_button_html() {
     <p><?php echo sprintf( __( 'Connecting Instagram Business accounts is deprecated and will be removed in a future update. Please enter an access token instead. %1$sSee documentation%2$s.', 'flatsome-admin' ), '<a href="https://docs.uxthemes.com/article/427-instagram-api" target="_blank" rel="noopener">', '</a>' ); ?></p>
   </div>
   <p><?php _e('Login with Facebook to connect an Instagram Business account:')  ?></p>
-  <a class="button" style="padding: 5px 15px; height: auto; background-color: #4267b2; border-color: #4267b2; color: #ffffff;" href="<?php echo $url ?>">
-    <span class="dashicons dashicons-facebook-alt" style="vertical-align: middle; margin-top: -2px;"></span>
+  <a class="button flatsome-facebook-login-button" href="<?php echo $url ?>">
+    <span class="dashicons dashicons-facebook-alt"></span>
     <?php _e( 'Login with Facebook', 'flatsome-admin' ) ?>
   </a>
   <?php return ob_get_clean();

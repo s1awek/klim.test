@@ -73,3 +73,29 @@ add_action( 'init', function () {
 if(is_admin()) {
   include_once(dirname( __FILE__ ).'/options/pages/options-page-meta.php');
 }
+
+function flatsome_admin_body_version_classes( $classes ) {
+	$raw_version = get_bloginfo( 'version' );
+
+	if ( ! $raw_version ) {
+		return $classes;
+	}
+
+	$version_parts = explode( '-', $raw_version );
+	$version       = count( $version_parts ) > 1 ? $version_parts[0] : $raw_version;
+	$class_list    = explode( ' ', $classes );
+
+	$version_classes = array(
+		'7.0' => 'flatsome-wp-version-gte-70',
+	);
+
+	foreach ( $version_classes as $min_version => $class_name ) {
+		if ( ! in_array( $class_name, $class_list, true ) && version_compare( $version, $min_version, '>=' ) ) {
+			$classes .= ' ' . $class_name;
+		}
+	}
+
+	return $classes;
+}
+
+add_filter( 'admin_body_class', 'flatsome_admin_body_version_classes' );

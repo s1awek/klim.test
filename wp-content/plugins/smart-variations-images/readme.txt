@@ -2,8 +2,8 @@
 Contributors: drosendo
 Tags: woocommerce, product variations, image gallery, swatches, ecommerce  
 Requires at least: 4.9 
-Tested up to: 6.9
-Stable tag: 5.2.26
+Tested up to: 7.0
+Stable tag: 5.2.29
 Requires PHP: 7.4
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -127,6 +127,23 @@ A: SVI replaces your default theme settings/options for the image & thumbnails a
 7. Setup swatches on Product > Attributes
 
 == Changelog ==
+
+= 5.2.29 =
+* Compatibility: WordPress tested up to 7.0.
+* Update: Freemius SDK updated to latest stable version.
+
+= 5.2.28 =
+* Compatibility: WooCommerce tested up to 10.7.0.
+* Update: Freemius SDK updated to 2.13.1.
+* Fix: PHP 8+ compatibility audit - added `isset()` guard on `$_POST['product-type']` in `save_woosvibulk_meta()` to prevent E_WARNING when hook fires without POST body (e.g. background order processing).
+* Fix: PHP 8+ compatibility audit - added `isset()` + `intval()` guard on `$_POST['data']` in `reloadSelect_json()` AJAX handler.
+* Fix: PHP 8+ compatibility audit - `woosvi_slugify()` now guards `$_POST['data']` with `isset()` and handles array input before calling `strtolower()`, preventing Fatal TypeError.
+* Fix: PHP 8+ compatibility audit - added `isset()` guard on `$_POST['id']` in `render_quick_view_frontend()`.
+* Fix: PHP 8+ - replaced `array_pop(explode(...))` with an IIFE pattern in gallery export helpers to avoid "Only variables should be passed by reference" warning.
+
+= 5.2.27 =
+* Fix: PHP 8+ compatibility - `woosvi_esc_html()` now checks if `$_POST['data']` is an array before calling `implode()`, preventing fatal TypeError when Printify/Gelato integrations pass a string value.
+* Fix: PHP 8+ compatibility - Removed strict `string` type hint from `$size` parameter in `filter_main_product_image()` to accept array sizes (e.g. `[32, 32]`) passed by WooCommerce email thumbnail generation.
 
 = 5.2.26 =
 * Fix: Breakdance compatibility - added final AJAX fallback in gallery bootstrap when `data-wcsvi` is not available, using `sviloadProduct` to load product gallery payload safely.

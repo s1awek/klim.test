@@ -910,6 +910,12 @@ abstract class ADBC_Abstract_Cleanup_Handler implements ADBC_Cleanup_Type_Handle
 
 			ADBC_Sites::instance()->switch_to_blog_id( $site['id'] );
 
+			// Make sure the tables exists in this blog
+			if ( ! ADBC_Tables::is_table_exists( $this->table() ) ) {
+				ADBC_Sites::instance()->restore_blog();
+				continue; // nothing to do on this blog
+			}
+
 			// Wrap in a derived table to dodge MySQL error 1093
 			$sql = "
 				DELETE FROM {$this->table()}
@@ -965,15 +971,6 @@ abstract class ADBC_Abstract_Cleanup_Handler implements ADBC_Cleanup_Type_Handle
 	 */
 	public function can_have_keep_last() {
 		return $this->date_column() !== null;
-	}
-
-	/**
-	 * Returns the documentation URL for this handler.
-	 *
-	 * @return string The documentation URL for this handler.
-	 */
-	public function get_documentation_url() {
-		return $this->documentation_url();
 	}
 
 }

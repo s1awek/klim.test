@@ -71,14 +71,58 @@ class ADBC_Cron_Jobs_Endpoints {
 			if ( ! is_array( $validation_answer ) )
 				return ADBC_Rest::error( $validation_answer, ADBC_Rest::BAD_REQUEST );
 
-			$grouped = ADBC_Selected_Items_Validator::group_selected_items_by_site_id( $validation_answer );
+			$cleaned_cron_jobs = $validation_answer;
+
+			if ( ADBC_Settings::instance()->get_setting( 'prevent_taking_action_on_wp_items' ) === '1' ) {
+
+				$cleaned_cron_jobs = ADBC_Hardcoded_Items::instance()->exclude_hardcoded_items_from_selected_items( $validation_answer, 'cron_jobs', "wp" );
+
+				if ( ADBC_VERSION_TYPE === 'PREMIUM' )
+					$cleaned_cron_jobs = ADBC_Scan_Utils::exclude_r_wp_items_from_selected_items( $cleaned_cron_jobs, 'cron_jobs' );
+
+				if ( empty( $cleaned_cron_jobs ) )
+					return ADBC_Rest::error(
+						__( 'The selected cron jobs could not be deleted because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+						ADBC_Rest::BAD_REQUEST,
+						0,
+						[ 
+							"message_links" => [ 
+								[ 
+									"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+									"tab_id" => "settings",
+									"anchor_id" => "other_settings",
+									"setting_id" => "prevent_taking_action_on_wp_items"
+								]
+							]
+						]
+					);
+			}
+
+			$grouped = ADBC_Selected_Items_Validator::group_selected_items_by_site_id( $cleaned_cron_jobs );
 
 			$not_processed = ADBC_Cron_Jobs::delete_cron_jobs( $grouped );
 
 			// Delete the cron jobs from the scan results
 			if ( ADBC_VERSION_TYPE === 'PREMIUM' ) {
-				$cron_jobs_names = array_column( $validation_answer, 'name' ); // Create an array containing only the cron job names.
+				$cron_jobs_names = array_column( $cleaned_cron_jobs, 'name' ); // Create an array containing only the cron job names.
 				ADBC_Scan_Utils::update_scan_results_file_after_deletion( 'cron_jobs', $cron_jobs_names, $not_processed );
+			}
+
+			if ( count( $cleaned_cron_jobs ) < count( $validation_answer ) ) {
+				return ADBC_Rest::success(
+					__( 'Some cron jobs were deleted successfully; others were skipped because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+					count( $not_processed ),
+					[ 
+						"message_links" => [ 
+							[ 
+								"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+								"tab_id" => "settings",
+								"anchor_id" => "other_settings",
+								"setting_id" => "prevent_taking_action_on_wp_items"
+							]
+						]
+					]
+				);
 			}
 
 			return ADBC_Rest::success( "", count( $not_processed ) );

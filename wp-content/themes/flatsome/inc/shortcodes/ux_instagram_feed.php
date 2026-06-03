@@ -148,7 +148,7 @@ function ux_instagram_feed( $atts, $content = null ) {
 	if ( $link != '' ) {
 		?>
 		<a class="plain uppercase" href="<?php echo trailingslashit( '//instagram.com/' . esc_attr( trim( $username ) ) ); ?>" rel="me"
-			 target="<?php echo esc_attr( $target ); ?> aria-label="<?php echo esc_attr__( 'Follow on Instagram', 'flatsome' ); ?>"><?php echo get_flatsome_icon( 'icon-instagram' ); ?><?php echo wp_kses_post( $link ); ?></a>
+			 target="<?php echo esc_attr( $target ); ?>" aria-label="<?php echo esc_attr__( 'Follow on Instagram', 'flatsome' ); ?>"><?php echo get_flatsome_icon( 'icon-instagram' ); ?><?php echo wp_kses_post( $link ); ?></a>
 		<?php
 	}
 

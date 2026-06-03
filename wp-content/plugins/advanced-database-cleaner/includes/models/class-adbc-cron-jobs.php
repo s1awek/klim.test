@@ -156,6 +156,7 @@ class ADBC_Cron_Jobs {
 						'site_id' => $cron_job->site_id,
 						'has_action' => $cron_job->has_action ? 'yes' : 'no',
 						'action' => $cron_job->action,
+						'action_file' => $cron_job->action_file,
 						'belongs_to' => $cron_job->belongs_to,
 						'known_plugins' => $cron_job->known_plugins,
 						'known_themes' => $cron_job->known_themes,
@@ -236,7 +237,8 @@ class ADBC_Cron_Jobs {
 							'interval' => ! empty( $event['interval'] ) ? $event['interval'] : 'N/A',
 							'site_id' => $site['id'],
 							'has_action' => has_action( $hook ) !== false,
-							'action' => self::get_hook_action_label( $hook )
+							'action' => self::get_hook_action_info( $hook )['action'],
+							'action_file' => self::get_hook_action_info( $hook )['action_file'],
 						];
 
 						// Apply filters
@@ -331,33 +333,45 @@ class ADBC_Cron_Jobs {
 	}
 
 	/**
-	 * Get a human-readable action label (callback name) for a given cron hook.
-	 * Returns the first registered callback name, or empty string if none.
+	 * Get the action label and source file for the first callback registered on a hook.
 	 *
 	 * @param string $hook Hook name.
-	 * @return string Callback label or empty string.
+	 * @return array { action: string, action_file: string }
 	 */
-	private static function get_hook_action_label( $hook ) {
+	private static function get_hook_action_info( $hook ) {
 
 		global $wp_filter;
 
+		$result = [ 'action' => '', 'action_file' => '' ];
+
 		if ( empty( $hook ) || ! isset( $wp_filter[ $hook ] ) )
-			return '';
+			return $result;
 
 		$hook_obj = $wp_filter[ $hook ];
 		if ( ! is_object( $hook_obj ) || empty( $hook_obj->callbacks ) )
-			return '';
+			return $result;
 
+		// Find the first registered callback
+		$callback = null;
 		foreach ( $hook_obj->callbacks as $priority => $callbacks ) {
 			if ( empty( $callbacks ) )
 				continue;
 			foreach ( $callbacks as $cb ) {
-				if ( isset( $cb['function'] ) )
-					return self::callback_to_string( $cb['function'] );
+				if ( isset( $cb['function'] ) ) {
+					$callback = $cb['function'];
+					break 2;
+				}
 			}
 		}
 
-		return '';
+		if ( $callback === null )
+			return $result;
+
+		$result['action'] = self::callback_to_string( $callback );
+		$result['action_file'] = self::get_callback_file_info( $callback );
+
+		return $result;
+
 	}
 
 	/**
@@ -367,6 +381,7 @@ class ADBC_Cron_Jobs {
 	 * @return string
 	 */
 	private static function callback_to_string( $callback ) {
+
 		if ( is_string( $callback ) )
 			return $callback . '()';
 
@@ -374,16 +389,55 @@ class ADBC_Cron_Jobs {
 			list( $obj_or_class, $method ) = $callback;
 			if ( is_object( $obj_or_class ) )
 				return get_class( $obj_or_class ) . '->' . (string) $method . '()';
-			return (string) $obj_or_class . '->' . (string) $method . '()';
+			return (string) $obj_or_class . '::' . (string) $method . '()';
 		}
 
 		if ( $callback instanceof \Closure )
-			return 'Closure';
+			return __( 'Anonymous function', 'advanced-database-cleaner' );
 
 		if ( is_object( $callback ) && method_exists( $callback, '__invoke' ) )
 			return get_class( $callback ) . '->__invoke()';
 
-		return 'callback';
+		return __( 'Unknown action', 'advanced-database-cleaner' );
+
+	}
+
+	/**
+	 * Get the file:line info for a callback.
+	 *
+	 * @param mixed $callback Callback.
+	 * @return string File:line info.
+	 */
+	private static function get_callback_file_info( $callback ) {
+
+		try {
+
+			if ( is_array( $callback ) && count( $callback ) === 2 ) {
+				$class = is_object( $callback[0] ) ? get_class( $callback[0] ) : (string) $callback[0];
+				$method = (string) $callback[1];
+				$ref = PHP_VERSION_ID >= 80400
+					? \ReflectionMethod::createFromMethodName( $class . '::' . $method )
+					: new \ReflectionMethod( $class, $method );
+			} elseif ( is_string( $callback ) && strpos( $callback, '::' ) !== false ) {
+				$ref = PHP_VERSION_ID >= 80400
+					? \ReflectionMethod::createFromMethodName( $callback )
+					: new \ReflectionMethod( ...explode( '::', $callback, 2 ) );
+			} elseif ( $callback instanceof \Closure ) {
+				$ref = new \ReflectionFunction( $callback );
+			} elseif ( is_object( $callback ) ) {
+				$ref = new \ReflectionMethod( $callback, '__invoke' );
+			} else {
+				$ref = new \ReflectionFunction( $callback );
+			}
+
+			$file = $ref->getFileName();
+			if ( ! empty( $file ) )
+				return $file . ':' . $ref->getStartLine();
+
+		} catch (\Throwable $e) {
+			return '';
+		}
+
 	}
 
 	/**

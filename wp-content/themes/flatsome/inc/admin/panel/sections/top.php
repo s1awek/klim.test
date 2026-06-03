@@ -11,7 +11,7 @@
     <?php echo '<strong>Welcome to Flatsome</strong>'; ?>
 </h1>
 <div class="about-text">
-<?php _e( 'Thanks for Choosing Flatsome - The worlds most powerful WooCommerce and Multi-Purpose Theme. This page will help you quickly get up and running with Flatsome.', 'flatsome-admin' ); ?>
+<?php _e( 'Thank you for choosing Flatsome - the world\'s most powerful WooCommerce and Multi-Purpose Theme. This page will help you quickly get up and running.', 'flatsome-admin' ); ?>
     <br><br>
     <a href="<?php echo admin_url().'admin.php?page=flatsome-setup'; ?>" class="button button-primary button-large"><?php _e('Setup Wizard', 'flatsome-admin' ); ?></a>
 </div>

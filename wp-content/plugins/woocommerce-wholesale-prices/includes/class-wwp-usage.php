@@ -227,7 +227,7 @@ class WWP_Usage {
         foreach ( $result as $option ) {
             if ( isset( $option ) && isset( $option['option_name'] ) && isset( $option['option_value'] ) ) {
                 // if option_name starts with wpay and not included in whitelist, continue.
-                if ( strpos( $option['option_name'], 'wpay_' ) === 0 && ! in_array( $option['option_name'], $wpay_settings_whitelist, true ) ) {
+                if ( str_starts_with( $option['option_name'], 'wpay_' ) && ! in_array( $option['option_name'], $wpay_settings_whitelist, true ) ) {
                     continue;
                 }
 
@@ -529,7 +529,7 @@ class WWP_Usage {
 
         // Don't track anything from our domains.
         $home_url = trailingslashit( home_url() );
-        if ( strpos( $home_url, 'wholesalesuiteplugin.com' ) !== false ) {
+        if ( str_contains( $home_url, 'wholesalesuiteplugin.com' ) ) {
             return false;
         }
 

@@ -46,8 +46,22 @@ if(!class_exists('Wt_Iew_Sh'))
 		*/
 		public static function sanitize_item($val, $type='')
 		{
+			/**
+			 * Allow skipping sanitization for the current item.
+			 *
+			 * Return true to skip sanitization and leave the value unchanged.
+			 *
+			 * @param bool   $skip Default false. Return true to skip.
+			 * @param mixed  $val  Value being sanitized.
+			 * @param string $type Sanitization type (e.g. 'text', 'text_arr', 'url').
+			 */
+			$skip = apply_filters( 'wt_iew_skip_sanitize_item', false, $val, $type );
+			if ( true === $skip ) {
+				return $val;
+			}
+
 			switch ($type) 
-			{
+			{ 
 			    case 'text':
 			        $val = sanitize_text_field($val);
 			        break;

@@ -126,6 +126,16 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Export {
                 $row[$column] = $term->parent;
                 continue;
             }
+			if ( 'parent_slug' === $column ) {
+				$row[ $column ] = '';
+				if ( ! empty( $term->parent ) ) {
+					$parent_term = get_term( (int) $term->parent, 'product_cat' );
+					if ( $parent_term && ! is_wp_error( $parent_term ) ) {
+						$row[ $column ] = rawurldecode( (string) $parent_term->slug );
+					}
+				}
+				continue;
+			}
 
             if ($column === 'thumbnail') {
                 $thumbnail_id = get_term_meta($term->term_id, 'thumbnail_id', true);

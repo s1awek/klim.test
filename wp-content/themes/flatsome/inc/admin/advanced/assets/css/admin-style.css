@@ -38,10 +38,27 @@
 .flatsome-instagram-accounts__access-token-form > input {
 	margin-left: 0 !important;
 }
-.flatsome-instagram-accounts__access-token-form > button.button {
+
+body:not(.flatsome-wp-version-gte-70) .flatsome-instagram-accounts__access-token-form > button.button {
 	display: flex;
 	align-items: center;
 	margin-bottom: 0;
+}
+
+.flatsome-facebook-login-button.button {
+	background-color: #4267b2;
+	border-color: #4267b2;
+	color: #ffffff;
+}
+
+body:not(.flatsome-wp-version-gte-70) .flatsome-facebook-login-button.button {
+	padding: 5px 15px;
+	height: auto;
+}
+
+body:not(.flatsome-wp-version-gte-70) .flatsome-facebook-login-button .dashicons {
+	vertical-align: middle;
+	margin-top: -2px;
 }
 
 .flatsome-instagram-accounts__access-token-form > button.button.is-busy {
@@ -106,7 +123,11 @@
 	background-repeat: no-repeat;
 	background-position: 90% 50%;
 		transition: all 0.3s;
+}
 
+#of_container #of-nav ul li a:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
 }
 
 #of_container #of-nav ul li{
@@ -168,14 +189,14 @@
 }
 
 #of_container #content input[type=checkbox] {
-	width: 17px;
-	min-width: 17px;
+	width: 1rem;
+	height: 1rem;
 }
 
 
 #of_container #content .section-multicheck .controls input{
 	display: inline-block;
-	width: 17px;
+	width: 1rem;
 	margin-right: 10px;
 }
 
@@ -183,7 +204,6 @@
 /* Options and select */
 #of_container select, #of_container input, #of_container textarea{
 	width:100%;
-	background-color: #f9f9f9;
 	border:1px solid #ddd;
 	border-radius: 3px;
 	padding:10px;

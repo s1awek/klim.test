@@ -14,6 +14,14 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
     var $import_results = array();
     var $row;
 
+	/**
+	 * During one import run: source (exported) term_id => local term_id on this site.
+	 * Used by resolve_import_parent_local_term_id() to link children to parents inserted in the same run.
+	 *
+	 * @var array<int,int>
+	 */
+	private static $product_cat_import_source_to_local = array();
+
     public function __construct($parent_object) {
 
         $this->parent_module = $parent_object;
@@ -24,6 +32,7 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
             'slug' => 'slug',
             'description' => 'description',
             'parent' => 'parent',
+			'parent_slug' => 'parent_slug',
             'thumbnail' => 'thumbnail',
         ));
     }
@@ -39,6 +48,8 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
         $this->taxonomy_type =  'product_cat';
 
         Wt_Import_Export_For_Woo_Basic_Logwriter::write_log($this->parent_module->module_base, 'import', "Preparing for import.");
+
+		self::$product_cat_import_source_to_local = array();
 
         $success = 0;
         $failed = 0;
@@ -93,6 +104,8 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
         try {
             $data = apply_filters('wt_woocommerce_product_categories_importer_pre_parse_data', $data);
 
+			$data = $this->maybe_resolve_parent_from_slug( $data );
+
             $item = $data['mapping_fields'];
 
             return $item;
@@ -100,6 +113,44 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
             return new WP_Error('woocommerce_product_importer_error', $e->getMessage(), array('status' => $e->getCode()));
         }
     }
+
+	/**
+	 * Resolve parent_slug to parent term ID before mapping merge.
+	 * If parent_slug points to an existing product_cat term, set 'parent' to its term_id
+	 * and mark the row so downstream resolution short-circuits the legacy numeric lookup.
+	 *
+	 * @since 2.6.4
+	 *
+	 * @param array $data Import row data.
+	 * @return array
+	 */
+	private function maybe_resolve_parent_from_slug( $data ) {
+		if ( empty( $data['mapping_fields'] ) || ! is_array( $data['mapping_fields'] ) ) {
+			return $data;
+		}
+
+		if ( ! array_key_exists( 'parent_slug', $data['mapping_fields'] ) ) {
+			return $data;
+		}
+
+		$parent_slug = $data['mapping_fields']['parent_slug'];
+		if ( is_string( $parent_slug ) ) {
+			$parent_slug = trim( rawurldecode( $parent_slug ) );
+		} else {
+			$parent_slug = '';
+		}
+
+		if ( '' !== $parent_slug ) {
+			$parent_term = get_term_by( 'slug', sanitize_title( $parent_slug ), 'product_cat' );
+			if ( $parent_term && ! is_wp_error( $parent_term ) ) {
+				$data['mapping_fields']['parent']                    = (int) $parent_term->term_id;
+				$data['mapping_fields']['_wt_parent_local_resolved'] = 1;
+			}
+		}
+
+		unset( $data['mapping_fields']['parent_slug'] );
+		return $data;
+	}
 
     /**
      * Create new taxonomy based on import information
@@ -124,6 +175,8 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
         $display_type = isset($data['display_type']) ? $data['display_type'] : '';
 
         $parent_id = (isset($data['parent']) && ($data['parent'] != 0 )) ? $data['parent'] : '';
+
+		$is_parent_local_resolved = ! empty( $data['_wt_parent_local_resolved'] );
 
         global $wpdb;
 
@@ -189,17 +242,19 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
 
                     if ($taxonomy_type == 'product_tag' || $taxonomy_type == 'product_cat') {
 
-                        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-                        $res = $wpdb->get_results($wpdb->prepare("SELECT term_id FROM $wpdb->termmeta WHERE meta_key = %s and meta_value = %d ORDER BY meta_key,meta_id", $term_meta_tbl_key, $parent_id), ARRAY_A);
-						if(empty($res)){
-                            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-							$res = $wpdb->get_results($wpdb->prepare("SELECT term_id FROM $wpdb->terms WHERE term_id = %d ORDER BY term_id", $parent_id), ARRAY_A);
+						$res = array();
+						if ( ! empty( $parent_id ) ) {
+							if ( $is_parent_local_resolved ) {
+								$resolved_parent = absint( $parent_id );
+							} else {
+								$resolved_parent = $this->resolve_import_parent_local_term_id( $parent_id, $term_meta_tbl_key, $tax_type );
+							}
+							if ( $resolved_parent > 0 ) {
+								$res                    = array( array( 'term_id' => $resolved_parent ) );
+								$pid                    = $resolved_parent;
+								$related_data['parent'] = $pid;
+							}
 						}
-
-                        if (!empty($res)) {
-                            $pid = $res[0]['term_id'];
-                        }
-                        $related_data['parent'] = $pid;
                     }
                     if (!empty($parent_id) && empty($res)) {
 
@@ -218,6 +273,10 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
                         $cid = $cid['term_id'];
                         if(!empty($term_id))
                         update_term_meta($cid, $term_meta_tbl_key, $term_id);
+
+						if ( 'product_cat' === $taxonomy_type && ! empty( $term_id ) && absint( $term_id ) > 0 ) {
+							self::register_product_cat_import_id_map( $term_id, $cid );
+						}
 
                         if ($taxonomy_type == 'product_cat') {
 
@@ -245,6 +304,16 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
             } else {
 
                 if ($is_update) {
+					if ( 'product_cat' === $taxonomy_type && ! empty( $parent_id ) ) {
+						if ( $is_parent_local_resolved ) {
+							$resolved_parent_upd = absint( $parent_id );
+						} else {
+							$resolved_parent_upd = $this->resolve_import_parent_local_term_id( $parent_id, $term_meta_tbl_key, $tax_type );
+						}
+						if ( $resolved_parent_upd > 0 ) {
+							$related_data['parent'] = $resolved_parent_upd;
+						}
+					}
                     $update = wp_update_term($tid, $taxonomy_name, $related_data);
                     if ($taxonomy_type == 'product_cat') {
                         $thumbnail = isset($data['thumbnail']) ? $data['thumbnail'] : '';
@@ -278,12 +347,105 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
                 }
                 if($term_id)
                 update_term_meta($tid, $term_meta_tbl_key, $term_id);
+
+				if ( 'product_cat' === $taxonomy_type && ! empty( $term_id ) && absint( $term_id ) > 0 ) {
+					self::register_product_cat_import_id_map( $term_id, $tid );
+				}
             }
         }
 
         unset($chk);
         return $status;
     }
+
+	/**
+	 * Register exported source term_id => local term_id for parent resolution within the same import run.
+	 *
+	 * @since 2.6.4
+	 *
+	 * @param mixed $source_term_id Value from CSV term_id column (string or int).
+	 * @param int   $local_term_id  Term ID on this site after insert/update.
+	 */
+	private static function register_product_cat_import_id_map( $source_term_id, $local_term_id ) {
+		$src = absint( $source_term_id );
+		$loc = absint( $local_term_id );
+		if ( $src && $loc ) {
+			self::$product_cat_import_source_to_local[ $src ] = $loc;
+		}
+	}
+
+	/**
+	 * Map exported parent reference to local product_cat term_id.
+	 *
+	 * Resolution order:
+	 *   1. In-run source→local map (terms inserted earlier in this import).
+	 *   2. termmeta lookup by the legacy "orginal_term_id" key.
+	 *   3. Direct term_id match on the local site (legacy/same-site behavior).
+	 *   4. Slug fallback when the parent reference is non-numeric (defensive).
+	 *
+	 * @since 2.6.4
+	 *
+	 * @param mixed  $parent_source     Parent column (source term ID or slug).
+	 * @param string $term_meta_tbl_key orginal_term_id (or tag equivalent).
+	 * @param string $tax_type          Taxonomy slug.
+	 * @return int Local parent term_id or 0 if not resolvable.
+	 */
+	private function resolve_import_parent_local_term_id( $parent_source, $term_meta_tbl_key, $tax_type ) {
+		global $wpdb;
+
+		if ( '' === $parent_source || null === $parent_source ) {
+			return 0;
+		}
+
+		if ( is_numeric( $parent_source ) ) {
+			$parent_id = absint( $parent_source );
+			if ( ! $parent_id ) {
+				return 0;
+			}
+			if ( isset( self::$product_cat_import_source_to_local[ $parent_id ] ) ) {
+				return (int) self::$product_cat_import_source_to_local[ $parent_id ];
+			}
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$by_meta = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT tm.term_id FROM {$wpdb->termmeta} tm
+					INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_id = tm.term_id AND tt.taxonomy = %s
+					WHERE tm.meta_key = %s AND ( tm.meta_value = %s OR tm.meta_value = %d )
+					ORDER BY tm.meta_id ASC
+					LIMIT 1",
+					$tax_type,
+					$term_meta_tbl_key,
+					(string) $parent_id,
+					$parent_id
+				)
+			);
+			if ( $by_meta ) {
+				return (int) $by_meta;
+			}
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$by_id = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT t.term_id FROM {$wpdb->terms} t
+					INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_id = t.term_id AND tt.taxonomy = %s
+					WHERE t.term_id = %d
+					LIMIT 1",
+					$tax_type,
+					$parent_id
+				)
+			);
+			return $by_id ? (int) $by_id : 0;
+		}
+
+		$slug = sanitize_title( (string) $parent_source );
+		if ( '' === $slug ) {
+			return 0;
+		}
+		$term = get_term_by( 'slug', $slug, $tax_type );
+		if ( $term && ! is_wp_error( $term ) ) {
+			return (int) $term->term_id;
+		}
+		return 0;
+	}
 
     /**
      * Method used for attach image file to wp library
@@ -335,6 +497,7 @@ class Wt_Import_Export_For_Woo_Basic_Categories_Import {
     }
 
     public function clean_after_import() {
+		self::$product_cat_import_source_to_local = array();
         wp_suspend_cache_invalidation(false);
         wp_defer_term_counting(false);
         wp_defer_comment_counting(false);

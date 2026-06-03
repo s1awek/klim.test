@@ -53,7 +53,19 @@ class ADBC_Logs_Endpoints {
 			$cleared = ADBC_Logging::clear_log();
 
 			if ( $cleared === false )
-				return ADBC_Rest::error( __( 'Cannot clear the log file content.', 'advanced-database-cleaner' ), ADBC_Rest::INTERNAL_SERVER_ERROR );
+				return ADBC_Rest::error(
+					__( 'Cannot clear the log file content.', 'advanced-database-cleaner' ), ADBC_Rest::INTERNAL_SERVER_ERROR,
+					0,
+					[ 
+						'message_links' => [ 
+							[ 
+								'text' => __( 'Check the logs', 'advanced-database-cleaner' ),
+								'tab_id' => 'info_and_logs',
+								'sub_tab_id' => 'debug',
+							],
+						],
+					]
+				);
 
 			return ADBC_Rest::success( "" );
 

@@ -1,6 +1,16 @@
 
 == Changelog ==
 
+= 2.6.4 2026-05-26 =
+* [Compatibility] - Tested OK with WordPress 7.0
+* [Fix] - Vulnerability. Thanks to @nacento for reporting the issue.
+* [Improvement] - Added parent_slug support for product category export/import.
+
+= 2.6.3 2026-05-06 =
+* [Compatibility] - Tested OK with WordPress 6.9.4
+* [Compatibility] – Tested OK with WooCommerce 10.7.0
+* [Fix] - Minor fixes.
+
 = 2.6.2 2026-03-10 =
 * [Compatibility] – Tested OK with WooCommerce 10.5.3
 * [Improvement] – Improved import/export file naming: replaced underscores with hyphens and switched timestamps to 24-hour format.

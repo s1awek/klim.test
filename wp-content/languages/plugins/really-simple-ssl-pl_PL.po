@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Really Simple Security &#8211; Simple and Performant Security (formerly Really Simple SSL) - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-14 09:38:46+0000\n"
+"PO-Revision-Date: 2026-05-29 10:24:18+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -44,13 +44,13 @@ msgid "Choose new username to replace 'admin'"
 msgstr "Wybierz nową nazwę użytkownika, aby zastąpić nazwę „admin”"
 
 #: settings/config/fields/general.php:88
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/src/Settings/Support.js:45
 msgid "Send"
 msgstr "Wyślij"
 
 #: class-admin.php:727 settings/build/366.cdae799ade6d811e7edd.js:1
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/build/635.572d18e3e2185b3ba2e9.js:1
 #: settings/src/Dashboard/TaskElement.js:72
 #: settings/src/Dashboard/TaskElement.js:76
@@ -64,20 +64,20 @@ msgstr "Zobacz"
 #: settings/config/fields/limit-login-attempts.php:184
 #: settings/config/fields/limit-login-attempts.php:230
 #: settings/config/menu.php:506 settings/config/menu.php:574
-#: settings/config/menu.php:600 settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/config/menu.php:600 settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/src/Settings/LearningMode/LearningMode.js:149
 msgid "Blocked"
 msgstr "Zablokowano"
 
 #: settings/config/menu.php:514 settings/config/menu.php:608
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/src/Settings/LearningMode/LearningMode.js:148
 msgid "Allowed"
 msgstr "Dozwolono"
 
 #: settings/config/menu.php:339 settings/config/menu.php:486
 #: settings/config/menu.php:651 settings/config/menu.php:688
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/src/Settings/DataTable/DataTableWrapper.js:151
 #: settings/src/Settings/EventLog/EventLogDataTable.js:213
 #: settings/src/Settings/firewall/UserAgentTable.js:257
@@ -106,7 +106,7 @@ msgid "Source"
 msgstr "Źródło"
 
 #: settings/config/fields/security-headers.php:214
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/src/Settings/LearningMode/LearningMode.js:335
 #: settings/src/Settings/LearningMode/LearningMode.js:343
 #: settings/src/Settings/PermissionsPolicy.js:200
@@ -118,8 +118,13 @@ msgstr "Wyłącz"
 msgid "Location"
 msgstr "Położenie"
 
+#: settings/config/fields/encryption.php:101
+#: settings/config/fields/vulnerability-detection.php:223
+msgid "Description"
+msgstr "Opis"
+
 #: settings/config/fields/security-headers.php:214
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/src/Settings/GeoBlockList/GeoDatatable.js:278
 #: settings/src/Settings/GeoBlockList/GeoDatatable.js:295
 #: settings/src/Settings/GeoBlockList/GeoDatatable.js:473
@@ -133,11 +138,6 @@ msgstr "Położenie"
 #: settings/src/Settings/LimitLoginAttempts/CountryDatatable.js:412
 msgid "Allow"
 msgstr "Pozwól"
-
-#: settings/config/fields/encryption.php:101
-#: settings/config/fields/vulnerability-detection.php:223
-msgid "Description"
-msgstr "Opis"
 
 #: settings/config/fields/encryption.php:94
 msgid "Type"
@@ -165,7 +165,7 @@ msgid "Method"
 msgstr "Metoda"
 
 #: settings/config/fields/security-headers.php:393
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/src/Settings/LearningMode/ManualCspAdditionModal.js:156
 msgid "Directive"
 msgstr "Dyrektywa"
@@ -300,7 +300,7 @@ msgstr "XML-RPC"
 #: placeholders/class-placeholder.php:389
 #: placeholders/class-placeholder.php:415
 #: placeholders/class-placeholder.php:440
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/src/Settings/MixedContentScan/MixedContentScan.js:90
 #: settings/src/Settings/RiskConfiguration/RiskData.js:115
 msgid "Details"
@@ -308,7 +308,7 @@ msgstr "Szczegóły"
 
 #: core/app/Features/Onboarding/OnboardingStepsGenerator.php:184
 #: settings/config/menu.php:755 settings/build/366.cdae799ade6d811e7edd.js:1
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/build/635.572d18e3e2185b3ba2e9.js:1
 #: settings/src/Dashboard/OtherPlugins/OtherPluginsData.js:74
 #: settings/src/Onboarding/OnboardingControls.js:192
@@ -316,14 +316,14 @@ msgstr "Szczegóły"
 msgid "Activate"
 msgstr "Włącz"
 
-#: settings/config/menu.php:68 settings/build/index.db18a1846419792ffa57.js:1
+#: settings/config/menu.php:68 settings/build/index.31109c0699562fc65751.js:1
 #: settings/src/Header.js:32
 msgid "Let's Encrypt"
 msgstr "Let's Encrypt"
 
 #: security/notices.php:93 settings/config/fields/limit-login-attempts.php:153
 #: settings/config/fields/two-fa.php:165
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/src/Settings/LimitLoginAttempts/AddUserModal.js:60
 msgid "Username"
 msgstr "Nazwa użytkownika"
@@ -569,7 +569,7 @@ msgid "Please refresh the SSL status if a certificate has been installed recentl
 msgstr "Proszę odświeżyć wykrywania SSL jeśli certyfikat został ostatnio zainstalowany."
 
 #: settings/config/fields/general.php:60
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/src/LetsEncrypt/Installation.js:95
 #: settings/src/LetsEncrypt/Installation.js:100
 #: settings/src/LetsEncrypt/Installation.js:104
@@ -638,7 +638,7 @@ msgid "Hosting"
 msgstr "Hosting"
 
 #: lets-encrypt/config/fields.php:134 lets-encrypt/config/notices.php:51
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/src/LetsEncrypt/DnsVerification.js:62
 msgid "Domain"
 msgstr "Domena"
@@ -646,11 +646,6 @@ msgstr "Domena"
 #: settings/settings.php:559
 msgid "Terms and Conditions"
 msgstr "Zasady i warunki"
-
-#: lets-encrypt/config/fields.php:94 lets-encrypt/config/fields.php:97
-#: settings/config/fields/general.php:78
-msgid "Email address"
-msgstr "Adres e-mail"
 
 #: lets-encrypt/config/fields.php:58
 msgid "Checking if CURL is available..."
@@ -703,6 +698,11 @@ msgstr "Dostawca hostingu"
 #: lets-encrypt/config/fields.php:291
 msgid "CloudWays user email"
 msgstr "Adres e-mail użytkownika CloudWays"
+
+#: lets-encrypt/config/fields.php:94 lets-encrypt/config/fields.php:97
+#: settings/config/fields/general.php:78
+msgid "Email address"
+msgstr "Adres email"
 
 #: security/cron.php:96
 msgid "Once every 5 minutes"
@@ -801,7 +801,7 @@ msgid "Retry"
 msgstr "Ponów"
 
 #: class-admin.php:2232 settings/build/366.cdae799ade6d811e7edd.js:1
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/build/635.572d18e3e2185b3ba2e9.js:1
 #: settings/src/Dashboard/TaskElement.js:66
 msgid "Re-check"
@@ -857,7 +857,7 @@ msgstr "Zainstalowano"
 msgid "Open"
 msgstr "Otwórz"
 
-#: class-admin.php:2047 settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: class-admin.php:2047 settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/src/Settings/MixedContentScan/MixedContentScan.js:58
 msgid "Warning"
 msgstr "Ostrzeżenie"
@@ -891,7 +891,7 @@ msgid "The .htaccess redirect rules selected by this plugin failed in the test. 
 msgstr "Reguła przekierowania .htaccess wybrana przez wtyczkę nie przeszła testu. Ustaw ręcznie lub odrzuć żeby zostawić przekierowanie PHP."
 
 #: class-site-health.php:333 settings/build/366.cdae799ade6d811e7edd.js:1
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/build/635.572d18e3e2185b3ba2e9.js:1
 #: settings/src/Dashboard/Progress/ProgressFooter.js:24
 #: settings/src/Onboarding/OnboardingControls.js:168
@@ -927,7 +927,7 @@ msgstr "SSL nie jest jeszcze włączone."
 msgid "SSL is not yet enabled on this site."
 msgstr "SSL nie jest jeszcze włączone na tej stronie."
 
-#: class-admin.php:203 settings/build/index.db18a1846419792ffa57.js:1
+#: class-admin.php:203 settings/build/index.31109c0699562fc65751.js:1
 #: settings/src/Header.js:45
 msgid "Support"
 msgstr "Pomoc"
@@ -941,7 +941,7 @@ msgstr "Naprawa mieszanej treści jest aktywna, ale nie została wykryta na fron
 #: class-site-health.php:290
 #: settings/config/fields/vulnerability-detection.php:236
 #: settings/build/366.cdae799ade6d811e7edd.js:1
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/src/Dashboard/SslLabs/SslLabs.js:320
 #: settings/src/LetsEncrypt/DnsVerification.js:57
 msgid "Read more"
@@ -1012,7 +1012,7 @@ msgstr "To może spowodować problemy przy aktywacji SSL dla całej sieci, gdyż
 
 #: upgrade/upgrade-to-pro.php:339 modal/build/433.db1479f1e30c6b53cbd8.js:1
 #: modal/src/components/Modal/RssslModal.js:68
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/build/635.572d18e3e2185b3ba2e9.js:1
 #: settings/src/Settings/firewall/UserAgentModal.js:151
 #: settings/src/Settings/GeoBlockList/TrustIpAddressModal.js:140
@@ -1023,7 +1023,7 @@ msgid "Cancel"
 msgstr "Anuluj"
 
 #: class-admin.php:727 settings/build/366.cdae799ade6d811e7edd.js:1
-#: settings/build/536.c273dd1cc0292bde0cc4.js:1
+#: settings/build/536.6a8263803b26fa228ff2.js:1
 #: settings/build/635.572d18e3e2185b3ba2e9.js:1
 #: settings/build/995.1951bdba4c61ca45e7ca.js:1
 #: settings/src/Dashboard/TaskElement.js:65 settings/src/Settings/Help.js:24

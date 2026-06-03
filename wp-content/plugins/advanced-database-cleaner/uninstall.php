@@ -34,6 +34,8 @@ class ADBC_Uninstall {
 	// List of all ADBC transients to delete on uninstall
 	private static $adbc_transients = [ 
 		'adbc_plugin_tables_to_repair' => 'all',
+		'adbc_plugin_innodb_conversion_lock' => 'all',
+		'adbc_plugin_post_types_dict_updated' => 'premium_pro',
 	];
 
 	// List of all ADBC cron jobs to unschedule on uninstall
@@ -59,7 +61,11 @@ class ADBC_Uninstall {
 		$is_free_version_active = is_plugin_active( 'advanced-database-cleaner/advanced-db-cleaner.php' );
 		$is_pro_version_active = is_plugin_active( 'advanced-database-cleaner-pro/advanced-db-cleaner.php' );
 
-		if ( basename( __DIR__ ) === 'advanced-database-cleaner-premium' ) { // we are in the premium version
+		$current_plugin_slug = basename( __DIR__ );
+
+		self::add_edd_cache_option_to_options_list( $current_plugin_slug );
+
+		if ( $current_plugin_slug === 'advanced-database-cleaner-premium' ) { // we are in the premium version
 
 			if ( $is_new_free_version_exists && $is_new_pro_version_exists ) { // free exists + pro exist
 
@@ -94,7 +100,7 @@ class ADBC_Uninstall {
 
 			}
 
-		} elseif ( basename( __DIR__ ) === 'advanced-database-cleaner-pro' ) { // we are in the pro version
+		} elseif ( $current_plugin_slug === 'advanced-database-cleaner-pro' ) { // we are in the pro version
 
 			if ( $is_new_free_version_exists && $is_premium_version_exists ) { // free exists + premium exists
 
@@ -243,6 +249,7 @@ class ADBC_Uninstall {
 		$automation_folder = $adbc_upload_folder . '/automation_events';
 		$addons_activity_file = $adbc_upload_folder . '/addons_activity.log';
 		$addons_activity_dictionary_file = $adbc_upload_folder . '/addons_activity_dictionary.log';
+		$registered_post_types_dictionary_file = $adbc_upload_folder . '/registered_post_types_dictionary.txt';
 
 		self::delete_folder( $scan_folder );
 		self::delete_folder( $analytics_folder );
@@ -253,6 +260,9 @@ class ADBC_Uninstall {
 
 		if ( file_exists( $addons_activity_dictionary_file ) )
 			wp_delete_file( $addons_activity_dictionary_file );
+
+		if ( file_exists( $registered_post_types_dictionary_file ) )
+			wp_delete_file( $registered_post_types_dictionary_file );
 
 	}
 
@@ -436,6 +446,39 @@ class ADBC_Uninstall {
 		}
 
 		return false;
+
+	}
+
+	/**
+	 * Add the EDD updater cache option to the options list.
+	 *
+	 * Added for ADBC integration so we can compute the cache key
+	 * without instantiating the updater and adding listeners.
+	 *
+	 * @param string $slug    Plugin slug.
+	 * 
+	 * @return void
+	 */
+	private static function add_edd_cache_option_to_options_list( $slug ) {
+
+		$plugin_version_type = $slug === 'advanced-database-cleaner-pro' ? 'pro' : 'premium';
+		$license_option_name = $plugin_version_type === 'pro' ? 'adbc_plugin_license_key_pro' : 'adbc_plugin_license_key';
+		$license = get_option( $license_option_name, '' );
+
+		if ( empty( $license ) )
+			return;
+
+		$key = md5(
+			wp_json_encode(
+				array(
+					(string) $slug,
+					(string) $license,
+					0,
+				)
+			)
+		);
+
+		self::$adbc_options[ "edd_sl_{$key}" ] = $plugin_version_type;
 
 	}
 

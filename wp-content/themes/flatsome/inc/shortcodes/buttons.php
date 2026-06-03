@@ -105,14 +105,14 @@ function button_shortcode( $atts, $content = null ) {
 	if ( $link ) {
 		// Smart links.
 		$link               = flatsome_smart_links( $link );
-		$attributes['href'] = $link;
+		$attributes['href'] = esc_url( $link );
 		if ( $target ) {
 			$attributes['target'] = esc_attr( $target );
 		}
 	}
 	if ( $tooltip ) {
 		$classes[]           = 'has-tooltip';
-		$attributes['title'] = wp_kses_post( $tooltip );
+		$attributes['title'] = esc_attr( $tooltip );
 	}
 
 	$styles = get_shortcode_inline_css( array(

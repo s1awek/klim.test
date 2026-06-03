@@ -3,7 +3,7 @@
  * Plugin Name: PW WooCommerce Bulk Edit
  * Plugin URI: https://www.pimwick.com/pw-bulk-edit/
  * Description: A powerful way to update your WooCommerce product catalog. Finally, no more tedious clicking through countless pages making the same change to all products!
- * Version: 2.140
+ * Version: 2.141
  * Author: Pimwick, LLC
  * Author URI: https://www.pimwick.com
  * Text Domain: pw-bulk-edit
@@ -14,7 +14,7 @@
  * Requires Plugins: woocommerce
  *
 */
-define('PWBE_VERSION', '2.140');
+define('PWBE_VERSION', '2.141');
 
 /*
 Copyright (C) Pimwick, LLC

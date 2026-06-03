@@ -31,7 +31,7 @@ class ADBC_General_Cleanup_Endpoints {
 
 			// Handle empty array - return all items
 			if ( is_array( $items_type_param ) && empty( $items_type_param ) ) {
-				return ADBC_Rest::success( 'Success', ADBC_General_Cleanup::get_general_data() );
+				return ADBC_Rest::success( '', ADBC_General_Cleanup::get_general_data() );
 			}
 
 			// Handle array of item types
@@ -42,17 +42,17 @@ class ADBC_General_Cleanup_Endpoints {
 					return ADBC_Rest::error( 'invalid items types.', ADBC_Rest::BAD_REQUEST );
 				}
 
-				return ADBC_Rest::success( 'Success', ADBC_General_Cleanup::get_general_data( $validated_items_types ) );
+				return ADBC_Rest::success( '', ADBC_General_Cleanup::get_general_data( $validated_items_types ) );
 			}
 
 			// Handle string item type (backward compatibility and refresh after purge)
 			$items_type = ADBC_Common_Validator::sanitize_items_type( $items_type_param );
 
 			if ( $items_type === '' ) {
-				return ADBC_Rest::success( 'Success', ADBC_General_Cleanup::get_general_data() );
+				return ADBC_Rest::success( '', ADBC_General_Cleanup::get_general_data() );
 			}
 
-			return ADBC_Rest::success( 'Success', ADBC_General_Cleanup::get_general_data( $items_type ) );
+			return ADBC_Rest::success( '', ADBC_General_Cleanup::get_general_data( $items_type ) );
 
 		} catch (Throwable $e) {
 			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
@@ -79,7 +79,7 @@ class ADBC_General_Cleanup_Endpoints {
 
 			$list = ADBC_General_Cleanup::get_items( $args['items_type'], $args );
 
-			return ADBC_Rest::success( 'Success', $list );
+			return ADBC_Rest::success( '', $list );
 
 		} catch (Throwable $e) {
 			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
@@ -113,7 +113,7 @@ class ADBC_General_Cleanup_Endpoints {
 
 			$deleted = ADBC_General_Cleanup::delete_items( $items_type, $validated_selected_items );
 
-			return ADBC_Rest::success( 'Success', [ 'deleted' => $deleted ] );
+			return ADBC_Rest::success( '', [ 'deleted' => $deleted ] );
 
 		} catch (Throwable $e) {
 			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
@@ -140,7 +140,7 @@ class ADBC_General_Cleanup_Endpoints {
 
 			$purged = ADBC_General_Cleanup::purge_items( $items_type );
 
-			return ADBC_Rest::success( 'Success', [ 'purged' => $purged ] );
+			return ADBC_Rest::success( '', [ 'purged' => $purged ] );
 
 		} catch (Throwable $e) {
 			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
@@ -164,7 +164,20 @@ class ADBC_General_Cleanup_Endpoints {
 			if ( ADBC_VERSION_TYPE === 'FREE' && is_array( $keep_last ) ) {
 				foreach ( $keep_last as $value ) {
 					if ( ( $value['type'] ?? null ) === 'items' ) {
-						return ADBC_Rest::error( __( 'Cannot use retention by items in free version, please upgrade to premium.' ), ADBC_Rest::BAD_REQUEST );
+						return ADBC_Rest::error(
+							__( 'Cannot use retention by items in free version, please upgrade to premium.' ),
+							ADBC_Rest::BAD_REQUEST,
+							0,
+							[ 
+								"message_links" => [ 
+									[ 
+										"text" => __( 'Upgrade Now', 'advanced-database-cleaner' ),
+										"url" => "https://sigmaplugin.com/downloads/wordpress-advanced-database-cleaner/?utm_source=adbc_notification_msg",
+										"target" => "_blank",
+									]
+								]
+							]
+						);
 					}
 				}
 			}
@@ -175,7 +188,7 @@ class ADBC_General_Cleanup_Endpoints {
 
 			$updated = ADBC_General_Cleanup::set_keep_last( $keep_last );
 
-			return ADBC_Rest::success( 'Success', $updated );
+			return ADBC_Rest::success( '', $updated );
 
 		} catch (Throwable $e) {
 			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
@@ -194,7 +207,7 @@ class ADBC_General_Cleanup_Endpoints {
 
 			$keep_last = ADBC_General_Cleanup::get_keep_last();
 
-			return ADBC_Rest::success( 'Success', $keep_last );
+			return ADBC_Rest::success( '', $keep_last );
 
 		} catch (Throwable $e) {
 			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
@@ -228,7 +241,65 @@ class ADBC_General_Cleanup_Endpoints {
 
 			$deleted = ADBC_General_Cleanup::delete_keep_last( $items_types );
 
-			return ADBC_Rest::success( 'Success', $deleted );
+			return ADBC_Rest::success( '', $deleted );
+
+		} catch (Throwable $e) {
+			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
+		}
+
+	}
+
+	/**
+	 * Activate auto count for specified items types.
+	 * 
+	 * @param WP_REST_Request $request The request object containing the items types.
+	 * 
+	 * @return WP_REST_Response The response indicating the success or failure of the activation operation.
+	 */
+	public static function activate_auto_count( WP_REST_Request $request ) {
+
+		try {
+
+			$items_types = $request->get_param( 'itemsTypes' );
+
+			$validated_items_types = ADBC_Common_Validator::sanitize_items_types( $items_types );
+
+			if ( empty( $validated_items_types ) ) {
+				return ADBC_Rest::error( 'invalid items types.', ADBC_Rest::BAD_REQUEST );
+			}
+
+			$activated = ADBC_General_Cleanup::activate_auto_count( $validated_items_types );
+
+			return ADBC_Rest::success( '', $activated );
+
+		} catch (Throwable $e) {
+			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
+		}
+
+	}
+
+	/**
+	 * Deactivate auto count for specified items types.
+	 * 
+	 * @param WP_REST_Request $request The request object containing the items types.
+	 * 
+	 * @return WP_REST_Response The response indicating the success or failure of the deactivation operation.
+	 */
+	public static function deactivate_auto_count( WP_REST_Request $request ) {
+
+		try {
+
+			$items_types = $request->get_param( 'itemsTypes' );
+
+			$validated_items_types = ADBC_Common_Validator::sanitize_items_types( $items_types );
+
+			if ( empty( $validated_items_types ) ) {
+				return ADBC_Rest::error( 'invalid items types.', ADBC_Rest::BAD_REQUEST );
+			}
+
+			$deactivated = ADBC_General_Cleanup::deactivate_auto_count( $validated_items_types );
+
+			return ADBC_Rest::success( '', $deactivated );
 
 		} catch (Throwable $e) {
 			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );

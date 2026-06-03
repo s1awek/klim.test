@@ -65,6 +65,7 @@ class ADBC_Info_Endpoints {
 						__( 'Total transients', 'advanced-database-cleaner' ) . ": " . ADBC_Transients::get_total_transients_count(),
 						__( 'Total user meta', 'advanced-database-cleaner' ) . ": " . ADBC_Users_Meta::get_total_users_meta_count(),
 						__( 'Total post meta', 'advanced-database-cleaner' ) . ": " . ADBC_Posts_Meta::get_total_posts_meta_count(),
+						__( 'Total post types', 'advanced-database-cleaner' ) . ": " . ADBC_Post_Types::get_total_post_types_count(),
 					)
 				),
 				'adbc' => array(

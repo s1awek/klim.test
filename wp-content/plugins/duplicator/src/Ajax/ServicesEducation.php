@@ -21,7 +21,7 @@ use Duplicator\Libs\Snap\SnapUtil;
 class ServicesEducation extends AbstractAjaxService
 {
     const OPTION_KEY_ONE_CLICK_UPGRADE_OTH  = 'duplicator_one_click_upgrade_oth';
-    const AUTH_TOKEN_KEY_OPTION_AUTO_ACTIVE = 'duplicator_pro_auth_token_auto_active';
+    const AUTH_TOKEN_KEY_OPTION_AUTO_ACTIVE = 'dupli_opt_auth_token_auto_active';
     const DUPLICATOR_STORE_URL              = "https://duplicator.com";
     const REMOTE_SUBSCRIBE_URL              = 'https://duplicator.com/?lite_email_signup=1';
 
@@ -36,7 +36,6 @@ class ServicesEducation extends AbstractAjaxService
         $this->addAjaxCall('wp_ajax_duplicator_packages_bottom_bar_dismiss', 'dismissBottomBar');
         $this->addAjaxCall('wp_ajax_duplicator_email_subscribe', 'setEmailSubscribed');
         $this->addAjaxCall('wp_ajax_duplicator_generate_connect_oth', 'generateConnectOTH');
-        $this->addAjaxCall('wp_ajax_nopriv_duplicator_lite_run_one_click_upgrade', 'oneClickUpgrade');
         $this->addAjaxCall('wp_ajax_duplicator_lite_run_one_click_upgrade', 'oneClickUpgrade');
         $this->addAjaxCall('wp_ajax_duplicator_enable_usage_stats', 'enableUsageStats');
     }
@@ -149,7 +148,7 @@ class ServicesEducation extends AbstractAjaxService
             array(__CLASS__, 'generateConnectOTHCallback'),
             'duplicator_generate_connect_oth',
             SnapUtil::sanitizeTextInput(INPUT_POST, 'nonce'),
-            'export'
+            'install_plugins'
         );
     }
 
@@ -289,6 +288,11 @@ class ServicesEducation extends AbstractAjaxService
     public function oneClickUpgrade()
     {
         try {
+            if (!current_user_can('install_plugins')) {
+                DUP_Log::trace("ERROR: User lacks install_plugins capability for one-click upgrade.");
+                throw new Exception("Insufficient permissions to install plugins");
+            }
+
             // Get encrypted package from service
             $encryptedPackage = sanitize_text_field($_REQUEST["package"] ?? '');
 

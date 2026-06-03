@@ -11,5 +11,9 @@ return apply_filters('woocommerce_csv_taxonomies_import_reserved_fields_pair', a
     'description' => array('title' => 'Description', 'description' => 'Description of the taxonomy'),
     'display_type' => array('title' => 'Display type', 'description' => 'Display type of the taxonomy'),
     'parent' => array('title' => 'Parent ID', 'description' => 'Parent ID'),
+	'parent_slug' => array(
+		'title'       => 'Parent slug',
+		'description' => 'Parent category slug',
+	),
     'thumbnail' => array('title' => 'Thumbnail', 'description' => 'Thumbnail'),
         ));

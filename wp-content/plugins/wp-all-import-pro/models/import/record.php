@@ -150,11 +150,6 @@ class PMXI_Import_Record extends PMXI_Model_Record {
 
                     if ( is_array( $upload_result ) && !count($this->errors->errors)) {
                         $filePath  = $upload_result['filePath'];
-                        // Persist corrected feed_type so stale values don't recur.
-                        if ( ! empty( $upload_result['feed_type'] ) && $upload_result['feed_type'] !== $this->feed_type ) {
-                            $this->feed_type = $upload_result['feed_type'];
-                            $this->set(array('feed_type' => $this->feed_type))->update();
-                        }
                     }
 
 					if ( ! $this->errors->get_error_codes() and "" != $filePath ) {

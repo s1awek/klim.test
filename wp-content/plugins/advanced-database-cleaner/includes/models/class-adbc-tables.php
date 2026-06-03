@@ -13,6 +13,12 @@ class ADBC_Tables {
 
 	private const TIME_TO_REFRESH_TO_REPAIR_TRANSIENT = 3600; // 1 hour in seconds
 
+	// Transient key for InnoDB conversion lock. Value: [ table_name => lock_timestamp, ... ]
+	private const INNODB_LOCK_TRANSIENT = 'adbc_plugin_innodb_conversion_lock';
+
+	// Per-table lock duration in seconds. Determined by each table's timestamp
+	private const INNODB_LOCK_DURATION = 900; // 15 minutes
+
 	/**
 	 * Get the tables list for the endpoint.
 	 *
@@ -29,6 +35,8 @@ class ADBC_Tables {
 		$total_tables = 0;
 
 		$scan_counter = new ADBC_Scan_Counter();
+
+		$total_database_size = (float) ADBC_Database::get_database_size_sql( false );
 
 		$startRecord = ( $filters['current_page'] - 1 ) * $filters['items_per_page'];
 		$endRecord = $startRecord + $filters['items_per_page'];
@@ -75,6 +83,10 @@ class ADBC_Tables {
 				// Only process the current batch if it's within the desired page range
 				if ( $currentRecord >= $startRecord && $currentRecord < $endRecord ) {
 
+					$size_percent = $total_database_size > 0
+						? round( ( $table_data->size / $total_database_size ) * 100, 2 )
+						: 0;
+
 					$tables_list[] = [ 
 						// This id is used to identify the table in the frontend and take actions on it
 						'composite_id' => [ 
@@ -86,6 +98,7 @@ class ADBC_Tables {
 						'prefix' => $table_data->prefix,
 						'name_without_prefix' => $table_data->table_name_without_prefix,
 						'size' => $table_data->size,
+						'size_percent' => $size_percent,
 						'rows' => $table_data->rows,
 						'overhead' => ADBC_Common_Utils::format_bytes( $table_data->overhead ),
 						'raw_overhead' => $table_data->overhead,
@@ -512,7 +525,7 @@ class ADBC_Tables {
 		// Loop through the selected tables and delete them
 		foreach ( $tables_names as $table_name ) {
 
-			$deleted = $wpdb->query( "DROP TABLE `{$table_name}`" );
+			$deleted = $wpdb->query( "DROP TABLE IF EXISTS `{$table_name}`" );
 
 			if ( ! $deleted )
 				$not_deleted[] = $table_name; // If the query failed, add the table name to the not deleted list
@@ -581,6 +594,28 @@ class ADBC_Tables {
 		delete_transient( 'adbc_plugin_tables_to_repair' );
 
 		return $not_repaired;
+	}
+
+	/**
+	 * Refresh counts for the list of the provided tables by running ANALYZE.
+	 *
+	 * @param array $tables_names The list of tables names to analyze.
+	 * @return array The list of tables for which the counts could not be refreshed.
+	 */
+	public static function refresh_tables_counts( $tables_names ) {
+
+		global $wpdb;
+		$not_processed = [];
+
+		foreach ( $tables_names as $table_name ) {
+
+			$analyzed = $wpdb->query( "ANALYZE TABLE `{$table_name}`" );
+
+			if ( ! $analyzed )
+				$not_processed[] = $table_name;
+		}
+
+		return $not_processed;
 	}
 
 	/**
@@ -720,6 +755,43 @@ class ADBC_Tables {
 	}
 
 	/**
+	 * Check if the MySQL server supports the InnoDB storage engine.
+	 *
+	 * @return bool True if InnoDB is supported, false otherwise.
+	 */
+	public static function is_innodb_supported() {
+
+		global $wpdb;
+
+		$engines = $wpdb->get_results( "SHOW ENGINES", OBJECT );
+
+		if ( ! is_array( $engines ) || empty( $engines ) )
+			return false;
+
+		foreach ( $engines as $engine ) {
+
+			if ( ! isset( $engine->Engine ) )
+				continue;
+
+			if ( strcasecmp( $engine->Engine, 'InnoDB' ) !== 0 )
+				continue;
+
+			// Some MySQL/MariaDB versions expose Support as a property indicating availability.
+			if ( isset( $engine->Support ) ) {
+				$support = strtoupper( (string) $engine->Support );
+				if ( in_array( $support, [ 'YES', 'DEFAULT' ], true ) )
+					return true;
+			} else {
+				// If Support column is missing, be conservative and assume it's available.
+				return true;
+			}
+		}
+
+		return false;
+
+	}
+
+	/**
 	 * Check if the actionscheduler table exists.
 	 * 
 	 * @param string $table_type The type of the Actions Scheduler table to check for ('actions', 'logs'...)
@@ -761,9 +833,14 @@ class ADBC_Tables {
 	 */
 	public static function is_table_exists( $table_name ) {
 		global $wpdb;
+
 		$exists = (bool) $wpdb->get_var(
-			$wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name )
+			$wpdb->prepare(
+				"SHOW TABLES LIKE %s",
+				$wpdb->esc_like( $table_name )
+			)
 		);
+
 		return $exists;
 	}
 
@@ -821,5 +898,305 @@ class ADBC_Tables {
 	public static function count_total_tables_to_repair() {
 		return self::get_tables_to_repair()[0];
 	}
+
+	/**
+	 * Get the list of column names for a given table.
+	 *
+	 * @param string $table_name The table name.
+	 * @return array List of column names (strings).
+	 */
+	public static function get_table_columns( $table_name ) {
+
+		global $wpdb;
+
+		// $table_name is already validated via is_table_exists() in the endpoint layer.
+		$results = $wpdb->get_col( "SHOW COLUMNS FROM `{$table_name}`", 0 );
+
+		if ( ! is_array( $results ) ) {
+			return [];
+		}
+
+		return array_map( 'strval', $results );
+	}
+
+	/**
+	 * Get the rows of a table.
+	 *
+	 * @param string $table_name The table name.
+	 * @param array $filters The filters.
+	 * @return array The rows of the table.
+	 */
+	public static function get_table_rows( $table_name, $filters ) {
+
+		global $wpdb;
+
+		// All filters are already validated, casted and defaulted at the endpoint level.
+		$current_page = $filters['current_page'];
+		$items_per_page = $filters['items_per_page'];
+		$sort_by = $filters['sort_by'];
+		$sort_order = $filters['sort_order'];
+
+		// Validate sort_by against real columns of the table. If invalid, do not sort.
+		$columns = self::get_table_columns( $table_name );
+		$order_by_sql = '';
+
+		if ( in_array( $sort_by, $columns, true ) ) {
+			$order_by_sql = "ORDER BY `{$sort_by}` {$sort_order}";
+		}
+
+		// Total items for this table (no additional filters for now).
+		$total_items = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table_name}`" );
+
+		$offset = ( $current_page - 1 ) * $items_per_page;
+
+		// Fetch the requested page of rows.
+		$query = $wpdb->prepare(
+			"SELECT * FROM `{$table_name}` {$order_by_sql} LIMIT %d OFFSET %d",
+			$items_per_page,
+			$offset
+		);
+
+		$rows = $wpdb->get_results( $query, ARRAY_A );
+
+		// Follow the same "real current page" logic used elsewhere.
+		$total_real_pages = $items_per_page > 0
+			? max( 1, (int) ceil( $total_items / $items_per_page ) )
+			: 1;
+
+		return [ 
+			'items' => is_array( $rows ) ? $rows : [],
+			'total_items' => $total_items,
+			'real_current_page' => min( $current_page, $total_real_pages ),
+		];
+
+	}
+
+	/**
+	 * Get the structure of a table.
+	 *
+	 * @param string $table_name The table name.
+	 * @return array The structure of the table.
+	 */
+	public static function get_table_structure( $table_name ) {
+
+		global $wpdb;
+
+		// 1) Columns
+		$columns = $wpdb->get_results( "SHOW FULL COLUMNS FROM `{$table_name}`", ARRAY_A );
+
+		// 2) Indexes (PRIMARY, UNIQUE, INDEX, FULLTEXT, etc.)
+		$indexes = $wpdb->get_results( "SHOW INDEX FROM `{$table_name}`", ARRAY_A );
+
+		// 3) Table status (engine, collation, auto_increment, row_format, comment, etc.)
+		$status = $wpdb->get_row(
+			$wpdb->prepare(
+				"SHOW TABLE STATUS WHERE `Name` = %s",
+				$table_name
+			),
+			ARRAY_A
+		);
+
+		// 4) CREATE TABLE statement (full DDL)
+		$create_row = $wpdb->get_row( "SHOW CREATE TABLE `{$table_name}`", ARRAY_A );
+		$create_sql = '';
+		if ( is_array( $create_row ) ) {
+			// Key is usually 'Create Table', but fall back defensively.
+			if ( isset( $create_row['Create Table'] ) ) {
+				$create_sql = $create_row['Create Table'];
+			} else {
+				$values = array_values( $create_row );
+				$create_sql = isset( $values[1] ) ? $values[1] : '';
+			}
+		}
+
+		return [ 
+			'columns' => is_array( $columns ) ? $columns : [],
+			'indexes' => is_array( $indexes ) ? $indexes : [],
+			'table_status' => is_array( $status ) ? $status : [],
+			'create_statement' => $create_sql,
+		];
+
+	}
+
+	/**
+	 * Check if a table is corrupted.
+	 *
+	 * @param string $table_name The table name.
+	 * 
+	 * @return bool True if the table is corrupted, false otherwise.
+	 */
+	public static function is_table_corrupted( $table_name ) {
+		$corrupted_tables = self::get_tables_to_repair()[1];
+		return in_array( $table_name, $corrupted_tables, true );
+	}
+
+	/******************************************************
+	 * Start of InnoDB conversion locking functions
+	 ******************************************************/
+
+	/**
+	 * Convert the provided tables to InnoDB, with per-table locking.
+	 *
+	 * For each table the method:
+	 *  1. Checks if already InnoDB → removes from lock if present, counts as success.
+	 *  2. Checks if locked by another process (timestamp-based) → skips.
+	 *  3. Locks the table, runs ALTER TABLE, unlocks on completion.
+	 *     If the script dies during ALTER TABLE the lock expires based on its timestamp.
+	 *
+	 * @param array $tables_names The list of table names to convert.
+	 * 
+	 * @return array { 'not_converted': string[], 'skipped_locked': int }
+	 */
+	public static function convert_tables_to_innodb( $tables_names ) {
+
+		global $wpdb;
+		$not_converted = [];
+		$skipped_locked = 0;
+
+		foreach ( $tables_names as $table_name ) {
+
+			if ( self::is_table_innodb( $table_name ) ) {
+				self::unlock_table_conversion( $table_name );
+				continue;
+			}
+
+			if ( self::is_table_conversion_locked( $table_name ) ) {
+				$skipped_locked++;
+				continue;
+			}
+
+			self::lock_table_conversion( $table_name );
+
+			if ( self::is_table_corrupted( $table_name ) ) {
+				$not_converted[] = $table_name;
+				continue;
+			}
+
+			$converted = $wpdb->query( "ALTER TABLE `{$table_name}` ENGINE=InnoDB" );
+
+			if ( $converted ) {
+				$wpdb->query( "ANALYZE TABLE `{$table_name}`" );
+			} else {
+				$not_converted[] = $table_name;
+			}
+
+			self::unlock_table_conversion( $table_name );
+
+		}
+
+		return [ 
+			'not_converted' => $not_converted,
+			'skipped_locked' => $skipped_locked,
+		];
+	}
+
+	/**
+	 * Read the lock data from the transient.
+	 *
+	 * @return array Associative array of table_name => lock_timestamp.
+	 */
+	private static function get_lock_data() {
+		$lock = get_transient( self::INNODB_LOCK_TRANSIENT );
+		return is_array( $lock ) ? $lock : [];
+	}
+
+	/**
+	 * Persist the lock data. Prunes expired entries before saving.
+	 * Deletes the transient entirely when no active entries remain.
+	 *
+	 * @param array $lock Associative array of table_name => lock_timestamp.
+	 * 
+	 * @return void
+	 */
+	private static function save_lock_data( $lock ) {
+
+		$now = time();
+
+		foreach ( array_keys( $lock ) as $table ) {
+			if ( ( $now - (int) $lock[ $table ] ) >= self::INNODB_LOCK_DURATION )
+				unset( $lock[ $table ] );
+		}
+
+		if ( empty( $lock ) ) {
+			delete_transient( self::INNODB_LOCK_TRANSIENT );
+		} else {
+			set_transient( self::INNODB_LOCK_TRANSIENT, $lock, self::INNODB_LOCK_DURATION );
+		}
+	}
+
+	/**
+	 * Check whether a table is currently locked for InnoDB conversion based on its timestamp.
+	 *
+	 * @param string $table_name Table name.
+	 * 
+	 * @return bool True if the table is locked (timestamp within INNODB_LOCK_DURATION).
+	 */
+	private static function is_table_conversion_locked( $table_name ) {
+
+		$lock = self::get_lock_data();
+
+		if ( ! isset( $lock[ $table_name ] ) )
+			return false;
+
+		return ( time() - (int) $lock[ $table_name ] ) < self::INNODB_LOCK_DURATION;
+	}
+
+	/**
+	 * Acquire a conversion lock for a single table (timestamp = now).
+	 *
+	 * @param string $table_name Table name.
+	 * 
+	 * @return void
+	 */
+	private static function lock_table_conversion( $table_name ) {
+
+		$lock = self::get_lock_data();
+		$lock[ $table_name ] = time();
+		self::save_lock_data( $lock );
+	}
+
+	/**
+	 * Release the conversion lock for a single table.
+	 *
+	 * @param string $table_name Table name.
+	 * 
+	 * @return void
+	 */
+	private static function unlock_table_conversion( $table_name ) {
+
+		$lock = self::get_lock_data();
+
+		if ( ! isset( $lock[ $table_name ] ) )
+			return;
+
+		unset( $lock[ $table_name ] );
+		self::save_lock_data( $lock );
+	}
+
+	/**
+	 * Check whether the given table is already using the InnoDB engine.
+	 *
+	 * @param string $table_name Table name.
+	 * 
+	 * @return bool True if the table engine is InnoDB, false otherwise.
+	 */
+	private static function is_table_innodb( $table_name ) {
+
+		global $wpdb;
+
+		$engine = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT `ENGINE` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = %s AND `TABLE_NAME` = %s",
+				DB_NAME,
+				$table_name
+			)
+		);
+
+		return strtoupper( (string) $engine ) === 'INNODB';
+	}
+
+	/******************************************************
+	 * End of InnoDB conversion locking functions
+	 ******************************************************/
 
 }

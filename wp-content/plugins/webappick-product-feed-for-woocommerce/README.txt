@@ -3,9 +3,9 @@ Contributors: wahid0003, webappick
 Donate link: https://webappick.com
 Tags: woocommerce, product feed, google shopping, facebook Catalog, google listings
 Requires at least: 4.4
-Tested Up To: 6.9
+Tested Up To: 7.0
 Requires PHP: 5.6
-Stable tag: 6.6.28
+Stable tag: 6.6.36
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -408,6 +408,31 @@ If your feed fails to generate:
 11. XML Feed: Preview a WooCommerce XML feed
 
 == Changelog ==
+
+= Version 6.6.36 (June 02, 2026) =
+* Code Optimization: Refactored codebase for improved efficiency
+
+= Version 6.6.35 (May 21, 2026) =
+* Added : Video attribute to facebook template
+* Compatibility : WordPress 7.0 compatibility check
+
+= Version 6.6.34 (May 18, 2026) =
+* Plugin Promotion: Added our others plugin promotion.
+
+= Version 6.6.33 (May 06, 2026) =
+* Code Optimization: Refactored core for enhanced performance.
+
+= Version 6.6.32 (May 06, 2026) =
+* Code Optimization: Refactored codebase for improved efficiency.
+
+= Version 6.6.31 (April 27, 2026) =
+* Performance Improvement: On Frontend page load, Admin file load prevented.
+
+= Version 6.6.30 (April 20, 2026) =
+* Pricing Fix: Fixed WPC bundle product price issue.
+
+= Version 6.6.29 (April 13, 2026) =
+* Pricing Fix: Fixed schedule sale price issue.
 
 = Version 6.6.28 (April 04, 2026) =
 * Functional Improvements: Title input option added on feed duplicate.

@@ -304,6 +304,7 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 			ADBC_Files::instance()->create_folder( ADBC_Automation::AUTOMATION_EVENT_DIR, true );
 			ADBC_Files::instance()->create_file( ADBC_Addons_Activity::ADDONS_ACTIVITY_LOG_FILE_PATH );
 			ADBC_Files::instance()->create_file( ADBC_Addons_Activity::ADDONS_ACTIVITY_DICTIONARY );
+			ADBC_Files::instance()->create_file( ADBC_Registered_Post_Types_Dict_Tracker::DICT_FILE_PATH );
 		}
 
 	}
@@ -389,6 +390,15 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 			}
 		}
 
+	}
+
+	/**
+	 * Register the cron_schedules filter to add ADBC custom schedules.
+	 *
+	 * @return void
+	 */
+	public static function register_cron_schedules_filter() {
+		add_filter( 'cron_schedules', [ self::class, 'add_adbc_schedules_frequencies' ] );
 	}
 
 	/**
@@ -649,12 +659,6 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 	 */
 	public static function has_conflict() {
 
-		// If a conflict notice was stored in a previous request (for example during activation redirect),
-		// ensure it is rendered on the first available admin page.
-		if ( get_option( self::$conflict_notice_option_key, '' ) !== '' ) {
-			add_action( 'all_admin_notices', [ self::class, 'render_scheduled_conflict_notice' ] );
-		}
-
 		if ( ! function_exists( 'deactivate_plugins' ) )
 			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
@@ -696,6 +700,21 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 		}
 
 		return false;
+
+	}
+
+	/**
+	 * Maybe schedule a conflict notice.
+	 * 
+	 * @return void
+	 */
+	public static function maybe_schedule_conflict_notice() {
+
+		global $pagenow;
+
+		if ( $pagenow === 'plugins.php' && get_option( self::$conflict_notice_option_key, '' ) !== '' ) {
+			add_action( 'all_admin_notices', [ self::class, 'render_scheduled_conflict_notice' ] );
+		}
 
 	}
 

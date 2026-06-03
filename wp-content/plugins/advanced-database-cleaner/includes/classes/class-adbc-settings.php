@@ -104,7 +104,7 @@ class ADBC_Settings extends ADBC_Singleton {
 				'validator_method' => 'is_scan_setting_valid'
 			],
 			'database_rows_batch' => [ 
-				'default' => 50000,
+				'default' => 100000,
 				'validator_class' => 'ADBC_Settings_Validator',
 				'validator_method' => 'is_performance_settings_valid'
 			],
@@ -173,11 +173,21 @@ class ADBC_Settings extends ADBC_Singleton {
 				'validator_class' => 'ADBC_Settings_Validator',
 				'validator_method' => 'is_performance_settings_valid'
 			],
-			// 'license_data' => [ 
-			// 	'default' => [],
-			// 	'validator_class' => 'ADBC_Settings_Validator',
-			// 	'validator_method' => 'is_license_data_valid'
-			// ],
+			'prevent_taking_action_on_wp_items' => [ 
+				'default' => '1',
+				'validator_class' => 'ADBC_Common_Validator',
+				'validator_method' => 'is_string_equals_0_or_1'
+			],
+			'show_confirmation_on_dangerous_actions' => [ 
+				'default' => '1',
+				'validator_class' => 'ADBC_Common_Validator',
+				'validator_method' => 'is_string_equals_0_or_1'
+			],
+			'general_cleanup_auto_count' => [ 
+				'default' => [],
+				'validator_class' => 'ADBC_Settings_Validator',
+				'validator_method' => 'is_general_cleanup_auto_count_valid'
+			],
 		];
 	}
 
@@ -188,6 +198,17 @@ class ADBC_Settings extends ADBC_Singleton {
 	 */
 	private function load_settings() {
 
+		global $wpdb;
+
+		// Acquire a MySQL advisory lock to prevent concurrent settings initialization.
+		// When the settings option is missing (e.g. after deletion), multiple parallel requests
+		// would each generate a different security_code, causing multiple upload folders to be created.
+		// The lock serializes initialization so only the first process generates and saves the settings;
+		// subsequent processes will read the already-persisted values.
+		// $lock_name = 'adbc_settings_init';
+		// $lock_timeout = 2; // 2 seconds
+		// $got_lock = (bool) $wpdb->get_var( $wpdb->prepare( "SELECT GET_LOCK(%s, %d)", $lock_name, $lock_timeout ) );
+
 		$stored_settings = get_option( 'adbc_plugin_settings', [] );
 		$stored_settings = is_array( $stored_settings ) ? $stored_settings : [];
 
@@ -197,14 +218,23 @@ class ADBC_Settings extends ADBC_Singleton {
 		foreach ( $this->default_settings as $key => $config ) {
 
 			if ( ! array_key_exists( $key, $stored_settings ) ) { // If the setting does not exist in the database, add it with its default value.
-				$value = $config['default'];
+				if ( $key === 'general_cleanup_auto_count' ) {
+					$value = ADBC_Cleanup_Type_Registry::get_default_auto_count_items_types();
+				} else {
+					$value = $config['default'];
+				}
 				$db_needs_update = true;
 			} else { // If the setting exists, validate it.
 				$value = $stored_settings[ $key ];
 				$validator_class = $config['validator_class'];
 				$validator_method = $config['validator_method'];
 				if ( ! call_user_func( [ $validator_class, $validator_method ], $key, $value ) ) {
-					$value = $config['default']; // Reset to default if validation fails.
+					// Reset to default if validation fails.
+					if ( $key === 'general_cleanup_auto_count' ) {
+						$value = ADBC_Cleanup_Type_Registry::get_default_auto_count_items_types();
+					} else {
+						$value = $config['default'];
+					}
 					$db_needs_update = true;
 				}
 			}
@@ -236,6 +266,11 @@ class ADBC_Settings extends ADBC_Singleton {
 		// Save if any settings were initialized with defaults
 		if ( $db_needs_update )
 			$this->update_settings_in_db();
+
+		// Release the advisory lock now that settings are persisted.
+		// if ( $got_lock )
+		// 	$wpdb->query( $wpdb->prepare( "SELECT RELEASE_LOCK(%s)", $lock_name ) );
+
 	}
 
 	/**

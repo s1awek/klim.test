@@ -36,7 +36,8 @@ class ADBC_Settings_Validator {
 		'automation',
 		'analytics',
 		'addons_activity',
-		'info_and_logs'
+		'info_and_logs',
+		'post_types',
 	);
 
 	/**
@@ -276,6 +277,27 @@ class ADBC_Settings_Validator {
 			default:
 				return false;
 		}
+	}
+
+	/**
+	 * Checks if the given value is a valid general cleanup auto count setting.
+	 *
+	 * @param string $key The setting key. (not used in this function, but kept for consistency)
+	 * @param array $value The value to check.
+	 * 
+	 * @return bool True if the value is valid, false otherwise.
+	 */
+	public static function is_general_cleanup_auto_count_valid( $key, $value ) {
+
+		if ( ! is_array( $value ) )
+			return false;
+
+		foreach ( $value as $items_type )
+			if ( ! ADBC_Cleanup_Type_Registry::is_valid_items_type( $items_type ) )
+				return false;
+
+		return true;
+
 	}
 
 }

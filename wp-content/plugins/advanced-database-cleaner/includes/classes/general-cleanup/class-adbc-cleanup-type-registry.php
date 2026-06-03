@@ -46,8 +46,10 @@ final class ADBC_Cleanup_Type_Registry {
 		"actionscheduler_completed_logs",
 		"actionscheduler_failed_logs",
 		"actionscheduler_canceled_logs",
-		"actionscheduler_orphan_logs"
+		"actionscheduler_orphan_logs",
 	];
+
+	private const AUTO_COUNT_META_THRESHOLD = 50000;
 
 	/**
 	 * Registers a handler for a specific items type.
@@ -111,6 +113,29 @@ final class ADBC_Cleanup_Type_Registry {
 	 */
 	public static function get_all_items_type() {
 		return self::$all_handlers_types;
+	}
+
+	/**
+	 * Retrieves all items types that can be automatically counted.
+	 *
+	 * @return array<string> An array of all items types that can be automatically counted.
+	 */
+	public static function get_default_auto_count_items_types() {
+
+		$auto_count_items_types = self::get_all_items_type();
+
+		// Exclude duplicated_postmeta, unused_postmeta and oembed_caches if the total posts meta count is greater than the threshold constant
+		if ( ADBC_Posts_Meta::get_total_posts_meta_count() > self::AUTO_COUNT_META_THRESHOLD ) {
+			$auto_count_items_types = array_diff( $auto_count_items_types, [ "duplicated_postmeta", "unused_postmeta", "oembed_caches" ] );
+		}
+
+		// Exclude duplicated_usermeta and unused_usermeta if the total users meta count is greater than the threshold constant
+		if ( ADBC_Users_Meta::get_total_users_meta_count() > self::AUTO_COUNT_META_THRESHOLD ) {
+			$auto_count_items_types = array_diff( $auto_count_items_types, [ "duplicated_usermeta", "unused_usermeta" ] );
+		}
+
+		return array_values( $auto_count_items_types );
+
 	}
 
 }

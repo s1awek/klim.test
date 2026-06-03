@@ -14,8 +14,8 @@
  *
  * @see              https://woocommerce.com/document/template-structure/
  * @package          WooCommerce\Templates
- * @version          9.9.0
- * @flatsome-version 3.19.13
+ * @version          10.8.0
+ * @flatsome-version 3.20.7
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( fl_woocommerce_version_check( '9.4.0' ) ) :
 	?>
-	<p class="woocommerce-result-count hide-for-medium" role="alert" aria-relevant="all" <?php echo ( empty( $orderedby ) || 1 === intval( $total ) ) ? '' : 'data-is-sorted-by="true"'; ?>>
+	<p class="woocommerce-result-count hide-for-medium" role="status" aria-relevant="all" <?php echo ( empty( $orderedby ) || 1 === intval( $total ) ) ? '' : 'data-is-sorted-by="true"'; ?>>
 		<?php
 		// phpcs:disable WordPress.Security
 		if ( 1 === intval( $total ) ) {

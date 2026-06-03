@@ -19,6 +19,9 @@ class ADBC_Automation_Endpoints {
 
 		try {
 
+			// Ensure the integrity of automation tasks only here because it will be always called before the other endpoints
+			ADBC_Admin_Init::ensure_automation_integrity();
+
 			$tasks = ADBC_Automation::instance()->tasks();
 
 			$status = sanitize_key( $request->get_param( 'status' ) );
@@ -43,7 +46,7 @@ class ADBC_Automation_Endpoints {
 				} );
 			}
 
-			return ADBC_Rest::success( 'Success', [ 
+			return ADBC_Rest::success( '', [ 
 				'items' => $items,
 				'counts' => [ 
 					'total' => $all_count,
@@ -74,7 +77,20 @@ class ADBC_Automation_Endpoints {
 			if ( ADBC_VERSION_TYPE === 'FREE' && is_array( $task_details ) && isset( $task_details['operations'] ) && is_array( $task_details['operations'] ) ) {
 				foreach ( $task_details['operations'] as $items_type => $keep_last_config ) {
 					if ( ( $keep_last_config['type'] ?? null ) === 'items' ) {
-						return ADBC_Rest::error( __( 'Cannot use retention by items in free version, please upgrade to premium.' ), ADBC_Rest::BAD_REQUEST );
+						return ADBC_Rest::error(
+							__( 'Cannot use retention by items in free version, please upgrade to premium.' ),
+							ADBC_Rest::BAD_REQUEST,
+							0,
+							[ 
+								"message_links" => [ 
+									[ 
+										"text" => __( 'Upgrade Now', 'advanced-database-cleaner' ),
+										"url" => "https://sigmaplugin.com/downloads/wordpress-advanced-database-cleaner/?utm_source=adbc_notification_msg",
+										"target" => "_blank",
+									]
+								]
+							]
+						);
 					}
 				}
 			}
@@ -95,7 +111,7 @@ class ADBC_Automation_Endpoints {
 				return ADBC_Rest::error( 'Failed to create task.', ADBC_Rest::INTERNAL_SERVER_ERROR );
 			}
 
-			return ADBC_Rest::success( 'Created', [ 'id' => $id ] );
+			return ADBC_Rest::success( '', [ 'id' => $id ] );
 
 		} catch (Throwable $e) {
 			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
@@ -131,7 +147,7 @@ class ADBC_Automation_Endpoints {
 				return ADBC_Rest::error( 'Task not found or failed to update.', ADBC_Rest::NOT_FOUND );
 			}
 
-			return ADBC_Rest::success( 'Updated', $updated_details );
+			return ADBC_Rest::success( '', $updated_details );
 
 		} catch (Throwable $e) {
 			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
@@ -161,7 +177,7 @@ class ADBC_Automation_Endpoints {
 				return ADBC_Rest::error( 'Task not found.', ADBC_Rest::NOT_FOUND );
 			}
 
-			return ADBC_Rest::success( 'Success', $task );
+			return ADBC_Rest::success( '', $task );
 
 		} catch (Throwable $e) {
 			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
@@ -191,7 +207,7 @@ class ADBC_Automation_Endpoints {
 				return ADBC_Rest::error( 'Task not found or failed to delete.', ADBC_Rest::NOT_FOUND );
 			}
 
-			return ADBC_Rest::success( 'Deleted', [] );
+			return ADBC_Rest::success( '', [] );
 
 		} catch (Throwable $e) {
 			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
@@ -224,7 +240,7 @@ class ADBC_Automation_Endpoints {
 			$real_current_page = min( $page, $total_pages );
 			$events['real_current_page'] = $real_current_page;
 
-			return ADBC_Rest::success( 'Success', $events );
+			return ADBC_Rest::success( '', $events );
 
 		} catch (Throwable $e) {
 			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
@@ -254,7 +270,7 @@ class ADBC_Automation_Endpoints {
 				return ADBC_Rest::error( 'Task not found.', ADBC_Rest::NOT_FOUND );
 			}
 
-			return ADBC_Rest::success( 'Cleared', [] );
+			return ADBC_Rest::success( '', [] );
 
 		} catch (Throwable $e) {
 			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );

@@ -67,9 +67,52 @@ class ADBC_Options_Endpoints {
 			if ( ! is_array( $validation_answer ) )
 				return ADBC_Rest::error( $validation_answer, ADBC_Rest::BAD_REQUEST );
 
-			$cleaned_options = ADBC_Hardcoded_Items::instance()->exclude_hardcoded_items_from_selected_items( $validation_answer, 'options', "wp" );
+			$cleaned_options = $validation_answer;
+
+			if ( ADBC_Settings::instance()->get_setting( 'prevent_taking_action_on_wp_items' ) === '1' ) {
+
+				$cleaned_options = ADBC_Hardcoded_Items::instance()->exclude_hardcoded_items_from_selected_items( $validation_answer, 'options', "wp" );
+
+				if ( ADBC_VERSION_TYPE === 'PREMIUM' )
+					$cleaned_options = ADBC_Scan_Utils::exclude_r_wp_items_from_selected_items( $cleaned_options, 'options' );
+
+				if ( empty( $cleaned_options ) )
+					return ADBC_Rest::error(
+						__( 'The selected options could not have their autoload edited because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+						ADBC_Rest::BAD_REQUEST,
+						0,
+						[ 
+							"message_links" => [ 
+								[ 
+									"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+									"tab_id" => "settings",
+									"anchor_id" => "other_settings",
+									"setting_id" => "prevent_taking_action_on_wp_items"
+								]
+							]
+						]
+					);
+			}
+
 			$grouped = ADBC_Selected_Items_Validator::group_selected_items_by_site_id( $cleaned_options );
 			$not_processed = ADBC_Options::set_autoload_to_yes( $grouped );
+
+			if ( count( $cleaned_options ) < count( $validation_answer ) ) {
+				return ADBC_Rest::success(
+					__( 'Some options were updated successfully; others were skipped because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+					count( $not_processed ),
+					[ 
+						"message_links" => [ 
+							[ 
+								"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+								"tab_id" => "settings",
+								"anchor_id" => "other_settings",
+								"setting_id" => "prevent_taking_action_on_wp_items"
+							]
+						]
+					]
+				);
+			}
 
 			return ADBC_Rest::success( "", count( $not_processed ) );
 
@@ -96,9 +139,51 @@ class ADBC_Options_Endpoints {
 			if ( ! is_array( $validation_answer ) )
 				return ADBC_Rest::error( $validation_answer, ADBC_Rest::BAD_REQUEST );
 
-			$cleaned_options = ADBC_Hardcoded_Items::instance()->exclude_hardcoded_items_from_selected_items( $validation_answer, 'options', "wp" );
+			$cleaned_options = $validation_answer;
+
+			if ( ADBC_Settings::instance()->get_setting( 'prevent_taking_action_on_wp_items' ) === '1' ) {
+
+				$cleaned_options = ADBC_Hardcoded_Items::instance()->exclude_hardcoded_items_from_selected_items( $validation_answer, 'options', "wp" );
+
+				if ( ADBC_VERSION_TYPE === 'PREMIUM' )
+					$cleaned_options = ADBC_Scan_Utils::exclude_r_wp_items_from_selected_items( $cleaned_options, 'options' );
+
+				if ( empty( $cleaned_options ) )
+					return ADBC_Rest::error(
+						__( 'The selected options could not have their autoload edited because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ), ADBC_Rest::BAD_REQUEST,
+						0,
+						[ 
+							"message_links" => [ 
+								[ 
+									"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+									"tab_id" => "settings",
+									"anchor_id" => "other_settings",
+									"setting_id" => "prevent_taking_action_on_wp_items"
+								]
+							]
+						]
+					);
+			}
+
 			$grouped = ADBC_Selected_Items_Validator::group_selected_items_by_site_id( $cleaned_options );
 			$not_processed = ADBC_Options::set_autoload_to_no( $grouped );
+
+			if ( count( $cleaned_options ) < count( $validation_answer ) ) {
+				return ADBC_Rest::success(
+					__( 'Some options were updated successfully; others were skipped because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+					count( $not_processed ),
+					[ 
+						"message_links" => [ 
+							[ 
+								"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+								"tab_id" => "settings",
+								"anchor_id" => "other_settings",
+								"setting_id" => "prevent_taking_action_on_wp_items"
+							]
+						]
+					]
+				);
+			}
 
 			return ADBC_Rest::success( "", count( $not_processed ) );
 
@@ -129,23 +214,58 @@ class ADBC_Options_Endpoints {
 			if ( ! is_array( $validation_answer ) )
 				return ADBC_Rest::error( $validation_answer, ADBC_Rest::BAD_REQUEST );
 
-			$cleaned_options = ADBC_Hardcoded_Items::instance()->exclude_hardcoded_items_from_selected_items( $validation_answer, 'options', "wp" );
+			$cleaned_options = $validation_answer;
 
-			if ( ADBC_VERSION_TYPE === 'PREMIUM' )
-				$cleaned_options = ADBC_Scan_Utils::exclude_r_wp_items_from_selected_items( $cleaned_options, 'options' );
+			if ( ADBC_Settings::instance()->get_setting( 'prevent_taking_action_on_wp_items' ) === '1' ) {
 
-			if ( empty( $cleaned_options ) )
-				return ADBC_Rest::error( __( "Selected options cannot be deleted because they belong to WordPress.", 'advanced-database-cleaner' ), ADBC_Rest::BAD_REQUEST );
+				$cleaned_options = ADBC_Hardcoded_Items::instance()->exclude_hardcoded_items_from_selected_items( $validation_answer, 'options', "wp" );
+
+				if ( ADBC_VERSION_TYPE === 'PREMIUM' )
+					$cleaned_options = ADBC_Scan_Utils::exclude_r_wp_items_from_selected_items( $cleaned_options, 'options' );
+
+				if ( empty( $cleaned_options ) )
+					return ADBC_Rest::error(
+						__( 'The selected options could not be deleted because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+						ADBC_Rest::BAD_REQUEST,
+						0,
+						[ 
+							"message_links" => [ 
+								[ 
+									"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+									"tab_id" => "settings",
+									"anchor_id" => "other_settings",
+									"setting_id" => "prevent_taking_action_on_wp_items"
+								]
+							]
+						]
+					);
+			}
 
 			$grouped = ADBC_Selected_Items_Validator::group_selected_items_by_site_id( $cleaned_options );
-
 			$not_processed = ADBC_Options::delete_options( $grouped );
 
 			// Delete the options from the scan results
-			$options_names = array_column( $cleaned_options, 'name' ); // Create an array containing only the options names.
-
-			if ( ADBC_VERSION_TYPE === 'PREMIUM' )
+			if ( ADBC_VERSION_TYPE === 'PREMIUM' ) {
+				$options_names = array_column( $cleaned_options, 'name' ); // Create an array containing only the options names.
 				ADBC_Scan_Utils::update_scan_results_file_after_deletion( 'options', $options_names, $not_processed );
+			}
+
+			if ( count( $cleaned_options ) < count( $validation_answer ) ) {
+				return ADBC_Rest::success(
+					__( 'Some options were deleted successfully; others were skipped because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+					count( $not_processed ),
+					[ 
+						"message_links" => [ 
+							[ 
+								"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+								"tab_id" => "settings",
+								"anchor_id" => "other_settings",
+								"setting_id" => "prevent_taking_action_on_wp_items"
+							]
+						]
+					]
+				);
+			}
 
 			return ADBC_Rest::success( "", count( $not_processed ) );
 

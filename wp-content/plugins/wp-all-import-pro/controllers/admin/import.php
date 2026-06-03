@@ -2311,11 +2311,6 @@ class PMXI_Admin_Import extends PMXI_Controller_Admin {
 
 							$uploader = new PMXI_Upload($file_to_import, $this->errors);
 							$upload_result = $uploader->url($this->data['import']->feed_type, $filePath);
-							// Persist corrected feed_type so stale values don't recur.
-							if ( is_array( $upload_result ) && ! empty( $upload_result['feed_type'] ) && $upload_result['feed_type'] !== $this->data['import']->feed_type ) {
-								$this->data['import']->feed_type = $upload_result['feed_type'];
-								$this->data['import']->set(array('feed_type' => $this->data['import']->feed_type))->update();
-							}
 						}
 
 						break;

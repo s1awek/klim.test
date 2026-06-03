@@ -1,3 +1,6 @@
+= 2.141 =
+* Confirmed compatibility with WordPress 7.0. Additional updates for WordPress 7.0. Other bug fixes.
+
 = 2.140 =
 * Compatibility with WooCommerce 10.6.
 

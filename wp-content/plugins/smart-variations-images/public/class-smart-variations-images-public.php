@@ -925,7 +925,7 @@ CSS;
      */
     public function render_quick_view_frontend() : void {
         global $product;
-        $product = wc_get_product( intval( $_POST['id'] ) );
+        $product = wc_get_product( ( isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0 ) );
         ob_start();
         include plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/smart-variations-images-public-display.php';
         $return = ob_get_clean();
@@ -1673,7 +1673,9 @@ CSS;
      */
     public function woosvi_slugify() : void {
         header( "Content-type: application/json" );
-        echo json_encode( sanitize_title( strtolower( $_POST['data'] ) ) );
+        $data = ( isset( $_POST['data'] ) ? $_POST['data'] : '' );
+        $data = ( is_array( $data ) ? implode( '_svipro_', $data ) : (string) $data );
+        echo json_encode( sanitize_title( strtolower( $data ) ) );
         wp_die();
     }
 
@@ -1894,7 +1896,7 @@ CSS;
     public function filter_main_product_image(
         string $image,
         WC_Product $product,
-        string $size,
+        $size,
         array $attr,
         bool $placeholder
     ) : string {

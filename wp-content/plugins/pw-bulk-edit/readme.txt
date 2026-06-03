@@ -3,9 +3,9 @@ Contributors: pimwick
 Donate link: https://paypal.me/pimwick
 Tags: woocommerce, bulk edit, products, prices, batch
 Requires at least: 4.5
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.140
+Stable tag: 2.141
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -83,6 +83,9 @@ You're in control of your WooCommerce product catalog with the power of PW WooCo
 
 == Changelog ==
 
+= 2.141 =
+* Confirmed compatibility with WordPress 7.0. Additional updates for WordPress 7.0. Other bug fixes.
+
 = 2.140 =
 * Compatibility with WooCommerce 10.6.
 
@@ -110,16 +113,13 @@ You're in control of your WooCommerce product catalog with the power of PW WooCo
 = 2.132 =
 * Load translation files in the plugins_loaded event rather than init.
 
-= 2.131 =
-* Changed hook for loading translations file to avoid warning in WordPress 6.7.
-
 = Previous versions =
 * See changelog.txt
 
 == Upgrade Notice ==
 
-= 2.140 =
-* Compatibility with WooCommerce 10.6.
+= 2.141 =
+* Confirmed compatibility with WordPress 7.0. Additional updates for WordPress 7.0. Other bug fixes.
 
 == Frequently Asked Questions ==
 

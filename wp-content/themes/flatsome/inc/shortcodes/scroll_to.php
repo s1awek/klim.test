@@ -45,7 +45,7 @@ function flatsome_scroll_to( $atts, $content = null, $tag = '' ) {
 	);
 
 	if ( $atts['offset_type'] === 'custom' ) {
-		$element_atts['data-offset-type'] = $atts['offset_type'];
+		$element_atts['data-offset-type'] = esc_attr( $atts['offset_type'] );
 		$element_atts['data-offset']      = esc_attr( $atts['offset'] );
 	}
 

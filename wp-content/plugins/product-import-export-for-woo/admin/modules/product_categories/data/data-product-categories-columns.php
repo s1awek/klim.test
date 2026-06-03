@@ -11,5 +11,6 @@ return apply_filters('taxonomies_csv_product_post_columns', array(
     'description' => 'description',
     'display_type' => 'display_type',
     'parent' => 'parent',
+	'parent_slug' => 'parent_slug',
     'thumbnail' => 'thumbnail',
         ));

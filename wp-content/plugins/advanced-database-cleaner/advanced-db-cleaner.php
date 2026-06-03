@@ -3,7 +3,7 @@
  * Plugin Name:       Advanced Database Cleaner
  * Plugin URI:        https://sigmaplugin.com/downloads/wordpress-advanced-database-cleaner
  * Description:       The most advanced Database Cleaner for WordPress. Clean database by deleting orphaned items such as old "revisions", "old drafts", optimize database, and more.
- * Version:           4.0.7
+ * Version:           4.1.1
  * Author:            SigmaPlugin
  * Author URI:        https://sigmaplugin.com
  * Contributors:      symptote
@@ -47,7 +47,7 @@ if ( ! defined( "ADBC_MAIN_PLUGIN_FILE_PATH" ) )
 	define( "ADBC_MAIN_PLUGIN_FILE_PATH", __FILE__ );
 
 if ( ! defined( 'ADBC_PLUGIN_VERSION' ) )
-	define( 'ADBC_PLUGIN_VERSION', '4.0.7' );
+	define( 'ADBC_PLUGIN_VERSION', '4.1.1' );
 
 class ADBC_Advanced_DB_Cleaner {
 
@@ -56,7 +56,27 @@ class ADBC_Advanced_DB_Cleaner {
 		// Load the classes files on demand
 		spl_autoload_register( [ $this, 'loader' ] );
 
-		// Load constants early so activation hooks have access to them
+		// Register activation hook
+		register_activation_hook( __FILE__, [ 'ADBC_Admin_Init', 'activate' ] );
+
+		// Bootstrap the plugin on plugins_loaded
+		add_action( 'plugins_loaded', [ $this, 'bootstrap' ], 0 );
+
+	}
+
+	/**
+	 * Run the actual plugin bootstrap (constants, hooks).
+	 *
+	 * @return void
+	 */
+	public function bootstrap() {
+
+		// This plugin operates in admin, WP-Cron, and REST API contexts only.
+		// Skip bootstrap on frontend requests to avoid unnecessary DB queries and file includes.
+		if ( ! is_admin() && ! wp_doing_cron() && ! self::is_rest_request() )
+			return;
+
+		// Load constants early so deactivation hook have access to them
 		include_once 'constants.php';
 
 		// Menus, scripts and custom styles
@@ -69,8 +89,10 @@ class ADBC_Advanced_DB_Cleaner {
 		if ( ADBC_Admin_Init::has_conflict() )
 			return;
 
-		// Register activation and deactivation hooks
-		register_activation_hook( __FILE__, [ 'ADBC_Admin_Init', 'activate' ] );
+		// Maybe schedule a conflict notice.
+		add_action( 'admin_init', [ 'ADBC_Admin_Init', 'maybe_schedule_conflict_notice' ] );
+
+		// Register deactivation hook
 		register_deactivation_hook( __FILE__, [ 'ADBC_Admin_Init', 'deactivate' ] );
 
 		// Register all routes
@@ -79,14 +101,16 @@ class ADBC_Advanced_DB_Cleaner {
 		// Init
 		add_action( 'init', [ 'ADBC_Admin_Init', 'load_text_domain' ], 10 );
 		add_action( 'init', [ 'ADBC_Admin_Init', 'create_adbc_uploads_folder_with_its_content' ], 11 );
-		add_action( 'init', [ 'ADBC_Admin_Init', 'load_general_cleanup_handlers' ], 12 );
-		add_action( 'init', [ 'ADBC_Admin_Init', 'ensure_automation_integrity' ], 13 );
+		add_action( 'init', [ 'ADBC_Admin_Init', 'register_cron_schedules_filter' ], 12 );
+		add_action( 'init', [ 'ADBC_Admin_Init', 'load_general_cleanup_handlers' ], 13 );
+		if ( wp_doing_cron() )
+			add_action( 'init', [ 'ADBC_Admin_Init', 'ensure_automation_integrity' ], 14 );
 
 		if ( ADBC_VERSION_TYPE === "FREE" )
-			add_action( 'init', [ 'ADBC_Migration', 'run_free_migration' ], 14 );
+			add_action( 'init', [ 'ADBC_Migration', 'run_free_migration' ], 15 );
 
 		if ( ADBC_IS_PRO_VERSION === true )
-			add_action( 'init', [ 'ADBC_Migration', 'run_pro_migration' ], 15 );
+			add_action( 'init', [ 'ADBC_Migration', 'run_pro_migration' ], 16 );
 
 		// Show global notifications
 		add_action( 'all_admin_notices', [ 'ADBC_Admin_Init', 'maybe_show_global_notifications' ] );
@@ -95,6 +119,9 @@ class ADBC_Advanced_DB_Cleaner {
 		add_action( 'adbc_cron_automation', [ 'ADBC_Automation', '_run_task_by_id' ], 10, 1 );
 
 		if ( ADBC_VERSION_TYPE === "PREMIUM" ) {
+
+			// Initialize the registered post types dict tracker
+			ADBC_Registered_Post_Types_Dict_Tracker::instance()->init();
 
 			// Register premium routes
 			add_action( 'rest_api_init', [ 'ADBC_Premium_Routes', 'register_routes' ] );
@@ -130,7 +157,6 @@ class ADBC_Advanced_DB_Cleaner {
 		}
 
 		// filters
-		add_filter( 'cron_schedules', [ 'ADBC_Admin_Init', 'add_adbc_schedules_frequencies' ] );
 		add_filter( 'load_script_translation_file', [ 'ADBC_Admin_Init', 'change_script_translation_file_name' ], 10, 3 );
 		if ( method_exists( 'ADBC_Admin_Init', '_capture_original_plugin_meta_links' ) && method_exists( 'ADBC_Admin_Init', '_restore_plugin_meta_links' ) ) {
 			add_filter( 'plugin_row_meta', [ 'ADBC_Admin_Init', '_capture_original_plugin_meta_links' ], 1, 2 );
@@ -146,32 +172,133 @@ class ADBC_Advanced_DB_Cleaner {
 	}
 
 	/**
-	 * Load the class file.
+	 * Load the class file using a deterministic class map.
+	 *
+	 * @param string $class_name The class/interface/trait name.
 	 * 
-	 * @param string $class_name The name of the class to load.
 	 * @return void
 	 */
 	public function loader( $class_name ) {
 
-		// skip loading the classes that doesn't belong to our plugin
 		if ( strpos( $class_name, 'ADBC_' ) !== 0 ) {
 			return;
 		}
 
-		$class_file_name = 'class-' . str_replace( '_', '-', strtolower( $class_name ) ) . '.php';
-
-		$iterator = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator( __DIR__ . '/includes', FilesystemIterator::SKIP_DOTS )
-		);
-
-		foreach ( $iterator as $file ) {
-			if ( $file->getFilename() === $class_file_name ) {
-				include_once $file->getRealPath();
-				return;
-			}
+		if ( empty( self::$class_map[ $class_name ] ) ) {
+			return;
 		}
 
+		$file_path = __DIR__ . '/' . self::$class_map[ $class_name ];
+
+		include_once $file_path;
+
 	}
+
+	/**
+	 * Detect a REST API request.
+	 *
+	 * @return bool
+	 */
+	private static function is_rest_request() {
+
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST )
+			return true;
+
+		if ( isset( $_GET['rest_route'] ) && is_string( $_GET['rest_route'] ) )
+			return true;
+
+		if ( ! isset( $_SERVER['REQUEST_URI'] ) || ! is_string( $_SERVER['REQUEST_URI'] ) )
+			return false;
+
+		$prefix = function_exists( 'rest_get_url_prefix' ) ? rest_get_url_prefix() : 'wp-json';
+		$path = wp_parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH );
+
+		return is_string( $path ) && strpos( $path, '/' . $prefix . '/' ) !== false;
+
+	}
+
+	/**
+	 * Deterministic class map for ADBC.
+	 *
+	 * @return array The class map.
+	 */
+	private static $class_map = [ 
+		'ADBC_Abstract_Cleanup_Handler' => 'includes/classes/general-cleanup/class-adbc-abstract-cleanup-handler.php',
+		'ADBC_Addons' => 'includes/classes/addons/class-adbc-addons.php',
+		'ADBC_Addons_Activity' => 'includes/premium/classes/addons/class-adbc-addons-activity.php',
+		'ADBC_Addons_Endpoints' => 'includes/premium/endpoints/class-adbc-addons-endpoints.php',
+		'ADBC_Admin_Init' => 'includes/classes/class-adbc-admin-init.php',
+		'ADBC_Analytics' => 'includes/premium/classes/class-adbc-analytics.php',
+		'ADBC_Analytics_Endpoints' => 'includes/premium/endpoints/class-adbc-analytics-endpoints.php',
+		'ADBC_Automation' => 'includes/classes/class-adbc-automation.php',
+		'ADBC_Automation_Endpoints' => 'includes/endpoints/class-adbc-automation-endpoints.php',
+		'ADBC_Automation_Events_Log' => 'includes/premium/classes/class-adbc-automation-events-log.php',
+		'ADBC_Automation_Validator' => 'includes/utils/validator/class-adbc-automation-validator.php',
+		'ADBC_Cleanup_Type_Handler' => 'includes/classes/general-cleanup/class-adbc-cleanup-type-handler.php',
+		'ADBC_Cleanup_Type_Registry' => 'includes/classes/general-cleanup/class-adbc-cleanup-type-registry.php',
+		'ADBC_Collect_Files' => 'includes/premium/classes/scan/process/steps/class-adbc-collect-files.php',
+		'ADBC_Common_Endpoints' => 'includes/endpoints/class-adbc-common-endpoints.php',
+		'ADBC_Common_Model' => 'includes/models/class-adbc-common-model.php',
+		'ADBC_Common_Utils' => 'includes/utils/class-adbc-common-utils.php',
+		'ADBC_Common_Validator' => 'includes/utils/validator/class-adbc-common-validator.php',
+		'ADBC_Cron_Jobs' => 'includes/models/class-adbc-cron-jobs.php',
+		'ADBC_Cron_Jobs_Endpoints' => 'includes/endpoints/class-adbc-cron-jobs-endpoints.php',
+		'ADBC_Database' => 'includes/models/class-adbc-database.php',
+		'ADBC_Dictionary' => 'includes/classes/addons/class-adbc-dictionary.php',
+		'ADBC_Exact_Match' => 'includes/premium/classes/scan/process/steps/class-adbc-exact-match.php',
+		'ADBC_Files' => 'includes/utils/class-adbc-files.php',
+		'ADBC_General_Cleanup' => 'includes/classes/general-cleanup/class-adbc-general-cleanup.php',
+		'ADBC_General_Cleanup_Endpoints' => 'includes/endpoints/class-adbc-general-cleanup-endpoints.php',
+		'ADBC_Hardcoded_Items' => 'includes/classes/class-adbc-hardcoded-items.php',
+		'ADBC_Info_Endpoints' => 'includes/endpoints/class-adbc-info-endpoints.php',
+		'ADBC_License_Endpoints' => 'includes/premium/endpoints/class-adbc-license-endpoints.php',
+		'ADBC_License_Manager' => 'includes/premium/classes/class-adbc-license-manager.php',
+		'ADBC_Local_Scan' => 'includes/premium/classes/scan/process/class-adbc-local-scan.php',
+		'ADBC_Logging' => 'includes/utils/class-adbc-logging.php',
+		'ADBC_Logs_Endpoints' => 'includes/endpoints/class-adbc-logs-endpoints.php',
+		'ADBC_Migration' => 'includes/classes/class-adbc-migration.php',
+		'ADBC_Migration_Endpoints' => 'includes/premium/endpoints/class-adbc-migration-endpoints.php',
+		'ADBC_Notifications' => 'includes/utils/class-adbc-notifications.php',
+		'ADBC_Options' => 'includes/models/class-adbc-options.php',
+		'ADBC_Options_Endpoints' => 'includes/endpoints/class-adbc-options-endpoints.php',
+		'ADBC_Partial_Match' => 'includes/premium/classes/scan/process/steps/class-adbc-partial-match.php',
+		'ADBC_Plugins' => 'includes/classes/addons/class-adbc-plugins.php',
+		'ADBC_Posts_Meta' => 'includes/models/class-adbc-posts-meta.php',
+		'ADBC_Posts_Meta_Endpoints' => 'includes/endpoints/class-adbc-posts-meta-endpoints.php',
+		'ADBC_Premium_Common_Validator' => 'includes/premium/utils/validator/class-adbc-premium-common-validator.php',
+		'ADBC_Premium_Routes' => 'includes/premium/classes/class-adbc-premium-routes.php',
+		'ADBC_Prepare_Items' => 'includes/premium/classes/scan/process/steps/class-adbc-prepare-items.php',
+		'ADBC_Prepare_Local_Scan_Results' => 'includes/premium/classes/scan/process/steps/class-adbc-prepare-local-scan-results.php',
+		'ADBC_Remote_Request' => 'includes/premium/utils/class-adbc-remote-request.php',
+		'ADBC_Remote_Scan' => 'includes/premium/classes/scan/process/class-adbc-remote-scan.php',
+		'ADBC_Rest' => 'includes/utils/class-adbc-rest.php',
+		'ADBC_Routes' => 'includes/classes/class-adbc-routes.php',
+		'ADBC_Scan' => 'includes/premium/classes/scan/process/class-adbc-scan.php',
+		'ADBC_Scan_Counter' => 'includes/classes/class-adbc-scan-counter.php',
+		'ADBC_Scan_Endpoints' => 'includes/premium/endpoints/class-adbc-scan-endpoints.php',
+		'ADBC_Scan_Info' => 'includes/premium/classes/scan/process/class-adbc-scan-info.php',
+		'ADBC_Scan_Paths' => 'includes/premium/classes/scan/class-adbc-scan-paths.php',
+		'ADBC_Scan_Results' => 'includes/premium/classes/scan/class-adbc-scan-results.php',
+		'ADBC_Scan_Utils' => 'includes/premium/classes/scan/class-adbc-scan-utils.php',
+		'ADBC_Scan_Validator' => 'includes/premium/utils/validator/class-adbc-scan-validator.php',
+		'ADBC_Selected_Items_Validator' => 'includes/utils/validator/class-adbc-selected-items-validator.php',
+		'ADBC_Settings' => 'includes/classes/class-adbc-settings.php',
+		'ADBC_Settings_Endpoints' => 'includes/endpoints/class-adbc-settings-endpoints.php',
+		'ADBC_Settings_Validator' => 'includes/utils/validator/class-adbc-settings-validator.php',
+		'ADBC_Singleton' => 'includes/classes/class-adbc-singleton.php',
+		'ADBC_Sites' => 'includes/models/class-adbc-sites.php',
+		'ADBC_Tables' => 'includes/models/class-adbc-tables.php',
+		'ADBC_Tables_Endpoints' => 'includes/endpoints/class-adbc-tables-endpoints.php',
+		'ADBC_Tables_Validator' => 'includes/utils/validator/class-adbc-tables-validator.php',
+		'ADBC_Themes' => 'includes/classes/addons/class-adbc-themes.php',
+		'ADBC_Transients' => 'includes/models/class-adbc-transients.php',
+		'ADBC_Transients_Endpoints' => 'includes/endpoints/class-adbc-transients-endpoints.php',
+		'ADBC_Users_Meta' => 'includes/models/class-adbc-users-meta.php',
+		'ADBC_Users_Meta_Endpoints' => 'includes/endpoints/class-adbc-users-meta-endpoints.php',
+		'ADBC_Post_Types' => 'includes/models/class-adbc-post-types.php',
+		'ADBC_Post_Types_Endpoints' => 'includes/endpoints/class-adbc-post-types-endpoints.php',
+		'ADBC_Registered_Post_Types_Dict_Tracker' => 'includes/premium/classes/scan/class-adbc-registered-post-types-dict-tracker.php',
+	];
 
 }
 

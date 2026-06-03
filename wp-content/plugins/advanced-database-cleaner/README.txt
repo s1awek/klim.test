@@ -4,8 +4,8 @@ Donate Link: https://www.sigmaplugin.com/donation
 Tags: clean, database, optimize, performance, postmeta
 Requires at least: 5.0.0
 Requires PHP: 7.0
-Tested up to: 6.9
-Stable tag: 4.0.7
+Tested up to: 7.0
+Stable tag: 4.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,9 +65,11 @@ With the ✨[**Premium version**](https://sigmaplugin.com/downloads/wordpress-ad
 #### ✅ Tables
 * Display the list of database tables with information such as number of rows, table size, engine, etc.
 * Sort tables by any column such as table name or table size
+* Display table contents along with their column structure, indexes, status, and more
 * Detect and filter tables with invalid prefixes (tables that do not belong to the current WordPress installation), this can be enabled or disabled from the settings page
 * Optimize database tables (the plugin notifies you when tables require optimization)
 * Repair corrupted or damaged database tables (the plugin notifies you when tables are corrupted)
+* Convert tables to InnoDB for better performance
 * Empty rows of database tables
 * Clean and delete database tables
 
@@ -93,6 +95,13 @@ With the ✨[**Premium version**](https://sigmaplugin.com/downloads/wordpress-ad
 * Detect unused post meta (meta not associated with any existing posts)
 * Detect duplicated post meta (same meta key/value for the same post ID)
 * Clean and delete post meta
+
+#### ✅ Post types
+* Display post types with information such as name, post count, visibility (public or non-public), etc.
+* Sort post types by columns such as name, post count, visibility, etc.
+* View posts corresponding to each post type, along with their details
+* Detect unused or orphaned post types
+* Clean orphaned post types
 
 #### ✅ User Meta
 * Display the user meta list with information such as meta key, value, size, associated user ID, etc.
@@ -249,6 +258,37 @@ This section describes how to install the plugin. In general, there are 3 ways t
 21. Settings page
 
 == Changelog ==
+
+= 4.1.1 – 05/05/2026 =
+- Security: [Premium + Pro-Lifetime] Patched a security vulnerability in the EDD SDK package
+- Fix: Resolved an issue where the "No route was found matching the URL" error occurred when the default REST API URL was modified
+- Fix: Fixed ReflectionFunction::__construct() error requiring a Closure or string as the first argument
+- Fix: Corrected "Invalid setting key" error when hiding the post types menu item
+- Fix: [Premium + Pro-Lifetime] Addressed undefined array key DOCUMENT_ROOT on sites running WP-Cron via system cron and WP-CLI in the Easy Digital Downloads (EDD) SDK package
+- Tweak: Refactored several parts of the codebase to improve performance and maintainability
+
+= 4.1.0 – 08/04/2026 =
+- New: Added "Post Types" cleanup module
+- New: In the General Cleanup tab, added a toggle for each item: Auto Count or Manual Count
+- New: Added an action to convert table engines to InnoDB
+- New: Added quick actions per row (available on the right side) for faster processing
+- New: Added the ability to view table data, including rows content, column structure, indexes, and more
+- Fix: Resolved an issue where RecursiveIteratorIterator could trigger excessive server load in certain environments
+- Fix: Corrected the refresh icon behavior in the Addons Activity module to ensure consistent updates
+- Fix: Fixed an issue where multiple folders were unintentionally created when deleting plugin settings
+- Fix: Resolved a multisite issue where update notifications were displayed even when the latest version was already installed
+- Fix: Fixed a “_load_textdomain_just_in_time was called incorrectly” warning caused by premature calls to wp_get_schedules() before the init hook
+- Fix: Prevented scan crash caused by natsort() receiving a boolean instead of an array
+- Fix: Adjust display properties for img/svg in WP admin menu to prevent layout shifts
+- Tweak: Each table now displays the percentage of total database size it occupies, providing a clearer view of database distribution
+- Tweak: Added an action to refresh table statistics and information
+- Tweak: Prevent actions (such as delete) on WordPress core items by default (can be disabled in settings)
+- Tweak: Add file path for cron jobs actions
+- Tweak: Added direct links in notifications to help users quickly access logs or settings
+- Tweak: Reduced (or eliminated) unnecessary frontend and backend requests/queries, executing them only when needed
+- Tweak: Added a setting to bypass the confirmation modal for actions such as delete
+- Tweak: In the settings page, invalid values are now handled locally with error messages, without sending REST requests
+- Tweak: Refactored several parts of the codebase for better performance and maintainability
 
 = 4.0.7 – 07/03/2026 =
 - New: Added support for both SQL and native deletion methods in the Options, Transients, Postmeta, and Usermeta modules

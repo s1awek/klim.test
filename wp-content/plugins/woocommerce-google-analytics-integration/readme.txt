@@ -3,7 +3,7 @@ Contributors: woocommerce, automattic, claudiosanches, bor0, royho, laurendaviss
 Tags: woocommerce, google analytics
 Requires at least: 6.8
 Tested up to: 6.9
-Stable tag: 2.1.22
+Stable tag: 2.1.23
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -48,6 +48,12 @@ Duplicate Google Analytics code causes a conflict in tracking. Remove any other 
 
 == Changelog ==
 
+= 2.1.23 - 2026-04-15 =
+* Dev - Enable min-release-age supply-chain protection.
+* Dev - Override serialize-javascript to ^7.0.5 and ajv to ^8.18.0 to resolve npm security vulnerabilities.
+* Dev - Update npm dependencies and transitive overrides to resolve non-breaking security advisories.
+* Update - Require WooCommerce 10.6+.
+
 = 2.1.22 - 2026-03-26 =
 * Dev - Add AGENTS.md and CLAUDE.md for coding agent guidelines.
 * Dev - Add Woo Deploy workflow for streamlined releases.
@@ -60,12 +66,5 @@ Duplicate Google Analytics code causes a conflict in tracking. Remove any other 
 = 2.1.21 - 2026-02-10 =
 * Tweak - WC 10.5 compatibility.
 * Update - Require WooCommerce 10.4+.
-
-= 2.1.20 - 2026-01-14 =
-* Add WooCommerce 10.4+ Interactivity API Mini Cart compatibility.
-* Dev - updated vulnerable packages.
-* Tweak - WordPress 6.9 compatibility.
-* Update - Require WooCommerce 10.3+.
-* Update - Require WordPress 6.8+.
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce-google-analytics-integration/trunk/changelog.txt).

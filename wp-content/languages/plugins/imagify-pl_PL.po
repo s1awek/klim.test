@@ -1,15 +1,15 @@
-# Translation of Plugins - Imagify Image Optimization – Optimize Images | Compress Images | Convert WebP | Convert AVIF - Stable (latest release) in Polish
-# This file is distributed under the same license as the Plugins - Imagify Image Optimization – Optimize Images | Compress Images | Convert WebP | Convert AVIF - Stable (latest release) package.
+# Translation of Plugins - Imagify: Optimize Images for Top Speed (Compress &amp; Convert to WebP/AVIF) - Stable (latest release) in Polish
+# This file is distributed under the same license as the Plugins - Imagify: Optimize Images for Top Speed (Compress &amp; Convert to WebP/AVIF) - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-05-21 05:09:08+0000\n"
+"PO-Revision-Date: 2026-05-29 04:31:54+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
 "X-Generator: GlotPress/4.0.3\n"
 "Language: pl\n"
-"Project-Id-Version: Plugins - Imagify Image Optimization – Optimize Images | Compress Images | Convert WebP | Convert AVIF - Stable (latest release)\n"
+"Project-Id-Version: Plugins - Imagify: Optimize Images for Top Speed (Compress &amp; Convert to WebP/AVIF) - Stable (latest release)\n"
 
 #: inc/Dependencies/ActionScheduler/classes/WP_CLI/Action/Cancel_Command.php:114
 msgid "scheduled action"
@@ -79,17 +79,17 @@ msgid "WP CLI"
 msgstr "WP CLI"
 
 #. translators: %s refers to the exception error message.
-#: inc/Dependencies/ActionScheduler/classes/WP_CLI/Action/Create_Command.php:145
+#: inc/Dependencies/ActionScheduler/classes/WP_CLI/Action/Create_Command.php:147
 #: inc/Dependencies/ActionScheduler/classes/WP_CLI/Action/Generate_Command.php:115
 msgid "There was an error creating the scheduled action: %s"
 msgstr "Wystąpił błąd podczas tworzenia zaplanowanej akcji: %s"
 
 #. translators: %1$s: type of action, %2$d: ID of the created action
-#: inc/Dependencies/ActionScheduler/classes/WP_CLI/Action/Create_Command.php:127
+#: inc/Dependencies/ActionScheduler/classes/WP_CLI/Action/Create_Command.php:129
 msgid "%1$s action (%2$d) scheduled."
 msgstr "%1$s akcja (%2$d) zaplanowana."
 
-#: inc/Dependencies/ActionScheduler/classes/WP_CLI/Action/Create_Command.php:108
+#: inc/Dependencies/ActionScheduler/classes/WP_CLI/Action/Create_Command.php:110
 msgid "Unable to create a scheduled action."
 msgstr "Nie można utworzyć zaplanowanej akcji."
 
@@ -98,13 +98,13 @@ msgid "Please specify hook of action to cancel."
 msgstr "Podaj hak akcji do anulowania."
 
 #. translators: %s is the action ID
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1253
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:987
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1300
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:1004
 msgid "Unidentified action %s: we were unable to mark this action as having completed. It may may have been deleted by another process."
 msgstr "Niezidentyfikowana akcja %s: nie mogliśmy oznaczyć tej akcji jako zakończonej. Mogła ona zostać usunięta przez inny proces."
 
 #. translators: %s is the action ID
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1185
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1232
 msgid "Unidentified action %s: we were unable to mark this action as having failed. It may may have been deleted by another process."
 msgstr "Niezidentyfikowana akcja %s: nie mogliśmy oznaczyć tej akcji jako zakończonej niepowodzeniem. Mogła ona zostać usunięta przez inny proces."
 
@@ -182,80 +182,12 @@ msgstr "Nie można pobrać akcji %d."
 msgid "Detailed information about registered sources is not currently available."
 msgstr "Szczegółowe informacje na temat zarejestrowanych źródeł nie są obecnie dostępne."
 
-#: classes/Dependencies/WPMedia/PluginFamily/Model/PluginFamily.php:127
-msgid "Activate"
-msgstr "Włącz"
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/PluginFamily.php:118
-msgid "Get it Now"
-msgstr "Zdobądź teraz"
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/PluginFamily.php:109
-msgid "Install"
-msgstr "Zainstaluj"
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/PluginFamily.php:66
-msgid "Activated"
-msgstr "Włączone"
-
 #: classes/Optimization/Process/CustomFolders.php:60
 #: classes/Optimization/Process/CustomFolders.php:102
 #: classes/Optimization/Process/WP.php:54
 #: classes/Optimization/Process/WP.php:142
 msgid "No media found."
 msgstr "Nie znalazłem obrazków."
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/wp_media_plugins.php:52
-msgid "The Easiest Way to Protect Your Website"
-msgstr "Najprostsza droga do ochrony twojego serwisu"
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/wp_media_plugins.php:38
-msgid "The Swiss Army Knife of SEO Tools"
-msgstr "Szwajcarski scyzoryk w narzędziach SEO"
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/wp_media_plugins.php:8
-msgid "Optimize Performance"
-msgstr "Zoptymalizuj wydajność"
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/wp_media_plugins.php:15
-msgid "Speed Up Your Website, Instantly"
-msgstr "Przyspiesz natychmiast swój serwis"
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/wp_media_plugins.php:62
-msgid "One of the easiest, most comprehensive, and popular cookie consent plugins available. Google Gold Certified Partner to quickly comply with data privacy laws from around the world."
-msgstr "Jedna z najłatwiejszych, najbardziej kompleksowych i popularnych dostępnych wtyczek do wyrażania zgody na pliki cookie. Partner z certyfikatem Google Gold, który szybko dostosowuje się do przepisów o ochronie danych na całym świecie."
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/wp_media_plugins.php:61
-msgid "GDPR/CCPA Cookie Consent Banner"
-msgstr "GDPR/CCPA Cookie Consent Banner"
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/wp_media_plugins.php:53
-msgid "BackWPup is the most comprehensive and user-friendly backup & restore plugin for WordPress. Easily schedule automatic backups, securely store and restore with just a few clicks!"
-msgstr "BackWPup to najbardziej kompleksowa i przyjazna użytkownikowi wtyczka do tworzenia kopii zapasowych i przywracania dla WordPressa. Łatwo planuj automatyczne kopie zapasowe, bezpiecznie przechowuj i przywracaj za pomocą kilku kliknięć!"
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/wp_media_plugins.php:45
-msgid "Protect & Secure"
-msgstr "Protect & Secure"
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/wp_media_plugins.php:39
-msgid "Rank Math SEO is the Best WordPress SEO plugin with the features of many SEO and AI SEO tools in a single package to help multiply your SEO traffic."
-msgstr "Rank Math SEO to najlepsza wtyczka SEO dla WordPress, która łączy funkcje wielu narzędzi SEO i narzędzi SI SEO w jednym pakiecie i pomaga zwielokrotnić ruch z wyszukiwarek."
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/wp_media_plugins.php:25
-msgid "Imagify is the easiest WordPress image optimizer. It automatically compresses images, converts them to WebP and AVIF formats, and lets you resize and optimize with just one click!"
-msgstr "Imagify to najłatwiejszy optymalizator obrazów WordPress. Automatycznie kompresuje obrazy, konwertuje je do formatów WebP i AVIF, a także umożliwia zmianę rozmiaru i optymalizację za pomocą jednego kliknięcia!"
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/wp_media_plugins.php:24
-msgid "Speed Up Your Website With Lighter Images"
-msgstr "Przyspiesz swoją witrynę internetową dzięki lżejszym obrazkom"
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/wp_media_plugins.php:16
-msgid "WP Rocket is the easiest way to make your WordPress website faster and boost your Google PageSpeed score. Get more traffic, better engagement, and higher conversions effortlessly."
-msgstr "WP Rocket to najłatwiejszy sposób na przyspieszenie witryny WordPress i zwiększenie wyniku Google PageSpeed. Uzyskaj większy ruch, lepsze zaangażowanie i wyższe konwersje bez wysiłku."
-
-#: classes/Dependencies/WPMedia/PluginFamily/Model/wp_media_plugins.php:31
-msgid "Boost Traffic"
-msgstr "Zwiększ ruch"
 
 #: inc/classes/class-imagify.php:90
 msgid "API key required."
@@ -273,12 +205,7 @@ msgstr "Zwiększ plan"
 msgid "Our Plugins"
 msgstr "Nasze wtyczki"
 
-#. translators: %s is a formatted price.
-#: views/modal-payment.php:75
-msgid "Unlimited upload size<br />Unlimited websites<br />%s"
-msgstr "Nieograniczony rozmiar wczytywania<br />Nieograniczone witryny<br />%s"
-
-#: classes/Admin/AdminSubscriber.php:53
+#: classes/Admin/AdminSubscriber.php:55
 msgid "Upgrade"
 msgstr "Ulepsz"
 
@@ -368,7 +295,7 @@ msgid "Action Scheduler was unable to delete action %1$d. Reason: %2$s"
 msgstr "Harmonogram akcji nie mógł usunąć akcji %1$d. Powód: %2$s"
 
 #. translators: 1: provided value 2: provided type.
-#: inc/Dependencies/ActionScheduler/functions.php:136
+#: inc/Dependencies/ActionScheduler/functions.php:137
 msgid "An integer was expected but \"%1$s\" (%2$s) was received."
 msgstr "Oczekiwano liczby całkowitej, ale otrzymano „%1$s” (%2$s)."
 
@@ -385,10 +312,6 @@ msgstr "Nie można uzyskać ścieżki do pliku w formacie nowej generacji."
 #: views/button/delete-webp.php:25
 msgid "Delete Next-Gen images"
 msgstr "Usuń obrazy nowej generacji"
-
-#: inc/classes/Dependencies/deliciousbrains/wp-background-processing/classes/wp-background-process.php:777
-msgid "Every Minute"
-msgstr "Co minutę"
 
 #: views/button/generate-webp.php:26
 msgid "Generate Next-Gen images versions"
@@ -418,17 +341,17 @@ msgid "There was an error deleting an action: %s"
 msgstr "There was an error deleting an action: %s"
 
 #. translators: %s database error.
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1019
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1022
 msgid "Unable to claim actions. Database error: %s."
 msgstr "Nie można zgłosić roszczeń do działań. Błąd bazy danych: %s."
 
 #. translators: 1: action ID. 2: status slug.
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1216
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:967
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1263
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:984
 msgid "Unable to update the status of action %1$d to %2$s."
 msgstr "Nie można zaktualizować stanu akcji %1$d do %2$s."
 
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1013
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1017
 msgctxt "database error"
 msgid "unknown"
 msgstr "nieznany"
@@ -451,11 +374,11 @@ msgstr "Konwersja:"
 msgid "For $9.99/month only, choose unlimited image optimization!"
 msgstr "Tylko za 9,99 USD miesięcznie wybierz nieograniczoną optymalizację obrazu!"
 
-#: classes/Admin/AdminBar.php:171
+#: classes/Admin/AdminBar.php:173
 msgid "For $9.99/month, optimize as many images as you like!"
 msgstr "Za 9,99 USD miesięcznie zoptymalizuj dowolną liczbę obrazów!"
 
-#: classes/Admin/AdminBar.php:161 views/part-upsell.php:75
+#: classes/Admin/AdminBar.php:163 views/part-upsell.php:75
 msgid "From $5.99/month only, keep going with image optimization!"
 msgstr "Tylko od 5,99 USD miesięcznie — kontynuuj optymalizację obrazu!"
 
@@ -463,15 +386,15 @@ msgstr "Tylko od 5,99 USD miesięcznie — kontynuuj optymalizację obrazu!"
 msgid "Partially"
 msgstr "Częściowo"
 
-#: classes/Admin/AdminBar.php:175
+#: classes/Admin/AdminBar.php:177
 msgid "Switch To Infinite Plan"
 msgstr "Przejdź na plan nieograniczony"
 
-#: classes/Admin/AdminBar.php:165
+#: classes/Admin/AdminBar.php:167
 msgid "Switch to Infinite plan for unlimited optimization:"
 msgstr "Przejdź na plan nieograniczony (Infinite), aby uzyskać nieograniczoną optymalizację:"
 
-#: classes/Admin/AdminBar.php:162
+#: classes/Admin/AdminBar.php:164
 msgid "Upgrade My Plan"
 msgstr "Zwiększ mój plan"
 
@@ -479,7 +402,7 @@ msgstr "Zwiększ mój plan"
 msgid "Upgrade now"
 msgstr "Aktualizuj teraz"
 
-#: classes/Admin/AdminBar.php:160 views/part-upsell.php:74
+#: classes/Admin/AdminBar.php:162 views/part-upsell.php:74
 msgid "Upgrade your plan now for more!"
 msgstr "Zaktualizuj swój plan, by móc więcej!"
 
@@ -495,7 +418,7 @@ msgstr "Plik WebP jest większy niż obraz oryginalny"
 msgid "For $11.99/month only, choose unlimited image optimization!"
 msgstr "Wybierz nieograniczoną optymalizację obrazków, za jedyne 11,99 dolarów miesięcznie!"
 
-#: classes/Admin/AdminBar.php:168
+#: classes/Admin/AdminBar.php:170
 msgid "For $11.99/month, optimize as many images as you like!"
 msgstr "Optymalizuj tak dużo obrazków jak tylko chcesz, za jedyne 11,99 dolarów miesięcznie!"
 
@@ -505,7 +428,7 @@ msgid "An unknown error occurred: %1$sMore info and possible solutions%2$s"
 msgstr "Wystąpił nieznany błąd: %1$sWięcej informacji i możliwych rozwiązań%2$s"
 
 #. translators: %d is an id.
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1131
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1178
 msgid "Unable to release actions from claim id %d."
 msgstr "Nie można zwolnić działań z roszczenia o identyfikatorze %d."
 
@@ -540,7 +463,7 @@ msgstr[1] "%d zaplanowane akcje zostały zakończone."
 msgstr[2] "%d zaplanowanych akcji zostało zakończonych."
 
 #. translators: %s is the error message
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:1068
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:1085
 msgid "%s Support for strings longer than this will be removed in a future version."
 msgstr "%s Obsługa ciągów dłuższych niż ta zostanie usunięta w przyszłej wersji."
 
@@ -601,7 +524,7 @@ msgstr[1] "%s lata"
 msgstr[2] "%s lat"
 
 #. translators: %s function name.
-#: inc/Dependencies/ActionScheduler/classes/abstracts/ActionScheduler.php:271
+#: inc/Dependencies/ActionScheduler/classes/abstracts/ActionScheduler.php:274
 msgid "%s() was called before the Action Scheduler data store was initialized"
 msgstr "Funkcja %s() została wywołana przed zainicjowaniem magazynu danych Harmonogramu akcji"
 
@@ -632,7 +555,7 @@ msgstr "O harmonogramie akcji %s"
 msgid "Action Group"
 msgstr "Grupa akcji"
 
-#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:111
+#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:110
 msgid "Action Scheduler"
 msgstr "Panowanie akcji"
 
@@ -649,7 +572,7 @@ msgstr "Harmonogram akcji to skalowalna, identyfikowalna kolejka zadań do przet
 msgid "Action Scheduler migration in progress. The list of scheduled actions may be incomplete."
 msgstr "Trwa migracja Harmonogramu akcji. Lista zaplanowanych działań może być niekompletna."
 
-#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:122
+#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:121
 msgid "Action Status"
 msgstr "Status akcji"
 
@@ -712,7 +635,7 @@ msgstr "Anulowane"
 
 #. translators: %1$s is the name of the hook to be cancelled, %2$s is the
 #. exception message.
-#: inc/Dependencies/ActionScheduler/functions.php:289
+#: inc/Dependencies/ActionScheduler/functions.php:292
 msgid "Caught exception while cancelling action \"%1$s\": %2$s"
 msgstr "Wychwycono wyjątek podczas anulowania akcji „%1$s”: %2$s"
 
@@ -738,11 +661,11 @@ msgstr "Ukończona akcja przetwarzania %1$s z hakiem: %2$s"
 msgid "Could not process change for action: \"%1$s\" (ID: %2$d). Error: %3$s"
 msgstr "Nie można przetworzyć zmiany dla akcji: „%1$s” (ID: %2$d). Błąd: %3$s"
 
-#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:124
+#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:123
 msgid "Count"
 msgstr "Licznik"
 
-#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:118
+#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:117
 msgid "Data store:"
 msgstr "Magazyn danych:"
 
@@ -851,8 +774,8 @@ msgstr "W trakcie realizacji"
 msgid "Invalid action - must be a recurring action."
 msgstr "Nieprawidłowa akcja — musi być akcją cykliczną."
 
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1288
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:904
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1335
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:921
 msgid "Invalid action ID. No status found."
 msgstr "Nieprawidłowy identyfikator działania. Nie znaleziono stanu."
 
@@ -893,12 +816,6 @@ msgstr "Dziennik"
 msgid "Lossless compression"
 msgstr "Kompresja bezstratna"
 
-#. translators: 1: source action ID 2: source store class 3: destination action
-#. ID 4: destination store class
-#: inc/Dependencies/ActionScheduler/classes/migration/Runner.php:141
-msgid "Migrated action with ID %1$d in %2$s to ID %3$d in %4$s"
-msgstr "Przeniesiono akcję o identyfikatorze %1$d w %2$s do identyfikatora %3$d w %4$s"
-
 #. translators: %s: amount of claims
 #: inc/Dependencies/ActionScheduler/classes/ActionScheduler_ListTable.php:381
 msgid "Maximum simultaneous queues already in progress (%s queue). No additional queues will begin processing until the current queues are complete."
@@ -906,6 +823,12 @@ msgid_plural "Maximum simultaneous queues already in progress (%s queues). No ad
 msgstr[0] "Maksymalna liczba jednoczesnych kolejek już w toku (kolejka %s). Żadne dodatkowe kolejki nie rozpoczną przetwarzania, dopóki bieżące kolejki nie zostaną ukończone."
 msgstr[1] "Maksymalna liczba jednoczesnych kolejek już w toku (%s kolejki). Żadne dodatkowe kolejki nie rozpoczną przetwarzania, dopóki bieżące kolejki nie zostaną ukończone."
 msgstr[2] "Maksymalna liczba jednoczesnych kolejek już w toku (%s kolejek). Żadne dodatkowe kolejki nie rozpoczną przetwarzania, dopóki bieżące kolejki nie zostaną ukończone."
+
+#. translators: 1: source action ID 2: source store class 3: destination action
+#. ID 4: destination store class
+#: inc/Dependencies/ActionScheduler/classes/migration/Runner.php:141
+msgid "Migrated action with ID %1$d in %2$s to ID %3$d in %4$s"
+msgstr "Przeniesiono akcję o identyfikatorze %1$d w %2$s do identyfikatora %3$d w %4$s"
 
 #. translators: %d: amount of actions
 #: inc/Dependencies/ActionScheduler/classes/migration/Runner.php:114
@@ -923,7 +846,7 @@ msgstr "Nazwa haka akcji, który zostanie wyzwolony."
 msgid "New Scheduled Action"
 msgstr "Nowa zaplanowana akcja"
 
-#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:126
+#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:125
 msgid "Newest Scheduled Date"
 msgstr "Najnowsza zaplanowana data"
 
@@ -943,7 +866,7 @@ msgstr "Niepowtarzalna"
 msgid "Now!"
 msgstr "Teraz!"
 
-#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:125
+#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:124
 msgid "Oldest Scheduled Date"
 msgstr "Najstarsza zaplanowana data"
 
@@ -1098,7 +1021,7 @@ msgstr "Data/godzina zaplanowanego uruchomienia działania."
 
 #. translators: %s: group name(s)
 #. translators: %s is the group name
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:981
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:975
 #: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:717
 msgid "The group \"%s\" does not exist."
 msgid_plural "The groups \"%s\" do not exist."
@@ -1143,7 +1066,7 @@ msgstr "Wystąpił błąd podczas planowania następnej instancji tej akcji: %s"
 msgid "There was an error running the action scheduler: %s"
 msgstr "Wystąpił błąd w zaplanowanej akcji: %s"
 
-#: inc/Dependencies/ActionScheduler/classes/abstracts/ActionScheduler_Abstract_QueueRunner.php:169
+#: inc/Dependencies/ActionScheduler/classes/abstracts/ActionScheduler_Abstract_QueueRunner.php:170
 msgid "This action appears to be consistently failing. A new instance will not be scheduled."
 msgstr "Wydaje się, że to działanie stale kończy się niepowodzeniem. Nowa instancja nie zostanie zaplanowana."
 
@@ -1152,7 +1075,7 @@ msgstr "Wydaje się, że to działanie stale kończy się niepowodzeniem. Nowa i
 msgid "This data will be deleted in %s."
 msgstr "Te dane zostaną usunięte w %s."
 
-#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:111
+#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:110
 msgid "This section shows details of Action Scheduler."
 msgstr "W tej sekcji przedstawiono szczegóły Harmonogramu akcji."
 
@@ -1161,7 +1084,7 @@ msgid "Unable to claim actions. Database error."
 msgstr "Nie można wykonać żądanej akcji. Błąd bazy danych."
 
 #. translators: %s: action ID
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:878
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:895
 msgid "Unable to mark failure on action %s. Database error."
 msgstr "Nie można oznaczyć niepowodzenia w akcji %s. Błąd bazy danych."
 
@@ -1175,12 +1098,12 @@ msgid "Unable to save action."
 msgstr "Nie można zapisać akcji."
 
 #. translators: %s: claim ID
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:824
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:841
 msgid "Unable to unlock claim %s. Database error."
 msgstr "Nie można odblokować żądania %s. Błąd bazy danych."
 
 #. translators: %s: action ID
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:852
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_wpPostStore.php:869
 msgid "Unable to unlock claim on action %s. Database error."
 msgstr "Nie można odblokować roszczenia w ramach akcji %s. Błąd bazy danych."
 
@@ -1188,11 +1111,11 @@ msgstr "Nie można odblokować roszczenia w ramach akcji %s. Błąd bazy danych.
 msgid "Unknown partial args matching value."
 msgstr "Nieznane częściowe argumenty pasujące do wartości."
 
-#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1290
+#: inc/Dependencies/ActionScheduler/classes/data-stores/ActionScheduler_DBStore.php:1337
 msgid "Unknown status found for action."
 msgstr "Znaleziono nieznany stan dla działania."
 
-#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:114
+#: inc/Dependencies/ActionScheduler/classes/ActionScheduler_wcSystemStatus.php:113
 msgid "Version:"
 msgstr "Wersja:"
 
@@ -1842,7 +1765,7 @@ msgstr "Żadne rozszerzenia php nie są dostępne do edycji obrazów na serwerze
 msgid "All images greater than %s (after resizing, if any) will be optimized when using a paid plan."
 msgstr "Wszystkie obrazy większe niż %s (po zmianie rozmiaru, jeśli takie istnieją) zostaną zoptymalizowane podczas korzystania z płatnego planu."
 
-#: views/page-settings.php:174
+#: views/page-settings.php:178
 msgid "Display Partner Links"
 msgstr "Wyświetlaj linki partnerskie"
 
@@ -1850,7 +1773,7 @@ msgstr "Wyświetlaj linki partnerskie"
 msgid "Partner links are links to products we trust which might be displayed in the Imagify plugin or the plugin modal page.  We may earn an affiliate commission if you make a purchase via these links."
 msgstr "Linki partnerskie to linki do zaufanych produktów, które mogą być wyświetlane we wtyczce Imagify lub na stronie modalnej wtyczki. Możemy otrzymać prowizję partnerską, jeśli dokonasz zakupu za pośrednictwem tych linków."
 
-#: views/page-settings.php:161
+#: views/page-settings.php:165
 msgid "Partners"
 msgstr "Partenrzy"
 
@@ -1902,10 +1825,6 @@ msgstr "Zoptymalizowano %s pliki multimedialne"
 #: inc/classes/class-imagify-files-list-table.php:365
 msgid "All Media Files"
 msgstr "Wszystkie multimedia"
-
-#: inc/classes/Dependencies/deliciousbrains/wp-background-processing/classes/wp-background-process.php:779
-msgid "Every %d Minutes"
-msgstr "Co %d minut"
 
 #: inc/classes/class-imagify-files-list-table.php:649
 msgctxt "Media File"
@@ -2160,10 +2079,6 @@ msgstr "%s Błąd / Błędy"
 #: inc/functions/api.php:276
 msgid "%s is not a valid extension."
 msgstr "%s nie jest poprawnym rozszerzeń."
-
-#: inc/classes/class-imagify-files-list-table.php:441
-msgid "Actions"
-msgstr "Akcje"
 
 #: inc/functions/i18n.php:78
 msgid "Added! All Good!"
@@ -2440,6 +2355,10 @@ msgctxt "verb"
 msgid "Filter"
 msgstr "Filtr"
 
+#: inc/classes/class-imagify-files-list-table.php:441
+msgid "Actions"
+msgstr "Działania"
+
 #: inc/functions/api.php:234
 msgid "This account already exists."
 msgstr "Takie konto już istnieje."
@@ -2461,7 +2380,7 @@ msgstr "Potrzebujesz pomocy lub masz pytania?"
 msgid "This file has no backup file."
 msgstr "Ten plik nie ma kopii zapasowej."
 
-#: classes/Admin/AdminBar.php:93 classes/Admin/AdminSubscriber.php:53
+#: classes/Admin/AdminBar.php:95 classes/Admin/AdminSubscriber.php:55
 msgid "Documentation"
 msgstr "Dokumentacja"
 
@@ -2816,7 +2735,7 @@ msgstr "Potrzebujesz unikalnego klucza API!"
 msgid "/month"
 msgstr "/ miesiąc"
 
-#: views/modal-payment.php:83
+#: views/modal-payment.php:81
 msgid "Choose plan"
 msgstr "Wybierz plan"
 
@@ -2824,7 +2743,7 @@ msgstr "Wybierz plan"
 msgid "Save & Go to Bulk Optimizer"
 msgstr "Zapisz i przejdź do grupowej optymalizacji"
 
-#: views/modal-payment.php:113
+#: views/modal-payment.php:111
 msgid "Thank you for being awesome!"
 msgstr "Dziękuję, że jesteś niesamowity!"
 
@@ -2936,7 +2855,7 @@ msgstr "Zamknij szczegóły"
 msgid "Filter by status"
 msgstr "Filtruj statusami"
 
-#: classes/Admin/AdminBar.php:136 views/part-settings-custom-folders.php:150
+#: classes/Admin/AdminBar.php:138 views/part-settings-custom-folders.php:150
 #: views/part-settings-files-tree-row.php:23
 msgid "Loading..."
 msgstr "Ładowanie..."
@@ -2947,7 +2866,7 @@ msgid "New Filesize:"
 msgstr "Nowy rozmiar pliku:"
 
 #. translators: %s is WordPress.org.
-#: classes/Admin/AdminBar.php:107
+#: classes/Admin/AdminBar.php:109
 msgid "Rate Imagify on %s"
 msgstr "Oceń Imagify na %s"
 
@@ -2994,7 +2913,7 @@ msgstr "Całkowita oszczędność:"
 msgid "Original photography about %s"
 msgstr "Oryginalna fotografia o %s"
 
-#: inc/functions/i18n.php:197 views/modal-payment.php:118
+#: inc/functions/i18n.php:197 views/modal-payment.php:116
 #: views/modal-settings-infos.php:52 views/modal-settings-partners-infos.php:13
 #: views/modal-settings-visual-comparison.php:135
 msgid "Close"
@@ -3062,7 +2981,7 @@ msgstr "Zachowaj swoje oryginalne obrazy w oddzielnym folderze zanim rozpocznie 
 
 #: classes/Optimization/File.php:647 inc/deprecated/deprecated.php:629
 #: inc/functions/i18n.php:109 inc/functions/i18n.php:258
-#: views/page-settings.php:165
+#: views/page-settings.php:169
 msgid "More info?"
 msgstr "Więcej informacji?"
 
@@ -3200,7 +3119,7 @@ msgstr "Twój klucz API jest niepoprawny!"
 msgid "Enter your API Key"
 msgstr "Wpisz swój klucz API"
 
-#: views/admin/admin-bar-status.php:44 views/notice-footer.php:6
+#: views/admin/admin-bar-status.php:45 views/notice-footer.php:6
 #: views/notice-welcome-steps.php:10 views/part-upsell.php:98
 msgid "Dismiss this notice"
 msgstr "Odrzuć to powiadomienie"
@@ -3289,7 +3208,7 @@ msgstr "Informacja"
 msgid "Upgrade your account to continue optimizing your images."
 msgstr "Uaktualnij swoje konto, aby kontynuować optymalizację obrazów."
 
-#: classes/Admin/AdminBar.php:71 classes/Admin/AdminSubscriber.php:81
+#: classes/Admin/AdminBar.php:73 classes/Admin/AdminSubscriber.php:83
 #: inc/classes/class-imagify-views.php:180 views/part-settings-header.php:5
 #: views/part-settings-header.php:14
 msgid "Settings"
@@ -3299,7 +3218,7 @@ msgstr "Ustawienia"
 msgid "<strong>ERROR</strong>: options page not found."
 msgstr "<strong>BŁĄD</strong>: nie znaleziono strony opcji."
 
-#: classes/Admin/AdminBar.php:82 classes/Admin/AdminSubscriber.php:72
+#: classes/Admin/AdminBar.php:84 classes/Admin/AdminSubscriber.php:74
 #: inc/3rd-party/nextgen-gallery/inc/admin/menu.php:18
 #: inc/classes/class-imagify-views.php:131
 #: inc/classes/class-imagify-views.php:174
@@ -3362,7 +3281,7 @@ msgstr "Optymalizuj"
 msgid "Sign Up"
 msgstr "Zarejestruj się"
 
-#: views/admin/admin-bar-status.php:13
+#: views/admin/admin-bar-status.php:14
 msgid "Account status"
 msgstr "Status konta"
 
@@ -3403,12 +3322,12 @@ msgid "Let's get you started!"
 msgstr "Zacznijmy!"
 
 #: inc/classes/class-imagify-admin-ajax-post.php:1012
-#: views/admin/admin-bar-status.php:40
+#: views/admin/admin-bar-status.php:41
 msgid "Oops, It's Over!"
 msgstr "Oops, Skończono!"
 
 #: inc/classes/class-imagify-admin-ajax-post.php:1014
-#: views/admin/admin-bar-status.php:38
+#: views/admin/admin-bar-status.php:39
 msgid "Oops, It's almost over!"
 msgstr "Ups, to prawie koniec!"
 
@@ -3435,7 +3354,7 @@ msgstr "Przywróć oryginał"
 
 #. translators: %s = percentage.
 #. translators: %s is a data quota.
-#: views/admin/admin-bar-status.php:24
+#: views/admin/admin-bar-status.php:25
 #: views/part-bulk-optimization-infos.php:11 views/part-upsell.php:61
 msgid "You have %s space credit left"
 msgstr "Pozostało Ci %s przestrzeni do wykorzystania"
@@ -3456,6 +3375,6 @@ msgstr "Twój klucz API jest poprawny. Teraz możesz skonfigurować Imagify, by 
 msgid "Your account has been successfully created. Please check your mailbox, you are going to receive an email with API key."
 msgstr "Twoje konto zostało pomyślnie utworzone. Sprawdź swoją skrzynkę pocztową, otrzymasz e-mail z kluczem API."
 
-#: views/admin/admin-bar-status.php:14
+#: views/admin/admin-bar-status.php:15
 msgid "Your subscription:"
 msgstr "Twój abonament:"

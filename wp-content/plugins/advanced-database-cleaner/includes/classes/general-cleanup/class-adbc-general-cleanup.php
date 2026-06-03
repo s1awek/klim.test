@@ -55,7 +55,6 @@ class ADBC_General_Cleanup {
 
 			$count_data = $handler->count();
 			$count_data['keep_last'] = $keep_last[ $type ] ?? [];
-			// $count_data['url'] = $handler->get_documentation_url();
 			// $count_data['has_automation'] = ADBC_Automation::has_automation( $type );
 
 			$items[ $type ] = $count_data;
@@ -253,6 +252,66 @@ class ADBC_General_Cleanup {
 		ADBC_Settings::instance()->update_settings( [ 'keep_last' => $old ] );
 
 		return $old;
+
+	}
+
+	/**
+	 * Activate auto count for specified items types.
+	 *
+	 * @param array $items_types An array of items types to activate auto count for.
+	 * 
+	 * @return array The updated items types with auto count activated.
+	 */
+	public static function activate_auto_count( $items_types ) {
+
+		$existing_items_types = ADBC_Settings::instance()->get_setting( 'general_cleanup_auto_count' );
+
+		$new_items_types = $existing_items_types;
+
+		// Add items types that do not exist in the old setting.
+		foreach ( $items_types as $items_type ) {
+
+			// If the items type already exists in the old setting, skip it.
+			if ( in_array( $items_type, $existing_items_types, true ) )
+				continue;
+
+			$new_items_types[] = $items_type;
+
+		}
+
+		$new_items_types = array_values( array_unique( $new_items_types ) );
+
+		ADBC_Settings::instance()->update_settings( [ 'general_cleanup_auto_count' => $new_items_types ] );
+
+		return $new_items_types;
+
+	}
+
+	/**
+	 * Deactivate auto count for specified items types.
+	 *
+	 * @param array $items_types An array of items types to deactivate auto count for.
+	 * 
+	 * @return array The updated items types with auto count deactivated.
+	 */
+	public static function deactivate_auto_count( $items_types ) {
+
+		$existing_items_types = ADBC_Settings::instance()->get_setting( 'general_cleanup_auto_count' );
+
+		$new_items_types = [];
+
+		// remove items types that exist in the old setting
+		foreach ( $existing_items_types as $existing_items_type ) {
+
+			// if the items type does not exist in the items types to deactivate, add it to the new items types
+			if ( ! in_array( $existing_items_type, $items_types, true ) )
+				$new_items_types[] = $existing_items_type;
+
+		}
+
+		ADBC_Settings::instance()->update_settings( [ 'general_cleanup_auto_count' => $new_items_types ] );
+
+		return $new_items_types;
 
 	}
 

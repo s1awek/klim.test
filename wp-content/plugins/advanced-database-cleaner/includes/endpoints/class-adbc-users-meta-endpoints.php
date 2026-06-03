@@ -71,13 +71,56 @@ class ADBC_Users_Meta_Endpoints {
 			if ( ! is_array( $validation_answer ) )
 				return ADBC_Rest::error( $validation_answer, ADBC_Rest::BAD_REQUEST );
 
-			$not_processed = ADBC_Users_Meta::delete_users_meta( $validation_answer );
+			$cleaned_users_meta = $validation_answer;
+
+			if ( ADBC_Settings::instance()->get_setting( 'prevent_taking_action_on_wp_items' ) === '1' ) {
+
+				$cleaned_users_meta = ADBC_Hardcoded_Items::instance()->exclude_hardcoded_items_from_selected_items( $validation_answer, 'users_meta', "wp" );
+
+				if ( ADBC_VERSION_TYPE === 'PREMIUM' )
+					$cleaned_users_meta = ADBC_Scan_Utils::exclude_r_wp_items_from_selected_items( $cleaned_users_meta, 'users_meta' );
+
+				if ( empty( $cleaned_users_meta ) )
+					return ADBC_Rest::error(
+						__( 'The selected user meta could not be deleted because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+						ADBC_Rest::BAD_REQUEST,
+						0,
+						[ 
+							"message_links" => [ 
+								[ 
+									"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+									"tab_id" => "settings",
+									"anchor_id" => "other_settings",
+									"setting_id" => "prevent_taking_action_on_wp_items"
+								]
+							]
+						]
+					);
+			}
+
+			$not_processed = ADBC_Users_Meta::delete_users_meta( $cleaned_users_meta );
 
 			// Delete the users meta from the scan results
 			if ( ADBC_VERSION_TYPE === 'PREMIUM' ) {
-				$users_meta_names = array_column( $validation_answer, 'name' ); // Create an array containing only the users meta names.
+				$users_meta_names = array_column( $cleaned_users_meta, 'name' ); // Create an array containing only the users meta names.
 				ADBC_Scan_Utils::update_scan_results_file_after_deletion( 'users_meta', $users_meta_names, $not_processed );
 			}
+
+			if ( count( $cleaned_users_meta ) < count( $validation_answer ) )
+				return ADBC_Rest::success(
+					__( 'Some user meta was deleted successfully; others were skipped because they belong to WordPress core and are protected.', 'advanced-database-cleaner' ),
+					count( $not_processed ),
+					[ 
+						"message_links" => [ 
+							[ 
+								"text" => __( 'Check setting', 'advanced-database-cleaner' ),
+								"tab_id" => "settings",
+								"anchor_id" => "other_settings",
+								"setting_id" => "prevent_taking_action_on_wp_items"
+							]
+						]
+					]
+				);
 
 			return ADBC_Rest::success( "", count( $not_processed ) );
 

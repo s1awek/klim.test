@@ -166,7 +166,7 @@ if ( ! class_exists( 'WWP_Wholesale_Price_Grouped_Product' ) ) {
                         if ( get_option( 'wwpp_settings_hide_original_price' ) !== 'yes' ) {
 
                             // Crush out existing prices, regular and sale.
-                            if ( strpos( $price, 'ins' ) !== false ) {
+                            if ( str_contains( $price, 'ins' ) ) {
                                 $wholesale_price_html = str_replace( 'ins', 'del', $price );
                             } else {
 

@@ -141,7 +141,10 @@ class Smart_Variations_Images_Admin {
             foreach ( $product_image_gallery as $k => $v ) {
                 $product_image_gallery[$k] = array(
                     'id'  => $v,
-                    'url' => array_pop( explode( '/', wp_get_attachment_url( $v ) ) ),
+                    'url' => (function ( $u ) {
+                        $p = explode( '/', $u );
+                        return array_pop( $p );
+                    })( wp_get_attachment_url( $v ) ),
                 );
             }
         }
@@ -268,8 +271,13 @@ class Smart_Variations_Images_Admin {
      */
     public function woosvi_esc_html() {
         header( "Content-type: application/json" );
-        $slug = $_POST['data'];
-        echo json_encode( esc_html( implode( '_svipro_', $slug ) ) );
+        $slug = ( isset( $_POST['data'] ) ? $_POST['data'] : '' );
+        if ( is_array( $slug ) ) {
+            $processed_slug = implode( '_svipro_', $slug );
+        } else {
+            $processed_slug = (string) $slug;
+        }
+        echo json_encode( esc_html( $processed_slug ) );
         die;
     }
 
@@ -373,7 +381,7 @@ class Smart_Variations_Images_Admin {
         }
         $bulk_video = false;
         $ordered = array();
-        if ( $_POST['product-type'] == 'simple' ) {
+        if ( isset( $_POST['product-type'] ) && $_POST['product-type'] == 'simple' ) {
             $arr = array(
                 'imgs' => $attachment_ids,
             );
@@ -472,7 +480,7 @@ class Smart_Variations_Images_Admin {
      * @return HTML
      */
     public function reloadSelect_json() {
-        $pid = $_POST['data'];
+        $pid = ( isset( $_POST['data'] ) ? intval( $_POST['data'] ) : 0 );
         //$attributes = get_post_meta($pid, '_product_attributes', true);
         $attributes = $this->load_variations( $pid );
         $sviBody = HtmlTag::createElement( 'div' );
@@ -894,7 +902,10 @@ class Smart_Variations_Images_Admin {
                 foreach ( $v['imgs'] as $k2 => $v2 ) {
                     $value[$k]['imgs'][$k2] = array(
                         'id'       => $v2,
-                        'url'      => array_pop( explode( '/', wp_get_attachment_url( $v2 ) ) ),
+                        'url'      => (function ( $u ) {
+                            $p = explode( '/', $u );
+                            return array_pop( $p );
+                        })( wp_get_attachment_url( $v2 ) ),
                         'full_url' => wp_get_attachment_url( $v2 ),
                     );
                 }

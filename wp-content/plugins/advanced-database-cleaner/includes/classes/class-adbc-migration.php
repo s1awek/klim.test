@@ -307,17 +307,15 @@ class ADBC_Migration {
 
 			}
 
-			// old pro data doesn't exist, or premium exists don't migrate
-			if ( ! ADBC_Common_Utils::is_old_pro_data_exists() || ADBC_Common_Utils::is_premium_exists() ) {
-
-				// delete old pro data if old free exists or delete all old data if old free doesn't exist
-				if ( ADBC_Common_Utils::is_old_free_exists() )
-					self::delete_old_pro_data();
-				else
-					self::delete_all_old_data();
-
+			// Premium exists or migration available notification is dismissed, don't migrate
+			if ( ADBC_Notifications::instance()->is_notification_dismissed( 'migration_available' ) || ADBC_Common_Utils::is_premium_exists() )
 				return;
 
+			// old pro data doesn't exist, add and dismiss the migration available notification explicitly to avoid further checks
+			if ( ! ADBC_Common_Utils::is_old_pro_data_exists() ) {
+				ADBC_Notifications::instance()->add_notification( 'migration_available' );
+				ADBC_Notifications::instance()->dismiss_notification( 'migration_available' );
+				return;
 			}
 
 			// run the migration for all data

@@ -55,6 +55,10 @@ class ADBC_Selected_Items_Validator {
 
 			$final_valid_selected_items = self::remove_inexistent_items_names( $valid_structure_selected_items, $items_type );
 
+		} else if ( $items_type === 'post_types' ) {
+
+			$final_valid_selected_items = self::remove_inexistent_post_types( $valid_structure_selected_items );
+
 		} else {
 
 			// For all other types (in General Cleanup), just return the valid structure selected items because we are working with IDs not names.
@@ -95,6 +99,8 @@ class ADBC_Selected_Items_Validator {
 			'cron_jobs' => [ 'site_id' => $is_numeric, 'name' => $is_not_empty, 'args' => $is_array, 'timestamp' => $is_numeric ],
 
 			'options' => [ 'site_id' => $is_numeric, 'id' => $is_numeric, 'name' => $is_not_empty ],
+
+			'post_types' => [ 'site_id' => $is_numeric, 'name' => $is_not_empty ],
 
 			'posts_meta' => [ 'site_id' => $is_numeric, 'id' => $is_numeric, 'name' => $is_not_empty ],
 			'users_meta' => [ 'site_id' => $is_numeric, 'id' => $is_numeric, 'name' => $is_not_empty ],
@@ -327,6 +333,37 @@ class ADBC_Selected_Items_Validator {
 		}
 
 		return $valid_items;
+	}
+
+	/**
+	 * Remove post types that do not exist in the posts table of the given site.
+	 *
+	 * @param array $selected_post_types [["items_type":"post_types", "site_id":"value", "name":"value"], ...].
+	 *
+	 * @return array The validated selected post types.
+	 */
+	private static function remove_inexistent_post_types( $selected_post_types ) {
+
+		$valid = [];
+		$grouped = self::group_selected_items_by_site_id( $selected_post_types );
+
+		foreach ( $grouped as $site_id => $group ) {
+
+			$site_prefix = ADBC_Sites::instance()->get_prefix_from_site_id( $site_id );
+
+			if ( $site_prefix === null )
+				continue;
+
+			$existing = ADBC_Post_Types::get_all_post_type_names_for_site( $site_prefix );
+			$existing_map = array_flip( $existing );
+
+			foreach ( $group as $selected ) {
+				if ( isset( $existing_map[ $selected['name'] ] ) )
+					$valid[] = $selected;
+			}
+		}
+
+		return $valid;
 	}
 
 	/**

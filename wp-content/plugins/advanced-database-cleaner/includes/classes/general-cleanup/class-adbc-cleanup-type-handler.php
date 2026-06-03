@@ -80,11 +80,4 @@ interface ADBC_Cleanup_Type_Handler {
 	 */
 	public function can_have_keep_last();
 
-	/**
-	 * Returns the documentation URL for this handler.
-	 *
-	 * @return string The documentation URL for this handler.
-	 */
-	public function get_documentation_url();
-
 }
