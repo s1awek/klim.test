@@ -19,7 +19,8 @@ abstract class AbstractMigration
     /**
      * Allow to skip migration if it is not needed. Tracking of migration version just by wp_options
      * value may be subject to random issues, so as a backup, this method can be used to avoid
-     * errornous migrations like creating alredy exising columns.
+     * errornous migrations like creating alredy exising columns. Schema migrations should inspect
+     * the actual database state here before altering tables or columns.
      */
     public function is_needed(): bool
     {

@@ -10,7 +10,7 @@ final class Version141 extends AbstractMigration {
 	public function up(): bool {
 		$has_index = $this->wpdb->query(
 			$this->wpdb->prepare(
-				<<<SQL
+				<<<'SQL'
 				SHOW INDEX FROM %i
 				WHERE Key_name = 'covering';
 				SQL,
@@ -24,7 +24,7 @@ final class Version141 extends AbstractMigration {
 
 		return (bool) $this->wpdb->query(
 			$this->wpdb->prepare(
-				<<<SQL
+				<<<'SQL'
 				ALTER TABLE %i
 					ADD INDEX `covering` (`product_id`, `currency`, `price`, `changed`, `created`);
 				SQL,

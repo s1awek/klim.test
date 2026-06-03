@@ -12,12 +12,14 @@ class PluginUpgrade
     private string $token;
     private PluginVersionInfo $plugin_info;
     private LoggerInterface $logger;
-    public function __construct(PluginVersionInfo $plugin_info, string $server, string $token, LoggerInterface $logger)
+    private NoticeCache $notice_cache;
+    public function __construct(PluginVersionInfo $plugin_info, string $server, string $token, LoggerInterface $logger, NoticeCache $notice_cache)
     {
         $this->server = $server;
         $this->token = $token;
         $this->plugin_info = $plugin_info;
         $this->logger = $logger;
+        $this->notice_cache = $notice_cache;
     }
     /**
      * @param string|array|\WP_Error|\stdClass $value Any response from remote server or request routine.
@@ -112,13 +114,31 @@ class PluginUpgrade
         $response->need_update = $parsed_response['need_update'] ?? null;
         $response->changelog = $parsed_response['changelog'] ?? null;
         $response->message = $parsed_response['message'] ?? null;
+        $location = $parsed_response['location'] ?? 'plugins';
+        $response->location = in_array($location, ['plugins', 'notice'], \true) ? $location : 'plugins';
         // Set license status
         if (empty($parsed_response['package'])) {
             (new PluginLicense($this->plugin_info))->set_inactive();
         } else {
             (new PluginLicense($this->plugin_info))->set_active();
         }
+        $this->handle_notice_cache($response);
         return $response;
+    }
+    /**
+     * Handle caching of notice data for admin notice display.
+     *
+     * @param \stdClass $response
+     */
+    private function handle_notice_cache(\stdClass $response): void
+    {
+        if ($response->location === 'notice' && !empty($response->message)) {
+            $this->notice_cache->set(['message' => $response->message]);
+            $response->message = null;
+        } else {
+            $this->notice_cache->delete();
+        }
+        unset($response->location);
     }
     private function render_changelog(string $plugin_version, string $changelog): string
     {

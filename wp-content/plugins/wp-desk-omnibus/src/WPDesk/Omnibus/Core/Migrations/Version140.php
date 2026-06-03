@@ -15,7 +15,7 @@ final class Version140 extends AbstractMigration {
 	public function up(): bool {
 		return (bool) $this->wpdb->query(
 			$this->wpdb->prepare(
-				<<<SQL
+				<<<'SQL'
 				ALTER TABLE %i
 					ADD `currency` CHAR(3) NOT NULL DEFAULT %s
 					AFTER `created`,

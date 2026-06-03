@@ -8,6 +8,7 @@ use OmnibusProVendor\WPDesk\Migrations\Migrator;
 use OmnibusProVendor\WPDesk\Mutex\Mutex;
 use OmnibusProVendor\WPDesk\PluginBuilder\Plugin\Activateable;
 use OmnibusProVendor\WPDesk\PluginBuilder\Plugin\Deactivateable;
+use OmnibusProVendor\WPDesk\Library\PluginUpdateReminder\RemindersFactory;
 use OmnibusProVendor\WPDesk_Plugin_Info;
 use WPDesk\Omnibus\Core\Batch\HandlersList;
 use WPDesk\Omnibus\Core\Batch\ResettableHandler;
@@ -57,6 +58,12 @@ class Plugin extends AbstractPlugin implements Activateable, Deactivateable {
 	public function hooks(): void {
 		parent::hooks();
 
+		( new RemindersFactory(
+			$this->plugin_info->get_plugin_dir(),
+			$this->plugin_info->get_plugin_file_name(),
+			$this->plugin_info->get_plugin_name()
+		)
+		)->hooks();
 		( new HookRegistrator( $this->plugin_info, $this->container ) )->boot();
 	}
 

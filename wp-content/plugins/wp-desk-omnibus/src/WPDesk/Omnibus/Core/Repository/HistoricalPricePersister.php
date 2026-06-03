@@ -74,7 +74,7 @@ class HistoricalPricePersister {
 
 		$res = $this->wpdb->query(
 			$this->wpdb->prepare(
-				<<<SQL
+				<<<'SQL'
 				SELECT 1
 				FROM %i
 				WHERE product_id = %d

@@ -64,9 +64,11 @@ class PluginRegistrator
     {
         $this->server = apply_filters('wpdesk/license/server', $this->server);
         if (self::should_use_license_server()) {
-            (new PluginUpgrade($this->plugin_info, $this->server, self::get_token(), $this->logger))->hooks();
+            $notice_cache = new NoticeCache($this->plugin_info->get_plugin_slug());
+            (new PluginUpgrade($this->plugin_info, $this->server, self::get_token(), $this->logger, $notice_cache))->hooks();
             (new PluginExternalBlocking($this->plugin_info, $this->server))->hooks();
             (new PluginViewVersionInfo($this->plugin_info, $this->server, $this->logger))->hooks();
+            (new AdminNotice($notice_cache))->hooks();
         } else {
             (new ImpossibleToUpgrade($this->plugin_info))->hooks();
         }
