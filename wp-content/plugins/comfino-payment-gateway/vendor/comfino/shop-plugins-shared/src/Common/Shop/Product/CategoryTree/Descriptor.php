@@ -1,0 +1,2 @@
+<?php
+declare(strict_types=1); namespace Comfino\Common\Shop\Product\CategoryTree; final class Descriptor{ public $nodes; public $index; public function __construct(NodeIterator $nodes,?array$index){$this->nodes=$nodes;$this->index=$index;}}

@@ -1,0 +1,2 @@
+<?php
+declare(strict_types=1); namespace Comfino\Common\Backend\Payment; use Comfino\Api\Dto\Payment\LoanTypeEnum; use Comfino\Common\Shop\Cart; interface ProductTypeFilterInterface{ public function getAllowedProductTypes($availableProductTypes,$cart):array; public function getAsArray():array;}

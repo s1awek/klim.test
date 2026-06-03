@@ -1,0 +1,2 @@
+<?php
+namespace Comfino\Common\Frontend; final class PaywallItemDetails{ public $productDetails; public $listItemData; public function __construct(string $productDetails,string $listItemData){$this->productDetails=$productDetails;$this->listItemData=$listItemData;}}

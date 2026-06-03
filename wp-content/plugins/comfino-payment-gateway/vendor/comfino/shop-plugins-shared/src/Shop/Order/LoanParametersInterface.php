@@ -1,0 +1,2 @@
+<?php
+declare(strict_types=1); namespace Comfino\Shop\Order; use Comfino\Api\Dto\Payment\LoanTypeEnum; interface LoanParametersInterface{ public function getAmount():int; public function getTerm():?int; public function getType():?LoanTypeEnum; public function getAllowedProductTypes():?array;}

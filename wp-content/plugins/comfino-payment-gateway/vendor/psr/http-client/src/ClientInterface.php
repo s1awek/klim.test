@@ -1,0 +1,2 @@
+<?php
+namespace ComfinoExternal\Psr\Http\Client; use ComfinoExternal\Psr\Http\Message\RequestInterface; use ComfinoExternal\Psr\Http\Message\ResponseInterface; interface ClientInterface{ public function sendRequest(RequestInterface $request):ResponseInterface;}

@@ -1,0 +1,2 @@
+<?php
+namespace Comfino\Common\Frontend; final class PaywallRenderer extends FrontendRenderer{ public function getPaywallHash($paywallContents,$apiKey):string{return hash_hmac('sha3-256',$paywallContents,$apiKey);} public function getStyles():array{return['paywall.css'];} public function getScripts():array{return['paywall.js'];}}

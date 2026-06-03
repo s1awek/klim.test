@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Flexible Checkout Fields for WooCommerce &#8211; WooCommerce Checkout Manager - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-07 11:52:23+0000\n"
+"PO-Revision-Date: 2026-04-24 06:53:37+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,6 +10,37 @@ msgstr ""
 "X-Generator: GlotPress/4.0.3\n"
 "Language: pl\n"
 "Project-Id-Version: Plugins - Flexible Checkout Fields for WooCommerce &#8211; WooCommerce Checkout Manager - Stable (latest release)\n"
+
+#. translators: %1$s: Open link tag, %2$s: Close link tag
+#: src/Tracker/DeactivationTracker.php:54
+#: templates/notices/compatibility-notice.php:9
+msgid "Pssst… Did you know that we support block checkout via our Checkout Fields For Blocks plugin? It allows you to add, edit and personalize fields in the WooCommerce block checkout - quickly, conveniently and without coding. It is free - find it %1$shere%2$s"
+msgstr "Psst… Czy wiesz, że obsługujemy checkout blokowy dzięki naszej wtyczce Bloki pól zamówienia WooCommerce? Pozwala ona dodawać, edytować i personalizować pola w blokowym checkoucie WooCommerce – szybko, wygodnie i bez kodowania. Jest darmowa – znajdziesz ją %1$stutaj%2$s"
+
+#: src/Tracker/DeactivationTracker.php:51
+#: templates/notices/compatibility-notice.php:3
+msgid "The plugin does not work with the default WooCommerce checkout."
+msgstr "Wtyczka nie działa z domyślnym checkoutem WooCommerce."
+
+#: src/Blocks/Editor.php:49
+msgid "Plugin Details"
+msgstr "Szczegóły wtyczki"
+
+#: src/Blocks/Editor.php:48
+msgid "The plugin does not work with the default WooCommerce checkout. Install Checkout Fields for Blocks to handle blocks."
+msgstr "Wtyczka nie działa z domyślnym checkoutem WooCommerce. Zainstaluj Bloki pól zamówienia WooCommerce, aby obsłużyć bloki."
+
+#. Plugin URI of the plugin
+#: flexible-checkout-fields.php
+msgid "https://www.wpdesk.net/sk/flexible-checkout-fields-plugin/"
+msgstr "https://wpdesk.link/flexible-checkout-fields-pro-wtyczka"
+
+#: templates/fields/colorpicker.php:24 templates/fields/email.php:24
+#: templates/fields/inspirecheckbox.php:37 templates/fields/number.php:24
+#: templates/fields/phone.php:24 templates/fields/text.php:24
+#: templates/fields/textarea.php:24 templates/fields/url.php:24
+msgid "optional"
+msgstr "opcjonalnie"
 
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/PluginActionLinks.php:75
 msgid "Disable usage tracking"
@@ -909,6 +940,11 @@ msgstr "Wsparcie"
 #: vendor_prefixed/wpdesk/wp-builder/src/Plugin/AbstractPlugin.php:184
 msgid "Docs"
 msgstr "Dokumentacja"
+
+#. Author URI of the plugin
+#: flexible-checkout-fields.php
+msgid "https://www.wpdesk.net/sk/flexible-checkout-fields-author/"
+msgstr "https://wpdesk.link/flexible-checkout-fields-docs"
 
 #: classes/display-options.php:103
 msgid "Additional Information"

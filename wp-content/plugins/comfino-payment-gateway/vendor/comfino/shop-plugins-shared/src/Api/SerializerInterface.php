@@ -1,0 +1,2 @@
+<?php
+declare(strict_types=1); namespace Comfino\Api; use Comfino\Api\Exception\RequestValidationError; use Comfino\Api\Exception\ResponseValidationError; interface SerializerInterface{ public function serialize($requestData):string; public function unserialize($responseBody);}

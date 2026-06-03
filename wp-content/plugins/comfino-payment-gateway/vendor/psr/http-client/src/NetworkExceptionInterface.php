@@ -1,0 +1,2 @@
+<?php
+namespace ComfinoExternal\Psr\Http\Client; use ComfinoExternal\Psr\Http\Message\RequestInterface; interface NetworkExceptionInterface extends ClientExceptionInterface{ public function getRequest():RequestInterface;}

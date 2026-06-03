@@ -2,14 +2,35 @@
 # This file is distributed under the same license as the Plugins - Duplicator &#8211; Backups &amp; Migration Plugin &#8211; Cloud Backups, Scheduled Backups, &amp; More - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-09-16 13:29:38+0000\n"
+"PO-Revision-Date: 2026-04-22 15:00:54+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.1\n"
+"X-Generator: GlotPress/4.0.3\n"
 "Language: pl\n"
 "Project-Id-Version: Plugins - Duplicator &#8211; Backups &amp; Migration Plugin &#8211; Cloud Backups, Scheduled Backups, &amp; More - Stable (latest release)\n"
+
+#: template/mocks/staging/staging.php:124
+msgid "Staging sites are not available in Duplicator Lite!"
+msgstr "W Duplicator Lite nie ma możliwości tworzenia środowisk testowych!"
+
+#: template/mocks/staging/staging.php:123
+msgid "Create staging sites to safely test changes!"
+msgstr "Stwórz strony testowe, żeby bezpiecznie sprawdzać zmiany!"
+
+#: template/mocks/staging/content-popup.php:23
+msgid "Duplicator Pro creates an isolated staging site from a backup so you can freely test changes without any risk to your live site."
+msgstr "Duplicator Pro tworzy izolowaną witrynę testową na podstawie kopii zapasowej, dzięki czemu możesz swobodnie testować zmiany bez ryzyka dla swojej witryny produkcyjnej."
+
+#: template/mocks/staging/content-popup.php:14
+msgid "Staging sites let you create a full copy of your WordPress site to safely test updates, new plugins, theme changes and other modifications without affecting your live site."
+msgstr "Witryny testowe pozwalają stworzyć pełną kopię twojej witryny WordPress, dzięki czemu możesz bezpiecznie testować aktualizacje, nowe wtyczki, zmiany szablonów i inne modyfikacje bez wpływu na działającą witrynę."
+
+#: src/Core/Bootstrap.php:315 src/Core/Bootstrap.php:316
+#: template/mocks/staging/staging.php:16
+msgid "Staging"
+msgstr "Testowy"
 
 #: template/admin_pages/settings/general/license.php:62
 msgid "This opens connect.duplicator.com where you'll securely connect to Duplicator Pro."
@@ -19,15 +40,15 @@ msgstr "Otworzy się connect.duplicator.com, gdzie bezpiecznie połączysz się 
 msgid "Already purchased? Connect to unlock <b>Duplicator PRO!</b>"
 msgstr "Już kupiłeś? Połącz, aby odblokować <b>Duplicator PRO!</b>"
 
-#: src/Core/Bootstrap.php:400
+#: src/Core/Bootstrap.php:411
 msgid "Please try again or contact support if the issue persists."
 msgstr "Spróbuj ponownie lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzał."
 
-#: src/Core/Bootstrap.php:398
+#: src/Core/Bootstrap.php:409
 msgid "Failed to connect to Duplicator Pro."
 msgstr "Nie udało się połączyć z Duplicator Pro."
 
-#: src/Ajax/ServicesEducation.php:418
+#: src/Ajax/ServicesEducation.php:417
 msgid "Upgrade installation failed: %s. Please try again or install manually."
 msgstr "Instalacja ulepszenia nie powiodła się: %s. Spróbuj ponownie lub zainstaluj ręcznie."
 
@@ -247,7 +268,7 @@ msgstr " - Edycja kopii zapasowej "
 msgid "Backup Read "
 msgstr "Odczyt kopii zapasowych "
 
-#: template/admin_pages/settings/general/general.php:172
+#: template/admin_pages/settings/general/general.php:170
 msgid "Reset Backups ?"
 msgstr "Zresetować kopie zapasowe?"
 
@@ -259,7 +280,7 @@ msgstr "Skanowanie kopii zapasowej"
 msgid "Reset Backups"
 msgstr "Zresetuj kopie zapasowe"
 
-#: src/Core/Bootstrap.php:564
+#: src/Core/Bootstrap.php:575
 msgid "Manage Backups"
 msgstr "Zarządzaj kopiami zapasowymi"
 
@@ -634,35 +655,35 @@ msgstr ""
 "Nie można włączyć wtyczki Duplicator LITE, jeśli jest włączona wersja PRO. Wyłącz wtyczkę Duplicator PRO, \n"
 "                    a następnie ponownie włącz wersję LITE na %1$sstronie wtyczek%2$s."
 
-#: src/Core/Bootstrap.php:420
+#: src/Core/Bootstrap.php:431
 msgid "Unable to copy"
 msgstr "Nie można skopiować"
 
-#: src/Core/Bootstrap.php:419
+#: src/Core/Bootstrap.php:430
 msgid "copied to clipboard"
 msgstr "skopiowano do schowka"
 
-#: src/Core/Bootstrap.php:418
+#: src/Core/Bootstrap.php:429
 msgid "Copy to clipboard"
-msgstr "Kopiuj do schowka"
+msgstr "Skopiuj do schowka"
 
-#: src/Core/Bootstrap.php:409
+#: src/Core/Bootstrap.php:420
 msgid "Failed to load help content!"
 msgstr "Nie udało się wczytać treści pomocy!"
 
-#: src/Core/Bootstrap.php:387
+#: src/Core/Bootstrap.php:398
 msgid "Email subscription failed with message: "
 msgstr "Subskrypcja e-mail nie powiodła się, komunikat: "
 
-#: src/Core/Bootstrap.php:386
+#: src/Core/Bootstrap.php:397
 msgid "Failed &#10007"
 msgstr "Nie udało się &#10007"
 
-#: src/Core/Bootstrap.php:385
+#: src/Core/Bootstrap.php:396
 msgid "Subscribing..."
 msgstr "Subskrybowanie..."
 
-#: src/Core/Bootstrap.php:384
+#: src/Core/Bootstrap.php:395
 msgid "Subscribed &#10003"
 msgstr "Zasubskrybowano &#10003"
 
@@ -775,7 +796,7 @@ msgctxt "%1 and %2 are replaced with <a> and </a> respectively"
 msgid "This Backup contains an error. Please review the %1$sBackup log%2$s for details."
 msgstr "Ta kopia zapasowa zawiera błąd. Szczegółowe informacje można znaleźć w %1$sdzienniku kopii zapasowej%2$s."
 
-#: template/admin_pages/settings/general/general.php:186
+#: template/admin_pages/settings/general/general.php:184
 msgctxt "1 and 2 are opening and closing <a> tags"
 msgid "AJAX error encountered when resetting Backups. Please see %1$sthis FAQ entry%2$s for possible resolutions."
 msgstr "Podczas resetowania kopii zapasowych napotkano błąd AJAX. Zobacz %1$stę pozycję w sekcji Często zadawane pytania%2$s, aby poznać możliwe rozwiązania tego problemu."
@@ -1149,7 +1170,7 @@ msgstr "Komponenty kopii zapasowej pozwalają na uwzględnienie w niej lub wyklu
 msgid "There was an error installing the upgrade. Please try again."
 msgstr "Wystąpił błąd podczas instalowania aktualizacji. Spróbuj ponownie."
 
-#: src/Core/Bootstrap.php:399
+#: src/Core/Bootstrap.php:410
 msgid "Message: "
 msgstr "Wiadomość: "
 
@@ -1260,7 +1281,7 @@ msgstr "Dostępne z Duplicator Pro!"
 msgid "Get tips and product updates straight to your inbox."
 msgstr "Otrzymuj porady i aktualizacje produktów prosto do swojej skrzynki odbiorczej."
 
-#: src/Core/Bootstrap.php:383 template/parts/Education/subscribe-form.php:26
+#: src/Core/Bootstrap.php:394 template/parts/Education/subscribe-form.php:26
 msgid "Subscribe"
 msgstr "Subskrybuj"
 
@@ -1317,7 +1338,7 @@ msgstr "Odrzuć ten komunikat"
 
 #: template/parts/DashboardWidget/sections-section.php:103
 msgid "Not set"
-msgstr "Nie ustawiono"
+msgstr "Nieustawione"
 
 #: template/mocks/recovery/recovery.php:16
 #: template/parts/DashboardWidget/sections-section.php:98
@@ -1981,11 +2002,11 @@ msgstr "Import z serwera na serwer"
 msgid "Secure File Encryption"
 msgstr "Bezpieczne szyfrowanie plików"
 
-#: src/Core/Bootstrap.php:340 template/admin_pages/about_us/tabs.php:17
+#: src/Core/Bootstrap.php:351 template/admin_pages/about_us/tabs.php:17
 msgid "About Us"
 msgstr "O nas"
 
-#: src/Core/Bootstrap.php:339
+#: src/Core/Bootstrap.php:350
 msgid "About Duplicator"
 msgstr "Informacje o Duplicatorze"
 
@@ -2143,7 +2164,7 @@ msgstr "Raczej nie"
 msgid "Are you enjoying %s?"
 msgstr "Czy podoba ci się %s?"
 
-#: src/Core/Bootstrap.php:269 src/Core/Bootstrap.php:544
+#: src/Core/Bootstrap.php:269 src/Core/Bootstrap.php:555
 msgid "Upgrade to Pro"
 msgstr "Ulepsz do Pro"
 
@@ -2615,7 +2636,7 @@ msgstr "Udoskonalony instalator"
 msgid "Drag & Drop Installs"
 msgstr "Instalacje przez przeciąganie"
 
-#: template/admin_pages/settings/general/general.php:184
+#: template/admin_pages/settings/general/general.php:182
 msgid "AJAX Call Error!"
 msgstr "Błąd wywołania AJAX!"
 
@@ -2631,7 +2652,7 @@ msgstr "Odzyskiwanie"
 msgid "Drag and Drop Import is not available in Duplicator Lite!"
 msgstr "Import metodą przeciągania elementów nie jest dostępny we wtyczce Duplicator Lite!"
 
-#: classes/package/class.pack.database.php:602
+#: classes/package/class.pack.database.php:644
 msgid "Shell mysql dump error. Change SQL Mode to the \"PHP Code\" in the Duplicator > Settings > Backups."
 msgstr "Błąd zrzutu mysql w powłoce. Zmień tryb SQL na „Kod PHP” w sekcji Duplicator > Ustawienia > Kopie zapasowe."
 
@@ -3229,13 +3250,13 @@ msgstr "Jednowątkowy"
 msgid "Add a custom path if the path to mysqldump is not properly detected.   For all paths use a forward slash as the path seperator.  On Linux systems use mysqldump for Windows systems use mysqldump.exe.  If the path tried does not work please contact your hosting provider for details on the correct path."
 msgstr "Jeśli ścieżka do narzędzia mysqldump nie jest prawidłowo wykrywana, dodaj własną. W każdej ścieżce używaj ukośnika jako separatora. W systemie Linux użyj zapisu „mysqldump”, a w systemie Windows – „mysqldump.exe”. Jeśli podana ścieżka nie działa, skontaktuj się z dostawcą hostingu w celu uzyskania szczegółowych informacji na temat prawidłowej ścieżki."
 
-#: template/admin_pages/settings/general/general.php:236
+#: template/admin_pages/settings/general/general.php:234
 msgid "Backups successfully reset"
 msgstr "Zresetowano kopie zapasowe"
 
 #: assets/js/duplicator/dup.util.php:97
-#: template/admin_pages/settings/general/general.php:201
-#: template/admin_pages/settings/general/general.php:246
+#: template/admin_pages/settings/general/general.php:199
+#: template/admin_pages/settings/general/general.php:244
 msgid "RESPONSE ERROR!"
 msgstr "BŁĄD ODPOWIEDZI!"
 
@@ -3247,20 +3268,20 @@ msgstr "Błąd żądania Ajax"
 msgid "AJAX ERROR! "
 msgstr "BŁĄD AJAX! "
 
-#: template/admin_pages/settings/general/general.php:178
+#: template/admin_pages/settings/general/general.php:176
 msgid "No"
 msgstr "Nie"
 
 #: src/Core/Notifications/Review.php:98
-#: template/admin_pages/settings/general/general.php:177
+#: template/admin_pages/settings/general/general.php:175
 msgid "Yes"
 msgstr "Tak"
 
-#: template/admin_pages/settings/general/general.php:174
+#: template/admin_pages/settings/general/general.php:172
 msgid "Resetting settings, Please Wait..."
 msgstr "Trwa resetowanie ustawień. Poczekaj..."
 
-#: template/admin_pages/settings/general/general.php:173
+#: template/admin_pages/settings/general/general.php:171
 msgid "This will clear and reset all of the current temporary Backups.  Would you like to continue?"
 msgstr "To spowoduje wyczyszczenie i zresetowanie wszystkich obecnych tymczasowych kopii zapasowych. Czy chcesz kontynuować?"
 
@@ -3292,7 +3313,7 @@ msgstr "To działanie powinno być stosowane tylko wtedy, gdy na ekranie kopii z
 
 #: template/admin_pages/settings/general/general.php:102
 msgid "Reset Settings"
-msgstr "Zresetuj ustawienia"
+msgstr "Resetuj ustawienia"
 
 #: template/admin_pages/settings/general/general.php:98
 msgid "This process will reset all Backups by deleting those without a completed status, reset the active Backup id and perform a cleanup of the build tmp file."
@@ -3423,43 +3444,43 @@ msgstr "Niepowodzenie kompilacji"
 msgid "Backup build appears stuck so marking Backup as failed. Is the Max Worker Time set too high?."
 msgstr "Kompilacja kopii zapasowej wydaje się zablokowana, więc kopia zapasowa została oznaczona jako niepowodzenie. Czy maksymalny czas procesu roboczego ma zbyt wysoką wartość?."
 
-#: classes/package/class.pack.database.php:757
+#: classes/package/class.pack.database.php:799
 msgid "Please contact your DataBase administrator to fix the error."
 msgstr "Skontaktuj się z administratorem bazy danych, aby naprawił ten błąd."
 
-#: classes/package/class.pack.php:1039
+#: classes/package/class.pack.php:1044
 msgid "ARCHIVE CONSISTENCY TEST: Pass"
 msgstr "TEST SPÓJNOŚCI ARCHIWUM: Pozytywny"
 
 #: classes/package/class.pack.installer.php:844
-#: classes/package/class.pack.php:1029
+#: classes/package/class.pack.php:1034
 msgid "ERROR: Archive checksum is bad."
 msgstr "BŁĄD: Suma kontrolna archiwum jest nieprawidłowa."
 
 #: classes/package/class.pack.installer.php:841
-#: classes/package/class.pack.php:1024
+#: classes/package/class.pack.php:1029
 msgid "ERROR: Archive doesn't pass consistency check."
 msgstr "BŁĄD: Archiwum nie przeszło pomyślnie sprawdzenia spójności."
 
 #: classes/package/class.pack.installer.php:838
-#: classes/package/class.pack.php:1020
+#: classes/package/class.pack.php:1025
 msgid "ERROR: Archive is not valid zip archive."
 msgstr "BŁĄD: Archiwum nie jest prawidłowym archiwum zip."
 
 #: classes/package/class.pack.installer.php:834
-#: classes/package/class.pack.php:1015
+#: classes/package/class.pack.php:1020
 msgid "ERROR: Cannot open created archive. Error code = %1$s"
 msgstr "BŁĄD: Nie można otworzyć utworzonego archiwum. Kod błędu = %1$s"
 
-#: classes/package/class.pack.php:967
+#: classes/package/class.pack.php:972
 msgid "ACTUAL FILE/DIRECTORY COUNT: %1$s"
 msgstr "RZECZYWISTA LICZBA PLIKÓW/KATALOGÓW: %1$s"
 
-#: classes/package/class.pack.php:966
+#: classes/package/class.pack.php:971
 msgid "EXPECTED FILE/DIRECTORY COUNT: %1$s"
 msgstr "OCZEKIWANA LICZBA PLIKÓW/KATALOGÓW: %1$s"
 
-#: classes/package/class.pack.php:945
+#: classes/package/class.pack.php:950
 msgid "Can't find Scanfile %s. Please ensure there no non-English characters in the Backup or schedule name."
 msgstr "Nie znaleziono pliku Scanfile %s. Upewnij się, że w nazwie kopii zapasowej lub harmonogramu nie ma znaków spoza angielskiego alfabetu."
 
@@ -5285,16 +5306,16 @@ msgstr "Duplicator Pro"
 msgid "Spread the Word"
 msgstr "Daj znać innym"
 
-#: src/Core/Bootstrap.php:565
+#: src/Core/Bootstrap.php:576
 msgid "Manage"
 msgstr "Zarządzaj"
 
-#: src/Core/Bootstrap.php:315 src/Core/Bootstrap.php:316
+#: src/Core/Bootstrap.php:326 src/Core/Bootstrap.php:327
 #: views/tools/controller.php:21
 msgid "Tools"
 msgstr "Narzędzia"
 
-#: src/Core/Bootstrap.php:329 src/Core/Bootstrap.php:330
+#: src/Core/Bootstrap.php:340 src/Core/Bootstrap.php:341
 #: template/admin_pages/settings/general/general.php:91
 #: template/mocks/storage/storage.php:87 views/settings/controller.php:23
 msgid "Settings"

@@ -1,0 +1,2 @@
+<?php
+namespace Comfino\Common\Frontend; final class PaywallIframeRenderer extends FrontendRenderer{ public function getStyles():array{return['paywall-frontend.css'];} public function getScripts():array{return['paywall-frontend.js'];}}

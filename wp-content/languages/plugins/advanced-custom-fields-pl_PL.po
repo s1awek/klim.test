@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Advanced Custom Fields (ACF®) - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-08 06:16:43+0000\n"
+"PO-Revision-Date: 2026-04-14 08:38:38+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2846,10 +2846,6 @@ msgstr "Zaplanowano publikację wpisu."
 msgid "Item Updated"
 msgstr "Element został zaktualizowany"
 
-#: includes/admin/views/acf-post-type/advanced-settings.php:673
-msgid "Post updated."
-msgstr "Wpis został zaktualizowany."
-
 #: includes/admin/views/acf-post-type/advanced-settings.php:693
 msgid "Post Link"
 msgstr "Odnośnik wpisu"
@@ -3591,10 +3587,6 @@ msgstr "Typ treści został zapisany."
 msgid "Add Custom"
 msgstr "Dodaj własną"
 
-#: includes/admin/tools/class-acf-admin-tool-export.php:363
-msgid "The following code can be used to register a local version of the selected items. Storing field groups, post types, or taxonomies locally can provide many benefits such as faster load times, version control & dynamic fields/settings. Simply copy and paste the following code to your theme's functions.php file or include it within an external file, then deactivate or delete the items from the ACF admin."
-msgstr "Następujący kod może zostać użyty do zarejestrowania lokalnej wersji wybranych elementów. Przechowywanie grup pól, typów treści czy taksonomii lokalnie może pozytywnie wpłynąć na szybsze czasy wczytywania, kontrolę wersji i dynamiczne pola oraz ustawienia. Skopiuj i wklej następujący kod do pliku function.php w twoim motywie lub załącz go w oddzielnym pliku, a następnie wyłącz lub usuń te elementy z ACF-a."
-
 #: includes/admin/views/acf-post-type/advanced-settings.php:110
 #: includes/admin/views/acf-taxonomy/advanced-settings.php:151
 msgid "Regenerate all labels using the Singular and Plural labels"
@@ -3615,6 +3607,10 @@ msgstr "Na pasku administratora do zobaczenia terminu podczas edycji."
 #: includes/admin/views/acf-post-type/advanced-settings.php:881
 msgid "Custom Meta Box Callback"
 msgstr "Własna funkcja zwrotna metaboksa"
+
+#: includes/admin/tools/class-acf-admin-tool-export.php:363
+msgid "The following code can be used to register a local version of the selected items. Storing field groups, post types, or taxonomies locally can provide many benefits such as faster load times, version control & dynamic fields/settings. Simply copy and paste the following code to your theme's functions.php file or include it within an external file, then deactivate or delete the items from the ACF admin."
+msgstr "Następujący kod może zostać użyty do zarejestrowania lokalnej wersji wybranych elementów. Przechowywanie grup pól, typów treści czy taksonomii lokalnie może pozytywnie wpłynąć na szybsze czasy wczytywania, kontrolę wersji i dynamiczne pola oraz ustawienia. Skopiuj i wklej następujący kod do pliku function.php w twoim motywie lub załącz go w oddzielnym pliku, a następnie wyłącz lub usuń te elementy z ACF-a."
 
 #: includes/admin/views/acf-taxonomy/advanced-settings.php:850
 msgid "Meta Box Sanitization Callback"
@@ -4378,6 +4374,10 @@ msgstr "Zobacz %s"
 #: includes/admin/views/acf-taxonomy/advanced-settings.php:202
 msgid "Edit %s"
 msgstr "Edytuj %s"
+
+#: includes/admin/views/acf-post-type/advanced-settings.php:673
+msgid "Post updated."
+msgstr "Zaktualizowano wpis."
 
 #: includes/admin/post-types/admin-field-group.php:279
 msgid "Field Settings Tabs"
@@ -6837,13 +6837,6 @@ msgstr "Pusty"
 msgid "Rules"
 msgstr "Reguły"
 
-#: includes/admin/views/acf-field-group/field.php:62
-#: includes/admin/views/acf-field-group/options.php:230
-#: includes/admin/views/acf-post-type/advanced-settings.php:98
-#: includes/admin/views/acf-taxonomy/advanced-settings.php:139
-msgid "Active"
-msgstr "Włączone"
-
 #: includes/admin/admin-internal-post-type-list.php:155
 msgid "Active <span class=\"count\">(%s)</span>"
 msgid_plural "Active <span class=\"count\">(%s)</span>"
@@ -7007,10 +7000,6 @@ msgstr "Synchronizacja jest dostępna"
 #: includes/forms/form-front.php:228
 msgid "Spam Detected"
 msgstr "Wykryto spam"
-
-#: includes/forms/form-front.php:111
-msgid "Post updated"
-msgstr "Wpis został zaktualizowany"
 
 #: includes/admin/views/acf-post-type/advanced-settings.php:490
 #: includes/media.php:60
@@ -7247,6 +7236,17 @@ msgstr "Maksimum wpisów"
 #: includes/fields/class-acf-field-relationship.php:487
 msgid "Search..."
 msgstr "Wyszukiwanie…"
+
+#: includes/forms/form-front.php:111
+msgid "Post updated"
+msgstr "Zaktualizowano wpis"
+
+#: includes/admin/views/acf-field-group/field.php:62
+#: includes/admin/views/acf-field-group/options.php:230
+#: includes/admin/views/acf-post-type/advanced-settings.php:98
+#: includes/admin/views/acf-taxonomy/advanced-settings.php:139
+msgid "Active"
+msgstr "Włączono"
 
 #. Plugin Name of the plugin
 #: acf.php acf.php:347

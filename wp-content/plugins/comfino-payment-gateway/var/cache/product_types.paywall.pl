@@ -1,0 +1,1 @@
+a:3:{i:0;a:2:{s:25:"INSTALLMENTS_ZERO_PERCENT";s:17:"Raty zero procent";s:23:"CONVENIENT_INSTALLMENTS";s:11:"Niskie raty";}i:1;a:1:{s:19:"admin_product_types";s:19:"admin_product_types";}i:2;N;}
