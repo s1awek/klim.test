@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the WordPress - 7.0.x - Development package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-05-29 04:42:54+0000\n"
+"PO-Revision-Date: 2026-06-23 06:54:32+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -5021,7 +5021,7 @@ msgstr "Klucz pamięci podręcznej nie może być pusty."
 
 #: wp-includes/class-wp-fatal-error-handler.php:191
 msgid "There has been a critical error on this website. Please reach out to your site administrator, and inform them of this error for further assistance."
-msgstr "Na tej stronie wystąpił błąd krytyczny. Proszę skontaktować się z administratorem witryny i poinformować go o tym błędzie w celu uzyskania dalszej pomocy."
+msgstr "Na stronie wystąpił błąd krytyczny. Skontaktuj się z administratorem witryny i poinformuj go o tym błędzie w celu uzyskania pomocy."
 
 #. translators: %s: Capability name.
 #: wp-includes/capabilities.php:450
@@ -5123,7 +5123,7 @@ msgstr "Plik z %1$s uznawany jest za <strong>przestarzały</strong> od wersji %2
 #. translators: 1: PHP file name, 2: Version number, 3: Alternative file name.
 #: wp-includes/functions.php:5823
 msgid "File %1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."
-msgstr "Plik %1$s uznawany jest za <strong>przestarzały</strong> od wersji %2$s! Zamiast tego proszę użyć %3$s."
+msgstr "Plik %1$s uznawany jest za <strong>przestarzały</strong> od wersji %2$s! Zamiast tego użyj %3$s."
 
 #. translators: 1: PHP function name, 2: Version number.
 #: wp-includes/functions.php:5586
@@ -5134,7 +5134,7 @@ msgstr "Funkcja %1$s jest <strong>przestarzała</strong> od wersji %2$s i nie ma
 #. function name.
 #: wp-includes/functions.php:5578
 msgid "Function %1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."
-msgstr "Funkcja %1$s jest <strong>przestarzała</strong> od wersji %2$s! Zamiast jej proszę użyć %3$s."
+msgstr "Funkcja %1$s jest <strong>przestarzała</strong> od wersji %2$s! Zamiast jej użyj %3$s."
 
 #: wp-includes/blocks/read-more/block.json
 msgctxt "block description"
@@ -5350,7 +5350,7 @@ msgstr "Nie można znaleźć pliku. Sprawdź w <a href=\"%s\">bibliotece mediów
 #. translators: %s: A list of valid video file extensions.
 #: wp-includes/widgets/class-wp-widget-media-video.php:51
 msgid "Sorry, the video at the supplied URL cannot be loaded. Please check that the URL is for a supported video file (%s) or stream (e.g. YouTube and Vimeo)."
-msgstr "Nie można załadować wideo z adresu URL. Proszę sprawdzić czy adres jest wspieranym plikiem (%s) lub streamem (np. YouTube i Vimeo)."
+msgstr "Nie można załadować wideo z adresu URL. Sprawdź czy adres jest wspieranym plikiem (%s) lub streamem (np. YouTube i Vimeo)."
 
 #. translators: %s: URL to media library.
 #: wp-includes/widgets/class-wp-widget-media-video.php:44
@@ -5503,7 +5503,7 @@ msgstr "Ciemne"
 
 #: wp-includes/class-wp-theme.php:328
 msgid "<strong>Error:</strong> The themes directory is either empty or does not exist. Please check your installation."
-msgstr "<strong>Błąd:</strong> katalog na motywy jest pusty lub nie istnieje. Proszę sprawdzić swoją instalację."
+msgstr "<strong>Błąd:</strong> katalog na motywy jest pusty lub nie istnieje. Sprawdź swoją instalację."
 
 #: wp-includes/class-wp-image-editor-gd.php:96
 #: wp-includes/class-wp-image-editor-gd.php:105
@@ -11866,7 +11866,7 @@ msgstr "Brak zestawu zmian do przejęcia"
 
 #: wp-includes/class-wp-customize-manager.php:3399
 msgid "Security check failed."
-msgstr "Nie powiodło się sprawdzanie bezpieczeństwa."
+msgstr "Błąd kontroli bezpieczeństwa."
 
 #: wp-includes/class-wp-customize-manager.php:2548
 #: wp-includes/class-wp-customize-manager.php:3184
@@ -12090,7 +12090,7 @@ msgstr "Aktualizowanie"
 
 #: wp-includes/script-loader.php:1310
 msgid "Draft Saved"
-msgstr "Szkic został zapisany"
+msgstr "Zapisano szkic"
 
 #: wp-includes/script-loader.php:1305 wp-admin/customize.php:199
 msgid "Activate &amp; Publish"
@@ -21811,7 +21811,7 @@ msgstr "Zachowaj proporcje"
 #: wp-includes/class-wp-editor.php:1224 wp-includes/js/dist/editor.js:66881
 #: wp-includes/js/dist/editor.js:67184
 msgid "General"
-msgstr "Ustawienia główne"
+msgstr "Ogólne"
 
 #: wp-includes/class-wp-editor.php:1275
 msgid "The URL you entered seems to be an external link. Do you want to add the required http:// prefix?"
@@ -23876,7 +23876,7 @@ msgstr "Kategorie odnośników"
 #: wp-includes/js/dist/editor.js:45420 wp-includes/js/dist/editor.js:66580
 #: wp-admin/includes/meta-boxes.php:1557 wp-admin/revision.php:113
 msgid "Revisions"
-msgstr "Poprzednie wersje"
+msgstr "Wersje"
 
 #. translators: Hidden accessibility text.
 #: wp-includes/revision.php:34 wp-includes/js/dist/block-library.js:32448

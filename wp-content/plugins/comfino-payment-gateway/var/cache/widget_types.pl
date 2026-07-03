@@ -1,1 +1,0 @@
-a:3:{i:0;a:2:{s:8:"standard";s:18:"Widget standardowy";s:7:"classic";s:16:"Widget klasyczny";}i:1;a:1:{s:18:"admin_widget_types";s:18:"admin_widget_types";}i:2;N;}

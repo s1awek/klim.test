@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Loco Translate - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-25 21:03:35+0000\n"
+"PO-Revision-Date: 2026-06-12 05:34:53+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -425,7 +425,7 @@ msgstr "Zobacz pełne wyłączenie odpowiedzialności"
 msgid "Third party services are subject to their own terms of use and may incur costs from the provider"
 msgstr "Usługi stron trzecich podlegają własnym warunkom użytkowania i mogą wiązać się z kosztami"
 
-#: tpl/admin/config/apis.php:157
+#: tpl/admin/config/apis.php:157 tpl/admin/config/apis.php:164
 msgid "Important"
 msgstr "Ważne"
 
@@ -467,7 +467,7 @@ msgstr "Przetłumacz ten plik automatycznie"
 msgid "This is NOT a translation file. Manual editing of source strings is not recommended."
 msgstr "To NIE jest plik do tłumaczenia. Nie zaleca się ręcznej edycji ciągów źródłowych."
 
-#: src/fs/FileWriter.php:324
+#: src/fs/FileWriter.php:320
 msgid "Modification of POT (template) files is disallowed by the plugin settings"
 msgstr "Modyfikacja plików POT (szablonów) jest niedozwolona przez ustawienia wtyczki"
 
@@ -506,7 +506,7 @@ msgstr "Zalecane"
 msgid "Enable Ajax file uploads"
 msgstr "Włącz przesyłanie plików Ajax"
 
-#: src/fs/FileWriter.php:249
+#: src/fs/FileWriter.php:241
 msgid "Parent directory isn't writable"
 msgstr "Katalog nadrzędny nie jest zapisywalny"
 
@@ -630,11 +630,11 @@ msgstr "Kod ustawienia regionalnego"
 msgid "Locale name"
 msgstr "Nazwa ustawienia regionalnego"
 
-#: tpl/admin/file/info.php:110
+#: tpl/admin/file/info.php:119
 msgid "Files in this location can be modified or deleted by WordPress automatic updates"
 msgstr "Pliki w tej lokalizacji mogą być modyfikowane lub usuwane przez automatyczne aktualizacje WordPress'a"
 
-#: tpl/admin/file/info.php:107
+#: tpl/admin/file/info.php:116
 msgid "WordPress updates"
 msgstr "Aktualizacje WordPress'a"
 
@@ -711,7 +711,7 @@ msgstr "Języki &lsaquo; Loco"
 msgid "Languages"
 msgstr "Języki"
 
-#: src/fs/FileWriter.php:313
+#: src/fs/FileWriter.php:304
 msgid "Modification of installed files is disallowed by the plugin settings"
 msgstr "Modyfikacja zainstalowanych plików jest niedozwolona przez ustawienia wtyczki"
 
@@ -746,8 +746,8 @@ msgstr "Zobacz wszystkie podstawowe tłumaczenia"
 #: src/admin/bundle/LocaleController.php:138
 #: src/admin/file/EditController.php:132 src/admin/file/EditController.php:183
 #: tpl/admin/common/inc-fsconn.php:16 tpl/admin/common/inc-fsconn.php:41
-#: tpl/admin/config/apis.php:167 tpl/admin/config/prefs.php:45
-#: tpl/admin/config/settings.php:244 tpl/admin/errors/no-backups.php:22
+#: tpl/admin/config/apis.php:171 tpl/admin/config/prefs.php:45
+#: tpl/admin/config/settings.php:250 tpl/admin/errors/no-backups.php:22
 msgid "Documentation"
 msgstr "Dokumentacja"
 
@@ -785,7 +785,7 @@ msgctxt "Plural category"
 msgid "Zero"
 msgstr "Zero"
 
-#: src/admin/init/InitPoController.php:377 tpl/admin/file/info.php:113
+#: src/admin/init/InitPoController.php:377 tpl/admin/file/info.php:122
 msgid "What's this?"
 msgstr "Co to?"
 
@@ -1015,52 +1015,52 @@ msgid "File is in binary MO format"
 msgstr "Plik jest w formacie binarnym MO"
 
 #. Translators: Where %s is the name (or number) of an operating system user
-#: tpl/admin/file/info.php:96
+#: tpl/admin/file/info.php:105
 msgid "To create new files here you'll have to connect to the remote file system, or make the directory writeable by %s"
 msgstr "Aby utworzyć nowe pliki, musisz połączyć się ze zdalnym systemem plików lub uczynić katalog dostępnym do zapisu za pomocą %s"
 
-#: tpl/admin/file/info.php:92
+#: tpl/admin/file/info.php:101
 msgid "This directory can't be written to directly by the web server"
 msgstr "Ten katalog nie może być zapisany bezpośrednio przez serwer sieciowy"
 
-#: tpl/admin/file/info.php:81
+#: tpl/admin/file/info.php:90
 msgid "Note that the file may not be deletable due to additional ownership permissions"
 msgstr "Pamiętaj, że plik może nie zostać usunięty z powodu dodatkowych uprawnień własności"
 
 #. Translators: Where %s is the name (or number) of an operating system user
-#: tpl/admin/file/info.php:73
+#: tpl/admin/file/info.php:82
 msgid "The containing directory is writeable by %s, so you can add new files in the same location"
 msgstr "Katalog zawierający jest zapisywalny przez %s, więc możesz dodawać nowe pliki w tej samej lokalizacji"
 
-#: tpl/admin/file/info.php:69
+#: tpl/admin/file/info.php:78
 msgid "Directory is writeable"
 msgstr "Katalog jest zapisywalny"
 
 #. Translators: "either" meaning that the file itself can't exist without a
 #. containing directory
-#: tpl/admin/file/info.php:59
+#: tpl/admin/file/info.php:69
 msgid "The containing directory for this file doesn't exist either"
 msgstr "Katalog zawierający ten plik również nie istnieje"
 
-#: tpl/admin/file/info.php:55
+#: tpl/admin/file/info.php:65
 msgid "Directory doesn't exist"
 msgstr "Katalog nie istnieje"
 
 #. Translators: Where %s is the name (or number) of an operating system user
-#: tpl/admin/file/info.php:43
+#: tpl/admin/file/info.php:54
 msgid "To make changes you'll have to connect to the remote file system, or make the file writeable by %s"
 msgstr "Aby wprowadzić zmiany, musisz połączyć się ze zdalnym systemem plików lub ustawić plik do zapisu przez %s"
 
-#: tpl/admin/file/info.php:39
+#: tpl/admin/file/info.php:50
 msgid "This file can't be updated directly by the web server"
 msgstr "Ten plik nie może być aktualizowany bezpośrednio przez serwer sieciowy"
 
-#: tpl/admin/file/info.php:27
+#: tpl/admin/file/info.php:37
 msgid "You can update these translations directly from the editor to the file system"
 msgstr "Możesz zaktualizować te tłumaczenia bezpośrednio z edytora do systemu plików"
 
 #. Translators: Where %s is the type of file, e.g. "po"
-#: tpl/admin/file/info.php:24
+#: tpl/admin/file/info.php:34
 msgid "%s file is writeable"
 msgstr "Plik %s jest zapisywalny"
 
@@ -1191,11 +1191,11 @@ msgstr "Aktualizuj do %s"
 msgid "Version %s"
 msgstr "Wersja %s"
 
-#: tpl/admin/config/settings.php:226
+#: tpl/admin/config/settings.php:232
 msgid "Allow full access to these roles"
 msgstr "Zezwól na pełny dostęp do tych ról"
 
-#: tpl/admin/config/settings.php:220
+#: tpl/admin/config/settings.php:226
 msgid "Grant access to roles"
 msgstr "Przyznaj dostęp do ról"
 
@@ -1234,8 +1234,7 @@ msgstr "Połącz"
 
 #. Translators: When a file or folder cannot be modified due to filesystem
 #. permissions
-#: tpl/admin/common/inc-fsconn.php:50 tpl/admin/file/info.php:36
-#: tpl/admin/file/info.php:89
+#: tpl/admin/common/inc-fsconn.php:50 tpl/admin/file/info.php:47
 msgid "Write protected"
 msgstr "Zabezpieczony przed zapisem"
 
@@ -1543,7 +1542,7 @@ msgstr "R/m/d"
 
 #: src/mvc/Controller.php:49
 msgid "You do not have sufficient permissions to access this page."
-msgstr "Brak uprawnień, aby uzyskać dostęp do tej strony."
+msgstr "Brak uprawnień, aby uzyskać dostęp do wybranej strony."
 
 #: src/mvc/AjaxRouter.php:194
 msgid "Download controller returned empty output"
@@ -1716,52 +1715,52 @@ msgctxt "File location"
 msgid "Author"
 msgstr "Autor"
 
-#: src/fs/FileWriter.php:308
+#: src/fs/FileWriter.php:299
 msgid "File modification is disallowed by your WordPress config"
 msgstr "Modyfikacja pliku jest niedozwolona w konfiguracji WordPress"
 
-#: src/fs/FileWriter.php:297
+#: src/fs/FileWriter.php:289
 msgid "Failed to build directory path"
 msgstr "Nie udało się zbudować ścieżki katalogu"
 
-#: src/fs/FileWriter.php:289
+#: src/fs/FileWriter.php:281
 msgid "Failed to create directory"
 msgstr "Nie udało się utworzyć katalogu"
 
-#: src/fs/FileWriter.php:253
+#: src/fs/FileWriter.php:245
 msgid "Failed to save file"
 msgstr "Nie udało się zapisać pliku"
 
-#: src/fs/FileWriter.php:243
+#: src/fs/FileWriter.php:235
 msgid "Permission denied to update file"
 msgstr "Brak uprawnień do aktualizacji pliku"
 
 #. translators: %s refers to a directory name which was expected to be an
 #. ordinary file
-#: src/fs/FileWriter.php:218
+#: src/fs/FileWriter.php:210
 msgid "\"%s\" is a directory, not a file"
 msgstr "„%s” to katalog, a nie plik"
 
 #. translators: %s refers to a file name, for which a delete operation failed.
-#: src/fs/FileWriter.php:201
+#: src/fs/FileWriter.php:193
 msgid "Failed to delete %s"
 msgstr "Nie udało się usunąć %s"
 
 #. translators: (1) Source file name (2) Target file name
-#: src/fs/FileWriter.php:162
+#: src/fs/FileWriter.php:154
 msgid "Failed to copy %1$s to %2$s"
 msgstr "Nie udało się skopiować %1$s do %2$s"
 
-#: src/fs/FileWriter.php:151
+#: src/fs/FileWriter.php:143
 msgid "Refusing to copy over an existing file"
 msgstr "Odmowa skopiowania istniejącego pliku"
 
 #. translators: %s refers to a file name, for which the chmod operation failed.
-#: src/fs/FileWriter.php:133
+#: src/fs/FileWriter.php:125
 msgid "Failed to chmod %s"
 msgstr "Nie udało się zmienić chmod %s"
 
-#: src/fs/FileWriter.php:52
+#: src/fs/FileWriter.php:46
 msgid "Failed to connect to remote server"
 msgstr "Nie udało się połączyć z serwerem"
 
@@ -1810,7 +1809,7 @@ msgstr "serwer WWW"
 msgid "%s already exists in this folder"
 msgstr "%s już istnieje w tym katalogu"
 
-#: src/ajax/XgettextController.php:67
+#: src/ajax/XgettextController.php:68
 msgid "Template file created"
 msgstr "Utworzono plik szablonu"
 
@@ -1894,15 +1893,15 @@ msgstr "Inicjowanie nowych tłumaczeń w „%s”"
 
 #. translators: Warning that the language in the file header (1) does not match
 #. the file name (2)
-#: src/admin/file/InfoController.php:177
+#: src/admin/file/InfoController.php:189
 msgid "Language header is \"%1$s\" but file name contains \"%2$s\""
 msgstr "Nagłówek języka to „%1$s”, ale nazwa pliku zawiera „%2$s”"
 
-#: src/admin/file/InfoController.php:169
+#: src/admin/file/InfoController.php:181
 msgid "File does not have a valid header"
 msgstr "Plik posiada niepoprawny nagłówek"
 
-#: src/admin/file/InfoController.php:137 src/package/Header.php:86
+#: src/admin/file/InfoController.php:149 src/package/Header.php:86
 msgid "Unknown author"
 msgstr "Autor nieznany"
 
@@ -2167,8 +2166,8 @@ msgstr "Filtruj tłumaczenia"
 msgid "Template file"
 msgstr "Plik szablonu"
 
-#: tpl/admin/config/apis.php:166 tpl/admin/config/prefs.php:44
-#: tpl/admin/config/settings.php:243
+#: tpl/admin/config/apis.php:170 tpl/admin/config/prefs.php:44
+#: tpl/admin/config/settings.php:249
 msgid "Save settings"
 msgstr "Zapisz ustawienia"
 

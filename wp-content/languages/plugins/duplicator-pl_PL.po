@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Duplicator &#8211; Backups &amp; Migration Plugin &#8211; Cloud Backups, Scheduled Backups, &amp; More - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-05-29 10:20:58+0000\n"
+"PO-Revision-Date: 2026-06-12 05:32:28+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -5156,10 +5156,6 @@ msgstr "Usuń"
 msgid "Name"
 msgstr "Nazwa"
 
-#: classes/utilities/class.u.php:513
-msgid "You do not have sufficient permissions to access this page."
-msgstr "Brak uprawnień, aby uzyskać dostęp do tej strony."
-
 #: views/packages/details/detail.php:126 views/packages/main/packages.php:192
 msgid "Created"
 msgstr "Utworzono"
@@ -5332,3 +5328,7 @@ msgstr "Rodzaj"
 #: views/packages/details/detail.php:242
 msgid "Download Links"
 msgstr "Odnośniki pobierania"
+
+#: classes/utilities/class.u.php:513
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Brak uprawnień, aby uzyskać dostęp do wybranej strony."

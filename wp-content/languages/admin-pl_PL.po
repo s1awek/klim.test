@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the WordPress - 7.0.x - Development - Administration package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-05-28 18:18:08+0000\n"
+"PO-Revision-Date: 2026-06-23 06:57:29+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1861,7 +1861,7 @@ msgstr "Pamięć podręczna strony nie została wykryta, ale czas odpowiedzi ser
 #. translators: 1: Error message, 2: Error code.
 #: wp-admin/includes/class-wp-site-health.php:2476
 msgid "Unable to detect page cache due to possible loopback request problem. Please verify that the loopback request test is passing. Error: %1$s (Code: %2$s)"
-msgstr "Nie można wykryć pamięci podręcznej strony z powodu możliwego problemu z żądaniem pętli zwrotnej. Proszę sprawdzić, czy test żądania pętli zwrotnej przebiega prawidłowo. Błąd: %1$s (Kod: %2$s)"
+msgstr "Nie można wykryć pamięci podręcznej strony z powodu możliwego problemu z żądaniem pętli zwrotnej. Sprawdź czy test żądania pętli zwrotnej przebiega prawidłowo. Błąd: %1$s (Kod: %2$s)"
 
 #: wp-admin/includes/class-wp-site-health.php:2472
 msgid "Unable to detect the presence of page cache"
@@ -1997,7 +1997,7 @@ msgstr "Dowiedz się więcej o WordPressie %s"
 #: wp-admin/includes/ajax-actions.php:1360
 #: wp-admin/includes/ajax-actions.php:1478
 msgid "Please type your comment text."
-msgstr "Proszę wpisać komentarz."
+msgstr "Napisz swój komentarz."
 
 #: wp-admin/users.php:468 wp-admin/users.php:500
 msgid "You cannot remove users."
@@ -2233,7 +2233,7 @@ msgstr "Twórz rozbudowane treści z użyciem bloków i wzorców"
 #. translators: %s: Current WordPress version.
 #: wp-admin/includes/dashboard.php:2089
 msgid "Learn more about the %s version."
-msgstr "Dowiedz się więcej na temat wersji %s."
+msgstr "Dowiedz się więcej o wersji %s."
 
 #: wp-admin/freedoms.php:44
 msgid "WordPress is free and open source software"
@@ -2309,7 +2309,7 @@ msgstr "Usunięto element menu"
 
 #: wp-admin/index.php:37
 msgid "The Dashboard is the first place you will come to every time you log into your site. It is where you will find all your WordPress tools. If you need help, just click the &#8220;Help&#8221; tab above the screen title."
-msgstr "Kokpit jet pierwszym miejscem, do którego trafisz za każdym razem po zalogowaniu się do swojej witryny. Znajdują się tutaj wszystkie narzędzia WordPressa. Jeśli potrzeba pomocy, po proszę kliknąć w zakładkę &#8222;Pomoc&#8221; nad tytułem ekranu."
+msgstr "Kokpit jet pierwszym miejscem, do którego trafisz za każdym razem po zalogowaniu się do swojej witryny. Znajdują się tutaj wszystkie narzędzia WordPressa. Jeśli potrzebujesz pomocy, kliknij w zakładkę &#8222;Pomoc&#8221; nad tytułem ekranu."
 
 #: wp-admin/index.php:36
 msgid "Welcome to your WordPress Dashboard!"
@@ -2389,7 +2389,7 @@ msgstr "Wtyczka %1$s %2$s została wyłączona z powodu braku zgodności z WordP
 #. 3: Current WP version, 4: Compatible plugin version.
 #: wp-admin/includes/plugin.php:2629
 msgid "%1$s %2$s was deactivated due to incompatibility with WordPress %3$s, please upgrade to %1$s %4$s or later."
-msgstr "Wtyczka %1$s %2$s została wyłączona z powodu braku zgodności z WordPressem %3$s, proszę zaktualizować %1$s do wersji %4$s lub późniejszej."
+msgstr "Wtyczka %1$s %2$s została wyłączona z powodu braku zgodności z WordPressem %3$s, zaktualizuj %1$s do wersji %4$s lub późniejszej."
 
 #: wp-admin/freedoms.php:39
 msgid "The Four Freedoms"
@@ -2559,7 +2559,7 @@ msgstr "Wiele wtyczek może gromadzić lub przechowywać dane osobiste w bazie W
 #. translators: %s: URL to Privacy Policy Guide screen.
 #: wp-admin/export-personal-data.php:48
 msgid "If you are not sure, check the plugin documentation or contact the plugin author to see if the plugin collects data and if it supports the Data Exporter tool. This information may be available in the <a href=\"%s\">Privacy Policy Guide</a>."
-msgstr "Jeśli nie ma pewności, proszę sprawdzić dokumentację wtyczki lub skontaktować się z autorem wtyczki, aby sprawdzić, czy wtyczka zbiera dane i czy obsługuje narzędzie eksportu danych. Informacje mogą być dostępne w <a href=\"%s\">Przewodniku po polityce prywatności</a>."
+msgstr "Jeśli nie masz pewności, sprawdź dokumentację wtyczki lub skantaktuj się z autorem wtyczki, aby sprawdzić, czy wtyczka zbiera dane i czy obsługuje narzędzie eksportu danych. Informacje mogą być dostępne w <a href=\"%s\">Przewodniku po polityce prywatności</a>."
 
 #: wp-admin/export-personal-data.php:41
 msgid "<strong>Comments</strong> &mdash; For user comments, Email Address, IP Address, User Agent (Browser/OS), Date/Time, Comment Content, and Content URL."
@@ -2663,7 +2663,7 @@ msgstr "Dane wtyczki"
 #. translators: %s: URL to Privacy Policy Guide screen.
 #: wp-admin/erase-personal-data.php:48
 msgid "If you are not sure, check the plugin documentation or contact the plugin author to see if the plugin collects data and if it supports the Data Eraser tool. This information may be available in the <a href=\"%s\">Privacy Policy Guide</a>."
-msgstr "Jeśli nie ma pewności, proszę sprawdzić dokumentację wtyczki lub skontaktować się z autorem wtyczki, aby sprawdzić, czy wtyczka zbiera dane i czy obsługuje narzędzie usuwania danych. Informacje mogą być dostępne w <a href=\"%s\">Przewodniku po polityce prywatności</a>."
+msgstr "Jeśli nie masz pewności, sprawdź dokumentację wtyczki lub skontaktuj się z autorem wtyczki, aby sprawdzić, czy wtyczka zbiera dane i czy obsługuje narzędzie usuwania danych. Informacje mogą być dostępne w <a href=\"%s\">Przewodniku po polityce prywatności</a>."
 
 #: wp-admin/erase-personal-data.php:42
 msgid "<strong>Media</strong> &mdash; A list of URLs for all media file uploads made by the user."
@@ -2725,7 +2725,7 @@ msgstr "Zaktualizuj swoją witrynę, aby korzystała z HTTPS"
 #. translators: 1: wp-config.php, 2: WP_HOME, 3: WP_SITEURL
 #: wp-admin/includes/class-wp-site-health.php:1555
 msgid "However, your WordPress Address is currently controlled by a PHP constant and therefore cannot be updated. You need to edit your %1$s and remove or update the definitions of %2$s and %3$s."
-msgstr "Adres WordPressa jest obecnie kontrolowany przez stałą PHP i dlatego nie może być zmieniony. Proszę edytować %1$s i usunąć lub zaktualizować definicje %2$s oraz %3$s."
+msgstr "Adres WordPressa jest obecnie kontrolowany przez stałą PHP i dlatego nie może być zmieniony. Edytuj %1$s i usuń lub zaktualizuj stałe %2$s oraz %3$s."
 
 #: wp-admin/includes/class-wp-site-health.php:1547
 msgid "HTTPS is already supported for your website."
@@ -2928,7 +2928,7 @@ msgstr "Przejdź na początek strony"
 #. possible.
 #: wp-admin/includes/dashboard.php:1455
 msgid "%s could not be located. Please try another nearby city. For example: Kansas City; Springfield; Portland."
-msgstr "Nie możemy zlokalizować %s. Podaj proszę inne miasto w pobliżu. Na przykład: Warszawa, Kraków czy Gdańsk."
+msgstr "Nie możemy zlokalizować %s. Podaj inne miasto w pobliżu. Na przykład: Warszawa, Kraków czy Gdańsk."
 
 #: wp-admin/authorize-application.php:323
 msgid "You will be returned to the WordPress Dashboard, and no changes will be made."
@@ -2940,7 +2940,7 @@ msgstr "Nie, nie zatwierdzam połączenia"
 
 #: wp-admin/authorize-application.php:298
 msgid "You will be given a password to manually enter into the application in question."
-msgstr "Otrzymasz hasło do ręcznego wprowadzenia do danej aplikacji."
+msgstr "Otrzymasz hasło do wpisania do danej aplikacji."
 
 #. translators: %s: The URL the user is being redirected to.
 #: wp-admin/authorize-application.php:285
@@ -3513,7 +3513,7 @@ msgstr "Nie można włączyć"
 
 #: wp-admin/comment.php:47
 msgid "You cannot edit this comment because the associated post is in the Trash. Please restore the post first, then try again."
-msgstr "Nie można edytować komentarza, ponieważ powiązany z nim wpis znajduje się w koszu. Proszę przywrócić wpis z kosza, a następnie spróbować ponownie."
+msgstr "Nie można edytować komentarza, ponieważ powiązany z nim wpis znajduje się w koszu. Przywróć wpis z kosza, a następnie spróbuj ponownie."
 
 #: wp-admin/async-upload.php:70
 msgctxt "media item"
@@ -3586,7 +3586,7 @@ msgstr "Tych motywów nie udało się zaktualizować:"
 
 #: wp-admin/includes/class-wp-automatic-updater.php:1345
 msgid "Please check your site now. It’s possible that everything is working. If there are updates available, you should update."
-msgstr "Proszę sprawdź teraz swoją witrynę. Możliwe, że wszystko działa prawidłowo. Jeśli dostępne są aktualizacje, należy je wykonać."
+msgstr "Sprawdź teraz swoją witrynę. Możliwe, że wszystko działa prawidłowo. Jeśli dostępne są aktualizacje, należy je wykonać."
 
 #. translators: %s: Home URL.
 #: wp-admin/includes/class-wp-automatic-updater.php:1335
@@ -3697,7 +3697,7 @@ msgstr "Widok kompaktowy"
 
 #: wp-admin/includes/user.php:183
 msgid "<strong>Error:</strong> Passwords do not match. Please enter the same password in both password fields."
-msgstr "<strong>Błąd:</strong> hasła nie są takie same. Proszę wprowadzić to samo hasło w obu polach hasła."
+msgstr "<strong>Błąd:</strong> hasła nie są takie same. Wpisz to samo hasło w obu polach hasła."
 
 #: wp-admin/includes/meta-boxes.php:383 wp-admin/includes/meta-boxes.php:384
 #: wp-admin/js/post.js:796
@@ -3856,7 +3856,7 @@ msgstr "Aktualizujesz motyw. Najpierw wykonaj <a href=\"%s\">kopię zapasową ba
 #. translators: %s: Documentation URL.
 #: wp-admin/includes/class-theme-installer-skin.php:346
 msgid "You are uploading an older version of the installed theme. You can continue to install the older version, but be sure to <a href=\"%s\">back up your database and files</a> first."
-msgstr "Wysłano starszą wersję obecnego motywu. Można kontynuować instalację starszej wersji, ale najpierw proszę wykonać <a href=\"%s\">kopię zapasową bazy danych oraz plików</a>."
+msgstr "Wysłano starszą wersję obecnego motywu. Można kontynuować instalację starszej wersji, ale najpierw zrób <a href=\"%s\">kopię zapasową bazy danych oraz plików</a>."
 
 #. translators: 1: Current WordPress version, 2: Version required by the
 #. uploaded theme.
@@ -4038,7 +4038,7 @@ msgstr "Nie znaleziono żadnych komentarzy w koszu."
 #. translators: 1: php.ini, 2: post_max_size, 3: upload_max_filesize
 #: wp-admin/includes/file.php:944 wp-admin/includes/import.php:87
 msgid "File is empty. Please upload something more substantial. This error could also be caused by uploads being disabled in your %1$s file or by %2$s being defined as smaller than %3$s in %1$s."
-msgstr "Plik jest pusty. Prześlij coś konkretniejszego. Ten błąd może być również spowodowany wyłączeniem przesyłania w pliku %1$s lub zdefiniowaniem %2$s jako mniejszej niż %3$s w %1$s."
+msgstr "Plik jest pusty. Prześlij coś konkretniejszego. Błąd może być również spowodowany wyłączeniem przesyłania w pliku %1$s lub zdefiniowaniem %2$s jako mniejszej niż %3$s w %1$s."
 
 #: wp-admin/includes/class-wp-site-health.php:3440
 #: wp-admin/js/site-health.js:356
@@ -4218,7 +4218,7 @@ msgstr "<a href=\"https://wordpress.org/documentation/article/tools-screen/\">Do
 
 #: wp-admin/options.php:387
 msgid "This page allows direct access to your site settings. You can break things here. Please be cautious!"
-msgstr "Strona umożliwia bezpośredni dostęp do ustawień witryny. Można tu coś zepsuć. Proszę zachować ostrożność!"
+msgstr "Strona umożliwia bezpośredni dostęp do ustawień witryny. Można tu coś zepsuć. Zachowaj ostrożność!"
 
 #: wp-admin/edit-form-advanced.php:373
 msgid "<strong>Format</strong> &mdash; Post Formats designate how your theme will display a specific post. For example, you could have a <em>standard</em> blog post with a title and paragraphs, or a short <em>aside</em> that omits the title and contains a short text blurb. Your theme could enable all or some of 10 possible formats. <a href=\"https://developer.wordpress.org/advanced-administration/wordpress/post-formats/#supported-formats\">Learn more about each post format</a>."
@@ -4259,7 +4259,7 @@ msgstr "<a href=\"https://wordpress.org/documentation/article/users-add-new-scre
 #. translators: %s: URL to Site Health Status page.
 #: wp-admin/site-health-info.php:47
 msgid "This page can show you every detail about the configuration of your WordPress website. For any improvements that could be made, see the <a href=\"%s\">Site Health Status</a> page."
-msgstr "Ta strona zawiera wszystkie szczegóły dotyczące konfiguracji twojej witryny WordPress. Wszelkie ulepszenia, które można wprowadzić, można zobaczyć na stronie <a href=\"%s\">stan witryny</a>."
+msgstr "Strona zawiera wszystkie szczegóły dotyczące konfiguracji WordPressa. Wszelkie ulepszenia, które można wprowadzić, można zobaczyć na stronie <a href=\"%s\">stan witryny</a>."
 
 #: wp-admin/includes/dashboard.php:2004 wp-admin/site-health.php:137
 msgid "Results are still loading&hellip;"
@@ -4309,7 +4309,7 @@ msgstr "Czas uniwersalny to %s."
 #. translators: %s: UTC abbreviation
 #: wp-admin/options-general.php:412
 msgid "Choose either a city in the same timezone as you or a %s (Coordinated Universal Time) time offset."
-msgstr "Proszę wybrać miasto w swojej strefie czasowej lub %s przesunięcie względem czasu uniwersalnego."
+msgstr "Wybierz miasto w swojej strefie czasowej lub %s przesunięcie względem czasu uniwersalnego."
 
 #: wp-admin/options-general.php:265
 msgid "Administration Email Address"
@@ -4327,7 +4327,7 @@ msgstr "Przed zapisaniem pliku należy ustawić prawo do jego zapisu. Więcej in
 
 #: wp-admin/includes/ajax-actions.php:2522
 msgid "Upload failed. Please reload and try again."
-msgstr "Przesyłanie nie powiodło się. Proszę odświeżyć stronę i spróbować ponownie."
+msgstr "Przesyłanie nie powiodło się. Odśwież stronę i spróbuj ponownie."
 
 #: wp-admin/includes/class-wp-privacy-data-removal-requests-list-table.php:142
 msgid "Data erasure has failed."
@@ -4567,7 +4567,7 @@ msgstr "Wtyczka %1$s została wyłączona z powodu błędu: %2$s"
 #. translators: %s: Link to documentation on child themes.
 #: wp-admin/theme-editor.php:455
 msgid "If you need to tweak more than your theme&#8217;s CSS, you might want to try <a href=\"%s\">making a child theme</a>."
-msgstr "Jeżeli potrzebne modyfikacje motywu to coś więcej niż CSS, proszę rozważyć <a href=\"%s\">użycie motywu potomnego</a>."
+msgstr "Jeżeli potrzebne modyfikacje motywu to coś więcej niż CSS, rozważ <a href=\"%s\">użycie motywu potomnego</a>."
 
 #: wp-admin/theme-editor.php:447
 msgid "You appear to be making direct edits to your theme in the WordPress dashboard. It is not recommended! Editing your theme directly could break your site and your changes may be lost in future updates."
@@ -4583,7 +4583,7 @@ msgstr "10"
 #: wp-admin/includes/file.php:494 wp-admin/plugin-editor.php:123
 #: wp-admin/theme-editor.php:351
 msgid "File does not exist! Please double check the name and try again."
-msgstr "Plik nie istnieje! Proszę dwukrotnie sprawdzić nazwę i spróbować ponownie."
+msgstr "Plik nie istnieje! Dwukrotnie sprawdź nazwę i spróbuj ponownie."
 
 #. translators: 1: $image, 2: WP_Image_Editor
 #: wp-admin/includes/image-edit.php:364 wp-admin/includes/image-edit.php:459
@@ -6101,7 +6101,7 @@ msgstr "Usunięcie kategorii nie spowoduje usunięcia wpisów do niej należący
 #. translators: %s: A link to install the Classic Widgets plugin.
 #: wp-admin/widgets-form-blocks.php:114
 msgid "The block widgets require JavaScript. Please enable JavaScript in your browser settings, or install the <a href=\"%s\">Classic Widgets plugin</a>."
-msgstr "Blokowe widżety wymagają JavaScriptu. Proszę go włączyć w ustawieniach swojej przeglądarki lub wypróbować <a href=\"%s\">wtyczkę Klasyczne Widżety</a>"
+msgstr "Blokowe widżety wymagają JavaScriptu. Włącz go w ustawieniach swojej przeglądarki lub wypróbować <a href=\"%s\">wtyczkę Klasyczne Widżety</a>"
 
 #: wp-admin/post.php:47
 msgid "A post type mismatch has been detected."
@@ -6114,12 +6114,12 @@ msgstr "Wykryto niezgodność identyfikatora treści."
 #. translators: %s: A link to use the Classic Editor plugin.
 #: wp-admin/includes/template.php:1234
 msgid "Please open the <a href=\"%s\">classic editor</a> to use this meta box."
-msgstr "Proszę otworzyć <a href=\"%s\">klasyczny edytor</a>, aby móc użyć bloku meta."
+msgstr "Otwórz <a href=\"%s\">klasyczny edytor</a>, aby móc użyć bloku meta."
 
 #. translators: %s: A link to activate the Classic Editor plugin.
 #: wp-admin/includes/template.php:1221
 msgid "Please activate the <a href=\"%s\">Classic Editor plugin</a> to use this meta box."
-msgstr "Proszę uruchomić <a href=\"%s\">wtyczkę klasycznego edytora</a>, aby móc użyć bloku meta."
+msgstr "Uruchom <a href=\"%s\">wtyczkę klasycznego edytora</a>, aby móc użyć bloku meta."
 
 #. translators: %s: A link to install the Classic Editor plugin.
 #: wp-admin/includes/template.php:1209
@@ -6266,7 +6266,7 @@ msgstr "Sugerowana treść polityki prywatności powinna zostać dodana  wyłąc
 #. translators: %s: Privacy Policy Guide URL.
 #: wp-admin/includes/class-wp-privacy-policy-content.php:143
 msgid "The suggested privacy policy text has changed. Please <a href=\"%s\">review the guide</a> and update your privacy policy."
-msgstr "Proponowany tekst polityki prywatności uległ zmianie. <a href=\"%s\">Przeczytaj przewodnik</a> i proszę zaktualizować swoją politykę prywatności."
+msgstr "Proponowany tekst polityki prywatności uległ zmianie. <a href=\"%s\">Przeczytaj przewodnik</a> i zaktualizuj swoją politykę prywatności."
 
 #: wp-admin/options-privacy.php:267
 msgid "There are no pages."
@@ -6445,7 +6445,7 @@ msgstr "Jakie masz prawa do swoich danych"
 #. translators: Default privacy policy text.
 #: wp-admin/includes/class-wp-privacy-policy-content.php:583
 msgid "For users that register on our website (if any), we also store the personal information they provide in their user profile. All users can see, edit, or delete their personal information at any time (except they cannot change their username). Website administrators can also see and edit that information."
-msgstr "Dla użytkowników którzy zarejestrowali się na naszej stronie internetowej (jeśli tacy są), przechowujemy również informacje osobiste wprowadzone w profilu. Każdy użytkownik może dokonać wglądu, korekty albo skasować swoje informacje osobiste w dowolnej chwili (nie licząc nazwy użytkownika, której nie można zmienić). Administratorzy strony również mogą przeglądać i modyfikować te informacje."
+msgstr "Dla użytkowników którzy zarejestrowali się na naszej stronie internetowej (jeśli tacy są), przechowujemy również informacje osobiste wpisane w profilu. Każdy użytkownik może dokonać wglądu, korekty albo skasować swoje informacje osobiste w dowolnej chwili (nie licząc nazwy użytkownika, której nie można zmienić). Administratorzy strony również mogą przeglądać i modyfikować te informacje."
 
 #. translators: Default privacy policy text.
 #: wp-admin/includes/class-wp-privacy-policy-content.php:581
@@ -6760,16 +6760,16 @@ msgstr "Nowa strona będzie zawierała pomoc i sugestie dotyczące polityki pryw
 
 #: wp-admin/options-privacy.php:194
 msgid "If you already have a Privacy Policy page, please select it below. If not, please create one."
-msgstr "Jeśli istnieje już stronę polityki prywatności, należy ją wybrać poniżej. Jeśli nie, proszę ją utworzyć."
+msgstr "Jeśli istnieje już stronę polityki prywatności, należy ją wybrać poniżej lub utworzyć."
 
 #. translators: %s: URL to Pages Trash.
 #: wp-admin/options-privacy.php:136
 msgid "The currently selected Privacy Policy page is in the Trash. Please create or select a new Privacy Policy page or <a href=\"%s\">restore the current page</a>."
-msgstr "Obecnie wybrana strona polityki prywatności znajduje się w koszu. Proszę utworzyć lub wybrać nową stronę polityki prywatności lub <a href=\"%s\">przywrócić aktualną</a>."
+msgstr "Obecnie wybrana strona polityki prywatności znajduje się w koszu. Utwórz lub wybierz nową stronę polityki prywatności lub <a href=\"%s\">przywróć aktualną</a>."
 
 #: wp-admin/options-privacy.php:126
 msgid "The currently selected Privacy Policy page does not exist. Please create or select a new page."
-msgstr "Aktualnie wybrana strona polityki prywatności nie istnieje. Proszę utworzyć lub wybrać nową stronę."
+msgstr "Aktualnie wybrana strona polityki prywatności nie istnieje. Utwórz lub wybierz nową stronę."
 
 #: wp-admin/options-privacy.php:102
 msgid "Unable to create a Privacy Policy page."
@@ -6812,7 +6812,7 @@ msgstr ""
 "Twoja prośba o eksport danych osobistych została przetworzona. Można pobrać swoje dane osobiste klikając poniższy odnośnik.\n"
 "Ze względów prywatności i bezpieczeństwa, plik zostanie automatycznie\n"
 "usunięty dnia ###EXPIRATION###.\n"
-"Proszę go pobrać przed upływem tego terminu.\n"
+"Pobierz go przed upływem tego terminu.\n"
 " \n"
 " ###LINK###\n"
 " \n"
@@ -7023,7 +7023,7 @@ msgstr "<strong>Błąd:</strong> katalog główny witryny nie jest <a href=\"%1$
 #. translators: %s: Documentation URL.
 #: wp-admin/options-general.php:253
 msgid "Enter the same address here unless you <a href=\"%s\">want your site home page to be different from your WordPress installation directory</a>."
-msgstr "Wprowadź adres, jeśli <a href=\"%s\">chcesz, aby strona główna witryny była inna niż katalog instalacyjny WordPressa</a>."
+msgstr "Wpisz adres, jeśli <a href=\"%s\">chcesz, aby strona główna witryny była inna niż katalog instalacyjny WordPressa</a>."
 
 #: wp-admin/freedoms.php:62 wp-admin/freedoms.php:112
 msgid "https://wordpress.org/about/license/"
@@ -7119,7 +7119,7 @@ msgstr "https://pl.wordpress.org/about/privacy/"
 
 #: wp-admin/press-this.php:80
 msgid "Press This is not available. Please contact your site administrator."
-msgstr "Press This jest niedostępny. Proszę skontaktować się z administratorem witryny."
+msgstr "Press This jest niedostępny. Skontaktuj się z administratorem witryny."
 
 #. translators: %s: URL to Press This bookmarklet on the main site.
 #: wp-admin/press-this.php:68
@@ -7273,7 +7273,7 @@ msgstr "Nie można zapisać pliku."
 #. translators: 1: Line number, 2: File path.
 #: wp-admin/includes/file.php:318
 msgid "Your PHP code changes were not applied due to an error on line %1$s of file %2$s. Please fix and try saving again."
-msgstr "Twoje zmiany w kodzie PHP nie zostały zastosowane z powodu błędu w linii %1$s pliku %2$s. Proszę poprawić i spróbować zapisać ponownie."
+msgstr "Zmiany w kodzie PHP nie zostały zastosowane z powodu błędu w linii %1$s pliku %2$s. Popraw błąd i zapisz zmiany ponownie."
 
 #. translators: If a Rosetta site exists (e.g. https://es.wordpress.org/news/),
 #. then use that. Otherwise, leave untranslated.
@@ -7420,7 +7420,7 @@ msgstr "Spotkania"
 
 #: wp-admin/includes/dashboard.php:1369 wp-admin/js/dashboard.js:591
 msgid "An error occurred. Please try again."
-msgstr "Wystąpił błąd. Proszę spróbować ponownie."
+msgstr "Wystąpił błąd. Spróbuj ponownie."
 
 #: wp-admin/includes/dashboard.php:92
 msgid "WordPress Events and News"
@@ -7724,17 +7724,17 @@ msgstr "%s został usunięty."
 #. translators: 1: URL to WordPress release notes, 2: New WordPress version.
 #: wp-admin/includes/update.php:337
 msgid "<a href=\"%1$s\">WordPress %2$s</a> is available! Please notify the site administrator."
-msgstr "<a href=\"%1$s\">WordPress %2$s</a> jest dostępny! Proszę poinformować administratora witryny."
+msgstr "<a href=\"%1$s\">WordPress %2$s</a> jest dostępny! Poinformuj administratora witryny."
 
 #: wp-admin/includes/update.php:332
 msgid "Please update WordPress now"
-msgstr "Proszę zaktualizować teraz WordPressa"
+msgstr "Zaktualizuj teraz WordPressa"
 
 #. translators: 1: URL to WordPress release notes, 2: New WordPress version, 3:
 #. URL to network admin, 4: Accessibility text.
 #: wp-admin/includes/update.php:328
 msgid "<a href=\"%1$s\">WordPress %2$s</a> is available! <a href=\"%3$s\" aria-label=\"%4$s\">Please update now</a>."
-msgstr "<a href=\"%1$s\">WordPress %2$s</a> jest już dostępny! <a href=\"%3$s\" aria-label=\"%4$s\">Proszę zaktualizować</a>."
+msgstr "<a href=\"%1$s\">WordPress %2$s</a> jest już dostępny! <a href=\"%3$s\" aria-label=\"%4$s\">Zaktualizuj</a>."
 
 #: wp-admin/includes/theme.php:327
 msgid "Portfolio"
@@ -8017,7 +8017,7 @@ msgstr "Trwa oczekiwanie na potwierdzenie zmiany twojego adresu email na %s."
 
 #: wp-admin/user-edit.php:242
 msgid "Error while saving the new email address. Please try again."
-msgstr "Błąd przy zapisywaniu nowego adresu email. Proszę spróbować ponownie."
+msgstr "Błąd przy zapisywaniu nowego adresu email. Spróbuj ponownie."
 
 #: wp-admin/upload.php:372
 msgid "You can narrow the list by file type/status or by date using the dropdown menus above the media table."
@@ -8963,7 +8963,7 @@ msgstr "Zarządzanie kontem"
 #. text "log in" should trigger a password save prompt.
 #: wp-admin/install.php:154
 msgid "You will need this password to log&nbsp;in. Please store it in a secure location."
-msgstr "Hasło będzie potrzebne do zalogowania się. Proszę przechowywać je w bezpiecznym miejscu."
+msgstr "Hasło będzie potrzebne do zalogowania się. Przechowuj je w bezpiecznym miejscu."
 
 #. translators: Hidden accessibility text.
 #: wp-admin/includes/class-wp-list-table.php:912
@@ -9091,12 +9091,12 @@ msgstr "<a href=\"https://codex.wordpress.org/Dashboard_My_Sites_Screen\">Dokume
 
 #: wp-admin/widgets.php:24
 msgid "The theme you are currently using is not widget-aware, meaning that it has no sidebars that you are able to change. For information on making your theme widget-aware, please <a href=\"https://developer.wordpress.org/themes/functionality/widgets/\">follow these instructions</a>."
-msgstr "Motyw, z którego aktualnie korzysta witryna, nie pozwala na użycie widżetów, co oznacza, że nie posiada on konfigurowalnych paneli bocznych. Aby dowiedzieć się, jak sprawić, aby motyw zezwalał na używanie widżetów, proszę <a href=\"https://developer.wordpress.org/themes/functionality/widgets/\">przejść do dokumentacji [en]</a>."
+msgstr "Motyw, z którego aktualnie korzysta witryna, nie pozwala na użycie widżetów, co oznacza, że nie posiada on konfigurowalnych paneli bocznych. Aby dowiedzieć się, jak sprawić, aby motyw zezwalał na używanie widżetów, <a href=\"https://developer.wordpress.org/themes/functionality/widgets/\">przeczytaj dokumnetację</a>."
 
 #. translators: %s: Documentation URL.
 #: wp-admin/options-writing.php:223
 msgid "When you publish a new post, WordPress automatically notifies the following site update services. For more about this, see the <a href=\"%s\">Update Services</a> documentation article. Separate multiple service URLs with line breaks."
-msgstr "Podczas publikacji nowego wpisu WordPress automatycznie powiadamia poniższe usługi aktualizacji witryn. Więcej informacji na ten temat znajduje się w sekcji <a href=\"%s\">Usługi aktualizacji</a> dokumentacji. Wprowadzaj adresy w oddzielnych liniach."
+msgstr "Podczas publikacji nowego wpisu WordPress automatycznie powiadamia poniższe usługi aktualizacji witryn. Więcej informacji na ten temat znajduje się w sekcji <a href=\"%s\">Usługi aktualizacji</a> dokumentacji. Wpisuj adresy w oddzielnych liniach."
 
 #: wp-admin/includes/options.php:137
 msgid "The <a href=\"https://wordpress.org/documentation/article/wordpress-glossary/#character-set\">character encoding</a> of your site (UTF-8 is recommended)"
@@ -9131,7 +9131,7 @@ msgstr "Własny format czasu:"
 #. translators: Hidden accessibility text.
 #: wp-admin/options-general.php:560
 msgid "enter a custom time format in the following field"
-msgstr "w poniższym polu wprowadź własny format godziny"
+msgstr "w poniższym polu wpisz własny format godziny"
 
 #. translators: Hidden accessibility text.
 #: wp-admin/options-general.php:519
@@ -9141,7 +9141,7 @@ msgstr "Własny format daty:"
 #. translators: Hidden accessibility text.
 #: wp-admin/options-general.php:515
 msgid "enter a custom date format in the following field"
-msgstr "w poniższym polu wprowadź własny format daty"
+msgstr "w poniższym polu wpisz własny format daty"
 
 #: wp-admin/includes/class-plugin-upgrader.php:66
 msgid "Plugins updated successfully."
@@ -9168,7 +9168,7 @@ msgstr "Główne menu"
 
 #: wp-admin/includes/file.php:2638
 msgid "Enter the location on the server where the public and private keys are located. If a passphrase is needed, enter that in the password field above."
-msgstr "Wprowadź ścieżkę do plików klucza prywatnego i publicznego na serwerze. Jeśli potrzebne jest hasło, podaj je w powyższym polu."
+msgstr "Wpisz ścieżkę do plików klucza prywatnego i publicznego na serwerze. Jeśli potrzebne jest hasło, podaj je w powyższym polu."
 
 #. translators: %s: Number of users.
 #: wp-admin/users.php:623
@@ -9464,7 +9464,7 @@ msgstr "Można dodawać media przez kliknięcie przycisku nad edytorem treści. 
 
 #: wp-admin/edit-form-advanced.php:286
 msgid "<strong>Post editor</strong> &mdash; Enter the text for your post. There are two modes of editing: Visual and Code. Choose the mode by clicking on the appropriate tab."
-msgstr "<strong>Edytor treści</strong> &mdash; wprowadź treść, korzystając z jednego z dwóch trybów edytora: wizualnego i kodu. Możesz wybrać tryb przez kliknięcie na odpowiednią zakładkę."
+msgstr "<strong>Edytor treści</strong> &mdash; wpisz treść, korzystając z jednego z dwóch trybów edytora: wizualnego i kodu. Możesz wybrać tryb przez kliknięcie na odpowiednią zakładkę."
 
 #. translators: %s: URL to header image configuration in Customizer.
 #: wp-admin/includes/class-custom-image-header.php:518
@@ -9479,7 +9479,7 @@ msgstr "Teraz można zarządzać ustawieniami tła i podglądać zmiany na żywo
 #: wp-admin/includes/class-wp-screen.php:1140
 msgctxt "Welcome panel"
 msgid "Welcome"
-msgstr "Powitanie"
+msgstr "Witaj"
 
 #. translators: %s: Number of users.
 #. translators: Number of users.
@@ -9502,7 +9502,7 @@ msgstr "Nazwa"
 #. translators: %s: Placeholder that must come at the start of the URL.
 #: wp-admin/options-permalink.php:413
 msgid "If you like, you may enter custom structures for your category and tag URLs here. For example, using <code>topics</code> as your category base would make your category links like <code>%s/topics/uncategorized/</code>. If you leave these blank the defaults will be used."
-msgstr "Jeśli chcesz, możesz ustawić własny format odnośników dla kategorii i tagów. Przykładowo, jeśli wprowadzisz <code>tematy</code> jako podstawę adresów kategorii, odnośniki do kategorii będą miały postać podobną do <code>%s/tematy/bez-kategorii/</code>. Jeśli pozostawisz te pola puste, zastosowane zostaną domyślne ustawienia."
+msgstr "Jeśli chcesz, możesz ustawić własny format odnośników dla kategorii i tagów. Przykładowo, jeśli wpiszesz <code>tematy</code> jako podstawę adresów kategorii, odnośniki do kategorii będą miały postać podobną do <code>%s/tematy/bez-kategorii/</code>. Jeśli pozostawisz te pola puste, zastosowane zostaną domyślne ustawienia."
 
 #: wp-admin/credits.php:142
 msgid "Release Lead"
@@ -9661,7 +9661,7 @@ msgstr "Możesz edytować zdjęcie jednocześnie zachowując miniaturę. Np. min
 
 #: wp-admin/includes/image-edit.php:206
 msgid "Once you have made your selection, you can adjust it by entering the size in pixels. The minimum selection size is the thumbnail size as set in the Media settings."
-msgstr "Po wybraniu obszaru można go dostosować wprowadzając jego wymiar w pikselach. Najmniejszy wybrany obszar odpowiada rozmiarowi miniatury podanemu w ustawieniach mediów."
+msgstr "Po wybraniu obszaru można go dostosować wpisując jego wymiar w pikselach. Najmniejszy wybrany obszar odpowiada rozmiarowi miniatury podanemu w ustawieniach mediów."
 
 #: wp-admin/includes/image-edit.php:203
 msgid "The aspect ratio is the relationship between the width and height. You can preserve the aspect ratio by holding down the shift key while resizing your selection. Use the input box to specify the aspect ratio, e.g. 1:1 (square), 4:3, 16:9, etc."
@@ -9965,7 +9965,7 @@ msgstr ""
 
 #: wp-admin/post.php:82
 msgid "Unable to submit this form, please refresh and try again."
-msgstr "Nie powiodło się przesłanie formularza. Proszę odświeżyć stronę i spróbować ponownie."
+msgstr "Nie powiodło się przesłanie formularza. Odśwież stronę i spróbuj ponownie."
 
 #: wp-admin/index.php:92
 msgid "<strong>Quick Draft</strong> &mdash; Allows you to create a new post and save it as a draft. Also displays links to the 3 most recent draft posts you've started."
@@ -10101,7 +10101,7 @@ msgstr "Pilnowanie, aby witryna była zaktualizowana, jest ważne ze względu na
 
 #: wp-admin/includes/class-wp-automatic-updater.php:1044
 msgid "Please check out your site now. It's possible that everything is working. If it says you need to update, you should do so:"
-msgstr "Proszę teraz sprawdzić swoją witrynę. Możliwe, że wszystko działa prawidłowo. Jeśli wyświetlana jest informacja, że wymagana jest aktualizacja, powinno się ją wykonać:"
+msgstr "Sprawdź swoją witrynę. Możliwe, że wszystko działa prawidłowo. Jeśli wyświetlana jest informacja, że wymagana jest aktualizacja, powinno się ją wykonać:"
 
 #: wp-admin/includes/class-wp-automatic-updater.php:1042
 msgid "This means your site may be offline or broken. Don't panic; this can be fixed."
@@ -10120,7 +10120,7 @@ msgstr "Aktualizacja jest łatwa i zajmuje tylko kilka chwil:"
 #. translators: 1: Home URL, 2: WordPress version.
 #: wp-admin/includes/class-wp-automatic-updater.php:1006
 msgid "Please update your site at %1$s to WordPress %2$s."
-msgstr "Proszę zaktualizować witrynę %1$s do WordPressa %2$s."
+msgstr "Zaktualizuj witrynę %1$s do WordPressa %2$s."
 
 #. translators: %s: WordPress version.
 #: wp-admin/includes/class-wp-automatic-updater.php:990
@@ -10145,7 +10145,7 @@ msgstr "[%1$s] PILNE: witryna może nie działać z powodu błędu aktualizacji"
 #. WordPress version.
 #: wp-admin/includes/class-wp-automatic-updater.php:956
 msgid "[%1$s] WordPress %2$s is available. Please update!"
-msgstr "[%1$s] Dostępny jest WordPress w wersji %2$s. Prosimy o aktualizację!"
+msgstr "[%1$s] Dostępny jest WordPress w wersji %2$s. Należy zaktualizować."
 
 #. translators: Site updated notification email subject. 1: Site title, 2:
 #. WordPress version.
@@ -10237,19 +10237,19 @@ msgstr "Nieprawidłowy adres email. Adresy email wyglądają na przykład tak: <
 
 #: wp-admin/install.php:432
 msgid "You must provide an email address."
-msgstr "Musisz wprowadzić adres email."
+msgstr "Musisz wpisać adres email."
 
 #: wp-admin/install.php:428
 msgid "Your passwords do not match. Please try again."
-msgstr "Wprowadzone hasła nie zgadzają się ze sobą. Proszę spróbować ponownie."
+msgstr "Wpisano różne hasła. Spróbuj ponownie."
 
 #: wp-admin/install.php:424
 msgid "The username you provided has invalid characters."
-msgstr "Wprowadzona nazwa użytkownika zawiera niedopuszczane znaki."
+msgstr "Wpisana nazwa użytkownika zawiera niedopuszczane znaki."
 
 #: wp-admin/install.php:421
 msgid "Please provide a valid username."
-msgstr "Proszę wprowadzić nazwę istniejącego użytkownika."
+msgstr "Wpisz nazwę istniejącego użytkownika."
 
 #: wp-admin/includes/update-core.php:1371
 msgid "Copying the required files&#8230;"
@@ -10477,7 +10477,7 @@ msgstr "Powtórz hasło"
 
 #: wp-admin/user-edit.php:710
 msgid "Repeat New Password"
-msgstr "Wprowadź nowe hasło ponownie"
+msgstr "Ponownie wpisz nowe hasło"
 
 #: wp-admin/includes/nav-menu.php:1269
 msgid "Add menu items from the column on the left."
@@ -10761,7 +10761,7 @@ msgstr "Wybierz menu do edycji:"
 #. translators: %s: URL to Upgrade Network screen.
 #: wp-admin/includes/ms.php:695
 msgid "Thank you for Updating! Please visit the <a href=\"%s\">Upgrade Network</a> page to update all your sites."
-msgstr "Dziękujemy za wykonanie aktualizacji! Proszę odwiedzić stronę <a href=\"%s\">Zaktualizuj sieć witryn</a>, aby zaktualizować wszystkie witryny."
+msgstr "Dziękujemy za wykonanie aktualizacji! Odwiedź stronę <a href=\"%s\">Zaktualizuj sieć witryn</a>, aby zaktualizować wszystkie witryny."
 
 #: wp-admin/setup-config.php:510
 msgid "All right, sparky! You&#8217;ve made it through this part of the installation. WordPress can now communicate with your database. If you are ready, time now to&hellip;"
@@ -10777,7 +10777,7 @@ msgstr "Automatycznie dodawaj strony"
 
 #: wp-admin/nav-menus.php:1145
 msgid "Give your menu a name, then click Create Menu."
-msgstr "Wprowadź nazwę menu i kliknij przycisk &bdquo;Utwórz menu&rdquo;."
+msgstr "Wpisz nazwę menu i kliknij przycisk Utwórz menu."
 
 #: wp-admin/nav-menus.php:1118
 msgid "Edit your default menu by adding or removing items. Drag the items into the order you prefer. Click Create Menu to save your changes."
@@ -10871,7 +10871,7 @@ msgstr "Wgrany do"
 #: wp-admin/includes/class-custom-background.php:524
 #: wp-admin/includes/class-custom-image-header.php:980
 msgid "The uploaded file is not a valid image. Please try again."
-msgstr "Nieprawidłowy format pliku graficznego. Proszę spróbować ponownie."
+msgstr "Nieprawidłowy format pliku graficznego. Spróbuj ponownie."
 
 #: wp-admin/includes/class-custom-image-header.php:683
 msgid "Choose a Custom Header"
@@ -10911,7 +10911,7 @@ msgstr "Wykorzystane: %1$s%% z %2$s"
 
 #: wp-admin/users.php:352
 msgid "Please select an option."
-msgstr "Proszę wybrać opcję."
+msgstr "Wybierz opcję."
 
 #: wp-admin/setup-config.php:446
 msgid "After you&#8217;ve done that, click &#8220;Run the installation&#8221;."
@@ -11189,11 +11189,11 @@ msgstr "Edytuj odnośnik"
 
 #: wp-admin/includes/user.php:213
 msgid "<strong>Error:</strong> This email is already registered. Please choose another one."
-msgstr "<strong>Błąd:</strong> wprowadzony adres email jest już zarejestrowany. Proszę wybrać inny."
+msgstr "<strong>Błąd:</strong> wpisany adres email jest już zarejestrowany. Wybierz inny."
 
 #: wp-admin/includes/user.php:157
 msgid "<strong>Error:</strong> Please enter a nickname."
-msgstr "<strong>Błąd:</strong> proszę wprowadzić pseudonim."
+msgstr "<strong>Błąd:</strong> wpisz pseudonim."
 
 #: wp-admin/credits.php:62
 msgid "https://wordpress.org/about/"
@@ -11382,7 +11382,7 @@ msgstr "Dziękujemy. Na twój adres email została wysłana wiadomość z odnoś
 
 #: wp-admin/ms-delete-site.php:31
 msgid "Sorry, the link you clicked is stale. Please select another option."
-msgstr "Kliknięty odnośnik jest nieaktualny. Proszę wybrać inną opcję."
+msgstr "Kliknięty odnośnik jest nieaktualny. Wybierz inną opcję."
 
 #. translators: %s: Network title.
 #: wp-admin/ms-delete-site.php:26
@@ -11498,7 +11498,7 @@ msgstr "Nazwa bazy danych"
 
 #: wp-admin/setup-config.php:227
 msgid "Below you should enter your database connection details. If you are not sure about these, contact your host."
-msgstr "Wprowadź dane potrzebne do łączenia się z bazą danych. Jeśli ich nie posiadasz, możesz je otrzymać od administratora swojego serwera."
+msgstr "Wpisz dane potrzebne do łączenia się z bazą danych. Jeśli ich nie posiadasz, możesz je otrzymać od administratora swojego serwera."
 
 #: wp-admin/setup-config.php:208
 msgid "Let&#8217;s go!"
@@ -11541,12 +11541,12 @@ msgstr "Plik %1$s już istnieje. Jeżeli trzeba zmienić konfigurację w tym pli
 #. translators: %s: wp-config-sample.php
 #: wp-admin/setup-config.php:52
 msgid "Sorry, I need a %s file to work from. Please re-upload this file to your WordPress installation."
-msgstr "Plik %s jest potrzebny do prawidłowej pracy. Proszę go ponownie wgrać do WordPressa."
+msgstr "Plik %s jest potrzebny do prawidłowej pracy. Wgraj go do WordPressa."
 
 #. translators: %s: wp-config.php
 #: wp-admin/maint/repair.php:38
 msgid "To allow use of this page to automatically repair database problems, please add the following line to your %s file. Once this line is added to your config, reload this page."
-msgstr "Aby możliwe było użycie skryptu do naprawy problemów w bazie danych witryny, proszę dodać poniższy wiersz do pliku %s. Kiedy to zrobisz, odśwież tę stronę."
+msgstr "Aby możliwe było użycie skryptu do naprawy problemów w bazie danych witryny, dpdaj poniższy wiersz do pliku %s. Kiedy to zrobisz, odśwież tę stronę."
 
 #: wp-admin/includes/class-wp-comments-list-table.php:233
 msgid "No comments awaiting moderation."
@@ -11601,7 +11601,7 @@ msgstr "Osoby, dla których zostaną utworzone konta, otrzymają wiadomość ema
 
 #: wp-admin/includes/image-edit.php:329
 msgid "There are unsaved changes that will be lost. 'OK' to continue, 'Cancel' to return to the Image Editor."
-msgstr "Nie wszystkie wprowadzone zmiany zostały zapisane. Kliknij „OK”, aby kontynuować, albo „Anuluj”, aby powrócić do edytora obrazków."
+msgstr "Nie wszystkie wpisane zmiany zostały zapisane. Kliknij „OK”, aby kontynuować, albo „Anuluj”, aby powrócić do edytora obrazków."
 
 #: wp-admin/options-writing.php:35
 msgid "Post via email settings allow you to send your WordPress installation an email with the content of your post. You must set up a secret email account with POP3 access to use this, and any mail received at this address will be posted, so it&#8217;s a good idea to keep this address very secret."
@@ -11640,7 +11640,7 @@ msgstr "WordPress może automatycznie wyszukać typowe problemy z bazą danych i
 
 #: wp-admin/maint/repair.php:170
 msgid "Repairs complete. Please remove the following line from wp-config.php to prevent this page from being used by unauthorized users."
-msgstr "Naprawa została ukończona. Proszę usunąć następujące linijki z pliku wp-config.php, aby zapobiec użyciu witryny przez nieupoważnione osoby."
+msgstr "Naprawa została ukończona. Usuń następujące linijki z pliku wp-config.php, aby zapobiec użyciu witryny przez nieupoważnione osoby."
 
 #. translators: 1: Table name, 2: Error message.
 #: wp-admin/maint/repair.php:119
@@ -11649,11 +11649,11 @@ msgstr "W tabeli „%1$s” zgłaszany jest następujący błąd: %2$s. WordPres
 
 #: wp-admin/user-new.php:454
 msgid "Enter the email address or username of an existing user on this network to invite them to this site. That person will be sent an email asking them to confirm the invite."
-msgstr "Wprowadź adres email lub nazwę użytkownika, który ma już konto w sieci witryn, aby zaprosić go na tę witrynę. Osoba ta otrzyma emaila z zaproszeniem wymagającym potwierdzenia."
+msgstr "Wpisz adres email lub nazwę użytkownika, który ma już konto w sieci witryn, aby zaprosić go na tę witrynę. Osoba ta otrzyma emaila z zaproszeniem wymagającym potwierdzenia."
 
 #: wp-admin/user-new.php:450
 msgid "Enter the email address of an existing user on this network to invite them to this site. That person will be sent an email asking them to confirm the invite."
-msgstr "Wprowadź adres email osoby, która posiada już konto w sieci witryn, aby dodać ją do tej witryny. Na podany adres email zostanie wysłana wiadomość z zaproszeniem."
+msgstr "Wpisz adres email osoby, która posiada już konto w sieci witryn, aby dodać ją do tej witryny. Na podany adres email zostanie wysłana wiadomość z zaproszeniem."
 
 #: wp-admin/user-edit.php:374
 msgid "Show Toolbar when viewing site"
@@ -12105,7 +12105,7 @@ msgstr "Wstaw medium z innej witryny"
 
 #: wp-admin/includes/file.php:2506
 msgid "<strong>Error:</strong> Could not connect to the server. Please verify the settings are correct."
-msgstr "<strong>Błąd:</strong> błąd łączenia się z serwerem. Proszę sprawdzić, czy wprowadzono prawidłowe dane."
+msgstr "<strong>Błąd:</strong> błąd łączenia się z serwerem. Sprawdź, czy wpisano prawidłowe dane."
 
 #: wp-admin/index.php:64
 msgid "<strong>Drag and Drop</strong> &mdash; To rearrange the boxes, drag and drop by clicking on the title bar of the selected box and releasing when you see a gray dotted-line rectangle appear in the location you want to place the box."
@@ -12314,7 +12314,7 @@ msgstr ""
 "Jeśli nie chcesz tego robić, zignoruj tą wiadomość email.\n"
 "Zaproszenie wygaśnie za kilka dni.\n"
 "\n"
-"Proszę kliknąć poniższy odnośnik, aby aktywować swoje konto:\n"
+"Kliknij poniższy odnośnik, aby aktywować swoje konto:\n"
 "%%s"
 
 #. translators: Hidden accessibility text.
@@ -12337,16 +12337,16 @@ msgstr "Obrazek wyróżniający jako nagłówek"
 #. translators: %s: Browser name and link.
 #: wp-admin/includes/dashboard.php:1741
 msgid "It looks like you're using an old version of %s. For the best WordPress experience, please update your browser."
-msgstr "Wygląda na to, że używasz starej wersji przeglądarki %s. Aby w pełni cieszyć się WordPressem, proszę zaktualizować swoją przeglądarkę."
+msgstr "Wygląda na to, że używasz starej wersji przeglądarki %s. Aby w pełni cieszyć się WordPressem, zaktualizuj swoją przeglądarkę."
 
 #. translators: %s: Browser name and link.
 #: wp-admin/includes/dashboard.php:1735
 msgid "It looks like you're using an insecure version of %s. Using an outdated browser makes your computer unsafe. For the best WordPress experience, please update your browser."
-msgstr "Wygląda na to, że używasz wersji przeglądarki %s, która posiada błędy w zabezpieczeniach. Używanie nieaktualnej przeglądarki naraża twój komputer na niebezpieczeństwo. Aby w pełni cieszyć się WordPressem, proszę zaktualizować swoją przeglądarkę."
+msgstr "Wygląda na to, że używasz wersji przeglądarki %s, która posiada błędy w zabezpieczeniach. Używanie nieaktualnej przeglądarki naraża twój komputer na niebezpieczeństwo. Aby w pełni cieszyć się WordPressem, zaktualizuj swoją przeglądarkę."
 
 #: wp-admin/includes/nav-menu.php:1321
 msgid "There are some invalid menu items. Please check or delete them."
-msgstr "Nazwy niektórych elementów menu są nieprawidłowe. Proszę je poprawić lub usunąć."
+msgstr "Nazwy niektórych elementów menu są nieprawidłowe. Popraw je lub usuń."
 
 #: wp-admin/edit-tag-form.php:150 wp-admin/edit-tags.php:464
 #: wp-admin/includes/class-wp-terms-list-table.php:192
@@ -12698,7 +12698,7 @@ msgstr "Obrazki przycina się poprzez kliknięcie na nich (przycisk włączając
 
 #: wp-admin/edit-form-advanced.php:340
 msgid "For images only, you can click on Edit Image under the thumbnail to expand out an inline image editor with icons for cropping, rotating, or flipping the image as well as for undoing and redoing. The boxes on the right give you more options for scaling the image, for cropping it, and for cropping the thumbnail in a different way than you crop the original image. You can click on Help in those boxes to get more information."
-msgstr "Pod obrazkami dostępny jest odnośnik &#8222;Edytuj obrazek&#8211;, którego kliknięcie powoduje rozwinięcie edytora wraz z przyciskami pozwalającymi na przycinanie, obracanie oraz odbijanie obrazka oraz na cofanie i ponowne wprowadzanie popełnionych zmian. W modułach po prawej dostępne jest więcej możliwości skalowania i przycinania obrazka oraz możliwość przycinania miniatury niezależnie od obrazka. Więcej informacji znajduje się pod odnośnikami &#8222;Pomoc&#8221; znajdującymi się w tych modułach."
+msgstr "Pod obrazkami dostępny jest odnośnik Edytuj obrazek, którego kliknięcie powoduje rozwinięcie edytora wraz z przyciskami pozwalającymi na przycinanie, obracanie oraz odbijanie obrazka oraz na cofanie i ponowne wprowadzanie popełnionych zmian. W modułach po prawej dostępne jest więcej możliwości skalowania i przycinania obrazka oraz możliwość przycinania miniatury niezależnie od obrazka. Więcej informacji znajduje się pod odnośnikami Pomoc znajdującymi się w tych modułach."
 
 #: wp-admin/edit-form-advanced.php:339
 msgid "This screen allows you to edit fields for metadata in a file within the media library."
@@ -12716,7 +12716,7 @@ msgstr "Przeszukaj zainstalowane motywy"
 #. translators: %s: Link to documentation on child themes.
 #: wp-admin/update-core.php:665
 msgid "<strong>Please Note:</strong> Any customizations you have made to theme files will be lost. Please consider using <a href=\"%s\">child themes</a> for modifications."
-msgstr "<strong>Proszę pamiętać:</strong> Wszelkie modyfikacje dokonane w plikach motywu zostaną utracone. Proszę rozważyć skorzystanie z funkcji <a href=\"%s\">motywów potomnych</a>."
+msgstr "<strong>Pamiętaj:</strong> wszelkie modyfikacje dokonane w plikach motywu zostaną utracone. Rozważ skorzystanie z <a href=\"%s\">motywu potomnego</a>."
 
 #. translators: %s: Number of posts.
 #: wp-admin/includes/class-wp-posts-list-table.php:404
@@ -12738,11 +12738,11 @@ msgstr "Ostatnio sprawdzono %1$s o %2$s."
 
 #: wp-admin/update-core.php:1086
 msgid "Please select one or more plugins to update."
-msgstr "Proszę wybrać jedną lub więcej wtyczek, które mają zostać zaktualizowane."
+msgstr "Wybierz jedną lub więcej wtyczek, które mają zostać zaktualizowane."
 
 #: wp-admin/update-core.php:1076
 msgid "Please select one or more themes to update."
-msgstr "Proszę wybrać jeden lub więcej motywów, które mają zostać zaktualizowane."
+msgstr "Wybierz jeden lub więcej motywów, które mają zostać zaktualizowane."
 
 #: wp-admin/includes/class-bulk-upgrader-skin.php:61
 msgid "The update process is starting. This process may take a while on some hosts, so please be patient."
@@ -12925,7 +12925,7 @@ msgstr "Większość motywów wyświetla tytuł witryny na górze każdej strony
 
 #: wp-admin/edit-form-advanced.php:407
 msgid "<strong>Order</strong> &mdash; Pages are usually ordered alphabetically, but you can choose your own order by entering a number (1 for first, etc.) in this field."
-msgstr "<strong>Kolejność</strong> &mdash; Strony są zwykle wyświetlane w porządku alfabetycznym, ale możesz w tym polu wprowadzić liczbę, aby to zmienić (1 oznacza pozycję pierwszą itd.)."
+msgstr "<strong>Kolejność</strong> &mdash; Strony są zwykle wyświetlane w porządku alfabetycznym, ale możesz w tym polu wpisać liczbę, aby to zmienić (1 oznacza pozycję pierwszą itd.)."
 
 #: wp-admin/includes/file.php:2573
 msgid "If you do not remember your credentials, you should contact your web host."
@@ -12933,11 +12933,11 @@ msgstr "Jeśli nie pamiętasz danych do połączenia się, skontaktuj się z adm
 
 #: wp-admin/includes/file.php:2567
 msgid "Please enter your FTP credentials to proceed."
-msgstr "Wprowadź dane połączenia FTP, aby kontynuować."
+msgstr "Wpisz dane połączenia FTP, aby kontynuować."
 
 #: wp-admin/includes/file.php:2563
 msgid "Please enter your FTP or SSH credentials to proceed."
-msgstr "Wprowadź dane połączenia FTP lub SSH, aby kontynuować."
+msgstr "Wpisz dane połączenia FTP lub SSH, aby kontynuować."
 
 #: wp-admin/user-edit.php:60
 msgid "Your profile contains information about you (your &#8220;account&#8221;) as well as some personal options related to using WordPress."
@@ -13194,7 +13194,7 @@ msgstr "Przywróć oryginalny obrazek nagłówka"
 
 #: wp-admin/includes/class-custom-image-header.php:749
 msgid "This will restore the original header image. You will not be able to restore any customizations."
-msgstr "Ta operacja przywróci oryginalny obrazek nagłówka. Odzyskanie wprowadzonych zmian nie będzie możliwe."
+msgstr "Akcja przywróci oryginalny obrazek nagłówka. Odzyskanie wprowadzonych zmian nie będzie możliwe."
 
 #: wp-admin/includes/class-custom-image-header.php:747
 msgid "Reset Image"
@@ -13206,7 +13206,7 @@ msgstr "Usuń obrazek nagłówka"
 
 #: wp-admin/includes/class-custom-image-header.php:731
 msgid "This will remove the header image. You will not be able to restore any customizations."
-msgstr "Ta operacja usunie obecny obrazek nagłówka. Odzyskanie wprowadzonych zmian nie będzie możliwe."
+msgstr "Akcja usunie obecny obrazek nagłówka. Odzyskanie wprowadzonych zmian nie będzie możliwe."
 
 #: wp-admin/includes/class-custom-image-header.php:712
 msgid "Default Images"
@@ -13341,7 +13341,7 @@ msgstr "To nie spam"
 
 #: wp-admin/includes/class-custom-background.php:342
 msgid "This will restore the original background image. You will not be able to restore any customizations."
-msgstr "Ta operacja przywróci oryginalny obrazek tła. Odzyskanie wprowadzonych zmian nie będzie możliwe."
+msgstr "Akcja przywróci oryginalny obrazek tła. Odzyskanie wprowadzonych zmian nie będzie możliwe."
 
 #: wp-admin/includes/dashboard.php:1567
 msgid "WordPress Blog"
@@ -13409,7 +13409,7 @@ msgstr "Element menu został usunięty."
 
 #: wp-admin/includes/ajax-actions.php:1696
 msgid "Please provide a custom field name."
-msgstr "Proszę podać nazwę własnego pola."
+msgstr "Wpisz nazwę własnego pola."
 
 #: wp-admin/includes/class-custom-background.php:372
 msgid "Display Options"
@@ -13507,7 +13507,7 @@ msgstr "Dostępne są nowe wersje poniższych wtyczek. Zaznacz wtyczki, które c
 
 #: wp-admin/includes/class-custom-background.php:328
 msgid "This will remove the background image. You will not be able to restore any customizations."
-msgstr "Ta operacja usunie obrazek tła. Odzyskanie wprowadzonych zmian nie będzie możliwe."
+msgstr "Akcja usunie obrazek tła. Odzyskanie wprowadzonych zmian nie będzie możliwe."
 
 #. translators: %s: Network title.
 #: wp-admin/includes/class-wp-themes-list-table.php:131
@@ -13611,7 +13611,7 @@ msgstr "Operacja ta spowodowała wystąpienie następującego błędu: %s"
 
 #: wp-admin/includes/schema.php:1046
 msgid "You must provide a valid email address."
-msgstr "Wprowadź prawidłowy adres email."
+msgstr "Wpisz prawidłowy adres email."
 
 #: wp-admin/includes/schema.php:1035 wp-admin/includes/schema.php:1041
 msgid "The network already exists."
@@ -13619,7 +13619,7 @@ msgstr "Sieć witryn została już wcześniej utworzona."
 
 #: wp-admin/includes/schema.php:1029
 msgid "You must provide a name for your network of sites."
-msgstr "Trzeba wprowadzić nazwę sieci witryn."
+msgstr "Wpisz nazwę sieci witryn."
 
 #: wp-admin/includes/schema.php:1026
 msgid "You must provide a domain name."
@@ -13740,7 +13740,7 @@ msgstr "Zobacz wszystko"
 
 #: wp-admin/nav-menus.php:446 wp-admin/nav-menus.php:475
 msgid "Please enter a valid menu name."
-msgstr "Proszę wprowadzić prawidłową nazwę menu."
+msgstr "Wpisz prawidłową nazwę menu."
 
 #. translators: 1: URL to WordPress release notes, 2: WordPress version number,
 #. 3: Minimum required PHP version number, 4: Minimum required MySQL version
@@ -13775,7 +13775,7 @@ msgstr "Zaawansowana wtyczka pamięci podręcznej."
 
 #: wp-admin/includes/file.php:940
 msgid "File is empty. Please upload something more substantial."
-msgstr "Plik jest pusty. Proszę wysłać plik, który zawiera jakieś dane."
+msgstr "Plik jest pusty. Wyślij plik, który zawiera jakieś dane."
 
 #: wp-admin/edit-comments.php:410
 msgid "This comment is already marked as spam."
@@ -13917,7 +13917,7 @@ msgstr "Dodatkowe uprawnienia"
 
 #: wp-admin/user-edit.php:714
 msgid "Type your new password again."
-msgstr "Wprowadź ponownie swoje nowe hasło."
+msgstr "Wpisz ponownie swoje nowe hasło."
 
 #: wp-admin/user-edit.php:689
 msgid "New Password"
@@ -14117,7 +14117,7 @@ msgstr "Porównaj wersje &#8222;%s&#8221;"
 
 #: wp-admin/post.php:143
 msgid "You cannot edit this item because it is in the Trash. Please restore it and try again."
-msgstr "Nie można edytować tego elementu, ponieważ znajduje się on w koszu. Proszę przywrócić go, a następnie spróbować ponownie."
+msgstr "Nie można edytować tego elementu, ponieważ znajduje się on w koszu. Przywróć go, a następnie spróbuj ponownie."
 
 #: wp-admin/edit-tags.php:173 wp-admin/includes/class-wp-screen.php:299
 #: wp-admin/includes/post.php:2160 wp-admin/media-upload.php:47
@@ -14596,7 +14596,7 @@ msgstr "Użytkownicy muszą być zarejestrowani i zalogowani, aby móc komentowa
 
 #: wp-admin/options-discussion.php:69
 msgid "Comment author must fill out name and email"
-msgstr "Komentujący musi wprowadzić swój podpis i adres email"
+msgstr "Komentujący musi wpisać swój podpis i adres email"
 
 #: wp-admin/options-discussion.php:65
 msgid "Other comment settings"
@@ -14676,7 +14676,7 @@ msgstr "Napraw bazę danych"
 #. translators: %s: URL to "Fixing WordPress" forum.
 #: wp-admin/maint/repair.php:161
 msgid "Some database problems could not be repaired. Please copy-and-paste the following list of errors to the <a href=\"%s\">WordPress support forums</a> to get additional assistance."
-msgstr "Niektóre problemy z bazą danych nie mogły zostać naprawione. Proszę skopiować i wkleić poniższą listę błędów na <a href=\"%s\">forum pomocy WordPressa</a>, aby uzyskać dodatkową pomoc."
+msgstr "Niektóre problemy z bazą danych nie mogły zostać naprawione. Skopiuj i wklei poniższą listę błędów na <a href=\"%s\">forum pomocy WordPressa</a>, aby uzyskać dodatkową pomoc."
 
 #: wp-admin/maint/repair.php:20
 msgid "WordPress &rsaquo; Database Repair"
@@ -14708,7 +14708,7 @@ msgstr "Sukces!"
 
 #: wp-admin/install.php:389
 msgid "Please provide the following information. Do not worry, you can always change these settings later."
-msgstr "Proszę wprowadzić poniższe informacje. Bez obaw, w razie czego zawsze można zmienić je później."
+msgstr "Wpisz poniższe informacje. Bez obaw, w razie czego zawsze można zmienić je później."
 
 #: wp-admin/install.php:388
 msgid "Information needed"
@@ -14720,7 +14720,7 @@ msgstr "Zainstaluj WordPressa"
 
 #: wp-admin/install.php:180
 msgid "Double-check your email address before continuing."
-msgstr "Sprawdź wprowadzony adres email dwukrotnie przed przejściem dalej."
+msgstr "Dwukrotnie sprawdź wpisany adres email przed przejściem dalej."
 
 #: wp-admin/install.php:178
 msgid "Your Email"
@@ -14736,7 +14736,7 @@ msgstr "WordPress &rsaquo; Instalacja"
 
 #: wp-admin/includes/user.php:207
 msgid "<strong>Error:</strong> Please enter an email address."
-msgstr "<strong>Błąd:</strong> proszę wprowadzić adres email."
+msgstr "<strong>Błąd:</strong> wpisz adres email."
 
 #: wp-admin/includes/user.php:178
 msgid "<strong>Error:</strong> Passwords may not contain the character \"\\\"."
@@ -14744,7 +14744,7 @@ msgstr "<strong>Błąd:</strong> hasła nie mogą zawierać znaku „\\”."
 
 #: wp-admin/includes/user.php:173
 msgid "<strong>Error:</strong> Please enter a password."
-msgstr "<strong>Błąd:</strong> proszę wprowadzić hasło."
+msgstr "<strong>Błąd:</strong> wpisz hasło."
 
 #. translators: Default post slug.
 #: wp-admin/includes/upgrade.php:249 wp-admin/includes/upgrade.php:529
@@ -14774,12 +14774,12 @@ msgstr "<strong><em>Zapisz to hasło</em> dokładnie</strong>! Zostało ono loso
 
 #: wp-admin/includes/update.php:887
 msgid "An automated WordPress update has failed to complete! Please notify the site administrator."
-msgstr "Automatyczna aktualizacja WordPressa nie powiodła się! Proszę powiadomić administratora witryny."
+msgstr "Automatyczna aktualizacja WordPressa nie powiodła się! Powiadom administratora witryny."
 
 #. translators: %s: URL to WordPress Updates screen.
 #: wp-admin/includes/update.php:883
 msgid "An automated WordPress update has failed to complete - <a href=\"%s\">please attempt the update again now</a>."
-msgstr "Automatyczna aktualizacja WordPressa nie powiodła się - <a href=\"%s\">proszę spróbować ponownie</a>."
+msgstr "Automatyczna aktualizacja WordPressa nie powiodła się - <a href=\"%s\">spróbuj ponownie</a>."
 
 #. translators: %s: WordPress version number, or 'Latest' string.
 #: wp-admin/includes/update.php:375
@@ -14942,7 +14942,7 @@ msgstr "Dodaj własne pole"
 
 #: wp-admin/includes/template.php:764
 msgid "Enter new"
-msgstr "Wprowadź nowy"
+msgstr "Wpisz nowy"
 
 #. translators: Hidden accessibility text.
 #: wp-admin/includes/template.php:665
@@ -15530,7 +15530,7 @@ msgstr "Nie ma niczego, co możnaby zapisać. Obrazek nie został zmodyfikowany.
 
 #: wp-admin/includes/image-edit.php:959
 msgid "Error while saving the scaled image. Please reload the page and try again."
-msgstr "Wystąpił błąd podczas zapisywania przeskalowanego obrazka. Proszę odświeżyć stronę i spróbować ponownie."
+msgstr "Wystąpił błąd podczas zapisywania przeskalowanego obrazka. Odśwież stronę i spróbuj ponownie."
 
 #: wp-admin/includes/image-edit.php:926
 msgid "Unable to create new image."
@@ -15624,7 +15624,7 @@ msgstr "Odbij w pionie"
 
 #: wp-admin/includes/image-edit.php:28 wp-admin/includes/image-edit.php:977
 msgid "Image data does not exist. Please re-upload the image."
-msgstr "Brak danych obrazka w pliku. Proszę wysłać obrazek na serwer ponownie."
+msgstr "Brak danych obrazka w pliku. Wyślij obrazek jeszcze raz."
 
 #: wp-admin/includes/file.php:2660
 msgid "Proceed"
@@ -15876,7 +15876,7 @@ msgstr "Przesłany plik nie mógł zostać przeniesiony do %s."
 #: wp-admin/includes/class-file-upload-upgrader.php:120
 #: wp-admin/includes/class-file-upload-upgrader.php:136
 msgid "Please select a file"
-msgstr "Proszę wybrać plik"
+msgstr "Wybierz plik"
 
 #: wp-admin/includes/class-file-upload-upgrader.php:89
 msgid "Return to the Theme Installer"
@@ -16500,7 +16500,7 @@ msgstr "Zamierzasz oznaczyć następujący komentarz jako spam:"
 
 #: wp-admin/comment.php:89
 msgid "This comment is in the Trash. Please move it out of the Trash if you want to edit it."
-msgstr "Ten komentarz znajduje się w koszu. Aby możliwa była jego edycja, konieczne jest uprzednie przeniesienie go w inne miejsce."
+msgstr "Komentarz jest w koszu. Aby możliwa była jego edycja, konieczne jest wyjęcie go z kosza."
 
 #: wp-admin/comment.php:296 wp-admin/edit-comments.php:300
 #: wp-admin/includes/comment.php:55
@@ -16563,7 +16563,7 @@ msgstr "H:i:s"
 #: wp-admin/includes/ajax-actions.php:1664
 #: wp-admin/includes/ajax-actions.php:1673
 msgid "Please provide a custom field value."
-msgstr "Proszę podać wartość własnego pola."
+msgstr "Wpisz wartość własnego pola."
 
 #: wp-admin/includes/ajax-actions.php:1354
 msgid "Sorry, you must be logged in to reply to a comment."
@@ -16571,7 +16571,7 @@ msgstr "Proszę się zalogować, aby móc odpowiadać na komentarze."
 
 #: wp-admin/includes/taxonomy.php:136
 msgid "You did not enter a category name."
-msgstr "Nie wprowadzono nazwy kategorii."
+msgstr "Nie wpisano nazwy kategorii."
 
 #. translators: %d: Comment ID.
 #: wp-admin/includes/ajax-actions.php:993

@@ -111,3 +111,4 @@ wp-content/plugins/updraftplus_backup/
 
 # Jetpack WAF runtime (bootstrap ma absolutne sciezki per-srodowisko, rules/ to listy IP)
 wp-content/jetpack-waf/
+wp-content/plugins/comfino-payment-gateway/var/cache/

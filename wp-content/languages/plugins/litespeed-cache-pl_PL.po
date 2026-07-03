@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - LiteSpeed Cache - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-05-29 10:24:09+0000\n"
+"PO-Revision-Date: 2026-06-25 12:05:11+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -43,6 +43,22 @@ msgstr "Zsynchronizowano pomyślnie."
 #: tpl/general/settings_inc.guest.tpl.php:39
 msgid "Syncing"
 msgstr "Synchronizowanie"
+
+#: tpl/general/settings_inc.guest.tpl.php:38
+msgid "Guest Mode IP/UA sync status"
+msgstr "Status synchronizacji trybu gościa (IP/UA)"
+
+#: src/task.cls.php:268
+msgid "Every 15 Minutes"
+msgstr "Co 15 minut"
+
+#: src/guest.cls.php:66
+msgid "Failed to sync Guest Mode lists."
+msgstr "Nie udało się zsynchronizować list w trybie gościa."
+
+#: src/guest.cls.php:65
+msgid "Guest Mode lists synced successfully."
+msgstr "Lista w trybie gościa została pomyślnie zsynchronizowana."
 
 #: tpl/toolbox/purge.tpl.php:110
 msgid "This will delete all generated Viewport Images"
@@ -5577,6 +5593,11 @@ msgstr "Serwer ustali, czy użytkownik jest zalogowany, na podstawie istnienia t
 #: tpl/page_optm/settings_tuning_css.tpl.php:147
 msgid "Note"
 msgstr "Notatka"
+
+#. translators: %s: link attributes
+#: thirdparty/woocommerce.content.tpl.php:30
+msgid "To test the cart, visit the %sFAQ%s."
+msgstr "Aby przetestować koszyk, przejdź na stronę %sFAQ%s."
 
 #: thirdparty/woocommerce.content.tpl.php:25
 msgid "After verifying that the cache works in general, please test the cart."
