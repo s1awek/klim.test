@@ -53,8 +53,8 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 			'base' => esc_url_raw(add_query_arg('pagenum', '%#%', $this->baseUrl)),
 			'add_args' => array('page' => 'pmxe-admin-manage'),
 			'format' => '',
-			'prev_text' => __('&laquo;', 'PMXE_plugin'),
-			'next_text' => __('&raquo;', 'PMXE_plugin'),
+			'prev_text' => __('&laquo;', 'wp-all-export'),
+			'next_text' => __('&raquo;', 'wp-all-export'),
 			'total' => ceil($list->total() / $perPage),
 			'current' => $pagenum,
 		));
@@ -94,7 +94,7 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 		$this->data['cron_job_key'] = PMXE_Plugin::getInstance()->getOption('cron_job_key');
 		$this->data['item'] = $item = new PMXE_Export_Record();
 		if ( ! $id or $item->getById($id)->isEmpty()) {
-			wp_redirect($this->baseUrl); die();
+			wp_safe_redirect($this->baseUrl); die();
 		}
 
 		$wp_uploads = wp_upload_dir();	
@@ -120,7 +120,7 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 		$this->data['cron_job_key'] = PMXE_Plugin::getInstance()->getOption('cron_job_key');
 		$this->data['item'] = $item = new PMXE_Export_Record();
 		if ( ! $id or $item->getById($id)->isEmpty()) {
-			wp_redirect($this->baseUrl); die();
+			wp_safe_redirect($this->baseUrl); die();
 		}
 		
 		$this->data['file_path'] = site_url() . '/wp-load.php?security_token=' . substr(md5($this->data['cron_job_key'] . $item['id']), 0, 16) . '&export_id=' . $item['id'] . '&action=get_data';
@@ -135,7 +135,7 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 		$this->data['id'] = $id = $this->input->get('id');		
 		$this->data['item'] = $item = new PMXE_Export_Record();
 		if ( ! $id or $item->getById($id)->isEmpty()) {
-			wp_redirect($this->baseUrl); die();
+			wp_safe_redirect($this->baseUrl); die();
 		}
 
 		$this->render();
@@ -145,24 +145,26 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 	 * Cancel import processing
 	 */
 	public function cancel(){
-		
+
+		check_admin_referer('cancel-export', '_wpnonce_cancel-export');
+
 		$id = $this->input->get('id');
-		
+
 		PMXE_Plugin::$session->clean_session( $id );
 
 		$item = new PMXE_Export_Record();
 		if ( ! $id or $item->getById($id)->isEmpty()) {
-			wp_redirect($this->baseUrl); die();
+			wp_safe_redirect($this->baseUrl); die();
 		}
 		$item->set(array(
 			'triggered'   => 0,
 			'processing'  => 0,
 			'executing'   => 0,
 			'canceled'    => 1,
-			'canceled_on' => date('Y-m-d H:i:s')
+			'canceled_on' => date('Y-m-d H:i:s')  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
 		))->update();		
 
-		wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('Export canceled', 'wp_all_import_plugin')), $this->baseUrl)));
+		wp_safe_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('Export canceled', 'wp-all-export')), $this->baseUrl)));
 		die();
 	}
 	
@@ -179,7 +181,7 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 
 		$this->data['item'] = $item = new PMXE_Export_Record();
 		if ( ! $id or $item->getById($id)->isEmpty()) {
-			wp_redirect($this->baseUrl); die();
+			wp_safe_redirect($this->baseUrl); die();
 		}			
 
 		$item->fix_template_options();				
@@ -231,7 +233,7 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 
 			$this->errors->remove('count-validation');
 			if ( ! $this->errors->get_error_codes()) {												
-				wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('Options updated', 'wp_all_export_plugin')), $this->baseUrl)));
+				wp_safe_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('Options updated', 'wp-all-export')), $this->baseUrl)));
 				die();
 			}
 
@@ -251,7 +253,7 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 		$id = $this->input->get('id');
 		$this->data['item'] = $item = new PMXE_Export_Record();
 		if ( ! $id or $item->getById($id)->isEmpty()) {
-			wp_redirect($this->baseUrl); die();
+			wp_safe_redirect($this->baseUrl); die();
 		}
 
 		if ($this->input->post('is_confirmed')) {
@@ -261,7 +263,7 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 			$scheduling = \Wpae\Scheduling\Scheduling::create();
 			$scheduling->deleteScheduleIfExists($id);
 
-			wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('Export deleted', 'wp_all_export_plugin')), $this->baseUrl))); die();
+			wp_safe_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('Export deleted', 'wp-all-export')), $this->baseUrl))); die();
 		}
 
 		$this->render();
@@ -280,7 +282,7 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 		$this->data['ids'] = $ids = $this->input->post('items');
 		$this->data['items'] = $items = new PMXE_Export_List();
 		if (empty($action) or ! in_array($action, array('delete')) or empty($ids) or $items->getBy('id', $ids)->isEmpty()) {
-			wp_redirect($this->baseUrl); die();
+			wp_safe_redirect($this->baseUrl); die();
 		}		
 		if ($this->input->post('is_confirmed')) {			
 			foreach($items->convertRecords() as $item) {
@@ -292,16 +294,18 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
                 $scheduling = \Wpae\Scheduling\Scheduling::create();
                 $scheduling->deleteScheduleIfExists($item->id);
 			}			
-			wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(sprintf(__('%d %s deleted', 'wp_all_export_plugin'), $items->count(), _n('export', 'exports', $items->count(), 'wp_all_export_plugin'))), $this->baseUrl)));
+			/* translators: 1: count, 2: singular/plural noun */
+			wp_safe_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(sprintf(__('%1$d %2$s deleted', 'wp-all-export'), $items->count(), _n('export', 'exports', $items->count(), 'wp-all-export'))), $this->baseUrl)));
 			die();
 		}		
 		$this->render();
 	}
 
 	public function get_template(){
-		$nonce = (!empty($_REQUEST['_wpnonce'])) ? $_REQUEST['_wpnonce'] : '';
-		if ( ! wp_verify_nonce( $nonce, '_wpnonce-download_template' ) ) {		    
-		    die( __('Security check', 'wp_all_export_plugin') ); 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verified on next line
+		$nonce = (!empty($_REQUEST['_wpnonce'])) ? sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) : '';
+		if ( ! wp_verify_nonce( $nonce, '_wpnonce-download_template' ) ) {	    
+		    die( esc_html__('Security check', 'wp-all-export') ); 
 		} else {	
 			
 			$id = $this->input->get('id');
@@ -333,10 +337,11 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 	 *
 	 */
 	public function bundle()
-	{				
-		$nonce = (!empty($_REQUEST['_wpnonce'])) ? $_REQUEST['_wpnonce'] : '';
+	{
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verified on next line
+		$nonce = (!empty($_REQUEST['_wpnonce'])) ? sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) : '';
 		if ( ! wp_verify_nonce( $nonce, '_wpnonce-download_bundle' ) ) {
-		    die( __('Security check', 'wp_all_export_plugin') ); 
+		    die( esc_html__('Security check', 'wp-all-export') ); 
 		} else {
 
 			$uploads  = wp_upload_dir();
@@ -360,21 +365,22 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 				}
 				else
 				{
-					wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('The exported bundle is missing and can\'t be downloaded. Please re-run your export to re-generate it.', 'wp_all_export_plugin')), $this->baseUrl)));
+					wp_safe_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('The exported bundle is missing and can\'t be downloaded. Please re-run your export to re-generate it.', 'wp-all-export')), $this->baseUrl)));
 					die();
 				}
 			}
 			else
 			{
-				wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('This export doesn\'t exist.', 'wp_all_export_plugin')), $this->baseUrl))); die();
+				wp_safe_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('This export doesn\'t exist.', 'wp-all-export')), $this->baseUrl))); die();
 			}			
 		}
 	}	
 
 	public function split_bundle(){
-		$nonce = (!empty($_REQUEST['_wpnonce'])) ? $_REQUEST['_wpnonce'] : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verified on next line
+		$nonce = (!empty($_REQUEST['_wpnonce'])) ? sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) : '';
 		if ( ! wp_verify_nonce( $nonce, '_wpnonce-download_split_bundle' ) ) {		    
-		    die( __('Security check', 'wp_all_export_plugin') ); 
+		    die( esc_html__('Security check', 'wp-all-export') ); 
 		} else {
 
 			$uploads  = wp_upload_dir();
@@ -395,7 +401,9 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 
 					wp_all_export_rrmdir($tmp_dir);
 
-					@mkdir($tmp_dir);	
+					// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
+					@mkdir($tmp_dir);
+					// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 					@mkdir($bundle_dir);
 
 					foreach ($export->options['split_files_list'] as $file) {
@@ -425,9 +433,10 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 	 */
 	public function get_file(){
 
-		$nonce = (!empty($_REQUEST['_wpnonce'])) ? $_REQUEST['_wpnonce'] : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verified on next line
+		$nonce = (!empty($_REQUEST['_wpnonce'])) ? sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) : '';
 		if ( ! wp_verify_nonce( $nonce, '_wpnonce-download_feed' ) ) {		    
-		    die( __('Security check', 'wp_all_export_plugin') ); 
+		    die( esc_html__('Security check', 'wp-all-export') ); 
 		} else {
 
 			$is_secure_import = PMXE_Plugin::getInstance()->getOption('secure');
@@ -472,20 +481,20 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
 							}
 							break;
 						default:
-							wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('File format not supported', 'wp_all_export_plugin')), $this->baseUrl)));
+							wp_safe_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('File format not supported', 'wp-all-export')), $this->baseUrl)));
 							die();
 							break;
 					}
 				}	
 				else
 				{
-					wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('The exported file is missing and can\'t be downloaded. Please re-run your export to re-generate it.', 'wp_all_export_plugin')), $this->baseUrl)));
+					wp_safe_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('The exported file is missing and can\'t be downloaded. Please re-run your export to re-generate it.', 'wp-all-export')), $this->baseUrl)));
 					die();
 				}
 			}
 			else 
 			{
-				wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('The exported file is missing and can\'t be downloaded. Please re-run your export to re-generate it.', 'wp_all_export_plugin')), $this->baseUrl)));
+				wp_safe_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('The exported file is missing and can\'t be downloaded. Please re-run your export to re-generate it.', 'wp-all-export')), $this->baseUrl)));
 				die();
 			}		
 		}
@@ -501,30 +510,30 @@ class PMXE_Admin_Manage extends PMXE_Controller_Admin {
         $post_types = PMXE_Plugin::$session->get('cpt');
         if (!empty($post_types)) {
             if (in_array('users', $post_types)) {
-                $friendly_name = 'Users Export - ' . date("Y F d H:i");
+                $friendly_name = 'Users Export - ' . wp_date("Y F d H:i");
                 return $friendly_name;
             } elseif (in_array('shop_customer', $post_types)) {
-                $friendly_name = 'Customers Export - ' . date("Y F d H:i");
+                $friendly_name = 'Customers Export - ' . wp_date("Y F d H:i");
                 return $friendly_name;
             } elseif (in_array('comments', $post_types)) {
-                $friendly_name = 'Comments Export - ' . date("Y F d H:i");
+                $friendly_name = 'Comments Export - ' . wp_date("Y F d H:i");
                 return $friendly_name;
             } elseif (in_array('taxonomies', $post_types)) {
                 $tx = get_taxonomy($post['taxonomy_to_export']);
                 if (!empty($tx->labels->name)) {
-                    $friendly_name = $tx->labels->name . ' Export - ' . date("Y F d H:i");
+                    $friendly_name = $tx->labels->name . ' Export - ' . wp_date("Y F d H:i");
                     return $friendly_name;
                 } else {
-                    $friendly_name = 'Taxonomy Terms Export - ' . date("Y F d H:i");
+                    $friendly_name = 'Taxonomy Terms Export - ' . wp_date("Y F d H:i");
                     return $friendly_name;
                 }
             } else {
                 $post_type_details = get_post_type_object(array_shift($post_types));
-                $friendly_name = $post_type_details->labels->name . ' Export - ' . date("Y F d H:i");
+                $friendly_name = $post_type_details->labels->name . ' Export - ' . wp_date("Y F d H:i");
                 return $friendly_name;
             }
         } else {
-            $friendly_name = 'WP_Query Export - ' . date("Y F d H:i");
+            $friendly_name = 'WP_Query Export - ' . wp_date("Y F d H:i");
             return $friendly_name;
         }
     }

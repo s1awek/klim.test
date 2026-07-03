@@ -1,5 +1,9 @@
 <?php
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
+defined( 'ABSPATH' ) || exit;
+
+
 final Class XmlCsvExport
 {
 	public static $main_xml_tag = '';
@@ -52,7 +56,7 @@ final Class XmlCsvExport
             }
 		}
 		elseif ( XmlExportEngine::$is_comment_export ) {  // exporting comments
-			die(\__('WP All Export Pro is required to run this export. If you already own it, you can download it here: <a href="http://www.wpallimport.com/portal/downloads" target="_blank">http://www.wpallimport.com/portal/downloads</a>', 'wp_all_export_plugin'));
+			die(wp_kses(\__('WP All Export Pro is required to run this export. If you already own it, you can download it here: <a href="http://www.wpallimport.com/portal/downloads" target="_blank">http://www.wpallimport.com/portal/downloads</a>', 'wp-all-export'), array('a' => array('href' => true, 'target' => true))));
 		}
 		elseif ( XmlExportEngine::$is_taxonomy_export )  { // exporting WordPress taxonomy terms
 
@@ -367,7 +371,7 @@ final Class XmlCsvExport
         }
 		elseif ( XmlExportEngine::$is_comment_export ) // exporting comments
 		{
-			die(\__('WP All Export Pro is required to run this export. If you already own it, you can download it here: <a href="http://www.wpallimport.com/portal/downloads" target="_blank">http://www.wpallimport.com/portal/downloads</a>', 'wp_all_export_plugin'));
+			die(wp_kses(\__('WP All Export Pro is required to run this export. If you already own it, you can download it here: <a href="http://www.wpallimport.com/portal/downloads" target="_blank">http://www.wpallimport.com/portal/downloads</a>', 'wp-all-export'), array('a' => array('href' => true, 'target' => true))));
 		}
 		else {// exporting custom post types
 			while ( XmlExportEngine::$exportQuery->have_posts() ) {
@@ -616,8 +620,24 @@ final Class XmlCsvExport
 //				}
 
 				break;
-		}		
-											
+		}
+
+		$field_type = XmlExportEngine::$exportOptions['cc_type'][$ID];
+		$addons = XmlExportEngine::get_addons();
+
+		if (in_array($field_type, $addons)) {
+			$ccOptions = XmlExportEngine::$exportOptions['cc_options'][$ID];
+			$fieldOptions = maybe_unserialize($ccOptions);
+
+			$headers = apply_filters(
+				"pmxe_{$field_type}_addon_get_headers",
+				$headers,
+				$fieldOptions,
+				XmlExportEngine::$exportOptions,
+				$ID,
+				$element_name
+			);
+		}
 	}
 
 	public static function _get_valid_header_name( $element_name )
@@ -643,10 +663,12 @@ final Class XmlCsvExport
 	public static function merge_headers( $file, &$headers )
 	{				
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 		$in  = fopen($file, 'r');			
 
 		$clear_old_headers = fgetcsv($in, 0, XmlExportEngine::$exportOptions['delimiter'], '"', '\\');		
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 		fclose($in);		
 
 		$old_headers = array();
@@ -706,11 +728,14 @@ final Class XmlCsvExport
             }
 			$tmp_file = str_replace(basename($file), 'iteration_' . basename($file), $file);
 			copy($file, $tmp_file);
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 			$in  = fopen($tmp_file, 'r');
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 			$out = fopen($file, 'w');
 			$headers = apply_filters('wp_all_export_csv_headers', $headers, XmlExportEngine::$exportID);
 
 			if ( XmlExportEngine::$exportOptions['include_bom'] ) {
+                // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
                 fwrite($out, chr(0xEF).chr(0xBB).chr(0xBF));
 				self::getCsvWriter()->writeCsv($out, array_map(array('XmlCsvExport', '_get_valid_header_name'), $headers), XmlExportEngine::$exportOptions['delimiter']);
 			}
@@ -762,10 +787,12 @@ final Class XmlCsvExport
 					self::getCsvWriter()->writeCsv($out, $line, XmlExportEngine::$exportOptions['delimiter']);
 					apply_filters('wp_all_export_after_csv_line', $out, XmlExportEngine::$exportID);
 				}
+				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 				fclose($in);
 			}
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 			fclose($out);
-			@unlink($tmp_file);
+			wp_delete_file($tmp_file);
 		}								
 	}
 

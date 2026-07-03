@@ -11,7 +11,7 @@ class Export
         $export->set(array(
             'triggered' => 1,
             'exported' => 0,
-            'last_activity' => date('Y-m-d H:i:s')
+            'last_activity' => date('Y-m-d H:i:s')  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
         ))->update();
     }
 

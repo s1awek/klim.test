@@ -33,10 +33,12 @@ class Request
 
     public function get($element, $default = null)
     {
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended -- generic request wrapper; nonce verification is the caller's responsibility
         if(isset($_GET[$element])) {
-            return $_GET[$element];
+            return sanitize_text_field( wp_unslash( $_GET[$element] ) );
         } else {
             return $default;
         }
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended
     }
 }

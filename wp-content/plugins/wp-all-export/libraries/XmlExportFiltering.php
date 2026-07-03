@@ -1,5 +1,9 @@
 <?php
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
+defined( 'ABSPATH' ) || exit;
+
+
 use Wpae\App\Service\VariationOptions\VariationOptionsFactory;
 
 if ( ! class_exists('XmlExportFiltering') )
@@ -70,7 +74,7 @@ if ( ! class_exists('XmlExportFiltering') )
 			<div class="wpallexport-collapsed wpallexport-section closed">
 				<div class="wpallexport-content-section wpallexport-filtering-section" <?php if ($is_on_template_screen):?>style="margin-bottom: 10px;"<?php endif; ?>>
 					<div class="wpallexport-collapsed-header" style="padding-left: 25px;">
-						<h3><?php esc_html_e('Filtering Options','wp_all_export_plugin');?></h3>
+						<h3><?php esc_html_e('Filtering Options','wp-all-export');?></h3>
 					</div>
 					<div class="wpallexport-collapsed-content" style="padding: 0;">
 						<div class="wpallexport-collapsed-content-inner">									

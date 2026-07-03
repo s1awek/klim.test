@@ -1,4 +1,8 @@
 <?php
+
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
+defined( 'ABSPATH' ) || exit;
+
 /**
  *    AJAX action export processing
  */
@@ -6,11 +10,11 @@ function pmxe_wp_ajax_wpallexport()
 {
 
     if (!check_ajax_referer('wp_all_export_secure', 'security', false)) {
-        exit(__('Security check', 'wp_all_export_plugin'));
+        exit(esc_html__('Security check', 'wp-all-export'));
     }
 
     if (!current_user_can(PMXE_Plugin::$capabilities)) {
-        exit(__('Security check', 'wp_all_export_plugin'));
+        exit(esc_html__('Security check', 'wp-all-export'));
     }
 
     $input = new PMXE_Input();
@@ -26,7 +30,7 @@ function pmxe_wp_ajax_wpallexport()
     $export->getById($export_id);
 
     if ($export->isEmpty()) {
-        exit(__('Export is not defined.', 'wp_all_export_plugin'));
+        exit(esc_html__('Export is not defined.', 'wp-all-export'));
     }
 
     $exportOptions = $export->options + PMXE_Plugin::get_default_import_options();
@@ -69,10 +73,12 @@ function pmxe_wp_ajax_wpallexport()
     if ($exportOptions['export_type'] == 'advanced') {
         if (XmlExportEngine::$is_user_export) {
             add_action('pre_user_query', 'wp_all_export_pre_user_query', 10, 1);
+            // phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- intentional: executes saved WP_Query argument string
             $exportQuery = eval('return new WP_User_Query(array(' . $exportOptions['wp_query'] . ', \'offset\' => ' . $export->exported . ', \'number\' => ' . $posts_per_page . ' ));');
             remove_action('pre_user_query', 'wp_all_export_pre_user_query');
         } elseif (XmlExportEngine::$is_comment_export) {
             add_action('comments_clauses', 'wp_all_export_comments_clauses', 10, 1);
+            // phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- intentional: executes saved WP_Query argument string
             $exportQuery = eval('return new WP_Comment_Query(array(' . $exportOptions['wp_query'] . ', \'offset\' => ' . $export->exported . ', \'number\' => ' . $posts_per_page . ' ));');
             remove_action('comments_clauses', 'wp_all_export_comments_clauses');
         } else {
@@ -83,6 +89,7 @@ function pmxe_wp_ajax_wpallexport()
             add_filter('posts_join', 'wp_all_export_posts_join', 10, 1);
             add_filter('posts_where', 'wp_all_export_posts_where', 10, 1);
             $code = 'return new WP_Query(array(' . $exportOptions['wp_query'] . ', \'offset\' => ' . $export->exported . ', \'posts_per_page\' => ' . $posts_per_page . ' ));';
+            // phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- intentional: executes saved WP_Query argument string
             $exportQuery = eval($code);
 
             remove_filter('posts_where', 'wp_all_export_posts_where');
@@ -238,7 +245,7 @@ function pmxe_wp_ajax_wpallexport()
         if (!empty($attachment_list)) {
             foreach ($attachment_list as $attachment) {
                 if (!is_numeric($attachment)) {
-                    @unlink($attachment);
+                    wp_delete_file($attachment);
                 }
             }
         }
@@ -263,11 +270,11 @@ function pmxe_wp_ajax_wpallexport()
 
     $export->set(array(
         'exported' => $export->exported + $postCount,
-        'last_activity' => date('Y-m-d H:i:s')
+        'last_activity' => date('Y-m-d H:i:s')  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
     ))->save();
 
 
-    if ($posts_per_page != -1 && $postCount && !isAdvancedSingleItemExport($postCount, $foundPosts)) {
+    if ($posts_per_page != -1 && $postCount && !wp_all_export_is_advanced_single_item_export($postCount, $foundPosts)) {
 
         $percentage = ceil(($export->exported / $foundPosts) * 100);
 
@@ -407,7 +414,7 @@ function pmxe_wp_ajax_wpallexport()
  * @param $foundPosts
  * @return bool
  */
-function isAdvancedSingleItemExport($postCount, $foundPosts)
+function wp_all_export_is_advanced_single_item_export($postCount, $foundPosts)
 {
     return ($postCount == 1 && $foundPosts == 1);
 }

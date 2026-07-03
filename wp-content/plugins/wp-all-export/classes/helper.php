@@ -77,6 +77,7 @@ class PMXE_Helper {
 				if ($deep) {
 					$array[$key] = self::array_prepend($element,$string,$deep);
 				} else {
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error -- intentional runtime warning
 					trigger_error(__METHOD__ . ': array element', E_USER_WARNING);
 				}
 			} else {

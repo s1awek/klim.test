@@ -1,4 +1,7 @@
-<?php 
+<?php
+
+defined( 'ABSPATH' ) || exit;
+ 
 
 function pmxe_admin_notices() {
 		

@@ -4,7 +4,7 @@ Tags: product export, product import, CSV import export, woocommerce product imp
 Requires at least: 3.0
 Tested up to: 7.0
 Requires PHP: 5.6
-Stable tag: 2.6.4
+Stable tag: 2.6.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,11 +12,13 @@ Import/export WooCommerce products via CSV with images, reviews, categories & ta
 
 == Description ==
 
-== WooCommerce Product Import Export Plugin for Hassle-free Data Transfers ==
+== WooCommerce Product Import Export Plugin for CSV Imports, Exports, and Bulk Uploads ==
 
-Export and import your WooCommerce products (simple, grouped, external/affiliate) in a super simple way using CSV files.
+Export, import, bulk upload and update your WooCommerce products (simple, grouped, external/affiliate) in a super simple way using CSV files.
+
+Use this WooCommerce product import plugin to import products to WooCommerce, export products to CSV, migrate products between WooCommerce stores, update stock and prices in bulk, and move product data such as images, gallery images, reviews, categories, tags, attributes, prices, and stock details.
  
-Inventory updates, syncing products, data filtration, and automatic column mapping are some of the main peculiarities of this product importer plugin.
+Inventory updates, syncing products, data filtration, and automatic column mapping are some of the key features of this product importer plugin.
 
 With the latest update, we have integrated ChatGPT API into our plugin. Now, the plugin will automatically generate product descriptions for products with missing descriptions. Thanks to Generative AI!
 
@@ -30,29 +32,28 @@ The free version of the Product Import Export for WooCommerce plugin imports and
 * Grouped
 * External/Affiliate products
 
-With this product export import plugin, you can export and import WooCommerce products to and from a CSV, and you can do basic import-export operations with this 100% free WooCommerce CSV import export plugin.
+With this product export import plugin, you can export WooCommerce products and import WooCommerce products to and from a CSV, and you can do basic import-export operations with this 100% free WooCommerce CSV import export plugin.
 
 
 ##MAJOR FEATURES##
 
-* <strong>Export products from WooCommerce into CSV</strong>.
-* <strong>Import products from CSV</strong> to WooCommerce.
-* Bulk add products
-* Supported product types - <strong>simple, grouped, external/affiliate</strong>.
-* <strong>Auto-generate product descriptions </strong> during import using ChatGPT API.
-* Export and import WooCommerce <strong>products with images (featured product image and gallery images)</strong>.
-* Export and import WooCommerce <strong>product reviews</strong> along with ratings.
-* Export and import WooCommerce <strong>products based on category/tags/selected products/status/stock</strong>.
-* Export specific products
-* Export and import WooCommerce products with <strong>attributes, taxonomies, price, stock, and more</strong>.
-* <strong>Bulk edit products, categories, price, stock, attributes</strong> 
-* Import, export or bulk add <strong>product categories and tags.</strong>
-* Export products based on stock status (In Stock, Out of Stock, On backorder). 
+* <strong>Export WooCommerce products to CSV</strong> - Export product data for migration, backups, catalog updates, or editing in spreadsheet tools.
+* <strong>Import products to WooCommerce from CSV</strong> - Bulk upload simple, grouped, and external/affiliate products using a structured CSV file.
+* <strong>Bulk update products</strong> - Update existing product stock, price, categories, tags, attributes, and other product data during import.
+* <strong>Import and export WooCommerce product with images</strong> - Move featured images and gallery images along with product data.
+* <strong>Import and export product reviews</strong> - Export and import WooCommerce product reviews with ratings.
+* <strong>Filter product exports</strong> - Use advanced export filters to export WooCommerce products by category, tag, selected products, status, stock status, and product type.
+* <strong>Generate missing product descriptions with ChatGPT</strong> - Automatically create product descriptions for imported products that do not have descriptions.
+* <strong>Export specific products</strong> – Select and export only the products you need instead of exporting the entire product catalog.
+* <strong>Export and import WooCommerce products with attributes, taxonomies, price, stock, and more</strong> – Move complete product data between stores or update existing products with ease.
+* <strong>Bulk edit products, categories, price, stock, and attributes</strong> – Update key WooCommerce product fields in bulk by importing an updated CSV file.
+* <strong>Import, export, or bulk add product categories and tags</strong> – Manage WooCommerce product categories and tags during product import and export.
+* <strong>Export products based on stock status</strong> – Exclude out-of-stock products from export, or use the stock status filter to export In Stock, Out of Stock, and On backorder products.
 
 
 ##ADDITIONAL FEATURES##
 
-* You can control the pace of the import/export process by doing it in <strong>custom batches</strong>.
+* Import and export thousands of products without server timeouts and memory limits. Set a <strong>custom batch size</strong> to match your hosting environment. 
 * Let's you <strong>set a CSV delimiter</strong> of your choice to import WooCommerce products.
 * Select from <strong>multiple import/export methods</strong>.
 * Easily import products from <strong>other eCommerce platforms</strong> such as Shopify, Magento, etc., with import <strong>column mapping</strong>.
@@ -62,7 +63,7 @@ With this product export import plugin, you can export and import WooCommerce pr
 * The plugin <strong>stores all the past imports and exports</strong> and <strong>lets you re-run</strong> them when needed.
 * <strong>Easy debugging:</strong> View and download import log for debugging purpose.
 &#9989; Tested OK with WordPress 7.0
-&#9989; Tested OK with WooCommerce 10.7.0
+&#9989; Tested OK with WooCommerce 10.8.1
 &#9989; Tested OK with PHP 8.3
 
 ###COMPATIBLE PLUGINS###
@@ -106,14 +107,7 @@ However, if you want to import only the product categories of a WooCommerce stor
 
 Export WooCommerce products based on your requirements. You can filter the product data and export the products based on multiple data filtration criteria, such as category, tag, stock, status, product type, and more.
 
-
-###SETUP GUIDE - PRODUCT IMPORT EXPORT FOR WOOCOMMERCE###
-
-To learn more about setting up the Product Import Export plugin for WooCommerce, refer the <a href="https://www.webtoffee.com/product-import-export-plugin-woocommerce-user-guide/">setup guide</a>.
-
-You can also check out this video to get a quick understanding of the product export import plugin.[youtube https://www.youtube.com/watch?v=sYvt_KSYfNY]
-
-### HOW DOES THE PLUGIN WORK? (WOOCOMMERCE CSV IMPORT) ###
+<strong>How Does This WooCommerce CSV Importer Plugin Works?</strong>
 
 The free version of the WooCommerce product import export plugin lets you import and export: Products, Product Reviews, Product Tags, and Product Categories.
 
@@ -132,6 +126,14 @@ This is to match each field of a CSV file to the field of a particular product, 
 You can create the CSV from scratch or export products to get the format of the CSV. You can use a spreadsheet program, such as LibreOffice, Microsoft Excel, OpenOffice, or Google Sheets, to create and modify the CSV file. Save this file with the extension ".CSV."
 
 After entering all details about products in a spreadsheet, you can import products to your WooCommerce store. With this plugin, you can also export products to CSV and download product details as a CSV.
+
+
+###SETUP GUIDE - PRODUCT IMPORT EXPORT FOR WOOCOMMERCE###
+
+To learn more about setting up the Product Import Export plugin for WooCommerce, refer the <a href="https://www.webtoffee.com/product-import-export-plugin-woocommerce-user-guide/">setup guide</a>.
+
+You can also check out this video to get a quick understanding of the product export import plugin.[youtube https://www.youtube.com/watch?v=sYvt_KSYfNY]
+
 
 ##PRODUCT IMPORT EXPORT PLUGIN FOR WOOCOMMERCE (PRO)##
 
@@ -245,6 +247,9 @@ Yes, you can import grouped, affiliate/external products in addition to simple p
 
 == Changelog ==
 
+= 2.6.5 2026-06-22 =
+* [Compatibility] – Tested OK with WooCommerce 10.8.1
+
 = 2.6.4 2026-05-26 =
 * [Compatibility] - Tested OK with WordPress 7.0
 * [Fix] - Vulnerability. Thanks to @nacento for reporting the issue.
@@ -255,9 +260,7 @@ Yes, you can import grouped, affiliate/external products in addition to simple p
 
 == Upgrade Notice ==
 
-= 2.6.4 =
-* [Compatibility] - Tested OK with WordPress 7.0
-* [Fix] - Vulnerability. Thanks to @nacento for reporting the issue.
-* [Improvement] - Added parent_slug support for product category export/import.
+= 2.6.5 =
+* [Compatibility] – Tested OK with WooCommerce 10.8.1
 
 

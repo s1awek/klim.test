@@ -1,4 +1,8 @@
 <?php
+
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
+defined( 'ABSPATH' ) || exit;
+
 	
 	if ( ! function_exists('wp_all_export_isValidMd5')){
 		function wp_all_export_isValidMd5($md5 ='')
@@ -33,10 +37,11 @@
 		     $objects = scandir($dir);
 		     foreach ($objects as $object) {
 		       if ($object != "." && $object != "..") {
-		         if (filetype($dir . "/" . $object) == "dir") wp_all_export_rrmdir($dir . "/" . $object); else unlink($dir . "/" . $object);
+		         if (filetype($dir . "/" . $object) == "dir") wp_all_export_rrmdir($dir . "/" . $object); else wp_delete_file($dir . "/" . $object);
 		       }
 		     }
 		     reset($objects);
+		     // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 		     rmdir($dir);
 		   }
 		}
@@ -70,6 +75,7 @@
 
             $post_type_in = implode(',', $post_type);
 
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $table_prefix from $wpdb->prefix; $post_type_in built above by mapping each value through $wpdb->prepare('%s', ...)
             $meta_keys = $wpdb->get_results("SELECT DISTINCT {$table_prefix}postmeta.meta_key FROM {$table_prefix}postmeta, {$table_prefix}posts WHERE {$table_prefix}postmeta.post_id = {$table_prefix}posts.ID AND {$table_prefix}posts.post_type IN ({$post_type_in}) AND {$table_prefix}postmeta.meta_key NOT LIKE '_edit%' AND {$table_prefix}postmeta.meta_key NOT LIKE '_oembed_%' LIMIT 1000");
 
 			$_existing_meta_keys = array();
@@ -149,6 +155,7 @@
                         $post_date = $timestamp;
                         break;
                     default:
+                        // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- exported date string must reflect WordPress site timezone, matching how dates were displayed pre-export
                         $post_date = date($fieldOptions, $timestamp);
                         break;
                 }
@@ -157,8 +164,10 @@
             {
 
                 if ( in_array(XmlExportEngine::$exportOptions['xml_template_type'], array('custom', 'XmlGoogleMerchants')) ){
+                    // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- exported date string must reflect WordPress site timezone, matching how dates were displayed pre-export
                     $post_date = date("Y-m-d H:i:s", $timestamp);
                 } else {
+                    // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- exported date string must reflect WordPress site timezone, matching how dates were displayed pre-export
                     $post_date = date("Y-m-d", $timestamp);
                 }
             }

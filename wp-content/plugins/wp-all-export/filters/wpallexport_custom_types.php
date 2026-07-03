@@ -1,12 +1,15 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 function pmxe_wpallexport_custom_types($custom_types)
 {
 	if (class_exists('WooCommerce'))
 	{
-		if ( ! empty($custom_types['product'])) $custom_types['product']->labels->name = __('WooCommerce Products','wp_all_export_plugin');
-		if ( ! empty($custom_types['shop_order'])) $custom_types['shop_order']->labels->name = __('WooCommerce Orders','wp_all_export_plugin');
-		if ( ! empty($custom_types['shop_coupon'])) $custom_types['shop_coupon']->labels->name = __('WooCommerce Coupons','wp_all_export_plugin');
+		if ( ! empty($custom_types['product'])) $custom_types['product']->labels->name = __('WooCommerce Products','wp-all-export');
+		if ( ! empty($custom_types['shop_order'])) $custom_types['shop_order']->labels->name = __('WooCommerce Orders','wp-all-export');
+		if ( ! empty($custom_types['shop_coupon'])) $custom_types['shop_coupon']->labels->name = __('WooCommerce Coupons','wp-all-export');
 		if ( ! empty($custom_types['product_variation'])) unset($custom_types['product_variation']);
 		if ( ! empty($custom_types['shop_order_refund'])) unset($custom_types['shop_order_refund']);		
 
@@ -23,7 +26,7 @@ function pmxe_wpallexport_custom_types($custom_types)
 			{
 				$ordered_custom_types['shop_customer'] = new stdClass();
 				$ordered_custom_types['shop_customer']->labels = new stdClass();
-				$ordered_custom_types['shop_customer']->labels->name = __('WooCommerce Customers','wp_all_export_plugin');
+				$ordered_custom_types['shop_customer']->labels->name = __('WooCommerce Customers','wp-all-export');
 			}
 			else
 			{

@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
 /**
  * Partner Discount SDK
  */
@@ -144,7 +145,7 @@ if (!class_exists('Soflyy_Partner_Discount')) {
                                                 </div>
                                             <?php else: ?>
                                                 <div class="soflyy_pd_sdk-partner-code">
-                                                    <div><?php echo $partner['code']; ?></div>
+                                                    <div><?php echo esc_html( $partner['code'] ); ?></div>
                                                 </div>
                                             <?php endif; ?>
                                             <a class="soflyy_pd_sdk-claim-btn" href="<?php echo esc_url($partner['link']); ?>" target="_blank" rel="noopener">

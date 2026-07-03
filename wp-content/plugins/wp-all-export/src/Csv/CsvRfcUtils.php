@@ -41,6 +41,7 @@ class CsvRfcUtils
 
         $eol = self::resolveEol($eol);
         if ($eol !== self::EOL_WRITE_DEFAULT || self::hasAnyValueWithEscapeFollowedByEnclosure($fields, $enclosure)) {
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
             \fwrite($handle, self::strPutCsv($fields, $delimiter, $enclosure, $eol));
         } else {
             \fputcsv($handle, $fields, $delimiter, $enclosure, '\\');
@@ -163,11 +164,12 @@ class CsvRfcUtils
     public static function checkPutCsvEscape($escape)
     {
         if ($escape !== '\\' && $escape !== null) {
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error,WordPress.Security.EscapeOutput.OutputNotEscaped -- runtime warning to PHP error log; not HTML output
             trigger_error(
                 sprintf(
                     "In writing mode, the escape char must be a backslash '\\'. "
                         ."The given escape char '%s' will be ignored.",
-                    $escape
+                    esc_html( $escape )
                 ),
                 E_USER_WARNING
             );
@@ -183,11 +185,12 @@ class CsvRfcUtils
     public static function checkGetCsvEscape($enclosure, $escape)
     {
         if ($enclosure !== $escape) {
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error,WordPress.Security.EscapeOutput.OutputNotEscaped -- runtime warning to PHP error log; not HTML output
             trigger_error(
                 sprintf(
                     'In reading mode, the escape and enclosure chars must be equals. '
                         ."The given escape char '%s' will be ignored.",
-                    $escape
+                    esc_html( $escape )
                 ),
                 E_USER_WARNING
             );

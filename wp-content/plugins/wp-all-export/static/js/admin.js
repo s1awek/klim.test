@@ -2843,8 +2843,8 @@
                         $pointer.css({'position': 'absolute', 'top': $topOffset + 'px', 'left': $leftOffset + 'px'});
 
                         $pointer.find('a.close').remove();
-                        $pointer.find('.wp-pointer-buttons').append('<button class="save-changes button button-primary button-hero wpallexport-large-button" style="float: right; background-image: none;">Save</button>');
-                        $pointer.find('.wp-pointer-buttons').append('<button class="close-pointer button button-primary button-hero wpallexport-large-button" style="float: right; background: #F1F1F1 none;text-shadow: 0 0 black; color: #777; margin-right: 10px;">Cancel</button>');
+                        $pointer.find('.wp-pointer-buttons').append('<button class="save-changes button wpallexport-large-button" style="float: right; background-image: none;">Save</button>');
+                        $pointer.find('.wp-pointer-buttons').append('<button class="close-pointer button wpallexport-large-button" style="float: right; background: #F1F1F1 none;text-shadow: 0 0 black; color: #777; margin-right: 10px;">Cancel</button>');
 
                         $(".close-pointer, .wpallexport-overlay").unbind('click').on('click', function () {
                             $self.pointer('close');

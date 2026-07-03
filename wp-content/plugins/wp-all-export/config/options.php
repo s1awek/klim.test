@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variables in template files inherited from controller render() scope
 /**
  * List of plugin options, contains only default values, actual values are stored in database
  * and can be changed by corresponding WordPress function calls

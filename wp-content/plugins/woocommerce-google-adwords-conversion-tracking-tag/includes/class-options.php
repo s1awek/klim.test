@@ -19,6 +19,15 @@ class Options {
 	private static $options_obj;
 	public static  $options_backup_name = 'wgact_options_backup';
 
+	/**
+	 * Option that records the default admin design system for this install.
+	 * Written once, on fresh installs only (see init()). Installs without it
+	 * existed before Nova and keep the Classic UI during the transition phase.
+	 *
+	 * @since 1.59.0
+	 */
+	public static $default_admin_theme_option_name = 'pmw_default_admin_theme';
+
 	private static $did_init = false;
 
 	private static function init() {
@@ -37,12 +46,22 @@ class Options {
 			// running the DB updater
 			Database::run_options_db_upgrade();
 
+			// The updater may have rewritten the stored options (schema
+			// migrations). Re-read so this very request already works with the
+			// migrated tree instead of the pre-upgrade snapshot.
+			self::$options = get_option(PMW_DB_OPTIONS_NAME);
+
 			// Update options that are missing with defaults, recursively
 			self::$options = self::update_with_defaults(self::$options, self::get_default_options());
 		} else { // If option not available, get default options and save it
 
 			self::$options = self::get_default_options();
 			update_option(PMW_DB_OPTIONS_NAME, self::$options);
+
+			// Fresh install (no stored options yet): Nova is the default admin
+			// UI. Existing installs never get this marker and keep the Classic
+			// UI until Nova is rolled out as the default for everyone.
+			add_option(self::$default_admin_theme_option_name, 'wp');
 		}
 
 		/**
@@ -102,7 +121,6 @@ class Options {
 			],
 			'facebook'   => [
 				'pixel_id'               => '',
-				'microdata'              => false,
 				'capi'                   => [
 					'token'             => '',
 					'test_event_code'   => '',
@@ -229,6 +247,13 @@ class Options {
 						'test_event_code' => '',
 					],
 				],
+				'openai'     => [
+					'pixel_id'          => '',
+					'advanced_matching' => false,
+					'capi'              => [
+						'token' => '',
+					],
+				],
 				'taboola'    => [
 					'account_id' => '',
 				],
@@ -237,6 +262,9 @@ class Options {
 				],
 				'contentsquare' => [
 					'tag_id' => '',
+				],
+				'clarity'    => [
+					'project_id' => '',
 				],
 			],
 			'shop'       => [
@@ -276,6 +304,9 @@ class Options {
 				'modules'                    => [
 					'load_deprecated_functions' => true,
 				],
+				// When true, all plugin data (settings, backups, custom table, etc.)
+				// is removed when the plugin is deleted. Read by uninstall.php.
+				'delete_plugin_data_on_uninstall' => false,
 			],
 			'ssp'        => [
 				'sync_token'              => '',
@@ -298,6 +329,8 @@ class Options {
 				'quota_exceeded'          => false,
 				'activation_retry_start'  => 0,
 				'additional_domain_keys'  => [], // Keyed by proxy_hostname, stores domain_token + resync_callback_token
+				'destination_results'         => [], // Per-destination credential-validation results from the last sync
+				'destination_results_checked' => 0, // Unix timestamp of the last destination health check
 			],
 			'db_version' => PMW_DB_VERSION,
 			'timestamp'  => null, // This will be set when the options are saved
@@ -421,10 +454,6 @@ class Options {
 
 	public static function is_facebook_capi_active() {
 		return self::is_facebook_active() && self::get_facebook_capi_token();
-	}
-
-	public static function is_facebook_microdata_active() {
-		return (bool) self::get_options_obj()->facebook->microdata;
 	}
 
 	public static function get_facebook_domain_verification_id() {
@@ -807,6 +836,30 @@ class Options {
 	}
 
 	/**
+	 * OpenAI
+	 */
+
+	public static function get_openai_pixel_id() {
+		return self::get_options_obj()->pixels->openai->pixel_id;
+	}
+
+	public static function is_openai_active() {
+		return (bool) self::get_openai_pixel_id();
+	}
+
+	public static function is_openai_advanced_matching_enabled() {
+		return (bool) self::get_options_obj()->pixels->openai->advanced_matching;
+	}
+
+	public static function get_openai_capi_token() {
+		return self::get_options_obj()->pixels->openai->capi->token;
+	}
+
+	public static function is_openai_capi_active() {
+		return self::is_openai_active() && (bool) self::get_openai_capi_token();
+	}
+
+	/**
 	 * Taboola
 	 */
 
@@ -864,6 +917,18 @@ class Options {
 
 	public static function is_contentsquare_active() {
 		return (bool) self::get_contentsquare_tag_id();
+	}
+
+	/**
+	 * Microsoft Clarity
+	 */
+
+	public static function get_clarity_project_id() {
+		return self::get_options_obj()->pixels->clarity->project_id;
+	}
+
+	public static function is_clarity_active() {
+		return (bool) self::get_clarity_project_id();
 	}
 
 	/**
@@ -1018,6 +1083,19 @@ class Options {
 	}
 
 	/**
+	 * Whether all plugin data should be deleted when the plugin is uninstalled.
+	 *
+	 * The actual deletion happens in uninstall.php (which reads the raw option,
+	 * since the plugin classes aren't loaded during uninstall).
+	 *
+	 * @return bool
+	 * @since 1.59.0
+	 */
+	public static function is_delete_plugin_data_on_uninstall_active() {
+		return (bool) self::get_options_obj()->general->delete_plugin_data_on_uninstall;
+	}
+
+	/**
 	 * Check if a specific module should be loaded.
 	 *
 	 * @param string $module_name The name of the module to check.
@@ -1142,6 +1220,10 @@ class Options {
 			$pixels[] = 'reddit';
 		}
 
+		if (self::is_openai_active()) {
+			$pixels[] = 'openai';
+		}
+
 		return $pixels;
 	}
 
@@ -1175,6 +1257,10 @@ class Options {
 
 		if (self::is_reddit_capi_active()) {
 			$pixels[] = 'reddit';
+		}
+
+		if (self::is_openai_capi_active()) {
+			$pixels[] = 'openai';
 		}
 
 		return $pixels;
@@ -1470,15 +1556,16 @@ class Options {
 	}
 
 	/**
-	 * Check if purchase events should be routed through the SSP.
+	 * Check if server-side events (purchase, refund, etc.) should be routed through the SSP.
 	 *
-	 * Currently returns is_ssp_active() — when SSP is active, purchases go through it.
-	 * Add a toggle here in the future if we want to let users control this separately.
+	 * Currently returns is_ssp_active(): when SSP is active, server-side events
+	 * (purchase + GA4 refund payloads) go through it. Add a toggle here in the
+	 * future if we want to let users control this separately.
 	 *
 	 * @return bool
 	 * @since 1.57.0
 	 */
-	public static function should_process_purchases_via_ssp() {
+	public static function should_process_server_events_via_ssp() {
 		return self::is_ssp_active();
 	}
 
@@ -1656,6 +1743,36 @@ class Options {
 	}
 
 	/**
+	 * Get the per-destination credential-validation results from the last sync.
+	 *
+	 * Each entry is an array with keys: type, ok, status_code, error.
+	 *
+	 * @return array
+	 * @since 1.59.0
+	 */
+	public static function get_ssp_destination_results() {
+		$options = self::get_options();
+		$results = isset($options['ssp']['destination_results']) ? $options['ssp']['destination_results'] : [];
+		return is_array($results) ? $results : [];
+	}
+
+	/**
+	 * Get the SSP destinations that failed their credential-validation probe
+	 * during the last sync.
+	 *
+	 * @return array List of failed destination result entries (ok === false).
+	 * @since 1.59.0
+	 */
+	public static function get_ssp_failed_destinations() {
+		return array_values(array_filter(
+			self::get_ssp_destination_results(),
+			static function ( $result ) {
+				return empty( $result['ok'] );
+			}
+		));
+	}
+
+	/**
 	 * Get or create the SSP session ID for the current visitor.
 	 *
 	 * Uses the WooCommerce session to persist a UUID across page loads.
@@ -1701,7 +1818,7 @@ class Options {
 		 * Filter to register additional SSP domains for multi-domain WordPress installs.
 		 *
 		 * @param array[] $domains Array of domain config arrays.
-		  * @since 1.58.5
+		 * @since 1.58.5
 		 */
 		$domains = apply_filters( 'pmw_ssp_additional_domains', [] );
 
@@ -1793,7 +1910,7 @@ class Options {
 		 * Filter backup retention policy settings.
 		 *
 		 * @param array $settings Default retention settings
-		  * @since 1.58.5
+		 * @since 1.58.5
 		 */
 		return apply_filters('pmw_backup_retention_settings', $default_settings);
 	}

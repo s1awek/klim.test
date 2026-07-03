@@ -1,12 +1,15 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 function pmxe_wp_ajax_wpae_get_scheduling_connection_icon() {
 	if ( ! check_ajax_referer( 'wp_all_export_secure', 'security', false ) ){
-		wp_send_json_error(array('html' => __('Security check failed.', 'wp-all-import-pro')));
+		wp_send_json_error(array('html' => __('Security check failed.', 'wp-all-export')));
 	}
 
 	if ( ! current_user_can( PMXI_Plugin::$capabilities ) ){
-		wp_send_json_error(array('html' => __('Insufficient permissions.', 'wp-all-import-pro')));
+		wp_send_json_error(array('html' => __('Insufficient permissions.', 'wp-all-export')));
 	}
 
 	ob_start();

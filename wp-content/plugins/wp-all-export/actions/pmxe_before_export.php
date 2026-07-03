@@ -1,5 +1,8 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 function pmxe_pmxe_before_export($export_id)
 {
 	$export = new PMXE_Export_Record();
@@ -14,9 +17,9 @@ function pmxe_pmxe_before_export($export_id)
 			$missing_ids = array();
 			if ( ! $missingPosts->isEmpty() ): 
 					
-				foreach ($missingPosts as $missingPost) 
-				{			
-					$missing_ids[] = $missingPost['post_id'];												
+				foreach ($missingPosts as $missingPost)
+				{
+					$missing_ids[] = (int) $missingPost['post_id'];
 				}
 
 			endif;	
@@ -25,10 +28,10 @@ function pmxe_pmxe_before_export($export_id)
 			{
 				global $wpdb;
 				// Delete records form pmxe_posts
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql composed of $wpdb->prefix-derived table name and int-cast post id list; export_id bound via prepare() below
 				$sql = "DELETE FROM " . PMXE_Plugin::getInstance()->getTablePrefix() . "posts WHERE post_id IN (" . implode(',', $missing_ids) . ") AND export_id = %d";
-				$wpdb->query( 
-					$wpdb->prepare($sql, $export->id)
-				);
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- plugin-owned pmxe_posts table cleanup; $sql composed of $wpdb->prefix-derived table name + int-cast post ids, export_id bound via prepare()
+				$wpdb->query( $wpdb->prepare( $sql, $export->id ) );
 			}
 		}
 

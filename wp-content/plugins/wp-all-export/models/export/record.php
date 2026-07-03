@@ -1,5 +1,9 @@
 <?php
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
+defined( 'ABSPATH' ) || exit;
+
+
 class PMXE_Export_Record extends PMXE_Model_Record {
 		
 	/**
@@ -75,12 +79,14 @@ class PMXE_Export_Record extends PMXE_Model_Record {
 			if (XmlExportEngine::$is_user_export)
 			{
 				add_action('pre_user_query', 'wp_all_export_pre_user_query', 10, 1);
+				// phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- intentional: evaluates saved WP_User_Query argument string
 				$exportQuery = eval('return new WP_User_Query(array(' . $this->options['wp_query'] . ', \'offset\' => ' . $this->exported . ', \'number\' => ' . $this->options['records_per_iteration'] . '));');			
 				remove_action('pre_user_query', 'wp_all_export_pre_user_query');
 			}
 			elseif (XmlExportEngine::$is_comment_export)
 			{				
 				add_action('comments_clauses', 'wp_all_export_comments_clauses', 10, 1);
+				// phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- intentional: evaluates saved WP_Comment_Query argument string
 				$exportQuery = eval('return new WP_Comment_Query(array(' . $this->options['wp_query'] . ', \'offset\' => ' . $this->exported . ', \'number\' => ' . $this->options['records_per_iteration'] . '));');			
 				remove_action('comments_clauses', 'wp_all_export_comments_clauses');
 			}
@@ -92,6 +98,7 @@ class PMXE_Export_Record extends PMXE_Model_Record {
 
 				add_filter('posts_where', 'wp_all_export_posts_where', 10, 1);
 				add_filter('posts_join', 'wp_all_export_posts_join', 10, 1);
+				// phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- intentional: executes saved WP_Query argument string
 				$exportQuery = eval('return new WP_Query(array(' . $this->options['wp_query'] . ', \'offset\' => ' . $this->exported . ', \'posts_per_page\' => ' . $this->options['records_per_iteration'] . '));');			
 				remove_filter('posts_join', 'wp_all_export_posts_join');			
 				remove_filter('posts_where', 'wp_all_export_posts_where');		
@@ -190,7 +197,7 @@ class PMXE_Export_Record extends PMXE_Model_Record {
 				foreach ($attachment_list as $attachment) {
 					if (!is_numeric($attachment))
 					{						
-						@unlink($attachment);
+						wp_delete_file($attachment);
 					}
 				}
 			}
@@ -350,7 +357,7 @@ class PMXE_Export_Record extends PMXE_Model_Record {
 
         $this->set(array(
             'exported' => $this->exported + $postCount,
-            'last_activity' => date('Y-m-d H:i:s'),
+            'last_activity' => date('Y-m-d H:i:s'),  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
             'processing' => 0
         ))->save();
 
@@ -362,7 +369,7 @@ class PMXE_Export_Record extends PMXE_Model_Record {
 				'processing' => 0,
 				'triggered' => 0,
 				'canceled' => 0,
-				'registered_on' => date('Y-m-d H:i:s'),
+				'registered_on' => date('Y-m-d H:i:s'),  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
 				'iteration' => ++$this->iteration
 			))->update();	
 
@@ -403,7 +410,7 @@ class PMXE_Export_Record extends PMXE_Model_Record {
 	                
 	                $message = '<p>Export '. wp_all_export_clear_xss($this->options['friendly_name']) .' has been completed. You can find exported file in attachments.</p>';
 
-	                wp_mail($this->options['scheduled_email'], __("WP All Export", "pmxe_plugin"), $message, $headers, array($file_path));
+	                wp_mail($this->options['scheduled_email'], __("WP All Export", "wp-all-export"), $message, $headers, array($file_path));
 
 	                remove_filter( 'wp_mail_content_type', array($this, 'set_html_content_type') );
 	            }
@@ -414,7 +421,7 @@ class PMXE_Export_Record extends PMXE_Model_Record {
 				'processing' => 0,
 				'triggered' => 0,
 				'canceled' => 0,				
-				'registered_on' => date('Y-m-d H:i:s'),	
+				'registered_on' => date('Y-m-d H:i:s'),	  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
 				'iteration' => ++$this->iteration										
 			))->update();	
 
@@ -423,7 +430,7 @@ class PMXE_Export_Record extends PMXE_Model_Record {
 		    do_action('pmxe_after_iteration', $this->id, $this);
         }
 
-		$this->set('registered_on', date('Y-m-d H:i:s'))->save(); // update registered_on to indicated that job has been exectured even if no files are going to be imported by the rest of the method
+		$this->set('registered_on', date('Y-m-d H:i:s'))->save(); // update registered_on to indicated that job has been exectured even if no files are going to be imported by the rest of the method  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
 		
 		return $this;
 	}
@@ -446,7 +453,8 @@ class PMXE_Export_Record extends PMXE_Model_Record {
 		// clear tmp dir
 		wp_all_export_rrmdir($bundle_dir);
 
-		@mkdir($bundle_dir);		
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
+		@mkdir($bundle_dir);
 						
 		$friendly_name = sanitize_file_name($this->friendly_name);		
 
@@ -477,7 +485,7 @@ class PMXE_Export_Record extends PMXE_Model_Record {
 
 			$templates[$template_options['custom_type']] = $template_data;			
 
-			$readme = __("The other two files in this zip are the export file containing all of your data and the import template for WP All Import. \n\nTo import this data, create a new import with WP All Import and upload this zip file.", "wp_all_export_plugin");	
+			$readme = __("The other two files in this zip are the export file containing all of your data and the import template for WP All Import. \n\nTo import this data, create a new import with WP All Import and upload this zip file.", "wp-all-export");	
 
 			file_put_contents($bundle_dir . 'readme.txt', $readme);
 		}			
@@ -543,7 +551,7 @@ class PMXE_Export_Record extends PMXE_Model_Record {
 
 		if ( @file_exists($bundle_path))
 		{
-			@unlink($bundle_path);
+			wp_delete_file($bundle_path);
 		}
 
 		PMXE_Zip::zipDir($bundle_dir, $bundle_path);
@@ -723,6 +731,7 @@ class PMXE_Export_Record extends PMXE_Model_Record {
 	 */
 	public function deletePosts() {
 		$post = new PMXE_Post_List();					
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name from PMXE_Post_List::getTable() which uses $wpdb->prefix; value bound via prepare()
 		$this->wpdb->query($this->wpdb->prepare('DELETE FROM ' . $post->getTable() . ' WHERE export_id = %s', $this->id));
 		return $this;
 	}
@@ -764,7 +773,7 @@ class PMXE_Export_Record extends PMXE_Model_Record {
 
 		$file_for_remote_access = $wp_uploads['basedir'] . DIRECTORY_SEPARATOR . PMXE_Plugin::UPLOADS_DIRECTORY . DIRECTORY_SEPARATOR . md5(PMXE_Plugin::getInstance()->getOption('cron_job_key') . $this->id) . '.' . $this->options['export_to'];
 		
-		if ( @file_exists($file_for_remote_access)) @unlink($file_for_remote_access);
+		if ( @file_exists($file_for_remote_access)) wp_delete_file($file_for_remote_access);
 
 		return parent::delete();
 	}

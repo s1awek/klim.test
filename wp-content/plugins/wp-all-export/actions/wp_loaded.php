@@ -1,7 +1,12 @@
 <?php
+// phpcs:ignoreFile WordPress.Security.NonceVerification.Recommended -- access verified either via security_token HMAC (substr(md5($cron_job_key . $export_id), 0, 16)) for export downloads, or via \Wpae\Http\Router auth dispatch for the wpae_public_api branch
+
+defined( 'ABSPATH' ) || exit;
+
 
 function pmxe_wp_loaded() {
 
+	// phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- intentional for long-running exports
 	@ini_set("max_input_time", PMXE_Plugin::getInstance()->getOption('max_input_time'));
 
 	if ( ! empty($_GET['action']) && ! empty($_GET['export_id']) && (!empty($_GET['export_hash']) || !empty($_GET['security_token'])))
@@ -9,18 +14,18 @@ function pmxe_wp_loaded() {
         pmxe_set_max_execution_time();
 
 		if(empty($_GET['export_hash'])) {
-			$securityToken = $_GET['security_token'];
+			$securityToken = sanitize_text_field( wp_unslash( $_GET['security_token'] ) );
 		} else {
-			$securityToken = $_GET['export_hash'];
+			$securityToken = sanitize_text_field( wp_unslash( $_GET['export_hash'] ) );
 		}
 
 		$cron_job_key = PMXE_Plugin::getInstance()->getOption('cron_job_key');
 
-		if ( hash_equals( substr( md5( $cron_job_key . $_GET['export_id'] ), 0, 16 ), $securityToken ) )
+		if ( hash_equals( substr( md5( $cron_job_key . absint( $_GET['export_id'] ) ), 0, 16 ), $securityToken ) )
 		{
 			$export = new PMXE_Export_Record();
 
-			$export->getById($_GET['export_id']);
+			$export->getById( absint( $_GET['export_id'] ) );
 
 			if ( ! $export->isEmpty())
 			{
@@ -46,7 +51,7 @@ function pmxe_wp_loaded() {
 							}
 						}
 
-						if ( ! empty($_GET['part']) and is_numeric($_GET['part'])) $filepath = str_replace(basename($filepath), str_replace('.' . $export->options['export_to'], '', basename($filepath)) . '-' . $_GET['part'] . '.' . $export->options['export_to'], $filepath);
+						if ( ! empty($_GET['part']) and is_numeric($_GET['part'])) $filepath = str_replace(basename($filepath), str_replace('.' . $export->options['export_to'], '', basename($filepath)) . '-' . absint( $_GET['part'] ) . '.' . $export->options['export_to'], $filepath);
 
 						break;
 
@@ -67,6 +72,7 @@ function pmxe_wp_loaded() {
 						// If we are doing a google merchants export, send the file as a download.
 						header("Content-type: text/plain");
 						header("Content-Disposition: attachment; filename=".basename($filepath));
+						// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 						readfile($filepath);
 
 						die;
@@ -81,6 +87,7 @@ function pmxe_wp_loaded() {
                         header("Cache-Control: post-check=0, pre-check=0", false);
                         header("Pragma: no-cache");
 
+                        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
                         readfile($filepath);
 
                         die;
@@ -88,13 +95,13 @@ function pmxe_wp_loaded() {
 
 					$fileurl = str_replace( "\\", "/", $fileurl );
 
-					wp_redirect($fileurl);
+					wp_safe_redirect($fileurl);
 				}
 				else
 				{
 					wp_send_json(array(
 						'status'     => 403,
-						'message'    => __('File doesn\'t exist', 'wp_all_export_plugin')
+						'message'    => __('File doesn\'t exist', 'wp-all-export')
 					));
 				}
 			}
@@ -103,7 +110,7 @@ function pmxe_wp_loaded() {
 		{
 			wp_send_json(array(
 				'status'     => 403,
-				'message'    => __('Export hash is not valid.', 'wp_all_export_plugin')
+				'message'    => __('Export hash is not valid.', 'wp-all-export')
 			));
 		}
 	}
@@ -113,13 +120,14 @@ function pmxe_wp_loaded() {
         pmxe_set_max_execution_time();
 
         $router = new \Wpae\Http\Router();
-        $router->route($_GET['q'], false);
+        $router->route( isset( $_GET['q'] ) ? sanitize_text_field( wp_unslash( $_GET['q'] ) ) : '', false);
     }
 }
 
 if(!function_exists('pmxe_set_max_execution_time')) {
     function pmxe_set_max_execution_time()
     {
+        // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- intentional for long-running exports
         @ini_set("max_input_time", PMXE_Plugin::getInstance()->getOption('max_input_time'));
 
         $maxExecutionTime = PMXE_Plugin::getInstance()->getOption('max_execution_time');
@@ -127,6 +135,7 @@ if(!function_exists('pmxe_set_max_execution_time')) {
             $maxExecutionTime = 0;
         }
 
+        // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- intentional for long-running exports
         @ini_set("max_execution_time", $maxExecutionTime);
     }
 }

@@ -154,7 +154,7 @@ class ReviewsUI
 
                         jQuery.ajax({
                             type: 'POST',
-                            url: '<?php echo admin_url( "admin-ajax.php" ); ?>',
+                            url: '<?php echo esc_url( admin_url( "admin-ajax.php" ) ); ?>',
                             data: request,
                             success: function(response) {},
                             dataType: "json"
@@ -173,7 +173,7 @@ class ReviewsUI
 
                         jQuery.ajax({
                             type: 'POST',
-                            url: '<?php echo admin_url( "admin-ajax.php" ); ?>',
+                            url: '<?php echo esc_url( admin_url( "admin-ajax.php" ) ); ?>',
                             data: request,
                             success: function(response) {},
                             dataType: "json"
@@ -197,7 +197,7 @@ class ReviewsUI
 
                         jQuery.ajax({
                             type: 'POST',
-                            url: '<?php echo admin_url( "admin-ajax.php" ); ?>',
+                            url: '<?php echo esc_url( admin_url( "admin-ajax.php" ) ); ?>',
                             data: request,
                             success: function(response) {
                                 jQuery('.wpae-submit-confirmation').show();
@@ -210,42 +210,43 @@ class ReviewsUI
                     });
                 });
             </script>
-            <input type="hidden" id="wpae-modal-type" value="<?php esc_attr_e($this->reviewLogic->getModalType()) ;?>" />
+            <input type="hidden" id="wpae-modal-type" value="<?php echo esc_attr($this->reviewLogic->getModalType()); ?>" />
             <div style="" class="notice notice-info wpae-reviews-notice">
                 <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
                 <div id="wpae-ask-for-review">
-                    <h1><?php esc_html_e($this->reviewLogic->getModalText(), 'wp-all-export-plugin'); ?></h1>
+                    <h1><?php echo esc_html($this->reviewLogic->getModalText()); ?></h1>
 
                     <div class="wpae-buttons-container wpae-review-buttons">
-                        <button data-review="good"><?php esc_html_e('Good', 'wp-all-export-plugin'); ?></button>
-                        <button data-review="ok"><?php esc_html_e('Just Ok', 'wp-all-export-plugin'); ?></button>
-                        <button data-review="bad"><?php esc_html_e('Bad', 'wp-all-export-plugin'); ?></button>
+                        <button data-review="good"><?php esc_html_e('Good', 'wp-all-export'); ?></button>
+                        <button data-review="ok"><?php esc_html_e('Just Ok', 'wp-all-export'); ?></button>
+                        <button data-review="bad"><?php esc_html_e('Bad', 'wp-all-export'); ?></button>
                     </div>
                 </div>
                 <div id="wpae-review">
-                    <h1><?php esc_html_e('That is great to hear, thank you for the feedback!', 'wp-all-export-plugin'); ?></h1>
+                    <h1><?php esc_html_e('That is great to hear, thank you for the feedback!', 'wp-all-export'); ?></h1>
                     <p>    
-                        <?php esc_html_e("Would you be willing to do us a small favor? Unhappy customers are quick to publicly complain, but happy customers rarely speak up and share their good experiences.", 'wp-all-export-plugin'); ?>
+                        <?php esc_html_e("Would you be willing to do us a small favor? Unhappy customers are quick to publicly complain, but happy customers rarely speak up and share their good experiences.", 'wp-all-export'); ?>
                         </br>
-                        <?php esc_html_e("If you have a moment, we would love for you to review our add-on in the WordPress.org plugin repository.", 'wp-all-export-plugin'); ?>
+                        <?php esc_html_e("If you have a moment, we would love for you to review our add-on in the WordPress.org plugin repository.", 'wp-all-export'); ?>
                     </p>
                     <div class="wpae-buttons-container">
                         <a class="review-link" href="<?php echo esc_attr($this->reviewLogic->getReviewLink()); ?>" target="_blank">
-                            <button><?php printf(esc_html__('Review the %s', 'wp-all-export-plugin'), $this->reviewLogic->getPluginName() ); ?></button>
+                            <?php /* translators: %s: plugin name */ ?>
+                            <button><?php printf(esc_html__('Review the %s', 'wp-all-export'), esc_html($this->reviewLogic->getPluginName()) ); ?></button>
                         </a>
                     </div>
                 </div>
                 <div id="wpae-feedback">
                     <div class="wpae-review-form">
-                        <h1><?php esc_html_e('Thank you for your feedback, it really helps us improve our products.', 'wp-all-export-plugin'); ?></h1>
-                        <p><?php esc_html_e('If you could improve one thing about WP All Export, what would it be?', 'wp-all-export-plugin'); ?></p>
+                        <h1><?php esc_html_e('Thank you for your feedback, it really helps us improve our products.', 'wp-all-export'); ?></h1>
+                        <p><?php esc_html_e('If you could improve one thing about WP All Export, what would it be?', 'wp-all-export'); ?></p>
                         <textarea id="wpae-feedback-message"></textarea>
                         <div class="wpae-submit-feedback">
-                            <button><?php esc_html_e('Submit', 'wp-all-export-plugin'); ?></button>
+                            <button><?php esc_html_e('Submit', 'wp-all-export'); ?></button>
                         </div>
                     </div>
                     <div class="wpae-submit-confirmation">
-                        Thank you for your feedback. Your message was emailed to support@wpallimport.com from <?php echo get_option('admin_email'); ?>. If you do not receive a confirmation email, it means we didn't receive your message for some reason.
+                        Thank you for your feedback. Your message was emailed to support@wpallimport.com from <?php echo esc_html(get_option('admin_email')); ?>. If you do not receive a confirmation email, it means we didn't receive your message for some reason.
                     </div>
 
                 </div>

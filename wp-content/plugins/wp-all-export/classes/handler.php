@@ -1,5 +1,6 @@
 <?php
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
 class PMXE_Handler extends PMXE_Session 
 {
 	/** cookie name */
@@ -70,6 +71,7 @@ class PMXE_Handler extends PMXE_Session
 	{					
 		global $wpdb;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- export-session lookup on options table; cache bypass intentional to read fresh per-import session state
 		$session = $wpdb->get_row( $wpdb->prepare("SELECT option_name, option_value FROM $wpdb->options WHERE option_name = %s", '_wpallexport_session_' . $this->_import_id . '_'), ARRAY_A );
 
 		return empty($session) ? array() : maybe_unserialize($session['option_value']);
@@ -109,16 +111,20 @@ class PMXE_Handler extends PMXE_Session
 
 			global $wpdb;
 
-			$session = $wpdb->get_row( $wpdb->prepare("SELECT option_name, option_value FROM $wpdb->options WHERE option_name = %s", $session_option), ARRAY_A );			
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- export-session lookup on options table; cache bypass intentional to read fresh per-import session state
+			$session = $wpdb->get_row( $wpdb->prepare("SELECT option_name, option_value FROM $wpdb->options WHERE option_name = %s", $session_option), ARRAY_A );
 
-	    	if ( empty($session) ) 
+	    	if ( empty($session) )
 	    	{
+	    		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- export-session write on options table with autoload=no; bypasses options API to avoid object-cache pollution for short-lived per-import keys
 	    		$wpdb->query($wpdb->prepare("INSERT INTO `$wpdb->options` (`option_name`, `option_value`, `autoload`) VALUES (%s, %s, 'no')", $session_option, serialize($this->_data)));
+	    		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- export-session write on options table with autoload=no; bypasses options API to avoid object-cache pollution for short-lived per-import keys
 	    		$wpdb->query($wpdb->prepare("INSERT INTO `$wpdb->options` (`option_name`, `option_value`, `autoload`) VALUES (%s, %s, 'no')", $session_expiry_option, $this->_session_expiration));
 	    		// add_option( $session_option, $this->_data, '', 'no' );
-		    	// add_option( $session_expiry_option, $this->_session_expiration, '', 'no' );		    	
+		    	// add_option( $session_expiry_option, $this->_session_expiration, '', 'no' );
 	    	} else {
 		    	// update_option( $session_option, $this->_data );
+		    	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- export-session update on options table; bypasses options API to avoid object-cache pollution for short-lived per-import keys
 		    	$wpdb->query($wpdb->prepare("UPDATE `$wpdb->options` SET `option_value` = %s WHERE `option_name` = %s", serialize($this->_data), $session_option));
 	    	}	    						
 	    }	    
@@ -128,7 +134,9 @@ class PMXE_Handler extends PMXE_Session
     {    
 		global $wpdb;
 
+    	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- export-session cleanup on options table; bypasses options API to avoid stale autoload cache for short-lived per-import keys
     	$wpdb->query( $wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name = %s", '_wpallexport_session_' . $import_id . '_') );
+    	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- export-session cleanup on options table; bypasses options API to avoid stale autoload cache for short-lived per-import keys
     	$wpdb->query( $wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name = %s", '_wpallexport_session_expires_' . $import_id . '_') );
     }
 }

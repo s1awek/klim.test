@@ -3,6 +3,7 @@ if(!defined('ABSPATH')) {
     die();
 }
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variables in template files inherited from controller render() scope
 if(empty($update_previous->options['cpt'])) {
 	$postTypes           = [];
 	$exportqueryPostType = [];
@@ -38,7 +39,7 @@ $post = $update_previous->options;
     <?php
     if ($isGoogleFeed) {
         ?>
-        <h3><?php esc_html_e('WP All Export successfully exported your data!', 'wp_all_export_plugin'); ?></h3>
+        <h3><?php esc_html_e('WP All Export successfully exported your data!', 'wp-all-export'); ?></h3>
     <?php
     $cronJobKey = PMXE_Plugin::getInstance()->getOption('cron_job_key');
     include_once('google_merchants_success.php');
@@ -58,49 +59,49 @@ $post = $update_previous->options;
             });
         </script>
         <ul class="success-tabs">
-            <li rel="tab1-content" class="tab selected"><?php esc_html_e("Download", 'wp_all_export_plugin'); ?></li>
-            <li rel="tab2-content" class="tab"><?php esc_html_e("Scheduling", 'wp_all_export_plugin'); ?></li>
-            <li rel="tab3-content" class="tab"><?php esc_html_e("External Apps", 'wp_all_export_plugin'); ?></li>
+            <li rel="tab1-content" class="tab selected"><?php esc_html_e("Download", 'wp-all-export'); ?></li>
+            <li rel="tab2-content" class="tab"><?php esc_html_e("Scheduling", 'wp-all-export'); ?></li>
+            <li rel="tab3-content" class="tab"><?php esc_html_e("External Apps", 'wp-all-export'); ?></li>
             <?php if ($isImportAllowedSpecification->isSatisfied($update_previous)): ?>
-                <li rel="tab4-content" class="tab"><?php esc_html_e("Export, Edit, Import", 'wp_all_export_plugin'); ?></li>
+                <li rel="tab4-content" class="tab"><?php esc_html_e("Export, Edit, Import", 'wp-all-export'); ?></li>
             <?php endif; ?>
         </ul>
     <hr style="margin-top:0;"/>
         <div class="tab-content-container">
             <div class="tab-content selected normal-tab" id="tab1-content">
-                <h3 style="margin-top: 30px; margin-bottom: 30px;"><?php esc_html_e("Click to Download", 'wp_all_export_plugin'); ?></h3>
+                <h3 style="margin-top: 30px; margin-bottom: 30px;"><?php esc_html_e("Click to Download", 'wp-all-export'); ?></h3>
                 <div class="wpallexport-free-edition-notice" id="migrate-orders-notice" style="padding: 20px; margin-bottom: 35px; display: none;">
-                    <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839967&discount=welcome-upgrade-99&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-orders"><?php esc_html_e('Upgrade to the Pro edition of WP All Export to Migrate Orders', 'wp_all_export_plugin');?></a>
-                    <p><?php esc_html_e('If you already own it, remove the free edition and install the Pro edition.', 'wp_all_export_plugin');?></p>
+                    <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839967&discount=welcome-upgrade-99&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-orders"><?php esc_html_e('Upgrade to the Pro edition of WP All Export to Migrate Orders', 'wp-all-export');?></a>
+                    <p><?php esc_html_e('If you already own it, remove the free edition and install the Pro edition.', 'wp-all-export');?></p>
                 </div>
 
                 <div class="input">
-                    <button class="button button-primary button-hero wpallexport-large-button download_data"
-                            rel="<?php echo esc_url_raw(add_query_arg(array('action' => 'download', 'id' => $update_previous->id, '_wpnonce' => wp_create_nonce('_wpnonce-download_feed')), $this->baseUrl)); ?>"><?php echo strtoupper(wp_all_export_get_export_format($update_previous->options)); ?></button>
+                    <button class="button wpallexport-large-button download_data"
+                            rel="<?php echo esc_url(add_query_arg(array('action' => 'download', 'id' => $update_previous->id, '_wpnonce' => wp_create_nonce('_wpnonce-download_feed')), $this->baseUrl)); ?>"><?php echo esc_html(strtoupper(wp_all_export_get_export_format($update_previous->options))); ?></button>
                     <?php if (!empty($update_previous->options['split_large_exports'])): ?>
-                        <button class="button button-primary button-hero wpallexport-large-button download_data"
-                                rel="<?php echo esc_url_raw(add_query_arg(array('page' => 'pmxe-admin-manage', 'id' => $update_previous->id, 'action' => 'split_bundle', '_wpnonce' => wp_create_nonce('_wpnonce-download_split_bundle')), $this->baseUrl)); ?>"><?php printf(esc_html__('Split %ss', 'wp_all_export_plugin'), esc_html(strtoupper(wp_all_export_get_export_format($update_previous->options)))); ?></button>
+                        <button class="button wpallexport-large-button download_data"
+                                rel="<?php echo esc_url_raw(add_query_arg(array('page' => 'pmxe-admin-manage', 'id' => $update_previous->id, 'action' => 'split_bundle', '_wpnonce' => wp_create_nonce('_wpnonce-download_split_bundle')), $this->baseUrl)); ?>"><?php /* translators: %s: export format extension */ printf(esc_html__('Split %ss', 'wp-all-export'), esc_html(strtoupper(wp_all_export_get_export_format($update_previous->options)))); ?></button>
                     <?php endif; ?>
                     <?php if (PMXE_Export_Record::is_bundle_supported($update_previous->options)): ?>
-                        <button class="button button-primary button-hero wpallexport-large-button download_data"
-                                id="download-bundle" rel="<?php echo esc_url_raw(add_query_arg(array('page' => 'pmxe-admin-manage', 'id' => $update_previous->id, 'action' => 'bundle', '_wpnonce' => wp_create_nonce('_wpnonce-download_bundle')), $this->baseUrl)); ?>"><?php esc_html_e('Bundle', 'wp_all_export_plugin'); ?></button>
+                        <button class="button wpallexport-large-button download_data"
+                                id="download-bundle" rel="<?php echo esc_url_raw(add_query_arg(array('page' => 'pmxe-admin-manage', 'id' => $update_previous->id, 'action' => 'bundle', '_wpnonce' => wp_create_nonce('_wpnonce-download_bundle')), $this->baseUrl)); ?>"><?php esc_html_e('Bundle', 'wp-all-export'); ?></button>
                     <?php endif; ?>
                 </div>
 
                 <?php if (PMXE_Export_Record::is_bundle_supported($update_previous->options)): ?>
                     <div id="download-details">
                         <p style="margin-top:30px;">
-                            <?php esc_html_e("The bundle contains your exported data and a settings file for WP All Import.", 'wp_all_export_plugin'); ?><br/>
-                            <?php esc_html_e("Upload the Bundle to WP All Import on another site to quickly import this data.", 'wp_all_export_plugin');?>
+                            <?php esc_html_e("The bundle contains your exported data and a settings file for WP All Import.", 'wp-all-export'); ?><br/>
+                            <?php esc_html_e("Upload the Bundle to WP All Import on another site to quickly import this data.", 'wp-all-export');?>
                         </p>
                     </div>
                 <?php endif; ?>
                 <div style="margin-top:30px;">
-                    <h3 style="margin-bottom: 0; margin-top: -10px;"><?php echo _e("Public URL", 'wp_all_export_plugin'); ?></h3>
-                    <a href="<?php echo $urlToExport; ?>" <?php if (php_sapi_name() != 'cli-server') { ?> target="_blank" <?php } ?>
-                       class="feed-url" style="margin-bottom: 0; font-size: 16px;"><?php echo $urlToExport; ?></a>
+                    <h3 style="margin-bottom: 0; margin-top: -10px;"><?php esc_html_e("Public URL", 'wp-all-export'); ?></h3>
+                    <a href="<?php echo esc_url($urlToExport); ?>" <?php if (php_sapi_name() != 'cli-server') { ?> target="_blank" <?php } ?>
+                       class="feed-url" style="margin-bottom: 0; font-size: 16px;"><?php echo esc_html($urlToExport); ?></a>
                     <p style="margin-top: 0;">
-                        <?php esc_html_e("This URL will always provide the export file from this export, even if the file name changes.", 'wp_all_export_plugin'); ?>
+                        <?php esc_html_e("This URL will always provide the export file from this export, even if the file name changes.", 'wp-all-export'); ?>
                     </p>
                 </div>
             </div>
@@ -120,7 +121,7 @@ $post = $update_previous->options;
                             </div>
                         </div>
                     </div>
-                    <div class="wpae-save-button button button-primary button-hero wpallexport-large-button wpae-export-complete-save-button <?php if(!$hasActiveLicense) { echo 'disabled'; }?>"
+                    <div class="wpae-save-button button wpallexport-large-button wpae-export-complete-save-button <?php if(!$hasActiveLicense) { echo 'disabled'; }?>"
                          style="position: relative; width: 285px; display: block; margin:auto; background-image: none; margin-top: 25px;">
                         <svg width="30" height="30" viewBox="0 0 1792 1792"
                              xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +136,7 @@ $post = $update_previous->options;
                         </div>
                         <div class="save-text"
                              style="display: block; position:absolute; left: 70px; top:0; user-select: none;">
-			                <?php esc_html_e('Save Scheduling Options', 'wp_all_export_plugin'); ?>
+			                <?php esc_html_e('Save Scheduling Options', 'wp-all-export'); ?>
                         </div>
                     </div>
                 </div>
@@ -143,13 +144,13 @@ $post = $update_previous->options;
         </div>
             <div class="tab-content normal-tab" id="tab3-content">
                 <p>
-                    <?php esc_html_e("Automatically send your data to over 500 apps with Zapier.", 'wp_all_export_plugin'); ?>
+                    <?php esc_html_e("Automatically send your data to over 500 apps with Zapier.", 'wp-all-export'); ?>
                     <br/>
                     <a href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839967&discount=welcome-upgrade-99&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=zapier" target="_blank">
-                        <?php esc_html_e("Upgrade to the Pro edition of WP All Export for Zapier integration", 'wp_all_export_plugin'); ?>
+                        <?php esc_html_e("Upgrade to the Pro edition of WP All Export for Zapier integration", 'wp-all-export'); ?>
                     </a>
                     <br/>
-                    <a href="https://zapier.com/zapbook/wp-all-export-pro/" target="_blank"><?php esc_html_e("Click here to read more about WP All Export's Zapier Integration.", 'wp_all_export_plugin'); ?></a>
+                    <a href="https://zapier.com/zapbook/wp-all-export-pro/" target="_blank"><?php esc_html_e("Click here to read more about WP All Export's Zapier Integration.", 'wp-all-export'); ?></a>
                 </p>
                 <iframe width="560" height="315" src="https://www.youtube.com/embed/6tBacBmiHsQ" frameborder="0" allowfullscreen></iframe>
             </div>
@@ -157,18 +158,18 @@ $post = $update_previous->options;
 
                 <div class="tab-content normal-tab" id="tab4-content">
                     <p>
-                        <?php esc_html_e("After you've downloaded your data, edit it however you like.", 'wp_all_export_plugin'); ?><br/>
-                        <?php esc_html_e("Then, click below to import the data with WP All Import without having to set anything up.", 'wp_all_export_plugin'); ?>
+                        <?php esc_html_e("After you've downloaded your data, edit it however you like.", 'wp-all-export'); ?><br/>
+                        <?php esc_html_e("Then, click below to import the data with WP All Import without having to set anything up.", 'wp-all-export'); ?>
                     </p>
                     <p>
-                        <button class="button button-primary button-hero wpallexport-large-button download_data"
-                                rel="<?php echo esc_url(add_query_arg(array('action' => 'download', 'id' => $update_previous->id, '_wpnonce' => wp_create_nonce('_wpnonce-download_feed')), $this->baseUrl)); ?>"><?php esc_html_e('Download', 'wp_all_export_plugin'); ?> <?php echo esc_html(strtoupper(wp_all_export_get_export_format($update_previous->options))); ?></button>
+                        <button class="button wpallexport-large-button download_data"
+                                rel="<?php echo esc_url(add_query_arg(array('action' => 'download', 'id' => $update_previous->id, '_wpnonce' => wp_create_nonce('_wpnonce-download_feed')), $this->baseUrl)); ?>"><?php esc_html_e('Download', 'wp-all-export'); ?> <?php echo esc_html(strtoupper(wp_all_export_get_export_format($update_previous->options))); ?></button>
 
-                        <button class="button button-primary button-hero wpallexport-large-button download_data"
-                                rel="<?php echo esc_url(add_query_arg(array('page' => 'pmxi-admin-import', 'id' => $update_previous->options['import_id'], 'deligate' => 'wpallexport'), remove_query_arg('page', $this->baseUrl))); ?>"><?php esc_html_e('Import with WP All Import', 'wp_all_export_plugin'); ?></button>
+                        <button class="button wpallexport-large-button download_data"
+                                rel="<?php echo esc_url(add_query_arg(array('page' => 'pmxi-admin-import', 'id' => $update_previous->options['import_id'], 'deligate' => 'wpallexport'), remove_query_arg('page', $this->baseUrl))); ?>"><?php esc_html_e('Import with WP All Import', 'wp-all-export'); ?></button>
                     </p>
                     <p>
-                        <?php esc_html_e("You can also start the import by clicking 'Import with WP All Import' on the Manage Exports page.", 'wp_all_export_plugin');?>
+                        <?php esc_html_e("You can also start the import by clicking 'Import with WP All Import' on the Manage Exports page.", 'wp-all-export');?>
                     </p>
                 </div>
             <?php endif; ?>

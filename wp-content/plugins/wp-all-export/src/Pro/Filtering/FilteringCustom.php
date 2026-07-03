@@ -1,5 +1,6 @@
 <?php
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
 namespace Wpae\Pro\Filtering;
 
 /**
@@ -125,6 +126,7 @@ class FilteringCustom extends FilteringBase
 
             $has_notes = [];
             $sql = "SELECT DISTINCT(entry_id) FROM {$gf_addon->get_related_table()} WHERE {$element_label} " . $this->parse_condition($rule);
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name from add-on internal API; $element_label whitelisted from data_element slug; rule values bound via parse_condition()/$wpdb->prepare(); admin-only path requires update_export capability
             $results = $this->wpdb->get_results($sql);
 
             if ($results && is_array($results)) {

@@ -1,11 +1,16 @@
 <?php
+
+defined( 'ABSPATH' ) || exit;
+
 function pmxe_admin_head(){
 
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only request inspection for current screen detection
     if(!isset($_GET['page'])) {
         return;
     }
 
-    if(strpos($_GET['page'], 'pmxe-') === false) {
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only request inspection for current screen detection
+    if(strpos( sanitize_text_field( wp_unslash( $_GET['page'] ) ), 'pmxe-') === false) {
         return;
     }
 
@@ -27,7 +32,7 @@ function pmxe_admin_head(){
 			if(typeof GoogleMerchants != 'undefined') {
 				GoogleMerchants.constant('NONCE', '<?php echo esc_js($wp_all_export_ajax_nonce); ?>');
 			}
-			var ajaxurl = '<?php echo admin_url( "admin-ajax.php" ); ?>';
+			var ajaxurl = '<?php echo esc_url( admin_url( "admin-ajax.php" ) ); ?>';
 			var export_action = '<?php echo esc_js($export_action); ?>';
 			var wp_all_export_security = '<?php echo esc_js($wp_all_export_ajax_nonce); ?>';
 		</script>

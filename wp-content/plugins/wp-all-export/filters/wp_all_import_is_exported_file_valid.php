@@ -1,5 +1,8 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 function pmxe_wp_all_import_is_exported_file_valid($is_valid, $export_id, $elements_cloud){		
 
 	$exportRecord = new PMXE_Export_Record();

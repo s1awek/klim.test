@@ -1,4 +1,8 @@
 <?php
+
+defined( 'ABSPATH' ) || exit;
+
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variables in template files inherited from controller render() scope
 /**
  * Plugin database schema
  * WARNING: 
@@ -24,7 +28,7 @@ if ( ! empty($wpdb->collate))
 
 $table_prefix = PMXE_Plugin::getInstance()->getTablePrefix();
 
-$plugin_queries = <<<SCHEMA
+$plugin_queries = "
 CREATE TABLE {$table_prefix}posts (
 	id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 	post_id BIGINT(20) UNSIGNED NOT NULL,
@@ -58,9 +62,9 @@ CREATE TABLE {$table_prefix}exports (
   	export_post_type TEXT NOT NULL DEFAULT '',
 	PRIMARY KEY  (id)
 ) $charset_collate;
-SCHEMA;
+";
 
-$googleCatsQueryCreate = <<<SCHEMA
+$googleCatsQueryCreate = "
 CREATE TABLE `{$table_prefix}google_cats` (
   `id` int(11) NOT NULL,
   `name` varchar(200) NOT NULL,
@@ -70,9 +74,9 @@ CREATE TABLE `{$table_prefix}google_cats` (
    PRIMARY KEY (`id`)
 
 ) $charset_collate;
-SCHEMA;
+";
 
-$googleCatsQueryData = <<<SCHEMA
+$googleCatsQueryData = "
 INSERT INTO `{$table_prefix}google_cats` (`id`, `name`, `parent_id`, `parent_name`, `level`) VALUES
 (1, 'Animals & Pet Supplies', 0, '', 0),
 (2, 'Pet Supplies', 1, 'Animals & Pet Supplies', 1),
@@ -5445,4 +5449,4 @@ INSERT INTO `{$table_prefix}google_cats` (`id`, `name`, `parent_id`, `parent_nam
 (505830, 'Letter Openers', 2986, 'Office Instruments', 2),
 (505831, 'Cutter & Scraper Blades', 2174, 'Tool Blades', 3),
 (505832, 'Kitchen Linens Sets', 4171, 'Linens & Bedding', 2);
-SCHEMA;
+";

@@ -1,17 +1,20 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 function pmxe_wp_ajax_scheduling_dialog_content()
 {
 
 	if (!check_ajax_referer('wp_all_export_secure', 'security', false)) {
-		exit(json_encode(array('html' => esc_html__('Security check', 'wp_all_export_plugin'))));
+		exit(json_encode(array('html' => esc_html__('Security check', 'wp-all-export'))));
 	}
 
 	if (!current_user_can(PMXE_Plugin::$capabilities)) {
-		exit(json_encode(array('html' => esc_html__('Security check', 'wp_all_export_plugin'))));
+		exit(json_encode(array('html' => esc_html__('Security check', 'wp-all-export'))));
 	}
 
-	$export_id = $_POST['id'];
+	$export_id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
 	$export = new PMXE_Export_Record();
 	$export->getById($export_id);
 	if (!$export) {

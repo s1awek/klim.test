@@ -20,20 +20,18 @@ class PMXE_Installer
 
     private function error($message){
 
-        $message = __(esc_html($message));
-        $error = <<<EOT
-<style type="text/css">
+        $message = esc_html($message);
+        $error = '<style type="text/css">
     body, html {
         margin: 0;
         padding: 0;
     }
 </style>
 <div class="error">
-    <p style="padding-left:2px; font-size:13px; color: #444; font-family: 'Open Sans',sans-serif; -webkit-font-smoothing: subpixel-antialiased;">
-        $message
+    <p style="padding-left:2px; font-size:13px; color: #444; font-family: \'Open Sans\',sans-serif; -webkit-font-smoothing: subpixel-antialiased;">
+        ' . $message . '
     </p>
-</div>
-EOT;
+</div>';
         echo wp_kses_post($error);
         die;
     }

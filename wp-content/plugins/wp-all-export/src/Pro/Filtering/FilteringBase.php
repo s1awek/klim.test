@@ -1,6 +1,10 @@
 <?php
 
+
 namespace Wpae\Pro\Filtering;
+
+defined( 'ABSPATH' ) || exit;
+
 
 /**
  * Class FilteringBase
@@ -126,6 +130,7 @@ abstract class FilteringBase implements FilteringInterface
             $rule->value = "-" . trim(str_replace("ago", "", $rule->value));
         }
 
+        // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- comparison value must match WP's local-timezone post_date column storage; strtotime() interprets the rule value in local timezone
         $rule->value = strpos($rule->value, ":") !== false ? date("Y-m-d H:i:s", strtotime($rule->value)) : ( in_array($rule->condition, array('greater')) ? date("Y-m-d", strtotime('+1 day', strtotime($rule->value))) : date("Y-m-d", strtotime($rule->value)));
 
     }

@@ -16,13 +16,15 @@ class ScheduledExport
         if ((int)$export->executing) {
             return new JsonResponse(array(
                 'status' => 403,
-                'message' => sprintf(esc_html__('Export #%s is currently in manually process. Request skipped.', 'wp_all_export_plugin'), $export->id)
+                /* translators: %s: export ID */
+                'message' => sprintf(esc_html__('Export #%s is currently in manually process. Request skipped.', 'wp-all-export'), $export->id)
             ));
         }
         if ($export->processing and !$export->triggered) {
             return new JsonResponse(array(
                 'status' => 403,
-                'message' => sprintf(esc_html__('Export #%s currently in process. Request skipped.', 'wp_all_export_plugin'), $export->id)
+                /* translators: %s: export ID */
+                'message' => sprintf(esc_html__('Export #%s currently in process. Request skipped.', 'wp-all-export'), $export->id)
             ));
         }
         if (!$export->processing and $export->triggered) {
@@ -35,12 +37,13 @@ class ScheduledExport
         $export->set(array(
             'triggered' => 1,
             'exported' => 0,
-            'last_activity' => date('Y-m-d H:i:s')
+            'last_activity' => date('Y-m-d H:i:s')  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
         ))->update();
 
         return new JsonResponse(array(
             'status' => 200,
-            'message' => sprintf(esc_html__('#%s Cron job triggered.', 'wp_all_export_plugin'), $export->id)
+            /* translators: %s: export ID */
+            'message' => sprintf(esc_html__('#%s Cron job triggered.', 'wp-all-export'), $export->id)
         ));
     }
 
@@ -62,19 +65,21 @@ class ScheduledExport
             if (!empty($export->parent_id) or empty($queue_exports)) {
                 wp_send_json(array(
                     'status' => 403,
-                    'message' => sprintf(esc_html__('Export #%s is not triggered. Request skipped.', 'wp_all_export_plugin'), $export->id)
+                    /* translators: %s: export ID */
+                    'message' => sprintf(esc_html__('Export #%s is not triggered. Request skipped.', 'wp-all-export'), $export->id)
                 ));
             }
         } elseif ((int)$export->executing) {
             wp_send_json(array(
                 'status' => 403,
-                'message' => sprintf(esc_html__('Export #%s is currently in manually process. Request skipped.', 'wp_all_export_plugin'), $export->id)
+                /* translators: %s: export ID */
+                'message' => sprintf(esc_html__('Export #%s is currently in manually process. Request skipped.', 'wp-all-export'), $export->id)
             ));
         } elseif ((int)$export->triggered and !(int)$export->processing) {
             try {
                 $response = $export->set(array('canceled' => 0))->execute($logger, true);
             } catch (AddonNotFoundException $e) {
-                die($e->getMessage());
+                die(esc_html($e->getMessage()));
             }
             if (!(int)$export->triggered and !(int)$export->processing) {
 
@@ -109,19 +114,22 @@ class ScheduledExport
 
                 wp_send_json(array(
                     'status' => 200,
-                    'message' => sprintf(esc_html__('Export #%s complete', 'wp_all_export_plugin'), $export->id)
+                    /* translators: %s: export ID */
+                    'message' => sprintf(esc_html__('Export #%s complete', 'wp-all-export'), $export->id)
                 ));
             } else {
                 wp_send_json(array(
                     'status' => 200,
-                    'message' => sprintf(esc_html__('Records Processed %s.', 'wp_all_export_plugin'), (int)$export->exported)
+                    /* translators: %s: number of records processed */
+                    'message' => sprintf(esc_html__('Records Processed %s.', 'wp-all-export'), (int)$export->exported)
                 ));
             }
 
         } else {
             wp_send_json(array(
                 'status' => 403,
-                'message' => sprintf(esc_html__('Export #%s already processing. Request skipped.', 'wp_all_export_plugin'), $export->id)
+                /* translators: %s: export ID */
+                'message' => sprintf(esc_html__('Export #%s already processing. Request skipped.', 'wp-all-export'), $export->id)
             ));
         }
     }

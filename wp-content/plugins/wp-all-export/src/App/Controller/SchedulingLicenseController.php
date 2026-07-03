@@ -40,7 +40,8 @@ class SchedulingLicenseController
 
     public function saveSchedulingLicenseAction()
     {
-        $license = $_POST['license'];
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- AJAX nonce verified by check_ajax_referer in wpae_api dispatcher (wpae_api.php) plus current_user_can capability check
+        $license = isset( $_POST['license'] ) ? sanitize_text_field( wp_unslash( $_POST['license'] ) ) : '';
 
 		$licenseCheckResponse = $this->licensingManager->checkLicense($license, \PMXE_Plugin::getSchedulingName());
         if(!empty($licenseCheckResponse['success'])) {
@@ -78,7 +79,9 @@ class SchedulingLicenseController
 
         delete_transient(PMXE_Plugin::$cache_key);
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- forces removal of cached license-check transient rows on options table to bypass any stale object-cache hit before re-activation
         $wpdb->query( $wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name = %s", $this->slug . '_' . PMXE_Plugin::$cache_key) );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- forces removal of cached license-check transient timeout row on options table to bypass any stale object-cache hit before re-activation
         $wpdb->query( $wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name = %s", $this->slug . '_timeout_' . PMXE_Plugin::$cache_key) );
 
         delete_site_transient('update_plugins');
@@ -95,7 +98,9 @@ class SchedulingLicenseController
 
         delete_transient(PMXE_Plugin::$cache_key);
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- forces removal of cached license-check transient rows on options table to bypass any stale object-cache hit before re-checking
         $wpdb->query( $wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name = %s", $this->slug . '_' . PMXE_Plugin::$cache_key) );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- forces removal of cached license-check transient timeout row on options table to bypass any stale object-cache hit before re-checking
         $wpdb->query( $wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name = %s", $this->slug . '_timeout_' . PMXE_Plugin::$cache_key) );
 
         return $this->licensingActivator->checkLicense(PMXE_Plugin::getSchedulingName(), $options, LicenseActivator::CONTEXT_SCHEDULING);

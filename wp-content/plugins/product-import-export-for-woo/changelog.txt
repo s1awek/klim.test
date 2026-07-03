@@ -1,6 +1,9 @@
 
 == Changelog ==
 
+= 2.6.5 2026-06-22 =
+* [Compatibility] – Tested OK with WooCommerce 10.8.1
+
 = 2.6.4 2026-05-26 =
 * [Compatibility] - Tested OK with WordPress 7.0
 * [Fix] - Vulnerability. Thanks to @nacento for reporting the issue.

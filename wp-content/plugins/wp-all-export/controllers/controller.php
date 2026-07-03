@@ -42,10 +42,12 @@ abstract class PMXE_Controller {
 	 */
 	protected function force_ssl() {
 		if (force_ssl_admin() && ! is_ssl()) {
-			if ( 0 === strpos($_SERVER['REQUEST_URI'], 'http') ) {
-				wp_redirect(preg_replace('|^http://|', 'https://', $_SERVER['REQUEST_URI'])); die();
+			$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+			$http_host   = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+			if ( 0 === strpos( $request_uri, 'http' ) ) {
+				wp_safe_redirect(preg_replace('|^http://|', 'https://', $request_uri)); die();
 			} else {
-				wp_redirect('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); die();
+				wp_safe_redirect('https://' . $http_host . $request_uri); die();
 			}
 		}		
 	}
@@ -66,6 +68,7 @@ abstract class PMXE_Controller {
 			
 			// assume template file name depending on calling function
 			if (is_null($viewPath)) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace -- used to derive view path from calling class/function
 				$trace = debug_backtrace();
 				$viewPath = str_replace('_', '/', preg_replace('%^' . preg_quote(PMXE_Plugin::PREFIX, '%') . '%', '', strtolower($trace[1]['class']))) . '/' . $trace[1]['function'];
 			}
@@ -78,7 +81,7 @@ abstract class PMXE_Controller {
 				extract($this->data);
 				include $filePath;
 			} else {
-				throw new Exception("Requested template file $filePath is not found.");
+				throw new Exception( esc_html( "Requested template file $filePath is not found." ) );
 			}
 		}
 	}
@@ -114,9 +117,10 @@ abstract class PMXE_Controller {
 	public function download(){
 
 
-		$nonce = (!empty($_REQUEST['_wpnonce'])) ? $_REQUEST['_wpnonce'] : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verified on next line
+		$nonce = (!empty($_REQUEST['_wpnonce'])) ? sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) : '';
 		if ( ! wp_verify_nonce( $nonce, '_wpnonce-download_feed' ) ) {
-		    die( __('Security check', 'wp_all_export_plugin') );
+		    die( esc_html__('Security check', 'wp-all-export') );
 		} else {
 
 			$is_secure_import = PMXE_Plugin::getInstance()->getOption('secure');

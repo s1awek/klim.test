@@ -2,9 +2,10 @@
 if(!defined('ABSPATH')) {
     die();
 }
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variables in template files inherited from controller render() scope
 $l10n = array(
-		'confirm_and_run'    => __('Confirm & Run Export', 'wp_all_export_plugin'),
-		'save_configuration' => __('Save Export Configuration', 'wp_all_export_plugin')	
+		'confirm_and_run'    => __('Confirm & Run Export', 'wp-all-export'),
+		'save_configuration' => __('Save Export Configuration', 'wp-all-export')	
 	);
 ?>
 <script type="text/javascript">	
@@ -20,10 +21,10 @@ $l10n = array(
 		<div class="wpallexport-header">
 			<div class="wpallexport-logo"></div>
 			<div class="wpallexport-title">
-				<h2><?php esc_html_e('Export Settings', 'wp_all_export_plugin'); ?></h2>
+				<h2><?php esc_html_e('Export Settings', 'wp-all-export'); ?></h2>
 			</div>
 			<div class="wpallexport-links">
-				<a href="http://www.wpallimport.com/support/?utm_source=export-plugin-free&utm_medium=help&utm_campaign=premium-support" target="_blank"><?php esc_html_e('Support', 'wp_all_export_plugin'); ?></a> | <a href="http://www.wpallimport.com/documentation/?utm_source=export-plugin-free&utm_medium=help&utm_campaign=docs" target="_blank"><?php esc_html_e('Documentation', 'wp_all_export_plugin'); ?></a>
+				<a href="http://www.wpallimport.com/support/?utm_source=export-plugin-free&utm_medium=help&utm_campaign=premium-support" target="_blank"><?php esc_html_e('Support', 'wp-all-export'); ?></a> | <a href="http://www.wpallimport.com/documentation/?utm_source=export-plugin-free&utm_medium=help&utm_campaign=docs" target="_blank"><?php esc_html_e('Documentation', 'wp-all-export'); ?></a>
 			</div>
 		</div>	
 		<div class="clear"></div>		
@@ -68,7 +69,7 @@ $l10n = array(
 						<input type="hidden" name="is_submitted" value="1" />
                         <input type="hidden" name="record-count" class="wpae-record-count" value="0" />
 
-                        <input style="padding:20px 50px 20px 50px;" type="submit" class="rad10 wp_all_export_confirm_and_run" value="<?php esc_html_e('Confirm & Run Export', 'wp_all_export_plugin') ?>" />
+                        <input style="padding:20px 50px 20px 50px;" type="submit" class="rad10 wp_all_export_confirm_and_run" value="<?php esc_html_e('Confirm & Run Export', 'wp-all-export') ?>" />
                     </form>
 					<?php endif; ?>
 				</div>					
@@ -107,7 +108,7 @@ $l10n = array(
                             <div class="wpallexport-content-section" style="padding-bottom: 15px; margin-bottom: 10px;">
                                 <div class="wpallexport-collapsed-header" id="scheduling-options-header" style="padding-left: 25px;">
                                     <h3 id="scheduling-title" style="position: relative;">
-										<?php esc_html_e('Scheduling Options', 'wp_all_export_plugin'); ?>
+										<?php esc_html_e('Scheduling Options', 'wp-all-export'); ?>
                                     </h3>
                                 </div>
 
@@ -131,17 +132,17 @@ $l10n = array(
                     <input type="hidden" name="is_submitted" value="1" />
                     <div style="color: #425F9A; font-size: 14px; font-weight: bold; margin: 0 0 15px; line-height: 25px; text-align: center;">
                         <div id="no-subscription" style="display: none;">
-                            <?php esc_html_e("Looks like you're trying out Automatic Scheduling!");?><br/>
-                            <?php esc_html_e("Your Automatic Scheduling settings won't be saved without a subscription.");?>
+                            <?php esc_html_e( "Looks like you're trying out Automatic Scheduling!", 'wp-all-export' );?><br/>
+                            <?php esc_html_e( "Your Automatic Scheduling settings won't be saved without a subscription.", 'wp-all-export' );?>
                         </div>
                     </div>
                     <div class="wpallexport-submit-buttons" style="text-align: center; <?php if ($this->isWizard) { ?> height: 60px; <?php } ?> ">
 
                         <?php if ($this->isWizard): ?>
-                            <a href="<?php echo esc_url(apply_filters('pmxi_options_back_link', add_query_arg(['action'=>'template','_wpnonce_template' => wp_create_nonce('template')], $this->baseUrl), $this->isWizard)); ?>" class="back rad3"><?php esc_html_e('Back', 'wp_all_export_plugin') ?></a>
+                            <a href="<?php echo esc_url(apply_filters('pmxi_options_back_link', add_query_arg(['action'=>'template','_wpnonce_template' => wp_create_nonce('template')], $this->baseUrl), $this->isWizard)); ?>" class="back rad3"><?php esc_html_e('Back', 'wp-all-export') ?></a>
                             <?php include(__DIR__ . "/../../../src/Scheduling/views/SaveSchedulingButton.php"); ?>
                         <?php else: ?>
-                            <a href="<?php echo esc_url(apply_filters('pmxi_options_back_link', remove_query_arg('id', remove_query_arg('action', $this->baseUrl)), $this->isWizard)); ?>" class="back rad3"><?php esc_html_e('Back to Manage Exports', 'wp_all_export_plugin') ?></a>
+                            <a href="<?php echo esc_url(apply_filters('pmxi_options_back_link', remove_query_arg('id', remove_query_arg('action', $this->baseUrl)), $this->isWizard)); ?>" class="back rad3"><?php esc_html_e('Back to Manage Exports', 'wp-all-export') ?></a>
                             <?php include(__DIR__ . "/../../../src/Scheduling/views/SaveSchedulingButton.php"); ?>
                         <?php endif ?>
                     </div>
@@ -149,7 +150,8 @@ $l10n = array(
                 </form>
 
                 <div class="wpallexport-display-columns wpallexport-margin-top-forty">
-					<?php echo apply_filters('wpallexport_footer', ''); ?>
+					<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plugin-owned filter output; callback in filters/wpallexport_footer.php returns trusted static HTML
+		echo apply_filters('wpallexport_footer', ''); ?>
                 </div>
 
 			</td>			

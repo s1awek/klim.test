@@ -1,5 +1,6 @@
 <?php
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
 namespace Wpae\WordPress;
 
 
@@ -15,6 +16,7 @@ class OrderQuery
 
 		$query = $this->getQuery($offset, $limit, $post_id);
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $query built in getQuery() from $wpdb->prefix table name and saved export-template SQL fragments; user-supplied post_id cast to (int) before concatenation; admin-saved where/join clauses require manage_options capability
 		return $wpdb->get_results($query);
 	}
 
@@ -41,7 +43,7 @@ class OrderQuery
 
 		// Handle RTE or other exports where a single post_id is provided.
 		if($post_id){
-			$post_id_where = ' AND id = "'.$post_id.'" ';
+			$post_id_where = ' AND id = ' . (int) $post_id . ' ';
 		}
 
 		// Order by - allow override
@@ -79,6 +81,7 @@ class OrderQuery
 				$postList = new \PMXE_Post_List();
 
 				$postsToExcludeSql = 'SELECT post_id FROM ' . $postList->getTable() . ' WHERE export_id = %d AND iteration < %d';
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name from PMXE_Post_List::getTable() (uses $wpdb->prefix); values bound via prepare()
 				$results = $wpdb->get_results($wpdb->prepare($postsToExcludeSql, $export->id, $export->iteration));
 
 				foreach ($results as $result) {

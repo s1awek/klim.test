@@ -258,13 +258,13 @@
 
 .wpallexport-plugin .days-of-week {
     margin-left: 5px;
-    width: 720px;
+    width: 100%
 }
 
 .wpallexport-plugin .days-of-week li {
     border: 1px solid #ccc;
     border-radius: 5px;
-    padding: 10px 30px;;
+    padding: 10px 25px;;
     display: inline-block;
     margin-right: 10px;
     cursor: pointer;
@@ -273,6 +273,7 @@
     text-align: center;
     height: 16px;
     color: rgb(68,68,68);
+    background-color: transparent;
     float: left;
 }
 
@@ -732,12 +733,18 @@
 }
 
 .wpallexport-plugin .tiered-pricing-options h3 {
-    background:none;
-    color: #464646;
-    padding:5px;
-    border:unset;
-    margin-top:20px;
+    background: none !important;
+    background-color: transparent !important;
+    color: #3c434a !important;
+    padding: 5px;
+    border: unset;
+    margin-top: 20px;
     font-size: 13px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .faq-section h4 {
+    background-color: transparent !important;
+    color: #3c434a !important;
 }
 
 .wpallexport-plugin .tiered-pricing-options .blue {

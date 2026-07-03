@@ -12,7 +12,6 @@ use Automattic\WooCommerce\Admin\Features\OnboardingTasks\TaskLists;
  * Allows tracking code to be inserted into store pages.
  *
  * @class   WC_Google_Analytics
- * @extends WC_Integration
  */
 class WC_Google_Analytics extends WC_Integration {
 
@@ -37,6 +36,17 @@ class WC_Google_Analytics extends WC_Integration {
 		// Load the settings
 		$this->init_form_fields();
 		$this->init_settings();
+
+		// Backfill any settings keys not yet stored in the database.
+		// On a fresh activation, maybe_set_defaults() writes a partial settings array before
+		// init_settings() runs. WC_Integration::init_settings() only applies defaults when no
+		// settings exist at all, so keys missing from a partial array would be absent from
+		// $this->settings. We fill them in here using the same fallback logic as get_option().
+		foreach ( $this->get_form_fields() as $key => $field ) {
+			if ( ! array_key_exists( $key, $this->settings ) ) {
+				$this->settings[ $key ] = $this->get_field_default( $field );
+			}
+		}
 
 		add_action( 'admin_notices', array( $this, 'universal_analytics_upgrade_notice' ) );
 
@@ -204,6 +214,8 @@ class WC_Google_Analytics extends WC_Integration {
 	public function show_options_info() {
 		$this->method_description .= "<div class='notice notice-info'><p>" . __( 'Please allow Google Analytics 24 hours to start displaying results.', 'woocommerce-google-analytics-integration' ) . '</p></div>';
 
+		// Nonce verification is handled by WC_Integration::process_admin_options().
+		// This callback runs on woocommerce_update_options_integration_google_analytics, which is already nonce-protected.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_REQUEST['woocommerce_google_analytics_ga_ecommerce_tracking_enabled'] ) && true === (bool) $_REQUEST['woocommerce_google_analytics_ga_ecommerce_tracking_enabled'] ) {
 			$this->method_description .= "<div class='notice notice-info'><p>" . __( 'Please note, for transaction tracking to work properly, you will need to use a payment gateway that redirects the customer back to a WooCommerce order received/thank you page.', 'woocommerce-google-analytics-integration' ) . '</div>';

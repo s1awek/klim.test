@@ -4,6 +4,7 @@
 namespace SweetCode\Pixel_Manager\Admin;
 
 use SweetCode\Pixel_Manager\Admin\Notifications\Notifications;
+use SweetCode\Pixel_Manager\Admin\Notifications\Trial_Promotion_Notification;
 use SweetCode\Pixel_Manager\Admin\Opportunities\Opportunities;
 use SweetCode\Pixel_Manager\Helpers;
 use SweetCode\Pixel_Manager\Logger;
@@ -11,6 +12,7 @@ use SweetCode\Pixel_Manager\Options;
 use SweetCode\Pixel_Manager\Pixels\Google\Google_Helpers;
 use SweetCode\Pixel_Manager\Pixels\Pixel_Manager;
 use SweetCode\Pixel_Manager\Shop;
+use SweetCode\Pixel_Manager\Tracking_Accuracy_DB;
 use WP_Post;
 defined( 'ABSPATH' ) || exit;
 // Exit if accessed directly
@@ -31,6 +33,8 @@ class Admin {
         add_action( 'admin_enqueue_scripts', [__CLASS__, 'wpm_admin_css'] );
         // add the admin options page
         add_action( 'admin_menu', [__CLASS__, 'plugin_admin_add_page'], 99 );
+        // add the WordPress dashboard overview widget
+        Dashboard_Widget::init();
         // Sync the dev theme switcher query param to a cookie (before output).
         add_action( 'admin_init', [__CLASS__, 'sync_theme_cookie'] );
         // install a settings page in the admin console
@@ -176,8 +180,8 @@ class Admin {
         if ( !strpos( $hook_suffix, 'page_pmw' ) ) {
             return;
         }
-        // Skip classic admin scripts when Mantine admin UI is active.
-        if ( self::is_mantine_admin_active() ) {
+        // Skip classic admin scripts when an alternative admin UI is active.
+        if ( 'classic' !== self::get_active_admin_theme() ) {
             return;
         }
         wp_enqueue_script(
@@ -279,10 +283,16 @@ class Admin {
     public static function plugin_admin_add_page() {
         //add_options_page('WPM Plugin Page', 'WPM Plugin Menu', 'manage_options', 'wpm', array($this, 'wpm_plugin_options_page'));
         $menu_title = esc_html__( 'Pixel Manager', 'woocommerce-google-adwords-conversion-tracking-tag' );
-        // Add notification badge if there are active opportunities
+        // Add notification badge if there are active opportunities.
+        // Use the .menu-counter markup (same as core's Site Health submenu badge,
+        // styled by core since WP 5.2). Unlike .awaiting-mod, .menu-counter is
+        // never repainted by the current/hover menu rules — in WP 7 those rules
+        // turn .awaiting-mod near-black inside the open flyout, while
+        // .menu-counter keeps the admin accent colour in every state.
         $opportunities_count = Opportunities::get_active_opportunities_count();
         if ( $opportunities_count > 0 ) {
-            $menu_title .= ' <span class="awaiting-mod pmw-menu-badge">' . $opportunities_count . '</span>';
+            $count = number_format_i18n( $opportunities_count );
+            $menu_title .= ' <span class="menu-counter count-' . absint( $opportunities_count ) . '">' . '<span class="count">' . esc_html( $count ) . '</span>' . '</span>';
         }
         add_submenu_page(
             self::get_submenu_parent_slug(),
@@ -476,20 +486,32 @@ class Admin {
             'wpm_plugin_options_page',
             $section_ids['settings_name']
         );
-        // add the field for the CrazyEgg pixel
-        add_settings_field(
-            'wpm_plugin_crazyegg_account_number',
-            esc_html__( 'CrazyEgg account number', 'woocommerce-google-adwords-conversion-tracking-tag' ),
-            [__CLASS__, 'option_html_crazyegg_account_number'],
-            'wpm_plugin_options_page',
-            $section_ids['settings_name']
-        );
+        // add the field for the CrazyEgg pixel (Pro feature)
+        if ( wpm_fs()->can_use_premium_code__premium_only() || Options::is_pro_version_demo_active() ) {
+            add_settings_field(
+                'wpm_plugin_crazyegg_account_number',
+                esc_html__( 'CrazyEgg account number', 'woocommerce-google-adwords-conversion-tracking-tag' ),
+                [__CLASS__, 'option_html_crazyegg_account_number'],
+                'wpm_plugin_options_page',
+                $section_ids['settings_name']
+            );
+        }
         // add the field for the Contentsquare pixel (Pro feature)
         if ( wpm_fs()->can_use_premium_code__premium_only() || Options::is_pro_version_demo_active() ) {
             add_settings_field(
                 'pmw_plugin_contentsquare_tag_id',
                 esc_html__( 'Contentsquare tag ID', 'woocommerce-google-adwords-conversion-tracking-tag' ) . self::html_beta(),
                 [__CLASS__, 'option_html_contentsquare_tag_id'],
+                'wpm_plugin_options_page',
+                $section_ids['settings_name']
+            );
+        }
+        // add the field for the Microsoft Clarity pixel (Pro feature)
+        if ( wpm_fs()->can_use_premium_code__premium_only() || Options::is_pro_version_demo_active() ) {
+            add_settings_field(
+                'pmw_plugin_clarity_project_id',
+                esc_html__( 'Microsoft Clarity project ID', 'woocommerce-google-adwords-conversion-tracking-tag' ) . self::html_beta(),
+                [__CLASS__, 'option_html_clarity_project_id'],
                 'wpm_plugin_options_page',
                 $section_ids['settings_name']
             );
@@ -596,6 +618,14 @@ class Admin {
                 'wpm_plugin_options_page',
                 $section_ids['settings_name']
             );
+            // Add the field for the OpenAI pixel
+            add_settings_field(
+                'pmw_plugin_openai_pixel_id',
+                esc_html__( 'OpenAI pixel ID', 'woocommerce-google-adwords-conversion-tracking-tag' ) . self::html_beta(),
+                [__CLASS__, 'option_html_openai_pixel_id'],
+                'wpm_plugin_options_page',
+                $section_ids['settings_name']
+            );
             // add the field for the Snapchat pixel
             add_settings_field(
                 'wpm_plugin_snapchat_pixel_id',
@@ -645,22 +675,20 @@ class Admin {
         /**
          * Add the settings fields
          */
-        if ( Helpers::is_experiment() ) {
-            add_settings_field(
-                'pmw_plugin_ab_tasty_account_id',
-                esc_html__( 'AB Tasty', 'woocommerce-google-adwords-conversion-tracking-tag' ) . self::html_beta(),
-                [__CLASS__, 'option_html_ab_tasty_account_id'],
-                'wpm_plugin_options_page',
-                $section_ids['settings_name']
-            );
-            add_settings_field(
-                'pmw_plugin_optimizely_project_id',
-                esc_html__( 'Optimizely', 'woocommerce-google-adwords-conversion-tracking-tag' ) . self::html_beta(),
-                [__CLASS__, 'option_html_optimizely_project_id'],
-                'wpm_plugin_options_page',
-                $section_ids['settings_name']
-            );
-        }
+        add_settings_field(
+            'pmw_plugin_ab_tasty_account_id',
+            esc_html__( 'AB Tasty', 'woocommerce-google-adwords-conversion-tracking-tag' ) . self::html_beta(),
+            [__CLASS__, 'option_html_ab_tasty_account_id'],
+            'wpm_plugin_options_page',
+            $section_ids['settings_name']
+        );
+        add_settings_field(
+            'pmw_plugin_optimizely_project_id',
+            esc_html__( 'Optimizely', 'woocommerce-google-adwords-conversion-tracking-tag' ) . self::html_beta(),
+            [__CLASS__, 'option_html_optimizely_project_id'],
+            'wpm_plugin_options_page',
+            $section_ids['settings_name']
+        );
         add_settings_field(
             'pmw_plugin_vwo_account_id',
             esc_html__( 'VWO', 'woocommerce-google-adwords-conversion-tracking-tag' ) . self::html_beta(),
@@ -694,6 +722,7 @@ class Admin {
             self::add_section_advanced_subsection_pinterest( $section_ids );
             self::add_section_advanced_subsection_snapchat( $section_ids );
             self::add_section_advanced_subsection_reddit( $section_ids );
+            self::add_section_advanced_subsection_openai( $section_ids );
             self::add_section_advanced_subsection_tiktok( $section_ids );
             if ( Environment::is_woocommerce_active() ) {
                 self::add_section_advanced_subsection_twitter( $section_ids );
@@ -1157,6 +1186,30 @@ class Admin {
         );
     }
 
+    public static function add_section_advanced_subsection_openai( $section_ids ) {
+        $sub_section_ids = [
+            'title' => 'OpenAI',
+            'slug'  => 'openai',
+        ];
+        self::add_subsection_div( $section_ids, $sub_section_ids );
+        // Add the field for the OpenAI CAPI token
+        add_settings_field(
+            'pmw_setting_openai_capi_token',
+            esc_html__( 'OpenAI Conversions API: token', 'woocommerce-google-adwords-conversion-tracking-tag' ),
+            [__CLASS__, 'option_html_openai_capi_token'],
+            'wpm_plugin_options_page',
+            $section_ids['settings_name']
+        );
+        // Add the field for the OpenAI advanced matching
+        add_settings_field(
+            'plugin_openai_advanced_matching',
+            esc_html__( 'OpenAI Advanced Matching', 'woocommerce-google-adwords-conversion-tracking-tag' ),
+            [__CLASS__, 'option_html_openai_advanced_matching'],
+            'wpm_plugin_options_page',
+            $section_ids['settings_name']
+        );
+    }
+
     public static function add_section_advanced_subsection_tiktok( $section_ids ) {
         $sub_section_ids = [
             'title' => 'TikTok',
@@ -1428,6 +1481,16 @@ class Admin {
                 $section_ids['settings_name']
             );
         }
+        if ( Environment::is_faz_cookie_manager_active() ) {
+            // Add fields for the FAZ Cookie Manager support
+            add_settings_field(
+                'wpm_setting_faz_cookie_manager_support',
+                esc_html__( 'FAZ Cookie Manager Support', 'woocommerce-google-adwords-conversion-tracking-tag' ),
+                [__CLASS__, 'setting_html_faz_cookie_manager_support'],
+                'wpm_plugin_options_page',
+                $section_ids['settings_name']
+            );
+        }
     }
 
     // Add a tab for the logs
@@ -1595,9 +1658,9 @@ class Admin {
 
     // display the admin options page
     public static function plugin_options_page() {
-        // ─── Mantine admin UI (dev-only theme switcher) ───────────
-        if ( self::is_mantine_admin_active() ) {
-            self::render_mantine_admin();
+        // ─── Admin UI: Nova (default) with a Classic fallback ───────────
+        if ( self::is_wp_admin_active() ) {
+            self::render_wp_admin();
             return;
         }
         $freemius_data = [
@@ -1778,18 +1841,26 @@ class Admin {
 		</div>
 
 		<?php 
-        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+        if ( self::nova_build_available() ) {
             ?>
-		<div style="position: fixed; bottom: 16px; right: 16px; z-index: 9999; background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,.15); padding: 8px 12px; border: 1px solid #dee2e6; display: flex; align-items: center; gap: 8px;">
-			<span style="font-size: 12px; color: #868e96; font-weight: 500;">Theme</span>
-			<span style="display: inline-flex; background: #f1f3f5; border-radius: 4px; overflow: hidden; font-size: 12px;">
+			<style>
+				.pmw-nova-switch { margin: 14px 0 4px; font-size: 13px; color: #50575e; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+				.pmw-nova-switch a { display: inline-flex; align-items: center; gap: 5px; text-decoration: none; font-weight: 600;
+					background: linear-gradient(135deg, #2271b1 0%, #5b3fd9 100%); color: #fff; padding: 6px 14px; border-radius: 7px; }
+				.pmw-nova-switch a:hover { color: #fff; }
+			</style>
+			<div class="pmw-nova-switch">
+				<span><?php 
+            esc_html_e( "You're using the Classic interface.", 'woocommerce-google-adwords-conversion-tracking-tag' );
+            ?></span>
 				<a href="<?php 
-            echo esc_url( add_query_arg( 'pmw_theme', 'mantine' ) );
-            ?>"
-					style="padding: 4px 10px; text-decoration: none; color: #495057;">Mantine</a>
-				<span style="padding: 4px 10px; background: #fff; color: #000; font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,.1);">Classic</span>
-			</span>
-		</div>
+            echo esc_url( add_query_arg( 'pmw_theme', 'wp' ) );
+            ?>">
+					<?php 
+            esc_html_e( 'Switch to the new Nova interface', 'woocommerce-google-adwords-conversion-tracking-tag' );
+            ?> &rarr;
+				</a>
+			</div>
 		<?php 
         }
         ?>
@@ -1797,19 +1868,15 @@ class Admin {
 		<?php 
     }
 
-    // ─── Mantine Admin UI Helpers ───────────
+    // ─── Admin UI theme helpers ───────────
     /**
-    * Check if the Mantine admin UI should be rendered.
-    *
-    * Active when WP_DEBUG is true and the user's localStorage preference
-    	/**
-    * Sync the ?pmw_theme query parameter to a cookie so the choice
-    * persists across settings saves and tab navigation.
-    *
-    * Runs on admin_init (before output) so headers can still be sent.
-    *
-    * @since 1.59.0
-    */
+     * Sync the ?pmw_theme query parameter to a cookie so the choice
+     * persists across settings saves and tab navigation.
+     *
+     * Runs on admin_init (before output) so headers can still be sent.
+     *
+     * @since 1.59.0
+     */
     public static function sync_theme_cookie() {
         // Only relevant on the PMW settings page.
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -1822,114 +1889,448 @@ class Admin {
         }
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $theme = sanitize_text_field( wp_unslash( $_GET['pmw_theme'] ) );
-        if ( 'classic' === $theme ) {
+        // Persist the chosen design system so the choice survives settings saves
+        // and tab navigation. Use WordPress's own admin cookie path (site path +
+        // 'wp-admin') so the cookie is also sent back on subdirectory installs and
+        // subdirectory multisite networks, where the admin is not at '/wp-admin/'.
+        if ( in_array( $theme, ['classic', 'wp'], true ) ) {
+            $cookie_path = ( defined( 'ADMIN_COOKIE_PATH' ) ? ADMIN_COOKIE_PATH : '/wp-admin/' );
             setcookie(
                 'pmw_admin_theme',
-                'classic',
+                $theme,
                 0,
-                '/wp-admin/'
-            );
-        } else {
-            // Switching to Mantine — clear the cookie.
-            setcookie(
-                'pmw_admin_theme',
-                '',
-                time() - 3600,
-                '/wp-admin/'
+                $cookie_path
             );
         }
     }
 
     /**
-     * Whether to render the Mantine admin UI instead of the classic one.
+     * Resolve which admin design system is active: 'wp' (Nova) | 'classic'.
      *
-     * Is communicated via a query parameter or cookie.
+     * Resolution order:
+     *  1. ?pmw_theme query param (set by the theme switcher)
+     *  2. pmw_admin_theme cookie (persisted choice)
+     *  3. the install's default (Nova on new installs, Classic on existing ones)
+     * Nova falls back to classic if its build output is missing.
      *
-     * For this first version we check for:
-     *  1. PMW_EXPERIMENTS must be enabled
-     *  2. The built Mantine JS file must exist
+     * @return string
      *
-     * The actual theme selection is stored client-side in localStorage.
-     * On first load with PMW_EXPERIMENTS, we always show the Mantine UI. The
-     * theme switcher component in Shell.tsx handles switching back to
-     * classic by reloading with ?pmw_theme=classic.
+     * @since 1.59.0
+     */
+    private static function get_active_admin_theme() {
+        $valid = ['classic', 'wp'];
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if ( isset( $_GET['pmw_theme'] ) ) {
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $requested = sanitize_text_field( wp_unslash( $_GET['pmw_theme'] ) );
+            if ( in_array( $requested, $valid, true ) ) {
+                return self::theme_with_build_fallback( $requested );
+            }
+        }
+        if ( isset( $_COOKIE['pmw_admin_theme'] ) ) {
+            $cookie = sanitize_text_field( wp_unslash( $_COOKIE['pmw_admin_theme'] ) );
+            if ( in_array( $cookie, $valid, true ) ) {
+                return self::theme_with_build_fallback( $cookie );
+            }
+        }
+        return self::theme_with_build_fallback( self::get_default_admin_theme() );
+    }
+
+    /**
+     * The default admin design system for this install.
+     *
+     * Fresh installs are marked with the pmw_default_admin_theme option the
+     * moment Options creates the initial defaults; they get Nova. Installs
+     * that predate Nova have no marker and keep the Classic UI during the
+     * transition phase, until Nova becomes the default for everyone.
+     *
+     * @return string 'wp' | 'classic'
+     *
+     * @since 1.59.0
+     */
+    public static function get_default_admin_theme() {
+        return ( 'wp' === get_option( Options::$default_admin_theme_option_name ) ? 'wp' : 'classic' );
+    }
+
+    /**
+     * The minimum WordPress version Nova can run on.
+     *
+     * Nova reuses WordPress core's React and component library at runtime
+     * (wp.element / wp.components). wp.element only exposes createRoot since
+     * WordPress 6.2 (the React 18 upgrade), and wp.components gained
+     * SearchControl in 5.9 and didn't exist at all before 5.0. Below this
+     * version the bundle would enqueue but the app could never mount.
+     *
+     * @var string
+     *
+     * @since 1.59.0
+     */
+    const NOVA_MIN_WP_VERSION = '6.2';
+
+    /**
+     * Whether this WordPress install ships the core APIs Nova needs.
      *
      * @return bool
      *
      * @since 1.59.0
      */
-    private static function is_mantine_admin_active() {
-        if ( !Helpers::is_experiment() ) {
-            return false;
-        }
-        // Allow explicit override via query param (set by the theme switcher on "Classic" selection).
-        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-        if ( isset( $_GET['pmw_theme'] ) && 'classic' === sanitize_text_field( wp_unslash( $_GET['pmw_theme'] ) ) ) {
-            return false;
-        }
-        // Honour the persisted cookie so "Classic" survives settings saves and tab switches.
-        if ( isset( $_COOKIE['pmw_admin_theme'] ) && 'classic' === sanitize_text_field( wp_unslash( $_COOKIE['pmw_admin_theme'] ) ) ) {
-            return false;
-        }
-        // Check that the Vite build output exists.
-        $js_file = plugin_dir_path( PMW_PLUGIN_FILE ) . 'js/admin/mantine/pmw-admin-mantine.js';
-        return file_exists( $js_file );
+    public static function nova_wp_version_supported() {
+        return version_compare( get_bloginfo( 'version' ), self::NOVA_MIN_WP_VERSION, '>=' );
     }
 
     /**
-     * Render the Mantine admin UI mount point and enqueue its assets.
+     * Whether switching to Nova will actually land on Nova.
+     *
+     * True only when the WordPress version is supported AND the Nova build
+     * output is present. Used to gate the "Switch to Nova" entry points so a
+     * click can never dead-end back on Classic (which theme_with_build_fallback
+     * would silently do when the build is missing).
+     *
+     * @return bool
      *
      * @since 1.59.0
      */
-    private static function render_mantine_admin() {
-        $base_url = PMW_PLUGIN_DIR_PATH . 'js/admin/mantine/';
-        $version = PMW_CURRENT_VERSION;
-        // Enqueue the Mantine admin CSS.
-        wp_enqueue_style(
-            'pmw-admin-mantine',
-            $base_url . 'pmw-admin-mantine.css',
-            [],
-            $version
-        );
-        // Enqueue the Mantine admin JS (IIFE bundle — no ES modules).
+    public static function nova_build_available() {
+        return self::nova_wp_version_supported() && file_exists( plugin_dir_path( PMW_PLUGIN_FILE ) . 'js/admin/wp/pmw-admin-wp.js' );
+    }
+
+    /**
+     * Fall back to the classic UI if the requested theme's build output is absent.
+     *
+     * @param string $theme
+     *
+     * @return string
+     *
+     * @since 1.59.0
+     */
+    private static function theme_with_build_fallback( $theme ) {
+        // Every resolution path (query param, cookie, install default) runs
+        // through here, so old WordPress cores always land on Classic.
+        if ( 'wp' === $theme && !self::nova_wp_version_supported() ) {
+            return 'classic';
+        }
+        $builds = [
+            'wp' => 'js/admin/wp/pmw-admin-wp.js',
+        ];
+        if ( isset( $builds[$theme] ) && !file_exists( plugin_dir_path( PMW_PLUGIN_FILE ) . $builds[$theme] ) ) {
+            return 'classic';
+        }
+        return $theme;
+    }
+
+    /**
+     * Whether the WordPress-components admin UI should be rendered.
+     *
+     * @return bool
+     *
+     * @since 1.59.0
+     */
+    public static function is_wp_admin_active() {
+        return 'wp' === self::get_active_admin_theme();
+    }
+
+    /**
+     * Render the WordPress-components admin UI mount point and enqueue its assets.
+     *
+     * Reuses WordPress's bundled React and component library (script handles
+     * react / react-dom / wp-element / wp-components / wp-i18n) rather than
+     * shipping its own copies — see the Vite externals in admin-ui-wp.
+     *
+     * @since 1.59.0
+     */
+    private static function render_wp_admin() {
+        $base_url = PMW_PLUGIN_DIR_PATH . 'js/admin/wp/';
+        $base_path = plugin_dir_path( PMW_PLUGIN_FILE ) . 'js/admin/wp/';
+        $js_path = $base_path . 'pmw-admin-wp.js';
+        $css_path = $base_path . 'pmw-admin-wp.css';
+        // Version the build artifacts by file mtime so a fresh build always busts
+        // the browser cache (these are generated bundles, not the plugin release).
+        $js_version = ( file_exists( $js_path ) ? (string) filemtime( $js_path ) : PMW_CURRENT_VERSION );
+        $css_version = ( file_exists( $css_path ) ? (string) filemtime( $css_path ) : PMW_CURRENT_VERSION );
+        // WordPress component styles (Card, Panel, controls, …) + dashicons (doc/video icons).
+        wp_enqueue_style( 'wp-components' );
+        wp_enqueue_style( 'dashicons' );
+        // The app's own CSS is only emitted if it imports any stylesheet; enqueue
+        // it conditionally so we never link a non-existent file.
+        if ( file_exists( $css_path ) ) {
+            wp_enqueue_style(
+                'pmw-admin-wp',
+                $base_url . 'pmw-admin-wp.css',
+                ['wp-components'],
+                $css_version
+            );
+        }
+        // IIFE bundle — depends on WordPress's bundled React + components.
         wp_enqueue_script(
-            'pmw-admin-mantine',
-            $base_url . 'pmw-admin-mantine.js',
-            [],
-            $version,
+            'pmw-admin-wp',
+            $base_url . 'pmw-admin-wp.js',
+            [
+                'react',
+                'react-dom',
+                'wp-element',
+                'wp-components',
+                'wp-i18n'
+            ],
+            $js_version,
             true
         );
-        // Pass data to the React app.
-        $can_use_premium = false;
-        if ( function_exists( 'wpm_fs' ) ) {
-            $can_use_premium = wpm_fs()->can_use_premium_code__premium_only();
+        // Pass data to the React app (same payload as the Nova UI).
+        // Use the canonical helper, not an inline wpm_fs() check: the WooCommerce
+        // Marketplace builds ship without the Freemius SDK, so function_exists('wpm_fs')
+        // is false there and the gulp `can_use_premium_code__premium_only() -> true`
+        // rewrite is dead code (it sits inside the guard). is_pmw_pro_version_active()
+        // resolves the paid wcm distribution via PMW_PLUGIN_BASENAME, so Pro pixels are
+        // correctly unlocked in the WooCommerce Pro build instead of shown as gated.
+        $can_use_premium = Helpers::is_pmw_pro_version_active();
+        // Expired means: this is the premium code base, but the license no
+        // longer validates. The Dashboard shows a prominent renewal card.
+        $license_expired = false;
+        if ( function_exists( 'wpm_fs' ) && wpm_fs()->is__premium_only() ) {
+            $license_expired = !$can_use_premium;
         }
-        wp_localize_script( 'pmw-admin-mantine', 'pmwAdminApi', [
-            'root'               => esc_url_raw( rest_url() ),
-            'nonce'              => wp_create_nonce( 'wp_rest' ),
-            'isDebug'            => Helpers::is_experiment(),
-            'canUsePremiumCode'  => $can_use_premium,
-            'options'            => Options::get_options(),
-            'opportunities'      => self::get_opportunities_for_mantine(),
-            'freemiusUpgradeUrl' => ( function_exists( 'wpm_fs' ) ? wpm_fs()->get_upgrade_url() : '' ),
-            'freemiusAccountUrl' => ( function_exists( 'wpm_fs' ) ? wpm_fs()->get_account_url() : '' ),
+        $ga4_credentials = Options::get_ga4_data_api_credentials();
+        wp_localize_script( 'pmw-admin-wp', 'pmwAdminApi', [
+            'root'                             => esc_url_raw( rest_url() ),
+            'nonce'                            => wp_create_nonce( 'wp_rest' ),
+            'isExperiment'                     => Helpers::is_experiment(),
+            'canUsePremiumCode'                => $can_use_premium,
+            'licenseExpired'                   => $license_expired,
+            'licenseExpiredDocsUrl'            => Documentation::get_link( 'license_expired_warning' ),
+            'options'                          => Options::get_options(),
+            'opportunities'                    => self::get_opportunities_for_nova(),
+            'opportunitiesCatalogWeight'       => self::get_opportunities_catalog_weight_for_nova(),
+            'backups'                          => self::get_backups_for_wp_admin(),
+            'diagnostics'                      => self::get_diagnostics_for_wp_admin(),
+            'roles'                            => self::get_roles_for_wp_admin(),
+            'detectedCmps'                     => self::get_detected_cmps_for_wp_admin(),
+            'consentRegions'                   => self::get_consent_regions_for_wp_admin(),
+            'sspFailedDestinations'            => ( Options::is_ssp_active() ? Options::get_ssp_failed_destinations() : [] ),
+            'sspQuotaExceeded'                 => Options::is_ssp_active() && Options::is_ssp_quota_exceeded(),
+            'sspProxyFailureBehavior'          => Options::get_ssp_proxy_failure_behavior(),
+            'trialPromotion'                   => Trial_Promotion_Notification::get_data_for_nova(),
+            'askForRating'                     => Ask_For_Rating::get_data_for_nova(),
+            'onboarding'                       => Onboarding::get_data_for_nova(),
+            'serverLoadWarning'                => Server_Load_Warning::get_data_for_nova(),
+            'gadsConversionAdjustmentsFeedUrl' => get_site_url() . Pixel_Manager::get_instance()->get_google_ads_conversion_adjustments_endpoint(),
+            'recentLogUrl'                     => (string) Helpers::get_admin_url_link_to_recent_wc_log( 'pmw' ),
+            'ga4DataApiClientEmail'            => ( isset( $ga4_credentials['client_email'] ) ? (string) $ga4_credentials['client_email'] : '' ),
+            'upgradeUrl'                       => Commercial_Links::upgrade_url(),
+            'accountUrl'                       => Commercial_Links::account_url(),
+            'supportUrl'                       => Commercial_Links::support_url(),
+            'pixelRequestUrl'                  => Commercial_Links::pixel_request_url(),
+            'trialUrl'                         => Trial_Promotion_Notification::get_available_trial_url(),
         ] );
         ?>
-		<style>.wrap > .nav-tab-wrapper { display: none !important; }</style>
-		<div id="pmw-mantine-root" style="margin: 10px 20px 0 0;"></div>
+		<style>
+			.wrap > .nav-tab-wrapper { display: none !important; }
+			/* The Nova app renders its own modern chat widget; hide the legacy one. */
+			#pmw-chatbot-widget, #pmw-chatbot-panel { display: none !important; }
+		</style>
+		<div id="pmw-wp-root" style="margin: 10px 20px 0 0;"></div>
 		<?php 
     }
 
     /**
+     * Lightweight backup list for the WordPress-components admin UI.
+     * The full backup blobs stay server-side; we only expose metadata.
+     *
+     * @return array
+     *
+     * @since 1.59.0
+     */
+    private static function get_backups_for_wp_admin() {
+        $active_timestamp = (int) Options::get_options_obj()->timestamp;
+        $backups = Options::get_automatic_options_backup();
+        $list = [];
+        foreach ( $backups as $timestamp => $data ) {
+            $list[] = [
+                'timestamp' => (int) $timestamp,
+                'dbVersion' => ( isset( $data['db_version'] ) ? (string) $data['db_version'] : '' ),
+                'active'    => (int) $timestamp === $active_timestamp,
+            ];
+        }
+        // Newest first.
+        usort( $list, function ( $a, $b ) {
+            return $b['timestamp'] - $a['timestamp'];
+        } );
+        return $list;
+    }
+
+    /**
+     * Cheap environment facts for the Diagnostics tab (no network calls).
+     *
+     * @return array
+     *
+     * @since 1.59.0
+     */
+    private static function get_diagnostics_for_wp_admin() {
+        return [
+            'pmwVersion'      => ( defined( 'PMW_CURRENT_VERSION' ) ? PMW_CURRENT_VERSION : '' ),
+            'wpVersion'       => get_bloginfo( 'version' ),
+            'wcVersion'       => ( defined( 'WC_VERSION' ) ? WC_VERSION : (( Environment::is_woocommerce_active() ? 'active' : 'not active' )) ),
+            'phpVersion'      => PHP_VERSION,
+            'memoryLimit'     => (string) WP_MEMORY_LIMIT,
+            'multisite'       => is_multisite(),
+            'wpDebug'         => defined( 'WP_DEBUG' ) && WP_DEBUG,
+            'curl'            => function_exists( 'curl_version' ),
+            'externalCache'   => wp_using_ext_object_cache(),
+            'gatewayAccuracy' => self::get_gateway_accuracy_for_wp_admin(),
+        ];
+    }
+
+    /**
+     * Payment Gateway Tracking Accuracy report data for the WordPress-components
+     * admin UI. Mirrors the Classic Diagnostics report. All reads are cheap —
+     * the analysis itself is generated on a separate scheduled action, here we
+     * only read the cached results (custom DB table or transient).
+     *
+     * The base per-gateway / weighted accuracy report is a FREE feature; only
+     * the Automatic Conversion Recovery (ACR) columns are premium and are
+     * surfaced via the `acr*` keys when a premium license is active.
+     *
+     * @return array
+     *
+     * @since 1.59.0
+     */
+    private static function get_gateway_accuracy_for_wp_admin() {
+        $transients_enabled = Environment::is_transients_enabled();
+        $data = [
+            'transientsEnabled' => $transients_enabled,
+            'canUseAcr'         => function_exists( 'wpm_fs' ) && wpm_fs()->can_use_premium_code__premium_only(),
+            'loadingMessage'    => Debug_Info::tracking_accuracy_loading_message(),
+            'date'              => null,
+            'dataBounds'        => Tracking_Accuracy_DB::get_data_date_bounds(),
+            'gateways'          => [],
+            'perGateway'        => null,
+            'weighted'          => null,
+        ];
+        if ( !$transients_enabled ) {
+            return $data;
+        }
+        $date = get_transient( 'pmw_tracking_accuracy_analysis_date' );
+        $data['date'] = ( $date ? (string) $date : null );
+        // Available payment gateways (id / method_title / class).
+        foreach ( Debug_Info::get_payment_gateways() as $gateway ) {
+            $data['gateways'][] = [
+                'id'          => (string) $gateway->id,
+                'methodTitle' => (string) $gateway->method_title,
+                'class'       => get_class( $gateway ),
+            ];
+        }
+        $per_gateway = Debug_Info::get_gateway_analysis_array();
+        if ( is_array( $per_gateway ) ) {
+            $data['perGateway'] = array_map( [__CLASS__, 'map_gateway_accuracy_row'], $per_gateway );
+        }
+        $weighted = Debug_Info::get_gateway_analysis_weighted_array();
+        if ( is_array( $weighted ) ) {
+            $data['weighted'] = array_map( [__CLASS__, 'map_gateway_accuracy_row'], $weighted );
+        }
+        return $data;
+    }
+
+    /**
+     * Normalise a single gateway-analysis row to camelCase keys for the JS UI.
+     *
+     * @param array $row
+     * @return array
+     *
+     * @since 1.59.0
+     */
+    private static function map_gateway_accuracy_row( $row ) {
+        $out = [
+            'gatewayId'  => ( isset( $row['gateway_id'] ) ? (string) $row['gateway_id'] : '' ),
+            'measured'   => ( isset( $row['order_count_measured'] ) ? (int) $row['order_count_measured'] : 0 ),
+            'total'      => ( isset( $row['order_count_total'] ) ? (int) $row['order_count_total'] : 0 ),
+            'percentage' => ( isset( $row['percentage'] ) ? (int) $row['percentage'] : 0 ),
+        ];
+        // Premium ACR columns (only present in the weighted array when licensed).
+        if ( isset( $row['acr_recovered'] ) ) {
+            $out['acrRecovered'] = (int) $row['acr_recovered'];
+            $out['measuredInclAcr'] = ( isset( $row['order_count_measured_including_acr'] ) ? (int) $row['order_count_measured_including_acr'] : 0 );
+            $out['percentageInclAcr'] = ( isset( $row['percentage_including_acr_recovered'] ) ? (int) $row['percentage_including_acr_recovered'] : 0 );
+            $out['percentageAcrRecovered'] = ( isset( $row['percentage_acr_recovered_conversions'] ) ? (int) $row['percentage_acr_recovered_conversions'] : 0 );
+        }
+        return $out;
+    }
+
+    /**
+     * Editable WordPress roles for the "disable tracking for roles" control.
+     *
+     * @return array  List of { slug, name }.
+     *
+     * @since 1.59.0
+     */
+    private static function get_roles_for_wp_admin() {
+        if ( !function_exists( 'get_editable_roles' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/user.php';
+        }
+        $roles = [];
+        foreach ( get_editable_roles() as $slug => $details ) {
+            $roles[] = [
+                'slug' => (string) $slug,
+                'name' => ( isset( $details['name'] ) ? (string) $details['name'] : (string) $slug ),
+            ];
+        }
+        return $roles;
+    }
+
+    /**
+     * Display names of any detected Consent Management Platforms.
+     *
+     * @return array  List of strings.
+     *
+     * @since 1.59.0
+     */
+    private static function get_detected_cmps_for_wp_admin() {
+        $checks = [
+            'Borlabs Cookie'                 => 'is_borlabs_cookie_active',
+            'Cookiebot'                      => 'is_cookiebot_active',
+            'Complianz'                      => 'is_complianz_active',
+            'Cookie Notice'                  => 'is_cookie_notice_active',
+            'Cookie Script'                  => 'is_cookie_script_active',
+            'GDPR Cookie Consent'            => 'is_wp_cookie_consent_active',
+            'GDPR Cookie Compliance (Moove)' => 'is_moove_gdpr_active',
+            'CookieYes'                      => 'is_cookieyes_active',
+            'Termly'                         => 'is_termly_active',
+            'FAZ Cookie Manager'             => 'is_faz_cookie_manager_active',
+        ];
+        $detected = [];
+        foreach ( $checks as $name => $method ) {
+            if ( method_exists( Environment::class, $method ) && Environment::$method() ) {
+                $detected[] = $name;
+            }
+        }
+        return $detected;
+    }
+
+    /**
+     * Consent-mode region codes + names for the restricted-regions picker.
+     *
+     * @return array  List of { code, name }.
+     *
+     * @since 1.59.0
+     */
+    private static function get_consent_regions_for_wp_admin() {
+        $list = [];
+        foreach ( Consent_Mode_Regions::get_consent_mode_regions() as $code => $name ) {
+            $list[] = [
+                'code' => (string) $code,
+                'name' => (string) $name,
+            ];
+        }
+        return $list;
+    }
+
+    /**
      * Serialize all available opportunities as a flat JSON-friendly array
-     * for the Mantine admin UI.
+     * for the Nova admin UI.
      *
      * @return array
      *
      * @since 1.58.8
      */
-    private static function get_opportunities_for_mantine() {
-        Opportunities::load_all_opportunity_classes_for_mantine();
+    private static function get_opportunities_for_nova() {
+        Opportunities::load_all_opportunity_classes_for_nova();
         $classes = get_declared_classes();
         $result = [];
         foreach ( $classes as $class ) {
@@ -1951,7 +2352,7 @@ class Admin {
                 'id'          => ( isset( $card['id'] ) ? $card['id'] : '' ),
                 'title'       => html_entity_decode( wp_strip_all_tags( ( isset( $card['title'] ) ? $card['title'] : '' ) ), ENT_QUOTES, 'UTF-8' ),
                 'description' => $description,
-                'impact'      => strtolower( ( isset( $card['impact'] ) ? $card['impact'] : 'low' ) ),
+                'impact'      => Opportunities::normalize_impact( ( isset( $card['impact'] ) ? $card['impact'] : 'low' ) ),
                 'setupLink'   => ( isset( $card['setup_link'] ) ? $card['setup_link'] : '' ),
                 'learnMore'   => ( isset( $card['learn_more_link'] ) ? $card['learn_more_link'] : '' ),
                 'setupVideo'  => ( isset( $card['setup_video'] ) ? $card['setup_video'] : '' ),
@@ -1970,6 +2371,40 @@ class Admin {
             return $a_order - $b_order;
         } );
         return $result;
+    }
+
+    /**
+     * Total impact weight of all opportunity checks the plugin can run,
+     * regardless of whether they currently apply to this store.
+     *
+     * The Nova UI uses this as the optimization-score denominator. Checks
+     * that pass (already configured, or not applicable) never reach the UI,
+     * so without this the score would only ever count dismissed cards and a
+     * store with a few open opportunities would show 0%.
+     *
+     * Weights match the UI: high = 3, medium = 2, low = 1.
+     *
+     * @return int
+     *
+     * @since 1.59.0
+     */
+    private static function get_opportunities_catalog_weight_for_nova() {
+        Opportunities::load_all_opportunity_classes_for_nova();
+        $weights = [
+            'high'   => 3,
+            'medium' => 2,
+            'low'    => 1,
+        ];
+        $total = 0;
+        foreach ( get_declared_classes() as $class ) {
+            if ( !is_subclass_of( $class, 'SweetCode\\Pixel_Manager\\Admin\\Opportunities\\Opportunity' ) ) {
+                continue;
+            }
+            $card = $class::card_data();
+            $impact = Opportunities::normalize_impact( ( isset( $card['impact'] ) ? $card['impact'] : 'low' ) );
+            $total += $weights[$impact];
+        }
+        return $total;
     }
 
     private static function get_link_locale() {
@@ -2153,7 +2588,7 @@ class Admin {
             echo esc_html( $gateway_analysis['percentage'] );
             ?>%</td>
 								<td><?php 
-            self::get_gateway_accuracy_warning_status( $gateway_analysis['percentage'] );
+            self::get_gateway_accuracy_warning_status( $gateway_analysis['percentage'], $gateway_analysis['order_count_total'] );
             ?></td>
 							</tr>
 						<?php 
@@ -2216,7 +2651,7 @@ class Admin {
             echo esc_html( $gateway_analysis['percentage'] );
             ?>%</td>
 								<td><?php 
-            self::get_gateway_accuracy_warning_status( $gateway_analysis['percentage'] );
+            self::get_gateway_accuracy_warning_status( $gateway_analysis['percentage'], $gateway_analysis['order_count_total'] );
             ?></td>
 							</tr>
 						<?php 
@@ -2243,7 +2678,7 @@ class Admin {
         ?>
 							</td>
 							<td><?php 
-        self::get_gateway_accuracy_warning_status( $percent );
+        self::get_gateway_accuracy_warning_status( $percent, $order_count_total );
         ?></td>
 
 						</tr>
@@ -2279,7 +2714,9 @@ class Admin {
 							<?php 
         esc_html_e( 'Get the pro version of the Pixel Manager for WooCommerce over here', 'woocommerce-google-adwords-conversion-tracking-tag' );
         ?>
-							: <a href="//sweetcode.com/pricing"
+							: <a href="<?php 
+        echo esc_url( ( Helpers::is_pmw_wcm_distro() ? Commercial_Links::WC_PRODUCT_URL : 'https://sweetcode.com/pricing' ) );
+        ?>"
 								target="_blank"><?php 
         esc_html_e( 'Go Pro', 'woocommerce-google-adwords-conversion-tracking-tag' );
         ?></a>
@@ -2296,17 +2733,19 @@ class Admin {
         Opportunities::html();
     }
 
-    private static function get_gateway_accuracy_warning_status( $percent ) {
-        if ( 0 === intval( $percent ) ) {
+    private static function get_gateway_accuracy_warning_status( $percent, $order_count = 0 ) {
+        if ( intval( $order_count ) <= 0 ) {
+            // No orders for this gateway in the period, so there is nothing to judge.
             echo '';
+        } elseif ( 0 === intval( $percent ) ) {
+            // Orders exist but none were tracked: the worst case, flag it distinctly.
+            echo '<span style="background:#d63638;color:#fff;padding:1px 6px;border-radius:3px">untracked</span>';
         } elseif ( $percent > 0 && $percent < 90 ) {
             echo '<span style="color:red">warning</span>';
         } elseif ( $percent >= 90 && $percent < 95 ) {
             echo '<span style="color:orange">monitor</span>';
-        } elseif ( 0 !== $percent ) {
-            echo '<span style="color:green">good</span>';
         } else {
-            echo '';
+            echo '<span style="color:green">good</span>';
         }
     }
 
@@ -2375,12 +2814,16 @@ class Admin {
 			<div>
 				<textarea id="debug-info-textarea" class=""
 							style="display:block; margin-bottom: 10px; width: 100%;resize: none;color:dimgrey;font-family: Courier;border-radius: 4px;"
-							cols="100%" rows="30" readonly><?php 
-        echo esc_html( Debug_Info::get_debug_info() );
-        ?>
-				</textarea>
-				<button id="debug-info-button" class="button button-primary"
+							cols="100%" rows="15" readonly
+							placeholder="<?php 
+        esc_attr_e( 'Click \'Generate debug info\' to load the report. It runs a few outbound connectivity checks, so it can take a moment.', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        ?>"></textarea>
+				<button id="debug-info-generate-button" class="button button-primary"
 						type="button"><?php 
+        esc_html_e( 'Generate debug info', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        ?></button>
+				<button id="debug-info-button" class="button"
+						type="button" disabled><?php 
         esc_html_e( 'Copy to Clipboard', 'woocommerce-google-adwords-conversion-tracking-tag' );
         ?></button>
 				<span id="debug-info-success" class="success-message"
@@ -2688,6 +3131,40 @@ class Admin {
 
 		<!-- Automatic Settings Backup -->
 
+		<hr class="pmw-hr">
+
+		<!-- Plugin data / uninstall -->
+		<div class="pmw-plugin-data-section" style="margin-top:20px">
+			<h2><?php 
+        esc_html_e( 'Plugin data', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        ?></h2>
+			<label>
+				<!-- The hidden input ensures an unchecked box still saves "0" instead of dropping the key -->
+				<input type="hidden" value="0" name="wgact_plugin_options[general][delete_plugin_data_on_uninstall]">
+				<input type="checkbox"
+						id="wpm_plugin_option_delete_plugin_data_on_uninstall"
+						name="wgact_plugin_options[general][delete_plugin_data_on_uninstall]"
+						value="1"
+					<?php 
+        checked( Options::is_delete_plugin_data_on_uninstall_active() );
+        ?>
+				/>
+				<?php 
+        esc_html_e( 'Delete all plugin data on uninstall', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        ?>
+			</label>
+			<?php 
+        self::display_status_icon( Options::is_delete_plugin_data_on_uninstall_active(), true, true );
+        ?>
+			<p>
+				<span class="dashicons dashicons-info"></span>
+				<?php 
+        esc_html_e( 'When enabled, deleting the plugin also removes all of its settings, backups, and stored data from the database. Leave it off to keep your configuration if you reinstall later. This only takes effect when you delete (not just deactivate) the plugin.', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        ?>
+			</p>
+		</div>
+		<!-- Plugin data / uninstall -->
+
 		<?php 
     }
 
@@ -2947,6 +3424,30 @@ class Admin {
         echo '<br><br>';
         esc_html_e( 'The Contentsquare tag ID looks like this:', 'woocommerce-google-adwords-conversion-tracking-tag' );
         echo '&nbsp;<code>b457e22cc0c6e</code>&nbsp;';
+    }
+
+    public static function option_html_clarity_project_id() {
+        ?>
+		<input class="pmw mono"
+				id="pmw_plugin_clarity_project_id"
+				name="wgact_plugin_options[pixels][clarity][project_id]"
+				size="40"
+				type="text"
+				value="<?php 
+        echo esc_html( Options::get_clarity_project_id() );
+        ?>"
+			<?php 
+        echo esc_html( self::disable_if_demo() );
+        ?>
+				onclick="this.select();"
+		/>
+		<?php 
+        self::display_status_icon( Options::is_clarity_active() );
+        self::get_documentation_html_by_key( 'clarity_project_id' );
+        self::html_pro_feature();
+        echo '<br><br>';
+        esc_html_e( 'The Microsoft Clarity project ID looks similar to this:', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        echo '&nbsp;<code>q9zk3x7p2w</code>&nbsp;';
     }
 
     public static function option_html_facebook_pixel_id() {
@@ -3841,6 +4342,106 @@ class Admin {
 		<?php 
     }
 
+    public static function option_html_openai_pixel_id() {
+        ?>
+		<input class="pmw mono"
+				id="plugin_openai_pixel_id"
+				name="wgact_plugin_options[pixels][openai][pixel_id]"
+				size="40"
+				type="text"
+				value="<?php 
+        echo esc_html( Options::get_openai_pixel_id() );
+        ?>"
+			<?php 
+        echo esc_html( self::disable_if_demo() );
+        ?>
+				onclick="this.select();"
+		/>
+		<?php 
+        self::display_status_icon( Options::get_openai_pixel_id(), true, true );
+        ?>
+		<?php 
+        self::get_documentation_html_by_key( 'openai_pixel_id' );
+        ?>
+		<?php 
+        self::output_advanced_section_cog_html( 'openai' );
+        ?>
+		<?php 
+        self::html_pro_feature();
+        ?>
+		<p style="margin-top:16px">
+			<?php 
+        esc_html_e( 'Create your OpenAI pixel ID in the conversions tab of OpenAI Ads Manager.', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        ?>
+		</p>
+		<?php 
+    }
+
+    public static function option_html_openai_advanced_matching() {
+        // adding the hidden input is a hack to make WordPress save the option with the value zero,
+        // instead of not saving it and remove that array key entirely
+        // https://stackoverflow.com/a/1992745/4688612
+        ?>
+		<label>
+			<input type="hidden" value="0" name="wgact_plugin_options[pixels][openai][advanced_matching]">
+			<input type="checkbox"
+					id="plugin_openai_advanced_matching"
+					name="wgact_plugin_options[pixels][openai][advanced_matching]"
+					value="1"
+				<?php 
+        checked( Options::is_openai_advanced_matching_enabled() );
+        ?>
+				<?php 
+        echo esc_html( self::disable_if_demo() );
+        ?>
+			/>
+			<?php 
+        esc_html_e( 'Enable OpenAI advanced matching', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        ?>
+		</label>
+		<?php 
+        self::display_status_icon( Options::is_openai_advanced_matching_enabled(), Options::is_openai_active(), true );
+        self::get_documentation_html_by_key( 'openai_advanced_matching' );
+        self::html_pro_feature();
+    }
+
+    public static function option_html_openai_capi_token() {
+        ?>
+		<textarea class="pmw mono"
+					id="plugin_openai_capi_token"
+					name="wgact_plugin_options[pixels][openai][capi][token]"
+					cols="60"
+					rows="6"
+					onfocus="this.select();"
+			<?php 
+        echo esc_html( self::disable_if_demo() );
+        ?>><?php 
+        echo esc_html( Options::get_openai_capi_token() );
+        ?></textarea>
+		<?php 
+        self::display_status_icon( Options::get_openai_capi_token(), Options::is_openai_active() );
+        ?>
+		<?php 
+        self::get_documentation_html_by_key( 'openai_capi_token' );
+        ?>
+		<?php 
+        self::html_pro_feature();
+        ?>
+		<?php 
+        if ( !Options::is_openai_active() ) {
+            ?>
+			<p>
+				<span class="dashicons dashicons-info"></span>
+				<?php 
+            esc_html_e( 'You need to activate the OpenAI pixel', 'woocommerce-google-adwords-conversion-tracking-tag' );
+            ?>
+			</p>
+		<?php 
+        }
+        ?>
+		<?php 
+    }
+
     public static function html_marketing_value_logic() {
         ?>
 		<label>
@@ -4701,6 +5302,16 @@ class Admin {
 
     public static function setting_html_termly_support() {
         esc_html_e( 'Termly CMP detected. Automatic support is:', 'woocommerce-google-adwords-conversion-tracking-tag' );
+        self::display_status_icon( true, true, true );
+    }
+
+    /**
+     * Outputs the FAZ Cookie Manager support status row in the settings UI.
+     *
+     * @since 1.58.12
+     */
+    public static function setting_html_faz_cookie_manager_support() {
+        esc_html_e( 'FAZ Cookie Manager detected. Automatic support is:', 'woocommerce-google-adwords-conversion-tracking-tag' );
         self::display_status_icon( true, true, true );
     }
 
@@ -6340,7 +6951,7 @@ class Admin {
         }
         if ( 'wcm' === Helpers::get_pmw_distro() ) {
             // Affiliate links are not allowed
-            $link = 'https://woocommerce.com/products/pixel-manager-pro-for-woocommerce/';
+            $link = Commercial_Links::WC_PRODUCT_URL;
             $button_text = __( 'Get Pro', 'woocommerce-google-adwords-conversion-tracking-tag' );
         } else {
             $link = 'https://sweetcode.com/plugins/pmw/?open-checkout=&trial=&billing-cycle=annual&utm_source=plugin&utm_medium=start-free-trial-button&utm_campaign=show-pro-version-settings#pricing-section';

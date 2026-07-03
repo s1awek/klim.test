@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) || exit;
+
 function pmxe_render_xml_attributes($el, $path = '/')
 {
 	foreach ($el->attributes as $attr) {

@@ -27,6 +27,7 @@ class PMXE_Admin_Partners extends PMXE_Controller_Admin {
 	 */
 	public function index() {
         echo '<div class="wrap">';
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_partner_discount_ui returns escaped HTML built from a hardcoded partners array
         echo render_partner_discount_ui($this->get_partners(), [], $this->get_filters());
         echo '</div>';
 	}	

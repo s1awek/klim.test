@@ -1,10 +1,10 @@
 === Pixel Manager for WooCommerce – Conversion Tracking, Google Ads, GA4, TikTok, Dynamic Remarketing ===
 Contributors: alekv, wolfbaer, freemius
 Tags: conversion tracking, google ads, google analytics, facebook pixel, woocommerce
-Requires at least: 3.7
-Tested up to: 6.9
+Requires at least: 6.2
+Tested up to: 7.0
 Requires PHP: 7.3
-Stable tag: 1.58.10
+Stable tag: 1.61.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,6 +127,7 @@ Compatible consent management plugins:
 * [Cookie Notice](https://wordpress.org/plugins/cookie-notice/)
 * [Cookie Notice & Compliance for GDPR / CCPA](https://wordpress.org/plugins/cookie-notice/)
 * [Cookie Law Info](https://wordpress.org/plugins/cookie-law-info/)
+* [FAZ Cookie Manager](https://wordpress.org/plugins/faz-cookie-manager/)
 * [GDPR Cookie Compliance](https://wordpress.org/plugins/gdpr-cookie-compliance/)
 * [WP AutoTerms](https://wordpress.org/plugins/auto-terms-of-service-and-privacy-policy/)
 * [CookiePro by OneTrust](https://wordpress.org/plugins/cookiepro/)
@@ -159,7 +160,7 @@ We are committed to ensuring the security of our customers and their data. If yo
 
 3. Get the Google Ads conversion ID and the conversion label. You will find both values in the Google Ads conversion tracking code. [Get the conversion ID and the conversion label](https://www.youtube.com/watch?v=p9gY3JSrNHU)
 
-4. In the WordPress admin panel go to WooCommerce and then into the 'Google Ads Conversion Tracking' menu. Please enter the conversion ID and the conversion label into their respective fields.
+4. In the WordPress admin panel go to WooCommerce → Pixel Manager, open the 'Tracking Pixels' tab and expand the 'Google (Ads & GA4)' section. Please enter the conversion ID and the conversion label into their respective fields.
 
 5. Head over to our documentation and follow our installation guides. Here are some of our most popular guides:
  * [Google Ads](https://sweetcode.com/docs/pmw/plugin-configuration/google-ads)
@@ -294,9 +295,77 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Screenshots ==
 
-1. Settings page
+1. Dashboard – an at-a-glance overview of your tracking health, optimization score, and active pixels
+2. Tracking Pixels – set up Google Ads, GA4, Meta, Hotjar and more from a single screen
+3. Pixel setup – just enter your conversion IDs, no coding required
+4. Consent – Google Consent Mode v2 with automatic integration for the major consent management platforms (GDPR & CCPA ready)
+5. Payment Gateway Accuracy Report – spot which payment gateways are dropping your conversion tracking
+6. Opportunities – prioritized, actionable suggestions to improve your tracking and campaign performance
 
 == Changelog ==
+
+= 1.61.0  =
+*Release date - 29.06.2026*
+
+* Tweak: When you enable the Google Tag Gateway but your site is not served through a Cloudflare edge, the Pixel Manager now warns you once that the gateway is handled by your own server and adds load, so you can move it behind Cloudflare, keep it as-is, or turn it off
+* Tweak: The confirmation that appears when you turn on a consent gate (Explicit Consent Mode, or Google TCF support) now offers only "Enable anyway" or "Cancel" and can no longer be closed by clicking beside it, pressing Escape, or a close icon, so this consequential choice is not dismissed by accident
+* Tweak: Added a `pmw_product_price_for_datalayer` filter to override the per-product price used in the browser events
+* Tweak: WooCommerce Product Bundles and Composite Products are now counted once at their full bundle price in purchase and cart events, instead of listing the bundle container alongside each of its child products
+* Fix: After you changed your Google tag or conversion ID, the old ID could keep being used for up to an hour because the cached tag ID was not cleared when you saved your settings; the cache is now cleared on save, so the new ID takes effect immediately
+* Fix: When Google Consent Mode was enabled without a cookie banner, Google Analytics and Google Ads could stop receiving data because the consent signal was applied a moment too late; the Pixel Manager now sets it before the Google tag loads, so your data flows in again
+* Fix: WooCommerce Product Bundles and Composite Products that are priced per item reported a price of 0 in the add to cart and view item events; the Pixel Manager now reports the real bundle price
+
+= 1.60.0  =
+*Release date - 23.06.2026*
+
+* New: Added a "Request a tracking pixel" link to the Tracking Pixels page so you can suggest a tracking pixel you would like us to add
+* Tweak: The Tracking Pixels page now separates active and inactive pixels with a labelled divider, so it is clear at a glance which pixels are currently tracking
+* Tweak: Turning on a consent gate (Explicit Consent Mode, or Google TCF support) now asks for confirmation first, because these settings stop all pixels from firing until your consent management platform grants consent
+* Tweak: Updated the development dependencies and vendor libraries to current releases; development tooling only, with no changes to the shipped plugin
+
+
+= 1.59.4  =
+*Release date - 19.06.2026*
+
+* Fix: The Opportunities tab could show a count in its badge while displaying no opportunity cards on sites running a non-English language; the opportunity impact level is now a stable internal value, so cards always render regardless of the active site language
+
+= 1.59.3  =
+*Release date - 17.06.2026*
+
+* Tweak: Updated the development dependencies to current patched releases; development tooling only, with no changes to the shipped plugin
+* Fix: Fixed the AddToCart event not firing for variable products rendered outside a native product page, such as through the [product_page] shortcode or a page builder's single-product widget; the selected variation is now detected from the add-to-cart form
+* Fix: WooCommerce.com distribution: the upgrade, account, and support links in the admin interface now point to WooCommerce.com
+* Fix: WooCommerce.com distribution: fixed the paid version showing the Pro tracking pixels as locked instead of unlocked
+
+
+= 1.59.2  =
+*Release date - 16.06.2026*
+
+* Tweak: Made the Nova admin UI clearly distinguish Pro from free features on unlicensed sites: Pro tracking pixels now group under a locked "Pixel Manager Pro" section instead of showing a misleading "active" badge, the Dashboard "Active pixels" count includes only pixels that are actually tracking, and locked fields explain whether a saved value is inactive without a Pro license or is a Pro-only feature
+* Tweak: Surfaced the 14-day free trial next to the in-app "Upgrade to Pro" links and the locked Tracking Pixels group, shown only when a trial can actually be started
+* Tweak: Removed the deprecated Meta Microdata output feature and its leftover setting, which no longer emitted any tracking code
+
+= 1.59.1  =
+*Release date - 15.06.2026*
+
+* Tweak: Internal code quality improvements; no functional changes since 1.59.0
+
+= 1.59.0  =
+*Release date - 15.06.2026*
+
+* New: Added Nova, a rebuilt Pixel Manager admin interface that is faster and cleaner and is now the default on new installs; existing sites keep the Classic UI and can switch to Nova in one click
+* New: Added support for the FAZ Cookie Manager Consent Management Platform
+* New: Added a getting-started checklist to the dashboard for new installs (set up the first pixel, review consent and general settings, verify tracking on the Diagnostics page, and meet Pixie, the AI assistant) with saved progress and the option to hide it
+* New: Expanded the Abilities API with a machine-readable settings catalog so AI agents can discover, read, and safely update Pixel Manager settings (pmw/get-settings-schema, pmw/get-settings, pmw/get-setup-status, pmw/update-settings, pmw/configure-pixel); writes are validated sparse patches that redact secret tokens, back up settings on every save, and can be disabled with the pmw_abilities_allow_write filter
+* Tweak: Removed a delay of up to two seconds on the first page view (while waiting for the Facebook pixel cookie); browser tracking now fires immediately and the Facebook cookie is added to server-side events as soon as it is available
+* Tweak: Bumped up WooCommerce version to 10.7
+* Tweak: Bumped up WordPress version to 7.0
+* Fix: Fixed fatal errors that could occur when an order or variation referenced a product or parent product that no longer exists
+
+= 1.58.11  =
+*Release date - 12.05.2026*
+
+* Tweak: Improved code quality and resolved static analysis findings
 
 = 1.58.10  =
 *Release date - 12.05.2026*

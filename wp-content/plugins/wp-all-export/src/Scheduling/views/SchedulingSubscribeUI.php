@@ -1,5 +1,8 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 ?>
 
 <div class="subscribe" id="scheduling-subscribe-group" style="margin-left: 5px; position: relative; margin-bottom: 20px;">
@@ -28,28 +31,28 @@
                 <h3>Frequently Asked Questions</h3>
                 <div class="faq-divs">
                     <div class="faq-section collapsed-header open" onclick="toggleSection('faq1')">
-                        <h4><?php _e('How does it work?', 'wp_all_export_plugin'); ?></h4>
+                        <h4><?php esc_html_e('How does it work?', 'wp-all-export'); ?></h4>
                     </div>
                     <div class="faq-answer" id="faq1" style="display:block;">
-                        <span><?php _e('When you set an export to run on a schedule, our servers will contact your site to make sure that your export starts when you want it to. Our servers will check back every minute to make sure that the export is still running, and will continue doing so until it finishes.', 'wp_all_export_plugin'); ?></span>
+                        <span><?php esc_html_e('When you set an export to run on a schedule, our servers will contact your site to make sure that your export starts when you want it to. Our servers will check back every minute to make sure that the export is still running, and will continue doing so until it finishes.', 'wp-all-export'); ?></span>
                     </div>
                     <div class="faq-section collapsed-header closed" onclick="toggleSection('faq2')">
-                        <h4><?php _e('Why does it cost money?', 'wp_all_export_plugin'); ?></h4>
+                        <h4><?php esc_html_e('Why does it cost money?', 'wp-all-export'); ?></h4>
                     </div>
                     <div class="faq-answer" id="faq2" style="display: none;">
-                        <span><?php _e('Your data is very important to us. We have a very resilient, scalable cluster of servers powering Automatic Scheduling. Our highly qualified team is on call 24hrs a day, 7 days a week to make sure your exports run when you need them to run.', 'wp_all_export_plugin');?></span>
+                        <span><?php esc_html_e('Your data is very important to us. We have a very resilient, scalable cluster of servers powering Automatic Scheduling. Our highly qualified team is on call 24hrs a day, 7 days a week to make sure your exports run when you need them to run.', 'wp-all-export');?></span>
                     </div>
                     <div class="faq-section collapsed-header closed" onclick="toggleSection('faq3')">
-                        <h4><?php _e('What do I get?', 'wp_all_export_plugin'); ?></h4>
+                        <h4><?php esc_html_e('What do I get?', 'wp-all-export'); ?></h4>
                     </div>
                     <div class="faq-answer" id="faq3" style="display: none;">
-                        <span><?php _e('You\'ll receive a license key for Automatic Scheduling that you can use in WP All Import and WP All Export. You can set up as many imports and exports as you like on unlimited sites.', 'wp_all_export_plugin'); ?></span>
+                        <span><?php esc_html_e('You\'ll receive a license key for Automatic Scheduling that you can use in WP All Import and WP All Export. You can set up as many imports and exports as you like on unlimited sites.', 'wp-all-export'); ?></span>
                     </div>
                     <div class="faq-section collapsed-header closed" onclick="toggleSection('faq4')">
-                        <h4><?php _e('What information is shared with Soflyy?', 'wp_all_export_plugin'); ?></h4>
+                        <h4><?php esc_html_e('What information is shared with Soflyy?', 'wp-all-export'); ?></h4>
                     </div>
                     <div class="faq-answer" id="faq4" style="display: none;">
-                        <span><?php _e('When you set an export to run on a schedule, WP All Export will open an encrypted connection to our servers and send your license key, your site URL, the ID of the export you want to run, the export security key, and the times that you want the export to run.', 'wp_all_export_plugin');?></span>
+                        <span><?php esc_html_e('When you set an export to run on a schedule, WP All Export will open an encrypted connection to our servers and send your license key, your site URL, the ID of the export you want to run, the export security key, and the times that you want the export to run.', 'wp-all-export');?></span>
                     </div>
                 </div>
             </div>
@@ -63,10 +66,10 @@
                                             </span>
                                             <span class="activate-license-entry-group">
                                                 <input type="password" id="add-subscription-field"
-                                                       placeholder="<?php _e('Enter your license', 'wp_all_export_plugin'); ?>"/>
+                                                       placeholder="<?php esc_attr_e('Enter your license', 'wp-all-export'); ?>"/>
                                                 <span id="find-subscription-link"><a
                                                             href="http://www.wpallimport.com/portal/automatic-scheduling/"
-                                                            target="_blank"><?php _e('Find your license', 'wp_all_export_plugin'); ?></a></span>
+                                                            target="_blank"><?php esc_html_e('Find your license', 'wp-all-export'); ?></a></span>
                                             </span>
                                         </span>
                                         <span class="subscribe-button-group" id="subscribe-button-group">

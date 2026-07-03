@@ -1,6 +1,7 @@
 <?php
 
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
 use Wpae\App\Service\VariationOptions\VariationOptionsFactory;
 
 final class XmlExportCpt
@@ -92,6 +93,25 @@ final class XmlExportCpt
                     }
                 }
 
+                $addons = XmlExportEngine::get_addons();
+                $addonFieldOptions = maybe_unserialize($fieldOptions);
+
+                if (in_array($fieldType, $addons)) {
+                    $article = apply_filters(
+                        "pmxe_{$fieldType}_addon_export_field",
+                        $article,
+                        $addonFieldOptions,
+                        $exportOptions,
+                        $ID,
+                        $entry,
+                        $entry->ID,
+                        $xmlWriter,
+                        $element_name,
+                        $element_name_ns,
+                        $fieldSnippet,
+                        $preview
+                    );
+                }
 
                 switch ($fieldType) {
                     case 'id':
@@ -540,12 +560,14 @@ final class XmlExportCpt
 
                         if (!empty($fieldSql)) {
                             global $wpdb;
+                            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnsupportedPlaceholder,WordPress.DB.PreparedSQLPlaceholders.UnsupportedIdentifierPlaceholder,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $fieldSql is admin-saved custom SQL from export template options (cc_sql); editing requires the manage_options capability; %%ID%% token is replaced with %d placeholder before being bound through $wpdb->prepare() with $entry->ID
                             $val = $wpdb->get_var($wpdb->prepare(stripcslashes(str_replace("%%ID%%", "%d", $fieldSql)), $entry->ID));
                             if (!empty($fieldPhp) and !empty($fieldCode)) {
                                 // if shortcode defined
                                 if (strpos($fieldCode, '[') === 0) {
                                     $val = do_shortcode(str_replace("%%VALUE%%", $val, $fieldCode));
                                 } else {
+                                    // phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- intentional: executes saved WP_Query argument string
                                     $val = eval('return ' . stripcslashes(str_replace("%%VALUE%%", $val, $fieldCode)) . ';');
                                 }
                             }

@@ -79,6 +79,7 @@ class PMXE_Model_List extends PMXE_Model {
 		} else {
 			$sql = "SELECT $this->what $sql";
 		}
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $sql built from $this->table (from $wpdb->prefix), $this->what / $orderBy / $groupBy / $this->joined set via internal API only; WHERE values bound through buildWhere()/$wpdb->prepare()
 		$result = $this->wpdb->get_results($sql, ARRAY_A);
 		if (is_array($result)) {
 			foreach ($result as $i => $row) {
@@ -113,6 +114,7 @@ class PMXE_Model_List extends PMXE_Model {
 		if ( ! is_null($field)) {
 			$sql .= " WHERE " . $this->buildWhere($field, $value);
 		}
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $sql built from $this->table (from $wpdb->prefix) and internal joins; WHERE values bound through buildWhere()/$wpdb->prepare()
 		return intval($this->wpdb->get_var($sql));
 	}
 	
@@ -133,7 +135,7 @@ class PMXE_Model_List extends PMXE_Model {
 	public function convertRecords($elementClass = NULL, $includeFields = NULL) {
 		! is_null($elementClass) or $elementClass = preg_replace('%List$%', 'Record', get_class($this));
 		if ( ! is_subclass_of($elementClass, PMXE_Plugin::PREFIX . 'Model_Record')) {
-			throw new Exception("Provideded class name $elementClass must be a subclass of " . PMXE_Plugin::PREFIX . 'Model_Record');
+			throw new Exception( esc_html( "Provideded class name $elementClass must be a subclass of " . PMXE_Plugin::PREFIX . 'Model_Record' ) );
 		}
 		$records = $this->exchangeArray(array());
 		foreach ($records as $r) {

@@ -2,6 +2,7 @@
 if(!defined('ABSPATH')) {
     die();
 }
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variables in template files inherited from controller render() scope
 $scheduling = \Wpae\Scheduling\Scheduling::create();
 $licenseCheckResult = $scheduling->checkLicense()['success'] ?? false;
 ?>

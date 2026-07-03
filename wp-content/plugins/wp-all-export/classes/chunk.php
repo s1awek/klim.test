@@ -1,4 +1,8 @@
 <?php
+
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Chunk
  * 
@@ -78,12 +82,15 @@ class PMXE_Chunk {
     $this->file = $file;   
 
     $is_html = false;
+    // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
     $f = @fopen($file, "rb");       
     while (!@feof($f)) {
+      // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
       $chunk = @fread($f, 1024);         
       if (strpos($chunk, "<!DOCTYPE") === 0) $is_html = true;
       break;      
     }  
+    // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
     @fclose($f);
 
     if ($is_html) return;

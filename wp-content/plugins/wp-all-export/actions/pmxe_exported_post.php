@@ -1,5 +1,8 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 function pmxe_pmxe_exported_post( $pid, $exportRecord )
 {
 	// do not associate exported record with child export

@@ -1,5 +1,9 @@
 <?php
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
+defined( 'ABSPATH' ) || exit;
+
+
 if ( ! class_exists('XmlExportEngine') ){
 
 	require_once dirname(__FILE__) . '/XmlExportTaxonomy.php';
@@ -231,15 +235,15 @@ if ( ! class_exists('XmlExportEngine') ){
 
 			$this->available_sections = array(
 				'default' => array(
-					'title'   => __("Standard", "wp_all_export_plugin"), 
+					'title'   => __("Standard", "wp-all-export"), 
 					'content' => 'default_fields'
 				),
 				'media' => array(
-					'title'   => __("Media", "wp_all_export_plugin"),
+					'title'   => __("Media", "wp-all-export"),
 					'content' => '',
 					'additional' => array(
 						'images' => array(
-							'title' => __("Images", "wp_all_export_plugin"),
+							'title' => __("Images", "wp-all-export"),
 							'meta' => array(								
 								array(
 									'name'  => 'URL',
@@ -295,7 +299,7 @@ if ( ! class_exists('XmlExportEngine') ){
 							)
 						),
 						'attachments' => array(
-							'title' => __("Attachments", "wp_all_export_plugin"),
+							'title' => __("Attachments", "wp-all-export"),
 							'meta' => array(
 								array(
 									'name'  => 'URL',
@@ -343,15 +347,15 @@ if ( ! class_exists('XmlExportEngine') ){
 					)
 				), 
 				'cats' => array(
-					'title'   => __("Taxonomies", "wp_all_export_plugin"),
+					'title'   => __("Taxonomies", "wp-all-export"),
 					'content' => 'existing_taxonomies'
 				),
 				'cf' => array(
-					'title'   => __("Custom Fields", "wp_all_export_plugin"), 
+					'title'   => __("Custom Fields", "wp-all-export"), 
 					'content' => 'existing_meta_keys'
 				),
 				'other' => array(
-					'title'   => __("Other", "wp_all_export_plugin"), 
+					'title'   => __("Other", "wp-all-export"), 
 					'content' => 'other_fields'
 				)
 			);
@@ -360,7 +364,7 @@ if ( ! class_exists('XmlExportEngine') ){
 
 			$this->filter_sections = array(				
 				'author' => array(
-					'title'  => __("Author", "wp_all_export_plugin"),
+					'title'  => __("Author", "wp-all-export"),
 					'fields' => array(
 						'user_ID' => 'User ID',
 						'user_login' => 'User Login',
@@ -497,16 +501,16 @@ if ( ! class_exists('XmlExportEngine') ){
 			if ('advanced' == $this->post['export_type']) {
 
                 if( "" == $this->post['wp_query'] ){
-                    $this->errors->add('form-validation', __('WP Query field is required', 'pmxe_plugin'));
+                    $this->errors->add('form-validation', __('WP Query field is required', 'wp-all-export'));
                 }
                 else if(!XmlExportEngine::get_addons_service()->isWooCommerceAddonActive() && strpos($this->post['wp_query'], 'product') !== false && \class_exists('WooCommerce')) {
-                    $this->errors->add('form-validation', __('The WooCommerce Export Add-On Pro is required to Export WooCommerce Products', 'pmxe_plugin'));
+                    $this->errors->add('form-validation', __('The WooCommerce Export Add-On Pro is required to Export WooCommerce Products', 'wp-all-export'));
                 }
                 else if(!XmlExportEngine::get_addons_service()->isWooCommerceAddonActive()  && !XmlExportEngine::get_addons_service()->isWooCommerceOrderAddonActive() && strpos($this->post['wp_query'], 'shop_order') !== false) {
-                    $this->errors->add('form-validation', __('The WooCommerce Export Add-On Pro is required to Export WooCommerce Orders', 'pmxe_plugin'));
+                    $this->errors->add('form-validation', __('The WooCommerce Export Add-On Pro is required to Export WooCommerce Orders', 'wp-all-export'));
                 }
                 else if(!XmlExportEngine::get_addons_service()->isWooCommerceAddonActive() && strpos($this->post['wp_query'], 'shop_coupon') !== false) {
-                    $this->errors->add('form-validation', __('The WooCommerce Export Add-On Pro is required to Export WooCommerce Coupons', 'pmxe_plugin'));
+                    $this->errors->add('form-validation', __('The WooCommerce Export Add-On Pro is required to Export WooCommerce Coupons', 'wp-all-export'));
                 }
 				else 
 				{
@@ -557,6 +561,7 @@ if ( ! class_exists('XmlExportEngine') ){
 			}	
 			if ( 'advanced' == $this->post['export_type'] and ! self::$is_user_export and ! self::$is_comment_export and ! self::$is_taxonomy_export )
 			{
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $table_prefix from $wpdb->prefix; no user input; meta_key LIKE clauses are static
 				$meta_keys = $wpdb->get_results("SELECT DISTINCT meta_key FROM {$table_prefix}postmeta WHERE {$table_prefix}postmeta.meta_key NOT LIKE '_edit%' AND {$table_prefix}postmeta.meta_key NOT LIKE '_oembed_%' LIMIT 1000");
 				if ( ! empty($meta_keys)){
 					$exclude_keys = array('_first_variation_attributes', '_is_first_variation_created');
@@ -600,6 +605,10 @@ if ( ! class_exists('XmlExportEngine') ){
 
 			}
 
+            foreach (self::get_addons() as $addon) {
+                $this->_existing_meta_keys = apply_filters("pmxe_get_{$addon}_addon_meta_keys", $this->_existing_meta_keys, 10, 1);
+            }
+
             if(XmlExportEngine::$user_export) {
                 // Prepare existing Users data
                 self::$user_export->init($this->_existing_meta_keys);
@@ -618,10 +627,14 @@ if ( ! class_exists('XmlExportEngine') ){
                 $this->available_data['existing_acf_meta_keys'] = self::$acf_export->get('_existing_acf_meta_keys');
             }
 
+			foreach (self::get_addons() as $addon) {
+				$this->available_data = apply_filters("pmxe_get_{$addon}_addon_available_data", $this->available_data);
+			}
+
 			$this->available_data['existing_meta_keys'] 	= $this->_existing_meta_keys;
 			$this->available_data['existing_taxonomies']    = $this->_existing_taxonomies;
 
-			$this->available_data['init_fields']    = apply_filters('wp_all_export_init_fields', $this->init_fields);	
+			$this->available_data['init_fields']    = apply_filters('wp_all_export_init_fields', $this->init_fields);
 			$this->available_data['default_fields'] = apply_filters('wp_all_export_default_fields', self::$default_fields);
 			$this->available_data['other_fields']   = apply_filters('wp_all_export_other_fields', $this->other_fields);
 
@@ -744,13 +757,27 @@ if ( ! class_exists('XmlExportEngine') ){
 			$available_sections = apply_filters("wp_all_export_available_sections", $this->available_sections);
 			self::$globalAvailableSections = $available_sections;
 
+			$reordered_sections = array();
+			foreach ($available_sections as $key => $value) {
+				if ($key === "cf") {
+					$reordered_sections["addons"] = true;
+				}
+				$reordered_sections[$key] = $value;
+			}
+
 			if(self::$woo_order_export) {
                 // Render Available WooCommerce Orders Data
                 self::$woo_order_export->render($i);
             }
 
-			foreach ($available_sections as $slug => $section)
+			foreach ($reordered_sections as $slug => $section)
 			{
+				if ($slug === 'addons') {
+					foreach (self::get_addons() as $addon) {
+						do_action("pmxe_render_{$addon}_addon", $i);
+					}
+					continue;
+				}
 
 				if ( ! empty($this->available_data[$section['content']]) or ! empty($section['additional']) ):
 				?>										
@@ -782,7 +809,7 @@ if ( ! class_exists('XmlExportEngine') ){
 						<?php if ( ! empty($this->available_data[$section['content']]) ): ?>
 						<li class="<?php echo esc_attr($elementClass); ?>">
 							<div class="default_column" rel="">
-								<label class="wpallexport-element-label"><?php esc_html_e("All", "wp_all_export_plugin") . ' ' . esc_html($section['title']); ?></label>
+								<label class="wpallexport-element-label"><?php echo esc_html__("All", "wp-all-export") . ' ' . esc_html($section['title']); ?></label>
 								<input type="hidden" name="rules[]" value="<?php echo esc_attr("pmxe_" . $slug); ?>"/>
 							</div>
 						</li>
@@ -797,18 +824,18 @@ if ( ! class_exists('XmlExportEngine') ){
 							$is_auto_field = ( ! empty($field['auto']) or self::$is_auto_generate_enabled and ('specific' != $this->post['export_type'] or 'specific' == $this->post['export_type'] and (! in_array(self::$post_types[0], array('product')) || !\class_exists('WooCommerce'))));
 
 							?>
-							<li class="pmxe_<?php echo $slug; ?> <?php if ( $is_auto_field ) echo 'wp_all_export_auto_generate';?> <?php echo esc_attr($elementClass);?>">
-								<div class="custom_column" rel="<?php echo ($i + 1);?>">															
+							<li class="pmxe_<?php echo esc_attr($slug); ?> <?php if ( $is_auto_field ) echo 'wp_all_export_auto_generate';?> <?php echo esc_attr($elementClass);?>">
+								<div class="custom_column" rel="<?php echo esc_attr($i + 1);?>">														
 									<label class="wpallexport-xml-element"><?php echo esc_html(is_array($field) ? $field['name'] : $field); ?></label>
 									<input type="hidden" name="ids[]" value="1"/>
-									<input type="hidden" name="cc_label[]" value="<?php echo esc_html(is_array($field) ? $field['label'] : $field); ?>"/>
-									<input type="hidden" name="cc_php[]" value="0"/>										
+									<input type="hidden" name="cc_label[]" value="<?php echo esc_attr(is_array($field) ? $field['label'] : $field); ?>"/>
+									<input type="hidden" name="cc_php[]" value="0"/>
 									<input type="hidden" name="cc_code[]" value=""/>
 									<input type="hidden" name="cc_sql[]" value="0"/>
-									<input type="hidden" name="cc_options[]" value="0"/>										
-									<input type="hidden" name="cc_type[]"  value="<?php echo esc_html(is_array($field) ? $field['type'] : $slug); ?>"/>
-									<input type="hidden" name="cc_value[]" value="<?php echo esc_html(is_array($field) ? $field['label'] : $field); ?>"/>
-									<input type="hidden" name="cc_name[]"  value="<?php echo esc_html(is_array($field) ? $field['name'] : $field); ?>"/>
+									<input type="hidden" name="cc_options[]" value="0"/>
+									<input type="hidden" name="cc_type[]"  value="<?php echo esc_attr(is_array($field) ? $field['type'] : $slug); ?>"/>
+									<input type="hidden" name="cc_value[]" value="<?php echo esc_attr(is_array($field) ? $field['label'] : $field); ?>"/>
+									<input type="hidden" name="cc_name[]"  value="<?php echo esc_attr(is_array($field) ? $field['name'] : $field); ?>"/>
 									<input type="hidden" name="cc_settings[]"  value="0"/>
 								</div>
 							</li>
@@ -837,7 +864,7 @@ if ( ! class_exists('XmlExportEngine') ){
                                         <ul>
                                             <li>
                                                 <div class="default_column" rel="">
-                                                    <label class="wpallexport-element-label"><?php echo __("All", "wp_all_export_plugin") . ' ' . esc_html($sub_section['title']); ?></label>
+                                                    <label class="wpallexport-element-label"><?php echo esc_html__("All", "wp-all-export") . ' ' . esc_html($sub_section['title']); ?></label>
                                                     <input type="hidden" name="rules[]"
                                                            value="<?php echo esc_attr("pmxe_" . $slug . "_" . $sub_slug); ?>"/>
                                                 </div>
@@ -848,7 +875,7 @@ if ( ! class_exists('XmlExportEngine') ){
                                                 $field_options = (in_array($sub_slug, array('images', 'attachments'))) ? esc_attr('{"is_export_featured":true,"is_export_attached":true,"image_separator":"|"}') : '0';
                                                 ?>
                                                 <li class="<?php echo esc_attr("pmxe_" . $slug . "_" . $sub_slug); ?> <?php if ($is_auto_field) echo 'wp_all_export_auto_generate'; ?>">
-                                                    <div class="custom_column" rel="<?php echo($i + 1); ?>">
+                                                    <div class="custom_column" rel="<?php echo esc_attr($i + 1); ?>">
                                                         <label class="wpallexport-xml-element"><?php echo (is_array($field)) ? esc_html(XmlExportEngine::sanitizeFieldName($field['name'])) : esc_html($field); ?></label>
                                                         <input type="hidden" name="ids[]" value="1"/>
                                                         <input type="hidden" name="cc_label[]"
@@ -988,7 +1015,7 @@ if ( ! class_exists('XmlExportEngine') ){
 													break;
 												case 'user_nicename':
 													?>
-													<option value="user_role"><?php esc_html_e('User Role', 'wp_all_export_plugin'); ?></option>
+													<option value="user_role"><?php esc_html_e('User Role', 'wp-all-export'); ?></option>
 													<?php
 													break;																							
 											}
@@ -1143,15 +1170,12 @@ if ( ! class_exists('XmlExportEngine') ){
 									$field_options = empty  ($field['options']) ? '' : $field['options'];
 
 									if ( $field_type == 'cf' && $field_name == '_thumbnail_id'  || ($field_type=='other')) continue;
-									$elementDisabled = "";
-									if(($section['title'] == 'Custom Fields' || $section['title'] == 'Other') && XmlExportEngine::$is_user_export) {
-									    $elementDisabled = "disabled='disabled'";
-                                    }
+									$elementDisabled = ( ( $section['title'] == 'Custom Fields' || $section['title'] == 'Other' ) && XmlExportEngine::$is_user_export );
 									?>
-									<option 
+									<option
 										value="<?php echo esc_attr($field_type);?>"
 										label="<?php echo esc_attr($field_label);?>"
-                                        <?php echo esc_html($elementDisabled); ?>
+                                        <?php if ( $elementDisabled ) echo 'disabled'; ?>
 										options="<?php echo esc_attr($field_options); ?>"><?php echo esc_html($field_name);?></option>
 									<?php								
 								}
@@ -1201,7 +1225,7 @@ if ( ! class_exists('XmlExportEngine') ){
 
 					?>
 					<optgroup label="Advanced">
-						<option value="sql" label="sql"><?php esc_html_e("SQL Query", "wp_all_export_plugin"); ?></option>
+						<option value="sql" label="sql"><?php esc_html_e("SQL Query", "wp-all-export"); ?></option>
 					</optgroup>
 				</select>		
 				<?php
@@ -1237,17 +1261,17 @@ if ( ! class_exists('XmlExportEngine') ){
 			// Validate Custom XML Template header
 			if ( empty($result['custom_xml_template_header']) )
 			{
-				$this->errors->add('form-validation', __('Missing custom XML template header.', 'wp_all_export_plugin'));
+				$this->errors->add('form-validation', __('Missing custom XML template header.', 'wp-all-export'));
 			}
 			// Validate Custom XML Template post LOOP
 			if ( empty($result['custom_xml_template_loop']) )
 			{
-				$this->errors->add('form-validation', __('Missing custom XML template post loop.', 'wp_all_export_plugin'));
+				$this->errors->add('form-validation', __('Missing custom XML template post loop.', 'wp-all-export'));
 			}
 			// Validate Custom XML Template footer
 			if ( empty($result['custom_xml_template_footer']) )
 			{
-				$this->errors->add('form-validation', __('Missing custom XML template footer.', 'wp_all_export_plugin'));
+				$this->errors->add('form-validation', __('Missing custom XML template footer.', 'wp-all-export'));
 			}
 
 			if ( ! $this->errors->get_error_codes()) {

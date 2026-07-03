@@ -1,5 +1,6 @@
 <?php
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
 // Handle eval errors that cause the script to finish
 $wpaeErrorHandler = new WpaePhpInterpreterErrorHandler();
 register_shutdown_function(array($wpaeErrorHandler, 'handle'));
@@ -288,13 +289,14 @@ class PMXE_XMLWriter extends XMLWriter
                     $numberOfDoubleQuotes = substr_count($filtered, "\"");
 
                     if ($numberOfSingleQuotes % 2 || $numberOfDoubleQuotes % 2) {
-                        throw new WpaeInvalidStringException($functionName);
+                        throw new WpaeInvalidStringException( esc_html( $functionName ) );
                     }
 
                     if (!function_exists($functionName)) {
-                        throw new WpaeMethodNotFoundException($functionName);
+                        throw new WpaeMethodNotFoundException( esc_html( $functionName ) );
                     }
 
+                    // phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- intentional: evaluates saved field-filter function-call expression
                     $values = eval("return " . $filtered . ";");
 
                     $v = '';

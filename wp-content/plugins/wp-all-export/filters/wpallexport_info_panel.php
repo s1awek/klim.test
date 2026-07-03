@@ -1,7 +1,10 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 function pmxe_wpallexport_info_panel($html){
-	$html = <<<EOT
+	$html = '
 
 <div id="wpallexport-cta-div"><h5 id="wpallexport-cta-headline">The best group of WordPress folks on the Internet.</h5><div id="wpallexport-cta-text">WP All Import users are some of the most advanced in the industry, working on some of the most interesting projects.<br><br>Discuss, share your work, and learn from the best.<br></div><a id="wpallexport-cta-link" href="https://www.facebook.com/groups/wpallimport" target="_blank">Join the Facebook Group</a></div>
 
@@ -84,7 +87,7 @@ function pmxe_wpallexport_info_panel($html){
     }
 </style>
 
-EOT;
+';
 
 	return $html;
 }

@@ -18,6 +18,7 @@ use SweetCode\Pixel_Manager\Pixels\TikTok\TikTok_EAPI;
 use SweetCode\Pixel_Manager\Pixels\Pinterest\Pinterest_APIC;
 use SweetCode\Pixel_Manager\Pixels\Snapchat\Snapchat_CAPI;
 use SweetCode\Pixel_Manager\Pixels\Reddit\Reddit_CAPI;
+use SweetCode\Pixel_Manager\Pixels\OpenAI\OpenAI_CAPI;
 use SweetCode\Pixel_Manager\Pixels\VWO\VWO;
 use SweetCode\Pixel_Manager\Geolocation;
 use SweetCode\Pixel_Manager\Helpers;
@@ -48,19 +49,6 @@ class Pixel_Manager {
      * Initializes the class and sets up options, states, additional classes, and pixel managers. Also registers actions and filters.
      */
     private function __construct() {
-        /**
-         * Inject optimization scripts
-         */
-        add_action( 'wp_head', function () {
-            if ( Options::is_ab_tasty_active() ) {
-                AB_Tasty::inject_script();
-            }
-        }, 1 );
-        add_action( 'wp_enqueue_scripts', function () {
-            if ( Options::is_optimizely_active() ) {
-                Optimizely::enqueue_scripts();
-            }
-        }, 10 );
         /**
          * Initialize Google Tag Gateway Proxy
          *
@@ -138,6 +126,7 @@ class Pixel_Manager {
             // Statistics pixels
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Hotjar_Descriptor',
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Crazyegg_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Clarity_Descriptor',
             // Optimization pixels
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\VWO_Descriptor',
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Optimizely_Descriptor',
@@ -386,10 +375,9 @@ class Pixel_Manager {
             'methods'             => 'POST',
             'callback'            => function ( $request ) {
                 $data = $request->get_json_params();
-                // TODO: Maybe remove the nonce verification. 1) Some merchants even cache parts of the purchase confirmation page, which lets the nonce fail. 2) Nonce checks in this endpoint are not really necessary as we CAN check for a valid order_key which is only known to the customer who purchased a specific order.
-                //              if (!wp_verify_nonce($request->get_header('X-WP-Nonce'), 'wp_rest')) {
-                //                  wp_send_json_error('Invalid nonce');
-                //              }
+                // Nonce verification is intentionally skipped: some merchants cache parts of the purchase
+                // confirmation page (which makes nonces fail), and the order_key check downstream is
+                // sufficient since the key is only known to the customer who placed the order.
                 $data = Helpers::generic_sanitization( $data );
                 self::process_conversion_pixel_status( $data['order_id'], $data['order_key'], $data['source'] );
             },
@@ -482,6 +470,34 @@ class Pixel_Manager {
             set_transient( 'pmw_products_for_datalayer_' . $page_id, $products, WEEK_IN_SECONDS );
         }
         wp_send_json_success( $products );
+    }
+
+    /**
+     * Serialize a single conversion adjustments feed row into a CSV line.
+     *
+     * Runs after the `pmw_conversion_adjustments_feed_row` filter so PMW's own
+     * normalization (clamping negative values to 0, enforcing the column order
+     * Google expects) is always applied, even when a filter callback modified
+     * the row.
+     *
+     * @param array $row Associative row data.
+     * @return string The CSV line, without a trailing newline.
+     */
+    private function compile_conversion_adjustments_feed_row( $row ) {
+        // Clamp negative adjusted values to 0 (Google rejects negative values).
+        if ( isset( $row['adjusted_value'] ) && $row['adjusted_value'] < 0 ) {
+            $row['adjusted_value'] = 0;
+        }
+        // Always serialize in the exact column order Google expects.
+        $ordered = [
+            ( isset( $row['order_id'] ) ? $row['order_id'] : '' ),
+            ( isset( $row['conversion_name'] ) ? $row['conversion_name'] : '' ),
+            ( isset( $row['adjustment_time'] ) ? $row['adjustment_time'] : '' ),
+            ( isset( $row['adjustment_type'] ) ? $row['adjustment_type'] : '' ),
+            ( isset( $row['adjusted_value'] ) ? $row['adjusted_value'] : '' ),
+            ( isset( $row['currency'] ) ? $row['currency'] : '' )
+        ];
+        return implode( ',', $ordered );
     }
 
     private function get_order_value_after_refunds( $order ) {
@@ -745,6 +761,9 @@ class Pixel_Manager {
                 if ( Options::is_reddit_capi_active() ) {
                     Reddit_CAPI::set_identifiers_on_session();
                 }
+                if ( Options::is_openai_capi_active() ) {
+                    OpenAI_CAPI::set_identifiers_on_session();
+                }
             }
             // TODO: That function should probably not go into the Google_MP_GA4 class
             if ( Shop::pmw_is_order_received_page() ) {
@@ -973,13 +992,6 @@ class Pixel_Manager {
     /**
      * Output the uncached data layer through ESI.
      *
-     * TODO: Once the wp_kses filter is updated, refactor the below code.
-     * TODO: Remove the wcm part and replace echo with echo wp_kses(...).
-     * TODO: The wp_kses output will have to go through a WP version check to
-     * TODO: make sure it's only used on WP installs with the updated wp_kses filter.
-     * TODO: https://core.trac.wordpress.org/ticket/58921
-     * TODO: Update the sweetcode.com docs after the refactor.
-     *
      * @return void
      * @since 1.32.6
      **/
@@ -1093,9 +1105,6 @@ class Pixel_Manager {
         }
         if ( Options::is_hotjar_enabled() ) {
             $data['hotjar'] = $this->get_hotjar_pixel_data();
-        }
-        if ( Options::is_crazyegg_enabled() ) {
-            $data['crazyegg'] = $this->get_crazyegg_pixel_data();
         }
         return $data;
     }
@@ -1276,6 +1285,12 @@ class Pixel_Manager {
         ];
     }
 
+    private static function get_clarity_pixel_data() {
+        return [
+            'project_id' => Options::get_clarity_project_id(),
+        ];
+    }
+
     private static function get_outbrain_pixel_data() {
         return [
             'advertiser_id'       => Options::get_outbrain_advertiser_id(),
@@ -1333,6 +1348,16 @@ class Pixel_Manager {
             'advanced_matching'   => Options::is_reddit_advanced_matching_enabled(),
             'dynamic_remarketing' => [
                 'id_type' => Product::get_dyn_r_id_type( 'reddit' ),
+            ],
+        ];
+    }
+
+    private function get_openai_pixel_data() {
+        return [
+            'pixel_id'            => Options::get_openai_pixel_id(),
+            'advanced_matching'   => Options::is_openai_advanced_matching_enabled(),
+            'dynamic_remarketing' => [
+                'id_type' => Product::get_dyn_r_id_type( 'openai' ),
             ],
         ];
     }
@@ -1398,6 +1423,18 @@ class Pixel_Manager {
     private static function get_vwo_pixel_data() {
         return [
             'account_id' => Options::get_vwo_account_id(),
+        ];
+    }
+
+    private static function get_optimizely_pixel_data() {
+        return [
+            'project_id' => Options::get_optimizely_project_id(),
+        ];
+    }
+
+    private static function get_ab_tasty_pixel_data() {
+        return [
+            'account_id' => Options::get_ab_tasty_account_id(),
         ];
     }
 
@@ -1611,11 +1648,19 @@ class Pixel_Manager {
         $cart_items = $woocommerce->cart->get_cart();
         $data = [];
         foreach ( $cart_items as $cart_item => $value ) {
+            // Skip bundle/composite child cart items: the bundle is reported once
+            // as its container, priced as the configured sum of container + children.
+            if ( Product::is_container_child_cart_item( $value ) ) {
+                continue;
+            }
             $product = wc_get_product( $value['data']->get_id() );
             if ( Product::is_not_wc_product( $product ) ) {
                 Product::log_problematic_product_id( $value['data']->get_id() );
                 continue;
             }
+            // Container products (bundles/composites) don't expose their assembled
+            // price via get_price(); use the configured cart line price instead.
+            $container_price = Product::maybe_get_container_cart_item_unit_price( $value, $cart_items );
             $data['cart_item_keys'][$cart_item] = [
                 'id'           => (string) $product->get_id(),
                 'is_variation' => false,
@@ -1626,7 +1671,7 @@ class Pixel_Manager {
                 'name'         => $product->get_name(),
                 'brand'        => Product::get_brand_name( $product->get_id() ),
                 'quantity'     => (int) $value['quantity'],
-                'price'        => (float) $product->get_price(),
+                'price'        => ( null !== $container_price ? $container_price : (float) $product->get_price() ),
                 'is_variation' => false,
             ];
             if ( 'variation' === $product->get_type() ) {

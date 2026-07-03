@@ -5,12 +5,12 @@
  * Description: Allows Google Analytics tracking code to be inserted into WooCommerce store pages.
  * Author: WooCommerce
  * Author URI: https://woocommerce.com
- * Version: 2.1.23
- * WC requires at least: 10.6
- * WC tested up to: 10.7
- * Requires at least: 6.8
+ * Version: 2.3.0
+ * WC requires at least: 10.8
+ * WC tested up to: 10.9
+ * Requires at least: 6.9
  * Requires Plugins: woocommerce
- * Tested up to: 6.9
+ * Tested up to: 7.0
  * Requires PHP: 7.4
  * License: GPLv3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -26,8 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WC_Google_Analytics_Integration' ) ) {
 
-	define( 'WC_GOOGLE_ANALYTICS_INTEGRATION_VERSION', '2.1.23' ); // WRCS: DEFINED_VERSION.
-	define( 'WC_GOOGLE_ANALYTICS_INTEGRATION_MIN_WC_VER', '10.6' );
+	define( 'WC_GOOGLE_ANALYTICS_INTEGRATION_VERSION', '2.3.0' ); // WRCS: DEFINED_VERSION.
+	define( 'WC_GOOGLE_ANALYTICS_INTEGRATION_MIN_WC_VER', '10.8' );
 
 	// Maybe show the GA Pro notice on plugin activation.
 	register_activation_hook(
@@ -45,7 +45,6 @@ if ( ! class_exists( 'WC_Google_Analytics_Integration' ) ) {
 			if ( class_exists( FeaturesUtil::class ) ) {
 				FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__ );
 				FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__ );
-				FeaturesUtil::declare_compatibility( 'product_block_editor', __FILE__ );
 			}
 		}
 	);
@@ -76,6 +75,8 @@ if ( ! class_exists( 'WC_Google_Analytics_Integration' ) ) {
 			// Checks which WooCommerce is installed.
 			if ( class_exists( 'WC_Integration' ) && defined( 'WOOCOMMERCE_VERSION' ) && version_compare( WOOCOMMERCE_VERSION, WC_GOOGLE_ANALYTICS_INTEGRATION_MIN_WC_VER, '>=' ) ) {
 				include_once 'includes/class-wc-google-analytics.php';
+				include_once 'includes/class-wc-google-analytics-abilities.php';
+				WC_Google_Analytics_Abilities::init();
 
 				// Register the integration.
 				add_filter( 'woocommerce_integrations', array( $this, 'add_integration' ) );
@@ -283,11 +284,17 @@ if ( ! class_exists( 'WC_Google_Analytics_Integration' ) ) {
 		 * @return array The asset file. Or an empty array if the file doesn't exist.
 		 */
 		public function get_js_asset_file( $asset_name ) {
+			$asset_path = $this->get_js_asset_path( $asset_name . '.asset.php' );
+
+			if ( ! file_exists( $asset_path ) ) {
+				return [];
+			}
+
 			try {
 				// Exclusion reason: No reaching any user input
 				// nosemgrep audit.php.lang.security.file.inclusion-arg
-				return require $this->get_js_asset_path( $asset_name . '.asset.php' );
-			} catch ( Exception $e ) {
+				return require $asset_path;
+			} catch ( Throwable $e ) {
 				return [];
 			}
 		}

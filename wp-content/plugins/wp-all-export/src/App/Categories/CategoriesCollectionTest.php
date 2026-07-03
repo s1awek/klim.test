@@ -12,6 +12,7 @@ class CategoriesCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\Wpae\App\Categories\CategoriesCollection::class, $categoriesCollection);
 
         $cat = $categoriesCollection->findCategory('Mugs');
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r -- test file
         print_r($cat);
 
     }

@@ -1,13 +1,16 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 function pmxe_wp_ajax_generate_zapier_api_key(){
 
 	if ( ! check_ajax_referer( 'wp_all_export_secure', 'security', false )){
-		exit( json_encode(array('html' => __('Security check', 'wp_all_export_plugin'))) );
+		exit( json_encode(array('html' => __('Security check', 'wp-all-export'))) );
 	}
 
 	if ( ! current_user_can( PMXE_Plugin::$capabilities ) ){
-		exit( json_encode(array('html' => __('Security check', 'wp_all_export_plugin'))) );
+		exit( json_encode(array('html' => __('Security check', 'wp-all-export'))) );
 	}
 
 	$api_key = wp_all_export_rand_char(32);

@@ -1,5 +1,8 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 /**
  * Export configuration wizard
  *
@@ -20,7 +23,7 @@ class PMXE_Admin_Export extends PMXE_Controller_Admin
             $id = $this->input->get('id');
             $this->data['export'] = $export = new PMXE_Export_Record();
             if (!$id or $export->getById($id)->isEmpty()) { // specified import is not found
-                wp_redirect(esc_url_raw(add_query_arg('page', 'pmxe-admin-manage', admin_url('admin.php'))));
+                wp_safe_redirect(esc_url_raw(add_query_arg('page', 'pmxe-admin-manage', admin_url('admin.php'))));
                 die();
             }
             $this->isWizard = false;
@@ -119,13 +122,13 @@ class PMXE_Admin_Export extends PMXE_Controller_Admin
             $history_files = PMXE_Helper::safe_glob(PMXE_ROOT_DIR . '/history/*', PMXE_Helper::GLOB_RECURSE | PMXE_Helper::GLOB_PATH);
             if (!empty($history_files)) {
                 foreach ($history_files as $filePath) {
-                    @file_exists($filePath) and @unlink($filePath);
+                    @file_exists($filePath) and wp_delete_file($filePath);
                 }
             }
         }
 
         if (!class_exists('XMLReader') or !class_exists('XMLWriter')) {
-            $this->errors->add('form-validation', __('Required PHP components are missing.<br/><br/>WP All Export requires XMLReader, and XMLWriter PHP modules to be installed.<br/>These are standard features of PHP, and are necessary for WP All Export to write the files you are trying to export.<br/>Please contact your web hosting provider and ask them to install and activate the DOMDocument, XMLReader, and XMLWriter PHP modules.', 'wp_all_export_plugin'));
+            $this->errors->add('form-validation', __('Required PHP components are missing.<br/><br/>WP All Export requires XMLReader, and XMLWriter PHP modules to be installed.<br/>These are standard features of PHP, and are necessary for WP All Export to write the files you are trying to export.<br/>Please contact your web hosting provider and ask them to install and activate the DOMDocument, XMLReader, and XMLWriter PHP modules.', 'wp-all-export'));
         }
 
         if ($this->input->post('is_submitted')) {
@@ -157,10 +160,10 @@ class PMXE_Admin_Export extends PMXE_Controller_Admin
             PMXE_Plugin::$session->save_data();
 
             if (!empty($post['auto_generate'])) {
-                wp_redirect(esc_url_raw(add_query_arg(['action' => 'options','_wpnonce_options' => wp_create_nonce('options')], $this->baseUrl)));
+                wp_safe_redirect(esc_url_raw(add_query_arg(['action' => 'options','_wpnonce_options' => wp_create_nonce('options')], $this->baseUrl)));
                 die();
             } else {
-                wp_redirect(esc_url_raw(add_query_arg(['action' => 'template','_wpnonce_template' => wp_create_nonce('template')], $this->baseUrl)));
+                wp_safe_redirect(esc_url_raw(add_query_arg(['action' => 'template','_wpnonce_template' => wp_create_nonce('template')], $this->baseUrl)));
                 die();
             }
 
@@ -210,7 +213,8 @@ class PMXE_Admin_Export extends PMXE_Controller_Admin
         $max_input_vars = @ini_get('max_input_vars');
 
         if (ctype_digit($max_input_vars) && count($_POST, COUNT_RECURSIVE) >= $max_input_vars) {
-            $this->errors->add('form-validation', sprintf(__('You\'ve reached your max_input_vars limit of %d. Please contact your web host to increase it.', 'wp_all_export_plugin'), $max_input_vars));
+            /* translators: %d: max_input_vars limit value */
+            $this->errors->add('form-validation', sprintf(__('You\'ve reached your max_input_vars limit of %d. Please contact your web host to increase it.', 'wp-all-export'), $max_input_vars));
         }
 
         PMXE_Plugin::$session->save_data();
@@ -238,33 +242,33 @@ class PMXE_Admin_Export extends PMXE_Controller_Admin
         } elseif ($this->input->post('is_submitted')) {
 
             if (empty($post['cc_type'][0]) && !in_array($post['xml_template_type'], array('custom', 'XmlGoogleMerchants'))) {
-                $this->errors->add('form-validation', __('You haven\'t selected any columns for export.', 'wp_all_export_plugin'));
+                $this->errors->add('form-validation', __('You haven\'t selected any columns for export.', 'wp-all-export'));
             }
 
             if ('csv' == $post['export_to'] and '' == $post['delimiter']) {
-                $this->errors->add('form-validation', __('CSV delimiter must be specified.', 'wp_all_export_plugin'));
+                $this->errors->add('form-validation', __('CSV delimiter must be specified.', 'wp-all-export'));
             }
 
             if ('xml' == $post['export_to'] && !in_array($post['xml_template_type'], array('custom', 'XmlGoogleMerchants'))) {
                 $post['main_xml_tag'] = preg_replace('/[^a-z0-9_]/i', '', $post['main_xml_tag']);
                 if (empty($post['main_xml_tag'])) {
-                    $this->errors->add('form-validation', __('Main XML Tag is required.', 'wp_all_export_plugin'));
+                    $this->errors->add('form-validation', __('Main XML Tag is required.', 'wp-all-export'));
                 }
 
                 $post['record_xml_tag'] = preg_replace('/[^a-z0-9_]/i', '', $post['record_xml_tag']);
                 if (empty($post['record_xml_tag'])) {
-                    $this->errors->add('form-validation', __('Single Record XML Tag is required.', 'wp_all_export_plugin'));
+                    $this->errors->add('form-validation', __('Single Record XML Tag is required.', 'wp-all-export'));
                 }
 
                 if ($post['main_xml_tag'] == $post['record_xml_tag']) {
-                    $this->errors->add('form-validation', __('Main XML Tag equals to Single Record XML Tag.', 'wp_all_export_plugin'));
+                    $this->errors->add('form-validation', __('Main XML Tag equals to Single Record XML Tag.', 'wp-all-export'));
                 }
             }
 
             if (($post['export_to'] == XmlExportEngine::EXPORT_TYPE_XML) && in_array($post['xml_template_type'], array('custom', 'XmlGoogleMerchants'))) {
 
                 if (empty($post['custom_xml_template'])) {
-                    $this->errors->add('form-validation', __('XML template is empty.', 'wp_all_export_plugin'));
+                    $this->errors->add('form-validation', __('XML template is empty.', 'wp-all-export'));
                 }
 
                 // Convert Custom XML template to default
@@ -305,16 +309,16 @@ class PMXE_Admin_Export extends PMXE_Controller_Admin
                         PMXE_Plugin::$session->set($key, $value);
                     }
                     PMXE_Plugin::$session->save_data();
-                    wp_redirect(esc_url_raw(add_query_arg(['action' => 'options','_wpnonce_options' => wp_create_nonce('options')], $this->baseUrl)));
+                    wp_safe_redirect(esc_url_raw(add_query_arg(['action' => 'options','_wpnonce_options' => wp_create_nonce('options')], $this->baseUrl)));
                     die();
                 } else {
-                    $this->data['export']->set(array('options' => $post, 'settings_update_on' => date('Y-m-d H:i:s')))->save();
+                    $this->data['export']->set(array('options' => $post, 'settings_update_on' => date('Y-m-d H:i:s')))->save();  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
 
                     if (!empty($post['friendly_name'])) {
                         $this->data['export']->set(array('friendly_name' => $post['friendly_name'], 'scheduled' => (($post['is_scheduled']) ? $post['scheduled_period'] : '')))->save();
                     }
 
-                    wp_redirect(esc_url_raw(add_query_arg(array('page' => 'pmxe-admin-manage', 'pmxe_nt' => urlencode(__('Options updated', 'pmxi_plugin')),'_wpnonce_options' => wp_create_nonce('options')) + array_intersect_key($_GET, array_flip($this->baseUrlParamNames)), admin_url('admin.php'))));
+                    wp_safe_redirect(esc_url_raw(add_query_arg(array('page' => 'pmxe-admin-manage', 'pmxe_nt' => urlencode(__('Options updated', 'wp-all-export')),'_wpnonce_options' => wp_create_nonce('options')) + array_intersect_key($_GET, array_flip($this->baseUrlParamNames)), admin_url('admin.php'))));
                     die();
                 }
             }
@@ -384,7 +388,7 @@ class PMXE_Admin_Export extends PMXE_Controller_Admin
                         'canceled' => 0,
                         'options' => $post,
                         'friendly_name' => $this->getFriendlyName($post),
-                        'last_activity' => date('Y-m-d H:i:s')
+                        'last_activity' => date('Y-m-d H:i:s')  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
 
                     )
                 )->save();
@@ -439,17 +443,17 @@ class PMXE_Admin_Export extends PMXE_Controller_Admin
                         PMXE_Plugin::$session->set($key, $value);
                     }
                     PMXE_Plugin::$session->save_data();
-                    wp_redirect(esc_url_raw(add_query_arg('action', 'process', $this->baseUrl)));
+                    wp_safe_redirect(esc_url_raw(add_query_arg(array('action' => 'process', '_wpnonce_process' => wp_create_nonce('process')), $this->baseUrl)));
                     die();
                 }
             } else {
                 $this->errors->remove('count-validation');
                 if (!$this->errors->get_error_codes()) {
-                    $this->data['export']->set(array('options' => $post, 'settings_update_on' => date('Y-m-d H:i:s')))->save();
+                    $this->data['export']->set(array('options' => $post, 'settings_update_on' => date('Y-m-d H:i:s')))->save();  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
                     if (!empty($post['friendly_name'])) {
                         $this->data['export']->set(array('friendly_name' => $post['friendly_name'], 'scheduled' => (($post['is_scheduled']) ? $post['scheduled_period'] : '')))->save();
                     }
-                    wp_redirect(esc_url_raw(add_query_arg(array('page' => 'pmxe-admin-manage', 'pmxe_nt' => urlencode(__('Options updated', 'wp_all_export_plugin'))) + array_intersect_key($_GET, array_flip($this->baseUrlParamNames)), admin_url('admin.php'))));
+                    wp_safe_redirect(esc_url_raw(add_query_arg(array('page' => 'pmxe-admin-manage', 'pmxe_nt' => urlencode(__('Options updated', 'wp-all-export'))) + array_intersect_key($_GET, array_flip($this->baseUrlParamNames)), admin_url('admin.php'))));
                     die();
                 }
             }
@@ -463,35 +467,47 @@ class PMXE_Admin_Export extends PMXE_Controller_Admin
      */
     public function process()
     {
+        // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- intentional for long-running exports
         @set_time_limit(0);
 
         $export = $this->data['update_previous'];
 
         if (!PMXE_Plugin::is_ajax()) {
 
+            // Accept the nonce from either flow that legitimately reaches this action: the export
+            // wizard (process) or the re-export confirmation delegated from Manage (update-export).
+            $nonce_ok =
+                (isset($_REQUEST['_wpnonce_process'])
+                    && wp_verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['_wpnonce_process'])), 'process'))
+                || (isset($_REQUEST['_wpnonce_update-export'])
+                    && wp_verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['_wpnonce_update-export'])), 'update-export'));
+            if (!$nonce_ok) {
+                wp_nonce_ays('process');
+            }
+
             if ("" == PMXE_Plugin::$session->friendly_name) {
 
                 $post_types = PMXE_Plugin::$session->get('cpt');
                 if (!empty($post_types)) {
                     if (in_array('users', $post_types)) {
-                        $friendly_name = 'Users Export - ' . date("Y F d H:i");
+                        $friendly_name = 'Users Export - ' . wp_date("Y F d H:i");
                     } elseif (in_array('shop_customer', $post_types)) {
-                        $friendly_name = 'Customers Export - ' . date("Y F d H:i");
+                        $friendly_name = 'Customers Export - ' . wp_date("Y F d H:i");
                     } elseif (in_array('comments', $post_types)) {
-                        $friendly_name = 'Comments Export - ' . date("Y F d H:i");
+                        $friendly_name = 'Comments Export - ' . wp_date("Y F d H:i");
                     } elseif (in_array('taxonomies', $post_types)) {
                         $tx = get_taxonomy(PMXE_Plugin::$session->get('taxonomy_to_export'));
                         if (!empty($tx->labels->name)) {
-                            $friendly_name = $tx->labels->name . ' Export - ' . date("Y F d H:i");
+                            $friendly_name = $tx->labels->name . ' Export - ' . wp_date("Y F d H:i");
                         } else {
-                            $friendly_name = 'Taxonomy Terms Export - ' . date("Y F d H:i");
+                            $friendly_name = 'Taxonomy Terms Export - ' . wp_date("Y F d H:i");
                         }
                     } else {
                         $post_type_details = get_post_type_object(array_shift($post_types));
-                        $friendly_name = $post_type_details->labels->name . ' Export - ' . date("Y F d H:i");
+                        $friendly_name = $post_type_details->labels->name . ' Export - ' . wp_date("Y F d H:i");
                     }
                 } else {
-                    $friendly_name = 'WP_Query Export - ' . date("Y F d H:i");
+                    $friendly_name = 'WP_Query Export - ' . wp_date("Y F d H:i");
                 }
 
                 PMXE_Plugin::$session->set('friendly_name', $friendly_name);
@@ -510,8 +526,8 @@ class PMXE_Admin_Export extends PMXE_Controller_Admin
                     'options' => PMXE_Plugin::$session->get_clear_session_data(),
                     'friendly_name' => PMXE_Plugin::$session->friendly_name,
                     'scheduled' => (PMXE_Plugin::$session->is_scheduled) ? PMXE_Plugin::$session->scheduled_period : '',
-                    //'registered_on' => date('Y-m-d H:i:s'),
-                    'last_activity' => date('Y-m-d H:i:s')
+                    //'registered_on' => date('Y-m-d H:i:s'),  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
+                    'last_activity' => date('Y-m-d H:i:s')  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
                 )
             )->save();
 
@@ -537,35 +553,35 @@ class PMXE_Admin_Export extends PMXE_Controller_Admin
         $post_types = PMXE_Plugin::$session->get('cpt');
         if (!empty($post_types)) {
             if (in_array('users', $post_types)) {
-                $friendly_name = 'Users Export - ' . date("Y F d H:i");
+                $friendly_name = 'Users Export - ' . wp_date("Y F d H:i");
                 return $friendly_name;
             } elseif (in_array('shop_customer', $post_types)) {
-                $friendly_name = 'Customers Export - ' . date("Y F d H:i");
+                $friendly_name = 'Customers Export - ' . wp_date("Y F d H:i");
                 return $friendly_name;
             } elseif (in_array('comments', $post_types)) {
-                $friendly_name = 'Comments Export - ' . date("Y F d H:i");
+                $friendly_name = 'Comments Export - ' . wp_date("Y F d H:i");
                 return $friendly_name;
             } elseif (in_array('taxonomies', $post_types)) {
                 $tx = get_taxonomy($post['taxonomy_to_export']);
                 if (!empty($tx->labels->name)) {
-                    $friendly_name = $tx->labels->name . ' Export - ' . date("Y F d H:i");
+                    $friendly_name = $tx->labels->name . ' Export - ' . wp_date("Y F d H:i");
                     return $friendly_name;
                 } else {
-                    $friendly_name = 'Taxonomy Terms Export - ' . date("Y F d H:i");
+                    $friendly_name = 'Taxonomy Terms Export - ' . wp_date("Y F d H:i");
                     return $friendly_name;
                 }
             } else {
                 $is_rapid_add_on_export = PMXE_Helper::is_rapid_export_addon($post_types);
                 if($is_rapid_add_on_export) {
-                    return 'Gravity Forms Entries Export - ' . date("Y F d H:i");
+                    return 'Gravity Forms Entries Export - ' . wp_date("Y F d H:i");
                 }
 
                 $post_type_details = get_post_type_object(array_shift($post_types));
-                $friendly_name = $post_type_details->labels->name . ' Export - ' . date("Y F d H:i");
+                $friendly_name = $post_type_details->labels->name . ' Export - ' . wp_date("Y F d H:i");
                 return $friendly_name;
             }
         } else {
-            $friendly_name = 'WP_Query Export - ' . date("Y F d H:i");
+            $friendly_name = 'WP_Query Export - ' . wp_date("Y F d H:i");
             return $friendly_name;
         }
     }

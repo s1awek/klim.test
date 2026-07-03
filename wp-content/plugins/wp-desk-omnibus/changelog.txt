@@ -1,5 +1,9 @@
 # WP Desk Omnibus Changelog
 
+## [2.2.22] - 2026-06-21 
+### Added
+- Support for WooCommerce 10.9
+
 ## [2.2.21] - 2026-05-28 
 ### Added
 - Support for WooCommerce 10.8

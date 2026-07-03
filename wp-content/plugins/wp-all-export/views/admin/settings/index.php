@@ -2,6 +2,7 @@
 if(!defined('ABSPATH')) {
     die();
 }
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variables in template files inherited from controller render() scope
 ?>
 
 <form class="settings" method="post" action="<?php echo esc_url($this->baseUrl); ?>" enctype="multipart/form-data">
@@ -9,7 +10,7 @@ if(!defined('ABSPATH')) {
     <div class="wpallexport-header">
 		<div class="wpallexport-logo"></div>
 		<div class="wpallexport-title">
-			<h3><?php esc_html_e('Settings', 'wp_all_export_plugin'); ?></h3>
+			<h3><?php esc_html_e('Settings', 'wp-all-export'); ?></h3>
 		</div>
 	</div>
 	<h2 style="padding:0px;"></h2>
@@ -19,7 +20,7 @@ if(!defined('ABSPATH')) {
 			<?php $this->error() ?>
 		<?php endif ?>
 
-		<h3><?php esc_html_e('Import/Export Templates', 'wp_all_export_plugin') ?></h3>
+		<h3><?php esc_html_e('Import/Export Templates', 'wp-all-export') ?></h3>
 		<?php $templates = new PMXE_Template_List(); $templates->getBy()->convertRecords() ?>
 		<?php wp_nonce_field('delete-templates', '_wpnonce_delete-templates') ?>
 		<?php if ($templates->total()): ?>
@@ -27,22 +28,22 @@ if(!defined('ABSPATH')) {
 				<?php foreach ($templates as $t): ?>
 					<tr>
 						<td>
-							<label class="selectit" for="template-<?php echo $t->id ?>"><input id="template-<?php echo esc_attr($t->id) ?>" type="checkbox" name="templates[]" value="<?php echo esc_attr($t->id) ?>" /> <?php echo wp_all_export_clear_xss(esc_html($t->name)); ?></label>
+							<label class="selectit" for="template-<?php echo esc_attr($t->id) ?>"><input id="template-<?php echo esc_attr($t->id) ?>" type="checkbox" name="templates[]" value="<?php echo esc_attr($t->id) ?>" /> <?php echo esc_html(wp_all_export_clear_xss($t->name)); ?></label>
 						</td>
 					</tr>
 				<?php endforeach ?>
 			</table>
 			<p class="submit-buttons">
-				<input type="submit" class="button-primary" name="delete_templates" value="<?php esc_html_e('Delete Selected', 'wp_all_export_plugin') ?>" />
-				<input type="submit" class="button-primary" name="export_templates" value="<?php esc_html_e('Export Selected', 'wp_all_export_plugin') ?>" />
+				<input type="submit" class="button-primary" name="delete_templates" value="<?php esc_html_e('Delete Selected', 'wp-all-export') ?>" />
+				<input type="submit" class="button-primary" name="export_templates" value="<?php esc_html_e('Export Selected', 'wp-all-export') ?>" />
 			</p>
 		<?php else: ?>
-			<em><?php esc_html_e('There are no templates saved', 'wp_all_export_plugin') ?></em>
+			<em><?php esc_html_e('There are no templates saved', 'wp-all-export') ?></em>
 		<?php endif ?>
 		<p>
 			<input type="hidden" name="is_templates_submitted" value="1" />
 			<input type="file" name="template_file"/>
-			<input type="submit" class="button-primary" name="import_templates" value="<?php esc_html_e('Import Templates', 'wp_all_export_plugin') ?>" />
+			<input type="submit" class="button-primary" name="import_templates" value="<?php esc_html_e('Import Templates', 'wp-all-export') ?>" />
 		</p>
 	</div>
 
@@ -51,23 +52,24 @@ if(!defined('ABSPATH')) {
 
 <form name="settings" class="settings" method="post" action="<?php echo esc_url($this->baseUrl); ?>">
 
-	<h3><?php esc_html_e('Files', 'wp_all_export_plugin') ?></h3>
+	<h3><?php esc_html_e('Files', 'wp-all-export') ?></h3>
 	
 	<table class="form-table">
 		<tbody>
 			<tr>
-				<th scope="row"><label><?php esc_html_e('Secure Mode', 'wp_all_export_plugin'); ?></label></th>
+				<th scope="row"><label><?php esc_html_e('Secure Mode', 'wp-all-export'); ?></label></th>
 				<td>
 					<fieldset style="padding:0;">
-						<legend class="screen-reader-text"><span><?php esc_html_e('Secure Mode', 'wp_all_export_plugin'); ?></span></legend>
+						<legend class="screen-reader-text"><span><?php esc_html_e('Secure Mode', 'wp-all-export'); ?></span></legend>
 						<input type="hidden" name="secure" value="0"/>
-						<label for="secure"><input type="checkbox" value="1" id="secure" name="secure" <?php echo (($post['secure']) ? 'checked="checked"' : ''); ?>><?php esc_html_e('Randomize folder names', 'wp_all_export_plugin'); ?></label>
+						<label for="secure"><input type="checkbox" value="1" id="secure" name="secure" <?php echo (($post['secure']) ? 'checked="checked"' : ''); ?>><?php esc_html_e('Randomize folder names', 'wp-all-export'); ?></label>
 					</fieldset>														
 					<p class="description">
 						<?php
 							$wp_uploads = wp_upload_dir();
 						?>
-						<?php printf('If enabled, exported files and temporary files will be saved in a folder with a randomized name in %s.<br/><br/>If disabled, exported files will be saved in the Media Library.', esc_html($wp_uploads['basedir'] . DIRECTORY_SEPARATOR . WP_ALL_EXPORT_UPLOADS_BASE_DIRECTORY) ); ?>
+						<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- format string is a hardcoded literal; %s argument is escaped
+								printf('If enabled, exported files and temporary files will be saved in a folder with a randomized name in %s.<br/><br/>If disabled, exported files will be saved in the Media Library.', esc_html($wp_uploads['basedir'] . DIRECTORY_SEPARATOR . WP_ALL_EXPORT_UPLOADS_BASE_DIRECTORY) ); ?>
 					</p>
                     <p class="submit-buttons">
                         <?php wp_nonce_field('edit-settings', '_wpnonce_edit-settings') ?>
@@ -79,30 +81,30 @@ if(!defined('ABSPATH')) {
 		</tbody>
 	</table>
 
-	<h3><?php esc_html_e('Zapier Integration', 'wp_all_export_plugin') ?></h3>
+	<h3><?php esc_html_e('Zapier Integration', 'wp-all-export') ?></h3>
 	
 	<table class="form-table">
 		<tbody>	
 			<tr>
-				<th scope="row"><label><?php esc_html_e('Getting Started', 'wp_all_export_plugin'); ?></label></th>
+				<th scope="row"><label><?php esc_html_e('Getting Started', 'wp-all-export'); ?></label></th>
 				<td>					
-					<p class="description"><?php printf(wp_kses_post(__('Zapier acts as a middle man between WP All Export and hundreds of other popular apps. To get started go to Zapier.com, create an account, and make a new Zap. Read more: <a target="_blank" href="https://zapier.com/zapbook/wp-all-export-pro/">https://zapier.com/zapbook/wp-all-export-pro/</a>', 'wp_all_export_plugin'), "https://zapier.com/zapbook/wp-all-export-pro/")); ?></p>
+					<p class="description"><?php printf(wp_kses_post(__('Zapier acts as a middle man between WP All Export and hundreds of other popular apps. To get started go to Zapier.com, create an account, and make a new Zap. Read more: <a target="_blank" href="https://zapier.com/zapbook/wp-all-export-pro/">https://zapier.com/zapbook/wp-all-export-pro/</a>', 'wp-all-export'), "https://zapier.com/zapbook/wp-all-export-pro/")); ?></p>
 				</td>
 			</tr>			
 			<tr>
-				<th scope="row"><label><?php esc_html_e('API Key', 'wp_all_export_plugin'); ?></label></th>
+				<th scope="row"><label><?php esc_html_e('API Key', 'wp-all-export'); ?></label></th>
 				<td>
 					<input type="text" class="regular-text" name="zapier_api_key" readOnly="readOnly" value=""/>
-					<input type="submit" class="button-secondary generate-zapier-api-key" name="pmxe_generate_zapier_api_key" value="<?php esc_html_e('Generate API Key', 'wp_all_export_plugin'); ?>"/>
-					<p class="description"><?php esc_html_e('Changing the key will require you to update your existing Zaps on Zapier.', 'wp_all_export_plugin'); ?></p>
+					<input type="submit" class="button-secondary generate-zapier-api-key" name="pmxe_generate_zapier_api_key" value="<?php esc_html_e('Generate API Key', 'wp-all-export'); ?>"/>
+					<p class="description"><?php esc_html_e('Changing the key will require you to update your existing Zaps on Zapier.', 'wp-all-export'); ?></p>
 				</td>
 			</tr>											
 		</tbody>
 	</table>	
 
 	<div class="wpallexport-free-edition-notice zapier-upgrade" style="margin: 15px 0; padding: 20px; display: none;">
-		<a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839967&discount=welcome-upgrade-99&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=zapier"><?php esc_html_e('Upgrade to the Pro edition of WP All Export for Zapier Integration','wp_all_export_plugin');?></a>
-		<p><?php esc_html_e('If you already own it, remove the free edition and install the Pro edition.', 'wp_all_export_plugin'); ?></p>
+		<a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839967&discount=welcome-upgrade-99&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=zapier"><?php esc_html_e('Upgrade to the Pro edition of WP All Export for Zapier Integration','wp-all-export');?></a>
+		<p><?php esc_html_e('If you already own it, remove the free edition and install the Pro edition.', 'wp-all-export'); ?></p>
 	</div>
 
 	<div class="clear"></div>
@@ -114,19 +116,19 @@ if(!defined('ABSPATH')) {
         <tbody>
 
         <tr>
-            <th scope="row"><label><?php esc_html_e('Automatic Scheduling License Key', 'wp_all_export_plugin'); ?></label></th>
+            <th scope="row"><label><?php esc_html_e('Automatic Scheduling License Key', 'wp-all-export'); ?></label></th>
             <td>
                 <input type="password" class="regular-text" name="scheduling_license"
-                       value="<?php if (!empty($post['scheduling_license'])) esc_attr_e(PMXE_Plugin::decode($post['scheduling_license'])); ?>"/>
+                       value="<?php if (!empty($post['scheduling_license'])) echo esc_attr(PMXE_Plugin::decode($post['scheduling_license'])); ?>"/>
                 <?php if (!empty($post['scheduling_license'])) { ?>
 
                     <?php if (!empty($post['scheduling_license_status']) && $post['scheduling_license_status'] == 'valid') { ?>
-                        <div class="license-status inline updated"><?php esc_html_e('Active', 'wp_all_export_plugin'); ?></div>
+                        <div class="license-status inline updated"><?php esc_html_e('Active', 'wp-all-export'); ?></div>
                     <?php } else { ?>
                         <input type="submit" class="button-secondary" name="pmxe_scheduling_license_activate"
-                               value="<?php esc_html_e('Activate License', 'wp_all_export_plugin'); ?>"/>
+                               value="<?php esc_html_e('Activate License', 'wp-all-export'); ?>"/>
                         <div class="license-status inline error"><?php echo esc_html($post['scheduling_license_status']); ?></div>
-                        <input type="hidden" name="scheduling_license_limit" value="<?php echo get_option('wpai_wpae_scheduling_license_site_limit', 0); ?>">
+                        <input type="hidden" name="scheduling_license_limit" value="<?php echo esc_attr(get_option('wpai_wpae_scheduling_license_site_limit', 0)); ?>">
                     <?php } ?>
 
                 <?php } ?>
@@ -135,7 +137,7 @@ if(!defined('ABSPATH')) {
                 if(!($scheduling->checkLicense()['success'] ?? false)){
 	                require_once(PMXE_Plugin::ROOT_DIR . '/src/Scheduling/views/SchedulingActiveSitesLimitUI.php');
                     ?>
-                    <p class="description"><?php echo wp_kses_post(__('A license key is required to use Automatic Scheduling. If you have already subscribed, <a href="https://www.wpallimport.com/portal/automatic-scheduling/" target="_blank">click here to access your license key</a>.<br>If you don\'t have a license, <a class="scheduling-subscribe-link" href="#">click here to subscribe</a>.', 'wp_all_export_plugin')); ?></p>
+                    <p class="description"><?php echo wp_kses_post(__('A license key is required to use Automatic Scheduling. If you have already subscribed, <a href="https://www.wpallimport.com/portal/automatic-scheduling/" target="_blank">click here to access your license key</a>.<br>If you don\'t have a license, <a class="scheduling-subscribe-link" href="#">click here to subscribe</a>.', 'wp-all-export')); ?></p>
 	                <?php
                 }
                 ?>
@@ -174,21 +176,21 @@ if(!defined('ABSPATH')) {
             <p class="submit-buttons">
                 <?php wp_nonce_field('edit-client-mode-settings', '_wpnonce_edit-client_mode_settings') ?>
                 <div class="input wp_all_export_save_client_mode_container">
-                    <input type="button" class="button-primary wp_all_export_save_client_mode" value="<?php esc_html_e("Save Client Mode Settings", 'wp_all_export_plugin'); ?>"/>
+                    <input type="button" class="button-primary wp_all_export_save_client_mode" value="<?php esc_html_e("Save Client Mode Settings", 'wp-all-export'); ?>"/>
                 </div>
             </p>
         </div>
         <div class="clear"></div>
         <div class="wpallexport-free-edition-notice php-client-mode-upgrade" style="margin: 15px 0; padding: 20px; display: none;">
-            <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839967&discount=welcome-upgrade-99&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=client-mode"><?php esc_html_e('Upgrade to the Pro edition of WP All Export to enable Client Mode','wp_all_export_plugin');?></a>
-            <p><?php esc_html_e('If you already own it, remove the free edition and install the Pro edition.', 'wp_all_export_plugin'); ?></p>
+            <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839967&discount=welcome-upgrade-99&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=client-mode"><?php esc_html_e('Upgrade to the Pro edition of WP All Export to enable Client Mode','wp-all-export');?></a>
+            <p><?php esc_html_e('If you already own it, remove the free edition and install the Pro edition.', 'wp-all-export'); ?></p>
         </div>
     </div>
 </form>
 <div class="wpallexport-overlay"></div>
 <div class="wpallexport-loader"
      style="border-radius: 5px; z-index: 999999; display:none; position: fixed;top: 200px;    left: 50%; width: 100px;height: 100px;background-color: #fff; text-align: center;">
-    <img style="margin-top: 45%;" src="<?php echo PMXE_ROOT_URL; ?>/static/img/preloader.gif"/>
+    <img style="margin-top: 45%;" src="<?php echo esc_url( PMXE_ROOT_URL ); ?>/static/img/preloader.gif"/>
 </div>
 
 
@@ -200,19 +202,20 @@ if(!defined('ABSPATH')) {
 ?>
 <hr />
 <div class="function-editor">
-    <h3><?php esc_html_e('Function Editor', 'pmxe_plugin') ?></h3>
+    <h3><?php esc_html_e('Function Editor', 'wp-all-export') ?></h3>
 
     <textarea id="wp_all_export_code" name="wp_all_export_code"><?php echo "<?php\n\n?>";?></textarea>						
     <div class="wpallexport-free-edition-notice php-functions-upgrade" style="margin: 15px 0; padding: 20px; display: none;">
-    	<a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839967&discount=welcome-upgrade-99&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=function-editor"><?php esc_html_e('Upgrade to the Pro edition of WP All Export to enable the Function Editor','wp_all_export_plugin');?></a>
-    	<p><?php esc_html_e('If you already own it, remove the free edition and install the Pro edition.', 'wp_all_export_plugin'); ?></p>
+    	<a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839967&discount=welcome-upgrade-99&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=function-editor"><?php esc_html_e('Upgrade to the Pro edition of WP All Export to enable the Function Editor','wp-all-export');?></a>
+    	<p><?php esc_html_e('If you already own it, remove the free edition and install the Pro edition.', 'wp-all-export'); ?></p>
     </div>
 
     <div class="input" style="margin-top: 10px;">
 
     	<div class="input wp_all_export_save_functions_container" style="display:inline-block; margin-right: 20px;">
-    		<input type="button" class="button-primary wp_all_export_save_functions" value="<?php esc_html_e("Save Functions", 'wp_all_export_plugin'); ?>"/>
-    		<a href="#help" class="wpallexport-help" title="<?php printf(esc_html__("Add functions here for use during your export. You can access this file at %s", "wp_all_export_plugin"), preg_replace("%.*wp-content%", "wp-content", esc_html($functions)));?>" style="top: 0;">?</a>
+    		<input type="button" class="button-primary wp_all_export_save_functions" value="<?php esc_html_e("Save Functions", 'wp-all-export'); ?>"/>
+    		<?php /* translators: %s: functions file path */ ?>
+    		<a href="#help" class="wpallexport-help" title="<?php printf(esc_html__("Add functions here for use during your export. You can access this file at %s", "wp-all-export"), esc_attr(preg_replace("%.*wp-content%", "wp-content", $functions)));?>" style="top: 0;">?</a>
     		<div class="wp_all_export_functions_preloader"></div>
     	</div>						
         <div class="input wp_all_export_saving_status">
@@ -222,5 +225,6 @@ if(!defined('ABSPATH')) {
     </div>
 </div>
 <div class="wpallexport-negative-margin fifteen">
-	<?php echo apply_filters('wpallexport_footer', ''); ?>
+	<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plugin-owned filter output; callback in filters/wpallexport_footer.php returns trusted static HTML
+		echo apply_filters('wpallexport_footer', ''); ?>
 </div>

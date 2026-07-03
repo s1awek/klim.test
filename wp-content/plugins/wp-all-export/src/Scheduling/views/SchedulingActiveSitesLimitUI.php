@@ -1,5 +1,8 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 ?>
 <div class="active-sites-limit-modal-overlay" style="display: none;">
 	<div class="active-sites-limit-modal">

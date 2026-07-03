@@ -2,6 +2,7 @@
 
 namespace SweetCode\Pixel_Manager\Admin\Notifications;
 
+use SweetCode\Pixel_Manager\Admin\Admin;
 use SweetCode\Pixel_Manager\Admin\Documentation;
 use SweetCode\Pixel_Manager\Admin\Environment;
 use SweetCode\Pixel_Manager\Helpers;
@@ -45,13 +46,33 @@ class Trial_Promotion_Notification extends Notification {
 			return true;
 		}
 
-		// Don't show on development installs
-		if (Environment::is_development_install()) {
+		// Only show on dashboard or PMW settings page
+		if (!Helpers::is_dashboard() && !Environment::is_pmw_settings_page()) {
 			return false;
 		}
 
-		// Only show on dashboard or PMW settings page
-		if (!Helpers::is_dashboard() && !Environment::is_pmw_settings_page()) {
+		// The Nova admin UI renders its own trial promotion card on the
+		// Dashboard tab, so suppress the top-of-page banner there.
+		if (Environment::is_pmw_settings_page() && Admin::is_wp_admin_active()) {
+			return false;
+		}
+
+		return self::is_eligible();
+	}
+
+	/**
+	 * Page-independent eligibility checks for the trial promotion.
+	 *
+	 * Shared between the classic admin notice (should_notify) and the Nova
+	 * admin UI, which renders the promotion as a card on its Dashboard tab.
+	 *
+	 * @return bool
+	 * @since 1.60.0
+	 */
+	public static function is_eligible() {
+
+		// Don't show on development installs
+		if (Environment::is_development_install()) {
 			return false;
 		}
 
@@ -133,6 +154,73 @@ class Trial_Promotion_Notification extends Notification {
 	 */
 	private static function is_force_show() {
 		return defined('PMW_FORCE_SHOW_TRIAL_NOTIFICATION') && PMW_FORCE_SHOW_TRIAL_NOTIFICATION;
+	}
+
+	/**
+	 * Payload for the Nova admin UI, which renders the trial promotion as a
+	 * dismissible card on its Dashboard tab instead of an admin notice.
+	 *
+	 * @return array
+	 * @since 1.60.0
+	 */
+	public static function get_data_for_nova() {
+
+		if (!function_exists('wpm_fs')) {
+			return [ 'show' => false ];
+		}
+
+		$show = self::is_force_show() || ( self::is_eligible() && self::is_not_dismissed() );
+
+		if (!$show) {
+			return [ 'show' => false ];
+		}
+
+		return [
+			'show'         => true,
+			'trialUrl'     => wpm_fs()->get_trial_url(),
+			'learnMoreUrl' => Documentation::get_link('trial_promotion'),
+		];
+	}
+
+	/**
+	 * Trial checkout URL for the contextual "start a free trial" links shown next
+	 * to the in-app upgrade CTAs (the per-field/section lock notes and the locked
+	 * Pro pixel group header).
+	 *
+	 * Unlike get_data_for_nova(), this is NOT gated by the 24h first-show delay or
+	 * the dismissal of the Dashboard promo card — those are specific to that card.
+	 * It returns a URL only when a trial can actually be started right now and the
+	 * admin hasn't switched trial promotion off.
+	 *
+	 * @return string The trial URL, or '' when no trial is available to start.
+	 * @since 1.60.0
+	 */
+	public static function get_available_trial_url() {
+
+		if (!function_exists('wpm_fs')) {
+			return '';
+		}
+
+		// Respect the site's master "disable trial promotion" toggle.
+		if (!self::is_admin_trial_promo_active()) {
+			return '';
+		}
+
+		$fs = wpm_fs();
+
+		// Nothing to offer once they're already paying or trialing, or once the
+		// trial has been used up.
+		if ($fs->is_paying_or_trial()) {
+			return '';
+		}
+		if ($fs->is_registered() && $fs->get_site() && $fs->get_site()->is_trial_utilized()) {
+			return '';
+		}
+		if (!$fs->has_trial_plan()) {
+			return '';
+		}
+
+		return (string) $fs->get_trial_url();
 	}
 
 	/**

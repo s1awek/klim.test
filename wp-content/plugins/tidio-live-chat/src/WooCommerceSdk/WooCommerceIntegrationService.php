@@ -14,6 +14,7 @@ use TidioLiveChat\TidioSdk\Exception\CannotRetrieveAccessTokensException;
 use TidioLiveChat\TidioSdk\TidioIntegrationService;
 use TidioLiveChat\TidioLiveChat;
 use TidioLiveChat\WooCommerceSdk\Dto\WooCommerceIntegrationDto;
+use function urlencode;
 
 class WooCommerceIntegrationService
 {
@@ -62,7 +63,7 @@ class WooCommerceIntegrationService
             '%s/wc-auth/v1/authorize?%s',
             get_home_url(),
             http_build_query([
-                'app_name' => TidioLiveChat::TIDIO_PLUGIN_NAME,
+                'app_name' => urlencode(TidioLiveChat::TIDIO_PLUGIN_NAME),
                 'scope' => 'read_write',
                 'user_id' => $this->integrationState->getProjectPublicKey(),
                 'return_url' => AdminRouting::getEndpointForIntegrateWooCommerceAction(),

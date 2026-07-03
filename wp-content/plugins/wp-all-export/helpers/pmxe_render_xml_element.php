@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) || exit;
+
 function pmxe_render_xml_element($el, $shorten = false, $path = '/', $ind = 1, $lvl = 0)
 {
 	$path .= $el->nodeName;	
@@ -39,7 +42,8 @@ function pmxe_render_xml_element($el, $shorten = false, $path = '/', $ind = 1, $
 				} elseif ($child instanceof DOMComment) {
 					if (preg_match('%\[pmxi_more:(\d+)\]%', $child->nodeValue, $mtch)) {
 						$no = intval($mtch[1]);
-						echo '<div class="xml-more">[ &dArr; ' . wp_kses_post(sprintf(__('<strong>%s</strong> %s more', 'wp_all_import_plugin'), $no, _n('element', 'elements', $no, 'wp_all_import_plugin'))) . ' &dArr; ]</div>';
+						/* translators: 1: count, 2: singular/plural noun */
+						echo '<div class="xml-more">[ &dArr; ' . wp_kses_post(sprintf(__('<strong>%1$s</strong> %2$s more', 'wp-all-export'), $no, _n('element', 'elements', $no, 'wp-all-export'))) . ' &dArr; ]</div>';
 					}
 				}
 			}

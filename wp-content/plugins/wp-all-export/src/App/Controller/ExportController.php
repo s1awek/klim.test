@@ -40,10 +40,11 @@ class ExportController extends BaseController
                 $exportData = false;
             }
         } else {
-            $id = intval($_GET['id']);
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only request inspection; access controlled by parent admin page capability
+            $id = isset( $_GET['id'] ) ? intval( $_GET['id'] ) : 0;
             $export = new \PMXE_Export_Record();
             if ($export->getById($id)->isEmpty()) { // specified import is not found
-                wp_redirect(esc_url_raw(add_query_arg('page', 'pmxe-admin-manage', admin_url('admin.php'))));
+                wp_safe_redirect(esc_url_raw(add_query_arg('page', 'pmxe-admin-manage', admin_url('admin.php'))));
                 die();
             }
 

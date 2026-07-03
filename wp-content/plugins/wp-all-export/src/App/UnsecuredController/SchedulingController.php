@@ -102,7 +102,7 @@ class SchedulingController extends BaseController
             try {
                 $export->set(array('canceled' => 0))->execute($logger, true);
             } catch (AddonNotFoundException $e) {
-                die($e->getMessage());
+                die(esc_html($e->getMessage()));
             }
             if (!(int)$export->triggered and !(int)$export->processing) {
                 $this->scheduledExportService->process($export);
@@ -129,11 +129,13 @@ class SchedulingController extends BaseController
     private function isRequestValid()
     {
         $cron_job_key = \PMXE_Plugin::getInstance()->getOption('cron_job_key');
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended -- access verified via export_key matching cron_job_key option
         return
             !empty($cron_job_key) and
             !empty($_GET['export_id']) and
             !empty($_GET['export_key']) and
-            $_GET['export_key'] == $cron_job_key;
+            hash_equals( $cron_job_key, sanitize_text_field( wp_unslash( $_GET['export_key'] ) ) );
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended
     }
 
     /**
@@ -153,7 +155,7 @@ class SchedulingController extends BaseController
             ||
             ($export->options['export_type'] == 'advanced' && $export->options['wp_query_selector'] == 'wp_user_query' && !$addons->isUserAddonActive())
         ) {
-            die(\__('The User Export Add-On Pro is required to run this export. You can download the add-on here: <a href="http://www.wpallimport.com/portal/" target="_blank">http://www.wpallimport.com/portal/</a>', 'wp_all_export_plugin'));
+            die(wp_kses_post(\__('The User Export Add-On Pro is required to run this export. You can download the add-on here: <a href="http://www.wpallimport.com/portal/" target="_blank">http://www.wpallimport.com/portal/</a>', 'wp-all-export')));
         }
 
 	    if (
@@ -165,11 +167,11 @@ class SchedulingController extends BaseController
 		    ||
 		    ($export->options['export_type'] == 'advanced' && in_array($export->options['exportquery']->query['post_type'], array(array('product', 'product_variation'), )) && !$addons->isWooCommerceAddonActive() && !$addons->isWooCommerceProductAddonActive())
 	    ) {
-            die(\__('The WooCommerce Export Add-On Pro is required to run this export. You can download the add-on here: <a href="http://www.wpallimport.com/portal/" target="_blank">http://www.wpallimport.com/portal/</a>', 'wp_all_export_plugin'));
+            die(wp_kses_post(\__('The WooCommerce Export Add-On Pro is required to run this export. You can download the add-on here: <a href="http://www.wpallimport.com/portal/" target="_blank">http://www.wpallimport.com/portal/</a>', 'wp-all-export')));
         }
 
         if(in_array('acf', $export->options['cc_type']) && !$addons->isAcfAddonActive()) {
-            die(\__('The ACF Export Add-On Pro is required to run this export. You can download the add-on here: <a href="http://www.wpallimport.com/portal/" target="_blank">http://www.wpallimport.com/portal/</a>', 'wp_all_export_plugin'));
+            die(wp_kses_post(\__('The ACF Export Add-On Pro is required to run this export. You can download the add-on here: <a href="http://www.wpallimport.com/portal/" target="_blank">http://www.wpallimport.com/portal/</a>', 'wp-all-export')));
         }
 
     }

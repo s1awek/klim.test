@@ -30,6 +30,7 @@ class GoogleCategoriesController extends BaseController
         }
 
         $querystr = "SELECT * FROM `{$tablePrefix}google_cats` WHERE 1=1 $searchString";
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $tablePrefix from $wpdb->prefix; $searchString fragments are pre-built with $wpdb->prepare() above
         $pageposts = $wpdb->get_results($querystr, ARRAY_A);
 
         // If it's a search find the parents of the categories
@@ -42,8 +43,8 @@ class GoogleCategoriesController extends BaseController
                     $parents = array_merge($parents, [$category]);
                 }
 
-                $sql = "SELECT * FROM `{$tablePrefix}google_cats` WHERE `id` = $category[parent_id]";
-                $results = $wpdb->get_results($sql, ARRAY_A);
+                // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $tablePrefix from $wpdb->prefix; parent_id bound via prepare()
+                $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM `{$tablePrefix}google_cats` WHERE `id` = %d", (int) $category['parent_id']), ARRAY_A);
 
                 foreach ($results as &$result) {
                     $result['children'] = [$this->processCategory($category, $search)];
@@ -81,8 +82,11 @@ class GoogleCategoriesController extends BaseController
 
         $categoryId = intval($categoryId);
 
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- $tablePrefix from $wpdb->prefix; placeholder used for $categoryId; plugin-owned google_cats table read for category tree building
         $childrenQuerystr = "SELECT COUNT(*) as hasChildren FROM `{$tablePrefix}google_cats` WHERE `parent_id` = %d";
-        $childrenQuerystr = $wpdb->prepare($childrenQuerystr, $categoryId);
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- prepared via wpdb->prepare on next line
+        $childrenQuerystr = $wpdb->prepare($childrenQuerystr, $categoryId); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $tablePrefix-bearing $childrenQuerystr is the SQL template for prepare() itself; rule misfires on prepare's first arg
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- query already passed through $wpdb->prepare() above
         $hasChildren = $wpdb->get_results($childrenQuerystr, ARRAY_A);
         $hasChildren = $hasChildren[0]['hasChildren'];
         return $hasChildren;

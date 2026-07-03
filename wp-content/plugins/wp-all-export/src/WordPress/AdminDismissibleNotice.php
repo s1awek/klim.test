@@ -1,6 +1,10 @@
 <?php
 
+
 namespace Wpae\WordPress;
+
+defined( 'ABSPATH' ) || exit;
+
 
 
 class AdminDismissibleNotice extends AdminNotice
@@ -16,7 +20,7 @@ class AdminDismissibleNotice extends AdminNotice
     public function showNotice()
     {
         ?>
-        <div class="<?php echo $this->getType();?>" style="position: relative;">
+        <div class="<?php echo esc_attr($this->getType());?>" style="position: relative;">
             <p>
                 <?php echo wp_kses_post($this->message); ?>
             </p>

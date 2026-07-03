@@ -1,4 +1,8 @@
 <?php
+
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
+defined( 'ABSPATH' ) || exit;
+
 /**
 *	AJAX action for preview export row
 */
@@ -6,11 +10,11 @@
 function pmxe_wp_ajax_wpae_preview(){
 
 	if ( ! check_ajax_referer( 'wp_all_export_secure', 'security', false )){
-		exit( json_encode(array('html' => __('Security check', 'wp_all_export_plugin'))) );
+		exit( json_encode(array('html' => __('Security check', 'wp-all-export'))) );
 	}
 
 	if ( ! current_user_can( PMXE_Plugin::$capabilities ) ){
-		exit( json_encode(array('html' => __('Security check', 'wp_all_export_plugin'))) );
+		exit( json_encode(array('html' => __('Security check', 'wp-all-export'))) );
 	}
 
 	XmlExportEngine::$is_preview = true;
@@ -21,7 +25,8 @@ function pmxe_wp_ajax_wpae_preview(){
 
 	$values = array();
 
-	parse_str($_POST['data'], $values);
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.InputNotValidated,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- structured payload parsed via parse_str; values keep their escape backslashes for the downstream stripslashes loop on cc_options
+	parse_str(isset($_POST['data']) ? (string) $_POST['data'] : '', $values);
 
 	if(is_array($values['cc_options'])) {
 
@@ -30,11 +35,12 @@ function pmxe_wp_ajax_wpae_preview(){
 		}
 	}
 
-	$export_id = (isset($_GET['id'])) ? stripcslashes($_GET['id']) : 0;
+	$export_id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : 0;
 
 	$exportOptions = $values + (PMXE_Plugin::$session->has_session() ? PMXE_Plugin::$session->get_clear_session_data() : array()) + PMXE_Plugin::get_default_import_options();
 
-	$exportOptions['custom_xml_template'] = (isset($_POST['custom_xml'])) ? stripcslashes($_POST['custom_xml']) : '';
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- XML template payload validated/parsed downstream; stripcslashes() is the intended decoder for this field and pairs with the form-side encoding
+	$exportOptions['custom_xml_template'] = (isset($_POST['custom_xml'])) ? stripcslashes( (string) $_POST['custom_xml'] ) : '';
 	$exportOptions['custom_xml_template'] = str_replace('<ID>','<id>', $exportOptions['custom_xml_template'] );
 	$exportOptions['custom_xml_template'] = str_replace('</ID>','</id>', $exportOptions['custom_xml_template'] );
 
@@ -75,7 +81,7 @@ function pmxe_wp_ajax_wpae_preview(){
 
 		if ( empty(XmlExportEngine::$exportOptions['custom_xml_template']) )
 		{
-			$errors->add('form-validation', __('XML template is empty.', 'wp_all_export_plugin'));
+			$errors->add('form-validation', __('XML template is empty.', 'wp-all-export'));
 		}
 
 		if ( ! empty(XmlExportEngine::$exportOptions['custom_xml_template'])){
@@ -132,9 +138,11 @@ function pmxe_wp_ajax_wpae_preview(){
 	if ( 'advanced' == $exportOptions['export_type'] )
 	{
 		if ( XmlExportEngine::$is_user_export ) {
+			// phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- intentional: executes saved WP_Query argument string
 			$exportQuery = eval('return new WP_User_Query(array(' . $exportOptions['wp_query'] . ', \'offset\' => 0, \'number\' => 10));');
 		}
 		elseif ( XmlExportEngine::$is_comment_export ) {
+			// phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- intentional: executes saved WP_Query argument string
 			$exportQuery = eval('return new WP_Comment_Query(array(' . $exportOptions['wp_query'] . ', \'offset\' => 0, \'number\' => 10));');
 		}
 		else {
@@ -142,6 +150,7 @@ function pmxe_wp_ajax_wpae_preview(){
 			remove_all_actions('pre_get_posts');
 			remove_all_filters('posts_clauses');
 			
+			// phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- intentional: executes saved WP_Query argument string
 			$exportQuery = eval('return new WP_Query(array(' . $exportOptions['wp_query'] . ', \'offset\' => 0, \'posts_per_page\' => 10));');
 		}
 	}
@@ -223,12 +232,12 @@ function pmxe_wp_ajax_wpae_preview(){
 		<?php
 
 		if(!$custom_xml_valid) {
-			$error_msg = '<strong class="error">' . __('Invalid XML', 'wp_all_import_plugin') . '</strong><ul  class="error">';
+			$error_msg = '<strong class="error">' . __('Invalid XML', 'wp-all-export') . '</strong><ul  class="error">';
 			foreach($custom_xml_template_errors as $error) {
 				$error_msg .= '<li>';
-				$error_msg .= __('Line', 'wp_all_import_plugin') . ' ' . ($error->line + $line_difference) . ', ';
-				$error_msg .= __('Column', 'wp_all_import_plugin') . ' ' . $error->column . ', ';
-				$error_msg .= __('Code', 'wp_all_import_plugin') . ' ' . $error->code . ': ';
+				$error_msg .= __('Line', 'wp-all-export') . ' ' . ($error->line + $line_difference) . ', ';
+				$error_msg .= __('Column', 'wp-all-export') . ' ' . $error->column . ', ';
+				$error_msg .= __('Code', 'wp-all-export') . ' ' . $error->code . ': ';
 				$error_msg .= '<em>' . trim(esc_html($error->message)) . '</em>';
 				$error_msg .= '</li>';
 			}
@@ -258,7 +267,7 @@ function pmxe_wp_ajax_wpae_preview(){
 						}
 					}
 
-					$error_msg = '<span class="error">'.__($errorMessage, 'wp_all_import_plugin').'</span>';
+					$error_msg = '<span class="error">'.esc_html($errorMessage).'</span>';
 					echo wp_kses_post($error_msg);
 					exit( json_encode(array('html' => ob_get_clean())) );
 				} catch (WpaeInvalidStringException $e) {
@@ -274,12 +283,12 @@ function pmxe_wp_ajax_wpae_preview(){
 						}
 					}
 
-					$error_msg = '<span class="error">'.__($errorMessage, 'wp_all_import_plugin').'</span>';
+					$error_msg = '<span class="error">'.esc_html($errorMessage).'</span>';
 					echo wp_kses_post($error_msg);
 					exit( json_encode(array('html' => ob_get_clean())) );
 				} catch (WpaeTooMuchRecursionException $e) {
-					$errorMessage = __('There was a problem parsing the custom XML template');
-					$error_msg = '<span class="error">'.__($errorMessage, 'wp_all_import_plugin').'</span>';
+					$errorMessage = __( 'There was a problem parsing the custom XML template', 'wp-all-export' );
+					$error_msg = '<span class="error">'.esc_html($errorMessage).'</span>';
 					echo wp_kses_post($error_msg);
 					exit( json_encode(array('html' => ob_get_clean())) );
 				}
@@ -349,9 +358,9 @@ function pmxe_wp_ajax_wpae_preview(){
                           $xml_errors = false;
                         }
                         else{
-                          $error_msg = '<strong>' . __('Can\'t preview the document.', 'wp_all_import_plugin') . '</strong><ul>';
+                          $error_msg = '<strong>' . __('Can\'t preview the document.', 'wp-all-export') . '</strong><ul>';
                           $error_msg .= '<li>';
-                          $error_msg .= __('You can continue export or try to use &lt;data&gt; tag as root element.', 'wp_all_import_plugin');
+                          $error_msg .= __('You can continue export or try to use &lt;data&gt; tag as root element.', 'wp-all-export');
                           $error_msg .= '</li>';
                           $error_msg .= '</ul>';
                           echo wp_kses_post($error_msg);
@@ -370,12 +379,12 @@ function pmxe_wp_ajax_wpae_preview(){
 					libxml_clear_errors();
 
 					if ($preview_xml_errors){
-						$error_msg = '<strong class="error">' . __('Invalid XML', 'wp_all_import_plugin') . '</strong><ul  class="error">';
+						$error_msg = '<strong class="error">' . __('Invalid XML', 'wp-all-export') . '</strong><ul  class="error">';
 						foreach($preview_xml_errors as $error) {
 							$error_msg .= '<li>';
-							$error_msg .= __('Line', 'wp_all_import_plugin') . ' ' . $error->line . ', ';
-							$error_msg .= __('Column', 'wp_all_import_plugin') . ' ' . $error->column . ', ';
-							$error_msg .= __('Code', 'wp_all_import_plugin') . ' ' . $error->code . ': ';
+							$error_msg .= __('Line', 'wp-all-export') . ' ' . $error->line . ', ';
+							$error_msg .= __('Column', 'wp-all-export') . ' ' . $error->column . ', ';
+							$error_msg .= __('Code', 'wp-all-export') . ' ' . $error->code . ': ';
 							$error_msg .= '<em>' . trim(esc_html($error->message)) . '</em>';
 							$error_msg .= '</li>';
 						}
@@ -389,9 +398,9 @@ function pmxe_wp_ajax_wpae_preview(){
 							pmxe_render_xml_element($elements->item( 0 ), true);
 						}
 						else{
-							$error_msg = '<strong>' . __('Can\'t preview the document. Root element is not detected.', 'wp_all_import_plugin') . '</strong><ul>';
+							$error_msg = '<strong>' . __('Can\'t preview the document. Root element is not detected.', 'wp-all-export') . '</strong><ul>';
 							$error_msg .= '<li>';
-							$error_msg .= __('You can continue export or try to use &lt;data&gt; tag as root element.', 'wp_all_import_plugin');
+							$error_msg .= __('You can continue export or try to use &lt;data&gt; tag as root element.', 'wp-all-export');
 							$error_msg .= '</li>';
 							$error_msg .= '</ul>';
 							echo wp_kses_post($error_msg);
@@ -441,7 +450,7 @@ function pmxe_wp_ajax_wpae_preview(){
 						}
 					}
 					else{
-						_e('Data not found.', 'wp_all_export_plugin');
+						esc_html_e('Data not found.', 'wp-all-export');
 					}
 				?>
 				</small>
@@ -450,7 +459,7 @@ function pmxe_wp_ajax_wpae_preview(){
 
 			default:
 
-				_e('This format is not supported.', 'wp_all_export_plugin');
+				esc_html_e('This format is not supported.', 'wp-all-export');
 
 				break;
 		}

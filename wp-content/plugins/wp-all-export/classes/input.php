@@ -23,6 +23,7 @@ class PMXE_Input {
 		$this->addFilter('strip_tags');
 		$this->addFilter('esc_sql');
         $this->addFilter('esc_js');
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- generic input wrapper; nonce verification is the caller's responsibility
 		$result = $this->read($_GET, $paramName, $default);
 		$this->removeFilter('htmlspecialchars');
 		$this->removeFilter('strip_tags');		
@@ -32,6 +33,7 @@ class PMXE_Input {
 	}
 	
 	public function post($paramName, $default = NULL) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- generic input wrapper; nonce verification is the caller's responsibility
 		return $this->read($_POST, $paramName, $default);
 	}
 	
@@ -40,10 +42,12 @@ class PMXE_Input {
 	}
 	
 	public function request($paramName, $default = NULL) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- generic input wrapper; nonce verification is the caller's responsibility
 		return $this->read($_GET + $_POST + $_COOKIE, $paramName, $default);
 	}
-	
+
 	public function getpost($paramName, $default = NULL) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- generic input wrapper; nonce verification is the caller's responsibility
 		return $this->read($_GET + $_POST, $paramName, $default);
 	}
 	
@@ -53,7 +57,7 @@ class PMXE_Input {
 	
 	public function addFilter($callback) {
 		if ( ! is_callable($callback)) {
-			throw new Exception(get_class($this) . '::' . __METHOD__ . ' parameter must be a proper callback function reference.');
+			throw new Exception( esc_html( get_class($this) . '::' . __METHOD__ . ' parameter must be a proper callback function reference.' ) );
 		}
 		if ( ! in_array($callback, $this->filters)) {
 			$this->filters[] = $callback;

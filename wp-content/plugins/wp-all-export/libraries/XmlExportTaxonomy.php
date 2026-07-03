@@ -1,5 +1,9 @@
 <?php
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
+defined( 'ABSPATH' ) || exit;
+
+
 if ( ! class_exists('XmlExportTaxonomy') )
 {
 	final class XmlExportTaxonomy
@@ -125,7 +129,7 @@ if ( ! class_exists('XmlExportTaxonomy') )
 			    unset($sections['cats']);
 				unset($sections['other']);
 
-				$sections['cf']['title'] = __("Term Meta", "wp_all_export_plugin");
+				$sections['cf']['title'] = __("Term Meta", "wp-all-export");
 
 				return $sections;
 			}					
@@ -230,8 +234,28 @@ if ( ! class_exists('XmlExportTaxonomy') )
 				
 				$fieldSnipped = ( ! empty($fieldPhp ) and ! empty($fieldCode)) ? $fieldCode : false;
 
+				$addons = XmlExportEngine::get_addons();
+				$addonFieldOptions = maybe_unserialize($fieldOptions);
+
+				if (in_array($fieldType, $addons)) {
+					$article = apply_filters(
+						"pmxe_{$fieldType}_addon_export_field",
+						$article,
+						$addonFieldOptions,
+						XmlExportEngine::$exportOptions,
+						$ID,
+						$term,
+						$term->term_id,
+						$xmlWriter,
+						$element_name,
+						$element_name_ns,
+						$fieldSnipped,
+						$preview
+					);
+				}
+
 				switch ($fieldType)
-				{						
+				{
 					case 'term_id':
 						wp_all_export_write_article( $article, $element_name, apply_filters('pmxe_term_id', pmxe_filter($term->term_id, $fieldSnipped), $term->term_id) );
 						break;
@@ -372,6 +396,7 @@ if ( ! class_exists('XmlExportTaxonomy') )
                         if ( ! empty($fieldSql) )
                         {
                             global $wpdb;
+                            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnsupportedPlaceholder,WordPress.DB.PreparedSQLPlaceholders.UnsupportedIdentifierPlaceholder,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $fieldSql is admin-saved custom SQL from export template options (cc_sql); editing requires the manage_options capability; %%ID%% token is replaced with %d placeholder before being bound through $wpdb->prepare() with $term->term_id
                             $val = $wpdb->get_var( $wpdb->prepare( stripcslashes(str_replace("%%ID%%", "%d", $fieldSql)), $term->term_id ));
                             if ( ! empty($fieldPhp) and !empty($fieldCode) )
                             {
@@ -382,6 +407,7 @@ if ( ! class_exists('XmlExportTaxonomy') )
                                 }
                                 else
                                 {
+                                    // phpcs:ignore Generic.PHP.ForbiddenFunctions.Found -- intentional: executes saved WP_Query argument string
                                     $val = eval('return ' . stripcslashes(str_replace("%%VALUE%%", $val, $fieldCode)) . ';');
                                 }
                             }

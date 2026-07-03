@@ -1,5 +1,8 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 function pmxe_wpmu_new_blog($blog_id, $user_id, $domain, $path, $site_id, $meta)
 {
 	// create/update required database tables

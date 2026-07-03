@@ -1,5 +1,8 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 function pmxe_prepare_price( $price, $disable_prepare_price, $prepare_price_to_woo_format, $convert_decimal_separator ){
 
     if ( $disable_prepare_price ){

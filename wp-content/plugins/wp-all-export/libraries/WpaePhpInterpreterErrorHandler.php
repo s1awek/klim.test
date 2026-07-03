@@ -20,13 +20,13 @@ class WpaePhpInterpreterErrorHandler
             $error['message'] = str_replace('  ', ' ', $error['message']);
             echo "[[ERROR]]";
             if($error['message'] == '') {
-                $error['message'] = __('An unknown error occured', 'wp_all_import_plugin');
+                $error['message'] = __('An unknown error occured', 'wp-all-export');
             }
-            $this->terminate(json_encode(array('error' => '<span class="error">'.$error['message'].' of the Functions Editor'.'</span>', 'line' => $error['line'], 'title' => __('PHP Error','wp_all_import_plugin'))));
+            $this->terminate(json_encode(array('error' => '<span class="error">'.$error['message'].' of the Functions Editor'.'</span>', 'line' => $error['line'], 'title' => __('PHP Error','wp-all-export'))));
         } else if($error && strpos($error['file'], 'XMLWriter.php') !== false ) {
             if(strpos($error['message'],'syntax error, unexpected') !== false) {
                 echo "[[ERROR]]";
-                $this->terminate(json_encode(array('error'=>__('You probably forgot to close a quote', 'wp_all_import_plugin'),'title' => __('PHP Error','wp_all_import_plugin'))));
+                $this->terminate(json_encode(array('error'=>__('You probably forgot to close a quote', 'wp-all-export'),'title' => __('PHP Error','wp-all-export'))));
             }
         }
     }
@@ -54,6 +54,7 @@ class WpaePhpInterpreterErrorHandler
      */
     protected function terminate($message)
     {
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- callers pass JSON-encoded payloads consumed by an AJAX endpoint; HTML escaping would corrupt the response
         exit($message);
     }
 }

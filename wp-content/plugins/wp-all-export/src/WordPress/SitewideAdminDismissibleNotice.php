@@ -1,6 +1,10 @@
 <?php
 
+
 namespace Wpae\WordPress;
+
+defined( 'ABSPATH' ) || exit;
+
 
 
 class SitewideAdminDismissibleNotice extends AdminNotice

@@ -2,6 +2,7 @@
 if(!defined('ABSPATH')) {
     die();
 }
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variables in template files inherited from controller render() scope
 ?>
 <h2 class="wpallexport-wp-notices"></h2>
 
@@ -10,13 +11,13 @@ if(!defined('ABSPATH')) {
     <div class="wpallexport-header">
         <div class="wpallexport-logo"></div>
         <div class="wpallexport-title">
-            <h2><?php esc_html_e('Confirm & Run', 'wp_all_export_plugin'); ?></h2>
+            <h2><?php esc_html_e('Confirm & Run', 'wp-all-export'); ?></h2>
         </div>
         <div class="wpallexport-links">
             <a href="http://www.wpallimport.com/support/?utm_source=export-plugin-free&utm_medium=help&utm_campaign=premium-support"
-               target="_blank"><?php esc_html_e('Support', 'wp_all_export_plugin'); ?></a> | <a
+               target="_blank"><?php esc_html_e('Support', 'wp-all-export'); ?></a> | <a
                 href="http://www.wpallimport.com/documentation/?utm_source=export-plugin-free&utm_medium=help&utm_campaign=docs"
-                target="_blank"><?php esc_html_e('Documentation', 'wp_all_export_plugin'); ?></a>
+                target="_blank"><?php esc_html_e('Documentation', 'wp-all-export'); ?></a>
         </div>
 
         <div class="clear"></div>
@@ -25,8 +26,8 @@ if(!defined('ABSPATH')) {
             <div class="clear"></div>
 
             <div class="step_description">
-                <h2><?php echo wp_kses_post('Export <span id="status">in Progress...</span>', 'wp_all_export_plugin') ?></h2>
-                <h3 id="process_notice"><?php esc_html_e('Exporting may take some time. Please do not close your browser or refresh the page until the process is complete.', 'wp_all_export_plugin'); ?></h3>
+                <h2><?php echo esc_html__('Export', 'wp-all-export'); ?> <span id="status"><?php esc_html_e('in Progress...', 'wp-all-export'); ?></span></h2>
+                <h3 id="process_notice"><?php esc_html_e('Exporting may take some time. Please do not close your browser or refresh the page until the process is complete.', 'wp-all-export'); ?></h3>
             </div>
             <div
                 class="wpallexport_process_wrapper_<?php echo intval($update_previous->id); ?> wpallexport_process_parent_wrapper">
@@ -34,9 +35,9 @@ if(!defined('ABSPATH')) {
                     <div class="rad14"></div>
                 </div>
                 <div class="export_progress">
-                    <span class="left_progress"><?php esc_html_e('Time Elapsed', 'wp_all_export_plugin'); ?> <span id="then">00:00:00</span></span>
+                    <span class="left_progress"><?php esc_html_e('Time Elapsed', 'wp-all-export'); ?> <span id="then">00:00:00</span></span>
                     <span class="center_progress"><span class="percents_count">0</span>%</span>
-                    <span class="right_progress"><?php esc_html_e('Exported', 'wp_all_export_plugin'); ?> <span
+                    <span class="right_progress"><?php esc_html_e('Exported', 'wp-all-export'); ?> <span
                             class="created_count"><?php echo intval($update_previous->exported); ?></span></span>
                 </div>
             </div>
@@ -70,8 +71,8 @@ if(!defined('ABSPATH')) {
 							<span class="left_progress">
 								<span class="center_progress">
 									<span
-                                            class="percents_count">0</span>%</span> <?php printf(esc_html__("Export %ss", "wp_all_export_plugin"), ucwords(str_replace("_", " ", str_replace("shop", "", esc_html($child_export->export_post_type))))); ?></span>
-                            <span class="right_progress"><?php esc_html_e('Exported', 'wp_all_export_plugin'); ?> <span
+                                            class="percents_count">0</span>%</span> <?php /* translators: %s: post type name */ printf(esc_html__("Export %ss", "wp-all-export"), esc_html(ucwords(str_replace("_", " ", str_replace("shop", "", $child_export->export_post_type))))); ?></span>
+                            <span class="right_progress"><?php esc_html_e('Exported', 'wp-all-export'); ?> <span
                                         class="created_count">0</span></span>
                         </div>
                     </div>
@@ -85,8 +86,8 @@ if(!defined('ABSPATH')) {
 			<div class="wpallexport-content-section" style="display:block; position: relative;">
 				<div class="wpallexport-notify-wrapper">
 					<div class="found_records terminated" style="background-position: 0 50% !important;">
-						<h3><?php esc_html_e('Your server terminated the export process', 'wp_all_export_plugin'); ?></h3>
-						<h4 style="width: 78%; line-height: 25px;"><?php esc_html_e("Ask your host to check your server's error log. They will be able to determine why your server is terminating the export process.", "wp_all_export_plugin"); ?></h4>
+						<h3><?php esc_html_e('Your server terminated the export process', 'wp-all-export'); ?></h3>
+						<h4 style="width: 78%; line-height: 25px;"><?php esc_html_e("Ask your host to check your server's error log. They will be able to determine why your server is terminating the export process.", "wp-all-export"); ?></h4>
 					</div>
 				</div>
 			</div>
@@ -97,7 +98,8 @@ if(!defined('ABSPATH')) {
     </div>
 
     <div class="wpallexport-display-columns wpallexport-margin-top-forty">
-		<?php echo apply_filters('wpallexport_footer', ''); ?>
+		<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plugin-owned filter output; callback in filters/wpallexport_footer.php returns trusted static HTML
+		echo apply_filters('wpallexport_footer', ''); ?>
     </div>
 
 </div>

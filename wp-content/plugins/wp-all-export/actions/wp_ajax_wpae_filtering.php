@@ -1,13 +1,16 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
+
 function pmxe_wp_ajax_wpae_filtering(){
 
 	if ( ! check_ajax_referer( 'wp_all_export_secure', 'security', false )){
-		exit( json_encode(array('html' => __('Security check', 'wp_all_export_plugin'))) );
+		exit( json_encode(array('html' => __('Security check', 'wp-all-export'))) );
 	}
 
 	if ( ! current_user_can( PMXE_Plugin::$capabilities ) ){
-		exit( json_encode(array('html' => __('Security check', 'wp_all_export_plugin'))) );
+		exit( json_encode(array('html' => __('Security check', 'wp-all-export'))) );
 	}
 
 	$addons = new \Wpae\App\Service\Addons\AddonService();
@@ -48,7 +51,7 @@ function pmxe_wp_ajax_wpae_filtering(){
 		?>
 		<div class="wpallexport-content-section">
 			<div class="wpallexport-collapsed-header">
-				<h3><?php esc_html_e('Add Filtering Options', 'wp_all_export_plugin'); ?></h3>
+				<h3><?php esc_html_e('Add Filtering Options', 'wp-all-export'); ?></h3>
 			</div>		
 			<div class="wpallexport-collapsed-content">			
 				<?php include_once PMXE_ROOT_DIR . '/views/admin/export/blocks/filters.php'; ?>
@@ -102,13 +105,13 @@ function pmxe_wp_ajax_wpae_filtering(){
 	if ( XmlExportEngine::$is_auto_generate_enabled ):
 	?>
     <div class="wpallexport-free-edition-notice" id="migrate-orders-notice" style="padding: 20px; margin-bottom: 10px; display: none;">
-        <p><?php esc_html_e('The WooCoommerce Export Package is Required to Migrate Orders.', 'wp_all_export_plugin');?></p><br/>
-        <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839955&discount=welcome-upgrade-169&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-orders"><?php esc_html_e('Purchase the WooCommerce Export Package', 'wp_all_export_plugin');?></a>
+        <p><?php esc_html_e('The WooCoommerce Export Package is Required to Migrate Orders.', 'wp-all-export');?></p><br/>
+        <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839955&discount=welcome-upgrade-169&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-orders"><?php esc_html_e('Purchase the WooCommerce Export Package', 'wp-all-export');?></a>
     </div>
 
     <div class="wpallexport-free-edition-notice" id="migrate-products-notice" style="padding: 20px; margin-bottom: 10px; display: none;">
-        <p><?php esc_html_e('The WooCoommerce Export Package is Required to Migrate Products.', 'wp_all_export_plugin');?></p><br/>
-        <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839955&discount=welcome-upgrade-169&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-products"><?php esc_html_e('Purchase the WooCommerce Export Package', 'wp_all_export_plugin');?></a>
+        <p><?php esc_html_e('The WooCoommerce Export Package is Required to Migrate Products.', 'wp-all-export');?></p><br/>
+        <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839955&discount=welcome-upgrade-169&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-products"><?php esc_html_e('Purchase the WooCommerce Export Package', 'wp-all-export');?></a>
     </div>
 
 
@@ -129,25 +132,26 @@ function pmxe_wp_ajax_wpae_filtering(){
         ?>
 
         <div class="wpallexport-free-edition-notice" id="migrate-users-notice" style="padding: 20px; margin-bottom: 10px; display: none;">
-            <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839967&discount=welcome-upgrade-99&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-users"><?php esc_html_e('Upgrade to the Pro edition of WP All Export to Migrate Users', 'wp_all_export_plugin');?></a>
-            <p><?php esc_html_e('If you already own it, remove the free edition and install the Pro edition.', 'wp_all_export_plugin');?></p>
+            <a class="upgrade_link" target="_blank" href="https://www.wpallimport.com/checkout/?edd_action=add_to_cart&download_id=5839967&discount=welcome-upgrade-99&edd_options%5Bprice_id%5D=1&utm_source=export-plugin-free&utm_medium=upgrade-notice&utm_campaign=migrate-users"><?php esc_html_e('Upgrade to the Pro edition of WP All Export to Migrate Users', 'wp-all-export');?></a>
+            <p><?php esc_html_e('If you already own it, remove the free edition and install the Pro edition.', 'wp-all-export');?></p>
         </div>
 
     <?php if(isset($post['cpt'])) { ?>
         <span class="wp_all_export_btn_with_note">
-            <a href="javascript:void(0);" class="back rad3 auto-generate-template" style="float:none; background: #425f9a; padding: 0 50px; margin-right: 10px; color: #fff; font-weight: normal;"><?php printf(esc_html__('Migrate %s', 'wp_all_export_plugin'), esc_html(wp_all_export_get_cpt_name(array($post['cpt'])), 2, $post)); ?></a>
+            <?php /* translators: %s: post type name */ ?>
+            <a href="javascript:void(0);" class="back rad3 auto-generate-template" style="float:none; background: #425f9a; padding: 0 50px; margin-right: 10px; color: #fff; font-weight: normal;"><?php printf(esc_html__('Migrate %s', 'wp-all-export'), esc_html(wp_all_export_get_cpt_name(array($post['cpt'])), 2, $post)); ?></a>
             <span class="auto-generate-template">&nbsp;</span>
         </span>
     <?php } ?>
 	<span class="wp_all_export_btn_with_note">
-		<input type="submit" class="button button-primary button-hero wpallexport-large-button" value="<?php esc_html_e('Customize Export File', 'wp_all_export_plugin') ?>"/>
+		<input type="submit" class="button wpallexport-large-button" value="<?php esc_html_e('Customize Export File', 'wp-all-export') ?>"/>
 		<span class="auto-generate-template">&nbsp;</span>
 	</span>
 	<?php
 	else:
 	?>	
 	<span class="wp_all_export_btn_with_note">
-		<input type="submit" class="button button-primary button-hero wpallexport-large-button" value="<?php esc_html_e('Customize Export File', 'wp_all_export_plugin') ?>"/>
+		<input type="submit" class="button wpallexport-large-button" value="<?php esc_html_e('Customize Export File', 'wp-all-export') ?>"/>
 	</span>
 	<?php
 	endif;

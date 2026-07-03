@@ -1,5 +1,6 @@
 <?php
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
 final class PMXE_Wpallimport
 {
 	/**
@@ -100,7 +101,8 @@ final class PMXE_Wpallimport
 				{
 					global $wpdb;
 					$post = new PMXI_Post_List();
-					$wpdb->query($wpdb->prepare('DELETE FROM ' . $post->getTable() . ' WHERE import_id = %s', $import->id));					
+					// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name from PMXI_Post_List::getTable() which uses $wpdb->prefix; value bound via prepare()
+					$wpdb->query($wpdb->prepare('DELETE FROM ' . $post->getTable() . ' WHERE import_id = %s', $import->id));
 				}
 			}
 		}
@@ -458,7 +460,7 @@ final class PMXE_Wpallimport
 					'name' => $import->name,
 					'import_id' => $import->id,
 					'path' => $historyPath,
-					'registered_on' => date('Y-m-d H:i:s')
+					'registered_on' => date('Y-m-d H:i:s')  // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- DB timestamp must match local-timezone format used by Manage Exports UI readers (mysql2date / strtotime / human_time_diff)
 				))->save();		
 
 				$exportOptions['import_id']	= $import->id;					

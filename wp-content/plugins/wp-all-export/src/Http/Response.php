@@ -36,6 +36,7 @@ class Response
 
     protected function sendContent()
     {
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- generic Response container; subclasses (JsonResponse, etc.) provide already-encoded payloads matching the Content-Type header
         echo $this->content;
     }
 }

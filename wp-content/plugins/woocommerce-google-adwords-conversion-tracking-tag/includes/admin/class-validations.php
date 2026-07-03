@@ -621,6 +621,36 @@ class Validations {
 			}
 		}
 
+		// Validate OpenAI pixel ID
+		if (isset($input['pixels']['openai']['pixel_id'])) {
+
+			// Trim space, newlines and quotes
+			$input['pixels']['openai']['pixel_id'] = Helpers::trim_string($input['pixels']['openai']['pixel_id']);
+
+			if (!self::is_openai_pixel_id($input['pixels']['openai']['pixel_id'])) {
+				$input['pixels']['openai']['pixel_id']
+					= Options::get_openai_pixel_id()
+					? Options::get_openai_pixel_id()
+					: '';
+				add_settings_error('wgact_plugin_options', 'invalid-openai-pixel-id', esc_html__('You have entered an invalid OpenAI pixel ID.', 'woocommerce-google-adwords-conversion-tracking-tag'));
+			}
+		}
+
+		// Validate OpenAI CAPI token
+		if (isset($input['pixels']['openai']['capi']['token'])) {
+
+			// Trim space, newlines and quotes
+			$input['pixels']['openai']['capi']['token'] = Helpers::trim_string($input['pixels']['openai']['capi']['token']);
+
+			if (!self::is_openai_capi_token($input['pixels']['openai']['capi']['token'])) {
+				$input['pixels']['openai']['capi']['token']
+					= Options::get_openai_capi_token()
+					? Options::get_openai_capi_token()
+					: '';
+				add_settings_error('wgact_plugin_options', 'invalid-openai-capi-token', esc_html__('You have entered an invalid OpenAI CAPI token.', 'woocommerce-google-adwords-conversion-tracking-tag'));
+			}
+		}
+
 		// Validate the VWO account ID
 		if (isset($input['pixels']['vwo']['account_id'])) {
 
@@ -678,6 +708,21 @@ class Validations {
 					? Options::get_contentsquare_tag_id()
 					: '';
 				add_settings_error('wgact_plugin_options', 'invalid-contentsquare-tag-id', esc_html__('You have entered an invalid Contentsquare tag ID.', 'woocommerce-google-adwords-conversion-tracking-tag'));
+			}
+		}
+
+		// Validate the Microsoft Clarity project ID
+		if (isset($input['pixels']['clarity']['project_id'])) {
+
+			// Trim space, newlines and quotes
+			$input['pixels']['clarity']['project_id'] = Helpers::trim_string($input['pixels']['clarity']['project_id']);
+
+			if (!self::is_clarity_project_id($input['pixels']['clarity']['project_id'])) {
+				$input['pixels']['clarity']['project_id']
+					= Options::get_clarity_project_id()
+					? Options::get_clarity_project_id()
+					: '';
+				add_settings_error('wgact_plugin_options', 'invalid-clarity-project-id', esc_html__('You have entered an invalid Microsoft Clarity project ID.', 'woocommerce-google-adwords-conversion-tracking-tag'));
 			}
 		}
 
@@ -767,6 +812,18 @@ class Validations {
 		 * we need to set one to overwrite the old value
 		 */
 		$input = array_replace_recursive(self::non_form_keys($input), $input);
+
+		/**
+		 * Preserve the saved premium-only settings while Pro features are unavailable.
+		 *
+		 * Without a valid license (and outside the Pro demo) the premium form fields
+		 * are not rendered, so they are not part of the submitted form data and would
+		 * be reset to their defaults a few lines below. Carrying the saved values over
+		 * makes sure that an expired license only deactivates the Pro features, but
+		 * never wipes their configuration. Once the license is reactivated, everything
+		 * is still in place.
+		 */
+		$input = self::preserve_premium_only_options($input);
 
 		// Set the timestamp for the options update
 		$input['timestamp'] = time();
@@ -895,6 +952,34 @@ class Validations {
 	}
 
 	/**
+	 * Re-apply the auto-revert scheduling side effects for the settings that
+	 * carry them, for the per-field/Nova save path.
+	 *
+	 * The Classic form save runs these inside options_validate(); the granular
+	 * PATCH path does not, so toggling order de-duplication or HTTP-request
+	 * logging through Nova would otherwise skip the timer that re-enables dedup
+	 * after 6 hours / turns logging back off. Only the paths that actually
+	 * changed are processed, to avoid resetting an existing timer on every save.
+	 *
+	 * @param array $options       The full, updated options tree.
+	 * @param array $changed_paths Dot-notation paths included in this save.
+	 *
+	 * @return void
+	 *
+	 * @since 1.59.0
+	 */
+	public static function apply_setting_change_side_effects( $options, $changed_paths ) {
+
+		if (in_array('shop.order_deduplication', $changed_paths, true)) {
+			self::schedule_duplication_prevention_activation($options);
+		}
+
+		if (in_array('general.logger.log_http_requests', $changed_paths, true)) {
+			self::schedule_http_request_logging_deactivation($options);
+		}
+	}
+
+	/**
 	 * Place here what could be overwritten when a form field is missing
 	 * and what should not be re-set to the default value
 	 * but should be preserved
@@ -924,6 +1009,217 @@ class Validations {
 //        }
 
 		return $non_form_keys;
+	}
+
+	/**
+	 * Copies the saved values of all premium-only settings into the submitted
+	 * input while Pro features are unavailable.
+	 *
+	 * The form only submits fields that have been rendered. While the license is
+	 * expired or missing (and the Pro demo is off), the premium-only fields are
+	 * not rendered, so their keys are missing from the input and would otherwise
+	 * be reset to their default values on every save.
+	 *
+	 * While Pro features are available (valid license or demo), the fields are
+	 * rendered and submitted, and the input must win, so nothing is preserved.
+	 *
+	 * @param array $input The submitted options.
+	 *
+	 * @return array The input with the saved premium-only settings restored.
+	 *
+	 * @since 1.59.0
+	 */
+	private static function preserve_premium_only_options( $input ) {
+
+		// The premium-only fields are rendered, the submitted values are authoritative.
+		if (Helpers::is_pmw_pro_version_active() || Options::is_pro_version_demo_active()) {
+			return $input;
+		}
+
+		$saved_options = Options::get_options();
+
+		foreach (self::premium_only_option_paths() as $path) {
+
+			$saved_value = self::get_nested_value($saved_options, $path);
+
+			if (null === $saved_value) {
+				continue;
+			}
+
+			$input = self::set_nested_value($input, $path, $saved_value);
+		}
+
+		return $input;
+	}
+
+	/**
+	 * The dot notation paths of all settings whose form fields are only rendered
+	 * while Pro features are available (valid license or active Pro demo).
+	 *
+	 * Keep this list in sync with every setting the UI renders as premium-only:
+	 * the Nova admin pixel registry (src/admin-ui-wp/src/shared/data/pixels.ts —
+	 * a pixel flagged `premium` locks ALL its fields, including the primary ID,
+	 * plus individually `premium` fields on the free pixels) and the Classic
+	 * admin's license-gated add_settings_field / HTML output callbacks. Custom
+	 * components with their own gated endpoints (e.g. the GA4 Data API
+	 * credentials import) are intentionally excluded — they never go through the
+	 * generic options patch.
+	 *
+	 * This gates the REST options patch (class-admin-rest.php), preserves saved
+	 * premium values on downgrade (preserve_premium_only_options), and is consumed
+	 * by the Abilities API settings catalog to flag premium-only settings for AI agents.
+	 *
+	 * @return array The premium-only option paths.
+	 *
+	 * @since 1.59.0
+	 */
+	public static function premium_only_option_paths() {
+
+		return [
+
+			// Bing / Microsoft Ads
+			'bing.consent_mode.is_active',
+			'bing.enhanced_conversions',
+			'bing.uet_tag_id',
+
+			// Facebook / Meta
+			'facebook.capi.test_event_code',
+			'facebook.capi.token',
+			'facebook.capi.user_transparency.send_additional_client_identifiers',
+			'facebook.domain_verification_id',
+
+			// General
+			'general.always_send_s2s',
+			'general.lazy_load_pmw',
+			'general.pageview_events_s2s',
+			'general.scroll_tracker_thresholds',
+
+			// Google
+			'google.ads.aw_merchant_id',
+			'google.ads.conversion_adjustments.conversion_name',
+			'google.ads.enhanced_conversions',
+			'google.ads.google_business_vertical',
+			'google.ads.phone_conversion_label',
+			'google.ads.phone_conversion_number',
+			'google.analytics.ga4.api_secret',
+			'google.analytics.ga4.data_api.property_id',
+			'google.analytics.ga4.page_load_time_tracking',
+			'google.tcf_support',
+			'google.user_id',
+
+			// Pinterest
+			'pinterest.ad_account_id',
+			'pinterest.advanced_matching',
+			'pinterest.apic.token',
+			'pinterest.enhanced_match',
+			'pinterest.pixel_id',
+
+			// Various pixels
+			'pixels.ab_tasty.account_id',
+			'pixels.adroll.advertiser_id',
+			'pixels.adroll.pixel_id',
+			'pixels.clarity.project_id',
+			'pixels.contentsquare.tag_id',
+			'pixels.linkedin.conversion_ids.add_to_cart',
+			'pixels.linkedin.conversion_ids.purchase',
+			'pixels.linkedin.conversion_ids.view_content',
+			'pixels.linkedin.partner_id',
+			'pixels.optimizely.project_id',
+			'pixels.outbrain.advertiser_id',
+			'pixels.openai.advanced_matching',
+			'pixels.openai.capi.token',
+			'pixels.openai.pixel_id',
+			'pixels.reddit.advanced_matching',
+			'pixels.reddit.advertiser_id',
+			'pixels.reddit.capi.test_event_code',
+			'pixels.reddit.capi.token',
+			'pixels.taboola.account_id',
+			'pixels.vwo.account_id',
+
+			// Shop
+			'shop.disable_tracking_for',
+			'shop.subscription_value_multiplier',
+
+			// Snapchat
+			'snapchat.advanced_matching',
+			'snapchat.capi.token',
+			'snapchat.pixel_id',
+
+			// TikTok
+			'tiktok.advanced_matching',
+			'tiktok.eapi.test_event_code',
+			'tiktok.eapi.token',
+			'tiktok.pixel_id',
+
+			// Twitter / X
+			'twitter.event_ids.add_payment_info',
+			'twitter.event_ids.add_to_cart',
+			'twitter.event_ids.add_to_wishlist',
+			'twitter.event_ids.initiate_checkout',
+			'twitter.event_ids.purchase',
+			'twitter.event_ids.search',
+			'twitter.event_ids.view_content',
+			'twitter.pixel_id',
+		];
+	}
+
+	/**
+	 * Get a nested array value using a dot notation path.
+	 *
+	 * @param array  $array The array to read from.
+	 * @param string $path  Dot notation path (e.g. "facebook.capi.token").
+	 *
+	 * @return mixed The value, or null if the path does not exist.
+	 *
+	 * @since 1.59.0
+	 */
+	private static function get_nested_value( $array, $path ) {
+
+		$current = $array;
+
+		foreach (explode('.', $path) as $key) {
+
+			if (!is_array($current) || !array_key_exists($key, $current)) {
+				return null;
+			}
+
+			$current = $current[$key];
+		}
+
+		return $current;
+	}
+
+	/**
+	 * Set a nested array value using a dot notation path.
+	 *
+	 * @param array  $array The array to modify.
+	 * @param string $path  Dot notation path (e.g. "facebook.capi.token").
+	 * @param mixed  $value The value to set.
+	 *
+	 * @return array The modified array.
+	 *
+	 * @since 1.59.0
+	 */
+	private static function set_nested_value( $array, $path, $value ) {
+
+		$keys    = explode('.', $path);
+		$current = &$array;
+
+		foreach ($keys as $i => $key) {
+
+			if (count($keys) - 1 === $i) {
+				$current[$key] = $value;
+			} else {
+
+				if (!isset($current[$key]) || !is_array($current[$key])) {
+					$current[$key] = [];
+				}
+
+				$current = &$current[$key];
+			}
+		}
+
+		return $array;
 	}
 
 	public static function validate_ga4_data_api_credentials( $credentials ) {
@@ -1056,6 +1352,25 @@ class Validations {
 		return self::validate_with_regex($re, $string);
 	}
 
+	public static function is_openai_pixel_id( $string ) {
+
+		// OpenAI does not publish a strict pixel ID format. Keep the validation
+		// permissive so valid IDs are never rejected, while still blocking
+		// obviously malformed input (whitespace, markup, control characters).
+		$re = '/^[A-Za-z0-9._-]{6,64}$/m';
+
+		return self::validate_with_regex($re, $string);
+	}
+
+	public static function is_openai_capi_token( $string ) {
+
+		// OpenAI Conversions API key (Bearer token). Format is not strictly
+		// published, so validate permissively while excluding whitespace/markup.
+		$re = '/^[A-Za-z0-9._-]{20,500}$/m';
+
+		return self::validate_with_regex($re, $string);
+	}
+
 	public static function is_vwo_account_id( $string ) {
 
 		$re = '/^\d{4,10}$/m';
@@ -1081,6 +1396,16 @@ class Validations {
 
 		// Contentsquare tag ID format: alphanumeric string like b457e22cc0c6e
 		$re = '/^[a-z0-9]{10,20}$/m';
+
+		return self::validate_with_regex($re, $string);
+	}
+
+	public static function is_clarity_project_id( $string ) {
+
+		// Microsoft Clarity project ID format: lowercase base36 string, typically
+		// 10 characters (e.g. q9zk3x7p2w). Kept slightly permissive so valid IDs
+		// are never rejected, while still blocking whitespace, markup and control characters.
+		$re = '/^[a-z0-9]{8,15}$/m';
 
 		return self::validate_with_regex($re, $string);
 	}
@@ -1130,6 +1455,11 @@ class Validations {
 		// It may not contain dashes
 		// It may only contain letters, numbers
 		// example: /metrics
+		// An empty value is valid — it clears the path and disables the gateway.
+		if ('' === $string) {
+			return true;
+		}
+
 		$re = '/^\/[a-zA-Z0-9]{1,100}$/m';
 
 		return self::validate_with_regex($re, $string);
@@ -1360,7 +1690,7 @@ class Validations {
 	/**
 	 * Validate and preprocess a single option value by dot-notation path.
 	 *
-	 * Used by the Mantine admin REST PATCH endpoint to apply the same
+	 * Used by the Nova admin REST PATCH endpoint to apply the same
 	 * trim / preprocessing / regex validation that options_validate() does
 	 * for the classic form POST.
 	 *
@@ -1450,8 +1780,9 @@ class Validations {
 				break;
 
 			case 'google.tag_gateway.measurement_path':
-				// Prefix a slash if missing
-				if ('/' !== substr($value, 0, 1)) {
+				// Prefix a slash if missing — but leave an empty value empty so the
+				// field can be cleared (an empty path disables the gateway).
+				if ('' !== $value && '/' !== substr($value, 0, 1)) {
 					$value = '/' . $value;
 				}
 				break;
@@ -1463,11 +1794,14 @@ class Validations {
 	/**
 	 * Map of dot-notation paths to their [validator_method, error_message] pairs.
 	 *
+	 * Also consumed by the Abilities API settings catalog, which surfaces the
+	 * error messages as format hints for AI agents.
+	 *
 	 * @return array<string, array{0: string, 1: string}>
 	 *
 	 * @since 1.58.7
 	 */
-	private static function get_field_validators() {
+	public static function get_field_validators() {
 
 		return [
 			// Google Ads
@@ -1485,6 +1819,9 @@ class Validations {
 
 			// Google Tag Gateway
 			'google.tag_gateway.measurement_path'               => [ 'is_google_tag_gateway_measurement_path', __('Invalid measurement path. It should start with / and contain only letters and numbers.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Shop
+			'shop.subscription_value_multiplier'                => [ 'is_subscription_value_multiplier', __('Invalid subscription value multiplier. It must be a number and at least 1.00.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
 
 			// Meta (Facebook)
 			'facebook.pixel_id'                                 => [ 'is_facebook_pixel_id', __('Invalid Meta (Facebook) pixel ID. It should contain 12 to 22 digits.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
@@ -1530,6 +1867,10 @@ class Validations {
 			'pixels.reddit.capi.token'                          => [ 'is_reddit_capi_token', __('Invalid Reddit CAPI token.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
 			'pixels.reddit.capi.test_event_code'                => [ 'is_reddit_capi_test_event_code', __('Invalid Reddit CAPI test event code.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
 
+			// OpenAI
+			'pixels.openai.pixel_id'                            => [ 'is_openai_pixel_id', __('Invalid OpenAI pixel ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'pixels.openai.capi.token'                          => [ 'is_openai_capi_token', __('Invalid OpenAI CAPI token.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
 			// Hotjar
 			'hotjar.site_id'                                    => [ 'is_hotjar_site_id', __('Invalid Hotjar site ID. It should contain 6 to 9 digits.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
 
@@ -1557,6 +1898,9 @@ class Validations {
 
 			// Contentsquare
 			'pixels.contentsquare.tag_id'                       => [ 'is_contentsquare_tag_id', __('Invalid Contentsquare tag ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Microsoft Clarity
+			'pixels.clarity.project_id'                         => [ 'is_clarity_project_id', __('Invalid Microsoft Clarity project ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
 		];
 	}
 }

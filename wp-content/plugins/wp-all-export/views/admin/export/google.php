@@ -2,6 +2,7 @@
 if(!defined('ABSPATH')) {
     die();
 }
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variables in template files inherited from controller render() scope
 wp_enqueue_script('pmxe-angular-app', PMXE_ROOT_URL . '/dist/app.min.js', array('jquery'), PMXE_VERSION);
 wp_enqueue_style('pmxe-angular-scss', PMXE_ROOT_URL . '/dist/styles.css', array(), PMXE_VERSION);
 
@@ -12,7 +13,7 @@ if(getenv('WPAE_DEV')) {
 }
 ?>
 <script type="text/javascript">
-    var wpae_product_attributes = <?php echo empty($productAttributesJson) ? '""' : $productAttributesJson; ?>;
+    var wpae_product_attributes = <?php echo empty($productAttributesJson) ? '""' : wp_json_encode( json_decode( $productAttributesJson ) ); ?>;
 </script>
 
 <div ng-app="GoogleMerchants"

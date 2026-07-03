@@ -30,7 +30,7 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin {
 
 				PMXE_Plugin::getInstance()->updateOption($post);
 
-				wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('Settings saved', 'wp_all_export_plugin')), $this->baseUrl)));
+				wp_safe_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(__('Settings saved', 'wp-all-export')), $this->baseUrl)));
 				die();
 			}
 		}
@@ -46,7 +46,7 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin {
                     $post['scheduling_license_status'] = $this->check_scheduling_license();
                     if ($post['scheduling_license_status'] == 'valid') {
 
-                        $this->data['scheduling_license_message'] = __('License activated.', 'wp_all_import_plugin');
+                        $this->data['scheduling_license_message'] = __('License activated.', 'wp-all-export');
                     }
 
                     PMXE_Plugin::getInstance()->updateOption($post);
@@ -77,9 +77,9 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin {
 			if ($this->input->post('import_templates')){
 
 				if (!empty($_FILES)){
-					$file_name = $_FILES['template_file']['name'];
-					$file_size = $_FILES['template_file']['size'];
-					$tmp_name  = $_FILES['template_file']['tmp_name'];										
+					$file_name = isset( $_FILES['template_file']['name'] ) ? sanitize_file_name( wp_unslash( $_FILES['template_file']['name'] ) ) : '';
+					$file_size = isset( $_FILES['template_file']['size'] ) ? absint( $_FILES['template_file']['size'] ) : 0;
+					$tmp_name  = isset( $_FILES['template_file']['tmp_name'] ) ? sanitize_text_field( wp_unslash( $_FILES['template_file']['tmp_name'] ) ) : '';										
 					
 					if(isset($file_name)) 
 					{
@@ -88,7 +88,7 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin {
 										
 						if (($extension != "txt")) 
 						{							
-							$this->errors->add('form-validation', __('Unknown File extension. Only txt files are permitted', 'wp_all_export_plugin'));
+							$this->errors->add('form-validation', __('Unknown File extension. Only txt files are permitted', 'wp-all-export'));
 						}
 						else {
 							$import_data = @file_get_contents($tmp_name);
@@ -98,11 +98,11 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin {
 								if (!empty($templates_data)){
                                     $templateOptions = empty($templates_data[0]['options']) ? false : unserialize($templates_data[0]['options']);
                                     if ( empty($templateOptions) ){
-                                        $this->errors->add('form-validation', __('The template is invalid. Options are missing.', 'wp_all_export_plugin'));
+                                        $this->errors->add('form-validation', __('The template is invalid. Options are missing.', 'wp-all-export'));
                                     }
                                     else{
                                         if (!isset($templateOptions['is_user_export'])){
-                                            $this->errors->add('form-validation', __('The template you\'ve uploaded is intended to be used with WP All Import plugin.', 'wp_all_export_plugin'));
+                                            $this->errors->add('form-validation', __('The template you\'ve uploaded is intended to be used with WP All Import plugin.', 'wp-all-export'));
                                         }
                                         else{
                                             $template = new PMXE_Template_Record();
@@ -110,25 +110,26 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin {
                                                 unset($template_data['id']);
                                                 $template->clear()->set($template_data)->insert();
                                             }
-                                            wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(sprintf(_n('%d template imported', '%d templates imported', count($templates_data), 'wp_all_export_plugin'), count($templates_data))), $this->baseUrl)));
+                                            /* translators: %d: number of templates imported */
+                                            wp_safe_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(sprintf(_n('%d template imported', '%d templates imported', count($templates_data), 'wp-all-export'), count($templates_data))), $this->baseUrl)));
                                             die();
                                         }
                                     }
 								}
-								else $this->errors->add('form-validation', __('Wrong imported data format', 'wp_all_export_plugin'));							
+								else $this->errors->add('form-validation', __('Wrong imported data format', 'wp-all-export'));							
 							}
-							else $this->errors->add('form-validation', __('File is empty or doesn\'t exests', 'wp_all_export_plugin'));
+							else $this->errors->add('form-validation', __('File is empty or doesn\'t exests', 'wp-all-export'));
 						}
 					}
-					else $this->errors->add('form-validation', __('Undefined entry!', 'wp_all_export_plugin'));
+					else $this->errors->add('form-validation', __('Undefined entry!', 'wp-all-export'));
 				}
-				else $this->errors->add('form-validation', __('Please select file.', 'wp_all_export_plugin'));
+				else $this->errors->add('form-validation', __('Please select file.', 'wp-all-export'));
 
 			}
 			else{
 				$templates_ids = $this->input->post('templates', array());
 				if (empty($templates_ids)) {
-					$this->errors->add('form-validation', __('Templates must be selected', 'wp_all_export_plugin'));
+					$this->errors->add('form-validation', __('Templates must be selected', 'wp-all-export'));
 				}
 				
 				if ( ! $this->errors->get_error_codes()) { // no validation errors detected
@@ -137,7 +138,8 @@ class PMXE_Admin_Settings extends PMXE_Controller_Admin {
 						foreach ($templates_ids as $template_id) {
 							$template->clear()->set('id', $template_id)->delete();
 						}
-						wp_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(sprintf(_n('%d template deleted', '%d templates deleted', count($templates_ids), 'wp_all_export_plugin'), count($templates_ids))), $this->baseUrl)));
+						/* translators: %d: number of templates deleted */
+						wp_safe_redirect(esc_url_raw(add_query_arg('pmxe_nt', urlencode(sprintf(_n('%d template deleted', '%d templates deleted', count($templates_ids), 'wp-all-export'), count($templates_ids))), $this->baseUrl)));
 						die();
 					}
 					if ($this->input->post('export_templates')){

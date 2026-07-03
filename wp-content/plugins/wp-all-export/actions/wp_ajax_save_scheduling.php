@@ -1,5 +1,9 @@
 <?php
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
+defined( 'ABSPATH' ) || exit;
+
+
 use Wpae\Scheduling\Interval\ScheduleTime;
 use Wpae\Scheduling\Scheduling;
 
@@ -10,14 +14,14 @@ function pmxe_wp_ajax_save_scheduling()
 {
 
     if (!check_ajax_referer('wp_all_export_secure', 'security', false)) {
-        exit(esc_html__('Security check', 'wp_all_export_plugin'));
+        exit(esc_html__('Security check', 'wp-all-export'));
     }
 
     if (!current_user_can(PMXE_Plugin::$capabilities)) {
-        exit(esc_html__('Security check', 'wp_all_export_plugin'));
+        exit(esc_html__('Security check', 'wp-all-export'));
     }
 
-    $elementId = $_POST['element_id'];
+    $elementId = isset( $_POST['element_id'] ) ? absint( $_POST['element_id'] ) : 0;
 
     $post = $_POST;
 
@@ -45,12 +49,4 @@ function pmxe_wp_ajax_save_scheduling()
 
     echo json_encode(array('success' => true));
     die;
-}
-
-/**
- * @return bool
- */
-function convertStringToBoolean($string)
-{
-    return ($string == 'true' || $string == 1 || $string === true) ? true : false;
 }

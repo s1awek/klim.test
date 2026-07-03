@@ -8,7 +8,7 @@ class PMXE_Download
 		$uploads    = wp_upload_dir();
 		$bundle_url = $uploads['baseurl'] . str_replace($uploads['basedir'], '', $file_name);
         $bundle_url = str_replace( "\\", "/", $bundle_url );
-		wp_redirect($bundle_url);
+		wp_safe_redirect($bundle_url);
 		die;
 	}
 
@@ -51,6 +51,7 @@ class PMXE_Download
             ob_end_clean();
         }
 
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
         readfile($file_name);
         die;
     }

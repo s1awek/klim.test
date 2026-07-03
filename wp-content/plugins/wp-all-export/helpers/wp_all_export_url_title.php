@@ -1,4 +1,8 @@
 <?php
+
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
+defined( 'ABSPATH' ) || exit;
+
 if ( ! function_exists('wp_all_export_url_title')){
 
 	function wp_all_export_url_title($str, $separator = 'dash', $lowercase = FALSE)
@@ -25,7 +29,7 @@ if ( ! function_exists('wp_all_export_url_title')){
 			'\.+$'					=> ''
 		);
 
-		$str = strip_tags($str);
+		$str = wp_strip_all_tags($str);
 
 		foreach ($trans as $key => $val)
 		{

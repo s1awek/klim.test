@@ -1,15 +1,22 @@
 <?php
 
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound,WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- legitimate plugin prefixes (pmxe/PMXE/wpae/Wpae/wp_all_export/wpallexport/XmlExport/CdataStrategy/VariableProductTitle/Soflyy/GF_Export); Plugin Check does not honor phpcs.xml prefix declaration
+defined( 'ABSPATH' ) || exit;
+
+
 function pmxe_prepend($string, $orig_filename) {
 	$context = stream_context_create();
+	// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 	$orig_file = fopen($orig_filename, 'r', 1, $context);
 
 	$temp_filename = tempnam(sys_get_temp_dir(), 'php_prepend_');
 	file_put_contents($temp_filename, $string);
 	file_put_contents($temp_filename, $orig_file, FILE_APPEND);
 
+	// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 	fclose($orig_file);
-	unlink($orig_filename);
+	wp_delete_file($orig_filename);
+	// phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename -- export plugin manipulates its own temp files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 	rename($temp_filename, $orig_filename);
 }
 
@@ -37,7 +44,7 @@ function pmxe_pmxe_after_export($export_id, $export)
 		if ( ! empty($exportOptions['split_files_list']) and ! $export->options['creata_a_new_export_file'] )
 		{
 			foreach ($exportOptions['split_files_list'] as $file) {
-				@unlink($file);
+				wp_delete_file($file);
 			}
 		}
 
@@ -68,7 +75,9 @@ function pmxe_pmxe_after_export($export_id, $export)
 
             $tmp_file = str_replace(basename($filepath), 'iteration_' . basename($filepath), $filepath);
             copy($filepath, $tmp_file);
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
             $in  = fopen($tmp_file, 'r');
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
             $out = fopen($filepath, 'w');
 
             $headers = fgetcsv($in, 0, XmlExportEngine::$exportOptions['delimiter'], '"', '\\');
@@ -84,6 +93,7 @@ function pmxe_pmxe_after_export($export_id, $export)
                         $line[$header] = ( isset($data_assoc[$header]) ) ? $data_assoc[$header] : '';
                     }
                     if ( ! $lineNumber && XmlExportEngine::$exportOptions['include_bom']){
+                        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
                         fwrite($out, chr(0xEF).chr(0xBB).chr(0xBF));
                         fputcsv($out, $line, XmlExportEngine::$exportOptions['delimiter'], '"', '\\');
                     }
@@ -93,10 +103,12 @@ function pmxe_pmxe_after_export($export_id, $export)
                     apply_filters('wp_all_export_after_csv_line', $out, XmlExportEngine::$exportID);
                     $lineNumber++;
                 }
+                // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
                 fclose($in);
             }
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
             fclose($out);
-            @unlink($tmp_file);
+            wp_delete_file($tmp_file);
         }
 
 		$preCsvHeaders = false;
@@ -164,7 +176,7 @@ function pmxe_pmxe_after_export($export_id, $export)
 							$exportOptions['split_files_list'] = wp_all_export_break_into_files($record_xml_tag, -1, $splitSize, file_get_contents($filepath), null, $outputFileTemplate);
 
 							// Remove first file which just contains the empty data tag
-							@unlink($exportOptions['split_files_list'][0]);
+							wp_delete_file($exportOptions['split_files_list'][0]);
 							array_shift($exportOptions['split_files_list']);
 						}
 					 	else {
@@ -193,6 +205,7 @@ function pmxe_pmxe_after_export($export_id, $export)
 
 						break;
 					case 'csv':
+						// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 						$in = fopen($filepath, 'r');
 
 						$rowCount  = 0;
@@ -203,12 +216,14 @@ function pmxe_pmxe_after_export($export_id, $export)
 						    if (empty($data)) continue;
 						    if (($rowCount % $splitSize) == 0) {
 						        if ($rowCount > 0) {
+						            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 						            fclose($out);
 						        }
 						        $outputFile = str_replace(basename($filepath), str_replace('.csv', '', basename($filepath)) . '-' . $fileCount++ . '.csv', $filepath);
 						        if ( ! in_array($outputFile, $exportOptions['split_files_list']))
 						        	$exportOptions['split_files_list'][] = $outputFile;
 
+						        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 						        $out = fopen($outputFile, 'w');
 						    }
 						    if ($data){
@@ -219,7 +234,9 @@ function pmxe_pmxe_after_export($export_id, $export)
 						    }
 						    $rowCount++;
 						}
+						// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 						fclose($in);
+						// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- export plugin reads/writes its own files in uploads dir, WP_Filesystem not viable for streamed CSV/XML output
 						fclose($out);
 
 						break;

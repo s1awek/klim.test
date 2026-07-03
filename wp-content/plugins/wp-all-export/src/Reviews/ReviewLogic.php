@@ -33,7 +33,8 @@ class ReviewLogic
     {
 
     	// Only display on the Manage Exports page.
-    	if($_GET['page'] !== 'pmxe-admin-manage' || isset($_GET['id']) ){
+    	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only request inspection for UI display
+    	if( ! isset( $_GET['page'] ) || sanitize_text_field( wp_unslash( $_GET['page'] ) ) !== 'pmxe-admin-manage' || isset($_GET['id']) ){
     		return false;
 	    }
 
@@ -98,7 +99,8 @@ class ReviewLogic
 
             $dismissedModals = get_option('wpae_modal_review_dismissed_modals', []);
 
-            $dismissModalType = esc_html($_POST['modal_type']);
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing -- AJAX nonce verified by check_ajax_referer in handler (wp_ajax_dismiss_review_modal.php)
+            $dismissModalType = isset( $_POST['modal_type'] ) ? sanitize_text_field( wp_unslash( $_POST['modal_type'] ) ) : '';
             
             if(!is_array($dismissedModals)) {
                 $dismissedModals = [];
@@ -141,7 +143,8 @@ class ReviewLogic
 
 	    // Prettify the reviewed plugin.
 	    $plugin = 'Plugin Reviewed: ';
-	    switch( $_POST['plugin'] ){
+	    // phpcs:ignore WordPress.Security.NonceVerification.Missing -- AJAX nonce verified by check_ajax_referer in handler (wp_ajax_send_feedback.php)
+	    switch( isset( $_POST['plugin'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin'] ) ) : '' ){
 		    case 'wpae':
 		    	$plugin .= 'WP All Export';
 		    	break;
@@ -158,7 +161,8 @@ class ReviewLogic
 		    	break;
 	    }
 
-        $message = $plugin . " <br/><br/>" . $proInUse . wp_kses_post(stripslashes(wpautop($_POST['message'])));
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- AJAX nonce verified by check_ajax_referer in handler (wp_ajax_send_feedback.php)
+        $message = $plugin . " <br/><br/>" . $proInUse . wp_kses_post( wpautop( isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '' ) );
         wp_mail( self::MAILTO, self::SUBJECT, $message, $headers );
     }
 
@@ -269,6 +273,7 @@ class ReviewLogic
 
     private function hasExportsThatMatch(){
 
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name from $wpdb->prefix; no user input in query
         $exportsOlderThan48Hours = $this->wpdb->get_results("SELECT * FROM " . $this->wpdb->prefix . "pmxe_exports WHERE created_at < NOW() - INTERVAL 2 DAY AND created_at <> '0000-00-00 00:00:00' ");
 
         $exports = $this->getExports();
@@ -282,6 +287,7 @@ class ReviewLogic
     private function getExports()
     {
         if (!$this->exports) {
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- table name from $wpdb->prefix; no user input in query
             $this->exports = $this->wpdb->get_results("SELECT * FROM " . $this->wpdb->prefix . "pmxe_exports");
         }
 
