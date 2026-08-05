@@ -16,6 +16,7 @@ require_once 'includes/class-wwp-wholesale-prices.php';
 require_once 'includes/class-wwp-order.php';
 require_once 'includes/class-wwp-duplicate-product.php';
 require_once 'includes/class-wwp-marketing.php';
+require_once 'includes/class-wwp-wholesale-role-preview.php';
 require_once 'includes/class-wwp-wholesale-roles-admin-page.php';
 require_once 'includes/class-wwp-import-export.php';
 require_once 'includes/class-wwp-product-visibility.php';
@@ -86,6 +87,7 @@ class WooCommerceWholeSalePrices {
     public $wwp_order;
     public $wwp_duplicate_product;
     public $wwp_marketing;
+    public $wwp_wholesale_role_preview;
     public $wwp_wholesale_roles_admin_page;
     public $wwp_import_export;
     public $wwp_rest_api;
@@ -111,7 +113,7 @@ class WooCommerceWholeSalePrices {
     public $wwp_plugin_installer;
     // phpcs:enable
 
-    const VERSION = '2.2.8';
+    const VERSION = '2.2.9';
 
     /**
      * Class Methods
@@ -166,6 +168,7 @@ class WooCommerceWholeSalePrices {
         $this->wwp_order                                = WWP_Order::instance( array( 'WWP_Wholesale_Roles' => $this->wwp_wholesale_roles ) );
         $this->wwp_duplicate_product                    = WWP_Duplicate_Product::instance( array( 'WWP_Wholesale_Roles' => $this->wwp_wholesale_roles ) );
         $this->wwp_marketing                            = WWP_Marketing::instance( array( 'WWP_Wholesale_Roles' => $this->wwp_wholesale_roles ) );
+        $this->wwp_wholesale_role_preview               = WWP_Wholesale_Role_Preview::instance( array( 'WWP_Wholesale_Roles' => $this->wwp_wholesale_roles ) );
         $this->wwp_wholesale_roles_admin_page           = WWP_Wholesale_Roles_Admin_Page::instance( array( 'WWP_Wholesale_Roles' => $this->wwp_wholesale_roles ) );
         $this->wwp_import_export                        = WWP_Import_export::instance( array( 'WWP_Wholesale_Roles' => $this->wwp_wholesale_roles ) );
         $this->wwp_wpml_compatibility                   = WWP_WPML_Compatibility::instance();
@@ -297,6 +300,7 @@ class WooCommerceWholeSalePrices {
      */
     public function run() {
         $this->wwp_marketing->run();
+        $this->wwp_wholesale_role_preview->run();
         $this->wwp_wholesale_roles->run();
         $this->wwp_bootstrap->run();
         $this->wwp_script_loader->run();

@@ -204,7 +204,9 @@ function pmxi_wp_ajax_wpai_run_preview_with_progress() {
     $post['import_id'] = $import_id;
 
     if (isset($_POST['fields']) && is_array($_POST['fields'])) {
-        $post['fields'] = $_POST['fields'];
+        // Raw $_POST is slash-escaped by WordPress; templates with quotes
+        // (xpath predicates like [DimensionName='Größe']) break unless unslashed.
+        $post['fields'] = wp_unslash($_POST['fields']);
     }
 
     $post['preview_mode'] = isset($_POST['preview_mode']) ? $_POST['preview_mode'] : 'first';
@@ -215,7 +217,7 @@ function pmxi_wp_ajax_wpai_run_preview_with_progress() {
     $post['post_status'] = isset($_POST['post_status']) ? $_POST['post_status'] : 'draft';
 
     if (isset($_POST['wpai_preview_unique_key']) && !empty($_POST['wpai_preview_unique_key'])) {
-        $post['unique_key'] = $_POST['wpai_preview_unique_key'];
+        $post['unique_key'] = wp_unslash($_POST['wpai_preview_unique_key']);
     }
 
     // Save the preview unique key to session so it can be used as default in Step 4
@@ -584,6 +586,11 @@ function wpai_execute_unified_preview($preview_data, $file_path, $records_to_imp
 
         $logger(sprintf(__('Extracting records %s for preview...', 'wp-all-import-pro'), implode(', ', $records_to_import)));
 
+        // Flat variation-group imports (first row is a variation / parent row) need the
+        // record's WHOLE group in one preview run: sibling records processed as separate
+        // runs rebuild the same parent and destroy each other's variations.
+        $group_config = wpai_preview_group_config($preview_data['options'], $records_to_import);
+
         $feed = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" . "\n" . "<pmxi_records>";
         $current_record = 0;
         $found_records = 0;
@@ -591,6 +598,8 @@ function wpai_execute_unified_preview($preview_data, $file_path, $records_to_imp
 
         $expected = count($records_to_import);
         $done_collecting = false;
+        $collected_records = array();
+        $group_window = array();
 
         while (($xml = $file->read())) {
             if (!empty($xml)) {
@@ -606,10 +615,14 @@ function wpai_execute_unified_preview($preview_data, $file_path, $records_to_imp
                         $current_record++;
                         $total_available_records++;
 
+                        if ($group_config && abs($current_record - $group_config['target']) <= $group_config['cap']) {
+                            $group_window[$current_record] = $dom->saveXML($elements->item($i));
+                        }
+
                         if (!$done_collecting && in_array($current_record, $records_to_import, true)) {
                             $nodeXml = $dom->saveXML($elements->item($i));
                             if (!empty($nodeXml)) {
-                                $feed .= $nodeXml;
+                                $collected_records[$current_record] = $nodeXml;
                                 $found_records++;
                                 if ($found_records >= $expected) {
                                     $done_collecting = true;
@@ -621,6 +634,22 @@ function wpai_execute_unified_preview($preview_data, $file_path, $records_to_imp
                 unset($dom, $xpath, $elements);
             }
         }
+
+        $group_expanded = false;
+        if ($group_config && isset($collected_records[$group_config['target']])) {
+            $group_members = wpai_preview_expand_group($group_window, $group_config, $preview_data['xpath']);
+            if (count($group_members) > 1) {
+                $logger(sprintf(__('Including %d sibling variation record(s) of record %d in the preview (records %s)...', 'wp-all-import-pro'), count($group_members) - 1, $group_config['target'], implode(', ', array_keys($group_members))));
+                foreach ($group_members as $member_index => $member_xml) {
+                    $collected_records[$member_index] = $member_xml;
+                }
+                $group_expanded = true;
+            }
+        }
+
+        ksort($collected_records);
+        $feed .= implode('', $collected_records);
+        $found_records = count($collected_records);
 
         $feed .= "</pmxi_records>";
 
@@ -1772,4 +1801,90 @@ function wpai_recursive_rmdir($dir) {
     }
 
     return @rmdir($dir);
+}
+
+
+/**
+ * Decide whether a preview request needs variation-group expansion.
+ *
+ * Only single-record requests for WooCommerce product imports using a flat
+ * variation-group matching mode qualify. Every other import shape returns
+ * null and takes the unmodified path.
+ *
+ * @return array|null ['target' => int, 'cap' => int, 'template' => string]
+ */
+function wpai_preview_group_config($options, $records_to_import) {
+    if (count($records_to_import) !== 1) {
+        return null;
+    }
+    if (empty($options['custom_type']) || $options['custom_type'] !== 'product') {
+        return null;
+    }
+    $matching = isset($options['matching_parent']) ? $options['matching_parent'] : '';
+    $template_field = '';
+    switch ($matching) {
+        case 'first_is_parent_id':
+            $template_field = 'single_product_first_is_parent_id_parent_sku';
+            break;
+        case 'first_is_variation':
+        case 'first_is_parent_title':
+            $template_field = 'single_product_first_is_parent_title_parent_sku';
+            break;
+        default:
+            return null;
+    }
+    $template = isset($options[$template_field]) ? trim((string) $options[$template_field]) : '';
+    if ($template === '') {
+        return null;
+    }
+    return array(
+        'target' => (int) reset($records_to_import),
+        'cap' => (int) apply_filters('wpai_preview_group_window_cap', 50),
+        'template' => $template,
+    );
+}
+
+/**
+ * Evaluate the group-identity template (the same expression the importer
+ * stores as _parent_sku) against one extracted record.
+ */
+function wpai_preview_eval_group_key($node_xml, $xpath, $template) {
+    try {
+        $doc = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" . $node_xml;
+        $tmp_file = null;
+        $values = \XmlImportParser::factory($doc, "(" . $xpath . ")[1]", $template, $tmp_file)->parse();
+        if ($tmp_file) {
+            @unlink($tmp_file);
+        }
+        return isset($values[0]) ? trim((string) $values[0]) : '';
+    } catch (\Exception $e) {
+        return '';
+    }
+}
+
+/**
+ * Expand the target record to its contiguous variation group: walk outwards
+ * from the target while neighboring records share the same group key.
+ * Returns [record_index => record_xml] including the target itself.
+ */
+function wpai_preview_expand_group($group_window, $group_config, $xpath) {
+    $target = $group_config['target'];
+    if (!isset($group_window[$target])) {
+        return array();
+    }
+    $target_key = wpai_preview_eval_group_key($group_window[$target], $xpath, $group_config['template']);
+    $members = array($target => $group_window[$target]);
+    if ($target_key === '') {
+        return $members;
+    }
+    foreach (array(-1, 1) as $direction) {
+        for ($index = $target + $direction; isset($group_window[$index]); $index += $direction) {
+            $key = wpai_preview_eval_group_key($group_window[$index], $xpath, $group_config['template']);
+            if ($key === '' || $key !== $target_key) {
+                break;
+            }
+            $members[$index] = $group_window[$index];
+        }
+    }
+    return $members;
 }

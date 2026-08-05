@@ -9,6 +9,8 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 use League\Flysystem\Adapter\Ftp as FtpAdapter;
 
+require_once __DIR__ . '/RemoteSftp.php';
+
 class RemoteFilesystem {
 
 	private $options;
@@ -117,7 +119,7 @@ class RemoteFilesystem {
 					$this->filesystem = new Filesystem( new FtpAdapter( $this->options ) );
 					break;
 				case 'sftp':
-					$this->filesystem = new Filesystem( new SftpAdapter( $this->options ) );
+					$this->filesystem = new Filesystem( new PMXI_SftpAdapter( $this->options ) );
 					break;
 			}
 

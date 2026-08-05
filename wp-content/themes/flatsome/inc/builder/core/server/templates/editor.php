@@ -15,7 +15,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <?php wp_print_styles( $ux_builder_styles ) ?>
 </head>
-<body>
+<body class="admin-color-<?php echo sanitize_html_class( get_user_option( 'admin_color' ), 'modern' ); ?>">
   <app></app>
   <app-loader></app-loader>
   <draggable-helper></draggable-helper>

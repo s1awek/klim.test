@@ -10,6 +10,7 @@
 namespace SweetCode\Pixel_Manager;
 
 use SweetCode\Pixel_Manager\Admin\Environment;
+use SweetCode\Pixel_Manager\Admin\Opportunities\Opportunities;
 
 defined('ABSPATH') || exit; // Exit if accessed directly
 
@@ -20,9 +21,11 @@ class Options {
 	public static  $options_backup_name = 'wgact_options_backup';
 
 	/**
-	 * Option that records the default admin design system for this install.
-	 * Written once, on fresh installs only (see init()). Installs without it
-	 * existed before Nova and keep the Classic UI during the transition phase.
+	 * Fresh-install marker, written once when Options creates the initial
+	 * defaults (see init()). Installs without it predate Nova. Since 1.62.0
+	 * Nova is the default UI for every install; the marker now identifies
+	 * fresh installs for the onboarding checklist and targets the one-time
+	 * "Nova is now the default" announcement at pre-Nova installs.
 	 *
 	 * @since 1.59.0
 	 */
@@ -58,9 +61,9 @@ class Options {
 			self::$options = self::get_default_options();
 			update_option(PMW_DB_OPTIONS_NAME, self::$options);
 
-			// Fresh install (no stored options yet): Nova is the default admin
-			// UI. Existing installs never get this marker and keep the Classic
-			// UI until Nova is rolled out as the default for everyone.
+			// Fresh-install marker (no stored options yet). Used by the
+			// onboarding checklist and to suppress the "Nova is now the
+			// default" announcement on installs that started on Nova.
 			add_option(self::$default_admin_theme_option_name, 'wp');
 		}
 
@@ -265,6 +268,31 @@ class Options {
 				],
 				'clarity'    => [
 					'project_id' => '',
+				],
+				'groundtruth' => [
+					'gtid' => '',
+				],
+				'criteo'     => [
+					'account_id'        => '',
+					'advanced_matching' => false,
+				],
+				'nextdoor'   => [
+					'pixel_id'          => '',
+					'advanced_matching' => false,
+					'capi'              => [
+						'token'           => '',
+						'test_event_code' => '',
+					],
+				],
+				'triple_whale' => [
+					'enabled'    => false,
+					'orders_api' => [
+						'token' => '',
+					],
+				],
+				'hyros'      => [
+					'product_hash'    => '',
+					'application_tag' => '',
 				],
 			],
 			'shop'       => [
@@ -932,6 +960,122 @@ class Options {
 	}
 
 	/**
+	 * GroundTruth
+	 */
+
+	public static function get_groundtruth_gtid() {
+		return self::get_options_obj()->pixels->groundtruth->gtid;
+	}
+
+	public static function is_groundtruth_active() {
+		return (bool) self::get_groundtruth_gtid();
+	}
+
+	/**
+	 * Criteo
+	 */
+
+	public static function get_criteo_account_id() {
+		return self::get_options_obj()->pixels->criteo->account_id;
+	}
+
+	public static function is_criteo_active() {
+		return (bool) self::get_criteo_account_id();
+	}
+
+	public static function is_criteo_advanced_matching_enabled() {
+		return (bool) self::get_options_obj()->pixels->criteo->advanced_matching;
+	}
+
+	/**
+	 * Nextdoor
+	 */
+
+	public static function get_nextdoor_pixel_id() {
+		return self::get_options_obj()->pixels->nextdoor->pixel_id;
+	}
+
+	public static function is_nextdoor_active() {
+		return (bool) self::get_nextdoor_pixel_id();
+	}
+
+	public static function is_nextdoor_advanced_matching_enabled() {
+		return (bool) self::get_options_obj()->pixels->nextdoor->advanced_matching;
+	}
+
+	public static function get_nextdoor_capi_token() {
+		return self::get_options_obj()->pixels->nextdoor->capi->token;
+	}
+
+	public static function get_nextdoor_capi_test_event_code() {
+		return self::get_options_obj()->pixels->nextdoor->capi->test_event_code;
+	}
+
+	public static function is_nextdoor_capi_active() {
+		return self::is_nextdoor_active() && (bool) self::get_nextdoor_capi_token();
+	}
+
+	public static function is_nextdoor_capi_test_event_code_set() {
+		return (bool) self::get_nextdoor_capi_test_event_code();
+	}
+
+	/**
+	 * Triple Whale
+	 */
+
+	public static function is_triple_whale_active() {
+		return (bool) self::get_options_obj()->pixels->triple_whale->enabled;
+	}
+
+	public static function get_triple_whale_orders_api_token() {
+		return self::get_options_obj()->pixels->triple_whale->orders_api->token;
+	}
+
+	public static function is_triple_whale_orders_api_active() {
+		return self::is_triple_whale_active() && self::get_triple_whale_orders_api_token();
+	}
+
+	/**
+	 * Hyros
+	 *
+	 * @since 1.63.1
+	 */
+
+	public static function get_hyros_product_hash() {
+		return self::get_options_obj()->pixels->hyros->product_hash;
+	}
+
+	public static function is_hyros_active() {
+		return (bool) self::get_hyros_product_hash();
+	}
+
+	/**
+	 * The application tag as configured by the shop, which can be empty.
+	 *
+	 * @since 1.63.1
+	 *
+	 * @return string
+	 */
+	public static function get_hyros_application_tag() {
+		return self::get_options_obj()->pixels->hyros->application_tag;
+	}
+
+	/**
+	 * The application tag Hyros attributes to visitors when they land on a tracked page.
+	 * Hyros defaults to !clicked when no custom tag has been configured.
+	 *
+	 * @since 1.63.1
+	 *
+	 * @return string
+	 */
+	public static function get_hyros_effective_application_tag() {
+
+		$tag = self::get_hyros_application_tag();
+
+		return $tag ? $tag : '!clicked';
+	}
+
+	/**
 	 * Logger
 	 */
 
@@ -1290,6 +1434,18 @@ class Options {
 		return (bool) self::get_options_obj()->shop->ltv->order_calculation->is_active;
 	}
 
+	/**
+	 * No longer read anywhere.
+	 *
+	 * The automatic LTV drift detection this gated was disabled because it
+	 * caused performance problems on large shops, and its settings field was
+	 * removed in 1.63.1. The option key stays in the options tree so saved
+	 * values and options backups remain valid, and this accessor stays so any
+	 * third-party code calling it does not fatal. A full recalculation is a
+	 * manual operation now. See LTV::calculate_pmw_order_values().
+	 *
+	 * @deprecated 1.63.1 The setting it reads no longer has any effect.
+	 */
 	public static function is_automatic_ltv_recalculation_active() {
 		return (bool) self::get_options_obj()->shop->ltv->automatic_recalculation->is_active;
 	}
@@ -1355,6 +1511,11 @@ class Options {
 
 		// Invalidate cache so new options are loaded
 		self::invalidate_cache();
+
+		// Almost every opportunity's availability is derived from the settings,
+		// so the cached admin-menu badge count is stale after a save.
+		// @since 1.63.1
+		Opportunities::flush_active_opportunities_count_cache();
 	}
 
 	/**

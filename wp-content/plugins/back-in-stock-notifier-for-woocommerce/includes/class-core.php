@@ -60,9 +60,21 @@ if ( ! class_exists( 'CWG_Instock_Core' ) ) {
 		public function trigger_instock_status( $id, $stockstatus, $obj ) {
 			global $wpdb;
 			// perform action or trigger dispatch process
-			if ( ! $obj ) {
+			if ( ! $obj instanceof WC_Product ) {
 				$obj = wc_get_product( $id );
 			}
+
+			// The triggering product may not exist. Another plugin or theme can
+			// fire the stock hook with a stale or deleted product id, which we
+			// cannot prevent. Verify the product is real before scanning for
+			// subscribers, otherwise the queued mail process would later call
+			// product methods (get_meta(), is_in_stock(), etc.) on null.
+			if ( ! $obj instanceof WC_Product ) {
+				$logger = new CWG_Instock_Logger( 'error', "Instock trigger skipped: product #$id does not exist or has been deleted" );
+				$logger->record_log();
+				return;
+			}
+
 			$queued_api = new CWG_BIS_Queue( $wpdb );
 
 			if ( $obj && ( $obj->is_type( 'variation' ) || $obj->is_type( 'variable' ) ) ) {
@@ -108,7 +120,7 @@ if ( ! class_exists( 'CWG_Instock_Core' ) ) {
 							array_merge( (array) $list_of_subscribers, $parent_subscribers )
 						);
 
-						// Set transient for 5 minutes — avoid duplicate notifications
+						// Set transient for 5 minutes - avoid duplicate notifications
 						set_transient( $flag_key, true, 180 );
 					}
 				}
@@ -279,6 +291,16 @@ if ( ! class_exists( 'CWG_Instock_Core' ) ) {
 							 */
 							$stop_send_email = apply_filters( 'cwginstock_stop_email', false, $each_id, $product_obj );
 							if ( ! $stop_send_email) {
+								if ( class_exists( 'CWG_Instock_Mail_Throttle' ) && ! CWG_Instock_Mail_Throttle::wait_for_slot() ) {
+									// Minute limit reached, push this and the remaining ids to the next minute.
+									$all_ids   = array_values( $ids );
+									$position  = array_search( $each_id, $all_ids, true );
+									$remaining = array_slice( $all_ids, false === $position ? 0 : $position );
+									if ( CWG_Instock_Mail_Throttle::defer( $remaining ) ) {
+										return;
+									}
+									// Deferral unavailable, send anyway so no mail is ever lost.
+								}
 								$mailer    = new CWG_Instock_Mail( $each_id );
 								$send_mail = $mailer->send(); // mail sent
 								if ( $send_mail ) {
@@ -292,6 +314,10 @@ if ( ! class_exists( 'CWG_Instock_Core' ) ) {
 									 * @since 4.0.1
 									 */
 									do_action( 'cwginstock_auto_email_sent', $each_id, time() );
+								} elseif ( 'disabled' === $mailer->get_last_send_status() ) {
+									// Email disabled, keep the subscriber as-is until it is re-enabled.
+									$logger = new CWG_Instock_Logger( 'info', "Instock email notification is disabled - skipped mail for ID #$each_id with #$get_email (subscriber kept in queue)" );
+									$logger->record_log();
 								} else {
 									$api         = new CWG_Instock_API();
 									$mail_status = $api->mail_not_sent_status( $each_id );

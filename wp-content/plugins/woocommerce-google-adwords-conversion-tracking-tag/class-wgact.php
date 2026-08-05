@@ -15,6 +15,7 @@ use SweetCode\Pixel_Manager\Abilities;
 use SweetCode\Pixel_Manager\Admin\Admin;
 use SweetCode\Pixel_Manager\Admin\Admin_REST;
 use SweetCode\Pixel_Manager\Admin\Borlabs;
+use SweetCode\Pixel_Manager\Admin\Broker_Client;
 use SweetCode\Pixel_Manager\Admin\Debug_Info;
 use SweetCode\Pixel_Manager\Admin\Environment;
 use SweetCode\Pixel_Manager\Admin\LTV;
@@ -150,6 +151,26 @@ class WCPM {
     }
 
     public function register_generic_hooks() {
+        // Schema upgrades and backfill scheduling are maintenance work: they only
+        // ever need to happen once, and nothing on the storefront depends on them
+        // having run during that particular request. Keeping them out of frontend
+        // and checkout requests matters because maybe_schedule_backfill() asks the
+        // Action Scheduler whether the backfill action is already queued, which is
+        // a real DB query that ran on every single request until the backfill
+        // completed.
+        //
+        // AJAX is excluded even though is_admin() is true for admin-ajax.php,
+        // because a large share of that traffic originates on the storefront
+        // (cart fragments and similar). The table itself is created on plugin
+        // activation, and every read and write in Tracking_Accuracy_DB guards on
+        // table_exists(), so a request that skips this simply records nothing
+        // rather than erroring. Any regular admin page view, cron run or WP-CLI
+        // invocation still performs the upgrade promptly.
+        // @since 1.63.1
+        $is_maintenance_context = is_admin() && !wp_doing_ajax() || wp_doing_cron() || defined( 'WP_CLI' ) && WP_CLI;
+        if ( !$is_maintenance_context ) {
+            return;
+        }
         // Create table on upgrade if DB version changed
         Tracking_Accuracy_DB::maybe_create_table();
         // Schedule backfill if not yet complete
@@ -328,6 +349,8 @@ class WCPM {
         // Needs to be under init to avoid issues with filters called in the Options class
         Environment::third_party_plugin_tweaks_on_init();
         Admin_REST::get_instance();
+        // Broker connect (experimental, routes only exist with PMW_EXPERIMENTS)
+        Broker_Client::get_instance();
         if ( is_admin() ) {
             Borlabs::init();
             // display admin views

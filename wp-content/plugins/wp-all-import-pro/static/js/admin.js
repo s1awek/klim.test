@@ -175,36 +175,6 @@
 		}
 	});
 
-	function overlayDivOverInput($input, divId) {
-		const $localInput = $($input);
-
-		// Get the name of the input/textarea
-		const inputName = $input.attr('name');
-
-		// Check if element is a textarea
-		const isTextarea = $input.is('textarea');
-
-		// Configure width value
-		const width = isTextarea ? '55%' : '100%';
-
-		// Apply position:relative to the parent of the input/textarea
-		$localInput.parent().css({position: 'relative'});
-
-		// Create the overlay div
-		const $div = $('<div/>', {
-			id: divId,
-			'data-input-name': inputName,
-			css: {position: 'absolute', top: 0, left: 0, 'z-index':-99},
-			height:$localInput.outerHeight(),
-			width: width
-		});
-
-		$div.insertAfter($input);
-
-		// Returning the jQuery object
-		return $div;
-	}
-
 	// Global declaration of $wpAllImportDrag and $wpAllImportOriginalColor so we can use them on dynamic elements.
 	var $wpAllImportDrag = null;
 	var $wpAllImportOriginalColor = '';
@@ -227,25 +197,38 @@
 		}
 	}
 
-	function wpaiMakeDroppable(){
-		let $targets = $('input, textarea');
+	function wpaiApplyDroppable(el) {
+		// Guard on a DOM expando, not jQuery .data: the "Add Attribute"/"Add
+		// Another" rows are built with $.fn.clone(true), which copies .data AND
+		// jQuery UI's ui-droppable instance onto the clone — but the clone is
+		// never registered in $.ui.ddmanager, so its drop target is dead. A copied
+		// .data flag would make us skip re-initializing it (issue #1828); expandos
+		// are not cloned, so a fresh clone always re-initializes here.
+		if (el.wpaiDroppableApplied) return;
+		el.wpaiDroppableApplied = true;
 
-		$targets.on('click', function (e) {
-			if (!$wpAllImportDrag) return;
+		var $input = $(el);
+		// Discard any copied-but-unregistered droppable state so .droppable() runs
+		// jQuery UI's _create (which registers the element) rather than treating
+		// this as an option update on the inherited instance.
+		$input.removeData('ui-droppable').removeClass('ui-droppable');
 
-			let newValue = $wpAllImportDrag.data('xpath');
-			wpaiInsertAtCursor($(this), newValue);
-
-			$wpAllImportDrag.css('color', $wpAllImportOriginalColor).css('font-weight', 'bold');
-			$wpAllImportDrag = null;
-		}).droppable({
+		$input.droppable({
 			drop: function (event, ui) {
-				let newValue = ui.draggable.data('xpath') || '';
+				var newValue = ui.draggable.data('xpath') || '';
 				wpaiInsertAtCursor($(this), newValue);
 			},
 			greedy: true,
-			tolerance: 'touch',
-			disabled: false
+			tolerance: 'pointer'
+		});
+	}
+
+	function wpaiMakeDroppable(){
+		// Click-to-insert lives on wpaiBindGlobalClickHandler. $.fn.xml('dragable')
+		// runs on every tag-tree render, so wpaiApplyDroppable's per-input guard
+		// prevents stacked droppables.
+		$('input, textarea').each(function () {
+			wpaiApplyDroppable(this);
 		});
 
 	}
@@ -281,14 +264,19 @@
 			return;
 		}
 
-		// Apply draggable to elements.
+		var proxy;
+
+		// Replaces the config from the original .ui-draggable bind site on every
+		// MutationObserver fire, so it must mirror zIndex/appendTo/iframeFix.
 		$(".ui-draggable").draggable({
 			helper: function () {
 				return $('<div>').text($(this).data('xpath'));
 			},
+			zIndex: 2147483646,
+			appendTo: 'body',
+			iframeFix: true,
 			start: function (event, ui) {
-				// Create a duplicate node as a proxy
-				proxy = ui.helper.clone().appendTo('body');
+				proxy = ui.helper.clone().appendTo('body').css('z-index', 2147483646);
 			},
 			drag: function (event, ui) {
 				// Recalculate drop area for iframe.
@@ -389,8 +377,24 @@
 			return;
 		}
 
-		$parent.on('click', 'input, textarea', function (e) {
+		// The MutationObserver fires for every DOM addition inside
+		// .wpallimport-layout; wpaiApplyDroppable's guard keeps that idempotent
+		// while still re-initializing cloned rows (issue #1828).
+		$parent.find('input, textarea').each(function() {
+			wpaiApplyDroppable(this);
+		});
+
+	}
+
+	function wpaiBindGlobalClickHandler() {
+		// Scoped to import form + wp-pointer popups — a wider scope would
+		// consume $wpAllImportDrag on unrelated admin inputs.
+		var $doc = $(document);
+		if ($doc.data('wpai-click-bound')) return;
+		$doc.data('wpai-click-bound', true);
+		$doc.on('click', 'input, textarea', function (e) {
 			if (!$wpAllImportDrag) return;
+			if (!$(this).closest('.wpallimport-layout, .wp-pointer').length) return;
 
 			let newValue = $wpAllImportDrag.data('xpath') || '';
 			wpaiInsertAtCursor($(this), newValue);
@@ -398,28 +402,14 @@
 			$wpAllImportDrag.css('color', $wpAllImportOriginalColor).css('font-weight', 'bold');
 			$wpAllImportDrag = null;
 		});
+	}
 
-		let $targets = $parent.find('input, textarea');
-		let divCounter = 0; // counter to generate unique ids for divs
-
-		$targets.each(function() {
-			let $input = $(this);
-			let divId = 'droppableDiv' + divCounter++; // generate a unique id based on the counter
-
-			let $div = overlayDivOverInput($input, divId);
-
-			// Apply jQuery UI droppable to the div
-			$div.droppable({
-				drop: function (event, ui) {
-					let inputName = $(this).data('input-name');
-					// Select only the closest sibling input/textarea with provided name
-					let $inputOrTextarea = $(this).siblings("input[name='" + inputName + "'], textarea[name='" + inputName + "']").first();
-					let newValue = ui.draggable.data('xpath') || '';
-					wpaiInsertAtCursor($inputOrTextarea, newValue);
-				}
-			});
+	function wpaiBindPopupInputs($popup) {
+		// wp-pointer innerHTML-copies its content, dropping jQuery UI droppable
+		// state — re-apply on the fresh DOM nodes.
+		$popup.find('input, textarea').each(function () {
+			wpaiApplyDroppable(this);
 		});
-
 	}
 
 	function wpaiObserveFieldAddition()
@@ -432,6 +422,8 @@
 		if(!wpaiXmlTargetNode){
 			return;
 		}
+
+		wpaiBindGlobalClickHandler();
 
 		// Options for the observer (which mutations to observe)
 		let wpaiXmlConfig = {childList: true, subtree: true};
@@ -1797,6 +1789,8 @@
 							'border-radius': '5px'
 						});
 					},
+					zIndex: 2147483646,
+					appendTo: 'body',
 					cursor: 'pointer',
 					iframeFix:true
 				}).css('cursor', 'pointer');
@@ -3045,7 +3039,13 @@
 		});
 	});
 
-	$(document).on('click', '.add-new-entry', function(){
+	$(document).on('click', '.add-new-entry', function(e){
+		// Some "Add Another" links carry both classes; suppress the .add-new-key
+		// twin so the row isn't cloned twice. Only stop the dual-class case so
+		// pure .add-new-entry clicks still reach any other delegated handlers.
+		if ($(this).hasClass('add-new-key')) {
+			e.stopImmediatePropagation();
+		}
 		var $template = $(this).parents('table').first().children('tbody').children('tr.template');
 		$number = $(this).parents('table').first().children('tbody').children('tr').length - 2;
 		$clone = $template.clone(true);
@@ -3064,12 +3064,22 @@
 		});
 		$clone.insertBefore($template).css('display', 'none').removeClass('template').fadeIn();
 
+		var $popup = $(this).closest('.wp-pointer');
+		if ($popup.length) {
+			wpaiBindPopupInputs($popup);
+		}
+
 		return false;
 	});
 
 	$(document).on('click', '.add-new-key', function(){
 		var $template = $(this).parents('table').first().find('tr.template');
 		$template.clone(true).insertBefore($template).css('display', 'none').removeClass('template').fadeIn();
+
+		var $popup = $(this).closest('.wp-pointer');
+		if ($popup.length) {
+			wpaiBindPopupInputs($popup);
+		}
 	});
 
 	/* END Categories hierarchy */
@@ -3287,6 +3297,8 @@
                 //$('.wpallimport-overlay').hide();
             }
         }).pointer('open');
+
+		wpaiBindPopupInputs($(this).pointer('widget'));
 	});
 
 	// Custom Fields Mapping Dialog
@@ -3311,6 +3323,8 @@
 	                //$('.wpallimport-overlay').hide();
 	            }
 	        }).pointer('open');
+
+			wpaiBindPopupInputs($triggerEvent.pointer('widget'));
 		}
 	});
 

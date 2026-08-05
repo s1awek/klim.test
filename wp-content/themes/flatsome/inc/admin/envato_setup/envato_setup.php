@@ -393,7 +393,14 @@ if ( ! class_exists( 'Envato_Theme_Setup_Wizard' ) ) {
 			) );
 
 			//wp_enqueue_style( 'envato_wizard_admin_styles', $this->plugin_url . '/css/admin.css', array(), $this->version );
-			wp_enqueue_style( 'envato-setup', $this->plugin_url . 'css/envato-setup.css', array( 'wp-admin', 'dashicons', 'install' ), $this->version );
+			// `wp-base-styles` defines the `--wp-admin-theme-color` vars used by core
+			// form controls since WP 7.0. Only depend on it where it's registered, since
+			// a missing dependency makes WP_Dependencies skip the whole stylesheet.
+			$setup_deps = array( 'wp-admin', 'dashicons', 'install' );
+			if ( wp_style_is( 'wp-base-styles', 'registered' ) ) {
+				$setup_deps[] = 'wp-base-styles';
+			}
+			wp_enqueue_style( 'envato-setup', $this->plugin_url . 'css/envato-setup.css', $setup_deps, $this->version );
 
 			//enqueue style for admin notices
 			wp_enqueue_style( 'wp-admin' );
@@ -448,7 +455,7 @@ if ( ! class_exists( 'Envato_Theme_Setup_Wizard' ) ) {
 			<?php do_action( 'admin_print_scripts' ); ?>
 			<?php //do_action( 'admin_head' ); ?>
 		</head>
-		<body class="envato-setup wp-core-ui">
+		<body class="<?php echo esc_attr( flatsome_admin_body_version_classes( 'envato-setup wp-core-ui admin-color-' . sanitize_html_class( get_user_option( 'admin_color' ), 'modern' ) ) ); ?>">
 		<h1 id="wc-logo">
 			<?php
 				$image_url = $this->get_site_logo();

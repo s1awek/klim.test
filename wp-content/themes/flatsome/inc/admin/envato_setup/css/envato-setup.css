@@ -450,12 +450,15 @@ body {
 
 .envato-setup .envato-setup-actions .button {
     float: right;
+    margin-right: .5em;
+    box-shadow: none;
+}
+
+body:not(.flatsome-wp-version-gte-70) .envato-setup .envato-setup-actions .button {
     font-size: 1.25em;
     padding: .5em 1em;
     line-height: 1em;
-    margin-right: .5em;
     height: auto;
-    box-shadow: none;
 }
 
 .envato-setup .envato-setup-actions .button.disabled {

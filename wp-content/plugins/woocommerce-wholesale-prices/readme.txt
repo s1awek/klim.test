@@ -4,7 +4,7 @@ Tags: woocommerce wholesale, b2b, wholesale pricing, catalog mode, dynamic prici
 Requires at least: 5.9
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.2.8
+Stable tag: 2.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -138,10 +138,36 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Screenshots ==
 
-See plenty of screenshots for this plugin and others at:
-[https://wholesalesuiteplugin.com/woocommerce-wholesale-prices-premium/](https://wholesalesuiteplugin.com/woocommerce-wholesale-prices-premium/)
+1. Set a Wholesale Price on a Product — Add wholesale pricing directly in the product's General tab: discount type, wholesale price, and an optional wholesale sale price you can schedule.
+2. Wholesale Roles — See your wholesale roles at a glance: name, key and description, with the form to edit one alongside. The free version gives you one level — Wholesale Customer.
+3. What Wholesale Customers See — The shop page as a logged-in wholesale customer: the retail price struck through, the wholesale price shown beneath it with your own label text, and add to cart ready at the wholesale rate.
+4. Wholesale Pricing for Variable Products — Every variation gets its own Wholesale Prices panel under the Variations tab. Set a discount type and wholesale price on each variation independently.
+5. General Settings — Store-wide wholesale options at a glance: usage tracking opt-in and a global switch to turn off coupons for anyone with a wholesale role.
+6. Admin Roles — Choose which user roles can reach the Wholesale dashboard and settings. Administrator and Shop manager are allowed by default; add any other role that needs access.
+7. Tax Settings — Decide how tax behaves for wholesale orders: exempt all wholesale roles, choose whether shop and cart/checkout prices show including or excluding tax, and set your own price suffixes for regular and wholesale prices.
+8. Price Settings — Control how wholesale prices appear on the front end: the label shown before the price, whether the retail price is hidden, how variable product ranges display, and whether prices and add to cart are hidden from visitors altogether.
 
 == Changelog ==
+
+= 2.2.9 =
+- Improvement: "Preview as wholesale role" admin-bar toggle
+- Improvement: Compute variable wholesale price range with an aggregate query instead of looping all variations
+- Improvement: Prime object/meta caches in the variable price-range loop and drop the redundant product re-hydration
+- Improvement: wwp_migrate_variable_price_range times out on large catalogues, permanently blocking Action Scheduler queue
+- Bug Fix: Aelia Currency Switcher: changing the "Product base currency" setting doesn't change the wholesale price label
+- Bug Fix: Composite Products: Wrong cart total & missing components for wholesale customers
+- Bug Fix: Elementor: Price and add to cart replacement message not showing in elementor product price widget
+- Bug Fix: Fatal error "Call to a member function get_price() on bool" when a Grouped product has a stale/orphaned child ID
+- Bug Fix: N+1 DB query loop in wholesale_price_html_filter causes site-wide TTFB regression
+- Bug Fix: Product Bundles child items dropped from cart for wholesale users after add-to-cart
+- Bug Fix: Product Bundles: individually-priced child items not added to cart or included in wholesale total
+- Bug Fix: UI: WPay recommendation notice overflows on WooCommerce Settings (sister bug to WWPP #1593)
+- Bug Fix: Variation dropdown missing when wholesale price is under $1.00 — NUMERIC cast truncation in wholesale/v1 variations meta_query
+- Bug Fix: Wholesale Quotes page dropdowns (New Quote Page / View Quote Page) silently fail to save — PHP integer key type mismatch in select sanitizer
+- Bug Fix: Wholesale Sale Price saved via Quick Edit is corrupted on comma-decimal-separator stores
+- Bug Fix: Wholesale requirement notice is missing from the render immediately after a classic-cart Update cart POST
+- Bug Fix: wholesale_price_html_filter hooked to woocommerce_get_price_html without admin-context guard, executing the full WWPP pricing pipeline on every admin Products list row
+- Bug Fix: wwp_options_registered_custom_roles becomes double-serialized after Wholesale Lead Capture / Order Form auto-update, wiping all wholesale roles
 
 = 2.2.8 =
 - Bug Fix: Bug: WPay upsell nag cannot be permanently dismissed (nonce fails with page caching)

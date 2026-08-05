@@ -4,7 +4,7 @@ Donate link: https://www.wpdesk.net/sk/flexible-checkout-fields-donate/
 Tags: woocommerce checkout fields, woocommerce checkout manager, woocommerce checkout, custom fields, checkout field customizer
 Requires at least: 5.2
 Tested up to: 7.0
-Stable tag: 4.1.38
+Stable tag: 4.1.39
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -700,6 +700,9 @@ Please report security bugs found in the source code of the Flexible Checkout Fi
 If you are upgrading from the old WooCommerce Checkout Fields version (1.1, woocommerce-checkout-fields) make sure to completely delete the old version first. Your settings will be kept. If you install the new version without deleting the old one you may break your WordPress installation.
 
 == Changelog ==
+
+= 4.1.39 - 2026-07-13 =
+* Fixed country field not hiding on WooCommerce 10.8+
 
 = 4.1.38 - 2026-06-21 =
 * Added support for WooCommerce 10.9

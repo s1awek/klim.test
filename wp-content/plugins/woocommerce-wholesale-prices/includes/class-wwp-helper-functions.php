@@ -633,6 +633,26 @@ if ( ! class_exists( 'WWP_Helper_Functions' ) ) {
         }
 
         /**
+         * Build the wholesale-price field label for the Aelia base currency.
+         *
+         * Canonical source for the "{name} ({symbol}) <em><b>Base Currency</b></em>" label format used by
+         * the simple- and variable-product admin renders. The live base-currency JS handler mirrors this
+         * format from localized data (it rebuilds the label via DOM nodes for output safety), so any change
+         * here must be reflected there too.
+         *
+         * @since 2.2.9
+         *
+         * @param string $currency_name   The base currency display name.
+         * @param string $currency_symbol The base currency symbol.
+         *
+         * @return string The base-currency field label markup.
+         */
+        public static function wwp_get_aelia_base_currency_field_label( $currency_name, $currency_symbol ) {
+
+            return $currency_name . ' (' . $currency_symbol . ') <em><b>' . __( 'Base Currency', 'woocommerce-wholesale-prices' ) . '</b></em>';
+        }
+
+        /**
          * Return formatted price.
          * WPML compatible.
          *
@@ -1580,6 +1600,43 @@ if ( ! class_exists( 'WWP_Helper_Functions' ) ) {
             }
 
             return $prices_per_role;
+        }
+
+        /**
+         * Sanitize a posted wholesale price or percentage value for storage.
+         *
+         * Delegates locale/number-format handling to WooCommerce's
+         * {@see wc_format_decimal()}, which treats the last separator as the
+         * decimal point. That avoids destroying values like "3.20" when the
+         * shop thousand separator is also a period (EU-style number formats).
+         *
+         * @since 2.2.9
+         *
+         * @param mixed $value Raw posted value (string, number, or null).
+         * @return string Empty string when empty/invalid, '0' when negative, otherwise a WC-formatted decimal string.
+         */
+        public static function sanitize_price_input( $value ) {
+            if ( null === $value ) {
+                return '';
+            }
+
+            $value = sanitize_text_field( wp_unslash( (string) $value ) );
+
+            if ( '' === $value ) {
+                return '';
+            }
+
+            $formatted = wc_format_decimal( $value );
+
+            if ( '' === $formatted || ! is_numeric( $formatted ) ) {
+                return '';
+            }
+
+            if ( (float) $formatted < 0 ) {
+                return '0';
+            }
+
+            return $formatted;
         }
     }
 }

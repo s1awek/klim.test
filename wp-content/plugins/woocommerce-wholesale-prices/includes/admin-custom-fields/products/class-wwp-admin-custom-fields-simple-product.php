@@ -216,6 +216,10 @@ if ( ! class_exists( 'WWP_Admin_Custom_Fields_Simple_Product' ) ) {
          * @since 1.2.0 Add Aelia Currency Switcher Plugin Integration
          * @since 1.3.0 Refactor codebase and move to its own model.
          * @since 2.1.0 Add wholesale sale percentage discount support.
+         * @since 2.2.9 Normalize the wholesale price and wholesale sale price via
+         *              WWP_Helper_Functions::sanitize_price_input() so a comma
+         *              decimal separator is converted correctly instead of being
+         *              saved verbatim and truncated by later floatval() calls.
          * @access public
          *
          * @param WC_Product $product Product object.
@@ -282,8 +286,8 @@ if ( ! class_exists( 'WWP_Admin_Custom_Fields_Simple_Product' ) ) {
 
                             $wholesale_price_key             = $roleKey . '_wholesale_price';
                             $wholesale_sale_price_key        = $roleKey . '_wholesale_sale_price';
-                            $wholesale_price                 = isset( $_REQUEST[ $wholesale_price_key ] ) ? sanitize_text_field( wp_unslash( $_REQUEST[ $wholesale_price_key ] ) ) : ''; //phpcs:ignore
-                            $wholesale_sale_price            = isset( $_REQUEST[ $wholesale_sale_price_key ] ) ? sanitize_text_field( wp_unslash( $_REQUEST[ $wholesale_sale_price_key ] ) ) : ''; //phpcs:ignore
+                            $wholesale_price                 = isset( $_REQUEST[ $wholesale_price_key ] ) ? WWP_Helper_Functions::sanitize_price_input( wp_unslash( $_REQUEST[ $wholesale_price_key ] ) ) : ''; //phpcs:ignore
+                            $wholesale_sale_price            = isset( $_REQUEST[ $wholesale_sale_price_key ] ) ? WWP_Helper_Functions::sanitize_price_input( wp_unslash( $_REQUEST[ $wholesale_sale_price_key ] ) ) : ''; //phpcs:ignore
                             $check_wholesale_price_existence = isset( $_REQUEST[ $wholesale_price_key ] ) && ! empty( $_REQUEST[ $wholesale_price_key ] ) ? true : false; //phpcs:ignore
 
                             if ( ! $check_wholesale_price_existence ) { // if corresponding wholesale price is empty, set wholesale sale price to empty as well.
@@ -495,7 +499,7 @@ if ( ! class_exists( 'WWP_Admin_Custom_Fields_Simple_Product' ) ) {
 
                             $wholesale_price = $product->get_meta( $role_key . '_wholesale_price', true ); // Get base currency wholesale price.
                             $field_id        = $role_key . '_wholesale_price';
-                            $field_label     = $wc_currencies[ $base_currency ] . ' (' . $currency_symbol . ') <em><b>' . __( 'Base Currency', 'woocommerce-wholesale-prices' ) . '</b></em>';
+                            $field_label     = WWP_Helper_Functions::wwp_get_aelia_base_currency_field_label( $wc_currencies[ $base_currency ], $currency_symbol );
                             /* translators: %1$s: Wholesale role name,%2$s: currency name and symbol */
                             $field_desc = sprintf( __( 'Only applies to users with the role of %1$s for %2$s currency', 'woocommerce-wholesale-prices' ), $role['roleName'], $wc_currencies[ $base_currency ] . ' (' . $currency_symbol . ')' );
                             ?>
@@ -812,53 +816,33 @@ if ( ! class_exists( 'WWP_Admin_Custom_Fields_Simple_Product' ) ) {
             $has_wholesale_discount_key = $role_key . '_wholesale_discount_type';
 
             /**
-             * Sanitize and properly format wholesale price.
-             * (This also supports comma as decimal separator currency format).
+             * Sanitize and properly format wholesale price / percentage.
+             *
+             * Uses WC number formatting (last separator = decimal) so values like
+             * "3.20" are not corrupted when the shop thousand separator is ".".
+             *
+             * Note: $thousand_sep and $decimal_sep remain in the method signature so
+             * existing call sites stay unchanged; separator handling is owned by
+             * WWP_Helper_Functions::sanitize_price_input() / wc_format_decimal().
+             *
+             * @see https://github.com/Rymera-Web-Co/woocommerce-wholesale-prices/issues/955
              */
+            // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- kept for call-site BC.
             $wholesale_discount_type = isset( $_POST[ $has_wholesale_discount_key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $has_wholesale_discount_key ] ) ) : ( ! empty( $product->get_meta( $role_key . '_wholesale_percentage_discount', true ) ) ? 'percentage' : '' ); //phpcs:ignore
 
-            $wholesale_price = sanitize_text_field( wp_unslash( $_POST[ $wholesale_price_key ] ) ); //phpcs:ignore
-
-            if ( $thousand_sep ) {
-                $wholesale_price = str_replace( $thousand_sep, '', $wholesale_price );
-            }
-
-            if ( $decimal_sep ) {
-                $wholesale_price = str_replace( $decimal_sep, '.', $wholesale_price );
-            }
-
-            if ( ! empty( $wholesale_price ) ) {
-
-                if ( ! is_numeric( $wholesale_price ) ) {
-                    $wholesale_price = '';
-                } elseif ( $wholesale_price < 0 ) {
-                    $wholesale_price = 0;
-                } else {
-                    $wholesale_price = wc_format_decimal( $wholesale_price );
-                }
-            }
+            // Helper also unslashes; wp_unslash here for PHPCS WordPress.Security.ValidatedSanitizedInput.
+            $wholesale_price = isset( $_POST[ $wholesale_price_key ] ) ? WWP_Helper_Functions::sanitize_price_input( wp_unslash( $_POST[ $wholesale_price_key ] ) ) : ''; //phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
             $wholesale_price = wc_clean( apply_filters( 'wwp_before_save_' . $product_type . '_product_wholesale_price', $wholesale_price, $role_key, $post_id, $aelia_currency_switcher_active, $is_base_currency, $currency_code ) );
 
             $product->update_meta_data( $wholesale_price_key, $wholesale_price );
 
             if ( 'percentage' === $wholesale_discount_type ) {
-                $wholesale_discount = sanitize_text_field( wp_unslash( isset( $_POST[ $role_key . '_wholesale_percentage_discount' ] ) ? $_POST[ $role_key . '_wholesale_percentage_discount' ] : ( ! empty( $product->get_meta( $role_key . '_wholesale_percentage_discount', true ) ) ? $product->get_meta( $role_key . '_wholesale_percentage_discount', true ) : '' ) ) ); //phpcs:ignore
+                $raw_discount = isset( $_POST[ $role_key . '_wholesale_percentage_discount' ] ) //phpcs:ignore WordPress.Security.NonceVerification.Missing
+                    ? wp_unslash( $_POST[ $role_key . '_wholesale_percentage_discount' ] ) //phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                    : ( ! empty( $product->get_meta( $role_key . '_wholesale_percentage_discount', true ) ) ? $product->get_meta( $role_key . '_wholesale_percentage_discount', true ) : '' );
 
-                if ( $decimal_sep ) {
-                    $wholesale_discount = str_replace( $decimal_sep, '.', $wholesale_discount );
-                }
-
-                if ( ! empty( $wholesale_discount ) ) {
-
-                    if ( ! is_numeric( $wholesale_discount ) ) {
-                        $wholesale_discount = '';
-                    } elseif ( $wholesale_discount < 0 ) {
-                        $wholesale_discount = 0;
-                    } else {
-                        $wholesale_discount = wc_format_decimal( $wholesale_discount );
-                    }
-                }
+                $wholesale_discount = WWP_Helper_Functions::sanitize_price_input( $raw_discount );
 
                 $product->update_meta_data( $role_key . '_wholesale_percentage_discount', trim( esc_attr( $wholesale_discount ) ) );
             } else {

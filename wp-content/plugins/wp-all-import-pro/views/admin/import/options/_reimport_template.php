@@ -24,7 +24,7 @@ if (!empty($custom_type)) {
     }
 }
 ?>
-<div class="wpallimport-collapsed wpallimport-section">
+<div class="wpallimport-collapsed wpallimport-section" data-wpai-section="import-step4-record-matching">
 	<script type="text/javascript">
 		__META_KEYS = <?php echo json_encode($existing_meta_keys) ?>;
 	</script>

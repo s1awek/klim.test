@@ -1,7 +1,7 @@
 <?php
 $custom_type = wp_all_import_custom_type_labels($post_type);
 ?>
-<div class="wpallimport-collapsed closed wpallimport-section wpallimport-custom-fields">
+<div class="wpallimport-collapsed closed wpallimport-section wpallimport-custom-fields" data-wpai-section="import-step3-custom-fields">
 	<div class="wpallimport-content-section">
 		<div class="wpallimport-collapsed-header">
 			<h3><?php _e('Custom Fields','wp-all-import-pro');?></h3>

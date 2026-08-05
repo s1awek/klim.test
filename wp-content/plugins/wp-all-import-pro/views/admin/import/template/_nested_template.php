@@ -4,7 +4,7 @@
 	var plugin_url = '<?php echo WP_ALL_IMPORT_ROOT_URL; ?>';
 </script>
 
-<div class="wpallimport-collapsed closed nested_options wpallimport-section">
+<div class="wpallimport-collapsed closed nested_options wpallimport-section" data-wpai-section="import-step3-nested">
 	<div class="wpallimport-content-section">
 		<div class="wpallimport-collapsed-header">
 			<h3><?php _e('Nested XML/CSV files','wp-all-import-pro');?></h3>	

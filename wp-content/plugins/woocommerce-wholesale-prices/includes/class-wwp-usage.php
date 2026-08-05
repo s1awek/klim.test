@@ -87,6 +87,11 @@ class WWP_Usage {
         // Settings.
         $data['settings'] = $this->_fetch_all_wws_settings();
 
+        // First-year activation signals (flags + counts, no dates) ride the same
+        // generic settings channel, so the usage worker stores them as-is with no
+        // worker change or allowlist update needed.
+        $data['settings'] = array_merge( $data['settings'], $this->_fetch_activation_signals() );
+
         // Merge environment settings data.
         $data = array_merge( $data, $this->_fetch_environment_settings_data() );
 
@@ -324,6 +329,59 @@ class WWP_Usage {
 
         // Return the settings as an array.
         return $settings;
+    }
+
+    /**
+     * Fetch first-year activation signals for the weekly check-in.
+     *
+     * Flags and counts only — no dates/timestamps and no PII. The signals ride
+     * the generic settings channel (see WWP_Usage::get_data()), which the usage
+     * worker stores as-is without an allowlist, so no worker-side change is
+     * required; they must not be promoted to bespoke top-level params, which
+     * would need worker allowlisting.
+     *
+     * WWP contributes its own self-contained `wholesale_price_set` flag. Sibling
+     * plugins (WWPP, Wholesale Quotes, Invoice Gateway) expose their signals by
+     * hooking the `wwp_activation_signals` filter, so WWP reads whatever is
+     * present with no hard runtime dependency and the data degrades gracefully
+     * when a sibling is inactive.
+     *
+     * @since  2.2.9
+     * @access private
+     * @return array Activation-signal key => scalar value pairs.
+     */
+    private function _fetch_activation_signals() {
+
+        global $wpdb;
+
+        // `wholesale_price_set`: true once any product or variation carries a
+        // wholesale price for any role. `{role}_have_wholesale_price = 'yes'` is
+        // WWP's canonical "has a wholesale price" marker.
+        $wholesale_price_set = (bool) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT 1 FROM {$wpdb->postmeta} WHERE meta_key LIKE %s AND meta_value = %s LIMIT 1",
+                '%_have_wholesale_price',
+                'yes'
+            )
+        );
+
+        $signals = array(
+            'wholesale_price_set' => $wholesale_price_set ? 'yes' : 'no',
+        );
+
+        /**
+         * Filters the first-year activation signals sent in WWP's weekly check-in.
+         *
+         * Sibling plugins add their own flags/counts here (e.g. `pricing_rule_set`,
+         * `quote_count`, `quote_converted_count`, `invoice_gateway_order_count`).
+         * Values must be flags/counts only — no dates/timestamps or PII — and are
+         * stored as-is by the usage worker's generic settings channel.
+         *
+         * @since 2.2.9
+         *
+         * @param array $signals Activation-signal key => scalar value pairs.
+         */
+        return (array) apply_filters( 'wwp_activation_signals', $signals );
     }
 
     /**

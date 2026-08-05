@@ -1,3 +1,17 @@
+--- 3.20.9 ---
+NEW: WooCommerce 11 compatibility.
+
+FIXED: UX Builder showing a server error on some server setups.
+FIXED: Possible addQty is not a function error in the Composite Products integration when the theme WooCommerce script is not loaded.
+FIXED: Possible fatal error during plugin updates when a third-party updater provides a non-string update package.
+
+--- 3.20.8 ---
+FIXED: Flatsome Studio & Setup Wizard WP 7.0+ import checkbox & button styling.
+FIXED: Quantity selector buttons not working when step value is set to 'any'.
+FIXED: Missing alt tags on product gallery thumbnails.
+
+Note: This release contains an enhanced security measure. We recommend updating your sites promptly for optimal protection.
+
 --- 3.20.7 ---
 NEW: WordPress 7.0 compatibility.
 NEW: WooCommerce 10.8 compatibility.

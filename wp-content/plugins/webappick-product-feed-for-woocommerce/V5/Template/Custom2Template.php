@@ -16,6 +16,7 @@ use CTXFeed\V5\Utility\Config;
 use CTXFeed\V5\File\FileFactory;
 use CTXFeed\V5\Helper\FeedHelper;
 use CTXFeed\V5\Helper\ProductHelper;
+use CTXFeed\V5\Helper\SafeExpressionEvaluator;
 use CTXFeed\V5\Product\AttributeValueByType;
 use CTXFeed\V5\Product\ProductFactory;
 use CTXFeed\V5\Product\ProductInfo;
@@ -169,14 +170,14 @@ class Custom2Template implements TemplateInterface {
 	 */
 	public function get_header() {
 		$getHeader = explode( '{{each product start}}', $this->config->feed_config_custom2 );
-		$header    = trim( $getHeader[0] );
+		$header    = isset( $getHeader[0] ) && is_string( $getHeader[0] ) ? trim( $getHeader[0] ) : '';
 		$getNodes  = explode( "\n", $header );
 
 		if ( ! empty( $getNodes ) ) {
 			foreach ( $getNodes as $value ) {
 				// Add header info to feed file
 				$value = preg_replace( '/\\\\/', '', $value );
-				if ( strpos( $value, 'return' ) !== false ) {
+				if ( \is_string( $value ) && strpos( $value, 'return' ) !== false ) {
 					$return       = FeedHelper::get_string_between( $value, '{(', ')}' );
 					$return_value = $this->process_eval( $return );
 					$value        = preg_replace( '/\{\(.*?\)\}/', $return_value, $value );
@@ -198,7 +199,8 @@ class Custom2Template implements TemplateInterface {
 	 */
 	public function get_footer() {
 		$getFooter = explode( '{{each product end}}', $this->config->feed_config_custom2 );
-		$getNodes  = explode( "\n", $getFooter[1] );
+		$footer_content = isset( $getFooter[1] ) && is_string( $getFooter[1] ) ? $getFooter[1] : '';
+		$getNodes  = explode( "\n", $footer_content );
 		if ( ! empty( $getNodes ) ) {
 			foreach ( $getNodes as $value ) {
 				$this->s -= 2;
@@ -255,7 +257,8 @@ class Custom2Template implements TemplateInterface {
 				$output = ProductHelper::str_replace( $output, $element['attr_code'], $this->config );
 			} elseif ( 'return' === $element['attr_type'] ) {
 //				$output = $this->getReturnTypeValue( $element, $product );
-				if ( preg_match( "/\bround\b/", $element['to_return'] ) ) {
+				$to_return_val = isset( $element['to_return'] ) && is_string( $element['to_return'] ) ? $element['to_return'] : '';
+				if ( preg_match( "/\bround\b/", $to_return_val ) ) {
 					$to_return            = preg_replace( "/round\(|\)/", "", $element['to_return'] );
 					$element['to_return'] = $to_return;
 					$output               = round( $this->getReturnTypeValue( $element, $product ) );
@@ -345,7 +348,7 @@ class Custom2Template implements TemplateInterface {
 		if ( ! empty( $element['start_code'] ) ) {
 			$start_attr_codes = array();
 			foreach ( $element['start_code'] as $attrValue ) {
-				if ( strpos( $attrValue, 'return' ) !== false ) {
+				if ( \is_string( $attrValue ) && strpos( $attrValue, 'return' ) !== false ) {
 					$start_attr_code                                = FeedHelper::get_string_between( $attrValue, '{(', ')}' );
 					$tempAttribute                                  = array(
 						'to_return' => $start_attr_code,
@@ -368,32 +371,45 @@ class Custom2Template implements TemplateInterface {
 	}
 
 
+	/**
+	 * Safely evaluate an expression without using eval().
+	 *
+	 * @param string $attribute The expression to evaluate.
+	 *
+	 * @return mixed The result of the evaluation.
+	 * @since 6.6.42 Security fix: Replaced eval() with SafeExpressionEvaluator.
+	 */
 	public function process_eval( $attribute ) {
-		$return = preg_replace( '/\\\\/', '', $attribute );
-
-		return eval( $return );
+		return SafeExpressionEvaluator::evaluate_string( $attribute, array() );
 	}
 
+	/**
+	 * Safely evaluate a return type expression.
+	 *
+	 * @param array       $attribute The attribute configuration.
+	 * @param \WC_Product $product   The product object.
+	 *
+	 * @return mixed The result of the evaluation.
+	 * @since 6.6.42 Security fix: Replaced extract() and eval() with SafeExpressionEvaluator.
+	 */
 	public function getReturnTypeValue( $attribute, $product ) {
 		$variables = array();
-		if ( ! empty( $attribute ) && strpos( $attribute['to_return'], '$' ) !== false ) {
-			$pattern = '/\$\S+/';
-			preg_match_all( $pattern, $attribute['to_return'], $matches, PREG_SET_ORDER );
-			$matches = array_column( $matches, 0 );
-			foreach ( $matches as $variable ) {
-				if ( strpos( $variable, '$' ) !== false ) {
-					$variable                             = str_replace( array( '$', ';' ), '', $variable );
-					$attribute['attr_code']               = $variable;
-					$variables[ $attribute['attr_code'] ] = $this->getAttributeTypeAndValue( $attribute['attr_code'], $product );
+		$to_return = isset( $attribute['to_return'] ) && is_string( $attribute['to_return'] ) ? $attribute['to_return'] : '';
+
+		if ( ! empty( $attribute ) && \is_string( $to_return ) && strpos( $to_return, '$' ) !== false ) {
+			$pattern = '/\$([a-zA-Z_][a-zA-Z0-9_]*)/';
+			preg_match_all( $pattern, $to_return, $matches, PREG_SET_ORDER );
+
+			foreach ( $matches as $match ) {
+				if ( isset( $match[1] ) && is_string( $match[1] ) ) {
+					$variable_name               = $match[1];
+					$variables[ $variable_name ] = $this->getAttributeTypeAndValue( $variable_name, $product );
 				}
 			}
 		}
 
-		extract( $variables, EXTR_OVERWRITE ); // phpcs:ignore
-		$return = $attribute['to_return'];
-		$return = preg_replace( '/\\\\/', '', $return );
-
-		return eval( $return );
+		// Use safe expression evaluator instead of eval()
+		return SafeExpressionEvaluator::evaluate( $to_return, $variables );
 	}
 
 	public function getAttributeTypeAndValue( $attribute, $product ) {

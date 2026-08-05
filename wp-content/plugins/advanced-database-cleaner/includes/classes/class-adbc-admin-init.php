@@ -64,11 +64,11 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 		$tools_menu = ADBC_Settings::instance()->get_setting( 'tools_menu' );
 
 		if ( $left_menu === '1' ) {
-			$this->left_menu = add_menu_page( 'Advanced DB Cleaner', 'WP DB Cleaner', 'manage_options', 'advanced_db_cleaner', [ $this, 'main_page_callback' ], $this->icon_svg, '80.01123' );
+			$this->left_menu = add_menu_page( 'Advanced DB Cleaner', 'DB Cleaner', 'manage_options', 'advanced_db_cleaner', [ $this, 'main_page_callback' ], $this->icon_svg, '80.01123' );
 		}
 
 		if ( $tools_menu === '1' ) {
-			$this->tools_submenu = add_submenu_page( 'tools.php', 'Advanced DB Cleaner', 'WP DB Cleaner', 'manage_options', 'advanced_db_cleaner', [ $this, 'main_page_callback' ], '80.01123' );
+			$this->tools_submenu = add_submenu_page( 'tools.php', 'Advanced DB Cleaner', 'DB Cleaner', 'manage_options', 'advanced_db_cleaner', [ $this, 'main_page_callback' ], '80.01123' );
 		}
 	}
 
@@ -82,7 +82,7 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 		$network_menu = ADBC_Settings::instance()->get_setting( 'network_menu' );
 
 		if ( $network_menu === '1' ) {
-			$this->network_menu = add_menu_page( 'Advanced DB Cleaner', 'WP DB Cleaner', 'manage_network_options', 'advanced_db_cleaner_network', [ $this, 'main_page_callback' ], $this->icon_svg, '80.01123' );
+			$this->network_menu = add_menu_page( 'Advanced DB Cleaner', 'DB Cleaner', 'manage_network_options', 'advanced_db_cleaner_network', [ $this, 'main_page_callback' ], $this->icon_svg, '80.01123' );
 		}
 
 	}
@@ -139,6 +139,7 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 				'actionscheduler_actions_exists' => ADBC_Tables::is_actionscheduler_table_exists( 'actions' ) ? '1' : '0',
 				'actionscheduler_logs_exists' => ADBC_Tables::is_actionscheduler_table_exists( 'logs' ) ? '1' : '0',
 				'php_max_execution_time' => ( $value = (int) ini_get( 'max_execution_time' ) ) > 0 ? $value : 120,
+				'is_woptimize_installed' => self::is_woptimize_installed() ? '1' : '0',
 			)
 		);
 
@@ -305,6 +306,7 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 			ADBC_Files::instance()->create_file( ADBC_Addons_Activity::ADDONS_ACTIVITY_LOG_FILE_PATH );
 			ADBC_Files::instance()->create_file( ADBC_Addons_Activity::ADDONS_ACTIVITY_DICTIONARY );
 			ADBC_Files::instance()->create_file( ADBC_Registered_Post_Types_Dict_Tracker::DICT_FILE_PATH );
+			ADBC_Files::instance()->create_file( ADBC_Scan_Paths::get_custom_addons_dictionary_file_path() );
 		}
 
 	}
@@ -704,8 +706,29 @@ class ADBC_Admin_Init extends ADBC_Singleton {
 	}
 
 	/**
+	 * Check whether the WOptimize pro is installed on the site.
+	 *
+	 * @return bool True if WOptimize Pro plugin is installed, false otherwise.
+	 */
+	public static function is_woptimize_installed() {
+
+		if ( ! function_exists( 'get_plugins' ) )
+			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+		foreach ( array_keys( get_plugins() ) as $plugin_file ) {
+
+			if ( strpos( $plugin_file, 'woptimize-pro' ) === 0 )
+				return true;
+
+		}
+
+		return false;
+
+	}
+
+	/**
 	 * Maybe schedule a conflict notice.
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function maybe_schedule_conflict_notice() {

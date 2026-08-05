@@ -3,7 +3,7 @@
  * Plugin Name:       Advanced Database Cleaner
  * Plugin URI:        https://sigmaplugin.com/downloads/wordpress-advanced-database-cleaner
  * Description:       The most advanced Database Cleaner for WordPress. Clean database by deleting orphaned items such as old "revisions", "old drafts", optimize database, and more.
- * Version:           4.1.1
+ * Version:           4.2.0
  * Author:            SigmaPlugin
  * Author URI:        https://sigmaplugin.com
  * Contributors:      symptote
@@ -47,7 +47,7 @@ if ( ! defined( "ADBC_MAIN_PLUGIN_FILE_PATH" ) )
 	define( "ADBC_MAIN_PLUGIN_FILE_PATH", __FILE__ );
 
 if ( ! defined( 'ADBC_PLUGIN_VERSION' ) )
-	define( 'ADBC_PLUGIN_VERSION', '4.1.1' );
+	define( 'ADBC_PLUGIN_VERSION', '4.2.0' );
 
 class ADBC_Advanced_DB_Cleaner {
 
@@ -236,6 +236,9 @@ class ADBC_Advanced_DB_Cleaner {
 		'ADBC_Automation_Validator' => 'includes/utils/validator/class-adbc-automation-validator.php',
 		'ADBC_Cleanup_Type_Handler' => 'includes/classes/general-cleanup/class-adbc-cleanup-type-handler.php',
 		'ADBC_Cleanup_Type_Registry' => 'includes/classes/general-cleanup/class-adbc-cleanup-type-registry.php',
+		'ADBC_Cleanup_Woocommerce_Orphaned_Customer_Analytics_Handler' => 'includes/classes/general-cleanup/type-handlers/class-adbc-woocommerce-handler.php',
+		'ADBC_Cleanup_Woocommerce_Orphaned_Product_Variations_Handler' => 'includes/classes/general-cleanup/type-handlers/class-adbc-woocommerce-handler.php',
+		'ADBC_Cleanup_Woocommerce_Expired_Sessions_Handler' => 'includes/classes/general-cleanup/type-handlers/class-adbc-woocommerce-handler.php',
 		'ADBC_Collect_Files' => 'includes/premium/classes/scan/process/steps/class-adbc-collect-files.php',
 		'ADBC_Common_Endpoints' => 'includes/endpoints/class-adbc-common-endpoints.php',
 		'ADBC_Common_Model' => 'includes/models/class-adbc-common-model.php',

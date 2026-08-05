@@ -1003,7 +1003,10 @@ class ADBC_Migration {
 			$dir = opendir( $aDBc_upload_dir );
 			while ( ( $file = readdir( $dir ) ) !== false ) {
 				if ( $file != '.' && $file != '..' ) {
-					unlink( $aDBc_upload_dir . "/" . $file );
+					$entry_path = $aDBc_upload_dir . '/' . $file;
+					if ( is_file( $entry_path ) ) {
+						@unlink( $entry_path );
+					}
 				}
 			}
 			closedir( $dir );

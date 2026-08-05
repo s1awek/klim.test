@@ -38,14 +38,14 @@ function flatsome_integrations_scripts() {
 
 add_action( 'wp_enqueue_scripts', 'flatsome_integrations_scripts' );
 
-// WPML Integration.
-if ( function_exists( 'pll_get_post' ) || function_exists( 'icl_object_id' ) ) {
-	require $integrations_url . '/wpml/flatsome-wpml.php';
+// Polylang Integration.
+if ( function_exists( 'pll_get_post' ) ) {
+	require $integrations_url . '/multi-language/polylang/flatsome-polylang.php';
 }
 
-// WCML Integration.
+// WCML (WooCommerce Multilingual) Integration.
 if ( defined( 'WCML_VERSION' ) ) {
-	require $integrations_url . '/wcml/class-wcml.php';
+	require $integrations_url . '/multi-language/wcml/class-wcml.php';
 }
 
 // Contactform7.

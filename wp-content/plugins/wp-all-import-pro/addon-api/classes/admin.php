@@ -17,6 +17,14 @@ class PMXI_Addon_Admin {
     }
 
     public function enqueue() {
+        // Loaded as an ES module; a stray module on unrelated admin pages
+        // invalidates WordPress core's import map in Firefox (strict ordering),
+        // breaking screens such as the WP 7.0 Connectors page. Only load it on
+        // WP All Import's own pages, where it is used.
+        if ( ! $this->is_wp_all_import_page() ) {
+            return;
+        }
+
         wp_enqueue_script( 'pmxi-datepicker', 'https://cdn.jsdelivr.net/npm/air-datepicker@3.3.5/air-datepicker.min.js' );
         wp_enqueue_style( 'pmxi-datepicker', 'https://cdn.jsdelivr.net/npm/air-datepicker@3.3.5/air-datepicker.min.css' );
 
@@ -25,6 +33,14 @@ class PMXI_Addon_Admin {
         wp_localize_script( 'pmxi-addon-admin-script', 'pmxiAddon', [
             'ajaxUrl' => get_rest_url( null, 'wp-all-import/v1/addon/fields' ),
         ] );
+    }
+
+    private function is_wp_all_import_page(): bool {
+        if ( empty( $_GET['page'] ) || ! is_string( $_GET['page'] ) ) {
+            return false;
+        }
+
+        return strpos( sanitize_key( wp_unslash( $_GET['page'] ) ), 'pmxi-' ) === 0;
     }
 
     public function add_type_attribute( $tag, $handle, $src ) {

@@ -103,6 +103,23 @@ class ADBC_Notifications extends ADBC_Singleton {
 			"global" => true,
 			"condition" => [ 'ADBC_Notifications', 'should_show_ltd_migration_notice' ]
 		],
+		"woptimize_notice" => [ 
+			"type" => "info",
+			"message" => "",
+			"is_critical" => false,
+			"dismissible" => true,
+			"save" => true,
+			"global" => false,
+			"condition" => [ 'ADBC_Notifications', 'should_show_woptimize_notice' ]
+		],
+		"woocommerce_not_detected" => [ 
+			"type" => "info",
+			"message" => "",
+			"is_critical" => false,
+			"dismissible" => false,
+			"save" => false,
+			"global" => false,
+		],
 
 	];
 
@@ -296,6 +313,10 @@ class ADBC_Notifications extends ADBC_Singleton {
 		if ( version_compare( get_bloginfo( 'version' ), self::WP_MIN_VERSION, '<' ) )
 			$this->add_notification( 'wp_is_old' );
 
+		// Check if WooCommerce is installed and activated.
+		if ( ! class_exists( 'WooCommerce' ) )
+			$this->add_notification( 'woocommerce_not_detected' );
+
 	}
 
 	/**
@@ -416,6 +437,22 @@ class ADBC_Notifications extends ADBC_Singleton {
 		// Set the LTD migration reminder date to today.
 		ADBC_Settings::instance()->update_settings( [ 'ltd_migration_reminder_date' => date( 'd/m/Y' ) ] );
 		return $this->delete_notification( 'ltd_migration_notice' );
+	}
+
+	/**
+	 * Whether to show the WOptimize promo notice.
+	 * Shows only when WOptimize is not installed yet.
+	 *
+	 * @return bool True if the notice should show.
+	 */
+	private static function should_show_woptimize_notice() {
+
+		// Don't promote WOptimize if it is already installed.
+		if ( ADBC_Admin_Init::is_woptimize_installed() )
+			return false;
+
+		return true;
+
 	}
 
 	/**

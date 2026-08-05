@@ -79,15 +79,15 @@ function pmxi_recursion_taxes($parent, $tx_name, $txes, $key, $do_not_create_ter
 		else{
 			
 			$term = is_exists_term($parent, $tx_name);
-			if ( empty($term) and !is_wp_error($term) ){					
-				$term = is_exists_term(htmlspecialchars($parent), $tx_name);		
-				if ( empty($term) and !is_wp_error($term) ){
+			if ( empty($term) and !is_wp_error($term) ){
+				$term = is_exists_term(htmlspecialchars($parent), $tx_name);
+				if ( empty($do_not_create_terms) && empty($term) && !is_wp_error($term) ){
 					$term = wp_insert_term(
-						$parent, // the term 
-					  	$tx_name // the taxonomy			  	
+						$parent, // the term
+					  	$tx_name // the taxonomy
 					);
 				}
-			}				
+			}
 			return ( ! empty($term) and ! is_wp_error($term)) ? $term['term_id'] : 0;
 			
 		}

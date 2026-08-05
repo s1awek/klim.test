@@ -13,6 +13,13 @@
   "support": {
     "issues": "https://www.wpallimport.com/support"
   },
+  "repositories": [
+    { "type": "vcs", "url": "https://github.com/soflyy/wpai-test-harness" }
+  ],
+  "require-dev": {
+    "soflyy/wpai-test-harness": "dev-master",
+    "phpunit/phpunit": "^9.0"
+  },
   "require": {
     "php": "^7.4 || ^8.0",
     "league/flysystem": "1.1.9",

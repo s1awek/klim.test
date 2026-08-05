@@ -95,10 +95,10 @@ class PMXI_Addon_Repeater_Field extends PMXI_Addon_Field {
     public function parseVariableXml($postId, $value, $data, $logger, $rawData) {
         $template_rows = $rawData['rows'] ?? [];
         $template = array_shift($template_rows);
-        $xml_for_each = ltrim(trim($rawData['foreach'], '{}!'), '/');
+        $xml_for_each = ltrim(trim($rawData['foreach'] ?? '', '{}!'), '/');
 
-        // xpaths
-        $repeater_xpath = '[' . ($data['i'] + 1) . ']/' . $xml_for_each;
+        // Empty foreach must not leave a trailing slash on the xpath.
+        $repeater_xpath = '[' . ($data['i'] + 1) . ']' . ($xml_for_each !== '' ? '/' . $xml_for_each : '');
         $xpath = $data['xpath_prefix'] . $data['import']->xpath . $repeater_xpath;
 
         $row_data = [];
@@ -218,10 +218,15 @@ class PMXI_Addon_Repeater_Field extends PMXI_Addon_Field {
         foreach ($rows as $index => $row) {
             foreach ($this->subfields as $subfield) {
                 if (empty($row)) continue;
+                // Fixed-mode rows for FlexibleContent only carry the keys for
+                // the active block per row — block-A rows lack block-B's
+                // subfield keys and vice versa. Skip subfields the row doesn't
+                // contain rather than emitting an "Undefined array key" warning.
+                if ( ! array_key_exists( $subfield['key'], $row ) ) continue;
 
                 $field_instance = PMXI_Addon_Field::from($subfield, $this->view, $this);
                 $field_value = $row[$subfield['key']];
-                $field_value_raw = $template[$subfield['key']];
+                $field_value_raw = $template[$subfield['key']] ?? $field_value;
 
                 $current_row = $field_instance->beforeImport(
                     $postId,

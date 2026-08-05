@@ -1,4 +1,4 @@
-<div class="wpallimport-collapsed pmxi-addon <?php echo $addon->isAccordionClosed($type, $subtype) ? 'closed' : ''; ?>" data-addon="<?php echo $addon->slug; ?>" data-type="<?php echo $type ?>" data-subtype="<?php echo $subtype; ?>" data-nonce="<?php echo esc_attr(wp_create_nonce('wp_rest')) ?>">
+<div class="wpallimport-collapsed pmxi-addon <?php echo $addon->isAccordionClosed($type, $subtype) ? 'closed' : ''; ?>" data-addon="<?php echo $addon->slug; ?>" data-wpai-section="import-step3-<?php echo esc_attr($addon->slug); ?>-section" data-type="<?php echo $type ?>" data-subtype="<?php echo $subtype; ?>" data-nonce="<?php echo esc_attr(wp_create_nonce('wp_rest')) ?>">
     <div class="wpallimport-content-section">
         <div class="wpallimport-collapsed-header">
             <h3 data-test="toggle"><?php echo $addon->name(); ?></h3>

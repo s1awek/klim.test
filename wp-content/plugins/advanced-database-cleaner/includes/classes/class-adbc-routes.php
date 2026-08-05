@@ -148,21 +148,21 @@ class ADBC_Routes {
 
 		// If the nonce is not set, return false.
 		if ( ! isset( $_SERVER['HTTP_X_WP_NONCE'] ) )
-			return new WP_Error( ADBC_Rest::UNAUTHORIZED, __( 'Security check failed! Invalid nonce.', 'advanced-database-cleaner' ) );
+			return new WP_Error( ADBC_Rest::UNAUTHORIZED, __( 'Security check failed! Invalid nonce.', 'advanced-database-cleaner' ), [ 'status' => ADBC_Rest::UNAUTHORIZED ] );
 
 		// If the nonce is not valid, return false.
 		$nonce = sanitize_key( $_SERVER['HTTP_X_WP_NONCE'] );
 
 		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) )
-			return new WP_Error( ADBC_Rest::UNAUTHORIZED, __( 'Security check failed! Invalid nonce.', 'advanced-database-cleaner' ) );
+			return new WP_Error( ADBC_Rest::UNAUTHORIZED, __( 'Security check failed! Invalid nonce.', 'advanced-database-cleaner' ), [ 'status' => ADBC_Rest::UNAUTHORIZED ] );
 
 		// Check if the user is logged in.
 		if ( ! is_user_logged_in() )
-			return new WP_Error( ADBC_Rest::UNAUTHORIZED, __( 'Unauthorized! You should be logged in.', 'advanced-database-cleaner' ) );
+			return new WP_Error( ADBC_Rest::UNAUTHORIZED, __( 'Unauthorized! You should be logged in.', 'advanced-database-cleaner' ), [ 'status' => ADBC_Rest::UNAUTHORIZED ] );
 
 		// Check if the user has the right permissions.
 		if ( ! current_user_can( 'manage_options' ) )
-			return new WP_Error( ADBC_Rest::UNAUTHORIZED, __( 'Unauthorized! Insufficient permissions.', 'advanced-database-cleaner' ) );
+			return new WP_Error( ADBC_Rest::UNAUTHORIZED, __( 'Unauthorized! Insufficient permissions.', 'advanced-database-cleaner' ), [ 'status' => ADBC_Rest::UNAUTHORIZED ] );
 
 		return true;
 

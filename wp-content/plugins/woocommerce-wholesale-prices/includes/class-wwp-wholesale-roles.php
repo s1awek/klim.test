@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Model that houses the logic of wholesale roles.
  *
  * @since 1.0.0
+ * @since 2.2.9 Harden registered wholesale roles option reads against over-serialized values.
  */
 class WWP_Wholesale_Roles {
 
@@ -53,6 +54,8 @@ class WWP_Wholesale_Roles {
      * Add custom user role.
      *
      * @since 1.0.0
+     * @since 2.2.9 Fall back to a minimal capability set when the WooCommerce 'customer' role is
+     *              unavailable (e.g. multisite sub-site network activation) so the role is always created.
      *
      * @param string $roleKey  Role key.
      * @param string $roleName Role name.
@@ -65,21 +68,28 @@ class WWP_Wholesale_Roles {
 
         $customerRole = $wp_roles->get_role( 'customer' ); // Copy customer role capabilities.
 
-        if ( $customerRole ) {
+        /*
+         * Fall back to a minimal capability set when the WooCommerce 'customer' role is not
+         * registered yet. This happens during multisite network activation on a fresh sub-site
+         * where WooCommerce has not set up its roles for that site; the previous
+         * `if ( $customerRole )` guard skipped role creation entirely, so the subsequent
+         * addCustomCapability() call then fataled with add_cap() on a null role.
+         */
+        $capabilities = $customerRole ? $customerRole->capabilities : array( 'read' => true );
 
-            do_action( 'wwp_action_before_add_custom_role', $roleKey, $roleName, $customerRole->capabilities );
+        do_action( 'wwp_action_before_add_custom_role', $roleKey, $roleName, $capabilities );
 
-            add_role( $roleKey, $roleName, $customerRole->capabilities );
+        add_role( $roleKey, $roleName, $capabilities );
 
-            do_action( 'wwp_action_after_add_custom_role', $roleKey, $roleName, $customerRole->capabilities );
-
-        }
+        do_action( 'wwp_action_after_add_custom_role', $roleKey, $roleName, $capabilities );
     }
 
     /**
      * Add custom capability to a given user role.
      *
      * @since 1.0.0
+     * @since 2.2.9 Guard against a missing role to avoid a fatal `add_cap()` on null during
+     *              multisite network activation.
      *
      * @param string $roleKey Role key.
      * @param string $cap     Capability.
@@ -88,7 +98,13 @@ class WWP_Wholesale_Roles {
         do_action( 'wwp_action_before_add_custom_cap', $roleKey, $cap );
 
         $role = get_role( $roleKey );
-        $role->add_cap( $cap );
+
+        // Guard against a missing role so activation does not fatal with add_cap() on null
+        // (e.g. the role could not be created because the WooCommerce 'customer' role was
+        // unavailable when addCustomRole() ran on a fresh multisite sub-site).
+        if ( $role instanceof WP_Role ) {
+            $role->add_cap( $cap );
+        }
 
         do_action( 'wwp_action_after_add_custom_cap', $roleKey, $cap );
     }
@@ -133,6 +149,7 @@ class WWP_Wholesale_Roles {
      * all custom roles added via this plugin.
      *
      * @since 1.0.0
+     * @since 2.2.9 Read the option through the over-serialization tolerant reader.
      *
      * @param string $roleKey  Role key.
      * @param string $roleName Role name.
@@ -141,7 +158,7 @@ class WWP_Wholesale_Roles {
     public function registerCustomRole( $roleKey, $roleName, $attr ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
         do_action( 'wwp_action_before_register_custom_role', $roleKey, $roleName );
 
-        $registeredCustomRoles = (array) maybe_unserialize( get_option( WWP_OPTIONS_REGISTERED_CUSTOM_ROLES ) );
+        $registeredCustomRoles = $this->get_registered_custom_roles_option();
         $registeredCustomRoles = array_filter( $registeredCustomRoles );
 
         $newRole = array( 'roleName' => $roleName );
@@ -168,13 +185,14 @@ class WWP_Wholesale_Roles {
      * all custom roles added via this plugin.
      *
      * @since 1.0.0
+     * @since 2.2.9 Read the option through the over-serialization tolerant reader.
      *
      * @param string $roleKey  Role key.
      */
     public function unregisterCustomRole( $roleKey ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
         do_action( 'wwp_action_before_unregister_custom_role', $roleKey );
 
-        $registeredCustomRoles = maybe_unserialize( get_option( WWP_OPTIONS_REGISTERED_CUSTOM_ROLES ) );
+        $registeredCustomRoles = $this->get_registered_custom_roles_option();
 
         if ( is_array( $registeredCustomRoles ) && array_key_exists( $roleKey, $registeredCustomRoles ) ) {
             unset( $registeredCustomRoles[ $roleKey ] );
@@ -191,17 +209,67 @@ class WWP_Wholesale_Roles {
      *
      * @since 1.0.0
      * @since 1.3.0 Refactor codebase. Make sure we return an array.
+     * @since 2.2.9 Read the option through the over-serialization tolerant reader.
      * @access public
      *
      * @return array
      */
     public function getAllRegisteredWholesaleRoles() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-        $all_registered_wholesale_roles = maybe_unserialize( get_option( WWP_OPTIONS_REGISTERED_CUSTOM_ROLES ) );
-        if ( ! is_array( $all_registered_wholesale_roles ) ) {
-            $all_registered_wholesale_roles = array();
-        }
+        $all_registered_wholesale_roles = $this->get_registered_custom_roles_option();
 
         return apply_filters( 'wwp_registered_wholesale_roles', $all_registered_wholesale_roles );
+    }
+
+    /**
+     * Read the registered wholesale roles option, tolerating over-serialized values.
+     *
+     * The option is intentionally stored double-serialized: writers pre-serialize the
+     * roles array and update_option() serializes it once more, so a healthy read needs
+     * two unserialize passes (get_option() performs one, this method one more). A faulty
+     * re-save elsewhere can leave the value triple-serialized, which the normal read
+     * cannot resolve — it yields a string, the roles resolve to none, and wholesale
+     * pricing disappears across the store. This method unwraps every serialization layer
+     * until it resolves the array, and when it detects an over-serialized value it
+     * re-saves the option in its canonical form so other readers of the option recover.
+     * That repair is a one-time write performed during a read: it is skipped for healthy
+     * values and stops recurring once the stored value has been normalized.
+     *
+     * @since 2.2.9
+     * @access private
+     *
+     * @return array Registered wholesale roles, or an empty array when none are stored.
+     */
+    private function get_registered_custom_roles_option() {
+        $value  = get_option( WWP_OPTIONS_REGISTERED_CUSTOM_ROLES );
+        $layers = 0;
+
+        // Unwrap every serialization layer; stop when a pass no longer changes the
+        // value so malformed data cannot loop indefinitely.
+        while ( is_string( $value ) && is_serialized( $value ) ) {
+            $unserialized = maybe_unserialize( $value );
+            if ( $unserialized === $value ) {
+                break;
+            }
+            $value = $unserialized;
+            ++$layers;
+        }
+
+        if ( ! is_array( $value ) ) {
+            return array();
+        }
+
+        // get_option() already performs one unserialize pass, so a correctly stored
+        // (double-serialized) value resolves in exactly one unwrap here. More unwraps
+        // mean the stored value was over-serialized, so repair it to the canonical form
+        // so the option's other direct readers recover as well. The autoload argument is
+        // omitted so this read-path repair only corrects the serialized value and leaves
+        // the option's existing autoload setting untouched.
+        $expected_unwrap_layers = 1;
+        if ( $layers > $expected_unwrap_layers ) {
+            update_option( WWP_OPTIONS_REGISTERED_CUSTOM_ROLES, maybe_serialize( $value ) );
+        }
+
+        return $value;
     }
 
     /**

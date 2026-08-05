@@ -2,7 +2,7 @@
 $custom_type = wp_all_import_custom_type( $post_type );
 ?>
 
-<div class="wpallimport-collapsed closed wpallimport-section ">
+<div class="wpallimport-collapsed closed wpallimport-section " data-wpai-section="import-step3-other">
 	<div class="wpallimport-content-section ">
 		<div class="wpallimport-collapsed-header">
 			<h3><?php printf(__('Other %s Options','wp-all-import-pro'), $custom_type->labels->singular_name);?></h3>

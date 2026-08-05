@@ -156,6 +156,7 @@ class WWP_REST_Wholesale_Products_V1_Controller extends WC_REST_Products_Control
      * @since 1.12
      * @since 1.16  Renamed function to get_wholesale_products_meta_query
      * @since 2.1.5 Add additional filter in condition that will check if general discount is set for the current wholesale user
+     * @since 2.2.9 Cast the wholesale price as DECIMAL(10,2) instead of NUMERIC so prices below $1.00 are not truncated to 0.
      * @access public
      * @return array
      */
@@ -182,7 +183,7 @@ class WWP_REST_Wholesale_Products_V1_Controller extends WC_REST_Products_Control
                     'key'     => $wholesale_role . '_wholesale_price',
                     'value'   => 0,
                     'compare' => '>',
-                    'type'    => 'NUMERIC',
+                    'type'    => 'DECIMAL(10,2)',
                 ),
             );
 

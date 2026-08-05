@@ -42,6 +42,18 @@ input.cwgstock_phone {
 	color: white;
 }
 
+/* Allow the button label to wrap on narrow screens (button element supports this, input value did not) */
+.cwgstock_button,
+.cwg_popup_submit {
+	white-space: normal;
+	overflow-wrap: break-word;
+	word-break: break-word;
+	height: auto;
+	line-height: 1.4;
+	text-align: center;
+	cursor: pointer;
+}
+
 .cwginstock-panel-body input[type=text],
 .cwginstock-panel-body input[type=email] {
 	margin-bottom: 15px;

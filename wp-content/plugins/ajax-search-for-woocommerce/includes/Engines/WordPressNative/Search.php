@@ -660,9 +660,8 @@ class Search {
             }
             if ( !empty( $search ) ) {
                 $search = " AND ({$search}) ";
-                if ( !is_user_logged_in() ) {
-                    $search .= " AND ({$wpdb->posts}.post_password = '') ";
-                }
+                // Password-protected products are never searchable, regardless of the login state.
+                $search .= " AND ({$wpdb->posts}.post_password = '') ";
             }
         }
         return $search;

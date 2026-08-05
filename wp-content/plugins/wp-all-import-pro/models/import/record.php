@@ -1358,13 +1358,18 @@ class PMXI_Import_Record extends PMXI_Model_Record {
 
             if ( $this->is_parsing_required('is_update_custom_fields') ){
                 foreach ($this->options['custom_name'] as $j => $custom_name) {
+                    // Skip stub rows — XmlImportParser fails on an empty template.
+                    if (!is_string($custom_name) || trim($custom_name) === '') {
+                        continue;
+                    }
+                    $custom_value = isset($this->options['custom_value'][$j]) ? $this->options['custom_value'][$j] : '';
                     $meta_keys[$j]   = XmlImportParser::factory($xml, $cxpath, $custom_name, $file)->parse($records); $tmp_files[] = $file;
-                    if (is_serialized($this->options['custom_value'][$j])){
-                        $meta_values[$j] = array_fill(0, count($titles), $this->options['custom_value'][$j]);
+                    if (is_serialized($custom_value)){
+                        $meta_values[$j] = array_fill(0, count($titles), $custom_value);
                     }
                     else{
-                        if ('' != $this->options['custom_value'][$j] and ! is_serialized($this->options['custom_value'][$j])){
-                            $meta_values[$j] = XmlImportParser::factory($xml, $cxpath, $this->options['custom_value'][$j], $file)->parse($records); $tmp_files[] = $file;
+                        if ('' != $custom_value and ! is_serialized($custom_value)){
+                            $meta_values[$j] = XmlImportParser::factory($xml, $cxpath, $custom_value, $file)->parse($records); $tmp_files[] = $file;
                             // mapping custom fields
 
                             if ( ! empty($this->options['custom_mapping_rules'][$j])){

@@ -159,7 +159,7 @@ class ADBC_Common_Validator {
 		$answer = [ "success" => false, "message" => "", "data" => []];
 
 		// Check items type is valid
-		if ( ! in_array( $items_type, [ 'options', 'transients', 'posts_meta', 'users_meta', 'revisions', 'auto_drafts', 'trashed_posts', 'unapproved_comments', 'spam_comments', 'trashed_comments', 'pingbacks', 'trackbacks', 'unused_postmeta', 'duplicated_postmeta', 'unused_commentmeta', 'duplicated_commentmeta', 'unused_usermeta', 'duplicated_usermeta', 'unused_termmeta', 'duplicated_termmeta', 'unused_relationships', 'expired_transients', 'oembed_caches', 'actionscheduler_completed_actions', 'actionscheduler_failed_actions', 'actionscheduler_canceled_actions', 'actionscheduler_completed_logs', 'actionscheduler_failed_logs', 'actionscheduler_canceled_logs', 'actionscheduler_orphan_logs' ], true ) )
+		if ( ! in_array( $items_type, [ 'options', 'transients', 'posts_meta', 'users_meta', 'revisions', 'auto_drafts', 'trashed_posts', 'unapproved_comments', 'spam_comments', 'trashed_comments', 'pingbacks', 'trackbacks', 'unused_postmeta', 'duplicated_postmeta', 'unused_commentmeta', 'duplicated_commentmeta', 'unused_usermeta', 'duplicated_usermeta', 'unused_termmeta', 'duplicated_termmeta', 'unused_relationships', 'expired_transients', 'oembed_caches', 'actionscheduler_completed_actions', 'actionscheduler_failed_actions', 'actionscheduler_canceled_actions', 'actionscheduler_completed_logs', 'actionscheduler_failed_logs', 'actionscheduler_canceled_logs', 'actionscheduler_orphan_logs', 'woocommerce_orphaned_customer_analytics', 'woocommerce_orphaned_product_variations' ], true ) )
 			$answer['message'] = "Invalid items type.";
 
 		// Check site ID is valid
@@ -313,6 +313,20 @@ class ADBC_Common_Validator {
 					'table_name' => $site_prefix . 'actionscheduler_logs',
 					'column_id' => "log_id",
 					'column_name' => "message"
+				];
+				break;
+			case 'woocommerce_orphaned_customer_analytics':
+				$answer['data'] = [ 
+					'table_name' => $site_prefix . 'wc_customer_lookup',
+					'column_id' => "customer_id",
+					'column_name' => "email"
+				];
+				break;
+			case 'woocommerce_orphaned_product_variations':
+				$answer['data'] = [ 
+					'table_name' => $site_prefix . 'posts',
+					'column_id' => "ID",
+					'column_name' => "post_content"
 				];
 				break;
 		}
@@ -489,23 +503,51 @@ class ADBC_Common_Validator {
 			return $generic_error_msg . ' #1';
 
 		$correction_category = $manual_categorization['type'];
-		if ( ! in_array( $correction_category, [ 'p', 't', 'w', 'o', 'u' ] ) )
+		if ( ! is_string( $correction_category ) || ! in_array( $correction_category, [ 'p', 't', 'w', 'o', 'u' ], true ) )
 			return $generic_error_msg . ' #2';
 
 		$slug = $manual_categorization['slug'];
-
-		if ( in_array( $correction_category, [ 'w', 'o', 'u' ] ) && ! in_array( $slug, [ 'w', 'o', 'u' ] ) )
+		if ( ! is_string( $slug ) )
 			return $generic_error_msg . ' #3';
 
-		if ( $correction_category === 'p' && ! ADBC_Plugins::instance()->is_plugin_slug_currently_installed( $slug ) )
-			return $generic_error_msg . ' #4';
+		$is_custom = key_exists( 'is_custom', $manual_categorization );
+		if ( $is_custom && ! in_array( $manual_categorization['is_custom'], [ true, 1, '1' ], true ) )
+			return $generic_error_msg . ' #7';
 
-		if ( $correction_category === 't' && ! ADBC_Themes::instance()->is_theme_slug_currently_installed( $slug ) )
-			return $generic_error_msg . ' #5';
+		if ( $is_custom ) {
+
+			// Custom addons are stored as regular plugin/theme manual corrections, but do not need to be installed.
+			if ( ! in_array( $correction_category, [ 'p', 't' ], true ) )
+				return $generic_error_msg . ' #8';
+
+			// WordPress-compatible slugs: lowercase ASCII letters, numbers, hyphens and underscores.
+			if ( strlen( $slug ) > 200 || preg_match( '/^[a-z0-9_-]+$/', $slug ) !== 1 )
+				return $generic_error_msg . ' #9';
+
+			if ( ! key_exists( 'name', $manual_categorization ) || ! is_string( $manual_categorization['name'] ) )
+				return $generic_error_msg . ' #10';
+
+			$addon_name = trim( $manual_categorization['name'] );
+			$addon_name_length = preg_match_all( '/./us', $addon_name ); // Count the number of Unicode characters in the string.
+			if ( $addon_name === '' || $addon_name_length === false || $addon_name_length > 200 || preg_match( '/[\x00-\x1F\x7F]/', $addon_name ) )
+				return $generic_error_msg . ' #11';
+
+		} else {
+
+			if ( in_array( $correction_category, [ 'w', 'o', 'u' ], true ) && ! in_array( $slug, [ 'w', 'o', 'u' ], true ) )
+				return $generic_error_msg . ' #3';
+
+			if ( $correction_category === 'p' && ! ADBC_Plugins::instance()->is_plugin_slug_currently_installed( $slug ) )
+				return $generic_error_msg . ' #4';
+
+			if ( $correction_category === 't' && ! ADBC_Themes::instance()->is_theme_slug_currently_installed( $slug ) )
+				return $generic_error_msg . ' #5';
+
+		}
 
 		$send_correction_to_server = $manual_categorization['send_to_server'];
 
-		if ( ! in_array( $send_correction_to_server, [ '0', '1' ] ) )
+		if ( ! in_array( $send_correction_to_server, [ '0', '1' ], true ) )
 			return $generic_error_msg . ' #6';
 
 		return true;

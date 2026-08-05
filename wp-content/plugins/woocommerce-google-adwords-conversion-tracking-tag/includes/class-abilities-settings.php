@@ -41,7 +41,7 @@ class Abilities_Settings {
 	 *
 	 * Group fields:
 	 * - label:    Human-readable group name.
-	 * - category: marketing | statistics | optimization | plugin
+	 * - category: marketing | statistics | attribution | optimization | plugin
 	 * - is_pixel: Whether the group is a tracking destination (configurable
 	 *             through pmw/configure-pixel) or a plugin-level settings group.
 	 * - settings: Map of short setting key to setting definition.
@@ -65,7 +65,7 @@ class Abilities_Settings {
 	 */
 	public static function get_catalog() {
 
-		return [
+		$catalog = [
 			'google_ads'    => [
 				'label'    => 'Google Ads',
 				'category' => 'marketing',
@@ -97,7 +97,7 @@ class Abilities_Settings {
 						'path'        => 'google.ads.product_identifier',
 						'type'        => 'integer',
 						'label'       => 'Product identifier',
-						'description' => 'Which product identifier is sent with dynamic remarketing and cart data events. Must match the product IDs in the connected Merchant Center feed. 0 = post ID (default), 2 = SKU, 1 = post ID with woocommerce_gpf_ prefix (WooCommerce Google Product Feed plugin), 3 = post ID with gla_ prefix (Google for WooCommerce plugin).',
+						'description' => 'Which product identifier is sent with dynamic remarketing and cart data events. Must match the product IDs in the connected Merchant Center feed. 0 = post ID (default), 2 = SKU, 1 = post ID with woocommerce_gpf_ prefix (WooCommerce Google Product Feed plugin), 3 = post ID with gla_ prefix (Google for WooCommerce plugin, formerly named Google Listings & Ads).',
 						'enum'        => [ 0, 1, 2, 3 ],
 						'advanced'    => true,
 						'benefit'     => 'Aligns the tracked product IDs with the Merchant Center feed so dynamic remarketing and cart data match products correctly.',
@@ -618,6 +618,112 @@ class Abilities_Settings {
 					],
 				],
 			],
+			'groundtruth'   => [
+				'label'    => 'GroundTruth',
+				'category' => 'marketing',
+				'is_pixel' => true,
+				'settings' => [
+					'gtid' => [
+						'path'        => 'pixels.groundtruth.gtid',
+						'type'        => 'string',
+						'label'       => 'GTID',
+						'description' => 'GroundTruth unique identifier (GTID). Provided by a GroundTruth representative. One GTID covers all campaigns of an Ads Manager account.',
+						'required'    => true,
+					],
+				],
+			],
+			'criteo'        => [
+				'label'    => 'Criteo',
+				'category' => 'marketing',
+				'is_pixel' => true,
+				'settings' => [
+					'account_id'        => [
+						'path'        => 'pixels.criteo.account_id',
+						'type'        => 'string',
+						'label'       => 'Account ID',
+						'description' => 'Criteo account ID (partner ID), a numeric ID. Found in Criteo Commerce Growth under Event Tracking, or provided by a Criteo representative.',
+						'required'    => true,
+					],
+					'advanced_matching' => [
+						'path'        => 'pixels.criteo.advanced_matching',
+						'type'        => 'boolean',
+						'label'       => 'Advanced matching',
+						'description' => 'Sends the SHA-256 hashed email address of logged-in customers and purchasers to Criteo with each event.',
+						'advanced'    => true,
+						'benefit'     => 'Improves Criteo audience match rates and attribution accuracy.',
+					],
+				],
+			],
+			'nextdoor'      => [
+				'label'    => 'Nextdoor',
+				'category' => 'marketing',
+				'is_pixel' => true,
+				'settings' => [
+					'pixel_id'          => [
+						'path'        => 'pixels.nextdoor.pixel_id',
+						'type'        => 'string',
+						'label'       => 'Pixel ID',
+						'description' => 'Nextdoor pixel ID, a UUID. Found in Nextdoor Ads Manager under Assets > Pixels.',
+						'required'    => true,
+					],
+					'advanced_matching' => [
+						'path'        => 'pixels.nextdoor.advanced_matching',
+						'type'        => 'boolean',
+						'label'       => 'Advanced matching',
+						'description' => 'Sends the SHA-256 hashed email address of logged-in customers and purchasers to Nextdoor with each event.',
+						'advanced'    => true,
+						'benefit'     => 'Improves Nextdoor audience match rates and attribution accuracy.',
+					],
+					'capi.token'        => [
+						'path'        => 'pixels.nextdoor.capi.token',
+						'type'        => 'string',
+						'label'       => 'Conversion API token',
+						'description' => 'Nextdoor Conversion API bearer token. Generated in Nextdoor Ads Manager under the Ads API settings (Generate token).',
+						'secret'      => true,
+						'advanced'    => true,
+						'benefit'     => 'Enables server-side tracking through the Nextdoor Conversion API, which recovers conversions lost to ad blockers and browser restrictions.',
+					],
+					'capi.test_event_code' => [
+						'path'        => 'pixels.nextdoor.capi.test_event_code',
+						'type'        => 'string',
+						'label'       => 'Conversion API test event code',
+						'description' => 'Marks Conversion API events as test events in Nextdoor. Remove it after testing.',
+						'advanced'    => true,
+						'benefit'     => 'Lets you verify server-side events in Nextdoor without polluting real conversion data.',
+					],
+				],
+			],
+			'openai'        => [
+				'label'    => 'OpenAI',
+				'category' => 'marketing',
+				'is_pixel' => true,
+				'settings' => [
+					'pixel_id'          => [
+						'path'        => 'pixels.openai.pixel_id',
+						'type'        => 'string',
+						'label'       => 'Pixel ID',
+						'description' => 'OpenAI ads pixel ID. Created in the conversions tab of the OpenAI Ads Manager.',
+						'required'    => true,
+					],
+					'advanced_matching' => [
+						'path'        => 'pixels.openai.advanced_matching',
+						'type'        => 'boolean',
+						'label'       => 'Advanced matching',
+						'description' => 'Sends hashed customer identifiers (such as the email address) to OpenAI with each event.',
+						'advanced'    => true,
+						'benefit'     => 'Improves OpenAI event match rates and attribution accuracy.',
+					],
+					'capi.token'        => [
+						'path'        => 'pixels.openai.capi.token',
+						'type'        => 'string',
+						'label'       => 'Conversions API token',
+						'description' => 'OpenAI Conversions API token (API key), sent as a bearer token. Created in the OpenAI Ads Manager.',
+						'secret'      => true,
+						'advanced'    => true,
+						'benefit'     => 'Enables server-side tracking through the OpenAI Conversions API, which recovers conversions lost to ad blockers and browser restrictions.',
+					],
+				],
+			],
 			'vwo'           => [
 				'label'    => 'VWO',
 				'category' => 'optimization',
@@ -685,6 +791,51 @@ class Abilities_Settings {
 						'label'       => 'Project ID',
 						'description' => 'Microsoft Clarity project ID. Found in the Clarity project settings under Setup, or in the Clarity tracking-code snippet.',
 						'required'    => true,
+					],
+				],
+			],
+			'triple_whale'  => [
+				'label'    => 'Triple Whale',
+				'category' => 'attribution',
+				'is_pixel' => true,
+				'settings' => [
+					'enabled'          => [
+						'path'        => 'pixels.triple_whale.enabled',
+						'type'        => 'boolean',
+						'label'       => 'Enable Triple Whale',
+						'description' => 'Enables the Triple Whale pixel. The shop is identified by its domain, which must match the Shop URL configured in Triple Whale under Settings > Store. No pixel ID is required.',
+						'required'    => true,
+					],
+					'orders_api_token' => [
+						'path'        => 'pixels.triple_whale.orders_api.token',
+						'type'        => 'string',
+						'label'       => 'Orders API key',
+						'description' => 'Triple Whale API key with the "Orders: Write" scope. Created in Triple Whale under Data > APIs. Enables server-side order sync to the Triple Whale Orders API.',
+						'advanced'    => true,
+						'benefit'     => 'Sends order records (including refunds) directly to Triple Whale, so attribution works without connecting the store\'s REST API to Triple Whale.',
+						'secret'      => true,
+					],
+				],
+			],
+			'hyros'         => [
+				'label'    => 'Hyros',
+				'category' => 'attribution',
+				'is_pixel' => true,
+				'settings' => [
+					'product_hash'    => [
+						'path'        => 'pixels.hyros.product_hash',
+						'type'        => 'string',
+						'label'       => 'Product hash',
+						'description' => 'Hyros product hash, the ph value of the Hyros Universal Script. Found in Hyros under Tracking > Universal Script. The whole script snippet or the script URL can be pasted here as well, the product hash is extracted from it automatically.',
+						'required'    => true,
+					],
+					'application_tag' => [
+						'path'        => 'pixels.hyros.application_tag',
+						'type'        => 'string',
+						'label'       => 'Application tag',
+						'description' => 'The tag Hyros attributes to a visitor on landing. Configured in Hyros under Tracking > Universal Script in the Application Tag field. Leave empty to use the Hyros default of !clicked.',
+						'advanced'    => true,
+						'benefit'     => 'Separates shop traffic from other funnels running on the same Hyros account.',
 					],
 				],
 			],
@@ -777,6 +928,8 @@ class Abilities_Settings {
 				],
 			],
 		];
+
+		return $catalog;
 	}
 
 	/**
@@ -1052,6 +1205,7 @@ class Abilities_Settings {
 		$active_count     = 0;
 		$has_marketing    = false;
 		$has_statistics   = false;
+		$has_attribution  = false;
 
 		foreach ($pixels as $pixel) {
 
@@ -1069,6 +1223,10 @@ class Abilities_Settings {
 				if ('statistics' === $pixel['category']) {
 					$has_statistics = true;
 				}
+
+				if ('attribution' === $pixel['category']) {
+					$has_attribution = true;
+				}
 			}
 		}
 
@@ -1081,6 +1239,7 @@ class Abilities_Settings {
 				'pixels_active'         => $active_count,
 				'has_marketing_pixel'   => $has_marketing,
 				'has_statistics_pixel'  => $has_statistics,
+				'has_attribution_pixel' => $has_attribution,
 				'tier'                  => $is_pro ? 'pro' : 'free',
 				'write_enabled'         => self::is_write_enabled(),
 			],

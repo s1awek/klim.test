@@ -8,6 +8,7 @@ import { __, _n, sprintf } from "@wordpress/i18n";
 /* eslint-disable no-unused-vars */
 const variable = "";
 const translations = [
+  __("New!", "advanced-database-cleaner"),
   __("Collapse sidebar", "advanced-database-cleaner"),
   __("Expand sidebar", "advanced-database-cleaner"),
   __("Free", "advanced-database-cleaner"),
@@ -42,11 +43,24 @@ const translations = [
   __("Transients", "advanced-database-cleaner"),
   __("Cron jobs", "advanced-database-cleaner"),
   __("Post types", "advanced-database-cleaner"),
+  __("WooCommerce", "advanced-database-cleaner"),
   __("Automation", "advanced-database-cleaner"),
   __("DB analytics", "advanced-database-cleaner"),
   __("Addons activity", "advanced-database-cleaner"),
   __("Info & logs", "advanced-database-cleaner"),
   __("Settings", "advanced-database-cleaner"),
+  __("Orphaned product variations", "advanced-database-cleaner"),
+  __("Variations no longer attached to any parent product.", "advanced-database-cleaner"),
+  __("Orphaned customer analytics", "advanced-database-cleaner"),
+  __(
+    "WooCommerce customer-lookup rows referencing users that no longer exist.",
+    "advanced-database-cleaner"
+  ),
+  __("Expired customer sessions", "advanced-database-cleaner"),
+  __(
+    "Customer session rows in wp_woocommerce_sessions whose expiry date has passed.",
+    "advanced-database-cleaner"
+  ),
   sprintf(
     // translators: %s is the REST URL the plugin tried to reach.
     __(
@@ -204,6 +218,10 @@ const translations = [
   __("Post ID", "advanced-database-cleaner"),
   __("Meta key", "advanced-database-cleaner"),
   __("Meta value", "advanced-database-cleaner"),
+  __("Customer lookup ID", "advanced-database-cleaner"),
+  __("Missing user ID", "advanced-database-cleaner"),
+  __("Email address", "advanced-database-cleaner"),
+  __("Username", "advanced-database-cleaner"),
   __("Object ID", "advanced-database-cleaner"),
   __("Term taxonomy ID", "advanced-database-cleaner"),
   __("Term order", "advanced-database-cleaner"),
@@ -251,6 +269,8 @@ const translations = [
   __("Actionscheduler failed logs", "advanced-database-cleaner"),
   __("Actionscheduler canceled logs", "advanced-database-cleaner"),
   __("Actionscheduler orphan logs", "advanced-database-cleaner"),
+  __("Orphaned product variations", "advanced-database-cleaner"),
+  __("Orphaned customer analytics", "advanced-database-cleaner"),
   __("Repair tables", "advanced-database-cleaner"),
   __("Optimize tables", "advanced-database-cleaner"),
   __("Completed actions", "advanced-database-cleaner"),
@@ -344,6 +364,30 @@ const translations = [
   ),
   __("Remote Scan Credits", "advanced-database-cleaner"),
   __("Remote Scan Credits:", "advanced-database-cleaner"),
+  __("Recommended for WooCommerce stores", "advanced-database-cleaner"),
+  __("Speed up & clean your WooCommerce store with WOptimize", "advanced-database-cleaner"),
+  __(
+    "WOptimize is the ultimate solution to clean and speed up your WooCommerce store, it removes old orders, expired sessions, orphaned product and customer data, stale carts and caches, then optimizes what remains, all on autopilot.",
+    "advanced-database-cleaner"
+  ),
+  __("Exclusive deal for you", "advanced-database-cleaner"),
+  __("Need more WooCommerce optimization?", "advanced-database-cleaner"),
+  __(
+    "We built WOptimize, an advanced cleaner that hunts down WooCommerce bloat and clears it in one click: Old orders, Orphaned products/customers meta, expired sessions, etc.",
+    "advanced-database-cleaner"
+  ),
+  __("Faster checkout", "advanced-database-cleaner"),
+  __("Lighter database", "advanced-database-cleaner"),
+  __("Safe one-click cleanup", "advanced-database-cleaner"),
+  __("Dismiss", "advanced-database-cleaner"),
+  __("Launch offer", "advanced-database-cleaner"),
+  sprintf(
+    /* translators: %d: discount percentage. */
+    __("%d%% OFF", "advanced-database-cleaner"),
+    variable
+  ),
+  __("Use code", "advanced-database-cleaner"),
+  __("I want to try it", "advanced-database-cleaner"),
   __("Not supported!", "advanced-database-cleaner"),
   __("Cancel", "advanced-database-cleaner"),
   __("Don't forget to make a backup of your database first!", "advanced-database-cleaner"),
@@ -396,7 +440,6 @@ const translations = [
   __("Contact us for personalized assistance", "advanced-database-cleaner"),
   __("Get help with technical issues, billing ...", "advanced-database-cleaner"),
   __("Read more", "advanced-database-cleaner"),
-  __("Dismiss", "advanced-database-cleaner"),
   __("Confirm", "advanced-database-cleaner"),
   __("All", "advanced-database-cleaner"),
   __("Activation", "advanced-database-cleaner"),
@@ -516,6 +559,11 @@ const translations = [
     "advanced-database-cleaner"
   ),
   __("Available in the premium version.", "advanced-database-cleaner"),
+  sprintf(
+    /* translators: %s: WooCommerce cleanup item label. */
+    __("WooCommerce: %s", "advanced-database-cleaner"),
+    variable
+  ),
   __("Action Scheduler completed actions", "advanced-database-cleaner"),
   __("Action Scheduler failed actions", "advanced-database-cleaner"),
   __("Action Scheduler canceled actions", "advanced-database-cleaner"),
@@ -929,6 +977,41 @@ const translations = [
     "advanced-database-cleaner"
   ),
   __("User ID", "advanced-database-cleaner"),
+  sprintf(
+    /* translators: %s: cleanup item label. */
+    __("Purge %s?", "advanced-database-cleaner"),
+    variable
+  ),
+  __("This action cannot be undone!", "advanced-database-cleaner"),
+  __(
+    "All items will be permanently deleted. This action cannot be undone!",
+    "advanced-database-cleaner"
+  ),
+  __("Purge", "advanced-database-cleaner"),
+  __("Purge all item types?", "advanced-database-cleaner"),
+  __(
+    "All matching items will be permanently deleted. This action cannot be undone!",
+    "advanced-database-cleaner"
+  ),
+  __("Purge all", "advanced-database-cleaner"),
+  __("Purge completed successfully!", "advanced-database-cleaner"),
+  __(
+    "WooCommerce is not installed or activated. Please install and activate WooCommerce to use this feature.",
+    "advanced-database-cleaner"
+  ),
+  __("Refresh all", "advanced-database-cleaner"),
+  __("Purging…", "advanced-database-cleaner"),
+  __("No count", "advanced-database-cleaner"),
+  __("Scanning…", "advanced-database-cleaner"),
+  sprintf(
+    /* translators: 1: item count, 2: human-readable size. */
+    __("View %1$s items (%2$s)", "advanced-database-cleaner"),
+    variable,
+    variable
+  ),
+  __("items", "advanced-database-cleaner"),
+  __("n/a", "advanced-database-cleaner"),
+  __("All clean", "advanced-database-cleaner"),
   __("Inactive", "advanced-database-cleaner"),
   __("Not installed", "advanced-database-cleaner"),
   __("Known plugins using this item", "advanced-database-cleaner"),
@@ -1017,17 +1100,23 @@ const translations = [
     "advanced-database-cleaner"
   ),
   __("Items per page", "advanced-database-cleaner"),
-  __("Plugin", "advanced-database-cleaner"),
-  __("Theme", "advanced-database-cleaner"),
+  __("Installed plugin", "advanced-database-cleaner"),
+  __("Installed theme", "advanced-database-cleaner"),
   __("WordPress", "advanced-database-cleaner"),
   __("Orphan", "advanced-database-cleaner"),
   __("Don't assign to any category", "advanced-database-cleaner"),
+  __("Assign to custom addon", "advanced-database-cleaner"),
   __("Select a plugin", "advanced-database-cleaner"),
   __("Select a theme", "advanced-database-cleaner"),
   __(
     "A scan is in progress. Please wait until it finishes before performing this action",
     "advanced-database-cleaner"
   ),
+  __(
+    "Use a maximum of 200 lowercase letters, numbers, hyphens, and underscores only.",
+    "advanced-database-cleaner"
+  ),
+  __("Enter the addon's name using a maximum of 200 characters.", "advanced-database-cleaner"),
   sprintf(
     /* translators: %d: number of selected items */
     __("Assign the %d selected item(s) to:", "advanced-database-cleaner"),
@@ -1037,6 +1126,17 @@ const translations = [
     "Items will not be assigned to any plugin/theme and will be marked as 'not scanned'",
     "advanced-database-cleaner"
   ),
+  __("Assign items to a plugin or theme that is no longer installed.", "advanced-database-cleaner"),
+  __("Saved custom addons", "advanced-database-cleaner"),
+  __("Search saved custom addons", "advanced-database-cleaner"),
+  __("No custom addons found.", "advanced-database-cleaner"),
+  __("Addon type", "advanced-database-cleaner"),
+  __("Plugin", "advanced-database-cleaner"),
+  __("Theme", "advanced-database-cleaner"),
+  __("Slug", "advanced-database-cleaner"),
+  __("e.g. my-custom-plugin", "advanced-database-cleaner"),
+  __("Addon's name", "advanced-database-cleaner"),
+  __("e.g. My Custom Plugin", "advanced-database-cleaner"),
   __("This correction will be sent anonymously to our server", "advanced-database-cleaner"),
   __(
     "You have chosen to submit your manual corrections to the plugin server. To change this, please navigate to the plugin settings page",

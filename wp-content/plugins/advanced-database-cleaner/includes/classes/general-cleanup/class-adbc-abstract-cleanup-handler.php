@@ -129,6 +129,16 @@ abstract class ADBC_Abstract_Cleanup_Handler implements ADBC_Cleanup_Type_Handle
 	}
 
 	/**
+	 * Whether detailed list rows should include and support filtering by size.
+	 * Summary counts can still calculate their aggregate size independently.
+	 *
+	 * @return bool
+	 */
+	protected function include_size_in_list() {
+		return true;
+	}
+
+	/**
 	 * These methods can be overridden by subclasses to provide the necessary
 	 * information about the "keep last" mode used by this handler.
 	 * by default from_total override by per-parent rule if needed (must set the parent column)
@@ -332,7 +342,9 @@ abstract class ADBC_Abstract_Cleanup_Handler implements ADBC_Cleanup_Type_Handle
 			$columns[] = "{$this->truncated_value()} AS {$this->value_column()}";
 		}
 
-		$columns[] = "{$this->size_expression()} AS size";
+		if ( $this->include_size_in_list() ) {
+			$columns[] = "{$this->size_expression()} AS size";
+		}
 		$columns[] = "{$site_id} AS site_id";
 		$columns = array_merge( $columns, $this->extra_select() ); // extra select columns
 
@@ -452,6 +464,10 @@ abstract class ADBC_Abstract_Cleanup_Handler implements ADBC_Cleanup_Type_Handle
 	protected function size_filter( $args ) {
 
 		global $wpdb;
+
+		if ( ! $this->include_size_in_list() ) {
+			return '';
+		}
 
 		// We check if there are args since it can be called by the count method without args
 		$size = $args['size'] ?? 0;
@@ -678,7 +694,9 @@ abstract class ADBC_Abstract_Cleanup_Handler implements ADBC_Cleanup_Type_Handle
 		$columns[] = "main.{$this->pk()}";
 		$columns[] = "main.{$this->name_column()}";
 		$columns[] = "{$this->truncated_value()} AS {$this->value_column()}";
-		$columns[] = "{$this->size_expression()} AS size";
+		if ( $this->include_size_in_list() ) {
+			$columns[] = "{$this->size_expression()} AS size";
+		}
 		$columns[] = "{$site_id} AS site_id";
 		$columns = array_merge( $columns, $this->extra_select() );
 

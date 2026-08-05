@@ -4,10 +4,12 @@ namespace SweetCode\Pixel_Manager\Pixels;
 
 use SweetCode\Pixel_Manager\Admin\Environment;
 use SweetCode\Pixel_Manager\Admin\LTV;
+use SweetCode\Pixel_Manager\Admin\Order_Columns;
 use SweetCode\Pixel_Manager\Admin\Validations;
 use SweetCode\Pixel_Manager\Data\GA4_Data_API;
 use SweetCode\Pixel_Manager\Pixels\ABTasty\AB_Tasty;
 use SweetCode\Pixel_Manager\Pixels\Core\Pixel_Registry;
+use SweetCode\Pixel_Manager\Pixels\Facebook\Facebook;
 use SweetCode\Pixel_Manager\Pixels\Facebook\Facebook_CAPI;
 use SweetCode\Pixel_Manager\Pixels\Google\Google_MP_GA4;
 use SweetCode\Pixel_Manager\Pixels\Google\Google_Helpers;
@@ -19,7 +21,10 @@ use SweetCode\Pixel_Manager\Pixels\Pinterest\Pinterest_APIC;
 use SweetCode\Pixel_Manager\Pixels\Snapchat\Snapchat_CAPI;
 use SweetCode\Pixel_Manager\Pixels\Reddit\Reddit_CAPI;
 use SweetCode\Pixel_Manager\Pixels\OpenAI\OpenAI_CAPI;
+use SweetCode\Pixel_Manager\Pixels\Nextdoor\Nextdoor_CAPI;
+use SweetCode\Pixel_Manager\Pixels\TripleWhale\Triple_Whale_API;
 use SweetCode\Pixel_Manager\Pixels\VWO\VWO;
+use SweetCode\Pixel_Manager\First_Event_Confirmation;
 use SweetCode\Pixel_Manager\Geolocation;
 use SweetCode\Pixel_Manager\Helpers;
 use SweetCode\Pixel_Manager\Logger;
@@ -123,10 +128,14 @@ class Pixel_Manager {
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\AdRoll_Descriptor',
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Outbrain_Descriptor',
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Taboola_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\GroundTruth_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Criteo_Descriptor',
             // Statistics pixels
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Hotjar_Descriptor',
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Crazyegg_Descriptor',
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Clarity_Descriptor',
+            // Attribution pixels
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Hyros_Descriptor',
             // Optimization pixels
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\VWO_Descriptor',
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Optimizely_Descriptor',
@@ -215,7 +224,12 @@ class Pixel_Manager {
                 2
             );
             add_action( 'woocommerce_mini_cart_contents', [$this, 'woocommerce_mini_cart_contents'] );
-            add_action( 'woocommerce_new_order', [$this, 'pmw_woocommerce_new_order'] );
+            add_action(
+                'woocommerce_new_order',
+                [$this, 'pmw_woocommerce_new_order'],
+                10,
+                2
+            );
             // Bucket orders_total against the *final* payment gateway, not the gateway at order creation.
             // Some gateways (Affirm, wallets) overwrite payment_method between creation and payment, which
             // would otherwise inflate the destination gateway's percentage above 100% and deflate the source
@@ -385,6 +399,32 @@ class Pixel_Manager {
                 return true;
             },
         ] );
+        /**
+         * One-shot first-run beacon: the storefront reports which pixels
+         * loaded, once, while the onboarding checklist is waiting for its
+         * "pixels are live" confirmation. Only registered while that state
+         * can still occur (fresh install, nothing confirmed yet), and the
+         * handler re-checks before writing, so the write-once semantic
+         * holds even across races and cached pages. No nonce for the same
+         * cache-tolerance reason as /pixels-fired/; the payload is reduced
+         * to a validated slug list before it touches the option.
+         */
+        if ( First_Event_Confirmation::is_beacon_needed() ) {
+            // nosemgrep: audit.php.wp.security.rest-route.permission-callback.return-true
+            register_rest_route( $this->rest_namespace, '/onboarding/pixels-live/', [
+                'methods'             => 'POST',
+                'callback'            => function ( $request ) {
+                    $data = Helpers::generic_sanitization( $request->get_json_params() );
+                    if ( First_Event_Confirmation::record_pixels_live( ( is_array( $data ) ? $data : [] ) ) ) {
+                        wp_send_json_success();
+                    }
+                    wp_send_json_error( 'Confirmation not accepted' );
+                },
+                'permission_callback' => function () {
+                    return true;
+                },
+            ] );
+        }
     }
 
     /**
@@ -774,8 +814,17 @@ class Pixel_Manager {
         }
     }
 
-    public function pmw_woocommerce_new_order( $order_id ) {
-        $order = wc_get_order( $order_id );
+    public function pmw_woocommerce_new_order( $order_id, $order = null ) {
+        // WooCommerce passes the order object as the second hook argument. Prefer it over
+        // wc_get_order(), which can return false right after order creation when a persistent
+        // object cache (e.g. Redis) serves a stale miss in cron contexts, such as
+        // WooCommerce Subscriptions renewal order creation. @since 1.61.1
+        if ( !$order instanceof \WC_Order ) {
+            $order = wc_get_order( $order_id );
+        }
+        if ( !$order instanceof \WC_Order ) {
+            return;
+        }
         /**
          * All new orders should be marked as long PMW is active,
          * so that we know we can process them later through PMW,
@@ -822,6 +871,40 @@ class Pixel_Manager {
         }
         // Only count orders that PMW was responsible for tracking when they were placed.
         if ( !$order->meta_exists( '_wpm_process_through_wpm' ) ) {
+            return;
+        }
+        // Orders created without a customer browser session (admin, subscription
+        // renewals) and orders where the visitor denied all consent categories
+        // can never produce a tracked purchase and must not deflate the
+        // accuracy denominator.
+        if ( !Shop::should_count_order_for_tracking_accuracy( $order ) ) {
+            $snapshot = $order->get_meta( '_pmw_consent_snapshot', true );
+            if ( is_array( $snapshot ) && empty( $snapshot['marketing'] ) && empty( $snapshot['statistics'] ) ) {
+                $order_changed = false;
+                // Make the consent exclusion visible on the order for support
+                if ( !$order->meta_exists( '_pmw_accuracy_exclusion_reason' ) ) {
+                    $order->update_meta_data( '_pmw_accuracy_exclusion_reason', 'consent_denied' );
+                    $order_changed = true;
+                    Logger::info( 'Tracking accuracy: order ' . $order->get_id() . ' excluded - consent denied' );
+                }
+                // Count the exclusion so the payment gateway accuracy report can
+                // show how many orders were untrackable due to denied consent.
+                // Own latch (not _wpm_orders_total_counted): the purchase-trigger
+                // hooks re-fire on several status transitions and must not
+                // double-count.
+                if ( !$order->get_meta( '_pmw_consent_excluded_counted' ) ) {
+                    $payment_method = $order->get_payment_method();
+                    $date_created = $order->get_date_created();
+                    if ( !empty( $payment_method ) && $date_created ) {
+                        Tracking_Accuracy_DB::increment_orders_consent_excluded( gmdate( 'Y-m-d', $date_created->getTimestamp() ), $payment_method );
+                        $order->update_meta_data( '_pmw_consent_excluded_counted', true );
+                        $order_changed = true;
+                    }
+                }
+                if ( $order_changed ) {
+                    $order->save();
+                }
+            }
             return;
         }
         // Idempotency guard: only count each order once toward orders_total.
@@ -1243,6 +1326,7 @@ class Pixel_Manager {
     private function get_facebook_pixel_data() {
         $data = [
             'pixel_id'            => Options::get_facebook_pixel_id(),
+            'pixel_ids'           => Facebook::get_pixel_ids(),
             'dynamic_remarketing' => [
                 'id_type' => Product::get_dyn_r_id_type( 'facebook' ),
             ],
@@ -1288,6 +1372,56 @@ class Pixel_Manager {
     private static function get_clarity_pixel_data() {
         return [
             'project_id' => Options::get_clarity_project_id(),
+        ];
+    }
+
+    private static function get_groundtruth_pixel_data() {
+        return [
+            'gtid' => Options::get_groundtruth_gtid(),
+        ];
+    }
+
+    private static function get_criteo_pixel_data() {
+        return [
+            'account_id'          => (int) Options::get_criteo_account_id(),
+            'advanced_matching'   => Options::is_criteo_advanced_matching_enabled(),
+            'dynamic_remarketing' => [
+                'id_type' => Product::get_dyn_r_id_type( 'criteo' ),
+            ],
+        ];
+    }
+
+    private static function get_nextdoor_pixel_data() {
+        return [
+            'pixel_id'            => Options::get_nextdoor_pixel_id(),
+            'advanced_matching'   => Options::is_nextdoor_advanced_matching_enabled(),
+            'dynamic_remarketing' => [
+                'id_type' => Product::get_dyn_r_id_type( 'nextdoor' ),
+            ],
+        ];
+    }
+
+    private static function get_triple_whale_pixel_data() {
+        return [
+            'shop' => Triple_Whale_API::get_shop(),
+        ];
+    }
+
+    /**
+     * Hyros data layer configuration
+     *
+     * The Universal Script URL is assembled in the browser so that the ref_url
+     * parameter carries the actual page URL, the same way the official Hyros
+     * plugin does it.
+     *
+     * @since 1.63.1
+     *
+     * @return array
+     */
+    private static function get_hyros_pixel_data() {
+        return [
+            'product_hash'    => Options::get_hyros_product_hash(),
+            'application_tag' => Options::get_hyros_effective_application_tag(),
         ];
     }
 
@@ -1764,8 +1898,33 @@ class Pixel_Manager {
         // Get the time between when the order was created and now and save it in _wpm_conversion_pixel_fired_delay
         $time_diff = time() - strtotime( $order->get_date_created() );
         $order->update_meta_data( '_wpm_conversion_pixel_fired_delay', $time_diff );
+        /**
+         * Record that the GA4 purchase was sent from the browser.
+         *
+         * The browser sends the GA4 purchase only while the Measurement Protocol
+         * is inactive (the adapter suppresses it when mp_active is true). Marking
+         * the order here lets the MP purchase gate recognize orders that were
+         * already tracked browser-side, so switching the MP API secret off and on
+         * again no longer resends them.
+         *
+         * @since 1.63.1
+         */
+        if ( Shop::should_record_ga4_browser_purchase() ) {
+            $order->update_meta_data( Shop::get_ga4_browser_purchase_key(), true );
+        }
         $order->save();
+        // This order just left the "pixels not fired" set, so drop the cached
+        // count behind the order-list view link. @since 1.63.1
         if ( !$already_fired ) {
+            delete_transient( Order_Columns::COUNT_TRANSIENT );
+        }
+        // First-run onboarding: record the very first tracked order once
+        // (single get_option() guard in the steady state).
+        First_Event_Confirmation::record_first_tracked_order( $order->get_id() );
+        // Orders excluded from the accuracy denominator must also stay out of the
+        // numerator, otherwise measured could exceed total for a bucket (e.g. a
+        // pay-for-order link on an admin-created order reaching the confirmation page).
+        if ( !$already_fired && Shop::should_count_order_for_tracking_accuracy( $order ) ) {
             $payment_method = $order->get_payment_method();
             if ( !empty( $payment_method ) ) {
                 $date_created = $order->get_date_created();
@@ -1947,6 +2106,22 @@ class Pixel_Manager {
         $data['order_duplication_prevention'] = Shop::is_order_duplication_prevention_active();
         $data['view_item_list_trigger'] = Shop::view_item_list_trigger_settings();
         $data['variations_output'] = Options::is_shop_variations_output_active();
+        /**
+         * Automatically fire the begin_checkout event when the checkout page loads
+         * with a non-empty cart and no begin_checkout has fired for that cart yet.
+         *
+         * Covers flows that reach the checkout page without a "proceed to checkout"
+         * button click: funnel builders (such as CartFlows next-step buttons that add
+         * the product server-side), buy-now buttons, direct checkout links, and
+         * block-based carts whose checkout links don't match the click selectors.
+         *
+         * @since 1.62.1
+         */
+        $begin_checkout_on_page_load = true === apply_filters( 'pmw_fire_begin_checkout_on_checkout_page', true );
+        // Not on the order-pay endpoint: is_checkout() is true there too, but that
+        // page retries payment for an existing order, and any cart the visitor
+        // happens to carry is unrelated to it.
+        $data['begin_checkout_on_checkout_page'] = $begin_checkout_on_page_load && !is_wc_endpoint_url( 'order-pay' );
         $data['session_active'] = Shop::is_woocommerce_session_active();
         return $data;
     }
@@ -2000,6 +2175,12 @@ class Pixel_Manager {
         ];
         if ( Options::are_restricted_consent_regions_set() ) {
             $data['consent_management']['restricted_regions'] = Options::get_restricted_consent_regions();
+        }
+        // First-run onboarding: ask the storefront for a one-shot "pixels are
+        // live" report. Only injected on fresh installs until the first
+        // confirmation lands, then never again.
+        if ( First_Event_Confirmation::is_beacon_needed() ) {
+            $data['first_event_confirmation'] = true;
         }
         return $data;
     }

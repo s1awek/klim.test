@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Model that houses the logic of wholesale prices.
  *
  * @since 1.3.0
- * @since 2.2.8 Recalculate cart totals on woocommerce_add_to_cart for wholesale customers (issue #549). Add cart null-guard and re-entrancy guard on the recalc.
+ * @since 2.2.9 Recalculate cart totals on woocommerce_add_to_cart for wholesale customers (issue #549), without suppressing WC core's priority-20 recalc (issues #923, #994).
  */
 class WWP_Wholesale_Prices {
 
@@ -212,25 +212,30 @@ class WWP_Wholesale_Prices {
     /**
      * Get product raw wholesale price. Without being passed through any filter.
      *
-     * @param int   $product_id          Product id.
-     * @param array $user_wholesale_role Array of user wholesale roles.
+     * @param int|WC_Product $product             Product id or an already-hydrated product object.
+     * @param array          $user_wholesale_role Array of user wholesale roles.
      *
      * @since  1.5.0
      * @since  1.6.3 Removed $quantity variable from the list of variables being passed to 'wwp_filter_' .
      *         $activeCurrency . '_wholesale_price' filter.
+     * @since  2.2.9 Accept an already-hydrated WC_Product to avoid a redundant second product
+     *         hydration when the caller already loaded the same product object.
      * @access public
      *
      * @return string Filtered wholesale price.
      */
-    public static function get_product_raw_wholesale_price( $product_id, $user_wholesale_role ) {
+    public static function get_product_raw_wholesale_price( $product, $user_wholesale_role ) {
 
-        // Get product object.
-        $product = wc_get_product( $product_id );
+        // Accept either a product id or an already-hydrated product object. Reusing the caller's
+        // object avoids a redundant second hydration on the hot wholesale price path.
+        $product = is_a( $product, 'WC_Product' ) ? $product : wc_get_product( $product );
 
         // check if valid product.
         if ( ! is_a( $product, 'WC_Product' ) ) {
             return '';
         }
+
+        $product_id = $product->get_id();
 
         if ( empty( $user_wholesale_role ) ) {
             $wholesale_price = '';
@@ -380,13 +385,36 @@ class WWP_Wholesale_Prices {
      * @since  1.12 "WooCommerce Currency Switcher" plugin support. Wrap wholesale_price_raw with
      *         "woocommerce_product_get_price" filter so that the wholesale prices is properly converted to selected
      *         currency.
+     * @since  2.2.9 Bail early with an empty-price array when the id does not resolve to a valid WC_Product,
+     *         preventing a fatal error on stale/orphaned Grouped product child ids. See issue #991.
      * @return array Array of wholesale price data.
      */
     public static function get_product_wholesale_price_on_shop_v3( $product_id, $user_wholesale_role ) {
 
-        $price_arr  = array();
-        $user_id    = apply_filters( 'wwp_wholesale_price_current_user_id', get_current_user_id() );
-        $product    = wc_get_product( $product_id );
+        $price_arr = array();
+        $user_id   = apply_filters( 'wwp_wholesale_price_current_user_id', get_current_user_id() );
+        $product   = wc_get_product( $product_id );
+
+        // Bail early when the id does not resolve to a valid product (e.g. a Grouped product's
+        // "_children" postmeta still referencing a deleted/orphaned child id). Passing the resulting
+        // "false" downstream into WooCommerce core's wc_get_price_including_tax()/wc_get_price_excluding_tax()
+        // would fatal with "Call to a member function get_price() on bool". Return the standard
+        // empty-price shape so consumers reading these keys keep working. See issue #991.
+        if ( ! $product instanceof WC_Product ) {
+            return apply_filters(
+                'wwp_filter_wholesale_price_shop_v2',
+                array(
+                    'wholesale_price_raw'         => '',
+                    'source'                      => '',
+                    'wholesale_price'             => '',
+                    'wholesale_price_with_no_tax' => '',
+                    'wholesale_price_with_tax'    => '',
+                ),
+                $product_id,
+                $user_wholesale_role
+            );
+        }
+
         $cache_data = apply_filters( 'wwp_get_product_wholesale_price_on_shop_v3_cache', false, $user_id, $product, $product_id, $user_wholesale_role );
 
         if ( ! empty( $cache_data ) ) {
@@ -395,7 +423,9 @@ class WWP_Wholesale_Prices {
 
         } else {
 
-            $per_product_level_wholesale_price = self::get_product_raw_wholesale_price( $product_id, $user_wholesale_role );
+            // Reuse the product object already hydrated above instead of re-fetching it by id.
+            // Fall back to the id when the object is invalid so the empty-result path is preserved.
+            $per_product_level_wholesale_price = self::get_product_raw_wholesale_price( is_a( $product, 'WC_Product' ) ? $product : $product_id, $user_wholesale_role );
 
             if ( empty( $per_product_level_wholesale_price ) ) {
 
@@ -611,6 +641,8 @@ class WWP_Wholesale_Prices {
      * @since  1.2.8 Now if empty $price then don't bother creating wholesale html price.
      * @since  1.5.0 Refactor codebase.
      * @since  1.6.0 Refactor codebase.
+     * @since  2.2.9 Prime the post, term, and meta caches for all variations in bulk before the
+     *               price-range loop to avoid a per-variation query (N+1) when the caches are cold.
      * @access public
      *
      * @return string Product price with wholesale applied if necessary.
@@ -673,46 +705,22 @@ class WWP_Wholesale_Prices {
                     $some_variations_have_wholesale_price = $cache_data['some_variations_have_wholesale_price'];
 
                 } else {
-                    $variations                           = $product->get_children();
-                    $min_price                            = '';
-                    $min_wholesale_price_without_taxing   = '';
-                    $max_price                            = '';
-                    $max_wholesale_price_without_taxing   = '';
-                    $some_variations_have_wholesale_price = false;
 
-                    foreach ( $variations as $variation_id ) {
+                    // Fast path: resolve the min/max range with an aggregate query when parity with
+                    // the per-variation loop is provable; null signals a fall back to the loop
+                    // (e.g. WWPP percentage discounts, currency switchers, non-uniform taxing, or a
+                    // third-party snippet altering individual variation prices).
+                    $range = $this->get_variable_product_price_range_via_aggregate( $product, $user_wholesale_role );
 
-                        $variation = wc_get_product( $variation_id );
-                        if ( ! $variation || ! $variation->is_purchasable() ) {
-                            continue;
-                        }
-
-                        $curr_var_price = wc_get_price_to_display( $variation );
-                        $price_arr      = self::get_product_wholesale_price_on_shop_v3( $variation_id, $user_wholesale_role );
-
-                        if ( strcasecmp( $price_arr['wholesale_price'], '' ) !== 0 ) {
-
-                            $curr_var_price = $price_arr['wholesale_price'];
-
-                            if ( ! $some_variations_have_wholesale_price ) {
-                                $some_variations_have_wholesale_price = true;
-                            }
-                        }
-
-                        if ( strcasecmp( $min_price, '' ) === 0 || $curr_var_price < $min_price ) {
-
-                            $min_price                          = $curr_var_price;
-                            $min_wholesale_price_without_taxing = strcasecmp( $price_arr['wholesale_price_with_no_tax'], '' ) !== 0 ? $price_arr['wholesale_price_with_no_tax'] : '';
-
-                        }
-
-                        if ( strcasecmp( $max_price, '' ) === 0 || $curr_var_price > $max_price ) {
-
-                            $max_price                          = $curr_var_price;
-                            $max_wholesale_price_without_taxing = strcasecmp( $price_arr['wholesale_price_with_no_tax'], '' ) !== 0 ? $price_arr['wholesale_price_with_no_tax'] : '';
-
-                        }
+                    if ( null === $range ) {
+                        $range = $this->get_variable_product_price_range_via_loop( $product, $user_wholesale_role );
                     }
+
+                    $min_price                            = $range['min_price'];
+                    $min_wholesale_price_without_taxing   = $range['min_wholesale_price_without_taxing'];
+                    $max_price                            = $range['max_price'];
+                    $max_wholesale_price_without_taxing   = $range['max_wholesale_price_without_taxing'];
+                    $some_variations_have_wholesale_price = $range['some_variations_have_wholesale_price'];
 
                     if ( ! $return_wholesale_price_only ) {
 
@@ -721,13 +729,7 @@ class WWP_Wholesale_Prices {
                             $user_id,
                             $product,
                             $user_wholesale_role,
-                            array(
-                                'min_price' => $min_price,
-                                'min_wholesale_price_without_taxing' => $min_wholesale_price_without_taxing,
-                                'max_price' => $max_price,
-                                'max_wholesale_price_without_taxing' => $max_wholesale_price_without_taxing,
-                                'some_variations_have_wholesale_price' => $some_variations_have_wholesale_price,
-                            )
+                            $range
                         );
 
                     }
@@ -840,6 +842,307 @@ class WWP_Wholesale_Prices {
         }
 
         return apply_filters( 'wwp_filter_variable_product_price_range_for_none_wholesale_users', $price, $product );
+    }
+
+    /**
+     * Compute a variable product's wholesale price range (min/max) by looping every purchasable
+     * variation and running the full wholesale price chain per child.
+     *
+     * Extracted verbatim from the historical inline loop in
+     * {@see WWP_Wholesale_Prices::wholesale_price_html_filter()} so it can serve as the fall-back when
+     * {@see WWP_Wholesale_Prices::get_variable_product_price_range_via_aggregate()} cannot guarantee
+     * byte-identical parity. Behaviour is unchanged from the inline loop.
+     *
+     * @param WC_Product $product             Variable product.
+     * @param array      $user_wholesale_role User's wholesale role(s).
+     *
+     * @since  2.2.9
+     * @access private
+     *
+     * @return array {
+     *     Range payload.
+     *
+     *     @type int|string $min_price                            Lowest effective display price across variations.
+     *     @type int|string $min_wholesale_price_without_taxing   No-tax wholesale price of the min owner, or '' if it had none.
+     *     @type int|string $max_price                            Highest effective display price across variations.
+     *     @type int|string $max_wholesale_price_without_taxing   No-tax wholesale price of the max owner, or '' if it had none.
+     *     @type bool       $some_variations_have_wholesale_price Whether any variation resolved a wholesale price.
+     * }
+     */
+    private function get_variable_product_price_range_via_loop( $product, $user_wholesale_role ) {
+
+        $variations = $product->get_children();
+
+        // Prime the post, term, and meta caches for every variation in a few bulk
+        // queries so the per-variation product loads inside the loop below are served
+        // from cache instead of triggering separate queries per variation. This is a
+        // no-op when the caches are already warm (e.g. the frontend price render path).
+        if ( ! empty( $variations ) ) {
+            _prime_post_caches( $variations, true, true );
+        }
+
+        $min_price                            = '';
+        $min_wholesale_price_without_taxing   = '';
+        $max_price                            = '';
+        $max_wholesale_price_without_taxing   = '';
+        $some_variations_have_wholesale_price = false;
+
+        foreach ( $variations as $variation_id ) {
+
+            $variation = wc_get_product( $variation_id );
+            if ( ! $variation || ! $variation->is_purchasable() ) {
+                continue;
+            }
+
+            $curr_var_price = wc_get_price_to_display( $variation );
+            $price_arr      = self::get_product_wholesale_price_on_shop_v3( $variation_id, $user_wholesale_role );
+
+            if ( strcasecmp( $price_arr['wholesale_price'], '' ) !== 0 ) {
+
+                $curr_var_price = $price_arr['wholesale_price'];
+
+                if ( ! $some_variations_have_wholesale_price ) {
+                    $some_variations_have_wholesale_price = true;
+                }
+            }
+
+            if ( strcasecmp( $min_price, '' ) === 0 || $curr_var_price < $min_price ) {
+
+                $min_price                          = $curr_var_price;
+                $min_wholesale_price_without_taxing = strcasecmp( $price_arr['wholesale_price_with_no_tax'], '' ) !== 0 ? $price_arr['wholesale_price_with_no_tax'] : '';
+
+            }
+
+            if ( strcasecmp( $max_price, '' ) === 0 || $curr_var_price > $max_price ) {
+
+                $max_price                          = $curr_var_price;
+                $max_wholesale_price_without_taxing = strcasecmp( $price_arr['wholesale_price_with_no_tax'], '' ) !== 0 ? $price_arr['wholesale_price_with_no_tax'] : '';
+
+            }
+        }
+
+        return array(
+            'min_price'                            => $min_price,
+            'min_wholesale_price_without_taxing'   => $min_wholesale_price_without_taxing,
+            'max_price'                            => $max_price,
+            'max_wholesale_price_without_taxing'   => $max_wholesale_price_without_taxing,
+            'some_variations_have_wholesale_price' => $some_variations_have_wholesale_price,
+        );
+    }
+
+    /**
+     * Compute a variable product's wholesale price range (min/max) with an aggregate query instead of
+     * hydrating and price-computing every variation.
+     *
+     * Returns the same range payload as
+     * {@see WWP_Wholesale_Prices::get_variable_product_price_range_via_loop()} in O(1) queries, OR null
+     * when the fast path cannot guarantee byte-identical parity with the loop — in which case the
+     * caller falls back to the loop. The path is taken only for the plain WWP scenario where a
+     * variation's wholesale price is its explicit "{role}_wholesale_price" meta (no premium percentage
+     * discounts) and the tax transform is uniform across variations, so min/max over the raw effective
+     * prices maps to min/max over the displayed prices.
+     *
+     * Parity guards (any failure returns null, signalling a loop fall-back):
+     * - WWPP active: per-variation prices can come from general/category/per-product percentage
+     *   discounts resolved inside WWPP via the 'wwp_filter_wholesale_price_shop' filter, and WWPP owns
+     *   the wholesale tax transform — neither is visible to this free aggregate. (WWPP's own O(1) range
+     *   computation is a separate premium-side enhancement.)
+     * - Aelia / WooCommerce Currency Switcher active: per-product currency conversion and
+     *   currency-specific meta keys ("{role}_{currency}_wholesale_price").
+     * - A callback on any per-variation price extension filter ('wwp_filter_wholesale_price_shop',
+     *   'wwp_filter_wholesale_price_shop_v2', 'wwp_get_product_raw_wholesale_price',
+     *   'wwp_filter_wholesale_price') — these are unused in WWP, so a callback means a third-party
+     *   snippet alters individual variation prices.
+     * - A callback on the visibility / purchasability filters ('woocommerce_variation_is_visible',
+     *   'woocommerce_variation_is_purchasable', 'woocommerce_is_purchasable') — the aggregate
+     *   approximates is_purchasable() as "published + priced", which a plugin (e.g. Subscriptions,
+     *   Bundles, hide-out-of-stock-variations) can override via any of these.
+     * - Non-uniform taxing: when taxes are calculated, any variation overriding the parent's tax class
+     *   or tax status breaks the uniform-monotonic-transform assumption.
+     *
+     * @param WC_Product $product             Variable product.
+     * @param array      $user_wholesale_role User's wholesale role(s).
+     *
+     * @since  2.2.9
+     * @access private
+     *
+     * @return array|null Range payload (same shape as the loop) or null to fall back to the loop.
+     */
+    private function get_variable_product_price_range_via_aggregate( $product, $user_wholesale_role ) {
+
+        global $wpdb;
+
+        if ( empty( $user_wholesale_role ) || ! is_a( $product, 'WC_Product' ) ) {
+            return null;
+        }
+
+        // Premium / currency / third-party hooks the free aggregate cannot reproduce -> fall back.
+        if (
+            WWP_Helper_Functions::is_plugin_active( 'woocommerce-wholesale-prices-premium/woocommerce-wholesale-prices-premium.bootstrap.php' ) ||
+            WWP_ACS_Integration_Helper::aelia_currency_switcher_active() ||
+            WWP_Helper_Functions::is_plugin_active( 'woocommerce-currency-switcher/index.php' ) ||
+            has_filter( 'wwp_filter_wholesale_price_shop' ) ||
+            has_filter( 'wwp_filter_wholesale_price_shop_v2' ) ||
+            has_filter( 'wwp_get_product_raw_wholesale_price' ) ||
+            has_filter( 'wwp_filter_wholesale_price' ) ||
+            has_filter( 'woocommerce_variation_is_visible' ) ||
+            has_filter( 'woocommerce_variation_is_purchasable' ) ||
+            has_filter( 'woocommerce_is_purchasable' )
+        ) {
+            return null;
+        }
+
+        $parent_id         = WWP_Helper_Functions::wwp_get_product_id( $product );
+        $meta_key          = $user_wholesale_role[0] . '_wholesale_price';
+        $calc_taxes        = 'yes' === get_option( 'woocommerce_calc_taxes', false );
+        $tax_display_incl  = 'incl' === get_option( 'woocommerce_tax_display_shop', false );
+        $parent_tax_status = $product->get_tax_status();
+        $parent_tax_class  = $product->get_tax_class();
+
+        // One aggregate over the purchasable (published + priced) children. Per child, "eff" is the
+        // explicit "{role}_wholesale_price" meta when set, else the active "_price" value, and "has_ws"
+        // flags whether the child has an explicit wholesale price.
+        // GROUP_CONCAT(...) ordered to mirror WC_Product::get_children() (menu_order, ID) yields the
+        // has_ws flag of the variation that "owns" the min / max, matching the loop's first-wins ties.
+        // class_overrides / status_mismatches detect non-uniform taxing across the children. A child whose
+        // _tax_class meta is absent (NULL) or 'parent' inherits the parent's class; an explicit '' is the
+        // Standard rate (NOT inherit), so it is uniform only when the parent is also Standard. Hence the
+        // comparison is against the parent's own class (%s) rather than a blanket "non-empty" override test.
+        // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $row = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT
+                    MIN( t.eff ) AS min_raw,
+                    MAX( t.eff ) AS max_raw,
+                    SUM( t.has_ws ) AS ws_count,
+                    COUNT(*) AS n,
+                    SUBSTRING_INDEX( GROUP_CONCAT( t.has_ws ORDER BY t.eff ASC, t.menu_order ASC, t.post_id ASC ), ',', 1 ) AS min_owner_has_ws,
+                    SUBSTRING_INDEX( GROUP_CONCAT( t.has_ws ORDER BY t.eff DESC, t.menu_order ASC, t.post_id ASC ), ',', 1 ) AS max_owner_has_ws,
+                    SUM( CASE WHEN t.tax_class IS NULL OR t.tax_class IN ( 'parent', %s ) THEN 0 ELSE 1 END ) AS class_overrides,
+                    SUM( CASE WHEN COALESCE( NULLIF( t.tax_status, '' ), 'taxable' ) <> %s THEN 1 ELSE 0 END ) AS status_mismatches
+                FROM (
+                    SELECT
+                        p.ID AS post_id,
+                        p.menu_order AS menu_order,
+                        CAST( COALESCE( NULLIF( ws.meta_value, '' ), price.meta_value ) AS DECIMAL(10,2) ) AS eff,
+                        CASE WHEN ws.meta_value IS NOT NULL AND ws.meta_value <> '' THEN 1 ELSE 0 END AS has_ws,
+                        tc.meta_value AS tax_class,
+                        ts.meta_value AS tax_status
+                    FROM {$wpdb->posts} p
+                    INNER JOIN {$wpdb->postmeta} price ON price.post_id = p.ID AND price.meta_key = '_price'
+                    LEFT JOIN {$wpdb->postmeta} ws ON ws.post_id = p.ID AND ws.meta_key = %s
+                    LEFT JOIN {$wpdb->postmeta} tc ON tc.post_id = p.ID AND tc.meta_key = '_tax_class'
+                    LEFT JOIN {$wpdb->postmeta} ts ON ts.post_id = p.ID AND ts.meta_key = '_tax_status'
+                    WHERE p.post_parent = %d
+                        AND p.post_type = 'product_variation'
+                        AND p.post_status = 'publish'
+                        AND price.meta_value <> ''
+                ) t",
+                $parent_tax_class,
+                $parent_tax_status,
+                $meta_key,
+                $parent_id
+            )
+        );
+        // phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+        // A query error (e.g. an unsupported SQL function on a non-MySQL backend, where this aggregate's
+        // GROUP_CONCAT( ... ORDER BY ... ) / SUBSTRING_INDEX are unavailable) makes get_row() return null.
+        // Fall back to the loop in that case rather than the empty-range branch below, which would hide
+        // the product's range. Unreachable on the supported MySQL/MariaDB stack.
+        if ( '' !== $wpdb->last_error ) {
+            return null;
+        }
+
+        if ( ! $row || (int) $row->n < 1 || null === $row->min_raw ) {
+            // No purchasable children: mirror the loop producing an empty (unshown) range.
+            return array(
+                'min_price'                            => '',
+                'min_wholesale_price_without_taxing'   => '',
+                'max_price'                            => '',
+                'max_wholesale_price_without_taxing'   => '',
+                'some_variations_have_wholesale_price' => false,
+            );
+        }
+
+        // Non-uniform taxing would break the monotonic-transform assumption -> fall back to the loop.
+        if ( $calc_taxes && ( (int) $row->class_overrides > 0 || (int) $row->status_mismatches > 0 ) ) {
+            return null;
+        }
+
+        $min_raw         = $row->min_raw;
+        $max_raw         = $row->max_raw;
+        $prices_incl_tax = wc_prices_include_tax();
+
+        return array(
+            'min_price'                            => $this->apply_price_range_tax_display( $product, $min_raw, $calc_taxes, $tax_display_incl ),
+            'min_wholesale_price_without_taxing'   => '1' === $row->min_owner_has_ws ? $this->price_range_wholesale_no_tax( $product, $min_raw, $prices_incl_tax ) : '',
+            'max_price'                            => $this->apply_price_range_tax_display( $product, $max_raw, $calc_taxes, $tax_display_incl ),
+            'max_wholesale_price_without_taxing'   => '1' === $row->max_owner_has_ws ? $this->price_range_wholesale_no_tax( $product, $max_raw, $prices_incl_tax ) : '',
+            'some_variations_have_wholesale_price' => (int) $row->ws_count > 0,
+        );
+    }
+
+    /**
+     * Apply the shop's tax-display transform to an aggregate boundary price, mirroring the per-variation
+     * paths the loop uses (wc_get_price_to_display() for regular prices and the
+     * 'wwp_pass_wholesale_price_through_taxing' callback for wholesale prices). Both resolve to the same
+     * wc_get_price_including_tax() / wc_get_price_excluding_tax() under the uniform-tax guard, so a single
+     * transform applied via the parent product is byte-identical to the per-variation computation.
+     *
+     * @param WC_Product   $product          Parent variable product (children inherit its tax treatment).
+     * @param float|string $price            Raw boundary price.
+     * @param bool         $calc_taxes       Whether taxes are calculated store-wide.
+     * @param bool         $tax_display_incl Whether the shop displays prices inclusive of tax.
+     *
+     * @since  2.2.9
+     * @access private
+     *
+     * @return float|string Display price.
+     */
+    private function apply_price_range_tax_display( $product, $price, $calc_taxes, $tax_display_incl ) {
+
+        if ( ! $calc_taxes ) {
+            return $price;
+        }
+
+        $args = array(
+            'qty'   => 1,
+            'price' => $price,
+        );
+
+        return $tax_display_incl
+            ? WWP_Helper_Functions::wwp_get_price_including_tax( $product, $args )
+            : WWP_Helper_Functions::wwp_get_price_excluding_tax( $product, $args );
+    }
+
+    /**
+     * Derive the "wholesale price without taxing" for an aggregate boundary owner, mirroring
+     * {@see WWP_Wholesale_Prices::get_product_wholesale_price_on_shop_v3()}: when shop prices are stored
+     * inclusive of tax the raw value is reduced by tax, otherwise it is returned as-is.
+     *
+     * @param WC_Product   $product         Parent variable product.
+     * @param float|string $raw             Raw wholesale price of the boundary owner.
+     * @param bool         $prices_incl_tax Whether stored prices include tax.
+     *
+     * @since  2.2.9
+     * @access private
+     *
+     * @return float|string Wholesale price excluding tax.
+     */
+    private function price_range_wholesale_no_tax( $product, $raw, $prices_incl_tax ) {
+
+        if ( $prices_incl_tax ) {
+            return WWP_Helper_Functions::wwp_get_price_excluding_tax(
+                $product,
+                array(
+                    'qty'   => 1,
+                    'price' => $raw,
+                )
+            );
+        }
+
+        return $raw;
     }
 
     /**
@@ -1055,11 +1358,20 @@ class WWP_Wholesale_Prices {
      *    triggering another calculate_totals() from within the chain risks corrupted state or
      *    infinite recursion. Skip in that case.
      *
-     * Also removes WC core's priority-20 calculate_totals callback (re-attached after our pass via
-     * the one-shot restore_wc_core_calculate_totals_hook) so wholesale add_to_cart only triggers
-     * a single recalc instead of two.
+     * IMPORTANT: unlike the original 2.2.8 implementation (reverted in #928), this deliberately
+     * does NOT remove WC core's priority-20 calculate_totals callback on woocommerce_add_to_cart.
+     * Core hooks WC_Cart_Session::set_session() onto woocommerce_after_calculate_totals, so this
+     * priority-1 recalc persists a cart-session snapshot taken BEFORE plugins like WooCommerce
+     * Product Bundles (priority 9) or Composite Products insert their child items directly into
+     * cart_contents. Core's later priority-20 pass recalculates with those children present and
+     * re-persists the complete session - suppressing it is what dropped bundled/composite child
+     * items from the persisted cart for wholesale customers (issues #923, #994). The cost of
+     * leaving it in place is one extra calculate_totals() per wholesale add-to-cart - the same
+     * work every non-wholesale add-to-cart already performs. Under batched add-to-cart flows
+     * (e.g. WWOF's Store API batch, which dispatches woocommerce_add_to_cart once per item in
+     * a single request) that extra pass compounds per item - an accepted tradeoff (see #994).
      *
-     * @since  2.2.8 Force cart totals recalculation on woocommerce_add_to_cart for wholesale customers (issue #549). Includes WC()->cart null-guard and re-entrancy guard against recursive calculate_totals chains.
+     * @since  2.2.9 Re-introduced without the core priority-20 hook suppression (issues #549, #923, #994).
      * @access public
      *
      * @return void
@@ -1082,55 +1394,7 @@ class WWP_Wholesale_Prices {
             return;
         }
 
-        $removed_core_recalc = remove_action(
-            'woocommerce_add_to_cart',
-            array( WC()->cart, 'calculate_totals' ),
-            20
-        );
-
-        // Queue the restore before calling recalc so an exception unwinding
-        // out of the calculate_totals chain still leaves the restore registered
-        // for the next dispatch - the prio-20 callback gets re-attached then
-        // and the cart resumes recalculating instead of staying broken until
-        // the page reloads.
-        if ( $removed_core_recalc ) {
-            add_action(
-                'woocommerce_add_to_cart',
-                array( $this, 'restore_wc_core_calculate_totals_hook' ),
-                21,
-                0
-            );
-        }
-
         $this->recalculate_cart_totals();
-    }
-
-    /**
-     * Re-attach WC core's priority-20 calculate_totals hook after our priority-1 dedup removed it.
-     *
-     * Self-removes so it only fires once per dispatch.
-     *
-     * @since  2.2.8
-     * @access public
-     *
-     * @return void
-     */
-    public function restore_wc_core_calculate_totals_hook() {
-
-        if ( WC()->cart instanceof WC_Cart ) {
-            add_action(
-                'woocommerce_add_to_cart',
-                array( WC()->cart, 'calculate_totals' ),
-                20,
-                0
-            );
-        }
-
-        remove_action(
-            'woocommerce_add_to_cart',
-            array( $this, 'restore_wc_core_calculate_totals_hook' ),
-            21
-        );
     }
 
     /**
@@ -1186,12 +1450,28 @@ class WWP_Wholesale_Prices {
     /**
      * Print WP Notices.
      *
+     * Notices are echoed immediately, so they only reach the response when this runs while the page
+     * is being rendered. Cart-modifying requests recalculate the totals on `wp_loaded` — before the
+     * template stage — and requests such as the classic cart "Update cart" POST go on to render the
+     * page in the same request. Emitting there would send the markup ahead of the document and
+     * record the message in the printed notices list, suppressing the emission that would otherwise
+     * have landed on the rendered page. So skip any emission that happens before the main query has
+     * run and leave it to the render pass.
+     *
      * @param string|array $notices WWP/P related notices.
      *
      * @since  1.0.7
+     * @since  2.2.9 Skip emission before the main query has run so the notice is not lost on
+     *               requests that recalculate the cart totals ahead of rendering the page.
      * @access public
+     *
+     * @return void
      */
     public function printWCNotice( $notices ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
+        if ( ! did_action( 'wp' ) ) {
+            return;
+        }
+
         if ( is_array( $notices ) && array_key_exists( 'message', $notices ) && array_key_exists( 'type', $notices )
             && ! in_array( $notices['message'], self::$printed_notices, true ) ) {
             // Pre Version 1.2.0 of wwpp where it sends back single dimension array of notice.
@@ -1424,14 +1704,32 @@ class WWP_Wholesale_Prices {
     }
 
     /**
+     * Determine whether the price and add-to-cart button should be hidden for the current visitor.
+     *
+     * Wraps the shared condition (logged-out visitor with the "Hide Price and Add to Cart button" option
+     * enabled) behind the wwp_hide_price_and_add_to_cart_button filter so every caller evaluates it
+     * identically and the rule has a single source of truth.
+     *
+     * @since  2.2.9 Extracted from the duplicated hide-price condition.
+     * @access public
+     *
+     * @return bool True when the price and add-to-cart button should be hidden.
+     */
+    public function should_hide_price_and_add_to_cart_button() {
+
+        return (bool) apply_filters( 'wwp_hide_price_and_add_to_cart_button', ! is_user_logged_in() && get_option( 'wwp_hide_price_add_to_cart' ) === 'yes' ? true : false );
+    }
+
+    /**
      * Handles hiding Price and Add to Cart button when "Hide Price and Add to Cart button" option is enabled.
      *
      * @since  1.13
+     * @since  2.2.9 Use the shared should_hide_price_and_add_to_cart_button() helper.
      * @access public
      */
     public function hide_price_and_add_to_cart_button() {
 
-        $hide_price_and_add_to_cart_button = apply_filters( 'wwp_hide_price_and_add_to_cart_button', ! is_user_logged_in() && get_option( 'wwp_hide_price_add_to_cart' ) === 'yes' ? true : false );
+        $hide_price_and_add_to_cart_button = $this->should_hide_price_and_add_to_cart_button();
 
         if ( $hide_price_and_add_to_cart_button ) {
             remove_action( 'woocommerce_simple_add_to_cart', 'woocommerce_simple_add_to_cart', 30 );
@@ -1492,22 +1790,66 @@ class WWP_Wholesale_Prices {
      * @since  1.13
      * @since  2.1.5 Separate logic on how to get the price and add to cart replacement message so the function is
      *         reusable
+     * @since  2.2.9 Use the shared should_hide_price_and_add_to_cart_button() helper.
      * @access public
      */
     public function display_replacement_message() {
 
-        $allowed_html = array(
+        $hide_price_and_add_to_cart_button = $this->should_hide_price_and_add_to_cart_button();
+
+        if ( $hide_price_and_add_to_cart_button ) {
+            echo wp_kses( $this->get_price_and_add_to_cart_replacement_message(), $this->get_replacement_message_allowed_html() );
+        }
+    }
+
+    /**
+     * Get the HTML tags allowed when escaping the price and add to cart replacement message.
+     *
+     * Shared by every output path that prints the replacement message so they escape consistently.
+     *
+     * @since 2.2.9 Extracted so the inline and Elementor output paths escape the message identically.
+     *
+     * @return array The allowed HTML tags and attributes for wp_kses().
+     */
+    private function get_replacement_message_allowed_html() {
+
+        return array(
             'a' => array(
                 'href'  => array(),
                 'class' => array(),
             ),
         );
+    }
 
-        $hide_price_and_add_to_cart_button = apply_filters( 'wwp_hide_price_and_add_to_cart_button', ! is_user_logged_in() && get_option( 'wwp_hide_price_add_to_cart' ) === 'yes' ? true : false );
+    /**
+     * Show the price and add-to-cart replacement message inside Elementor's "Product Price" widget.
+     *
+     * Elementor's WooCommerce "Product Price" widget renders the price through its own widget,
+     * bypassing the woocommerce_single_product_summary / woocommerce_after_shop_loop_item actions
+     * that normally output the replacement message. When the "Hide Price and Add to Cart button"
+     * option hides the price for the current visitor, the widget would otherwise be left blank, so
+     * replace its content with the replacement message.
+     *
+     * @since 2.2.9 Output the replacement message in Elementor's Product Price widget when the price is hidden.
+     *
+     * @param string $widget_content The widget's rendered HTML.
+     * @param object $widget         The Elementor widget instance.
+     *
+     * @return string The widget content, or the replacement message when the price is hidden.
+     */
+    public function show_replacement_message_in_elementor_price_widget( $widget_content, $widget ) {
 
-        if ( $hide_price_and_add_to_cart_button ) {
-            echo wp_kses( $this->get_price_and_add_to_cart_replacement_message(), $allowed_html );
+        if ( ! is_object( $widget ) || ! method_exists( $widget, 'get_name' ) || 'woocommerce-product-price' !== $widget->get_name() ) {
+            return $widget_content;
         }
+
+        $hide_price_and_add_to_cart_button = $this->should_hide_price_and_add_to_cart_button();
+
+        if ( ! $hide_price_and_add_to_cart_button ) {
+            return $widget_content;
+        }
+
+        return wp_kses( $this->get_price_and_add_to_cart_replacement_message(), $this->get_replacement_message_allowed_html() );
     }
 
     /**
@@ -1561,11 +1903,12 @@ class WWP_Wholesale_Prices {
      * @param WC_Product $product Product object.
      *
      * @since  2.1.5
+     * @since  2.2.9 Use the shared should_hide_price_and_add_to_cart_button() helper.
      * @access public
      */
     public function hide_add_to_cart_button_wc_blocks( $html, $data, $product ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
 
-        $hide_price_and_add_to_cart_button = apply_filters( 'wwp_hide_price_and_add_to_cart_button', ! is_user_logged_in() && get_option( 'wwp_hide_price_add_to_cart' ) === 'yes' ? true : false );
+        $hide_price_and_add_to_cart_button = $this->should_hide_price_and_add_to_cart_button();
 
         if ( $hide_price_and_add_to_cart_button ) {
 
@@ -1798,6 +2141,7 @@ CSS;
      * filter hook for premium plugins (e.g. WWPP) to add category-level conditions.
      *
      * @since 2.2.7
+     * @since 2.2.9 Cast the wholesale price BETWEEN clause as DECIMAL(10,2) instead of NUMERIC so prices below $1.00 are not truncated to 0.
      *
      * @param string $role_key  The sanitized wholesale role key.
      * @param float  $min_price The minimum wholesale price to filter.
@@ -1816,7 +2160,7 @@ CSS;
                 'key'     => $meta_key,
                 'value'   => array( $min_price, $max_price ),
                 'compare' => 'BETWEEN',
-                'type'    => 'NUMERIC',
+                'type'    => 'DECIMAL(10,2)',
             ),
             array(
                 'relation' => 'AND',
@@ -2319,6 +2663,11 @@ CSS;
      * role, enabling the range-overlap price filter query introduced in 2.2.8.
      *
      * @since  2.2.8
+     * @since  2.2.9 Process a single page of products per invocation and re-enqueue for the next
+     *               page, tracking progress with the `wwp_variable_price_range_current_page`
+     *               checkpoint option. This keeps each run within the host PHP time limit, makes
+     *               the migration resumable after an interruption, and prevents the Action
+     *               Scheduler queue from being permanently blocked by a timed-out monolithic run.
      * @access public
      *
      * @return void
@@ -2332,63 +2681,64 @@ CSS;
         $wholesale_roles = $this->_wwp_wholesale_roles->getAllRegisteredWholesaleRoles();
 
         if ( empty( $wholesale_roles ) ) {
+            delete_option( 'wwp_variable_price_range_current_page' );
             update_option( 'wwp_variable_price_range_version', '1.0' );
             return;
         }
 
-        $page  = 1;
         $limit = 50;
+        $page  = max( 1, (int) get_option( 'wwp_variable_price_range_current_page', 1 ) );
 
-        do {
-            $variable_products = wc_get_products(
-                array(
-                    'type'   => 'variable',
-                    'limit'  => $limit,
-                    'page'   => $page,
-                    'return' => 'objects',
-                )
-            );
+        $variable_products = wc_get_products(
+            array(
+                'type'   => 'variable',
+                'limit'  => $limit,
+                'page'   => $page,
+                'return' => 'objects',
+            )
+        );
 
-            if ( empty( $variable_products ) ) {
-                break;
+        foreach ( $variable_products as $variable_product ) {
+            $children = $variable_product->get_children();
+
+            if ( empty( $children ) ) {
+                continue;
             }
 
-            foreach ( $variable_products as $variable_product ) {
-                $children = $variable_product->get_children();
+            $wholesale_prices_per_role = WWP_Helper_Functions::get_wholesale_prices_per_role_from_variations( $children, $wholesale_roles );
 
-                if ( empty( $children ) ) {
-                    continue;
-                }
-
-                $wholesale_prices_per_role = WWP_Helper_Functions::get_wholesale_prices_per_role_from_variations( $children, $wholesale_roles );
-
-                $needs_save = false;
-
-                foreach ( $wholesale_roles as $role_key => $role ) {
-                    if ( ! empty( $wholesale_prices_per_role[ $role_key ] ) ) {
-                        $prices = $wholesale_prices_per_role[ $role_key ];
-                        $variable_product->update_meta_data( $role_key . '_have_wholesale_price', 'yes' );
-                        $variable_product->update_meta_data( $role_key . '_min_wholesale_price', min( $prices ) );
-                        $variable_product->update_meta_data( $role_key . '_max_wholesale_price', max( $prices ) );
-                        $needs_save = true;
-                    } else {
-                        $variable_product->update_meta_data( $role_key . '_have_wholesale_price', 'no' );
-                        $variable_product->delete_meta_data( $role_key . '_min_wholesale_price' );
-                        $variable_product->delete_meta_data( $role_key . '_max_wholesale_price' );
-                        $needs_save = true;
-                    }
-                }
-
-                if ( $needs_save ) {
-                    $variable_product->save_meta_data();
+            foreach ( $wholesale_roles as $role_key => $role ) {
+                if ( ! empty( $wholesale_prices_per_role[ $role_key ] ) ) {
+                    $prices = $wholesale_prices_per_role[ $role_key ];
+                    $variable_product->update_meta_data( $role_key . '_have_wholesale_price', 'yes' );
+                    $variable_product->update_meta_data( $role_key . '_min_wholesale_price', min( $prices ) );
+                    $variable_product->update_meta_data( $role_key . '_max_wholesale_price', max( $prices ) );
+                } else {
+                    $variable_product->update_meta_data( $role_key . '_have_wholesale_price', 'no' );
+                    $variable_product->delete_meta_data( $role_key . '_min_wholesale_price' );
+                    $variable_product->delete_meta_data( $role_key . '_max_wholesale_price' );
                 }
             }
 
-            $fetched = count( $variable_products );
-            ++$page;
-        } while ( $fetched === $limit );
+            $variable_product->save_meta_data();
+        }
 
-        update_option( 'wwp_variable_price_range_version', '1.0' );
+        if ( count( $variable_products ) < $limit ) {
+            // Final page processed - clear the checkpoint and mark the migration complete.
+            delete_option( 'wwp_variable_price_range_current_page' );
+            update_option( 'wwp_variable_price_range_version', '1.0' );
+        } else {
+            // More pages remain - persist the checkpoint for the next run.
+            update_option( 'wwp_variable_price_range_current_page', $page + 1 );
+
+            if ( function_exists( 'as_enqueue_async_action' ) ) {
+                // Re-enqueue the next page as a fresh Action Scheduler run so each invocation
+                // stays well within the PHP execution limit.
+                as_enqueue_async_action( 'wwp_migrate_variable_price_range' );
+            }
+            // When Action Scheduler is unavailable the synchronous driver in
+            // schedule_wholesale_price_range_migration() advances through the remaining pages.
+        }
     }
 
     /**
@@ -2400,6 +2750,8 @@ CSS;
      * is not yet loaded), the migration is run synchronously as a fallback.
      *
      * @since  2.2.8
+     * @since  2.2.9 Enqueue via as_enqueue_async_action(); when Action Scheduler is unavailable,
+     *               drive the now-paginated migration synchronously page by page until complete.
      * @access public
      *
      * @return void
@@ -2410,21 +2762,67 @@ CSS;
             return;
         }
 
-        if ( ! function_exists( 'as_schedule_single_action' ) ) {
-            // Fallback: run synchronously if Action Scheduler is not available.
-            $this->migrate_variable_product_wholesale_price_range();
+        if ( ! function_exists( 'as_enqueue_async_action' ) ) {
+            // Fallback: Action Scheduler is unavailable, so run the migration synchronously,
+            // one page per call, until the completion flag is set.
+            do {
+                $this->migrate_variable_product_wholesale_price_range();
+            } while ( ! get_option( 'wwp_variable_price_range_version' ) );
             return;
         }
 
         if ( ! as_has_scheduled_action( 'wwp_migrate_variable_price_range' ) ) {
-            as_schedule_single_action( time(), 'wwp_migrate_variable_price_range' );
+            as_enqueue_async_action( 'wwp_migrate_variable_price_range' );
         }
+    }
+
+    /**
+     * Whether to register wholesale_price_html_filter on woocommerce_get_price_html.
+     *
+     * Pure admin page loads do not need frontend wholesale price HTML. Admin AJAX
+     * (e.g. variation price display) and REST API requests still do.
+     *
+     * @since 2.2.9
+     * @access private
+     *
+     * @return bool True when the filter should be registered for this request.
+     */
+    private function should_register_wholesale_price_html_filter() {
+
+        // Storefront, cron, CLI, and other non-admin contexts always need the filter.
+        // Evaluated at plugin bootstrap (registration time), not inside price callbacks
+        // where WPML historically made is_admin() unreliable.
+        if ( ! is_admin() ) {
+            return true;
+        }
+
+        // Admin-ajax.php still needs the filter for variation / dynamic price HTML.
+        if ( wp_doing_ajax() ) {
+            return true;
+        }
+
+        // REST requests (including WC Store API / product endpoints) need the filter.
+        // REST_REQUEST may not be defined yet at bootstrap; WC URI check covers that case.
+        if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+            return true;
+        }
+
+        if ( function_exists( 'WC' ) ) {
+            $woocommerce = WC();
+            if ( $woocommerce && is_callable( array( $woocommerce, 'is_rest_api_request' ) ) && $woocommerce->is_rest_api_request() ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
      * Execute model.
      *
      * @since  1.5.0
+     * @since  2.2.9 Register the Elementor Product Price widget replacement-message filter;
+     *               skip wholesale price HTML filter on pure admin screens (#951).
      * @access public
      */
     public function run() {
@@ -2432,9 +2830,15 @@ CSS;
         add_action( 'init', array( $this, 'schedule_wholesale_price_range_migration' ) );
         add_action( 'wwp_migrate_variable_price_range', array( $this, 'migrate_variable_product_wholesale_price_range' ) );
 
-        // Apply wholesale price to archive and single product pages
+        // Apply wholesale price to archive and single product pages.
         // On WC 3.x series, includes variation products.
-        add_filter( 'woocommerce_get_price_html', array( $this, 'wholesale_price_html_filter' ), 10, 2 );
+        // Do not attach on pure admin screens. WooCommerce's Price column on
+        // /wp-admin/edit.php?post_type=product calls get_price_html() per row and would
+        // otherwise drag the full WWPP pricing pipeline into the product list for no
+        // frontend benefit. Keep it for storefront, admin-ajax, and REST. Issue #951.
+        if ( $this->should_register_wholesale_price_html_filter() ) {
+            add_filter( 'woocommerce_get_price_html', array( $this, 'wholesale_price_html_filter' ), 10, 2 );
+        }
 
         // Apply wholesale price upon adding product to cart.
         add_action(
@@ -2447,6 +2851,10 @@ CSS;
             1
         );
 
+        // Populate wholesale line totals for woocommerce_add_to_cart listeners (issue #549).
+        // Priority 1 so later listeners see calculated totals; WC core's own priority-20
+        // calculate_totals stays registered so the complete cart (incl. bundled/composite
+        // children added at priority 9) is re-persisted to the session (issues #923, #994).
         add_action(
             'woocommerce_add_to_cart',
             array(
@@ -2545,6 +2953,10 @@ CSS;
         add_filter( 'init', array( $this, 'hide_price_and_add_to_cart_button' ) );
         add_action( 'woocommerce_single_product_summary', array( $this, 'display_replacement_message' ), 10 );
         add_action( 'woocommerce_after_shop_loop_item', array( $this, 'display_replacement_message' ), 10 );
+        // Elementor renders the price through its own "Product Price" widget, bypassing the
+        // WooCommerce actions above, so output the replacement message there too. The filter only
+        // fires when Elementor is active, so no extra guard is needed.
+        add_filter( 'elementor/widget/render_content', array( $this, 'show_replacement_message_in_elementor_price_widget' ), 10, 2 );
         add_filter(
             'woocommerce_blocks_product_grid_item_html',
             array(

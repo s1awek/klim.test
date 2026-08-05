@@ -33,6 +33,7 @@ class ADBC_Settings_Validator {
 		'users_meta',
 		'transients',
 		'cron_jobs',
+		'woocommerce',
 		'automation',
 		'analytics',
 		'addons_activity',

@@ -90,9 +90,9 @@ add_filter( 'pre_set_transient_update_themes', 'flatsome_get_update_info', 1, 99
  * @return array
  */
 function flatsome_upgrader_package_options( $options ) {
-	$package = $options['package'];
+	$package = isset( $options['package'] ) ? $options['package'] : '';
 
-	if ( false !== strrpos( $package, 'flatsome_download' ) ) {
+	if ( is_string( $package ) && false !== strpos( $package, 'flatsome_download' ) ) {
 		parse_str( wp_parse_url( $package, PHP_URL_QUERY ), $vars );
 
 		if ( isset( $vars['flatsome_version'] ) ) {

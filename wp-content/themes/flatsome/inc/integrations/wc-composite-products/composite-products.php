@@ -13,7 +13,7 @@
 function flatsome_wc_composite_products_integration() {
 	global $integrations_uri;
 
-	$deps = array( 'jquery', 'flatsome-js' );
+	$deps = array( 'jquery', 'flatsome-js', 'flatsome-theme-woocommerce-js' );
 
 	if ( get_theme_mod( 'lazy_load_images' ) ) {
 		$deps[] = 'flatsome-lazy';

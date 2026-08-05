@@ -348,7 +348,7 @@ class ADBC_Automation extends ADBC_Singleton {
 			return true;
 		}
 
-		return unlink( $task_events_file );
+		return @unlink( $task_events_file );
 
 	}
 

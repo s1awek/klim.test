@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8564eae6b8dc6ac4655caaabc2d76d46
+class ComposerStaticInit979be8b58ed8e0831cf2f645022ed37b
 {
     public static $files = array (
         '9c67151ae59aff4788964ce8eb2a0f43' => __DIR__ . '/..' . '/clue/stream-filter/src/functions_include.php',
@@ -13,23 +13,23 @@ class ComposerStaticInit8564eae6b8dc6ac4655caaabc2d76d46
     );
 
     public static $prefixLengthsPsr4 = array (
-        'S' => 
+        'S' =>
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Component\\OptionsResolver\\' => 34,
         ),
-        'P' => 
+        'P' =>
         array (
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
             'Paynow\\Tests\\' => 13,
             'Paynow\\' => 7,
         ),
-        'N' => 
+        'N' =>
         array (
             'Nyholm\\Psr7\\' => 12,
         ),
-        'H' => 
+        'H' =>
         array (
             'Http\\Promise\\' => 13,
             'Http\\Message\\' => 13,
@@ -37,64 +37,64 @@ class ComposerStaticInit8564eae6b8dc6ac4655caaabc2d76d46
             'Http\\Client\\Curl\\' => 17,
             'Http\\Client\\' => 12,
         ),
-        'C' => 
+        'C' =>
         array (
             'Clue\\StreamFilter\\' => 18,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Symfony\\Polyfill\\Php80\\' => 
+        'Symfony\\Polyfill\\Php80\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
         ),
-        'Symfony\\Component\\OptionsResolver\\' => 
+        'Symfony\\Component\\OptionsResolver\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/options-resolver',
         ),
-        'Psr\\Http\\Message\\' => 
+        'Psr\\Http\\Message\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-factory/src',
             1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'Psr\\Http\\Client\\' => 
+        'Psr\\Http\\Client\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-client/src',
         ),
-        'Paynow\\Tests\\' => 
+        'Paynow\\Tests\\' =>
         array (
             0 => __DIR__ . '/..' . '/pay-now/paynow-php-sdk/tests',
         ),
-        'Paynow\\' => 
+        'Paynow\\' =>
         array (
             0 => __DIR__ . '/..' . '/pay-now/paynow-php-sdk/src/Paynow',
         ),
-        'Nyholm\\Psr7\\' => 
+        'Nyholm\\Psr7\\' =>
         array (
             0 => __DIR__ . '/..' . '/nyholm/psr7/src',
         ),
-        'Http\\Promise\\' => 
+        'Http\\Promise\\' =>
         array (
             0 => __DIR__ . '/..' . '/php-http/promise/src',
         ),
-        'Http\\Message\\' => 
+        'Http\\Message\\' =>
         array (
             0 => __DIR__ . '/..' . '/php-http/message-factory/src',
             1 => __DIR__ . '/..' . '/php-http/message/src',
         ),
-        'Http\\Discovery\\' => 
+        'Http\\Discovery\\' =>
         array (
             0 => __DIR__ . '/..' . '/php-http/discovery/src',
         ),
-        'Http\\Client\\Curl\\' => 
+        'Http\\Client\\Curl\\' =>
         array (
             0 => __DIR__ . '/..' . '/php-http/curl-client/src',
         ),
-        'Http\\Client\\' => 
+        'Http\\Client\\' =>
         array (
             0 => __DIR__ . '/..' . '/php-http/httplug/src',
         ),
-        'Clue\\StreamFilter\\' => 
+        'Clue\\StreamFilter\\' =>
         array (
             0 => __DIR__ . '/..' . '/clue/stream-filter/src',
         ),
@@ -293,9 +293,9 @@ class ComposerStaticInit8564eae6b8dc6ac4655caaabc2d76d46
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8564eae6b8dc6ac4655caaabc2d76d46::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8564eae6b8dc6ac4655caaabc2d76d46::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8564eae6b8dc6ac4655caaabc2d76d46::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit979be8b58ed8e0831cf2f645022ed37b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit979be8b58ed8e0831cf2f645022ed37b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit979be8b58ed8e0831cf2f645022ed37b::$classMap;
 
         }, null, ClassLoader::class);
     }

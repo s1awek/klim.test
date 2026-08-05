@@ -38,6 +38,9 @@ class ADBC_Dictionary {
 		// Load the names from the dictionary file for the slugs with missing names
 		self::load_names_from_dictionary( $slugs_with_missing_names, $items_type );
 
+		// Load remaining missing names from the global custom addons dictionary as a last fallback.
+		self::load_names_from_custom_addons_dictionary( $slugs_with_missing_names );
+
 		// Set the names for the slugs with missing names. If the name is not found, the slug is set as the name.
 		self::update_items_list_with_names( $items_list, $slugs_with_missing_names );
 
@@ -109,17 +112,52 @@ class ADBC_Dictionary {
 	 */
 	private static function load_names_from_dictionary( &$slugs_with_missing_names, $items_type ) {
 
-		$total_slugs_with_missing_names = count( $slugs_with_missing_names );
-
 		$dict_file_path = ADBC_Scan_Paths::get_addons_dictionary_file_path( $items_type );
+		self::load_names_from_dictionary_file( $slugs_with_missing_names, $dict_file_path );
+
+	}
+
+	/**
+	 * Load names from the custom addons dictionary file.
+	 *
+	 * @param array $slugs_with_missing_names The slugs with missing names.
+	 * @return void
+	 */
+	private static function load_names_from_custom_addons_dictionary( &$slugs_with_missing_names ) {
+
+		if ( ! self::has_missing_addon_names( $slugs_with_missing_names ) )
+			return;
+
+		$dict_file_path = ADBC_Scan_Paths::get_custom_addons_dictionary_file_path();
+		self::load_names_from_dictionary_file( $slugs_with_missing_names, $dict_file_path );
+
+	}
+
+	/**
+	 * Load names from a dictionary file.
+	 *
+	 * @param array  $slugs_with_missing_names The slugs with missing names.
+	 * @param string $dict_file_path The dictionary file path.
+	 * @return void
+	 */
+	private static function load_names_from_dictionary_file( &$slugs_with_missing_names, $dict_file_path ) {
+
+		$total_slugs_with_missing_names = self::count_missing_addon_names( $slugs_with_missing_names );
+
+		if ( $total_slugs_with_missing_names === 0 )
+			return;
+
 		$dict_file_handle = ADBC_Files::instance()->get_file_handle( $dict_file_path, 'r' );
 
 		if ( $dict_file_handle !== false ) {
 			while ( ( $line = fgets( $dict_file_handle ) ) !== false ) {
 				$line = rtrim( $line, "\r\n" );
-				list( $typed_slug, $addon_name ) = explode( '|', $line, 2 );
+				[ $typed_slug, $addon_name ] = self::split_slug_name_dictionary_line( $line );
 
-				if ( isset( $slugs_with_missing_names[ $typed_slug ] ) ) {
+				if ( $typed_slug === false || $addon_name === false )
+					continue;
+
+				if ( isset( $slugs_with_missing_names[ $typed_slug ] ) && $slugs_with_missing_names[ $typed_slug ] === '' ) {
 					$slugs_with_missing_names[ $typed_slug ] = $addon_name;
 					if ( --$total_slugs_with_missing_names === 0 )
 						break;
@@ -128,6 +166,37 @@ class ADBC_Dictionary {
 
 			fclose( $dict_file_handle );
 		}
+
+	}
+
+	/**
+	 * Check if the slugs names dictionary still contains missing names.
+	 *
+	 * @param array $slugs_names_dictionary The slugs names dictionary.
+	 * @return bool True if a missing name still exists.
+	 */
+	private static function has_missing_addon_names( &$slugs_names_dictionary ) {
+
+		return self::count_missing_addon_names( $slugs_names_dictionary ) > 0;
+
+	}
+
+	/**
+	 * Count missing addon names in a slugs names dictionary.
+	 *
+	 * @param array $slugs_names_dictionary The slugs names dictionary.
+	 * @return int The number of missing names.
+	 */
+	private static function count_missing_addon_names( &$slugs_names_dictionary ) {
+
+		$missing = 0;
+
+		foreach ( $slugs_names_dictionary as $addon_name ) {
+			if ( $addon_name === '' )
+				$missing++;
+		}
+
+		return $missing;
 
 	}
 
@@ -207,6 +276,12 @@ class ADBC_Dictionary {
 		if ( $slug_type !== 'p' && $slug_type !== 't' ) // We update the dictionary only for plugins and themes.
 			return;
 
+		$is_custom = ! empty( $manual_categorization['is_custom'] );
+		if ( $is_custom ) {
+			self::update_custom_addons_names_dictionary_for_manual( $manual_categorization );
+			return;
+		}
+
 		$new_addon_name = ADBC_Addons::get_addon_name( $new_slug, $slug_type );
 		$new_slug = $slug_type . ':' . $new_slug;
 
@@ -253,9 +328,10 @@ class ADBC_Dictionary {
 			// if the addon is the one we are looking for, flag it as found.
 			$found_slug = true;
 
-			// if the addon is the one we are looking for, and the name is different, update the name.
-			if ( $addon_name !== $new_addon_name )
-				$line = $new_slug . "|" . $new_addon_name . "\n";
+			// Write the current name or replace it with the newly submitted custom addon name.
+			$line = $addon_name === $new_addon_name
+				? $line . "\n"
+				: $new_slug . "|" . $new_addon_name . "\n";
 
 			fwrite( $temp_dict_file_handle, $line );
 
@@ -275,6 +351,125 @@ class ADBC_Dictionary {
 			ADBC_Logging::log_error( "Failed to rename the dictionary file.", __METHOD__, __LINE__ );
 			return;
 		}
+
+	}
+
+	/**
+	 * Update the custom addons names dictionary file for the manual categorization.
+	 *
+	 * @param array $manual_categorization The manual categorization data containing type, slug and name.
+	 * @return void
+	 */
+	private static function update_custom_addons_names_dictionary_for_manual( $manual_categorization ) {
+
+		$slug_type = $manual_categorization['type'];
+		$new_slug = $slug_type . ':' . $manual_categorization['slug'];
+		$new_addon_name = trim( $manual_categorization['name'] );
+
+		$dict_file_path = ADBC_Scan_Paths::get_custom_addons_dictionary_file_path();
+		$temp_dict_file_path = ADBC_Scan_Paths::get_custom_addons_dictionary_temp_file_path();
+
+		// If the dictionary file does not exist, create it and add the custom addon name.
+		if ( ADBC_Files::instance()->exists( $dict_file_path ) === false ) {
+
+			$line = $new_slug . "|" . $new_addon_name . "\n";
+			$success = ADBC_Files::instance()->put_contents( $dict_file_path, $line );
+
+			if ( $success === false ) {
+				ADBC_Logging::log_error( "Failed to create the custom addons dictionary file.", __METHOD__, __LINE__ );
+				return;
+			}
+		}
+
+		$dict_file_handle = ADBC_Files::instance()->get_file_handle( $dict_file_path, 'r' );
+		$temp_dict_file_handle = ADBC_Files::instance()->get_file_handle( $temp_dict_file_path, 'w' );
+
+		if ( $dict_file_handle === false || $temp_dict_file_handle === false ) {
+			ADBC_Logging::log_error( "Failed to open the custom addons dictionary file.", __METHOD__, __LINE__ );
+			return;
+		}
+
+		$found_slug = false;
+
+		while ( ( $line = fgets( $dict_file_handle ) ) !== false ) {
+
+			$line = rtrim( $line, "\r\n" );
+			[ $slug, $addon_name ] = self::split_slug_name_dictionary_line( $line );
+
+			if ( $slug === false || $addon_name === false )
+				continue;
+
+			if ( $slug !== $new_slug ) {
+				fwrite( $temp_dict_file_handle, $line . "\n" );
+				continue;
+			}
+
+			$found_slug = true;
+			$line = $addon_name === $new_addon_name
+				? $line . "\n"
+				: $new_slug . "|" . $new_addon_name . "\n";
+
+			fwrite( $temp_dict_file_handle, $line );
+
+		}
+
+		if ( ! $found_slug ) {
+			$line = $new_slug . "|" . $new_addon_name . "\n";
+			fwrite( $temp_dict_file_handle, $line );
+		}
+
+		fclose( $dict_file_handle );
+		fclose( $temp_dict_file_handle );
+
+		if ( ADBC_Files::instance()->exists( $temp_dict_file_path ) && ! rename( $temp_dict_file_path, $dict_file_path ) ) {
+			ADBC_Logging::log_error( "Failed to rename the custom addons dictionary file.", __METHOD__, __LINE__ );
+			return;
+		}
+
+	}
+
+	/**
+	 * Get the custom addons names dictionary.
+	 *
+	 * @return array The custom addons dictionary list.
+	 */
+	public static function get_custom_addons_names_dictionary() {
+
+		$dict_file_path = ADBC_Scan_Paths::get_custom_addons_dictionary_file_path();
+		$dict_file_handle = ADBC_Files::instance()->get_file_handle( $dict_file_path, 'r' );
+
+		if ( $dict_file_handle === false )
+			return [];
+
+		$custom_addons = [];
+
+		while ( ( $line = fgets( $dict_file_handle ) ) !== false ) {
+
+			$line = rtrim( $line, "\r\n" );
+			[ $typed_slug, $addon_name ] = self::split_slug_name_dictionary_line( $line );
+
+			if ( $typed_slug === false || $addon_name === false )
+				continue;
+
+			$parts = explode( ':', $typed_slug, 2 );
+			if ( count( $parts ) !== 2 || ! in_array( $parts[0], [ 'p', 't' ], true ) || $parts[1] === '' )
+				continue;
+
+			$custom_addons[] = [ 
+				'type' => $parts[0],
+				'slug' => $parts[1],
+				'name' => $addon_name,
+			];
+
+		}
+
+		fclose( $dict_file_handle );
+
+		usort( $custom_addons, function ($a, $b) {
+			return strcasecmp( $a['name'], $b['name'] );
+		} );
+
+		return $custom_addons;
 
 	}
 

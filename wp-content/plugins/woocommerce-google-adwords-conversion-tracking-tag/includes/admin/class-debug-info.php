@@ -5,6 +5,7 @@ namespace SweetCode\Pixel_Manager\Admin;
 use Exception;
 use SweetCode\Pixel_Manager\Geolocation;
 use SweetCode\Pixel_Manager\Logger;
+use SweetCode\Pixel_Manager\Pixels\Facebook\Facebook;
 use SweetCode\Pixel_Manager\Pixels\Pixel_Manager;
 use SweetCode\Pixel_Manager\Helpers;
 use SweetCode\Pixel_Manager\Tracking_Accuracy_DB;
@@ -69,6 +70,8 @@ class Debug_Info {
             $html .= 'hook_suffix:                  ' . $hook_suffix . PHP_EOL;
             $html .= PHP_EOL;
             $html .= 'Hosting provider: ' . Environment::get_hosting_provider() . PHP_EOL;
+            $html = self::add_facebook_event_setup_info( $html );
+            $html = self::add_facebook_restricted_events_info( $html );
             if ( Environment::is_woocommerce_active() ) {
                 $html .= PHP_EOL . '## WooCommerce ##' . PHP_EOL . PHP_EOL;
                 $html .= 'Default currency: ' . get_woocommerce_currency() . PHP_EOL . PHP_EOL;
@@ -86,14 +89,26 @@ class Debug_Info {
                     $html .= PHP_EOL;
                     $last_order_url_contains_order_received_page_url = ( strpos( Environment::get_last_order_url(), $order_received_page_url ) !== false ? 'yes' : 'no' );
                     $html .= 'Purchase confirmation uses is_order_received(): ' . $last_order_url_contains_order_received_page_url . PHP_EOL;
-                    $url_response = self::pmw_remote_get_response( $last_order_url );
-                    if ( 200 === $url_response ) {
-                        $html .= 'Purchase confirmation page redirect:            ' . $url_response . ' (OK)' . PHP_EOL;
-                    } elseif ( $url_response >= 300 && $url_response < 400 ) {
-                        $html .= self::show_warning( true ) . 'Purchase confirmation redirect:            ' . $url_response . ' (ERROR)' . PHP_EOL;
-                        $html .= self::show_warning( true ) . 'Redirect URL:                              ' . self::pmw_get_final_url( Environment::get_last_order_url() ) . PHP_EOL;
+                    $redirect_report = self::get_purchase_confirmation_redirect_report( $last_order_url );
+                    $redirect_hops = [];
+                    foreach ( $redirect_report['chain'] as $hop ) {
+                        $redirect_hops[] = $hop['code'];
+                    }
+                    if ( $redirect_report['error'] ) {
+                        $html .= 'Purchase confirmation page redirect:            could not be tested (' . $redirect_report['error'] . ')' . PHP_EOL;
+                    } elseif ( empty( $redirect_report['chain'] ) ) {
+                        if ( 200 === $redirect_report['final_code'] ) {
+                            $html .= 'Purchase confirmation page redirect:            200 (OK)' . PHP_EOL;
+                        } else {
+                            $html .= self::show_warning( true ) . 'Purchase confirmation page HTTP status:         ' . $redirect_report['final_code'] . ' (ERROR)' . PHP_EOL;
+                        }
+                    } elseif ( 200 === $redirect_report['final_code'] && self::is_order_confirmation_url( $redirect_report['final_url'], Environment::get_last_order() ) ) {
+                        $html .= 'Purchase confirmation page redirect:            ' . implode( ' -> ', $redirect_hops ) . ' -> ' . $redirect_report['final_code'] . ' (OK, ends on the order confirmation page)' . PHP_EOL;
+                        $html .= 'Final URL:                                      ' . $redirect_report['final_url'] . PHP_EOL;
                     } else {
-                        $html .= 'Purchase confirmation redirect:            ' . $url_response . ' (ERROR)' . PHP_EOL;
+                        $html .= self::show_warning( true ) . 'Purchase confirmation page redirect:            ' . implode( ' -> ', $redirect_hops ) . ' -> ' . $redirect_report['final_code'] . ' (ERROR, redirects away from the order confirmation page)' . PHP_EOL;
+                        $html .= self::show_warning( true ) . 'Redirect URL:                                   ' . $redirect_report['final_url'] . PHP_EOL;
+                        $html .= 'Note: Tested server side. Verify in a private browser window before concluding that customers get redirected.' . PHP_EOL;
                     }
                 }
                 //        $html                                .= 'wc_get_page_permalink(\'checkout\'): ' . wc_get_page_permalink('checkout') . PHP_EOL;
@@ -207,6 +222,129 @@ class Debug_Info {
             return $html;
         } catch ( Exception $e ) {
             $html .= PHP_EOL . 'Freemius error: ' . $e->getMessage() . PHP_EOL;
+        }
+        return $html;
+    }
+
+    /**
+     * Add a report about Meta Event Setup Tool rules to the debug info.
+     *
+     * Meta stores point-and-click Event Setup Tool rules server-side on the
+     * pixel and delivers them to every browser through the public signals
+     * config file. Active rules fire additional events without an event ID
+     * and usually without a value, which corrupts event counts and purchase
+     * values because they cannot be deduplicated against the events the
+     * Pixel Manager sends.
+     *
+     * Reference: https://secure.helpscout.net/conversation/3309525073
+     *
+     * @param string $html
+     * @return string
+     * @since 1.63.1
+     */
+    private static function add_facebook_event_setup_info( $html ) {
+        try {
+            $pixel_ids = Facebook::get_pixel_ids();
+            if ( empty( $pixel_ids ) ) {
+                return $html;
+            }
+            $html .= PHP_EOL . '## Meta Event Setup Tool ##' . PHP_EOL . PHP_EOL;
+            $results = Facebook_Event_Setup_Scan::get_scan_results( true );
+            if ( !is_array( $results ) || empty( $results['pixels'] ) ) {
+                $html .= 'Scan disabled or no results available.' . PHP_EOL;
+                return $html;
+            }
+            $findings_detected = false;
+            foreach ( $results['pixels'] as $pixel_id => $pixel ) {
+                if ( !empty( $pixel['error'] ) ) {
+                    $html .= 'Pixel ' . $pixel_id . ': could not be scanned (' . $pixel['error'] . ')' . PHP_EOL;
+                    continue;
+                }
+                $event_names = Facebook_Event_Setup_Scan::get_active_rule_event_names( $pixel );
+                $iwl_extractors = ( !empty( $pixel['iwl_extractors'] ) ? $pixel['iwl_extractors'] : [] );
+                if ( empty( $event_names ) && empty( $iwl_extractors ) ) {
+                    $html .= 'Pixel ' . $pixel_id . ': OK (no active Event Setup Tool rules found)' . PHP_EOL;
+                    continue;
+                }
+                $findings_detected = true;
+                if ( !empty( $event_names ) ) {
+                    $html .= self::show_warning( true ) . 'Pixel ' . $pixel_id . ': ' . count( $pixel['active_rules'] ) . ' active Event Setup Tool rule(s) firing: ' . implode( ', ', $event_names ) . PHP_EOL;
+                }
+                if ( !empty( $iwl_extractors ) ) {
+                    $html .= self::show_warning( true ) . 'Pixel ' . $pixel_id . ': Event Setup Tool value extractors configured for: ' . implode( ', ', $iwl_extractors ) . PHP_EOL;
+                }
+            }
+            if ( $findings_detected ) {
+                $html .= PHP_EOL;
+                $html .= 'These rules fire additional browser events without deduplication and mostly without values,' . PHP_EOL;
+                $html .= 'which corrupts event counts and purchase values in Meta. Remove them in the Meta Events Manager:' . PHP_EOL;
+                $html .= 'Data sources -> select the pixel -> Settings -> Event setup -> Manage' . PHP_EOL;
+                $html .= 'More information: ' . Documentation::get_link( 'facebook_event_setup_tool' ) . PHP_EOL;
+            }
+            if ( !empty( $results['scanned_at'] ) ) {
+                $html .= 'Scan date: ' . gmdate( 'Y-m-d H:i:s', $results['scanned_at'] ) . ' UTC' . PHP_EOL;
+            }
+            return $html;
+        } catch ( Exception $e ) {
+            $html .= PHP_EOL . 'Meta Event Setup Tool scan error: ' . $e->getMessage() . PHP_EOL;
+        }
+        return $html;
+    }
+
+    /**
+     * Add Meta business category event restrictions to the debug info.
+     *
+     * Meta pixels in restricted business categories (e.g. health and wellness)
+     * carry an eventValidation entry with restrictedEventNames in their public
+     * signals config. fbevents.js silently drops those events client-side (no
+     * request to facebook.com/tr) and Meta filters them on the Conversion API
+     * too, while PageView and ViewContent keep working. Merchants then suspect
+     * the Pixel Manager because only the lower funnel events are missing.
+     *
+     * Reference: averyalert.com support case, 2026-07-24
+     *
+     * @param string $html
+     * @return string
+     * @since 1.63.1
+     */
+    private static function add_facebook_restricted_events_info( $html ) {
+        try {
+            $pixel_ids = Facebook::get_pixel_ids();
+            if ( empty( $pixel_ids ) ) {
+                return $html;
+            }
+            $html .= PHP_EOL . '## Meta Business Category Event Restrictions ##' . PHP_EOL . PHP_EOL;
+            $results = Facebook_Event_Setup_Scan::get_scan_results( true );
+            if ( !is_array( $results ) || empty( $results['pixels'] ) ) {
+                $html .= 'Scan disabled or no results available.' . PHP_EOL;
+                return $html;
+            }
+            $restrictions_detected = false;
+            foreach ( $results['pixels'] as $pixel_id => $pixel ) {
+                if ( !empty( $pixel['error'] ) ) {
+                    $html .= 'Pixel ' . $pixel_id . ': could not be scanned (' . $pixel['error'] . ')' . PHP_EOL;
+                    continue;
+                }
+                $restricted_events = ( !empty( $pixel['restricted_events'] ) ? $pixel['restricted_events'] : [] );
+                if ( empty( $restricted_events ) ) {
+                    $html .= 'Pixel ' . $pixel_id . ': OK (no restricted events)' . PHP_EOL;
+                    continue;
+                }
+                $restrictions_detected = true;
+                $html .= self::show_warning( true ) . 'Pixel ' . $pixel_id . ': Meta blocks these events for this pixel: ' . implode( ', ', $restricted_events ) . PHP_EOL;
+            }
+            if ( $restrictions_detected ) {
+                $html .= PHP_EOL;
+                $html .= 'Meta restricts these events because of the business category of the pixel (e.g. health and wellness).' . PHP_EOL;
+                $html .= 'fbevents.js silently drops them in the browser and Meta also filters them on the Conversion API,' . PHP_EOL;
+                $html .= 'while PageView and ViewContent keep working. This is enforced by Meta and not caused by the Pixel Manager.' . PHP_EOL;
+                $html .= 'Review the business category in the Meta Events Manager (Data sources -> select the pixel -> Settings ->' . PHP_EOL;
+                $html .= 'Manage data source categories, and Manage event blocking) and request a review if the categorization is wrong.' . PHP_EOL;
+                $html .= 'More information: ' . Documentation::get_link( 'facebook_restricted_events' ) . PHP_EOL;
+            }
+            return $html;
+        } catch ( Exception $e ) {
+            $html .= PHP_EOL . 'Meta business category restrictions scan error: ' . $e->getMessage() . PHP_EOL;
         }
         return $html;
     }
@@ -543,23 +681,102 @@ class Debug_Info {
         return self::show_warning( true ) . $response_code;
     }
 
-    private static function pmw_get_final_url( $url ) {
-        $response = wp_remote_get( $url, [
-            'timeout'             => 4,
-            'sslverify'           => !Geolocation::is_localhost(),
-            'limit_response_size' => 5000,
-            'blocking'            => true,
-            'redirection'         => 10,
-        ] );
-        if ( is_wp_error( $response ) ) {
-            return $response->get_error_message();
-        } else {
-            // If $response['http_response']->get_response_object()->url is set, return it, else return 'error'
-            if ( isset( $response['http_response']->get_response_object()->url ) ) {
-                return $response['http_response']->get_response_object()->url;
+    /**
+     * Follow the redirect chain of the purchase confirmation URL hop by hop.
+     *
+     * The request mimics a regular browser (user agent, Accept headers, the shop locale)
+     * because WAFs, bot protection and language plugins answer redirects to the default
+     * WordPress user agent that real visitors never see.
+     *
+     * @param string $url
+     * @return array {
+     *     error:      string  Error message if the test could not be completed, empty otherwise.
+     *     chain:      array   One entry per redirect hop: [ 'code' => int, 'to' => string ].
+     *     final_url:  string  The last URL that was requested.
+     *     final_code: int     The HTTP status code of the final response, 0 on error.
+     * }
+     */
+    private static function get_purchase_confirmation_redirect_report( $url ) {
+        $report = [
+            'error'      => '',
+            'chain'      => [],
+            'final_url'  => $url,
+            'final_code' => 0,
+        ];
+        $max_hops = 5;
+        $current_url = $url;
+        for ($hop = 0; $hop <= $max_hops; $hop++) {
+            $response = wp_remote_get( $current_url, [
+                'timeout'             => 4,
+                'sslverify'           => !Geolocation::is_localhost(),
+                'limit_response_size' => 5000,
+                'blocking'            => true,
+                'redirection'         => 0,
+                'user-agent'          => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+                'headers'             => [
+                    'Accept'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Accept-Language' => str_replace( '_', '-', get_locale() ),
+                ],
+            ] );
+            if ( is_wp_error( $response ) ) {
+                $report['error'] = $response->get_error_message();
+                $report['final_url'] = $current_url;
+                return $report;
             }
-            return 'error';
+            $response_code = wp_remote_retrieve_response_code( $response );
+            if ( $response_code >= 300 && $response_code < 400 ) {
+                $location = wp_remote_retrieve_header( $response, 'location' );
+                if ( is_array( $location ) ) {
+                    $location = end( $location );
+                }
+                if ( !$location ) {
+                    // Redirect status without a Location header, nothing to follow
+                    $report['final_url'] = $current_url;
+                    $report['final_code'] = $response_code;
+                    return $report;
+                }
+                $location = \WP_Http::make_absolute_url( $location, $current_url );
+                $report['chain'][] = [
+                    'code' => $response_code,
+                    'to'   => $location,
+                ];
+                $current_url = $location;
+                continue;
+            }
+            $report['final_url'] = $current_url;
+            $report['final_code'] = $response_code;
+            return $report;
         }
+        $report['error'] = 'too many redirects (more than ' . $max_hops . ' hops)';
+        $report['final_url'] = $current_url;
+        return $report;
+    }
+
+    /**
+     * Check if a URL still points to the order confirmation page of the given order.
+     *
+     * Canonical redirects (http to https, www to non-www, trailing slash, language
+     * prefixes) keep the order key or the order-received endpoint in the URL. Only
+     * a redirect that loses both actually moves the customer off the confirmation
+     * page and breaks purchase tracking.
+     *
+     * @param string        $url
+     * @param \WC_Order|false $order
+     * @return bool
+     */
+    private static function is_order_confirmation_url( $url, $order ) {
+        if ( !$url || !$order ) {
+            return false;
+        }
+        $order_key = $order->get_order_key();
+        if ( $order_key && false !== strpos( $url, $order_key ) ) {
+            return true;
+        }
+        $endpoint = get_option( 'woocommerce_checkout_order_received_endpoint', 'order-received' );
+        if ( false !== strpos( $url, '/' . $endpoint . '/' . $order->get_id() ) ) {
+            return true;
+        }
+        return false;
     }
 
     private static function show_warning( $test = false ) {

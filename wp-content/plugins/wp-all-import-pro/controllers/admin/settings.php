@@ -561,13 +561,9 @@ class PMXI_Admin_Settings extends PMXI_Controller_Admin {
 
 		global $wpdb;
 
-		$meta_key = $_POST['key'];
+		$meta_key = sanitize_text_field( wp_unslash( $_POST['key'] ) );
 
-		$r = $wpdb->get_results("
-			SELECT DISTINCT postmeta.meta_value
-			FROM ".$wpdb->postmeta." as postmeta
-			WHERE postmeta.meta_key='".$meta_key."' LIMIT 0,10
-		", ARRAY_A);
+		$r = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT postmeta.meta_value FROM {$wpdb->postmeta} as postmeta WHERE postmeta.meta_key = %s LIMIT 0,10", $meta_key), ARRAY_A);
 
 		$meta_values = array();
 

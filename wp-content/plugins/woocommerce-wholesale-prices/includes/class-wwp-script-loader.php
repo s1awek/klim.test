@@ -101,6 +101,7 @@ if ( ! class_exists( 'WWP_Script_Loader' ) ) {
          * @since 1.4.0 Refactor codebase and move to its own model.
          * @since 2.1.0 Added custom decimal place for calculation on percentage discount, added also filter so that this can be overridden based on your requirements.
          * @since 2.2.8 Enqueue Wholesale Reports teaser assets when WWPP is inactive (#885).
+         * @since 2.2.9 Localize base-currency display data on the product edit screen so wholesale-price labels update live when the Aelia product base currency changes.
          * @access public
          *
          * @param string $handle Hook suffix for the current admin page.
@@ -225,6 +226,46 @@ if ( ! class_exists( 'WWP_Script_Loader' ) ) {
                 // Single Product specific CSS/JS.
                 wp_enqueue_style( 'wwp_cpt_product_single_admin_main_css', WWP_CSS_URL . 'backend/cpt/product/wwp-cpt-product-single-admin-main.css', array(), $this->_wwp_current_version, 'all' );
                 wp_enqueue_script( 'wwp_cpt_product_single_admin_main_js', WWP_JS_URL . 'backend/cpt/product/wwp-cpt-product-single-admin-main.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-accordion' ), $this->_wwp_current_version, true );
+
+                // When Aelia Currency Switcher is active, provide the currency display data so the
+                // wholesale-price field labels can update live when the product base currency changes.
+                if ( WWP_ACS_Integration_Helper::aelia_currency_switcher_active() ) {
+
+                    $wc_currencies  = get_woocommerce_currencies();
+                    $currencies_map = array();
+                    foreach ( WWP_ACS_Integration_Helper::enabled_currencies() as $currency_code ) {
+                        $currencies_map[ $currency_code ] = array(
+                            'name'   => isset( $wc_currencies[ $currency_code ] ) ? $wc_currencies[ $currency_code ] : $currency_code,
+                            // Decode here so the JS label builder (which uses text nodes for output safety)
+                            // renders the real glyph; currency symbols are entity-encoded (e.g. &euro;) and
+                            // wp_localize_script only decodes top-level scalars, not these nested values.
+                            'symbol' => html_entity_decode( get_woocommerce_currency_symbol( $currency_code ), ENT_QUOTES, 'UTF-8' ),
+                        );
+                    }
+
+                    $roles_symbols = array();
+                    foreach ( $this->_wwp_wholesale_roles->getAllRegisteredWholesaleRoles() as $role_key => $role ) {
+                        $roles_symbols[ $role_key ] = array(
+                            // Decode for the same reason as the currency symbols above: a role's override
+                            // symbol is entity-encoded and the JS builder renders it via a text node.
+                            'currency_symbol' => html_entity_decode( isset( $role['currency_symbol'] ) ? $role['currency_symbol'] : '', ENT_QUOTES, 'UTF-8' ),
+                            'name'            => isset( $role['roleName'] ) ? $role['roleName'] : '',
+                        );
+                    }
+
+                    wp_localize_script(
+                        'wwp_cpt_product_single_admin_main_js',
+                        'wwp_base_currency_label_params',
+                        array(
+                            'currencies'         => $currencies_map,
+                            'roles'              => $roles_symbols,
+                            'base_currency_text' => __( 'Base Currency', 'woocommerce-wholesale-prices' ),
+                            /* translators: %1$s: Wholesale role name, %2$s: currency name and symbol */
+                            'tip_format'         => __( 'Only applies to users with the role of %1$s for %2$s currency', 'woocommerce-wholesale-prices' ),
+                        )
+                    );
+                }
+
                 wp_enqueue_script( 'wwp_single_variable_product_admin_custom_bulk_actions_js', WWP_JS_URL . 'backend/cpt/product/wwp-single-variable-product-admin-custom-bulk-actions.js', array( 'jquery' ), $this->_wwp_current_version, true );
 
                 wp_localize_script(

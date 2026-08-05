@@ -19,7 +19,7 @@ switch ($post_type){
         break;
 }
 ?>
-<div class="wpallimport-collapsed">
+<div class="wpallimport-collapsed" data-wpai-section="import-step3-comments">
 	<div class="wpallimport-content-section" style="overflow: hidden; padding-bottom: 0;">
 		<div class="wpallimport-collapsed-header" style="margin-bottom: 15px;">
             <h3><?php printf(__('%s Content','wp-all-import-pro'), $custom_type->labels->singular_name);?></h3>

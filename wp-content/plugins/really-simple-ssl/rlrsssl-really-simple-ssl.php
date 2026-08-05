@@ -3,7 +3,7 @@
  * Plugin Name: Really Simple Security
  * Plugin URI: https://really-simple-ssl.com
  * Description: Easily improve site security with WordPress Hardening, Two-Factor Authentication (2FA), Login Protection, Vulnerability Detection and SSL certificate generation.
- * Version: 9.6.0
+ * Version: 9.7.0
  * Requires at least: 6.6
  * Requires PHP: 7.4
  * Author: Really Simple Security
@@ -46,16 +46,13 @@ if (!function_exists('rsssl_activation_check')) {
     register_activation_hook( __FILE__, 'rsssl_activation_check' );
 }
 
-if ( class_exists('REALLY_SIMPLE_SSL') ) {
-    // Normally we can assume the function exists as class REALLY_SIMPLE_SSL
-    // also exists. But as this function is new we should be extra sure.
-    if (!function_exists('rsssl_deactivate_alternate')) {
-        $rsssl_path = trailingslashit( plugin_dir_path( __FILE__ ) );
-        require_once $rsssl_path . 'functions.php';
-    }
+// Load alternate deactivation helpers early without loading functions.php before constants are set.
+$rsssl_path = trailingslashit( plugin_dir_path( __FILE__ ) );
+require_once $rsssl_path . 'deactivate-alternate.php';
 
-    rsssl_deactivate_alternate('pro');
-} else {
+rsssl_deactivate_alternate( 'pro' );
+
+if ( ! class_exists( 'REALLY_SIMPLE_SSL' ) ) {
     class REALLY_SIMPLE_SSL {
 
         private static $instance;
@@ -122,7 +119,7 @@ if ( class_exists('REALLY_SIMPLE_SSL') ) {
             define('rsssl_url', plugin_dir_url(__FILE__));
             define('rsssl_path', trailingslashit(plugin_dir_path(__FILE__)));
             define('rsssl_template_path', trailingslashit(plugin_dir_path(__FILE__)).'grid/templates/');
-            define('rsssl_version', '9.6.0');
+            define('rsssl_version', '9.7.0');
             define('rsssl_le_cron_generation_renewal_check', 20);
             define('rsssl_le_manual_generation_renewal_check', 15);
         }
@@ -138,7 +135,6 @@ if ( class_exists('REALLY_SIMPLE_SSL') ) {
                 require_once( rsssl_path . 'class-multisite.php');
             }
             if ( rsssl_admin_logged_in() ) {
-                require_once( rsssl_path . 'compatibility.php');
                 require_once( rsssl_path . 'upgrade.php');
                 require_once( rsssl_path . 'settings/settings.php' );
                 require_once( rsssl_path . 'modal/modal.php' );

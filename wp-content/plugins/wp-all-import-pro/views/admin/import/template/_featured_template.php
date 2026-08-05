@@ -1,4 +1,4 @@
-<div class="wpallimport-collapsed closed wpallimport-section wpallimport-featured-images">
+<div class="wpallimport-collapsed closed wpallimport-section wpallimport-featured-images" data-wpai-section="import-step3-featured-image">
 	<div class="wpallimport-content-section" style="padding-bottom: 0;">
 		<div class="wpallimport-collapsed-header" style="margin-bottom: 15px;">
 			<h3><?php echo $section_title;?></h3>	

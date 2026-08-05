@@ -1,15 +1,360 @@
-# Translation of Plugins - Imagify: Optimize Images for Top Speed (Compress &amp; Convert to WebP/AVIF) - Stable (latest release) in Polish
-# This file is distributed under the same license as the Plugins - Imagify: Optimize Images for Top Speed (Compress &amp; Convert to WebP/AVIF) - Stable (latest release) package.
+# Translation of Plugins - Imagify Image Optimization: Optimize Images | Compress &amp; Convert to WebP/AVIF - Stable (latest release) in Polish
+# This file is distributed under the same license as the Plugins - Imagify Image Optimization: Optimize Images | Compress &amp; Convert to WebP/AVIF - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-06-25 13:23:16+0000\n"
+"PO-Revision-Date: 2026-07-31 17:34:59+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
 "X-Generator: GlotPress/4.0.3\n"
 "Language: pl\n"
-"Project-Id-Version: Plugins - Imagify: Optimize Images for Top Speed (Compress &amp; Convert to WebP/AVIF) - Stable (latest release)\n"
+"Project-Id-Version: Plugins - Imagify Image Optimization: Optimize Images | Compress &amp; Convert to WebP/AVIF - Stable (latest release)\n"
+
+#: classes/Abilities/RestoreMedia.php:32
+msgid "Restore media"
+msgstr "Przywróć multimedia"
+
+#: views/part-settings-analytics.php:65
+msgid "Activate Imagify Analytics"
+msgstr "Włącz analizę Imagify"
+
+#: views/part-analytics-data-table.php:21
+msgid "Media type"
+msgstr "Rodzaj multimediów"
+
+#: views/part-analytics-data-table.php:20
+msgid "Optimization level"
+msgstr "Poziom optymalizacji"
+
+#: views/part-analytics-data-table.php:19
+msgid "Plugin version"
+msgstr "Wersja wtyczki"
+
+#: views/part-analytics-data-table.php:18
+msgid "PHP version"
+msgstr "Wersja PHP"
+
+#: views/part-analytics-data-table.php:17
+msgid "WordPress version"
+msgstr "Wersja WordPressa"
+
+#: views/notice-analytics-thankyou.php:15
+msgid "Thank you!"
+msgstr "Dziękujemy!"
+
+#: views/notice-analytics-optin.php:34
+msgid "No, thanks"
+msgstr "Nie, dziękuję"
+
+#: views/notice-analytics-optin.php:33
+msgid "Yes, allow"
+msgstr "Tak, pozwól"
+
+#: classes/Tracking/Notices.php:202
+msgid "N/A"
+msgstr "brak"
+
+#: classes/Tracking/Notices.php:192
+msgid "WebP and AVIF"
+msgstr "WebP i AVIF"
+
+#: classes/Tracking/Notices.php:190
+msgid "None"
+msgstr "Brak"
+
+#: classes/Tracking/Notices.php:80
+msgid "Unauthorized."
+msgstr "Nieautoryzowany."
+
+#: classes/MCP/ConfigSubscriber.php:45
+msgid "Image optimization tools for WordPress powered by Imagify."
+msgstr "Narzędzia do optymalizacji obrazów dla WordPress stworzone przez Imagify."
+
+#: classes/MCP/AbilitiesSubscriber.php:69
+msgid "Image optimization tools for WordPress."
+msgstr "Narzędzia do optymalizacji obrazków dla WordPress."
+
+#. translators: IMAGIFY_API_KEY is a PHP constant name, do not translate it.
+#: classes/Abilities/UpdateSettings.php:315
+msgid "api_key cannot be updated when IMAGIFY_API_KEY constant is defined."
+msgstr "api_key nie można aktualizować, gdy zdefiniowana jest stała IMAGIFY_API_KEY."
+
+#: classes/Abilities/OptimizeMedia.php:53
+msgid "Optimize media"
+msgstr "Optymalizuj multimedia"
+
+#: classes/Abilities/UpdateSettings.php:80
+msgid "Enable lossless compression (0 = off, 1 = on)."
+msgstr "Włącz bezstratną kompresję (0 = wyłączone, 1 = włączone)."
+
+#: classes/Abilities/UpdateSettings.php:147
+msgid "Convert images to WebP format (0 = off, 1 = on)."
+msgstr "Konwertuj obrazki do formatu WebP (0 = wyłączone, 1 = włączone)."
+
+#: classes/Abilities/UpdateSettings.php:142
+msgid "Convert images to AVIF format (0 = off, 1 = on)."
+msgstr "Konwertuj obrazki do formatu AVIF (0 = wyłączone, 1 = włączone)."
+
+#: classes/Abilities/UpdateSettings.php:85
+msgid "Automatically optimize images on upload (0 = off, 1 = on)."
+msgstr "Automatycznie optymalizuj obrazki przy przesyłaniu (0 = wyłączone, 1 = włączone)."
+
+#: classes/Abilities/UpdateSettings.php:50
+msgid "Update Imagify settings"
+msgstr "Aktualizuj ustawienia Imagify"
+
+#: classes/Abilities/UpdateSettings.php:90
+msgid "Keep a backup of original images (0 = off, 1 = on)."
+msgstr "Zostaw kopie oryginalnych obrazków (0 = wyłączone, 1 = włączone)."
+
+#: classes/Abilities/UpdateSettings.php:95
+msgid "Resize images wider than resize_larger_w (0 = off, 1 = on)."
+msgstr "Zmień rozmiar obrazków szerszych niż resize_larger_w (0 = wyłączone, 1 = włączone)."
+
+#: views/part-settings-analytics.php:26 views/part-settings-analytics.php:47
+msgid "Imagify Analytics"
+msgstr "Analityka Imagify"
+
+#: views/part-analytics-data-table.php:25
+msgid "License type"
+msgstr "Rodzaj licencji"
+
+#. translators: 1: setting key name, 2: list of allowed values.
+#: classes/Abilities/UpdateSettings.php:205
+#: classes/Abilities/UpdateSettings.php:219
+#: classes/Abilities/UpdateSettings.php:234
+msgid "Invalid value for \"%1$s\". Expected one of: %2$s."
+msgstr "Nieprawidłowa wartość dla \"%1$s\". Oczekiwano jednej z: %2$s."
+
+#: classes/Abilities/UpdateSettings.php:167
+msgid "Full post-update settings, excluding api_key and version."
+msgstr "Pełne ustawienia po aktualizacji, z wyłączeniem api_key i wersji."
+
+#. translators: %s: the unknown setting key name.
+#: classes/Abilities/UpdateSettings.php:294
+#: classes/Abilities/UpdateSettings.php:305
+msgid "\"%s\" is not a valid Imagify setting key."
+msgstr "„%s” nie jest prawidłowym kluczem ustawień Imagify."
+
+#. translators: %1$s = <strong>, %2$s = </strong>
+#: views/part-settings-analytics.php:52
+msgid "Below is a detailed view of all data Imagify will collect %1$sif granted permission.%2$s"
+msgstr "Poniżej znajduje się szczegółowy widok wszystkich danych, które Imagify będzie zbierać %1$s, jeśli zostanie udzielone pozwolenie.%2$s"
+
+#. translators: %1$s = opening <button> tag, %2$s = closing </button> tag
+#: views/part-settings-analytics.php:32
+msgid "I agree to share anonymous data with the development team to help improve Imagify. %1$sWhat info will we collect?%2$s"
+msgstr "Zgadzam się na udostępnianie anonimowych danych zespołowi programistów w celu pomocy w ulepszaniu Imagify. %1$sJakie informacje będziemy zbierać?%2$s"
+
+#: views/part-analytics-data-table.php:24
+msgid "How the optimization was started (auto, bulk, manual)"
+msgstr "Jak rozpoczęto optymalizację (automatyczną, zbiorczą, ręczną)"
+
+#: views/part-analytics-data-table.php:24
+msgid "Trigger"
+msgstr "Wyzwalacz"
+
+#: views/part-analytics-data-table.php:23
+msgid "Next-gen format"
+msgstr "Formaty nowej generacji"
+
+#: views/part-analytics-data-table.php:22
+msgid "Percentage of file size reduced per optimization"
+msgstr "Procent zmniejszenia rozmiaru pliku po optymalizacji"
+
+#: views/part-analytics-data-table.php:22
+msgid "Savings percentage"
+msgstr "Procent oszczędności"
+
+#: views/part-analytics-data-table.php:21
+msgid "MIME type of the optimized file (jpeg, png, gif…)"
+msgstr "Typ MIME zoptymalizowanego pliku (jpeg, png, gif…)"
+
+#: views/notice-analytics-thankyou.php:18 views/part-settings-analytics.php:60
+msgid "We never collect your images, their content, or any personal data — only anonymous performance metrics."
+msgstr "Nigdy nie gromadzimy twoich obrazków, ich treści ani żadnych danych osobowych — jedynie anonimowe dane dotyczące skuteczności."
+
+#: views/notice-analytics-thankyou.php:16
+msgid "Imagify now collects these metrics from your website:"
+msgstr "Imagify zbiera teraz następujące dane metryczne z twojej witryny:"
+
+#: views/notice-analytics-optin.php:28
+msgid "Below is a detailed view of all data Imagify will collect if granted permission. We never collect your images, their content, or any personal data — only anonymous performance metrics."
+msgstr "Poniżej znajduje się szczegółowy widok wszystkich danych, które Imagify będzie gromadzić po uzyskaniu zgody. Nigdy nie gromadzimy twoich obrazków, ich treści ani żadnych danych osobowych – jedynie anonimowe wskaźniki wydajności."
+
+#: views/notice-analytics-optin.php:24
+msgid "What info will we collect?"
+msgstr "Jakie informacje będziemy zbierać?"
+
+#: views/notice-analytics-optin.php:21
+msgid "This would help us to improve Imagify for you in the future."
+msgstr "Pomoże nam to w przyszłości udoskonalić Imagify."
+
+#: views/notice-analytics-optin.php:19
+msgid "Would you allow Imagify to collect non-sensitive diagnostic data from this website?"
+msgstr "Czy zezwoliłbyś Imagify na zbieranie niepoufnych danych diagnostycznych z tej witryny?"
+
+#: classes/Abilities/UpdateSettings.php:163
+msgid "Keys whose values changed after the update."
+msgstr "Klucze, których wartości uległy zmianie po aktualizacji."
+
+#: classes/Abilities/UpdateSettings.php:152
+msgid "Output format for optimized images."
+msgstr "Format wyjściowy zaktualizowanych obrazków."
+
+#: classes/Abilities/UpdateSettings.php:137
+msgid "Show partner links in the Imagify admin area (0 = off, 1 = on)."
+msgstr "Pokaż odnośniki partnerskie w obszarze administracyjnym Imagify (0 = wyłączone, 1 = włączone)."
+
+#: classes/Abilities/UpdateSettings.php:132
+msgid "Show Imagify entry in the WordPress admin bar (0 = off, 1 = on)."
+msgstr "Pokaż wpis Imagify na pasku administracyjnym WordPress (0 = wyłączone, 1 = włączone)."
+
+#: classes/Abilities/UpdateSettings.php:127
+msgid "Image sizes excluded from optimization, keyed by size slug."
+msgstr "Rozmiary obrazków wyłączone z optymalizacji, określone na podstawie długości uproszczonej nazwy pliku."
+
+#: classes/Abilities/UpdateSettings.php:123
+msgid "CDN base URL for serving optimized images."
+msgstr "Podstawowy adres URL CDN do obsługi zoptymalizowanych obrazków."
+
+#: classes/Abilities/UpdateSettings.php:119
+msgid "Delivery method for WebP images: picture element or URL rewrite."
+msgstr "Metoda dostarczania obrazków WebP: element obrazka lub przepisanie adresu URL."
+
+#: classes/Abilities/UpdateSettings.php:114
+msgid "Serve WebP images to supported browsers (0 = off, 1 = on)."
+msgstr "Wyświetlaj obrazy WebP w obsługiwanych przeglądarkach (0 = wyłączone, 1 = włączone)."
+
+#: classes/Abilities/UpdateSettings.php:109
+msgid "Delivery method for next-gen images: picture element or URL rewrite."
+msgstr "Metoda dostarczania obrazków nowej generacji: element obrazka lub przepisanie adresu URL."
+
+#: classes/Abilities/UpdateSettings.php:104
+msgid "Serve next-gen images to supported browsers (0 = off, 1 = on)."
+msgstr "Wyświetlaj obrazki nowej generacji w obsługiwanych przeglądarkach (0 = wyłączone, 1 = włączone)."
+
+#: classes/Abilities/UpdateSettings.php:99
+msgid "Maximum image width in pixels when resize_larger is enabled."
+msgstr "Maksymalna szerokość obrazka w pikselach, gdy włączona jest opcja resize_larger."
+
+#: classes/Abilities/UpdateSettings.php:75
+msgid "Optimization aggressiveness: 0 = normal, 1 = aggressive, 2 = ultra."
+msgstr "Agresywność optymalizacji: 0 = normalna, 1 = agresywna, 2 = ultra."
+
+#: classes/Abilities/UpdateSettings.php:69
+msgid "Imagify API key. Cannot be updated when IMAGIFY_API_KEY constant is defined."
+msgstr "Klucz API Imagify. Nie można go zaktualizować, gdy zdefiniowana jest stała IMAGIFY_API_KEY."
+
+#: classes/Abilities/UpdateSettings.php:51
+msgid "Updates one or more Imagify configuration options. Only supplied keys are changed; others remain unchanged."
+msgstr "Aktualizuje jedną lub więcej opcji konfiguracji Imagify. Zmieniane są tylko dostarczone klucze; pozostałe pozostają niezmienione."
+
+#: classes/Abilities/BulkOptimize.php:109
+#: classes/Abilities/OptimizeMedia.php:99 classes/Abilities/RestoreMedia.php:59
+msgid "Human-readable error message on failure, or null on success."
+msgstr "Czytelny komunikat o błędzie w przypadku niepowodzenia lub null w przypadku powodzenia."
+
+#: classes/Abilities/OptimizeMedia.php:95
+msgid "Percentage savings, or null on error."
+msgstr "Oszczędności procentowe lub zero w przypadku błędu."
+
+#: classes/Abilities/OptimizeMedia.php:91
+msgid "Optimized file size in bytes after optimization, or null on error or if not yet available."
+msgstr "Zoptymalizowany rozmiar pliku w bajtach po optymalizacji lub null w przypadku błędu lub gdy informacja nie jest jeszcze dostępna."
+
+#: classes/Abilities/OptimizeMedia.php:87
+msgid "Original file size in bytes before optimization, or null on error."
+msgstr "Oryginalny rozmiar pliku w bajtach przed optymalizacją lub null w przypadku błędu."
+
+#: classes/Abilities/RestoreMedia.php:50
+msgid "Result status: \"success\" or \"error\"."
+msgstr "Status wyniku: „powodzenie” lub „błąd”."
+
+#: classes/Abilities/OptimizeMedia.php:65
+msgid "Optimization level: 0 (normal), 1 (aggressive), or 2 (ultra). If omitted, uses the global setting."
+msgstr "Poziom optymalizacji: 0 (normalny), 1 (agresywny) lub 2 (ultra). W przypadku pominięcia, używane jest ustawienie globalne."
+
+#: classes/Abilities/OptimizeMedia.php:61
+msgid "The WordPress attachment ID to optimize."
+msgstr "Identyfikator załącznika WordPress w celu optymalizacji."
+
+#: classes/Abilities/OptimizeMedia.php:54
+msgid "Optimizes a specific media on-demand using Imagify."
+msgstr "Optymalizuje określone media na żądanie przy użyciu Imagify."
+
+#: classes/Abilities/GetStats.php:45
+msgid "Returns optimization statistics for WP media and custom folders."
+msgstr "Zwraca statystyki optymalizacji dla multimediów WP i katalogów niestandardowych."
+
+#: classes/Abilities/GetStats.php:44
+msgid "Get Imagify optimization stats"
+msgstr "Uzyskaj statystyki optymalizacji Imagify"
+
+#: classes/Abilities/GetSettings.php:51
+msgid "Returns all Imagify configuration options and their current values."
+msgstr "Zwraca wszystkie opcje konfiguracji Imagify i ich bieżące wartości."
+
+#: classes/Abilities/GetSettings.php:50
+msgid "Get Imagify settings"
+msgstr "Pobierz ustawienia Imagify"
+
+#: classes/Abilities/GetNextgenCoverage.php:70
+msgid "Returns the number of optimized images missing a next-gen version and the configured next-gen format."
+msgstr "Zwraca liczbę zoptymalizowanych obrazków, w których brakuje wersji nowej generacji, oraz skonfigurowany format nowej generacji."
+
+#: classes/Abilities/GetNextgenCoverage.php:69
+msgid "Get next-gen coverage"
+msgstr "Uzyskaj dostęp do relacji nowej generacji"
+
+#: classes/Abilities/GetMediaStatus.php:97
+msgid "Human-readable error message when status is \"error\". Null otherwise."
+msgstr "Komunikat o błędzie czytelny dla człowieka, gdy status to „błąd”. W przeciwnym razie wartość null."
+
+#: classes/Abilities/GetMediaStatus.php:93
+msgid "True when an AVIF version of the full-size image has been generated."
+msgstr "Komunikat o działaniu czytelnym dla człowieka, gdy status to „błąd”. W razie wypadku wartość null."
+
+#: classes/Abilities/GetMediaStatus.php:89
+msgid "True when a WebP version of the full-size image has been generated."
+msgstr "Prawda, gdy wygenerowano wersję WebP obrazka w pełnym rozmiarze."
+
+#: classes/Abilities/GetMediaStatus.php:85
+msgid "File size in bytes after optimization."
+msgstr "Rozmiar pliku w bajtach po optymalizacji."
+
+#: classes/Abilities/GetMediaStatus.php:81
+msgid "File size in bytes before optimization."
+msgstr "Rozmiar pliku w bajtach przed optymalizacją."
+
+#: classes/Abilities/GetMediaStatus.php:77
+msgid "0 = lossless, 1 = aggressive, 2 = ultra. Null when not optimized."
+msgstr "0 = bezstratna, 1 = agresywna, 2 = ultra. Wartość null, jeśli nie jest zoptymalizowany."
+
+#: classes/Abilities/GetMediaStatus.php:72
+msgid "Optimization status: \"success\", \"error\", or \"unoptimized\"."
+msgstr "Status optymalizacji: „powodzenie”, „błąd” lub „niezoptymalizowany”."
+
+#: classes/Abilities/GetMediaStatus.php:62
+msgid "The WordPress attachment ID."
+msgstr "Identyfikator załącznika WordPress."
+
+#: classes/Abilities/GetMediaStatus.php:55
+msgid "Retrieve the optimization status and metrics for a WordPress media library attachment."
+msgstr "Pobierz status optymalizacji i metryki załącznika biblioteki multimediów WordPress."
+
+#: classes/Abilities/GetMediaStatus.php:54
+msgid "Get Media Status"
+msgstr "Pobierz status multimediów"
+
+#: classes/Abilities/GetAccount.php:51
+msgid "Returns account quota, plan details, and API key validity."
+msgstr "Zwraca limit konta, szczegóły planu i ważność klucza API."
+
+#: classes/Abilities/GetAccount.php:50
+msgid "Get Imagify account status"
+msgstr "Pobierz status konta Imagify"
 
 #: views/part-settings-tools.php:13
 msgid "Reset Internal State"
@@ -237,7 +582,7 @@ msgstr "Ulepsz"
 msgid "Upgrade Plan"
 msgstr "Zwiększ plan"
 
-#: views/page-settings.php:114
+#: views/page-settings.php:115
 msgid "Our Plugins"
 msgstr "Nasze wtyczki"
 
@@ -245,7 +590,7 @@ msgstr "Nasze wtyczki"
 msgid "Upgrade"
 msgstr "Ulepsz"
 
-#: inc/classes/class-imagify-admin-ajax-post.php:1016 views/part-upsell.php:29
+#: inc/classes/class-imagify-admin-ajax-post.php:1034 views/part-upsell.php:29
 msgid "Unlock Imagify's full potential"
 msgstr "Odblokuj pełny potencjał Imagify"
 
@@ -253,7 +598,7 @@ msgstr "Odblokuj pełny potencjał Imagify"
 msgid "Choose the Perfect Plan for Your Needs"
 msgstr "Wybierz perfekcyjny plan dla siebie"
 
-#: views/page-settings.php:115
+#: views/page-settings.php:116
 msgid "Build better, faster, safer"
 msgstr "Buduj lepiej, szybciej i bezpieczniej"
 
@@ -261,7 +606,7 @@ msgstr "Buduj lepiej, szybciej i bezpieczniej"
 msgid "Pick the plan that fits your image optimization goals and unlock the full potential of Imagify!"
 msgstr "Wybierz plan odpowiadający twoim celom optymalizacji obrazków i wykorzystaj w pełni potencjał Imagify!"
 
-#: views/page-settings.php:118
+#: views/page-settings.php:119
 msgid "Beyond Imagify, there's a whole family of plugins designed to help you build better, faster, and safer websites. Each one is crafted with our unique blend of expertise, simplicity, and outstanding support. Combine our plugins below to build incredible WordPress websites!"
 msgstr "Poza Imagify istnieje cała rodzina wtyczek zaprojektowanych, aby pomóc ci budować lepsze, szybsze i bezpieczniejsze witryny. Każda z nich została stworzona z naszą unikalną mieszanką wiedzy, prostoty i wyjątkowego wsparcia. Połącz nasze wtyczki poniżej, aby budować niesamowite witryny WordPress!"
 
@@ -274,11 +619,11 @@ msgstr "Zwiększ limit obrazków i zlikwiduj ograniczenia przesyłania."
 msgid "Imagify Image Optimizer – Optimize Images & Convert WebP & Avif"
 msgstr "Imagify Image Optimizer – Optymalizuj obrazki i konwertuj na formaty WebP i AVIF"
 
-#: views/part-settings-webp.php:50
+#: classes/Tracking/Notices.php:196 views/part-settings-webp.php:50
 msgid "WebP"
 msgstr "WebP"
 
-#: views/part-settings-webp.php:49
+#: classes/Tracking/Notices.php:194 views/part-settings-webp.php:49
 msgid "AVIF"
 msgstr "AVIF"
 
@@ -341,7 +686,7 @@ msgstr "Oczekiwano liczby całkowitej, ale otrzymano „%1$s” (%2$s)."
 msgid "Caught exception while enqueuing action \"%1$s\": %2$s"
 msgstr "Wychwycono wyjątek podczas kolejkowania akcji „%1$s”: %2$s"
 
-#: classes/Optimization/Process/AbstractProcess.php:1485
+#: classes/Optimization/Process/AbstractProcess.php:1494
 msgid "Could not get the path to the Next-Gen format file."
 msgstr "Nie można uzyskać ścieżki do pliku w formacie nowej generacji."
 
@@ -1299,7 +1644,7 @@ msgid "https://imagify.io"
 msgstr "https://imagify.io"
 
 #. translators: %s is a formatted number, don’t use %d.
-#: classes/Optimization/Process/AbstractProcess.php:1433
+#: classes/Optimization/Process/AbstractProcess.php:1442
 msgid "%s file could not be deleted."
 msgid_plural "%s files could not be deleted."
 msgstr[0] "Nie można usunąć pliku %s."
@@ -1310,7 +1655,7 @@ msgstr[2] "Nie można usunąć plików %s."
 msgid "Deleting..."
 msgstr "Usuwanie..."
 
-#: classes/Optimization/Process/AbstractProcess.php:1455
+#: classes/Optimization/Process/AbstractProcess.php:1464
 msgid "Path to non-next-gen file not provided."
 msgstr "Nie podano ścieżki do pliku innej generacji."
 
@@ -1319,7 +1664,7 @@ msgid "Previous next-gen files could not be deleted."
 msgstr "Nie można było usunąć poprzednich plików nowej generacji."
 
 #. translators: %s is a file path.
-#: classes/Optimization/Process/AbstractProcess.php:1521
+#: classes/Optimization/Process/AbstractProcess.php:1530
 msgid "The file %s could not be deleted."
 msgstr "Nie można usunąć pliku %s."
 
@@ -1331,7 +1676,7 @@ msgstr "Ten nośnik nie ma odpowiedniego stanu optymalizacji."
 msgid "Because the selected images did not have a backup copy, Imagify was unable to create next-gen versions."
 msgstr "Ponieważ wybrane obrazy nie miały kopii zapasowej, Imagify nie było w stanie utworzyć wersji nowej generacji."
 
-#: classes/Bulk/Bulk.php:309
+#: classes/Bulk/Bulk.php:326
 msgid "The path to the selected files could not be retrieved."
 msgstr "Nie można pobrać ścieżki do wybranych plików."
 
@@ -1390,7 +1735,7 @@ msgid "All your optimized images already have a next-gen version. Congratulation
 msgstr "Wszystkie zoptymalizowane obrazy mają już wersję nowej generacji. Gratulacje!"
 
 #. translators: %s is an error message.
-#: classes/Optimization/Process/AbstractProcess.php:1283
+#: classes/Optimization/Process/AbstractProcess.php:1292
 msgid "Backup failed: %s"
 msgstr "Tworzenie kopii zapasowej nie powiodło się: %s"
 
@@ -1424,7 +1769,7 @@ msgstr "Wyświetlaj obrazy na stronie w formatach nowej generacji"
 msgid "Edition of the %s file is disabled."
 msgstr "Edycja pliku %s jest wyłączona."
 
-#: classes/Optimization/File.php:392
+#: classes/Optimization/File.php:459
 msgid "Error while retrieving the backups directory path."
 msgstr "Błąd podczas pobierania ścieżki katalogu kopii zapasowych."
 
@@ -1451,7 +1796,7 @@ msgstr "Jeśli zdecydujesz się użyć reguł przepisywania, plik %s zostanie ut
 msgid "If you choose to use rewrite rules, you will have to add the following lines manually to the %s file:"
 msgstr "Jeśli zdecydujesz się użyć reguł przepisywania, będziesz musiał ręcznie dodać następujące wiersze do pliku %s:"
 
-#: classes/Optimization/Process/AbstractProcess.php:1242
+#: classes/Optimization/Process/AbstractProcess.php:1251
 msgid "Imagify could not get the image dimensions."
 msgstr "W aplikacji Imagify nie udało się uzyskać wymiarów obrazu."
 
@@ -1486,7 +1831,7 @@ msgid "No"
 msgstr "Nie"
 
 #. translators: %1$s is an error message, %2$s is a "More info?" link.
-#: classes/Optimization/File.php:645
+#: classes/Optimization/File.php:712
 msgid "No php extensions are available to edit images on the server. ImageMagick or GD is required. The internal error is: %1$s. %2$s"
 msgstr "Żadne rozszerzenia php nie są dostępne do edycji obrazów na serwerze. Wymagany jest ImageMagick lub GD. Błąd wewnętrzny to: %1$s. %2$s"
 
@@ -1523,8 +1868,8 @@ msgstr[1] "Żądanie zostało ograniczone. Przewidujemy, że będzie dostępny z
 msgstr[2] "Żądanie zostało ograniczone. Przewidujemy, że będzie dostępny za %s sekund."
 
 #. translators: %s is an error message.
-#: classes/Optimization/Process/AbstractProcess.php:1241
-#: classes/Optimization/Process/AbstractProcess.php:1267
+#: classes/Optimization/Process/AbstractProcess.php:1250
+#: classes/Optimization/Process/AbstractProcess.php:1276
 msgid "Resizing failed: %s"
 msgstr "Zmiana rozmiaru nie powiodła się: %s"
 
@@ -1583,14 +1928,14 @@ msgid "The class %1$s is not present on your server, a %2$s file cannot be creat
 msgstr "Klasa %1$s nie istnieje na Twoim serwerze. Nie można utworzyć ani edytować pliku %2$s."
 
 #. translators: %s is a file path.
-#: classes/Optimization/File.php:202 classes/Optimization/File.php:326
+#: classes/Optimization/File.php:202 classes/Optimization/File.php:393
 msgid "The file %s does not seem to be an image, and cannot be resized."
 msgstr "Plik %s nie wygląda na obraz i nie można zmienić jego rozmiaru."
 
 #. translators: %s is a file path.
 #: classes/Optimization/File.php:140
 #: classes/Optimization/Process/AbstractProcess.php:669
-#: classes/Optimization/Process/AbstractProcess.php:1497
+#: classes/Optimization/Process/AbstractProcess.php:1506
 msgid "The file %s does not seem to be writable."
 msgstr "Wygląda na to, że plik %s nie nadaje się do zapisu."
 
@@ -1600,7 +1945,7 @@ msgstr "Wygląda na to, że plik %s nie nadaje się do zapisu."
 msgid "The file %s does not seem to exist."
 msgstr "Wygląda na to, że plik %s nie istnieje."
 
-#: classes/Optimization/File.php:366 classes/Optimization/File.php:584
+#: classes/Optimization/File.php:433 classes/Optimization/File.php:651
 msgid "The file could not be moved to its final destination."
 msgstr "Nie można przenieść pliku do miejsca docelowego."
 
@@ -1623,7 +1968,7 @@ msgstr[0] "Nie można pobrać następującego pliku z CDN: %s."
 msgstr[1] "Nie można pobrać następujących plików z CDN: %s."
 msgstr[2] "Nie można pobrać następujących plików z CDN: %s."
 
-#: classes/Optimization/Process/AbstractProcess.php:1299
+#: classes/Optimization/Process/AbstractProcess.php:1308
 msgid "The image could not be replaced by the resized one."
 msgstr "Nie można zastąpić obrazu obrazem o zmienionym rozmiarze."
 
@@ -1647,7 +1992,7 @@ msgstr "Rozmiar %s jest już zoptymalizowany przez Imagify."
 msgid "The size %s is unknown."
 msgstr "Rozmiar %s jest nieznany."
 
-#: classes/Optimization/File.php:342
+#: classes/Optimization/File.php:409
 msgid "The thumbnail could not be created."
 msgstr "Nie można utworzyć miniatury."
 
@@ -1657,7 +2002,7 @@ msgstr "Nie udało się utworzyć miniatur."
 
 #. translators: %s is a file path.
 #: classes/Optimization/File.php:129
-#: classes/Optimization/Process/AbstractProcess.php:1508
+#: classes/Optimization/Process/AbstractProcess.php:1517
 msgid "This does not seem to be a file: %s."
 msgstr "This does not seem to be a file: %s."
 
@@ -1665,7 +2010,7 @@ msgstr "This does not seem to be a file: %s."
 msgid "This file is not an image and cannot be converted to Next-Gen format."
 msgstr "Ten plik nie jest obrazem i nie można go przekonwertować do formatu nowej generacji."
 
-#: classes/Optimization/Process/AbstractProcess.php:1722
+#: classes/Optimization/Process/AbstractProcess.php:1731
 msgid "This media already has next-gen versions."
 msgstr "Ten nośnik ma już wersje nowej generacji."
 
@@ -1674,7 +2019,7 @@ msgstr "Ten nośnik ma już wersje nowej generacji."
 msgid "This media could not be found on the CDN."
 msgstr "Nie można znaleźć tego nośnika w sieci CDN."
 
-#: classes/Optimization/Process/AbstractProcess.php:1750
+#: classes/Optimization/Process/AbstractProcess.php:1759
 msgid "This media does not have files that can be converted to next-gen format."
 msgstr "Ten nośnik nie zawiera plików, które można przekonwertować do formatu nowej generacji."
 
@@ -1683,11 +2028,11 @@ msgid "This media has already been optimized by Imagify."
 msgstr "Ten nośnik został już zoptymalizowany przez Imagify."
 
 #: classes/Optimization/Process/AbstractProcess.php:887
-#: classes/Optimization/Process/AbstractProcess.php:1712
+#: classes/Optimization/Process/AbstractProcess.php:1721
 msgid "This media has no backup file."
 msgstr "Na tym nośniku nie ma pliku kopii zapasowej."
 
-#: classes/Optimization/Process/AbstractProcess.php:1718
+#: classes/Optimization/Process/AbstractProcess.php:1727
 msgid "This media has not been optimized by Imagify yet."
 msgstr "Ten nośnik nie został jeszcze zoptymalizowany przez Imagify."
 
@@ -1705,11 +2050,11 @@ msgstr "Te multimedia są już przetwarzane."
 msgid "This media is already optimized with this level."
 msgstr "Ten nośnik jest już zoptymalizowany z tymi ustawieniami."
 
-#: classes/Optimization/Process/AbstractProcess.php:1708
+#: classes/Optimization/Process/AbstractProcess.php:1717
 msgid "This media is not an image and cannot be converted to next-gen format."
 msgstr "Ten nośnik nie jest obrazem i nie można go przekonwertować na format nowej generacji."
 
-#: classes/Optimization/Process/AbstractProcess.php:1403
+#: classes/Optimization/Process/AbstractProcess.php:1412
 #: classes/Optimization/Process/CustomFolders.php:78
 #: classes/Optimization/Process/WP.php:72
 #: inc/3rd-party/nextgen-gallery/classes/Optimization/Process/NGG.php:61
@@ -1729,8 +2074,8 @@ msgstr "Ten nośnik nie jest jeszcze zoptymalizowany."
 #: classes/Optimization/Process/AbstractProcess.php:356
 #: classes/Optimization/Process/AbstractProcess.php:481
 #: classes/Optimization/Process/AbstractProcess.php:877
-#: classes/Optimization/Process/AbstractProcess.php:1397
-#: classes/Optimization/Process/AbstractProcess.php:1702
+#: classes/Optimization/Process/AbstractProcess.php:1406
+#: classes/Optimization/Process/AbstractProcess.php:1711
 #: classes/Optimization/Process/CustomFolders.php:54
 #: classes/Optimization/Process/CustomFolders.php:96
 #: classes/Optimization/Process/Noop.php:151
@@ -1801,7 +2146,7 @@ msgstr "Żadne rozszerzenia php nie są dostępne do edycji obrazów na serwerze
 msgid "All images greater than %s (after resizing, if any) will be optimized when using a paid plan."
 msgstr "Wszystkie obrazy większe niż %s (po zmianie rozmiaru, jeśli takie istnieją) zostaną zoptymalizowane podczas korzystania z płatnego planu."
 
-#: views/page-settings.php:178
+#: views/page-settings.php:179
 msgid "Display Partner Links"
 msgstr "Wyświetlaj linki partnerskie"
 
@@ -1809,7 +2154,7 @@ msgstr "Wyświetlaj linki partnerskie"
 msgid "Partner links are links to products we trust which might be displayed in the Imagify plugin or the plugin modal page.  We may earn an affiliate commission if you make a purchase via these links."
 msgstr "Linki partnerskie to linki do zaufanych produktów, które mogą być wyświetlane we wtyczce Imagify lub na stronie modalnej wtyczki. Możemy otrzymać prowizję partnerską, jeśli dokonasz zakupu za pośrednictwem tych linków."
 
-#: views/page-settings.php:165
+#: views/page-settings.php:166
 msgid "Partners"
 msgstr "Partenrzy"
 
@@ -1917,7 +2262,7 @@ msgstr "Ten nośnik nie jest obsługiwany."
 msgid "This size is not authorized to be optimized. Update your Imagify settings if you want to optimize it."
 msgstr "Optymalizacja tego rozmiaru nie jest dozwolona. Zaktualizuj ustawienia Imagify, jeśli chcesz je zoptymalizować."
 
-#: inc/classes/class-imagify-admin-ajax-post.php:1309
+#: inc/classes/class-imagify-admin-ajax-post.php:1327
 #: inc/functions/i18n.php:119 inc/functions/i18n.php:268
 msgid "Your API key is not valid!"
 msgstr "Twój klucz API jest nieważny!"
@@ -2036,7 +2381,7 @@ msgstr "Oryginalny rozmiar"
 msgid "Remove the ad"
 msgstr "Usuń reklamę"
 
-#: views/part-bulk-optimization-overquota-alert.php:22
+#: views/part-bulk-optimization-overquota-alert.php:34
 msgid "See our plans on the Imagify website"
 msgstr "Zobacz nasze plany na stronie Imagify"
 
@@ -2128,7 +2473,7 @@ msgstr "Wszystkie foldery"
 msgid "Choose the folders to optimize"
 msgstr "Wybierz katalogi do optymalizacji"
 
-#: inc/classes/class-imagify-admin-ajax-post.php:1005
+#: inc/classes/class-imagify-admin-ajax-post.php:1023
 msgid "Couldn't get user data."
 msgstr "Nie udało się pobrać danych użytkownika."
 
@@ -2208,7 +2553,7 @@ msgid "Number of files per page"
 msgstr "Liczba plików na stronę"
 
 #: inc/classes/class-imagify-files-list-table.php:438
-#: views/page-settings.php:101
+#: views/page-settings.php:102
 msgid "Optimization"
 msgstr "Optymalizacja"
 
@@ -2357,7 +2702,7 @@ msgstr "Możesz także ponownie zoptymalizować pliki multimedialne na ekranie %
 msgid "You can re-optimize your media files more finely directly in the %1$smedia management%2$s."
 msgstr "Możesz dokładniej ponownie zoptymalizować pliki multimedialne bezpośrednio w %1$szarządzaniu multimediami%2$s."
 
-#: inc/classes/class-imagify-admin-ajax-post.php:1317
+#: inc/classes/class-imagify-admin-ajax-post.php:1335
 #: inc/functions/i18n.php:120 inc/functions/i18n.php:269
 msgid "You have used all your credits!"
 msgstr "Wykorzystałeś wszystkie kredyty!"
@@ -2466,7 +2811,7 @@ msgstr "Potwierdź swoje konto, aby kontynuować optymalizację plików."
 msgid "Coupon does not exist."
 msgstr "Kupon nie istnieje."
 
-#: inc/classes/class-imagify-admin-ajax-post.php:899
+#: inc/classes/class-imagify-admin-ajax-post.php:917
 msgid "Coupon is empty."
 msgstr "Kupon jest pusty."
 
@@ -2479,7 +2824,7 @@ msgstr "Niestandardowy plan jednorazowy zaczyna się od %s MB."
 msgid "Email field should not be empty."
 msgstr "Pole e-mail nie powinno być puste."
 
-#: inc/classes/class-imagify-admin-ajax-post.php:837
+#: inc/classes/class-imagify-admin-ajax-post.php:841
 msgid "Empty API key."
 msgstr "Pusty klucz API."
 
@@ -2501,8 +2846,8 @@ msgstr "Nie można wysłać plików do Amazon S3."
 msgid "Go back"
 msgstr "Wróć"
 
-#: classes/Bulk/Bulk.php:582 classes/Bulk/Bulk.php:605
-#: classes/Bulk/Bulk.php:629 inc/classes/class-imagify-admin-ajax-post.php:272
+#: classes/Bulk/Bulk.php:601 classes/Bulk/Bulk.php:624
+#: classes/Bulk/Bulk.php:648 inc/classes/class-imagify-admin-ajax-post.php:272
 #: inc/classes/class-imagify-admin-ajax-post.php:305
 #: inc/classes/class-imagify-admin-ajax-post.php:338
 #: inc/classes/class-imagify-admin-ajax-post.php:371
@@ -2513,10 +2858,10 @@ msgstr "Wróć"
 #: inc/classes/class-imagify-admin-ajax-post.php:552
 #: inc/classes/class-imagify-admin-ajax-post.php:583
 #: inc/classes/class-imagify-admin-ajax-post.php:702
-#: inc/classes/class-imagify-admin-ajax-post.php:1053
-#: inc/classes/class-imagify-admin-ajax-post.php:1059
-#: inc/classes/class-imagify-admin-ajax-post.php:1067
-#: inc/classes/class-imagify-admin-ajax-post.php:1078
+#: inc/classes/class-imagify-admin-ajax-post.php:1071
+#: inc/classes/class-imagify-admin-ajax-post.php:1077
+#: inc/classes/class-imagify-admin-ajax-post.php:1085
+#: inc/classes/class-imagify-admin-ajax-post.php:1096
 #: inc/deprecated/classes/class-imagify-admin-ajax-post-deprecated.php:120
 #: inc/deprecated/classes/class-imagify-admin-ajax-post-deprecated.php:195
 #: inc/deprecated/classes/class-imagify-regenerate-thumbnails-deprecated.php:49
@@ -2586,7 +2931,7 @@ msgstr "Błędny użytkownik."
 msgid "WELL DONE. This media file is already optimized, no further optimization is required."
 msgstr "DOBRZE ZROBIONY. Ten plik multimedialny jest już zoptymalizowany i nie jest wymagana żadna dalsza optymalizacja."
 
-#: inc/classes/class-imagify-admin-ajax-post.php:873
+#: inc/classes/class-imagify-admin-ajax-post.php:891
 msgid "Wrongly formatted response from our server."
 msgstr "Błędnie sformatowana odpowiedź z naszego serwera."
 
@@ -2670,7 +3015,7 @@ msgstr "Nie można zapisać powiązanych danych."
 msgid "Restoration failed."
 msgstr "Przywrócenie nie powiodło się."
 
-#: classes/Optimization/File.php:399 inc/deprecated/deprecated.php:760
+#: classes/Optimization/File.php:466 inc/deprecated/deprecated.php:760
 msgid "The backup directory is not writable."
 msgstr "Katalog kopii zapasowej nie jest przeznaczony do zapisu."
 
@@ -2689,7 +3034,7 @@ msgstr "Nie można utworzyć folderu kopii zapasowej %s. Czy serwer może zapisy
 msgid "The backup folder %s is not writable by the server, original images cannot be saved!"
 msgstr "Serwer nie może zapisać folderu kopii zapasowych %s, oryginalne obrazy nie mogą zostać zapisane!"
 
-#: classes/Optimization/File.php:423 classes/Optimization/File.php:442
+#: classes/Optimization/File.php:490 classes/Optimization/File.php:509
 #: inc/deprecated/deprecated.php:791
 msgid "The file could not be saved."
 msgstr "Nie udało się zapisać pliku."
@@ -2836,7 +3181,7 @@ msgstr "Nie mogę znaleźć %s."
 msgid "Dramatically reduce image file sizes without losing quality, make your website load faster, boost your SEO and save money on your bandwidth using Imagify, the new most advanced image optimization tool."
 msgstr "Radykalnie zmniejsz rozmiar plików obrazów bez utraty jakości, przyspiesz ładowanie swojej witryny, zwiększ swoje SEO i zaoszczędź pieniądze na przepustowości dzięki Imagify, nowemu, najbardziej zaawansowanemu narzędziu do optymalizacji obrazu."
 
-#: classes/Optimization/File.php:494 inc/deprecated/deprecated.php:635
+#: classes/Optimization/File.php:561 inc/deprecated/deprecated.php:635
 #: inc/functions/i18n.php:117 inc/functions/i18n.php:266
 msgid "External HTTP requests are blocked."
 msgstr "Zewnętrzne żądania HTTP są blokowane."
@@ -2952,6 +3297,7 @@ msgstr "Oryginalna fotografia o %s"
 #: inc/functions/i18n.php:203 views/modal-payment.php:116
 #: views/modal-settings-infos.php:52 views/modal-settings-partners-infos.php:13
 #: views/modal-settings-visual-comparison.php:135
+#: views/part-settings-analytics.php:45
 msgid "Close"
 msgstr "Zamknij"
 
@@ -3015,9 +3361,9 @@ msgstr "Optymalizacja plików"
 msgid "Keep your original images in a separate folder before optimization process."
 msgstr "Zachowaj swoje oryginalne obrazy w oddzielnym folderze zanim rozpocznie się proces optymalizacji."
 
-#: classes/Optimization/File.php:647 inc/deprecated/deprecated.php:629
+#: classes/Optimization/File.php:714 inc/deprecated/deprecated.php:629
 #: inc/functions/i18n.php:115 inc/functions/i18n.php:264
-#: views/page-settings.php:169
+#: views/page-settings.php:170
 msgid "More info?"
 msgstr "Więcej informacji?"
 
@@ -3184,10 +3530,6 @@ msgstr "Rozmiar po optymalizacji"
 msgid "Original size"
 msgstr "Rozmiar oryginalny"
 
-#: views/page-bulk.php:19
-msgid "Statistics"
-msgstr "Statystyki"
-
 #: views/notice-bulk-optimization-complete.php:14
 #: views/part-bulk-optimization-success.php:17
 msgid "Well done!"
@@ -3202,6 +3544,10 @@ msgstr "to liczba oryginalnych obrazów%s zoptymalizowanych za pomocą Imagify"
 #: views/page-bulk.php:56
 msgid "that's the size you saved %sby using Imagify"
 msgstr "to jest rozmiar, który zaoszczędziłeś, %s używając Imagify"
+
+#: views/page-bulk.php:19
+msgid "Statistics"
+msgstr "Statystyka"
 
 #: views/page-bulk.php:14
 msgid "Overview"
@@ -3272,7 +3618,8 @@ msgid "Check your Settings"
 msgstr "Sprawdź swoje ustawienia"
 
 #. Plugin Name of the plugin
-#: imagify.php inc/admin/meta-boxes.php:38 inc/admin/meta-boxes.php:68
+#: imagify.php classes/MCP/AbilitiesSubscriber.php:68
+#: inc/admin/meta-boxes.php:38 inc/admin/meta-boxes.php:68
 #: inc/admin/upload.php:16
 msgid "Imagify"
 msgstr "Imagify"
@@ -3358,12 +3705,12 @@ msgstr "Jeśli opcja ta będzie wyłączona, nie będzie można ponownie zoptyma
 msgid "Let's get you started!"
 msgstr "Zacznijmy!"
 
-#: inc/classes/class-imagify-admin-ajax-post.php:1012
+#: inc/classes/class-imagify-admin-ajax-post.php:1030
 #: views/admin/admin-bar-status.php:41
 msgid "Oops, It's Over!"
 msgstr "Oops, Skończono!"
 
-#: inc/classes/class-imagify-admin-ajax-post.php:1014
+#: inc/classes/class-imagify-admin-ajax-post.php:1032
 #: views/admin/admin-bar-status.php:39
 msgid "Oops, It's almost over!"
 msgstr "Ups, to prawie koniec!"

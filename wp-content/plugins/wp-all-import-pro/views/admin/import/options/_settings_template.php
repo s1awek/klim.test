@@ -1,4 +1,4 @@
-<div class="wpallimport-collapsed closed wpallimport-section">
+<div class="wpallimport-collapsed closed wpallimport-section" data-wpai-section="import-step4-post-status">
 	<div class="wpallimport-content-section">
 		<div class="wpallimport-collapsed-header">
 			<h3><?php _e('Configure Advanced Settings','wp-all-import-pro');?></h3>

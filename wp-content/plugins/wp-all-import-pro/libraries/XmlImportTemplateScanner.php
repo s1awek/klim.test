@@ -206,9 +206,9 @@ final class XmlImportTemplateScanner
         $input->read();
         break;
       }
-      elseif ($ch == '[' && $accum[strlen($accum) - 1] != "\\")
-      {                   
-        
+      elseif ($ch == '[' && $accum[strlen($accum) - 1] != "\\" && PMXI_Plugin::$is_php_allowed)
+      {
+
         $this->currentState = XmlImportTemplateScanner::STATE_LANG;
         $this->isLangBegin = true;
         //omit [

@@ -5,7 +5,7 @@ Tags: clean, database, optimize, performance, postmeta
 Requires at least: 5.0.0
 Requires PHP: 7.0
 Tested up to: 7.0
-Stable tag: 4.1.1
+Stable tag: 4.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,11 @@ With the ✨[**Premium version**](https://sigmaplugin.com/downloads/wordpress-ad
 * Clean and delete transients
 * Set transient autoload to yes/no
 
+#### ✅ WooCommerce
+* Clean orphaned product variations
+* Clean orphaned customer analytics
+* Clean expired customer sessions
+
 #### ✅ Other Tools
 * Display current database size
 * Logging system for easy troubleshooting
@@ -196,6 +201,12 @@ Unlock the full power of database cleanup and optimization with Advanced Databas
 * Display which site each item belongs to
 * Run automation tasks across the entire network
 
+#### 🛒 WOptimize – The Cleaner & Optimizer for WooCommerce
+
+If you run a WooCommerce store and want to go further, try our dedicated plugin [**WOptimize**](https://sigmaplugin.com/downloads/woptimize/?utm_source=wprepo&utm_medium=readme&utm_campaign=wordpress&utm_content=woptimize_landing_page) - the ultimate solution to clean and speed up your WooCommerce store.
+
+Learn more: [https://sigmaplugin.com/downloads/woptimize](https://sigmaplugin.com/downloads/woptimize/?utm_source=wprepo&utm_medium=readme&utm_campaign=wordpress&utm_content=woptimize_landing_page)
+
 == Installation ==
 
 This section describes how to install the plugin. In general, there are 3 ways to install this plugin like any other WordPress plugin.
@@ -231,7 +242,7 @@ This section describes how to install the plugin. In general, there are 3 ways t
 
 = Where is the plugin menu? =
 
-* The plugin can be accessed via "Dashboard" » "WP DB Cleaner" or "Dashboard" » "Tools" » "WP DB Cleaner" (depending on your settings).
+* The plugin can be accessed via "Dashboard" » "DB Cleaner" or "Dashboard" » "Tools" » "DB Cleaner" (depending on your settings).
 
 == Screenshots ==
 
@@ -258,6 +269,20 @@ This section describes how to install the plugin. In general, there are 3 ways t
 21. Settings page
 
 == Changelog ==
+
+= 4.2.0 – 13/07/2026 =
+- New: 3 WooCommerce cleanup tools: Orphaned product variations, orphaned customer analytics, and expired customer sessions
+- New: Users can now assign items (belongs-to data) to themes/plugins that are not installed
+- Fix: Prevent concurrency issues when creating "adbc_uploads_F..." folder by using a locking mechanism
+- Fix: 502 Bad Gateway error at the end of a scan triggered by unlink()
+- Fix: REST permission errors returning HTTP 500 instead of 403 for unauthenticated requests
+- Fix: Don't display normal warnings when a critical warning exists
+- Tweak: [Premium] New relations added to the Remote Scan database
+- Tweak: Set "Keep last" to 30 days by default for completed actions in Action Scheduler to comply with the standard
+- Tweak: Remember the "Items per page" value even after refreshing the page
+- Tweak: The plugin menu is now called "DB Cleaner" instead of "WP DB Cleaner"
+- Tweak: Refactored several parts of the codebase for better performance and maintainability
+- **Info**: We created [**WOptimize**](https://sigmaplugin.com/downloads/woptimize/?utm_source=wprepo&utm_medium=readme&utm_campaign=wordpress&utm_content=woptimize_landing_page), a new plugin for cleaning WooCommerce stores. Use coupon code **WOPT30** to get 30% off now.
 
 = 4.1.1 – 05/05/2026 =
 - Security: [Premium + Pro-Lifetime] Patched a security vulnerability in the EDD SDK package

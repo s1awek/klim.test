@@ -1694,27 +1694,67 @@ class PMXI_Admin_Import extends PMXI_Controller_Admin {
 					}
 				}
 
-				// remove entires where both custom_name and custom_value are empty
-				$not_empty = array_flip(array_values(array_merge(array_keys(array_filter($post['custom_name'], 'strlen')), array_keys(array_filter($post['custom_value'], 'strlen')))));
-
-				$post['custom_name'] = array_intersect_key($post['custom_name'], $not_empty);
-				$post['custom_value'] = array_intersect_key($post['custom_value'], $not_empty);
+				// Drop stub rows — the parser fails on an empty template.
+				$cf_is_blank = static function ($v) {
+					return !is_string($v) || trim($v) === '';
+				};
+				$cf_keep = array();
+				$cf_indexes = array_keys((array) $post['custom_name']);
+				foreach ($cf_indexes as $i) {
+					$name_blank = $cf_is_blank($post['custom_name'][$i]);
+					$value_blank = !isset($post['custom_value'][$i]) || $cf_is_blank($post['custom_value'][$i]);
+					if ($name_blank && $value_blank) {
+						continue;
+					}
+					$cf_keep[$i] = true;
+				}
+				foreach (array('custom_name', 'custom_value', 'custom_format', 'serialized_values', 'custom_mapping_rules') as $cf_field) {
+					if (isset($post[$cf_field]) && is_array($post[$cf_field])) {
+						$post[$cf_field] = array_intersect_key($post[$cf_field], $cf_keep);
+					}
+				}
 
 				// validate
-                foreach ($post['custom_name'] as $custom_name) {
-                    $this->_validate_template($custom_name, __('Custom Field Name', 'wp-all-import-pro'));
+                // A meta key (name) is always required, but a blank value is allowed — it imports
+                // an empty custom field. Only reject a row that supplies a value with no name.
+                $cf_name_missing = false;
+                foreach (array_keys((array) $post['custom_name']) as $i) {
+                    $value_present = isset($post['custom_value'][$i]) && !$cf_is_blank($post['custom_value'][$i]);
+                    if ($cf_is_blank($post['custom_name'][$i]) && $value_present) {
+                        $cf_name_missing = true;
+                        break;
+                    }
                 }
-                foreach ($post['custom_value'] as $key => $custom_value) {
-                    if ( empty($post['custom_format'][$key]) ) {
-                        $this->_validate_template($custom_value, __('Custom Field Value', 'wp-all-import-pro'));
+                if ($cf_name_missing) {
+                    $this->errors->add('form-validation', __('A name must be set for all custom fields', 'wp-all-import-pro'));
+                } else {
+                    foreach ($post['custom_name'] as $custom_name) {
+                        $this->_validate_template($custom_name, __('Custom Field Name', 'wp-all-import-pro'));
+                    }
+                    foreach ($post['custom_value'] as $key => $custom_value) {
+                        if ( empty($post['custom_format'][$key]) ) {
+                            $this->_validate_template($custom_value, __('Custom Field Value', 'wp-all-import-pro'));
+                        }
                     }
                 }
 
 				if ( $post['type'] == "post" and $post['custom_type'] == "product" and class_exists('PMWI_Plugin')){
-					// remove entires where both custom_name and custom_value are empty
-					$not_empty = array_flip(array_values(array_merge(array_keys(array_filter($post['attribute_name'], 'strlen')), array_keys(array_filter($post['attribute_value'], 'strlen')))));
-					$post['attribute_name'] = array_intersect_key($post['attribute_name'], $not_empty);
-					$post['attribute_value'] = array_intersect_key($post['attribute_value'], $not_empty);
+					// remove entires where both attribute_name and attribute_value are empty
+					$attr_keep = array();
+					$attr_indexes = array_keys((array) $post['attribute_name']);
+					foreach ($attr_indexes as $i) {
+						$name_blank = !isset($post['attribute_name'][$i]) || !strlen((string) $post['attribute_name'][$i]);
+						$value_blank = !isset($post['attribute_value'][$i]) || !strlen((string) $post['attribute_value'][$i]);
+						if ($name_blank && $value_blank) {
+							continue;
+						}
+						$attr_keep[$i] = true;
+					}
+					foreach (array('attribute_name', 'attribute_value', 'in_variations', 'is_visible', 'is_taxonomy') as $attr_field) {
+						if (isset($post[$attr_field]) && is_array($post[$attr_field])) {
+							$post[$attr_field] = array_intersect_key($post[$attr_field], $attr_keep);
+						}
+					}
 					// validate
 					if (array_keys(array_filter($post['attribute_name'], 'strlen')) != array_keys(array_filter($post['attribute_value'], 'strlen'))) {
 						$this->errors->add('form-validation', __('Both name and value must be set for all woocommerce attributes', 'wp-all-import-pro'));

@@ -593,6 +593,8 @@ class Rsssl_Two_Factor
      */
     public static function rsssl_wp_login(string $user_login, WP_User $user): void
     {
+        self::maybe_redirect_expired_password_before_two_factor( $user );
+
         switch (Rsssl_Two_Factor_Settings::get_login_action($user->ID)) {
             case 'onboarding':
                 self::is_onboarding_complete($user);
@@ -613,6 +615,30 @@ class Rsssl_Two_Factor
             default:
                 break;
         }
+    }
+
+    /**
+     * Let password expiration win before 2FA can render a login/onboarding screen.
+     *
+     * Side effects: redirects and exits the request when the user's password is expired.
+     */
+    private static function maybe_redirect_expired_password_before_two_factor( WP_User $user ): void
+    {
+        if ( ! function_exists( '\RSSSL\Pro\Security\WordPress\rsssl_maybe_get_expired_password_redirect' ) ) {
+            return;
+        }
+
+        $redirect_to = isset( $_REQUEST['redirect_to'] )
+            ? wp_validate_redirect( wp_unslash( $_REQUEST['redirect_to'] ), admin_url() )
+            : admin_url();
+
+        $expired_password_redirect = \RSSSL\Pro\Security\WordPress\rsssl_maybe_get_expired_password_redirect( $redirect_to, $user->ID );
+        if ( $expired_password_redirect === $redirect_to ) {
+            return;
+        }
+
+        wp_safe_redirect( $expired_password_redirect );
+        exit;
     }
 
     /**
@@ -722,7 +748,7 @@ class Rsssl_Two_Factor
     public static function show_two_factor_login(WP_User $user): void
     {
 	    $redirect_to = isset($_REQUEST['redirect_to']) ? wp_validate_redirect(wp_unslash($_REQUEST['redirect_to']), admin_url()) : admin_url();
-        $provider = Rsssl_Two_Factor_Settings::get_login_action($user->ID);
+        Rsssl_Two_Factor_Settings::get_login_action($user->ID);
 		$login_nonce = Rsssl_Two_Fa_Authentication::create_login_nonce($user->ID)['rsssl_key'];
 
         self::login_html($user, $login_nonce ,$redirect_to);
@@ -858,7 +884,6 @@ class Rsssl_Two_Factor
         $provider_class = $provider::get_instance();
 
 
-        $available_providers = self::get_available_providers_for_user($user);
 //        $backup_providers = array_diff_key($available_providers, array($provider => null));
         $interim_login = isset($_REQUEST['interim-login']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
@@ -1142,6 +1167,9 @@ class Rsssl_Two_Factor
 		do_action('rsssl_two_factor_user_authenticated', $user);
 
 		$redirect_to = apply_filters('login_redirect', $redirect_to, $redirect_to, $user);
+		if (function_exists('\RSSSL\Pro\Security\WordPress\rsssl_maybe_get_expired_password_redirect')) {
+			$redirect_to = \RSSSL\Pro\Security\WordPress\rsssl_maybe_get_expired_password_redirect($redirect_to, $user->ID);
+		}
 		// cleaning up the user meta.
 	    delete_user_meta( $user->ID, self::RSSSL_USER_FAILED_LOGIN_ATTEMPTS_KEY);
 	    delete_user_meta( $user->ID, self::RSSSL_USER_RATE_LIMIT_KEY);

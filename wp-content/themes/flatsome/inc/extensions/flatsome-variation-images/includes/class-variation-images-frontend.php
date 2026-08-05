@@ -166,7 +166,7 @@ class Variation_Images_Frontend {
 
 		$gallery_thumbnail = wc_get_image_size( apply_filters( 'woocommerce_gallery_thumbnail_size', 'woocommerce_' . $image_size ) );
 
-		foreach ( $attachment_ids as $attachment_id ) {
+		foreach ( $attachment_ids as $index => $attachment_id ) {
 			$classes     = array();
 			$image_class = esc_attr( implode( ' ', $classes ) );
 			$image       = wp_get_attachment_image_src( $attachment_id, apply_filters( 'woocommerce_gallery_thumbnail_size', 'woocommerce_' . $image_size ) );
@@ -175,10 +175,12 @@ class Variation_Images_Frontend {
 				continue;
 			}
 
-			$image_alt = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
-			$image     = '<img src="' . $image[0] . '" alt="' . $image_alt . '" width="' . $gallery_thumbnail['width'] . '" height="' . $gallery_thumbnail['height'] . '"  class="attachment-woocommerce_thumbnail" />';
+			$image_alt = trim( wp_strip_all_tags( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) );
+			if ( fl_woocommerce_version_check( '9.3.3' ) && function_exists( 'woocommerce_get_alt_from_product_title_and_position' ) && $variation ) {
+				$image_alt = empty( $image_alt ) ? woocommerce_get_alt_from_product_title_and_position( $variation->get_name(), false, $index - 1 ) : $image_alt;
+			}
 
-			$thumbs[] = apply_filters( 'woocommerce_single_product_image_thumbnail_html', sprintf( '<div class="col"><a>%s</a></div>', $image ), $attachment_id, 0, $image_class );
+			$thumbs[] = apply_filters( 'woocommerce_single_product_image_thumbnail_html', sprintf( '<div class="col"><a>%s</a></div>', wp_get_attachment_image( $attachment_id, apply_filters( 'woocommerce_gallery_thumbnail_size', 'woocommerce_' . $image_size ), false, array( 'alt' => esc_attr( $image_alt ) ) ) ), $attachment_id, 0, $image_class );
 		}
 
 		wp_send_json( array(

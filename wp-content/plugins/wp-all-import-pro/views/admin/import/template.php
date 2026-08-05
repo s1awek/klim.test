@@ -72,7 +72,7 @@ $form_classes = apply_filters( 'pmxi_template_form_class', $form_classes, $this 
 
 				<?php if ( in_array('caption', $visible_sections) ): ?>
 
-					<div class="wpallimport-collapsed wpallimport-section">
+					<div class="wpallimport-collapsed wpallimport-section" data-wpai-section="import-step3-title-content">
 						<div class="wpallimport-content-section" style="overflow: hidden; padding-bottom: 0; margin-top: 0;">
 							<div class="wpallimport-collapsed-header" style="margin-bottom: 15px;">
                                 <?php if ( in_array($post_type, ['comments', 'woo_reviews'] ) ){ ?>

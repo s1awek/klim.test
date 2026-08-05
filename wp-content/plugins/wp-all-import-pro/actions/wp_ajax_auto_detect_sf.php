@@ -21,33 +21,17 @@ function pmxi_wp_ajax_auto_detect_sf(){
 	    switch ($post_type){
 			case 'import_users':
 			case 'shop_customer':
-                $values = $wpdb->get_results("
-                    SELECT DISTINCT usermeta.meta_value
-                    FROM ".$wpdb->usermeta." as usermeta
-                    WHERE usermeta.meta_key='".$fieldName."'
-                ", ARRAY_A);
+                $values = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT usermeta.meta_value FROM {$wpdb->usermeta} as usermeta WHERE usermeta.meta_key = %s", $fieldName), ARRAY_A);
                 break;
             case 'taxonomies':
-                $values = $wpdb->get_results("
-                    SELECT DISTINCT termmeta.meta_value
-                    FROM ".$wpdb->termmeta." as termmeta
-                    WHERE termmeta.meta_key='".$fieldName."'
-                ", ARRAY_A);
+                $values = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT termmeta.meta_value FROM {$wpdb->termmeta} as termmeta WHERE termmeta.meta_key = %s", $fieldName), ARRAY_A);
                 break;
             case 'woo_reviews':
             case 'comments':
-                $values = $wpdb->get_results("
-                    SELECT DISTINCT commentmeta.meta_value
-                    FROM ".$wpdb->commentmeta." as commentmeta
-                    WHERE commentmeta.meta_key='".$fieldName."'
-                ", ARRAY_A);
+                $values = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT commentmeta.meta_value FROM {$wpdb->commentmeta} as commentmeta WHERE commentmeta.meta_key = %s", $fieldName), ARRAY_A);
                 break;
             default:
-                $values = $wpdb->get_results("
-                    SELECT DISTINCT postmeta.meta_value
-                    FROM ".$wpdb->postmeta." as postmeta
-                    WHERE postmeta.meta_key='".$fieldName."'
-                ", ARRAY_A);
+                $values = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT postmeta.meta_value FROM {$wpdb->postmeta} as postmeta WHERE postmeta.meta_key = %s", $fieldName), ARRAY_A);
                 break;
         }
 

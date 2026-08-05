@@ -47,6 +47,9 @@ final class ADBC_Cleanup_Type_Registry {
 		"actionscheduler_failed_logs",
 		"actionscheduler_canceled_logs",
 		"actionscheduler_orphan_logs",
+		"woocommerce_orphaned_customer_analytics",
+		"woocommerce_orphaned_product_variations",
+		"woocommerce_expired_sessions",
 	];
 
 	private const AUTO_COUNT_META_THRESHOLD = 50000;
@@ -133,6 +136,9 @@ final class ADBC_Cleanup_Type_Registry {
 		if ( ADBC_Users_Meta::get_total_users_meta_count() > self::AUTO_COUNT_META_THRESHOLD ) {
 			$auto_count_items_types = array_diff( $auto_count_items_types, [ "duplicated_usermeta", "unused_usermeta" ] );
 		}
+
+		// Always exclude woocommerce_orphaned_customer_analytics, woocommerce_orphaned_product_variations and woocommerce_expired_sessions
+		$auto_count_items_types = array_diff( $auto_count_items_types, [ "woocommerce_orphaned_customer_analytics", "woocommerce_orphaned_product_variations", "woocommerce_expired_sessions" ] );
 
 		return array_values( $auto_count_items_types );
 

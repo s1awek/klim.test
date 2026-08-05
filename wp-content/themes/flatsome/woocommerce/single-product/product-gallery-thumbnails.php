@@ -3,7 +3,7 @@
  * Product gallery thumbnails.
  *
  * @package          Flatsome/WooCommerce/Templates
- * @flatsome-version 3.16.0
+ * @flatsome-version 3.20.8
  */
 
 global $post, $product;
@@ -48,9 +48,9 @@ if ( $attachment_ids || $render_without_attachments ) {
 	$gallery_class[] = 'slider row row-small row-slider slider-nav-small small-columns-4';
 	$gallery_class   = apply_filters( 'flatsome_single_product_thumbnails_classes', $gallery_class );
 	?>
-	<div class="<?php echo implode( ' ', $gallery_class ); ?>"
+	<div class="<?php echo esc_attr( implode( ' ', $gallery_class ) ); ?>"
 		data-flickity-options='{
-			"cellAlign": "<?php echo $thumb_cell_align; ?>",
+			"cellAlign": "<?php echo esc_attr( $thumb_cell_align ); ?>",
 			"wrapAround": false,
 			"autoPlay": false,
 			"prevNextButtons": true,
@@ -58,7 +58,7 @@ if ( $attachment_ids || $render_without_attachments ) {
 			"percentPosition": true,
 			"imagesLoaded": true,
 			"pageDots": false,
-			"rightToLeft": <?php echo $rtl; ?>,
+			"rightToLeft": <?php echo esc_attr( $rtl ); ?>,
 			"contain": true
 		}'>
 		<?php
@@ -70,16 +70,16 @@ if ( $attachment_ids || $render_without_attachments ) {
 				<a>
 					<?php
 					$image_id  = get_post_thumbnail_id( $post->ID );
-					$image     = wp_get_attachment_image_src( $image_id, apply_filters( 'woocommerce_gallery_thumbnail_size', 'woocommerce_' . $image_size ) );
-					$image_alt = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
-					$image     = '<img src="' . $image[0] . '" alt="' . $image_alt . '" width="' . $gallery_thumbnail['width'] . '" height="' . $gallery_thumbnail['height'] . '" class="attachment-woocommerce_thumbnail" />';
-
-					echo $image;
+					$image_alt = trim( wp_strip_all_tags( get_post_meta( $image_id, '_wp_attachment_image_alt', true ) ) );
+					if ( fl_woocommerce_version_check( '9.3.3' ) && function_exists( 'woocommerce_get_alt_from_product_title_and_position' ) && $product ) {
+						$image_alt = empty( $image_alt ) ? woocommerce_get_alt_from_product_title_and_position( $product->get_title(), false, -1 ) : $image_alt;
+					}
+					echo wp_get_attachment_image( $image_id, apply_filters( 'woocommerce_gallery_thumbnail_size', 'woocommerce_' . $image_size ), false, array( 'alt' => esc_attr( $image_alt ) ) );
 					?>
 				</a>
-			</div><?php
+			</div>
+		<?php
 		endif;
-
 		foreach ( $attachment_ids as $attachment_id ) {
 
 			$classes     = array( '' );
@@ -90,14 +90,15 @@ if ( $attachment_ids || $render_without_attachments ) {
 				continue;
 			}
 
-			$image_alt = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
-			$image     = '<img src="' . $image[0] . '" alt="' . $image_alt . '" width="' . $gallery_thumbnail['width'] . '" height="' . $gallery_thumbnail['height'] . '"  class="attachment-woocommerce_thumbnail" />';
+			$image_alt = trim( wp_strip_all_tags( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) );
+			if ( fl_woocommerce_version_check( '9.3.3' ) && function_exists( 'woocommerce_get_alt_from_product_title_and_position' ) && $product ) {
+				$image_alt = empty( $image_alt ) ? woocommerce_get_alt_from_product_title_and_position( $product->get_title(), false, $loop ) : $image_alt;
+			}
+			echo apply_filters( 'woocommerce_single_product_image_thumbnail_html', sprintf( '<div class="col"><a>%s</a></div>', wp_get_attachment_image( $attachment_id, apply_filters( 'woocommerce_gallery_thumbnail_size', 'woocommerce_' . $image_size ), false, array( 'alt' => esc_attr( $image_alt ) ) ) ), $attachment_id, $post->ID, $image_class ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-			echo apply_filters( 'woocommerce_single_product_image_thumbnail_html', sprintf( '<div class="col"><a>%s</a></div>', $image ), $attachment_id, $post->ID, $image_class );
-
-			$loop ++;
+			$loop++;
 		}
 		?>
 	</div>
 	<?php
-} ?>
+}

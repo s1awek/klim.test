@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Flexible Checkout Fields for WooCommerce &#8211; WooCommerce Checkout Manager - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-05-28 04:38:32+0000\n"
+"PO-Revision-Date: 2026-07-20 06:17:15+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -51,7 +51,7 @@ msgstr "Wyłącz śledzenie użycia"
 msgid "Enable usage tracking"
 msgstr "Włącz śledzenie użycia"
 
-#: classes/plugin.php:980
+#: classes/plugin.php:1006
 msgid "Start here"
 msgstr "Zacznij tutaj"
 
@@ -387,7 +387,7 @@ msgstr "Wartość minimalna"
 msgid "Max value"
 msgstr "Wartość maksymalna"
 
-#: classes/plugin.php:986 src/Settings/Option/LogicAdvOption.php:58
+#: classes/plugin.php:1012 src/Settings/Option/LogicAdvOption.php:58
 #: src/Settings/Option/SettingSectionsAdvOption.php:37
 msgid "Upgrade to PRO"
 msgstr "Ulepsz do PRO"
@@ -495,7 +495,7 @@ msgstr "Wybierz"
 
 #: src/Field/Type/RadioType.php:25
 msgid "Radio"
-msgstr "Radio"
+msgstr "Pole wyboru"
 
 #: src/Field/Type/RadioImagesType.php:25
 msgid "Radio with images"
@@ -893,7 +893,7 @@ msgstr "Data"
 
 #: src/Field/Type/CheckboxType.php:44
 msgid "Checkbox"
-msgstr "Pole wyboru"
+msgstr "Pole zaznaczenia"
 
 #: src/Settings/Option/SettingSectionsAdvOption.php:31
 msgid "Get Flexible Checkout Fields PRO to use Custom Sections"
@@ -936,7 +936,7 @@ msgstr "Flexible Checkout Fields"
 msgid "Support"
 msgstr "Wsparcie"
 
-#: classes/plugin.php:982
+#: classes/plugin.php:1008
 #: vendor_prefixed/wpdesk/wp-builder/src/Plugin/AbstractPlugin.php:184
 msgid "Docs"
 msgstr "Dokumentacja"
@@ -950,35 +950,35 @@ msgstr "https://wpdesk.link/flexible-checkout-fields-docs"
 msgid "Additional Information"
 msgstr "Informacje dodatkowe"
 
-#: classes/plugin.php:958
+#: classes/plugin.php:984
 msgid "Previous"
 msgstr "Poprzedni"
 
-#: classes/plugin.php:957
+#: classes/plugin.php:983
 msgid "Next"
 msgstr "Następny"
 
-#: classes/plugin.php:954
+#: classes/plugin.php:980
 msgid "Today"
 msgstr "Dzisiaj"
 
-#: classes/plugin.php:953
+#: classes/plugin.php:979
 msgid "Close"
 msgstr "Zamknij"
 
-#: classes/plugin.php:905
+#: classes/plugin.php:931
 msgid "Uploading file..."
 msgstr "Przesyłanie pliku..."
 
-#: classes/plugin.php:354 src/Settings/Menu.php:72
+#: classes/plugin.php:380 src/Settings/Menu.php:72
 msgid "Order"
 msgstr "Zamówienie"
 
-#: classes/plugin.php:347 src/Settings/Menu.php:71
+#: classes/plugin.php:373 src/Settings/Menu.php:71
 msgid "Shipping"
 msgstr "Wysyłka"
 
-#: classes/plugin.php:340 src/Settings/Menu.php:70
+#: classes/plugin.php:366 src/Settings/Menu.php:70
 msgid "Billing"
 msgstr "Rozliczenie"
 
@@ -1031,9 +1031,9 @@ msgstr "Rodzaj pola"
 
 #: src/Settings/Page.php:208
 msgid "Add new field"
-msgstr "Dodaj nowe pole"
+msgstr "Utwórz pole"
 
-#: classes/plugin.php:981 src/Settings/Menu.php:35
+#: classes/plugin.php:1007 src/Settings/Menu.php:35
 #: vendor_prefixed/wpdesk/wp-builder/src/Plugin/AbstractPlugin.php:188
 msgid "Settings"
 msgstr "Ustawienia"

@@ -184,6 +184,7 @@ class Flexible_Checkout_Fields_Plugin extends \FcfVendor\WPDesk\PluginBuilder\Pl
 		add_filter( 'woocommerce_get_country_locale_base', [ $this, 'woocommerce_get_country_locale_base' ], 9999 );
 
 		add_action( 'woocommerce_get_country_locale_default', [ $this, 'woocommerce_get_country_locale_default' ], 11 );
+		add_filter( 'woocommerce_country_locale_field_selectors', [ $this, 'woocommerce_country_locale_field_selectors' ], 9999 );
 
 		add_filter( 'woocommerce_screen_ids', [ $this, 'add_woocommerce_screen_ids' ] );
 
@@ -310,6 +311,31 @@ class Flexible_Checkout_Fields_Plugin extends \FcfVendor\WPDesk\PluginBuilder\Pl
 		}
 
 		return $locale;
+	}
+
+	/**
+	 * Remove country from locale field selectors when field is disabled in FCF.
+	 *
+	 * WC 10.8+ added country to locale field selectors and enforces country as always
+	 * visible in locale. This causes address-i18n.js to call field.show() on the
+	 * country field, overriding our CSS hide class. Removing country from selectors
+	 * restores pre-10.8 behavior where JS skips the field entirely.
+	 *
+	 * @param array<string, string> $selectors .
+	 *
+	 * @return array<string, string>
+	 */
+	public function woocommerce_country_locale_field_selectors( $selectors ) {
+		$settings = $this->get_settings();
+
+		$billing_disabled  = ( $settings['billing']['billing_country']['visible'] ?? '0' ) === '1';
+		$shipping_disabled = ( $settings['shipping']['shipping_country']['visible'] ?? '0' ) === '1';
+
+		if ( $billing_disabled || $shipping_disabled ) {
+			unset( $selectors['country'] );
+		}
+
+		return $selectors;
 	}
 
 	/**

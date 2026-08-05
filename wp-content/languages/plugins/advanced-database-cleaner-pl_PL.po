@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Advanced Database Cleaner – Optimize &amp; Clean Database to Speed Up Site Performance - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-07-13 06:13:37+0000\n"
+"PO-Revision-Date: 2026-07-16 03:20:43+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -69,37 +69,37 @@ msgstr "Niektóre rodzaje wpisów zostały pomyślnie usunięte, inne zostały p
 msgid "Check setting"
 msgstr "Sprawdź ustawienie"
 
-#: includes/classes/class-adbc-admin-init.php:554
+#: includes/classes/class-adbc-admin-init.php:556
 msgid "Advanced DB Cleaner Pro V4 is finally here!"
 msgstr "Advanced DB Cleaner Pro V4 jest w końcu dostępny!"
 
-#: includes/classes/class-adbc-admin-init.php:563
+#: includes/classes/class-adbc-admin-init.php:565
 msgid "How to get to the full version - 50% OFF forever"
 msgstr "Jak uzyskać pełną wersję – 50% ZNIŻKI na zawsze"
 
-#: includes/classes/class-adbc-admin-init.php:567
+#: includes/classes/class-adbc-admin-init.php:569
 msgid "Remind me in a week"
 msgstr "Przypomnij mi za tydzień"
 
-#: includes/classes/class-adbc-admin-init.php:783
+#: includes/classes/class-adbc-admin-init.php:806
 msgid "The free version of Advanced DB Cleaner has been de-activated since the pro version is active."
 msgstr "Darmowa wersja Advanced DB Cleaner została dezaktywowana, ponieważ wersja pro jest aktywna."
 
-#: includes/classes/class-adbc-admin-init.php:547
+#: includes/classes/class-adbc-admin-init.php:549
 msgid "To access it, we created a separate plugin version under an annual pricing model, bundled with the Remote Scan feature and upcoming AI and cloud capabilities. As a lifetime customer, you can benefit from a 50% discount on the first purchase and all renewals (discount available for a limited time)."
 msgstr "Aby uzyskać do niej dostęp, stworzyliśmy oddzielną wersję wtyczki w ramach rocznego modelu cenowego, w pakiecie z funkcją zdalnego skanowania oraz nadchodzącymi możliwościami SI i chmury. Jako dożywotni klient możesz skorzystać z 50% zniżki na pierwszy zakup i wszystkie odnowienia (zniżka dostępna przez ograniczony czas)."
 
 #. translators: 1: opening <strong> tag, 2: closing </strong> tag
-#: includes/classes/class-adbc-admin-init.php:539
+#: includes/classes/class-adbc-admin-init.php:541
 msgid "We have introduced a new Remote Scan feature, designed to detect orphaned database items with much higher accuracy. Because this feature requires ongoing infrastructure and maintenance costs, %1$sit is not included in the lifetime plan%2$s."
 msgstr "Wprowadziliśmy nową funkcję zdalnego skanowania, zaprojektowaną do wykrywania osieroconych elementów bazy danych ze znacznie większą dokładnością. Ponieważ ta funkcja wymaga bieżących kosztów infrastruktury i utrzymania, %1$snie jest ona uwzględniona w planie dożywotnim%2$s."
 
-#: includes/classes/class-adbc-admin-init.php:535
+#: includes/classes/class-adbc-admin-init.php:537
 msgid "Your \"Advanced DB Cleaner Pro\" has been upgraded to version 4.x, a major update featuring a new architecture, a redesigned interface, and many new features."
 msgstr "Twój „Advanced DB Cleaner Pro” został zaktualizowany do wersji 4.x, głównej aktualizacji zawierającej nową architekturę, przeprojektowany interfejs i wiele nowych funkcji."
 
 #. translators: 1: opening <a> tag, 2: closing </a> tag
-#: includes/classes/class-adbc-admin-init.php:529
+#: includes/classes/class-adbc-admin-init.php:531
 msgid "Your %1$sAdvanced DB Cleaner Pro%2$s has been upgraded to version 4.x, a major update featuring a new architecture, a redesigned interface, and many new features."
 msgstr "Twój %1$sAdvanced DB Cleaner Pro%2$s został zaktualizowany do wersji 4.x, głównej aktualizacji zawierającej nową architekturę, przeprojektowany interfejs i wiele nowych funkcji."
 
@@ -158,27 +158,27 @@ msgid "F j, Y"
 msgstr "j F Y"
 
 #: includes/endpoints/class-adbc-info-endpoints.php:84 assets/js/app.js:2
-#: assets/js/translations.js:1250
+#: assets/js/translations.js:1350
 msgid "Cleanup method"
 msgstr "Metoda czyszczenia"
 
 #: includes/endpoints/class-adbc-info-endpoints.php:87 assets/js/app.js:2
-#: assets/js/translations.js:1342
+#: assets/js/translations.js:1442
 msgid "CPU work time"
 msgstr "Czas pracy CPU"
 
 #: includes/endpoints/class-adbc-info-endpoints.php:85 assets/js/app.js:2
-#: assets/js/translations.js:1251
+#: assets/js/translations.js:1351
 msgid "Database rows batches"
 msgstr "Partie wierszy bazy danych"
 
 #: includes/endpoints/class-adbc-info-endpoints.php:89 assets/js/app.js:2
-#: assets/js/translations.js:1352
+#: assets/js/translations.js:1452
 msgid "File line batches"
 msgstr "Partie linii plików"
 
 #: includes/endpoints/class-adbc-info-endpoints.php:94 assets/js/app.js:2
-#: assets/js/translations.js:1210
+#: assets/js/translations.js:1310
 msgid "Show tables with invalid prefix"
 msgstr "Pokaż tabele z nieprawidłowym prefiksem"
 
@@ -195,22 +195,22 @@ msgstr "Adres URL strony głównej"
 msgid "Site URL"
 msgstr "Adres URL witryny"
 
-#: includes/classes/class-adbc-admin-init.php:519
+#: includes/classes/class-adbc-admin-init.php:521
 msgid "Remind me later"
 msgstr "Przypomnij mi później"
 
-#: includes/classes/class-adbc-admin-init.php:428 assets/js/app.js:2
-#: assets/js/translations.js:507
+#: includes/classes/class-adbc-admin-init.php:430 assets/js/app.js:2
+#: assets/js/translations.js:550
 msgid "Once daily"
 msgstr "Raz dziennie"
 
-#: includes/classes/class-adbc-admin-init.php:422 assets/js/app.js:2
-#: assets/js/translations.js:506
+#: includes/classes/class-adbc-admin-init.php:424 assets/js/app.js:2
+#: assets/js/translations.js:549
 msgid "Twice daily"
 msgstr "Dwa razy dziennie"
 
-#: includes/classes/class-adbc-admin-init.php:416 assets/js/app.js:2
-#: assets/js/translations.js:505
+#: includes/classes/class-adbc-admin-init.php:418 assets/js/app.js:2
+#: assets/js/translations.js:548
 msgid "Once hourly"
 msgstr "Co godzinę"
 
@@ -263,7 +263,7 @@ msgid "Memory limit"
 msgstr "Limit pamięci"
 
 #: includes/endpoints/class-adbc-info-endpoints.php:59 assets/js/app.js:2
-#: assets/js/translations.js:671
+#: assets/js/translations.js:719
 msgid "Database"
 msgstr "Baza danych"
 
@@ -272,7 +272,7 @@ msgid "Memory Limit"
 msgstr "Limit pamięci"
 
 #: includes/endpoints/class-adbc-info-endpoints.php:76 assets/js/app.js:2
-#: assets/js/translations.js:1165
+#: assets/js/translations.js:1265
 msgid "License status"
 msgstr "Status licencji"
 
@@ -323,7 +323,7 @@ msgid "License plan"
 msgstr "Plan licencji"
 
 #: includes/endpoints/class-adbc-info-endpoints.php:116 assets/js/app.js:2
-#: assets/js/translations.js:1362
+#: assets/js/translations.js:1462
 msgid "Max execution time"
 msgstr "Maks. czas wykonywania"
 
@@ -344,12 +344,12 @@ msgid "Not supported"
 msgstr "Nieobsługiwane"
 
 #. translators: 1: WordPress version
-#: includes/utils/class-adbc-notifications.php:346
+#: includes/utils/class-adbc-notifications.php:367
 msgid "Please upgrade WordPress to %s or higher to use the plugin without issues."
 msgstr "Zaktualizuj WordPressa do wersji %s lub wyższej, aby korzystać z wtyczki bez problemów."
 
 #. translators: 1: PHP version
-#: includes/utils/class-adbc-notifications.php:341
+#: includes/utils/class-adbc-notifications.php:362
 msgid "Please upgrade your PHP to %s or higher to use the plugin without issues."
 msgstr "Zaktualizuj PHP do wersji %s lub wyższej, aby korzystać z wtyczki bez problemów."
 
@@ -409,20 +409,20 @@ msgstr "Nieautoryzowany dostęp! Musisz być zalogowany."
 msgid "Upload Max Filesize"
 msgstr "Maks. rozmiar przesyłanego pliku"
 
-#: includes/utils/class-adbc-notifications.php:349
+#: includes/utils/class-adbc-notifications.php:370
 msgid "Uploads folder is not writable. Check permissions."
 msgstr "Katalog Uploads nie jest zapisywalny. Sprawdź uprawnienia."
 
-#: includes/utils/class-adbc-notifications.php:352
+#: includes/utils/class-adbc-notifications.php:373
 msgid "WordPress file system API is not initialized."
 msgstr "API systemu plików WordPress nie jest zainicjowane."
 
 #. translators: 1: Plugin name with link
-#: includes/classes/class-adbc-admin-init.php:469
+#: includes/classes/class-adbc-admin-init.php:471
 msgid "You have been using %s for more than 1 week. Would you mind taking a few seconds to give it a 5-star rating on WordPress? Thank you in advance :)"
 msgstr "Używasz %s od ponad tygodnia. Czy mógłbyś poświęcić kilka sekund, aby ocenić wtyczkę na 5 gwiazdek na WordPress? Z góry dziękujemy :)"
 
-#: includes/classes/class-adbc-admin-init.php:474
+#: includes/classes/class-adbc-admin-init.php:476
 msgid "You have been using the \"Advanced DB Cleaner\" for more than 1 week. Would you mind taking a few seconds to give it a 5-star rating on WordPress? Thank you in advance :)"
 msgstr "Używasz \"Advanced DB Cleaner\" od ponad tygodnia. Czy mógłbyś poświęcić kilka sekund, aby ocenić wtyczkę na 5 gwiazdek na WordPress? Z góry dziękujemy :)"
 
@@ -440,57 +440,57 @@ msgid "Total post meta"
 msgstr "Łączna liczba danych meta wpisów"
 
 #: includes/endpoints/class-adbc-info-endpoints.php:43 assets/js/app.js:2
-#: assets/js/translations.js:1022
+#: assets/js/translations.js:1105
 msgid "WordPress"
 msgstr "WordPress"
 
-#: includes/classes/class-adbc-admin-init.php:513
+#: includes/classes/class-adbc-admin-init.php:515
 msgid "Awesome!"
 msgstr "Wspaniale!"
 
-#: includes/classes/class-adbc-admin-init.php:520
-#: includes/classes/class-adbc-admin-init.php:572 assets/js/app.js:2
-#: assets/js/translations.js:399
+#: includes/classes/class-adbc-admin-init.php:522
+#: includes/classes/class-adbc-admin-init.php:574 assets/js/app.js:2
+#: assets/js/translations.js:382
 msgid "Dismiss"
 msgstr "Odrzuć"
 
-#: includes/classes/class-adbc-admin-init.php:517
+#: includes/classes/class-adbc-admin-init.php:519
 msgid "I already did"
 msgstr "Już to zrobiłem/am"
 
-#: includes/classes/class-adbc-admin-init.php:518
+#: includes/classes/class-adbc-admin-init.php:520
 msgid "No, not good enough"
 msgstr "Nie, to nie wystarczy"
 
-#: includes/classes/class-adbc-admin-init.php:516
+#: includes/classes/class-adbc-admin-init.php:518
 msgid "Ok, you deserved it"
 msgstr "Ok, zasłużyliście na to"
 
-#: includes/classes/class-adbc-hardcoded-items.php:1147
-#: includes/classes/class-adbc-hardcoded-items.php:1194
+#: includes/classes/class-adbc-hardcoded-items.php:1151
+#: includes/classes/class-adbc-hardcoded-items.php:1198
 msgid "WordPress core"
 msgstr "WordPress"
 
 #: includes/endpoints/class-adbc-info-endpoints.php:52 assets/js/app.js:2
-#: assets/js/translations.js:1021
+#: assets/js/translations.js:1135
 msgid "Theme"
 msgstr "Motyw"
 
 #: includes/models/class-adbc-cron-jobs.php:218 assets/js/app.js:2
-#: assets/js/translations.js:504
+#: assets/js/translations.js:547
 msgid "Once"
 msgstr "Raz"
 
-#: includes/classes/class-adbc-admin-init.php:772
+#: includes/classes/class-adbc-admin-init.php:795
 msgid "The free version of Advanced DB Cleaner has been de-activated since the premium version is active."
 msgstr "Darmowa wersja Advanced DB Cleaner została dezaktywowana, ponieważ aktywna jest wersja premium."
 
-#: includes/classes/class-adbc-admin-init.php:794
+#: includes/classes/class-adbc-admin-init.php:817
 msgid "The pro version of Advanced DB Cleaner has been de-activated since the newest premium version is active."
 msgstr "Wersja Pro Advanced DB Cleaner została dezaktywowana, ponieważ aktywna jest najnowsza wersja premium."
 
 #: includes/endpoints/class-adbc-info-endpoints.php:61 assets/js/app.js:2
-#: assets/js/translations.js:452
+#: assets/js/translations.js:495
 msgid "Database size"
 msgstr "Rozmiar bazy danych"
 
@@ -500,12 +500,12 @@ msgstr "Rozmiar bazy danych"
 #: includes/endpoints/class-adbc-info-endpoints.php:93
 #: includes/endpoints/class-adbc-info-endpoints.php:94
 #: includes/endpoints/class-adbc-info-endpoints.php:107 assets/js/app.js:2
-#: assets/js/translations.js:326
+#: assets/js/translations.js:346
 msgid "Yes"
 msgstr "Tak"
 
 #: includes/endpoints/class-adbc-info-endpoints.php:82 assets/js/app.js:2
-#: assets/js/translations.js:49
+#: assets/js/translations.js:51
 msgid "Settings"
 msgstr "Ustawienia"
 
@@ -515,7 +515,7 @@ msgstr "Ustawienia"
 #: includes/endpoints/class-adbc-info-endpoints.php:93
 #: includes/endpoints/class-adbc-info-endpoints.php:94
 #: includes/endpoints/class-adbc-info-endpoints.php:107 assets/js/app.js:2
-#: assets/js/translations.js:331
+#: assets/js/translations.js:351
 msgid "No"
 msgstr "Nie"
 
@@ -524,13 +524,13 @@ msgstr "Nie"
 msgid "https://sigmaplugin.com/downloads/wordpress-advanced-database-cleaner"
 msgstr "https://sigmaplugin.com/downloads/wordpress-advanced-database-cleaner"
 
-#: includes/classes/class-adbc-admin-init.php:440 assets/js/app.js:2
-#: assets/js/translations.js:509
+#: includes/classes/class-adbc-admin-init.php:442 assets/js/app.js:2
+#: assets/js/translations.js:552
 msgid "Once monthly"
 msgstr "Raz w miesiącu"
 
-#: includes/classes/class-adbc-admin-init.php:434 assets/js/app.js:2
-#: assets/js/translations.js:508
+#: includes/classes/class-adbc-admin-init.php:436 assets/js/app.js:2
+#: assets/js/translations.js:551
 msgid "Once weekly"
 msgstr "Raz w tygodniu"
 
@@ -549,6 +549,6 @@ msgid "Total options"
 msgstr "Łączna liczba opcji"
 
 #: includes/endpoints/class-adbc-info-endpoints.php:62 assets/js/app.js:2
-#: assets/js/translations.js:453
+#: assets/js/translations.js:496
 msgid "Total tables"
 msgstr "Łączna liczba tabel"

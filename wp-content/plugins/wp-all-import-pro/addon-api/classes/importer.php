@@ -137,7 +137,9 @@ class PMXI_Addon_Importer {
         }
 
         if ( ! array_key_exists( $this->addon->slug, $options ) ) {
-            call_user_func( $importData['logger'], __( 'No options found for this addon, skipping...', 'wp-all-import-pro' ) );
+            if ( $importData['logger'] ) {
+                call_user_func( $importData['logger'], __( 'No options found for this addon, skipping...', 'wp-all-import-pro' ) );
+            }
 
             return null;
         }
@@ -162,7 +164,9 @@ class PMXI_Addon_Importer {
             $field_value = $this->unwrapValue( $field, $parsedData[ $field_slug ], $index );
 
             if ( ! $this->canUpdateField( $field, $options ) ) {
-	            call_user_func( $importData['logger'], __( '- Field `'.$field['key'].'` skipped due to import settings.', 'wp-all-import-pro' ) );
+                if ( $importData['logger'] ) {
+                    call_user_func( $importData['logger'], __( '- Field `'.$field['key'].'` skipped due to import settings.', 'wp-all-import-pro' ) );
+                }
 				unset($fields[$field_index]);
                 continue;
             }
@@ -248,7 +252,9 @@ class PMXI_Addon_Importer {
 
         // If no fields are found, skip the import
         if ( empty( $data ) ) {
-            call_user_func( $importData['logger'], __( 'No options found for this addon, skipping...', 'wp-all-import-pro' ) );
+            if ( $importData['logger'] ) {
+                call_user_func( $importData['logger'], __( 'No options found for this addon, skipping...', 'wp-all-import-pro' ) );
+            }
 
             return null;
         }

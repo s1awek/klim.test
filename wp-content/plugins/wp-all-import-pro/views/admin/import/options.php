@@ -100,7 +100,7 @@
                                 $import = $update_previous;
                             }
                             ?>
-                        <div class="wpallimport-collapsed closed wpallimport-section scheduling">
+                        <div class="wpallimport-collapsed closed wpallimport-section scheduling" data-wpai-section="import-step4-scheduling">
                             <div class="wpallimport-content-section">
                                 <div class="wpallimport-collapsed-header <?php if(!$import->canBeScheduled()) { ?> disabled<?php } ?>"
 									<?php if(!$import->canBeScheduled()) { ?> title="<?php _e("To run this import on a schedule you must use the 'Download from URL' or 'Use existing file' options on the Data Source screen.", 'wp-all-import-pro');?>" <?php }?>>

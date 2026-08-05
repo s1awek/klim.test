@@ -227,7 +227,7 @@ if ( ! class_exists( 'WWP_Admin_Custom_Fields_Variable_Product' ) ) {
                                 }
 
                                 $field_id    = $role_key . '_wholesale_prices[' . $loop . ']';
-                                $field_label = $woocommerce_currencies[ $base_currency ] . ' (' . $currency_symbol . ') <em><b>' . __( 'Base Currency', 'woocommerce-wholesale-prices' ) . '</b></em>';
+                                $field_label = WWP_Helper_Functions::wwp_get_aelia_base_currency_field_label( $woocommerce_currencies[ $base_currency ], $currency_symbol );
 
                                 /* translators: %1$s: Wholesale role name,%2$s: currency name and symbol */
                                 $field_desc = sprintf( __( 'Only applies to users with the role of %1$s for %2$s currency', 'woocommerce-wholesale-prices' ), $role['roleName'], $woocommerce_currencies[ $base_currency ] . ' (' . $currency_symbol . ')' );
@@ -718,43 +718,22 @@ if ( ! class_exists( 'WWP_Admin_Custom_Fields_Variable_Product' ) ) {
             $variation_product = wc_get_product( $variation_id );
 
             /**
-             * Sanitize and properly format wholesale price.
-             * (This also supports comma as decimal separator currency format).
+             * Sanitize and properly format wholesale price / percentage.
+             *
+             * Uses WC number formatting (last separator = decimal) so values like
+             * "3.20" are not corrupted when the shop thousand separator is ".".
+             *
+             * Note: $thousand_sep and $decimal_sep remain in the method signature so
+             * existing call sites stay unchanged; separator handling is owned by
+             * WWP_Helper_Functions::sanitize_price_input() / wc_format_decimal().
+             *
+             * @see https://github.com/Rymera-Web-Co/woocommerce-wholesale-prices/issues/955
              */
-            $wholesale_price = sanitize_text_field( $wholesale_price );
-
-            if ( $thousand_sep ) {
-                $wholesale_price = str_replace( $thousand_sep, '', $wholesale_price );
-            }
-
-            if ( $decimal_sep ) {
-                $wholesale_price = str_replace( $decimal_sep, '.', $wholesale_price );
-
-                if ( ! empty( $percentage_discount ) && null !== $percentage_discount ) {
-                    $percentage_discount = str_replace( $decimal_sep, '.', $percentage_discount );
-                }
-            }
-
-            if ( ! empty( $wholesale_price ) ) {
-
-                if ( ! is_numeric( $wholesale_price ) ) {
-                    $wholesale_price = '';
-                } elseif ( $wholesale_price < 0 ) {
-                    $wholesale_price = 0;
-                } else {
-                    $wholesale_price = wc_format_decimal( $wholesale_price );
-                }
-            }
+            // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- kept for call-site BC.
+            $wholesale_price = WWP_Helper_Functions::sanitize_price_input( $wholesale_price );
 
             if ( ! empty( $percentage_discount ) && null !== $percentage_discount ) {
-
-                if ( ! is_numeric( $percentage_discount ) ) {
-                    $percentage_discount = '';
-                } elseif ( $percentage_discount < 0 ) {
-                    $percentage_discount = 0;
-                } else {
-                    $percentage_discount = wc_format_decimal( $percentage_discount );
-                }
+                $percentage_discount = WWP_Helper_Functions::sanitize_price_input( $percentage_discount );
             }
 
             if ( $variable_product instanceof WC_Product ) {

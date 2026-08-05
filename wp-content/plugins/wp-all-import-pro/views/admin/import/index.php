@@ -47,7 +47,7 @@
 
 						<?php do_action('pmxi_import_options_before'); ?>
 
-						<div class="wpallimport-import-types">
+						<div class="wpallimport-import-types" data-wpai-section="import-step1-source-method">
 							<?php if (empty($_GET['deligate'] ?? '')): ?>
 							<h2><?php _e('First, specify how you want to import your data', 'wp-all-import-pro'); ?></h2>
 							<?php else: ?>
@@ -114,7 +114,7 @@
                                 </a>
                             </div>
                         </div>
-						<div class="wpallimport-upload-type-container" rel="file_type">
+						<div class="wpallimport-upload-type-container" rel="file_type" data-wpai-section="import-step1-existing-file">
 							<?php $upload_dir = wp_upload_dir(); ?>
 							<div class="wpallimport-file-type-options">
 
@@ -174,7 +174,7 @@
 						<?php if (empty($_GET['deligate'] ?? '')): ?>
 
                         <div class="wpallimport-download-resource-step-two">
-                            <div class="wpallimport-download-resource wpallimport-download-resource-step-two-url">
+                            <div class="wpallimport-download-resource wpallimport-download-resource-step-two-url" data-wpai-section="import-step1-source-url">
                                 <div class="wpallimport-file-type-options">
                                     <span class="wpallimport-input-icon wpallimport-url-icon"></span>
                                     <input type="text" class="regular-text" name="url" value="<?php echo ( ! empty($post['url'])) ? esc_attr($post['url']) : ''; ?>" placeholder="<?php _e('Enter a web address to download the file from...', 'wp-all-import-pro'); ?>"/>
@@ -246,7 +246,7 @@
                                 </div>
 
                                 <span class="wpallimport-ftp-builder-wrap">
-                                <div class="wpallimport-ftp-connection-builder" id="wpallimport-ftp-connection-builder">
+                                <div class="wpallimport-ftp-connection-builder" id="wpallimport-ftp-connection-builder" data-wpai-section="import-step1-source-ftp">
                                 </div>
                                 <input type="hidden" id="wpai-ftp-browser-nonce"
                                        value="<?php echo wp_create_nonce( 'wpai-ftp-browser' ); ?>"/>

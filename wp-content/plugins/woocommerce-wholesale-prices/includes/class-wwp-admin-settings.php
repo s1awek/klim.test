@@ -410,6 +410,7 @@ if ( ! class_exists( 'WWP_Admin_Settings' ) ) {
          * Sanitize an option value based on the control type.
          *
          * @since  2.2.7
+         * @since  2.2.8 Cast select/radio option keys and the value to string so numeric-keyed options (e.g. page IDs) pass the strict comparison.
          * @access private
          *
          * @param mixed  $value      The value to sanitize.
@@ -443,19 +444,22 @@ if ( ! class_exists( 'WWP_Admin_Settings' ) ) {
                 case 'select':
                 case 'radio':
                     if ( ! empty( $control['options'] ) ) {
-                        $allowed = array_keys( $control['options'] );
+                        // Cast keys to strings: PHP converts numeric array keys (e.g. page IDs)
+                        // to integers, which would fail the strict comparison against the string
+                        // values sent by the REST API.
+                        $allowed = array_map( 'strval', array_keys( $control['options'] ) );
 
                         // Handle multi-select: value may be a JSON-encoded array.
                         if ( ! empty( $control['multiple'] ) ) {
                             $decoded = is_string( $value ) ? json_decode( $value, true ) : null;
                             if ( is_array( $decoded ) ) {
-                                $sanitized = array_values( array_intersect( $decoded, $allowed ) );
+                                $sanitized = array_values( array_intersect( array_map( 'strval', $decoded ), $allowed ) );
                                 return wp_json_encode( $sanitized );
                             }
                         }
 
-                        if ( in_array( $value, $allowed, true ) ) {
-                            return $value;
+                        if ( in_array( (string) $value, $allowed, true ) ) {
+                            return (string) $value;
                         }
                         // Return first option as default if invalid.
                         return ! empty( $allowed ) ? reset( $allowed ) : '';

@@ -266,6 +266,8 @@ class ADBC_Hardcoded_Items extends ADBC_Singleton {
 		'wp_attachment_pages_enabled' => '',
 		// 6.9
 		'wp_notes_notify' => '',
+		// 7.0
+		'wordpress_api_key' => '',
 	];
 
 	/**
@@ -514,6 +516,8 @@ class ADBC_Hardcoded_Items extends ADBC_Singleton {
 		'imagedata' => '',
 		'is_wp_suggestion' => '',
 		'origin' => '',
+		'_wp_font_face_file' => '',
+		'_wp_ignored_hooked_blocks' => '',
 	];
 
 	/**
