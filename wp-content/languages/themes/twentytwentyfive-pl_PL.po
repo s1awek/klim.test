@@ -1815,25 +1815,6 @@ msgstr "Ukryty nagłówek dla strony głównej i szablonu indeksu."
 msgid "Other Posts"
 msgstr "Inne wpisy"
 
-#: patterns/hidden-sidebar.php:38 patterns/page-portfolio-home.php:65
-#: patterns/page-portfolio-home.php:87 patterns/page-portfolio-home.php:121
-#: patterns/page-portfolio-home.php:154 patterns/page-portfolio-home.php:176
-#: patterns/page-portfolio-home.php:203 patterns/template-home-news-blog.php:40
-#: patterns/template-home-posts-grid-news-blog.php:35
-#: patterns/template-home-posts-grid-news-blog.php:60
-#: patterns/template-home-posts-grid-news-blog.php:78
-#: patterns/template-home-posts-grid-news-blog.php:103
-#: patterns/template-home-with-sidebar-news-blog.php:62
-#: patterns/template-home-with-sidebar-news-blog.php:119
-#: patterns/template-query-loop-news-blog.php:55
-#: patterns/template-query-loop-photo-blog.php:22
-#: patterns/template-query-loop-text-blog.php:19
-#: patterns/template-query-loop-vertical-header-blog.php:47
-#: patterns/template-query-loop.php:31
-msgctxt "Message explaining that there are no results returned from a search."
-msgid "Sorry, but nothing was found. Please try a search with different keywords."
-msgstr "Brak wyników. Prosimy spróbować wyszukiwania z innymi słowami kluczowymi."
-
 #: patterns/hidden-written-by.php
 msgctxt "Pattern title"
 msgid "Written by"
@@ -1873,6 +1854,25 @@ msgstr "Obecnie"
 msgctxt "Pattern title"
 msgid "Instagram grid"
 msgstr "Siatka Instagrama"
+
+#: patterns/hidden-sidebar.php:38 patterns/page-portfolio-home.php:65
+#: patterns/page-portfolio-home.php:87 patterns/page-portfolio-home.php:121
+#: patterns/page-portfolio-home.php:154 patterns/page-portfolio-home.php:176
+#: patterns/page-portfolio-home.php:203 patterns/template-home-news-blog.php:40
+#: patterns/template-home-posts-grid-news-blog.php:35
+#: patterns/template-home-posts-grid-news-blog.php:60
+#: patterns/template-home-posts-grid-news-blog.php:78
+#: patterns/template-home-posts-grid-news-blog.php:103
+#: patterns/template-home-with-sidebar-news-blog.php:62
+#: patterns/template-home-with-sidebar-news-blog.php:119
+#: patterns/template-query-loop-news-blog.php:55
+#: patterns/template-query-loop-photo-blog.php:22
+#: patterns/template-query-loop-text-blog.php:19
+#: patterns/template-query-loop-vertical-header-blog.php:47
+#: patterns/template-query-loop.php:31
+msgctxt "Message explaining that there are no results returned from a search."
+msgid "Sorry, but nothing was found. Please try a search with different keywords."
+msgstr "Brak wyników. Prosimy spróbować wyszukiwania z innymi słowami kluczowymi."
 
 #: patterns/hidden-404.php:21
 msgctxt "image description"
@@ -2382,6 +2382,11 @@ msgctxt "Hero - Overlapped book cover pattern subline text"
 msgid "A fine collection of moments in time featuring photographs from Louis Fleckenstein, Paul Strand and Asahachi Kōno."
 msgstr "Wspaniała kolekcja uchwyconych w czasie klatek zawierająca fotografie Louisa Fleckensteina, Paula Stranda i Asahachi Kōno."
 
+#: patterns/page-cv-bio.php:31
+msgctxt "Pattern placeholder text."
+msgid "My name is Nora Winslow Keene, and I’m a committed public interest attorney. Living in Denver, Colorado, I’ve spent years championing the rights of underrepresented workers. A graduate of Stanford University, I played a key role in securing critical protections for agricultural laborers, ensuring better wages and access to healthcare. My work has focused on advocating for environmental justice and improving the quality of life for rural communities. Every case I take on is driven by the belief that everyone deserves dignity and fair treatment in the workplace."
+msgstr "Nazywam się Nora Winslow Keene i jestem zaangażowanym prawnikiem działającym w interesie publicznym. Mieszkając w Denver w stanie Kolorado, spędziłam lata broniąc praw niedostatecznie reprezentowanych pracowników. Jako absolwentka Uniwersytetu Stanforda odegrałam kluczową rolę w zapewnieniu krytycznej ochrony pracownikom rolnym, zapewniając im lepsze płace i dostęp do opieki zdrowotnej. Moja praca koncentrowała się na promowaniu sprawiedliwości środowiskowej i poprawie jakości życia społeczności wiejskich. W każdej sprawie, którą się zajmuję, kieruję się przekonaniem, że każdy zasługuje na godność i sprawiedliwe traktowanie w miejscu pracy."
+
 #: patterns/pricing-2-col.php:48 patterns/pricing-2-col.php:92
 #: patterns/services-subscriber-only-section.php:31
 msgid "Join our IRL events."
@@ -2391,11 +2396,6 @@ msgstr "Dołącz do naszych spotkań stacjonarnych."
 msgctxt "Content of the hero section."
 msgid "A fine collection of moments in time featuring photographs from Louis Fleckenstein, Paul Strand and Asahachi Kōno."
 msgstr "Wspaniała kolekcja uchwyconych w czasie klatek zawierająca fotografie Louisa Fleckensteina, Paula Stranda i Asahachi Kōno."
-
-#: patterns/page-cv-bio.php:31
-msgctxt "Pattern placeholder text."
-msgid "My name is Nora Winslow Keene, and I’m a committed public interest attorney. Living in Denver, Colorado, I’ve spent years championing the rights of underrepresented workers. A graduate of Stanford University, I played a key role in securing critical protections for agricultural laborers, ensuring better wages and access to healthcare. My work has focused on advocating for environmental justice and improving the quality of life for rural communities. Every case I take on is driven by the belief that everyone deserves dignity and fair treatment in the workplace."
-msgstr "Nazywam się Nora Winslow Keene i jestem zaangażowanym prawnikiem działającym w interesie publicznym. Mieszkając w Denver w stanie Kolorado, spędziłam lata broniąc praw niedostatecznie reprezentowanych pracowników. Jako absolwentka Uniwersytetu Stanforda odegrałam kluczową rolę w zapewnieniu krytycznej ochrony pracownikom rolnym, zapewniając im lepsze płace i dostęp do opieki zdrowotnej. Moja praca koncentrowała się na promowaniu sprawiedliwości środowiskowej i poprawie jakości życia społeczności wiejskich. W każdej sprawie, którą się zajmuję, kieruję się przekonaniem, że każdy zasługuje na godność i sprawiedliwe traktowanie w miejscu pracy."
 
 #: patterns/heading-and-paragraph-with-image.php:27
 msgctxt "Event Overview Text."

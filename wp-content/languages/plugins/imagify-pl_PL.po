@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Imagify: Optimize Images for Top Speed (Compress &amp; Convert to WebP/AVIF) - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-06-07 18:32:23+0000\n"
+"PO-Revision-Date: 2026-06-25 13:23:16+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,6 +10,34 @@ msgstr ""
 "X-Generator: GlotPress/4.0.3\n"
 "Language: pl\n"
 "Project-Id-Version: Plugins - Imagify: Optimize Images for Top Speed (Compress &amp; Convert to WebP/AVIF) - Stable (latest release)\n"
+
+#: views/part-settings-tools.php:13
+msgid "Reset Internal State"
+msgstr "Zresetuj stan wewnętrzny"
+
+#: views/part-settings-tools.php:7
+msgid "If image optimization gets stuck or bulk optimization never completes, use this button to clear internal optimization locks, running-state transients, and pending scheduled jobs. Your settings and optimized images will not be affected."
+msgstr "Jeśli optymalizacja obrazka się zablokuje lub optymalizacja zbiorcza nigdy się nie zakończy, użyj tego przycisku, aby usunąć wewnętrzne blokady optymalizacji, stany przejściowe w stanie wykonania i oczekujące zaplanowane zadania. Twoje ustawienia i zoptymalizowane obrazki nie zostaną naruszone."
+
+#: views/part-settings-tools.php:5
+msgid "Troubleshooting"
+msgstr "Rozwiązywanie problemów"
+
+#: inc/functions/i18n.php:68
+msgid "An error occurred while resetting the internal state. Please try again."
+msgstr "Wystąpił błąd podczas resetowania stanu wewnętrznego. Spróbuj ponownie."
+
+#: inc/functions/i18n.php:66
+msgid "Are you sure you want to reset the Imagify internal state? This will clear optimization locks and cancel any pending jobs."
+msgstr "Czy na pewno chcesz zresetować stan wewnętrzny Imagify? Spowoduje to usunięcie blokad optymalizacyjnych i anulowanie wszystkich oczekujących zadań."
+
+#: inc/3rd-party/nextgen-gallery/classes/Media/NGG.php:288
+msgid "NextGen Gallery storage is not available."
+msgstr "Przechowywanie w Galerii NextGen jest niedostępne."
+
+#: classes/Tools/Subscriber.php:61 inc/functions/i18n.php:67
+msgid "Imagify internal state has been reset successfully."
+msgstr "Pomyślnie zresetowano stan wewnętrzny Imagify."
 
 #: views/modal-payment.php:74
 msgid "Unlimited websites"
@@ -1237,7 +1265,7 @@ msgstr "Inteligentnie"
 msgid "%1$s OFF on %2$s subscriptions"
 msgstr "%1$s ZNIŻKI na subskrypcje %2$s"
 
-#: inc/functions/i18n.php:152
+#: inc/functions/i18n.php:158
 msgid "This coupon is not valid with this plan."
 msgstr "Ten kupon nie jest ważny z tym planem."
 
@@ -1299,11 +1327,11 @@ msgstr "Nie można usunąć pliku %s."
 msgid "This media does not have the right optimization status."
 msgstr "Ten nośnik nie ma odpowiedniego stanu optymalizacji."
 
-#: inc/functions/i18n.php:117
+#: inc/functions/i18n.php:123
 msgid "Because the selected images did not have a backup copy, Imagify was unable to create next-gen versions."
 msgstr "Ponieważ wybrane obrazy nie miały kopii zapasowej, Imagify nie było w stanie utworzyć wersji nowej generacji."
 
-#: classes/Bulk/Bulk.php:255
+#: classes/Bulk/Bulk.php:309
 msgid "The path to the selected files could not be retrieved."
 msgstr "Nie można pobrać ścieżki do wybranych plików."
 
@@ -1353,11 +1381,11 @@ msgstr "%s Wycofania aktualizacji"
 
 #. translators: %s is a file name.
 #: classes/WriteFile/AbstractIISDirConfFile.php:133
-#: classes/WriteFile/AbstractWriteDirConfFile.php:189
+#: classes/WriteFile/AbstractWriteDirConfFile.php:190
 msgid "%s’s parent folder is not writable."
 msgstr "Folder nadrzędny %s nie jest przeznaczony do zapisu."
 
-#: inc/functions/i18n.php:116 inc/functions/i18n.php:269
+#: inc/functions/i18n.php:122 inc/functions/i18n.php:275
 msgid "All your optimized images already have a next-gen version. Congratulations!"
 msgstr "Wszystkie zoptymalizowane obrazy mają już wersję nowej generacji. Gratulacje!"
 
@@ -1378,7 +1406,7 @@ msgid "Could not create an unoptimized copy of the size %s."
 msgstr "Nie można utworzyć niezoptymalizowanej kopii o rozmiarze %s."
 
 #. translators: %s is a file name.
-#: classes/WriteFile/AbstractWriteDirConfFile.php:353
+#: classes/WriteFile/AbstractWriteDirConfFile.php:355
 msgid "Could not write into the %s file."
 msgstr "Nie można zapisać w pliku %s."
 
@@ -1392,7 +1420,7 @@ msgstr "Wyświetlaj obrazy na stronie w formatach nowej generacji"
 
 #. translators: %s is a file name.
 #: classes/WriteFile/AbstractIISDirConfFile.php:105
-#: classes/WriteFile/AbstractWriteDirConfFile.php:173
+#: classes/WriteFile/AbstractWriteDirConfFile.php:174
 msgid "Edition of the %s file is disabled."
 msgstr "Edycja pliku %s jest wyłączona."
 
@@ -1433,7 +1461,7 @@ msgid "Imagify could not insert contents into the %1$s file: %2$s"
 msgstr "Imagify nie może wstawić zawartości do pliku %1$s: %2$s"
 
 #. translators: 1 is a file name, 2 is an error message.
-#: classes/WriteFile/AbstractWriteDirConfFile.php:118
+#: classes/WriteFile/AbstractWriteDirConfFile.php:119
 msgid "Imagify could not remove contents from the %1$s file: %2$s"
 msgstr "Imagify nie mogło usunąć zawartości z pliku %1$s: %2$s"
 
@@ -1443,7 +1471,7 @@ msgid "Imagify did not add contents to the %s file, as its edition is disabled."
 msgstr "Imagify nie dodało zawartości do pliku %s, ponieważ jego edycja jest wyłączona."
 
 #. translators: %s is a file name.
-#: classes/WriteFile/AbstractWriteDirConfFile.php:108
+#: classes/WriteFile/AbstractWriteDirConfFile.php:109
 msgid "Imagify did not remove the contents from the %s file, as its edition is disabled."
 msgstr "Imagify nie usunął zawartości pliku %s, ponieważ jego edycja jest wyłączona."
 
@@ -1482,7 +1510,7 @@ msgstr "Nasz serwer zwrócił błąd (%s)."
 msgid "Re-install version %s"
 msgstr "Zainstaluj ponownie wersję %s"
 
-#: inc/3rd-party/nextgen-gallery/classes/Media/NGG.php:347
+#: inc/3rd-party/nextgen-gallery/classes/Media/NGG.php:363
 msgid "Related NextGen Gallery data could not be saved."
 msgstr "Nie można zapisać powiązanych danych Galerii NextGen."
 
@@ -1502,19 +1530,19 @@ msgstr "Zmiana rozmiaru nie powiodła się: %s"
 
 #. translators: %s is a file name.
 #: classes/WriteFile/AbstractIISDirConfFile.php:146
-#: classes/WriteFile/AbstractWriteDirConfFile.php:199
+#: classes/WriteFile/AbstractWriteDirConfFile.php:200
 msgid "The %s file could not be created."
 msgstr "Nie można utworzyć pliku %s."
 
 #. translators: %s is a file name.
 #: classes/WriteFile/AbstractIISDirConfFile.php:195
-#: classes/WriteFile/AbstractWriteDirConfFile.php:320
+#: classes/WriteFile/AbstractWriteDirConfFile.php:322
 msgid "The %s file could not be read."
 msgstr "Nie można odczytać pliku %s."
 
 #. translators: %s is a file name.
 #: classes/WriteFile/AbstractIISDirConfFile.php:157
-#: classes/WriteFile/AbstractWriteDirConfFile.php:209
+#: classes/WriteFile/AbstractWriteDirConfFile.php:210
 msgid "The %s file is not writable."
 msgstr "Plik %s nie nadaje się do zapisu."
 
@@ -1714,7 +1742,7 @@ msgstr "Ten nośnik nie jest jeszcze zoptymalizowany."
 #: classes/Optimization/Process/Noop.php:277
 #: classes/Optimization/Process/WP.php:48
 #: classes/Optimization/Process/WP.php:136
-#: inc/3rd-party/nextgen-gallery/classes/Media/NGG.php:277
+#: inc/3rd-party/nextgen-gallery/classes/Media/NGG.php:283
 #: inc/3rd-party/nextgen-gallery/classes/Optimization/Process/NGG.php:41
 #: inc/3rd-party/nextgen-gallery/classes/Optimization/Process/NGG.php:79
 #: inc/classes/class-imagify-admin-ajax-post.php:222
@@ -1763,8 +1791,8 @@ msgid "Could not initialize a new cURL handle."
 msgstr "Nie można zainicjować nowego uchwytu cURL."
 
 #. translators: %s is a "More info?" link.
-#: inc/deprecated/deprecated.php:628 inc/functions/i18n.php:108
-#: inc/functions/i18n.php:257
+#: inc/deprecated/deprecated.php:628 inc/functions/i18n.php:114
+#: inc/functions/i18n.php:263
 msgid "No php extensions are available to edit images on the server. ImageMagick or GD is required. %s"
 msgstr "Żadne rozszerzenia php nie są dostępne do edycji obrazów na serwerze. Wymagany jest ImageMagick lub GD. %s"
 
@@ -1825,7 +1853,7 @@ msgstr[1] "%s Zoptymalizowane pliki multimedialne"
 msgstr[2] "%s Zoptymalizowanych plików multimedialnych"
 
 #. translators: %s is a formatted number, dont use %d.
-#: inc/functions/i18n.php:285
+#: inc/functions/i18n.php:291
 msgid "%s Media File(s) Optimized"
 msgstr "Zoptymalizowano %s pliki multimedialne"
 
@@ -1861,11 +1889,11 @@ msgstr "Niezoptymalizowane"
 msgid "Optimize your media files"
 msgstr "Optymalizacja twoich plików multimedialnych"
 
-#: inc/functions/i18n.php:199
+#: inc/functions/i18n.php:205
 msgid "Optimized File"
 msgstr "Plik zoptymalizowany"
 
-#: inc/functions/i18n.php:198
+#: inc/functions/i18n.php:204
 msgid "Original File"
 msgstr "Oryginalny plik"
 
@@ -1890,7 +1918,7 @@ msgid "This size is not authorized to be optimized. Update your Imagify settings
 msgstr "Optymalizacja tego rozmiaru nie jest dozwolona. Zaktualizuj ustawienia Imagify, jeśli chcesz je zoptymalizować."
 
 #: inc/classes/class-imagify-admin-ajax-post.php:1309
-#: inc/functions/i18n.php:113 inc/functions/i18n.php:262
+#: inc/functions/i18n.php:119 inc/functions/i18n.php:268
 msgid "Your API key is not valid!"
 msgstr "Twój klucz API jest nieważny!"
 
@@ -2079,7 +2107,7 @@ msgid "child theme of %s"
 msgstr "podrzędnego szablonu z %s"
 
 #. translators: %s is a formatted number, dont use %d.
-#: inc/functions/i18n.php:287
+#: inc/functions/i18n.php:293
 msgid "%s Error(s)"
 msgstr "%s Błąd / Błędy"
 
@@ -2088,7 +2116,7 @@ msgstr "%s Błąd / Błędy"
 msgid "%s is not a valid extension."
 msgstr "%s nie jest poprawnym rozszerzeń."
 
-#: inc/functions/i18n.php:78
+#: inc/functions/i18n.php:84
 msgid "Added! All Good!"
 msgstr "Dodany! Wszystko dobrze!"
 
@@ -2096,7 +2124,7 @@ msgstr "Dodany! Wszystko dobrze!"
 msgid "All Folders"
 msgstr "Wszystkie foldery"
 
-#: inc/functions/i18n.php:76
+#: inc/functions/i18n.php:82
 msgid "Choose the folders to optimize"
 msgstr "Wybierz katalogi do optymalizacji"
 
@@ -2215,11 +2243,11 @@ msgstr "Odświeżanie statusu..."
 msgid "Select All"
 msgstr "Wybierz wszystko"
 
-#: inc/functions/i18n.php:72 inc/functions/i18n.php:75
+#: inc/functions/i18n.php:78 inc/functions/i18n.php:81
 msgid "Select Folders"
 msgstr "Wybierz katalogi"
 
-#: inc/functions/i18n.php:73
+#: inc/functions/i18n.php:79
 msgid "Select one or several folders to optimize."
 msgstr "Wybierz jeden lub kilka katalogów do optymalizacji."
 
@@ -2231,11 +2259,11 @@ msgstr "Wybierz jeden lub kilka katalogów do optymalizacji."
 msgid "Site's root"
 msgstr "Katalog główny witryny"
 
-#: inc/functions/i18n.php:74
+#: inc/functions/i18n.php:80
 msgid "Some folders that do not contain any images are hidden."
 msgstr "Niektóre katalogi niezawierające żadnych obrazów są ukryte."
 
-#: inc/functions/i18n.php:289
+#: inc/functions/i18n.php:295
 msgid "Start the optimization"
 msgstr "Rozpocznij optymalizację"
 
@@ -2255,7 +2283,7 @@ msgstr "Plik został zmieniony"
 msgid "The file was missing or its path could not be retrieved from the database. The entry has been deleted from the database."
 msgstr "Brakowało pliku lub nie można było pobrać jego ścieżki z bazy danych. Wpis został usunięty z bazy."
 
-#: inc/functions/i18n.php:119 inc/functions/i18n.php:273
+#: inc/functions/i18n.php:125 inc/functions/i18n.php:279
 msgid "The operation failed."
 msgstr "Błąd operacji."
 
@@ -2306,7 +2334,7 @@ msgstr "Zobacz błędy"
 msgid "View your profile"
 msgstr "Zobacz swój profil"
 
-#: inc/functions/i18n.php:283
+#: inc/functions/i18n.php:289
 msgid "Waiting other optimizations to finish."
 msgstr "Oczekiwanie na zakończenie innej optymalizacji."
 
@@ -2330,7 +2358,7 @@ msgid "You can re-optimize your media files more finely directly in the %1$smedi
 msgstr "Możesz dokładniej ponownie zoptymalizować pliki multimedialne bezpośrednio w %1$szarządzaniu multimediami%2$s."
 
 #: inc/classes/class-imagify-admin-ajax-post.php:1317
-#: inc/functions/i18n.php:114 inc/functions/i18n.php:263
+#: inc/functions/i18n.php:120 inc/functions/i18n.php:269
 msgid "You have used all your credits!"
 msgstr "Wykorzystałeś wszystkie kredyty!"
 
@@ -2339,7 +2367,7 @@ msgid "Your Account"
 msgstr "Twoje konto"
 
 #: inc/deprecated/deprecated.php:619 inc/functions/api.php:227
-#: inc/functions/i18n.php:105 inc/functions/i18n.php:254
+#: inc/functions/i18n.php:111 inc/functions/i18n.php:260
 msgid "cURL is not available on the server."
 msgstr "cURL nie jest dostępny na serwerze."
 
@@ -2348,12 +2376,12 @@ msgctxt "checkbox label"
 msgid "Select file"
 msgstr "Wybierz plik"
 
-#: inc/functions/i18n.php:71 views/part-settings-row-custom-folder.php:7
+#: inc/functions/i18n.php:77 views/part-settings-row-custom-folder.php:7
 msgctxt "custom folder"
 msgid "Remove"
 msgstr "Usuń"
 
-#: inc/functions/i18n.php:275
+#: inc/functions/i18n.php:281
 msgctxt "file"
 msgid "Already Optimized"
 msgstr "Już zoptymalizowano"
@@ -2473,8 +2501,8 @@ msgstr "Nie można wysłać plików do Amazon S3."
 msgid "Go back"
 msgstr "Wróć"
 
-#: classes/Bulk/Bulk.php:528 classes/Bulk/Bulk.php:551
-#: classes/Bulk/Bulk.php:575 inc/classes/class-imagify-admin-ajax-post.php:272
+#: classes/Bulk/Bulk.php:582 classes/Bulk/Bulk.php:605
+#: classes/Bulk/Bulk.php:629 inc/classes/class-imagify-admin-ajax-post.php:272
 #: inc/classes/class-imagify-admin-ajax-post.php:305
 #: inc/classes/class-imagify-admin-ajax-post.php:338
 #: inc/classes/class-imagify-admin-ajax-post.php:371
@@ -2499,7 +2527,7 @@ msgstr "Błędne zapytanie"
 msgid "Not a valid email address."
 msgstr "To nie jest poprawny adres e-mail."
 
-#: inc/functions/i18n.php:218
+#: inc/functions/i18n.php:224
 msgid "Optimize Missing Sizes"
 msgstr "Zoptymalizuj brakujące rozmiary"
 
@@ -2574,7 +2602,7 @@ msgstr "Zużyłeś wszystkie swoje kredyty. Aby kontynuować, musisz zaktualizow
 msgid "Your file is too big to be uploaded on our server."
 msgstr "Twój plik jest zbyt duży, aby można go było przesłać na nasz serwer."
 
-#: inc/3rd-party/nextgen-gallery/classes/Media/NGG.php:353
+#: inc/3rd-party/nextgen-gallery/classes/Media/NGG.php:369
 #: inc/deprecated/classes/class-imagify-ngg-attachment.php:945
 msgid "%n thumbnail could not be restored."
 msgid_plural "%n thumbnails could not be restored."
@@ -2591,12 +2619,12 @@ msgstr[1] "%s błędy"
 msgstr[2] "%s błędów"
 
 #. translators: %s is a number. Don't use %d.
-#: inc/functions/i18n.php:280
+#: inc/functions/i18n.php:286
 msgid "%s error(s)"
 msgstr "%s błąd / błędy"
 
 #. translators: %s is a number. Don't use %d.
-#: inc/functions/i18n.php:277
+#: inc/functions/i18n.php:283
 msgid "%s file(s)"
 msgstr "%s plik(i)"
 
@@ -2616,7 +2644,7 @@ msgstr "Błąd podczas pobierania ścieżki katalogu przesyłania."
 msgid "Filesystem error."
 msgstr "Błąd systemu plików."
 
-#: inc/3rd-party/nextgen-gallery/classes/Media/NGG.php:283
+#: inc/3rd-party/nextgen-gallery/classes/Media/NGG.php:295
 #: inc/deprecated/classes/class-imagify-ngg-attachment.php:764
 msgid "Image not found in NextGen Gallery data."
 msgstr "Nie znaleziono obrazu w danych Galerii NextGen."
@@ -2630,7 +2658,7 @@ msgstr "Ścieżka do obrazu i ścieżka do kopii są identyczne."
 msgid "Mime type not supported."
 msgstr "Typ MIME nie jest obsługiwany."
 
-#: inc/functions/i18n.php:271
+#: inc/functions/i18n.php:277
 msgid "Optimizing"
 msgstr "Optymalizacja"
 
@@ -2680,12 +2708,12 @@ msgstr "Plik do utworzenia kopii zapasowej nie istnieje."
 msgid "The image to replace is not writable."
 msgstr "Obraz do zastąpienia nie nadaje się do zapisu."
 
-#: inc/functions/i18n.php:274
+#: inc/functions/i18n.php:280
 msgctxt "adjective"
 msgid "Complete"
 msgstr "Zakończone"
 
-#: inc/functions/i18n.php:278
+#: inc/functions/i18n.php:284
 msgctxt "noun"
 msgid "Notice"
 msgstr "Powiadomienie"
@@ -2717,20 +2745,20 @@ msgstr "Zoptymalizowałeś %s obrazów w swojej witrynie"
 msgid "Special Offer<br><strong>Until %s</strong>"
 msgstr "Oferta specjalna<br><strong>Do %s</strong>"
 
-#: inc/functions/i18n.php:143
+#: inc/functions/i18n.php:149
 msgid "Error with checking this coupon."
 msgstr "Błąd przy sprawdzaniu tego kuponu."
 
-#: inc/functions/i18n.php:151
+#: inc/functions/i18n.php:157
 msgid "If you have a <strong>coupon code</strong><br> use it here:"
 msgstr "Jeśli masz <strong>kod kuponu</strong><br>, użyj go tutaj:"
 
-#: inc/functions/i18n.php:150
+#: inc/functions/i18n.php:156
 msgid "Something went wrong with getting our updated offers. Please retry later."
 msgstr "Coś poszło nie tak podczas pobierania naszych zaktualizowanych ofert. Spróbuj ponownie później."
 
 #. translators: 1 is a percentage, 2 is a coupon code.
-#: inc/functions/i18n.php:146
+#: inc/functions/i18n.php:152
 msgctxt "coupon validated"
 msgid "%1$s off with %2$s"
 msgstr "%1$s ukończone z %2$s"
@@ -2776,15 +2804,15 @@ msgstr "Jeśli masz więcej niż %s obrazów, będziesz musiał kilka razy uruch
 msgid "%1$sCongratulations%2$s, you have optimized %1$s%3$s images%2$s and improved your website's speed by reducing your images size."
 msgstr "%1$sGratulacje%2$s, zoptymalizowałeś %1$s%3$s obrazy%2$s i poprawiłeś szybkość działania swojej witryny poprzez zmniejszenie rozmiaru obrazów."
 
-#: inc/functions/i18n.php:200 views/button/compare-images.php:12
+#: inc/functions/i18n.php:206 views/button/compare-images.php:12
 msgid "Compare Original VS Optimized"
 msgstr "Porównaj wersję oryginalną i zoptymalizowaną"
 
-#: inc/functions/i18n.php:121 inc/functions/i18n.php:282
+#: inc/functions/i18n.php:127 inc/functions/i18n.php:288
 msgid "An unknown error occurred when we tried to get all your unoptimized media files. Try again and if the issue still persists, please contact us!"
 msgstr "Wystąpił nieznany błąd, gdy próbowaliśmy pobrać wszystkie niezoptymalizowane pliki multimedialne. Spróbuj ponownie, a jeśli problem będzie nadal występował, skontaktuj się z nami!"
 
-#: inc/functions/i18n.php:120 inc/functions/i18n.php:281
+#: inc/functions/i18n.php:126 inc/functions/i18n.php:287
 msgid "Oops, There is something wrong!"
 msgstr "Ups, coś poszło nie tak!"
 
@@ -2809,7 +2837,7 @@ msgid "Dramatically reduce image file sizes without losing quality, make your we
 msgstr "Radykalnie zmniejsz rozmiar plików obrazów bez utraty jakości, przyspiesz ładowanie swojej witryny, zwiększ swoje SEO i zaoszczędź pieniądze na przepustowości dzięki Imagify, nowemu, najbardziej zaawansowanemu narzędziu do optymalizacji obrazu."
 
 #: classes/Optimization/File.php:494 inc/deprecated/deprecated.php:635
-#: inc/functions/i18n.php:111 inc/functions/i18n.php:260
+#: inc/functions/i18n.php:117 inc/functions/i18n.php:266
 msgid "External HTTP requests are blocked."
 msgstr "Zewnętrzne żądania HTTP są blokowane."
 
@@ -2817,8 +2845,8 @@ msgstr "Zewnętrzne żądania HTTP są blokowane."
 msgid "File path is empty."
 msgstr "Ścieżka do pliku jest pusta."
 
-#: inc/deprecated/deprecated.php:640 inc/functions/i18n.php:112
-#: inc/functions/i18n.php:261
+#: inc/deprecated/deprecated.php:640 inc/functions/i18n.php:118
+#: inc/functions/i18n.php:267
 msgid "Sorry, our servers are temporarily unavailable. Please, try again in a couple of minutes."
 msgstr "Przepraszamy, nasze serwery są chwilowo niedostępne. Spróbuj ponownie za kilka minut."
 
@@ -2887,7 +2915,7 @@ msgstr "Rozmiar %s nie ma autoryzacji do optymalizacji. Zaktualizuj ustawienia I
 msgid "Errors"
 msgstr "Błędy"
 
-#: inc/functions/i18n.php:195 views/modal-settings-visual-comparison.php:66
+#: inc/functions/i18n.php:201 views/modal-settings-visual-comparison.php:66
 #: views/modal-settings-visual-comparison.php:76
 #: views/modal-settings-visual-comparison.php:96
 #: views/modal-settings-visual-comparison.php:117
@@ -2909,7 +2937,7 @@ msgid "Optimized photography about %s"
 msgstr "Zoptymalizowane zdjęcia o %s"
 
 #: inc/classes/class-imagify-files-list-table.php:605
-#: inc/functions/admin-ui.php:74 inc/functions/i18n.php:196
+#: inc/functions/admin-ui.php:74 inc/functions/i18n.php:202
 #: views/modal-settings-visual-comparison.php:80
 #: views/modal-settings-visual-comparison.php:100
 #: views/modal-settings-visual-comparison.php:121
@@ -2921,7 +2949,7 @@ msgstr "Całkowita oszczędność:"
 msgid "Original photography about %s"
 msgstr "Oryginalna fotografia o %s"
 
-#: inc/functions/i18n.php:197 views/modal-payment.php:116
+#: inc/functions/i18n.php:203 views/modal-payment.php:116
 #: views/modal-settings-infos.php:52 views/modal-settings-partners-infos.php:13
 #: views/modal-settings-visual-comparison.php:135
 msgid "Close"
@@ -2988,7 +3016,7 @@ msgid "Keep your original images in a separate folder before optimization proces
 msgstr "Zachowaj swoje oryginalne obrazy w oddzielnym folderze zanim rozpocznie się proces optymalizacji."
 
 #: classes/Optimization/File.php:647 inc/deprecated/deprecated.php:629
-#: inc/functions/i18n.php:109 inc/functions/i18n.php:258
+#: inc/functions/i18n.php:115 inc/functions/i18n.php:264
 #: views/page-settings.php:169
 msgid "More info?"
 msgstr "Więcej informacji?"
@@ -3208,7 +3236,7 @@ msgstr "Należy pamiętać, że optymalizacja dużej liczby obrazów może zają
 msgid "Ultra"
 msgstr "Ultra"
 
-#: inc/functions/i18n.php:288
+#: inc/functions/i18n.php:294
 msgid "Information"
 msgstr "Informacja"
 
@@ -3227,6 +3255,7 @@ msgid "<strong>ERROR</strong>: options page not found."
 msgstr "<strong>BŁĄD</strong>: nie znaleziono strony opcji."
 
 #: classes/Admin/AdminBar.php:84 classes/Admin/AdminSubscriber.php:74
+#: inc/3rd-party/nextgen-gallery/inc/admin/menu.php:17
 #: inc/3rd-party/nextgen-gallery/inc/admin/menu.php:18
 #: inc/classes/class-imagify-views.php:131
 #: inc/classes/class-imagify-views.php:174
@@ -3254,33 +3283,33 @@ msgstr "Imagify"
 msgid "Invalid API key"
 msgstr "Nieprawidłowy klucz API"
 
-#: inc/functions/i18n.php:268
+#: inc/functions/i18n.php:274
 msgid "All your media files have been optimized by Imagify. Congratulations!"
 msgstr "Wszystkie Twoje pliki multimedialne zostały zoptymalizowane przez Imagify. Gratulacje!"
 
-#: inc/functions/i18n.php:115 inc/functions/i18n.php:266
+#: inc/functions/i18n.php:121 inc/functions/i18n.php:272
 msgid "Hold on!"
 msgstr "Trzymaj się!"
 
-#: inc/functions/i18n.php:77 inc/functions/i18n.php:118
-#: inc/functions/i18n.php:252 inc/functions/i18n.php:272
+#: inc/functions/i18n.php:83 inc/functions/i18n.php:124
+#: inc/functions/i18n.php:258 inc/functions/i18n.php:278
 msgid "Error"
 msgstr "Błąd"
 
-#: inc/functions/i18n.php:251
+#: inc/functions/i18n.php:257
 msgid "Optimized"
 msgstr "Zoptymalizowane"
 
-#: inc/functions/i18n.php:250
+#: inc/functions/i18n.php:256
 msgid "Unoptimized"
 msgstr "Niezoptymalizowane"
 
-#: inc/functions/i18n.php:265
+#: inc/functions/i18n.php:271
 msgid "We are trying to get your unoptimized media files, it may take time depending on the number of files."
 msgstr "Próbujemy uzyskać Twoje niezoptymalizowane pliki multimedialne, może to zająć trochę czasu w zależności od liczby plików."
 
-#: inc/admin/meta-boxes.php:77 inc/functions/i18n.php:201
-#: inc/functions/i18n.php:217 inc/functions/i18n.php:329
+#: inc/admin/meta-boxes.php:77 inc/functions/i18n.php:207
+#: inc/functions/i18n.php:223 inc/functions/i18n.php:335
 #: views/button/optimize.php:24
 msgid "Optimize"
 msgstr "Optymalizuj"
@@ -3293,13 +3322,13 @@ msgstr "Zarejestruj się"
 msgid "Account status"
 msgstr "Status konta"
 
-#: inc/functions/i18n.php:66
+#: inc/functions/i18n.php:72
 msgid "Check in progress..."
 msgstr "Trwa sprawdzanie..."
 
 #. translators: Don't use escaped HTML entities here (like &nbsp;).
 #: inc/functions/i18n.php:42 inc/functions/i18n.php:49
-#: inc/functions/i18n.php:67
+#: inc/functions/i18n.php:73
 msgid "Congratulations!"
 msgstr "Gratulacje!"
 
@@ -3312,7 +3341,7 @@ msgstr "Połącz mnie"
 msgid "Connect to Imagify!"
 msgstr "Połącz z Imagify!"
 
-#: inc/functions/i18n.php:69
+#: inc/functions/i18n.php:75
 msgid "Don't Need a Parachute?"
 msgstr "Nie potrzebujesz łagodnego lądowania?"
 
@@ -3320,7 +3349,7 @@ msgstr "Nie potrzebujesz łagodnego lądowania?"
 msgid "Enter your email to get an API key:"
 msgstr "Wpisz swój adres e-mail, by pobrać klucz API:"
 
-#: inc/functions/i18n.php:70
+#: inc/functions/i18n.php:76
 msgid "If you keep this option deactivated, you won't be able to re-optimize your images to another compression level and restore your original images in case of need."
 msgstr "Jeśli opcja ta będzie wyłączona, nie będzie można ponownie zoptymalizować obrazów do innego poziomu kompresji ani przywrócić oryginalnych obrazów w razie potrzeby."
 
@@ -3351,11 +3380,11 @@ msgstr "Optymalizacja..."
 msgid "Paste your API key below:"
 msgstr "Wklej twój klucz API poniżej:"
 
-#: inc/functions/i18n.php:264
+#: inc/functions/i18n.php:270
 msgid "Please wait..."
 msgstr "Proszę czekać..."
 
-#: inc/functions/i18n.php:219 inc/functions/i18n.php:330
+#: inc/functions/i18n.php:225 inc/functions/i18n.php:336
 #: views/button/restore.php:25
 msgid "Restore Original"
 msgstr "Przywróć oryginał"
@@ -3371,11 +3400,11 @@ msgstr "Pozostało Ci %s przestrzeni do wykorzystania"
 msgid "You need to specify an email!"
 msgstr "Musisz podać adres e-mail!"
 
-#: inc/functions/i18n.php:65 views/part-settings-account.php:73
+#: inc/functions/i18n.php:71 views/part-settings-account.php:73
 msgid "Your API key is valid."
 msgstr "Twój klucz API jest poprawny."
 
-#: inc/functions/i18n.php:50 inc/functions/i18n.php:68
+#: inc/functions/i18n.php:50 inc/functions/i18n.php:74
 msgid "Your API key is valid. You can now configure the Imagify settings to optimize your images."
 msgstr "Twój klucz API jest poprawny. Teraz możesz skonfigurować Imagify, by optymalizować twoje obrazy."
 

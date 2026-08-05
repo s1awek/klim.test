@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - UpdraftPlus: WP Backup &amp; Migration Plugin - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-06-24 16:00:45+0000\n"
+"PO-Revision-Date: 2026-07-15 04:46:17+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -4170,10 +4170,6 @@ msgstr "Podręcznik"
 msgid "Error message"
 msgstr "Komunikat błędu"
 
-#: updraftplus.php:180
-msgid "Monthly"
-msgstr "Miesięcznie"
-
 #: admin.php:4306 central/translations-central.php:36
 #: methods/updraftvault.php:617 methods/updraftvault.php:664
 #: methods/updraftvault.php:820
@@ -4192,6 +4188,10 @@ msgstr "Data utworzenia kopii zapasowej"
 #: class-updraftplus.php:3896
 msgid "Full backup"
 msgstr "Pełna kopia zapasowa"
+
+#: updraftplus.php:180
+msgid "Monthly"
+msgstr "Co miesiąc"
 
 #: admin.php:3921
 msgid "Memory limit"
@@ -4297,18 +4297,6 @@ msgstr "Aktualne zużycie pamięci"
 msgid "%s version:"
 msgstr "wersja %s:"
 
-#: templates/wp-admin/advanced/total-size.php:6
-msgid "Total (uncompressed) on-disk data:"
-msgstr "Wszystkie (nieskompresowane) dane na dysku: "
-
-#: templates/wp-admin/advanced/total-size.php:19
-msgid "count"
-msgstr "ilość"
-
-#: templates/wp-admin/settings/delete-and-restore-modals.php:52
-msgid "Choose the components to restore"
-msgstr "Wybierz składniki do przywrócenia"
-
 #: admin.php:3982 admin.php:3987 admin.php:3990 admin.php:4001
 #: templates/wp-admin/settings/tab-addons.php:87
 #: templates/wp-admin/settings/tab-addons.php:100
@@ -4352,6 +4340,18 @@ msgstr "Tak"
 #: templates/wp-admin/settings/tab-addons.php:312
 msgid "No"
 msgstr "Nie"
+
+#: templates/wp-admin/advanced/total-size.php:6
+msgid "Total (uncompressed) on-disk data:"
+msgstr "Wszystkie (nieskompresowane) dane na dysku: "
+
+#: templates/wp-admin/advanced/total-size.php:19
+msgid "count"
+msgstr "ilość"
+
+#: templates/wp-admin/settings/delete-and-restore-modals.php:52
+msgid "Choose the components to restore"
+msgstr "Wybierz składniki do przywrócenia"
 
 #: templates/wp-admin/settings/delete-and-restore-modals.php:68
 msgid "Your web server has PHP's so-called safe_mode active."
@@ -4831,6 +4831,11 @@ msgstr "Błąd"
 msgid "Settings"
 msgstr "Ustawienia"
 
+#: admin.php:1042 includes/class-commands.php:1020
+#: includes/class-remote-send.php:493 includes/class-remote-send.php:709
+msgid "Send"
+msgstr "Wyślij"
+
 #. translators: %s: List of corrupted files
 #: admin.php:1479 admin.php:1487 admin.php:1494 admin.php:1504 admin.php:1513
 #: admin.php:1522 admin.php:1540 admin.php:1553 admin.php:4941 admin.php:4953
@@ -4846,11 +4851,6 @@ msgstr "Ustawienia"
 #: templates/wp-admin/settings/tab-backups.php:27
 msgid "Warning"
 msgstr "Ostrzeżenie"
-
-#: admin.php:1042 includes/class-commands.php:1020
-#: includes/class-remote-send.php:493 includes/class-remote-send.php:709
-msgid "Send"
-msgstr "Wyślij"
 
 #: admin.php:1006 central/translations-central.php:72
 msgid "Create"

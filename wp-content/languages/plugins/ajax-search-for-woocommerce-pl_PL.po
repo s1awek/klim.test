@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - FiboSearch &#8211; Ajax Search for WooCommerce - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-05-29 04:43:13+0000\n"
+"PO-Revision-Date: 2026-07-31 06:38:52+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -139,10 +139,6 @@ msgstr "(Ustawienia FiboSearch) Przejdź do zakładki <code>Autouzupełnienie</c
 msgid "Solutions (you only need to use one of them)"
 msgstr "Rozwiązania (wystarczy, że skorzystasz z jednej z nich)"
 
-#: partials/themes/flatsome.php:296
-msgid "There is a rare combination of <b>FiboSearch</b> and <b>Flatsome</b> settings that might cause issues when adding a product to the cart from the autocomplete search results. Unfortunately, you have this combination. You can't use <b>Off-Canvas Sidebar</b> as <b>Cart Style (Flatsome)</b>, <b>Search Icon Type</b> as <b>Search Icon Type (Flatsome)</b>, and <b>Details Panel (FiboSearch)</b> at the same time. The solution is to resign from one of these options."
-msgstr "Istnieje bardzo rzadka kombinacja ustawień <b>FiboSearch</b> oraz <b>Flatsome</b>  która może powodować błąd wyglądu strony podczas dodawania produktu do koszyka z poziomu wyszukiwarki. Niestety wykryliśmy, że masz taką kombinację. Nie możesz używać <b>Off-Canvas Sidebar</b> jako <b>Cart Style (Flatsome)</b>, <b>Search Icon Type</b> jako <b>Search Icon Type (Flatsome)</b> oraz <b>Panel ze szczegółami (FiboSearch)</b> w tym samym czasie. Aby rozwiązać ten konflikt, wystarczy zmienić jedną z powyższych opcji."
-
 #: partials/themes/flatsome.php:295
 msgid "There is a conflict between Flatsome theme settings and our plugin"
 msgstr "Wykryto konflikt motywu Flatsome z wtyczką FiboSearch"
@@ -154,6 +150,10 @@ msgstr "Zobacz bardziej rozbudowane przykłady wiadomości \"Brak wyników\"  <a
 #: includes/Settings.php:398
 msgid "The following HTML tags are allowed:<br /> %s."
 msgstr "Tagi HTML, które są dozwolone:<br /> %s."
+
+#: partials/themes/flatsome.php:296
+msgid "There is a rare combination of <b>FiboSearch</b> and <b>Flatsome</b> settings that might cause issues when adding a product to the cart from the autocomplete search results. Unfortunately, you have this combination. You can't use <b>Off-Canvas Sidebar</b> as <b>Cart Style (Flatsome)</b>, <b>Search Icon Type</b> as <b>Search Icon Type (Flatsome)</b>, and <b>Details Panel (FiboSearch)</b> at the same time. The solution is to resign from one of these options."
+msgstr "Istnieje bardzo rzadka kombinacja ustawień <b>FiboSearch</b> oraz <b>Flatsome</b>  która może powodować błąd wyglądu strony podczas dodawania produktu do koszyka z poziomu wyszukiwarki. Niestety wykryliśmy, że masz taką kombinację. Nie możesz używać <b>Off-Canvas Sidebar</b> jako <b>Cart Style (Flatsome)</b>, <b>Search Icon Type</b> jako <b>Search Icon Type (Flatsome)</b> oraz <b>Panel ze szczegółami (FiboSearch)</b> w tym samym czasie. Aby rozwiązać ten konflikt, wystarczy zmienić jedną z powyższych opcji."
 
 #: includes/Settings.php:504
 msgid "The current search history is presented when the user clicked/taped on the search bar, but hasn't yet typed the query. The history includes the last searched products and phrases."
@@ -203,7 +203,7 @@ msgstr "Analityka"
 #: partials/admin/stats/stats.php:59 partials/admin/stats/stats.php:194
 #: partials/admin/stats/stats.php:249
 msgid "Export CSV"
-msgstr "Eksport CSV"
+msgstr "Eksport do pliku CSV"
 
 #: partials/admin/how-to-use.php:22
 msgid "As a block"
@@ -1024,13 +1024,13 @@ msgstr "widoku menu"
 msgid "Scheduling indexing"
 msgstr "Harmonogram indeksowania"
 
-#: includes/Settings.php:708
-msgid "weekly"
-msgstr "tygodniowy"
-
 #: includes/EmbeddingViaMenu.php:180 includes/EmbeddingViaMenu.php:181
 msgid "Add to menu"
 msgstr "Dodaj do menu"
+
+#: includes/Settings.php:708
+msgid "weekly"
+msgstr "co tydzień"
 
 #: includes/Settings.php:398
 msgctxt "admin"

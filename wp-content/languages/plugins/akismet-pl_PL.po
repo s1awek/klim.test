@@ -431,14 +431,14 @@ msgstr "Wyświetl pod formularzami komentarzy informacje o prywatności."
 msgid "Akismet privacy notice"
 msgstr "Polityka prywatności Akismeta"
 
+#: class.akismet-admin.php:108
+msgid "We collect information about visitors who comment on Sites that use our Akismet Anti-spam service. The information we collect depends on how the User sets up Akismet for the Site, but typically includes the commenter's IP address, user agent, referrer, and Site URL (along with other information directly provided by the commenter such as their name, username, email address, and the comment itself)."
+msgstr "Gromadzimy informacje o odwiedzających, którzy komentują witryny korzystające z naszej usługi antyspamowej Akismet. Informacje, które zbieramy, zależą od tego, jak użytkownik konfiguruje Akismet dla witryny, ale zazwyczaj obejmują adres IP komentującego, agenta użytkownika, odsyłacza i adres URL witryny (wraz z innymi informacjami bezpośrednio podanymi przez komentującego, takimi jak jego imię, nazwa użytkownika, adres e-mail i sam komentarz)."
+
 #. translators: %s: Akismet privacy URL
 #: class.akismet.php:2280
 msgid "This site uses Akismet to reduce spam. <a href=\"%s\" target=\"_blank\" rel=\"nofollow noopener\">Learn how your comment data is processed.</a>"
 msgstr "Ta strona używa Akismet do redukcji spamu. <a href=\"%s\" target=\"_blank\" rel=\"nofollow noopener\">Dowiedz się, w jaki sposób przetwarzane są dane Twoich komentarzy.</a>"
-
-#: class.akismet-admin.php:108
-msgid "We collect information about visitors who comment on Sites that use our Akismet Anti-spam service. The information we collect depends on how the User sets up Akismet for the Site, but typically includes the commenter's IP address, user agent, referrer, and Site URL (along with other information directly provided by the commenter such as their name, username, email address, and the comment itself)."
-msgstr "Gromadzimy informacje o odwiedzających, którzy komentują witryny korzystające z naszej usługi antyspamowej Akismet. Informacje, które zbieramy, zależą od tego, jak użytkownik konfiguruje Akismet dla witryny, ale zazwyczaj obejmują adres IP komentującego, agenta użytkownika, odsyłacza i adres URL witryny (wraz z innymi informacjami bezpośrednio podanymi przez komentującego, takimi jak jego imię, nazwa użytkownika, adres e-mail i sam komentarz)."
 
 #: class.akismet-rest-api.php:211
 msgid "This site's API key is hardcoded and cannot be deleted."

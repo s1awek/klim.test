@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Tracking and Consent Manager &#8211; WP Full Picture - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-06-12 05:32:06+0000\n"
+"PO-Revision-Date: 2026-07-16 10:16:00+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2979,7 +2979,7 @@ msgstr "marketing"
 
 #: admin/modules/cscr/cscr-gdpr-check.php:39
 msgid "statistics"
-msgstr "statystyki"
+msgstr "statystyka"
 
 #: admin/modules/cscr/cscr-gdpr-check.php:50
 msgid " and "
@@ -7909,7 +7909,7 @@ msgstr "Kolor przycisków po najechaniu myszą"
 
 #: admin/modules/cook/customizer/fupi-customizer-settings.php:713
 msgid "Button Text Color"
-msgstr "Kolor tekstu na przyciskach"
+msgstr "Kolor tekstu przycisku"
 
 #: admin/modules/cook/customizer/fupi-customizer-settings.php:691
 msgid "Button Color"
@@ -8004,7 +8004,7 @@ msgstr "Chcę pomóc Ci ulepszyć tę witrynę, więc zgadzam się na zbieranie 
 #: admin/modules/cscr/cscr-fields.php:86
 #: public/modules/cook/fupi-display-cookie-notice.php:60
 msgid "Statistics"
-msgstr "Statystyki"
+msgstr "Statystyka"
 
 #: admin/modules/cook/cook-gdpr-check-cdb.php:241
 #: admin/modules/cook/customizer/fupi-customizer-settings.php:1065

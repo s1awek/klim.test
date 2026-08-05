@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Redux Framework - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-05-21 04:42:24+0000\n"
+"PO-Revision-Date: 2026-07-22 04:10:16+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Language: pl\n"
 "Project-Id-Version: Plugins - Redux Framework - Stable (latest release)\n"
 
-#: sample/barebones-config.php:178 sample/sample-config.php:246
+#: sample/barebones-config.php:180 sample/sample-config.php:246
 msgid "Visit us on GitHub"
 msgstr "Odwiedź nas na GitHub"
 
@@ -64,7 +64,7 @@ msgstr "Wyjście:"
 
 #. translators: 1: Redux Framework, 2: Required PHP version number, 3: Current
 #. PHP version number, 4: URL of PHP update help page
-#: redux-core/inc/classes/class-redux-php.php:44
+#: redux-core/inc/classes/class-redux-php.php:46
 msgid "The %1$s plugin requires PHP version %2$s or higher. This site is running PHP version %3$s. The theme/plugin that relies on Redux will not run properly without a PHP update. <a href=\"%4$s\">Learn about updating PHP</a>."
 msgstr "Wtyczka %1$s wymaga wersji PHP %2$s lub nowszej. Ta strona korzysta z wersji PHP %3$s. Motyw/wtyczka, która opiera się na Redux, nie będzie działać poprawnie bez aktualizacji PHP. <a href=\"%4$s\">Dowiedz się więcej o aktualizacji PHP</a>."
 
@@ -166,32 +166,32 @@ msgid "Unable to create a term due an empty term array or the term variable pass
 msgstr "Nie można utworzyć taksonomii, ponieważ tablica taksonomii jest pusta lub przekazana zmienna taksonomii nie jest tablicą."
 
 #. translators: %1$s: template path.
-#: ReduxCore/inc/fields/typography/field_typography.php:11
-msgid "The Redux 3 file ReduxCore/inc/fields/typography/typography.php is still in use by %1$s. Please contact the author of this theme (NOT Redux support, we have no control over this issue). They need to update their project to use Redux 4 and discontinue use of this file. It will soon be removed from Redux."
-msgstr "Plik Redux 3 ReduxCore/inc/fields/typography/typography.php jest nadal używany przez %1$s. Skontaktuj się z autorem tego motywu (NIE ze wsparciem Redux, nie mamy kontroli nad tym problemem). Muszą zaktualizować swój projekt, aby używać Redux 4 i zaprzestać używania tego pliku. Wkrótce zostanie on usunięty z Redux."
-
-#. translators: %1$s: template path.
-#: ReduxCore/core/required.php:11
+#: ReduxCore/core/required.php:13
 msgid "The Redux 3 file ReduxCore/core/required.php is still in use by %1$s. Please contact the author of this theme (NOT Redux support, we have no control over this issue). They need to update their project to use Redux 4 and discontinue use of this file. It will soon be removed from Redux."
 msgstr "Plik Redux 3 ReduxCore/core/required.php jest nadal używany przez %1$s. Skontaktuj się z autorem tego motywu (NIE z pomocą techniczną Redux, nie mamy kontroli nad tym problemem). Muszą zaktualizować swój projekt, aby używać Redux 4 i zaprzestać używania tego pliku. Wkrótce zostanie on usunięty z Redux."
 
 #. translators: %1$s: template path.
-#: ReduxCore/core/panel.php:11
+#: ReduxCore/inc/fields/typography/field_typography.php:13
+msgid "The Redux 3 file ReduxCore/inc/fields/typography/typography.php is still in use by %1$s. Please contact the author of this theme (NOT Redux support, we have no control over this issue). They need to update their project to use Redux 4 and discontinue use of this file. It will soon be removed from Redux."
+msgstr "Plik Redux 3 ReduxCore/inc/fields/typography/typography.php jest nadal używany przez %1$s. Skontaktuj się z autorem tego motywu (NIE ze wsparciem Redux, nie mamy kontroli nad tym problemem). Muszą zaktualizować swój projekt, aby używać Redux 4 i zaprzestać używania tego pliku. Wkrótce zostanie on usunięty z Redux."
+
+#. translators: %1$s: template path.
+#: ReduxCore/core/panel.php:13
 msgid "The Redux 3 file ReduxCore/core/panel.php is still in use by %1$s. Please contact the author of this theme (NOT Redux support, we have no control over this issue). They need to update their project to use Redux 4 and discontinue use of this file. It will soon be removed from Redux."
 msgstr "Plik Redux 3 ReduxCore/core/panel.php jest nadal używany przez %1$s. Skontaktuj się z autorem tego motywu (NIE z pomocą techniczną Redux, nie mamy kontroli nad tym problemem). Muszą zaktualizować swój projekt, aby używać Redux 4 i zaprzestać używania tego pliku. Wkrótce zostanie on usunięty z Redux."
 
 #. translators: %1$s: template path.
-#: ReduxCore/core/newsflash.php:11
+#: ReduxCore/core/newsflash.php:13
 msgid "The Redux 3 file ReduxCore/core/newsflash.php is still in use by %1$s. Please contact the author of this theme (NOT Redux support, we have no control over this issue). They need to update their project to use Redux 4 and discontinue use of this file. It will soon be removed from Redux."
 msgstr "Plik Redux 3 ReduxCore/core/newsflash.php jest nadal używany przez %1$s. Skontaktuj się z autorem tego motywu (NIE z pomocą techniczną Redux, nie mamy kontroli nad tym problemem). Muszą zaktualizować swój projekt, aby używać Redux 4 i zaprzestać używania tego pliku. Wkrótce zostanie on usunięty z Redux."
 
 #. translators: %1$s: template path.
-#: ReduxCore/core/enqueue.php:11
+#: ReduxCore/core/enqueue.php:13
 msgid "The Redux 3 file ReduxCore/core/enqueue.php is still in use by %1$s. Please contact the author of this theme (NOT Redux support, we have no control over this issue). They need to update their project to use Redux 4 and discontinue use of this file. It will soon be removed from Redux."
 msgstr "Plik Redux 3 ReduxCore/core/enqueue.php jest nadal używany przez %1$s. Skontaktuj się z autorem tego motywu (NIE z pomocą techniczną Redux, nie mamy kontroli nad tym problemem). Muszą zaktualizować swój projekt, aby używać Redux 4 i zaprzestać używania tego pliku. Wkrótce zostanie on usunięty z Redux."
 
 #. translators: %1$s: template path.
-#: ReduxCore/core/dashboard.php:11
+#: ReduxCore/core/dashboard.php:13
 msgid "The Redux 3 file ReduxCore/core/dashboard.php is still in use by %1$s. Please contact the author of this theme (NOT Redux support, we have no control over this issue). They need to update their project to use Redux 4 and discontinue use of this file. It will soon be removed from Redux."
 msgstr "Plik Redux 3 ReduxCore/core/dashboard.php jest nadal używany przez %1$s. Skontaktuj się z autorem tego motywu (NIE z pomocą techniczną Redux, nie mamy kontroli nad tym problemem). Muszą zaktualizować swój projekt, aby używać Redux 4 i zaprzestać używania tego pliku. Wkrótce zostanie on usunięty z Redux."
 
@@ -727,10 +727,6 @@ msgstr "git tip"
 msgid "github square"
 msgstr "Kwadrat Github"
 
-#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:285
-msgid "github"
-msgstr "Github"
-
 #: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:296
 msgid "github alt"
 msgstr "Github alt"
@@ -760,6 +756,9 @@ msgid "behance square"
 msgstr "Kwadrat Behance"
 
 #: redux-core/inc/extensions/social_profiles/social_profiles/class-redux-social-profiles.php:232
+#: sample/sections/extensions/taxonomy.php:157
+#: sample/sections/extensions/users.php:140
+#: sample/sections/switch-button/switch.php:40
 msgid "Enabled"
 msgstr "Włączone"
 
@@ -767,6 +766,10 @@ msgstr "Włączone"
 #: redux-core/inc/extensions/social_profiles/social_profiles/class-redux-social-profiles.php:138
 msgid "Go to the %1$s page to add the Redux Social Widget to any active widget area."
 msgstr "Przejdź do strony %1$s, aby dodać Widżet społecznościowy Redux do dowolnego aktywnego obszaru widżetów."
+
+#: redux-core/inc/extensions/social_profiles/social_profiles/inc/class-redux-social-profiles-defaults.php:285
+msgid "github"
+msgstr "GitHub"
 
 #: sample/sections/extensions/accordion.php:16
 msgid "Accordion"
@@ -857,7 +860,7 @@ msgstr "Wyszukaj pole(a)"
 msgid "Reset"
 msgstr "Resetuj"
 
-#: sample/barebones-config.php:205
+#: sample/barebones-config.php:207
 msgid "Did you know that Redux sets a global variable for you? To access any of your saved options from within your code you can use your global variable: $s"
 msgstr "Czy wiesz, że Redux ustawia dla Ciebie zmienną globalną? Aby uzyskać dostęp do dowolnej z zapisanych opcji z poziomu kodu, możesz użyć zmiennej globalnej: $s"
 
@@ -1861,10 +1864,6 @@ msgstr "Przykład 2 pokazu slajdów JQuery UI z krokami (5)"
 msgid "Basic Radio Button field."
 msgstr "Podstawowe pole przycisku radiowego."
 
-#: sample/metaboxes.php:43 sample/sections/extensions/tabbed.php:39
-msgid "Radio Button"
-msgstr "Przycisk radiowy"
-
 #: sample/metaboxes.php:37 sample/sections/extensions/tabbed.php:33
 msgid "Basic Checkbox field."
 msgstr "Podstawowe pole pola wyboru."
@@ -1878,7 +1877,7 @@ msgstr "Redux Framework został stworzony z myślą o deweloperach. Umożliwia k
 msgid "Metabox Options"
 msgstr "Opcje meta pola"
 
-#: sample/barebones-config.php:278
+#: sample/barebones-config.php:280
 msgid "This is a <strong>hint</strong> tool-tip for the text field.<br/><br/>Add any HTML-based text you like here."
 msgstr "To jest <strong>wskazówka</strong> podpowiedzi pola tekstowego.<br/><br/>Dodaj tutaj dowolny tekst w formacie HTML."
 
@@ -1889,6 +1888,10 @@ msgstr "Wybierz ikonkę."
 #: sample/sections/color-selection/color-palette.php:77
 msgid "Red Material Design Colors."
 msgstr "Kolory czerwieni projektu materiału."
+
+#: sample/metaboxes.php:43 sample/sections/extensions/tabbed.php:39
+msgid "Radio Button"
+msgstr "Pole wyboru"
 
 #: redux-core/inc/welcome/views/about.php:144
 msgid "Plugin"
@@ -1934,11 +1937,11 @@ msgstr "Prześlij plik"
 msgid "Import from Clipboard"
 msgstr "Importuj ze schowka"
 
-#: sample/barebones-config.php:188 sample/sample-config.php:256
+#: sample/barebones-config.php:190 sample/sample-config.php:256
 msgid "Follow us on Twitter"
 msgstr "Obserwuj nas na Twitterze"
 
-#: sample/barebones-config.php:183 sample/sample-config.php:251
+#: sample/barebones-config.php:185 sample/sample-config.php:251
 msgid "Like us on Facebook"
 msgstr "Polub nas na Facebooku"
 
@@ -1946,7 +1949,7 @@ msgstr "Polub nas na Facebooku"
 msgid "Filters"
 msgstr "Filtry"
 
-#: sample/barebones-config.php:193 sample/sample-config.php:261
+#: sample/barebones-config.php:195 sample/sample-config.php:261
 msgid "Find us on LinkedIn"
 msgstr "Znajdź nas na LinkedIn"
 
@@ -2077,7 +2080,7 @@ msgstr "ZALECANE"
 
 #: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1534
 #: redux-core/inc/extensions/taxonomy/class-redux-extension-taxonomy.php:1149
-#: redux-core/inc/extensions/users/class-redux-extension-users.php:1143
+#: redux-core/inc/extensions/users/class-redux-extension-users.php:1155
 msgid "warnings(s) were found!"
 msgstr "znaleziono ostrzeżenie(a)!"
 
@@ -2897,8 +2900,8 @@ msgstr "Usuń"
 msgid "Description"
 msgstr "Opis"
 
-#: redux-core/templates/panel/header.tpl.php:11
-#: redux-core/templates/panel/header.tpl.php:48
+#: redux-core/templates/panel/header.tpl.php:13
+#: redux-core/templates/panel/header.tpl.php:50
 msgid "Developer Mode Enabled"
 msgstr "Włączony Tryb Twórcy"
 
@@ -2913,7 +2916,7 @@ msgstr "Włącz"
 #: redux-core/inc/extensions/metaboxes/class-redux-extension-metaboxes.php:1228
 #: redux-core/inc/extensions/taxonomy/class-redux-extension-taxonomy.php:868
 #: redux-core/inc/extensions/users/class-redux-extension-users.php:860
-#: redux-core/templates/panel/header-stickybar.tpl.php:16
+#: redux-core/templates/panel/header-stickybar.tpl.php:18
 msgid "Expand"
 msgstr "Rozwiń"
 
@@ -2921,7 +2924,7 @@ msgstr "Rozwiń"
 msgid "Export Options"
 msgstr "Eksportuj opcje"
 
-#: sample/barebones-config.php:172
+#: sample/barebones-config.php:174
 msgid "Extensions"
 msgstr "Dodatki"
 
@@ -3020,12 +3023,12 @@ msgid "Remove"
 msgstr "Usuń"
 
 #: redux-core/templates/panel/footer.tpl.php:62
-#: redux-core/templates/panel/header-stickybar.tpl.php:26
+#: redux-core/templates/panel/header-stickybar.tpl.php:28
 msgid "Reset Section"
 msgstr "Resetuj Sekcję"
 
 #: redux-core/templates/panel/footer.tpl.php:58
-#: redux-core/templates/panel/header-stickybar.tpl.php:22
+#: redux-core/templates/panel/header-stickybar.tpl.php:24
 msgid "Save Changes"
 msgstr "Zapisz Zmiany"
 
@@ -3158,7 +3161,7 @@ msgid "moving the mouse over"
 msgstr "przesuwanie myszą nad"
 
 #: redux-core/inc/extensions/social_profiles/social_profiles/class-redux-social-profiles.php:249
-#: sample/barebones-config.php:296 sample/sections/basic-fields/text.php:15
+#: sample/barebones-config.php:298 sample/sections/basic-fields/text.php:15
 msgid "Text"
 msgstr "Tekst"
 
@@ -3171,7 +3174,7 @@ msgstr "Tło"
 msgid "Color"
 msgstr "Kolor"
 
-#: redux-core/templates/panel/header.tpl.php:31
+#: redux-core/templates/panel/header.tpl.php:33
 msgid "and"
 msgstr "i"
 
@@ -3179,7 +3182,7 @@ msgstr "i"
 msgid "Help"
 msgstr "Pomoc"
 
-#: sample/barebones-config.php:160 sample/sample-config.php:232
+#: sample/barebones-config.php:162 sample/sample-config.php:232
 #: sample/sample-config.php:551
 msgid "Documentation"
 msgstr "Dokumentacja"
@@ -3219,7 +3222,7 @@ msgid "Upload"
 msgstr "Prześlij"
 
 #: redux-core/templates/panel/footer.tpl.php:63
-#: redux-core/templates/panel/header-stickybar.tpl.php:27
+#: redux-core/templates/panel/header-stickybar.tpl.php:29
 msgid "Reset All"
 msgstr "Resetuj wszystko"
 
@@ -3259,7 +3262,7 @@ msgstr "Skopiowano!"
 msgid "Name"
 msgstr "Nazwa"
 
-#: sample/barebones-config.php:166 sample/sample-config.php:238
+#: sample/barebones-config.php:168 sample/sample-config.php:238
 msgid "Support"
 msgstr "Pomoc techniczna"
 
@@ -3287,6 +3290,10 @@ msgstr "Zbiór znaków kroju"
 #: redux-core/inc/fields/typography/class-redux-typography.php:625
 msgid "Word Spacing"
 msgstr "Odstępy między wyrazami"
+
+#: redux-core/inc/welcome/class-redux-welcome.php:179
+msgid "Docs"
+msgstr "Dokumentacja"
 
 #: redux-core/inc/fields/border/class-redux-border.php:147
 #: redux-core/inc/fields/spacing/class-redux-spacing.php:260
@@ -3350,7 +3357,7 @@ msgstr "Wielkość liter"
 #: redux-core/inc/extensions/taxonomy/class-redux-extension-taxonomy.php:859
 #: redux-core/inc/extensions/taxonomy/class-redux-extension-taxonomy.php:1143
 #: redux-core/inc/extensions/users/class-redux-extension-users.php:851
-#: redux-core/inc/extensions/users/class-redux-extension-users.php:1137
+#: redux-core/inc/extensions/users/class-redux-extension-users.php:1149
 msgid "error(s) were found!"
 msgstr "wystąpił co najmniej jeden błąd!"
 
@@ -4119,10 +4126,6 @@ msgstr "Opcja radiowa z danymi menu"
 msgid "Radio Option"
 msgstr "Opcja radiowa"
 
-#: sample/sections/basic-fields/radio.php:15
-msgid "Radio"
-msgstr "Radio"
-
 #: sample/sections/basic-fields/checkbox.php:59
 msgid "Multi Checkbox Option (with sidebar data)"
 msgstr "Opcja wielu pól wyboru (z danymi na panelu bocznym)"
@@ -4134,6 +4137,107 @@ msgstr "Opcja wielu pól wyboru (z danymi menu)"
 #: sample/sections/basic-fields/checkbox.php:32
 msgid "Multi Checkbox Option"
 msgstr "Opcja wielu pól wyboru"
+
+#: sample/sections/additional-types/date.php:24
+#: sample/sections/basic-fields/checkbox.php:25
+#: sample/sections/basic-fields/checkbox.php:33
+#: sample/sections/basic-fields/checkbox.php:52
+#: sample/sections/basic-fields/checkbox.php:60
+#: sample/sections/basic-fields/radio.php:25
+#: sample/sections/basic-fields/radio.php:40
+#: sample/sections/disabling/disable-field.php:25
+#: sample/sections/disabling/disable-section.php:26
+#: sample/sections/extensions/taxonomy.php:51
+#: sample/sections/select-fields/image-select.php:24
+#: sample/sections/select-fields/image-select.php:69
+#: sample/sections/select-fields/select.php:24
+#: sample/sections/select-fields/select.php:50
+#: sample/sections/select-fields/select.php:76
+#: sample/sections/select-fields/select.php:97
+#: sample/sections/select-fields/select.php:106
+#: sample/sections/select-fields/select.php:114
+#: sample/sections/select-fields/select.php:123
+#: sample/sections/select-fields/select.php:131
+#: sample/sections/select-fields/select.php:140
+#: sample/sections/select-fields/select.php:148
+#: sample/sections/select-fields/select.php:157
+#: sample/sections/select-fields/select.php:165
+#: sample/sections/select-fields/select.php:174
+#: sample/sections/select-fields/select.php:182
+#: sample/sections/select-fields/select.php:191
+#: sample/sections/select-fields/select.php:209
+#: sample/sections/select-fields/select.php:218
+#: sample/sections/select-fields/select.php:226
+#: sample/sections/select-fields/select.php:237
+#: sample/sections/select-fields/select.php:245
+#: sample/sections/select-fields/select.php:255
+#: sample/sections/select-fields/select.php:264
+#: sample/sections/switch-button/button-set.php:24
+#: sample/sections/switch-button/button-set.php:39
+msgid "No validation can be done on this field type"
+msgstr "Nie można przeprowadzić walidacji tego rodzaju pola"
+
+#: sample/sections/basic-fields/checkbox.php:24
+#: sample/sections/disabling/disable-field.php:24
+#: sample/sections/disabling/disable-section.php:25
+msgid "Checkbox Option"
+msgstr "Opcja pola wyboru"
+
+#: sample/sample-config.php:324
+msgid "These are really basic fields!"
+msgstr "To są naprawdę podstawowe pola!"
+
+#: sample/barebones-config.php:325
+msgid "Text Area Field"
+msgstr "Pole obszaru tekstowego"
+
+#: sample/barebones-config.php:317
+msgid "Text Area"
+msgstr "Obszar tekstowy"
+
+#: sample/barebones-config.php:308 sample/barebones-config.php:327
+#: sample/sections/basic-fields/multi-text.php:25
+#: sample/sections/basic-fields/text.php:26
+#: sample/sections/basic-fields/text.php:34
+#: sample/sections/basic-fields/text.php:46
+msgid "Field Description"
+msgstr "Opis pola"
+
+#: sample/barebones-config.php:307 sample/barebones-config.php:326
+#: sample/sections/additional-types/raw.php:31
+#: sample/sections/additional-types/raw.php:40
+#: sample/sections/basic-fields/text.php:25
+#: sample/sections/basic-fields/text.php:33
+#: sample/sections/basic-fields/text.php:45
+#: sample/sections/basic-fields/textarea.php:24
+msgid "Subtitle"
+msgstr "Podtytuł"
+
+#: sample/barebones-config.php:306 sample/metaboxes.php:108
+#: sample/sections/basic-fields/text.php:24
+#: sample/sections/extensions/repeater.php:38
+#: sample/sections/extensions/repeater.php:62
+#: sample/sections/extensions/repeater.php:64
+#: sample/sections/extensions/tabbed.php:101
+msgid "Text Field"
+msgstr "Pole tekstowe"
+
+#: sample/barebones-config.php:291
+msgid "Basic fields as subsections."
+msgstr "Pola podstawowe jako podsekcje."
+
+#: sample/barebones-config.php:289 sample/metaboxes.php:28
+#: sample/sample-config.php:322
+msgid "Basic Fields"
+msgstr "Pola podstawowe"
+
+#: sample/barebones-config.php:278
+msgid "Example subtitle."
+msgstr "Przykładowy podtytuł."
+
+#: sample/barebones-config.php:277
+msgid "Example description."
+msgstr "Przykładowy opis."
 
 #: sample/metaboxes.php:67 sample/sections/additional-types/date.php:25
 #: sample/sections/advanced-features/field-sanitizing.php:26
@@ -4204,96 +4308,7 @@ msgstr "Opcja wielu pól wyboru"
 msgid "This is the description field, again good for additional info."
 msgstr "To jest pole opisu, dobre na dodatkowe informacje."
 
-#: sample/sections/basic-fields/checkbox.php:24
-#: sample/sections/disabling/disable-field.php:24
-#: sample/sections/disabling/disable-section.php:25
-msgid "Checkbox Option"
-msgstr "Opcja pola wyboru"
-
-#: sample/metaboxes.php:36 sample/sections/basic-fields/checkbox.php:15
-#: sample/sections/extensions/tabbed.php:32
-msgid "Checkbox"
-msgstr "Pole wyboru"
-
-#: sample/sample-config.php:324
-msgid "These are really basic fields!"
-msgstr "To są naprawdę podstawowe pola!"
-
-#: sample/barebones-config.php:323
-msgid "Text Area Field"
-msgstr "Pole obszaru tekstowego"
-
-#: sample/barebones-config.php:315
-msgid "Text Area"
-msgstr "Obszar tekstowy"
-
-#: sample/barebones-config.php:306 sample/barebones-config.php:325
-#: sample/sections/basic-fields/multi-text.php:25
-#: sample/sections/basic-fields/text.php:26
-#: sample/sections/basic-fields/text.php:34
-#: sample/sections/basic-fields/text.php:46
-msgid "Field Description"
-msgstr "Opis pola"
-
-#: sample/barebones-config.php:305 sample/barebones-config.php:324
-#: sample/sections/additional-types/raw.php:31
-#: sample/sections/additional-types/raw.php:40
-#: sample/sections/basic-fields/text.php:25
-#: sample/sections/basic-fields/text.php:33
-#: sample/sections/basic-fields/text.php:45
-#: sample/sections/basic-fields/textarea.php:24
-msgid "Subtitle"
-msgstr "Podtytuł"
-
-#: sample/barebones-config.php:304 sample/metaboxes.php:108
-#: sample/sections/basic-fields/text.php:24
-#: sample/sections/extensions/repeater.php:38
-#: sample/sections/extensions/repeater.php:62
-#: sample/sections/extensions/repeater.php:64
-#: sample/sections/extensions/tabbed.php:101
-msgid "Text Field"
-msgstr "Pole tekstowe"
-
-#: sample/sections/additional-types/date.php:24
-#: sample/sections/basic-fields/checkbox.php:25
-#: sample/sections/basic-fields/checkbox.php:33
-#: sample/sections/basic-fields/checkbox.php:52
-#: sample/sections/basic-fields/checkbox.php:60
-#: sample/sections/basic-fields/radio.php:25
-#: sample/sections/basic-fields/radio.php:40
-#: sample/sections/disabling/disable-field.php:25
-#: sample/sections/disabling/disable-section.php:26
-#: sample/sections/extensions/taxonomy.php:51
-#: sample/sections/select-fields/image-select.php:24
-#: sample/sections/select-fields/image-select.php:69
-#: sample/sections/select-fields/select.php:24
-#: sample/sections/select-fields/select.php:50
-#: sample/sections/select-fields/select.php:76
-#: sample/sections/select-fields/select.php:97
-#: sample/sections/select-fields/select.php:106
-#: sample/sections/select-fields/select.php:114
-#: sample/sections/select-fields/select.php:123
-#: sample/sections/select-fields/select.php:131
-#: sample/sections/select-fields/select.php:140
-#: sample/sections/select-fields/select.php:148
-#: sample/sections/select-fields/select.php:157
-#: sample/sections/select-fields/select.php:165
-#: sample/sections/select-fields/select.php:174
-#: sample/sections/select-fields/select.php:182
-#: sample/sections/select-fields/select.php:191
-#: sample/sections/select-fields/select.php:209
-#: sample/sections/select-fields/select.php:218
-#: sample/sections/select-fields/select.php:226
-#: sample/sections/select-fields/select.php:237
-#: sample/sections/select-fields/select.php:245
-#: sample/sections/select-fields/select.php:255
-#: sample/sections/select-fields/select.php:264
-#: sample/sections/switch-button/button-set.php:24
-#: sample/sections/switch-button/button-set.php:39
-msgid "No validation can be done on this field type"
-msgstr "Nie można przeprowadzić walidacji tego rodzaju pola"
-
-#: sample/barebones-config.php:297 sample/barebones-config.php:316
+#: sample/barebones-config.php:299 sample/barebones-config.php:318
 #: sample/sample-config.php:522
 #: sample/sections/additional-types/date-time-picker.php:17
 #: sample/sections/additional-types/date.php:17
@@ -4350,57 +4365,40 @@ msgstr "Nie można przeprowadzić walidacji tego rodzaju pola"
 msgid "For full documentation on this field, visit: "
 msgstr "Aby uzyskać pełną dokumentację na ten temat, przejdź na: "
 
-#: sample/barebones-config.php:289
-msgid "Basic fields as subsections."
-msgstr "Pola podstawowe jako podsekcje."
-
-#: sample/barebones-config.php:287 sample/metaboxes.php:28
-#: sample/sample-config.php:322
-msgid "Basic Fields"
-msgstr "Pola podstawowe"
-
 #: sample/barebones-config.php:276
-msgid "Example subtitle."
-msgstr "Przykładowy podtytuł."
-
-#: sample/barebones-config.php:275
-msgid "Example description."
-msgstr "Przykładowy opis."
-
-#: sample/barebones-config.php:274
 msgid "Example Text"
 msgstr "Przykładowy tekst"
 
-#: sample/barebones-config.php:268
+#: sample/barebones-config.php:270
 msgid "Basic field with no subsections."
 msgstr "Pole podstawowe bez podsekcji."
 
-#: sample/barebones-config.php:266
+#: sample/barebones-config.php:268
 msgid "Basic Field"
 msgstr "Pole podstawowe"
 
-#: sample/barebones-config.php:240 sample/sample-config.php:306
+#: sample/barebones-config.php:242 sample/sample-config.php:306
 msgid "This is the sidebar content, HTML is allowed."
 msgstr "To jest treść panelu bocznego, dozwolony jest kod HTML."
 
-#: sample/barebones-config.php:232 sample/sample-config.php:299
+#: sample/barebones-config.php:234 sample/sample-config.php:299
 msgid "Theme Information 2"
 msgstr "Informacje motywu 2"
 
-#: sample/barebones-config.php:227 sample/barebones-config.php:233
+#: sample/barebones-config.php:229 sample/barebones-config.php:235
 #: sample/sample-config.php:295 sample/sample-config.php:300
 msgid "This is the tab content, HTML is allowed."
 msgstr "To jest treść karty, dozwolony jest kod HTML."
 
-#: sample/barebones-config.php:226 sample/sample-config.php:294
+#: sample/barebones-config.php:228 sample/sample-config.php:294
 msgid "Theme Information 1"
 msgstr "Informacje motywu 1"
 
-#: sample/barebones-config.php:211 sample/sample-config.php:280
+#: sample/barebones-config.php:213 sample/sample-config.php:280
 msgid "This text is displayed below the options panel. It isn't required, but more info is always better! The footer_text field accepts all HTML."
 msgstr "Ten tekst jest wyświetlany poniżej panelu opcji. Nie jest wymagany, ale więcej informacji jest zawsze lepsze! Pole footer_text akceptuje wszystkie HTML."
 
-#: sample/barebones-config.php:207 sample/sample-config.php:276
+#: sample/barebones-config.php:209 sample/sample-config.php:276
 msgid "This text is displayed above the options panel. It isn't required, but more info is always better! The intro_text field accepts all HTML."
 msgstr "Ten tekst jest wyświetlany nad panelem opcji. Nie jest wymagany, ale więcej informacji jest zawsze lepsze! Pole intro_text akceptuje cały HTML."
 
@@ -4409,24 +4407,24 @@ msgstr "Ten tekst jest wyświetlany nad panelem opcji. Nie jest wymagany, ale wi
 msgid "Did you know that Redux sets a global variable for you? To access any of your saved options from within your code you can use your global variable: $%1$s"
 msgstr "Czy wiesz, że Redux ustawia dla Ciebie zmienną globalną? Aby uzyskać dostęp do dowolnej z zapisanych opcji z poziomu kodu, możesz użyć zmiennej globalnej: $%1$s"
 
-#: sample/barebones-config.php:45 sample/barebones-config.php:46
+#: sample/barebones-config.php:47 sample/barebones-config.php:48
 #: sample/sample-config.php:90 sample/sample-config.php:93
 msgid "Sample Options"
 msgstr "Opcje próbek"
 
-#: redux-core/templates/panel/header.tpl.php:36
+#: redux-core/templates/panel/header.tpl.php:38
 msgid "If you are not a developer, your theme/plugin author shipped with developer mode enabled. Contact them directly to fix it."
 msgstr "Jeśli nie jesteś programistą, autor Twojego motywu/wtyczki został dostarczony z włączonym trybem programisty. Skontaktuj się z nim bezpośrednio, aby to naprawić."
 
-#: redux-core/templates/panel/header.tpl.php:34
+#: redux-core/templates/panel/header.tpl.php:36
 msgid "This has been automatically enabled because"
 msgstr "Ta opcja została włączona automatycznie, ponieważ"
 
-#: redux-core/templates/panel/header.tpl.php:26
+#: redux-core/templates/panel/header.tpl.php:28
 msgid "you are working in a localhost environment"
 msgstr "pracujesz w środowisku lokalnym"
 
-#: redux-core/templates/panel/header.tpl.php:20
+#: redux-core/templates/panel/header.tpl.php:22
 msgid "WP_DEBUG is enabled"
 msgstr "WP_DEBUG jest włączony"
 
@@ -4501,3 +4499,12 @@ msgstr "OSTRZEŻENIE! To nadpisze wszystkie istniejące wartości opcji, proszę
 #: redux-core/inc/extensions/users/class-redux-extension-users.php:843
 msgid "Settings Imported!"
 msgstr "Ustawienia zaimportowane!"
+
+#: sample/metaboxes.php:36 sample/sections/basic-fields/checkbox.php:15
+#: sample/sections/extensions/tabbed.php:32
+msgid "Checkbox"
+msgstr "Pole zaznaczenia"
+
+#: sample/sections/basic-fields/radio.php:15
+msgid "Radio"
+msgstr "Pole wyboru"

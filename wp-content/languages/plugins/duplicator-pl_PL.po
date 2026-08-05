@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Duplicator &#8211; Backups &amp; Migration Plugin &#8211; Cloud Backups, Scheduled Backups, &amp; More - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-06-12 05:32:28+0000\n"
+"PO-Revision-Date: 2026-07-28 13:18:47+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -100,14 +100,6 @@ msgstr ""
 "Aby odblokować więcej funkcji, rozważ <strong><a href=\"%s\" target=\"_blank\"\n"
 "                            rel=\"noopener noreferrer\">aktualizację do wersji PRO</a></strong>."
 
-#: views/settings/storage.php:55
-msgid "Backup files are stored in the wp-content directory for better security and compatibility."
-msgstr "Pliki kopii zapasowej są przechowywane w katalogu wp-content w celu zapewnienia większego bezpieczeństwa i kompatybilności."
-
-#: views/settings/storage.php:49
-msgid "Storage Location"
-msgstr "Miejsce przechowywania"
-
 #: src/Utils/ExtraPlugins/ExtraPluginsMng.php:535
 msgid ""
 "Database Reset Pro is the safest and simplest way to reset your WordPress database to its default state. \n"
@@ -117,6 +109,14 @@ msgstr ""
 "Database Reset Pro to najbezpieczniejszy i najprostszy sposób na przywrócenie domyślnego stanu bazy danych WordPress.\n"
 "            W przeciwieństwie do ponownej instalacji WordPressa, ta wtyczka do resetowania bazy danych zachowuje pliki, przesyłane pliki\n"
 "            i dane uwierzytelniające administratora, umożliwiając jednocześnie rozpoczęcie pracy od nowa w ciągu kilku sekund."
+
+#: views/settings/storage.php:55
+msgid "Backup files are stored in the wp-content directory for better security and compatibility."
+msgstr "Pliki kopii zapasowej są przechowywane w katalogu wp-content w celu zapewnienia większego bezpieczeństwa i kompatybilności."
+
+#: views/settings/storage.php:49
+msgid "Storage Location"
+msgstr "Miejsce przechowywania"
 
 #: src/Utils/ExtraPlugins/ExtraPluginsMng.php:532
 msgid "Database Reset Pro"
@@ -896,10 +896,6 @@ msgstr "Stan"
 msgid "No backups were created in the past week."
 msgstr "W ciągu ostatniego tygodnia nie utworzono żadnych kopii zapasowych."
 
-#: template/admin_pages/settings/misc/misc.php:130
-msgid "Usage Tracking"
-msgstr "Śledzenie użycia"
-
 #: template/admin_pages/settings/general/email_summary.php:45
 #: template/mail/email_summary.php:178
 msgctxt "%1s and %2s are opening and closing link tags to the documentation."
@@ -945,6 +941,10 @@ msgstr "Ten e-mail został wygenerowany automatycznie i wysłany z witryny %s."
 msgctxt "%1s and %2s are the opening and close <a> tags to the summary preview link"
 msgid "You can view the email summary example %1shere%2s."
 msgstr "Przykład podsumowania wiadomości e-mail możesz zobaczyć %1stutaj%2s."
+
+#: template/admin_pages/settings/misc/misc.php:130
+msgid "Usage Tracking"
+msgstr "Śledzenie użytkowania"
 
 #: src/Utils/CronUtils.php:42
 msgid "Once a Month"
@@ -2180,13 +2180,13 @@ msgstr "Włączona ochrona hasłem"
 msgid "Do not to leave any installer files on the destination server, after installing the migrated/restored site.  Logon as a WordPress administrator and follow the prompts to remove the installer files or remove them manually."
 msgstr "Po zainstalowaniu zmigrowanej/przywróconej witryny nie pozostawiaj plików instalatora na serwerze docelowym. Zaloguj się jako administrator WordPressa i postępuj zgodnie z instrukcjami w celu usunięcia plików instalatora lub usuń je ręcznie."
 
-#: views/settings/packages.php:388
-msgid "Tip: Each row on the Backups screen includes a copy button to copy the installer name to the clipboard.  Paste the installer name from the clipboard into the URL being used to install the destination site.  This feature is handy when using the secure installer name."
-msgstr "Wskazówka: Każdy wiersz na ekranie kopii zapasowych zawiera przycisk kopiowania, który umożliwia skopiowanie nazwy instalatora do schowka. Wklej nazwę instalatora ze schowka do adresu URL używanego w celu zainstalowania witryny docelowej. Ta funkcja przydaje się w przypadku korzystania z bezpiecznej nazwy instalatora."
-
 #: views/settings/packages.php:369
 msgid "This setting specifies the name of the installer used at download-time.  Independent of the value of this setting, you can change the name of the installer in the \"Save as\" file dialog at download-time.  If you choose to use a custom name, use a file name that is known only to you. Installer filenames must end in \"php\".  Changes to the Backup file should not be made."
 msgstr "To ustawienie określa nazwę instalatora używaną podczas pobierania. Niezależnie od wartości tego ustawienia nazwę instalatora można zmienić w oknie dialogowym „Zapisz jako” na etapie pobierania. Jeśli zdecydujesz się użyć własnej nazwy, użyj nazwy pliku znanej tylko sobie. Nazwy plików instalatora muszą się kończyć elementem „php”. Nie należy wprowadzać zmian w pliku kopii zapasowej."
+
+#: views/settings/packages.php:388
+msgid "Tip: Each row on the Backups screen includes a copy button to copy the installer name to the clipboard.  Paste the installer name from the clipboard into the URL being used to install the destination site.  This feature is handy when using the secure installer name."
+msgstr "Wskazówka: Każdy wiersz na ekranie kopii zapasowych zawiera przycisk kopiowania, który umożliwia skopiowanie nazwy instalatora do schowka. Wklej nazwę instalatora ze schowka do adresu URL używanego w celu zainstalowania witryny docelowej. Ta funkcja przydaje się w przypadku korzystania z bezpiecznej nazwy instalatora."
 
 #: views/settings/packages.php:365
 msgid "Example"
@@ -2419,10 +2419,6 @@ msgstr "Pobierz oba pliki"
 msgid "Build Time"
 msgstr "Czas kompilacji"
 
-#: views/packages/main/s3.build.php:24
-msgid "When clicking the Installer download button, the 'Save as' dialog will save the name as '[name]_[hash]_[time]_installer.php'. This is the secure and recommended option.  For more information goto: Settings ❯ Backups Tab ❯ Installer Name Option.  To quickly copy the hashed installer name, to your clipboard use the copy icon link."
-msgstr "Po kliknięciu przycisku pobierania instalatora okno dialogowe „Zapisz jako” spowoduje zapisanie nazwy w postaci „[nazwa]_[skrót]_[czas]_installer.php”. Jest to bezpieczna i zalecana opcja. Aby uzyskać więcej informacji, przejdź do menu Ustawienia ❯ karta Kopie zapasowe ❯ opcja Nazwa instalatora. Aby szybko skopiować do schowka nazwę instalatora ze skrótem, użyj odnośnika z ikonką kopiowania."
-
 #: views/packages/main/s3.build.php:117
 msgid "Step 3: Build and download the Backup files."
 msgstr "Krok 3: Skompiluj i pobierz pliki kopii zapasowej."
@@ -2430,6 +2426,10 @@ msgstr "Krok 3: Skompiluj i pobierz pliki kopii zapasowej."
 #: views/packages/main/s3.build.php:180
 msgid "Download Backup Files"
 msgstr "Pobierz pliki kopii zapasowej"
+
+#: views/packages/main/s3.build.php:24
+msgid "When clicking the Installer download button, the 'Save as' dialog will save the name as '[name]_[hash]_[time]_installer.php'. This is the secure and recommended option.  For more information goto: Settings ❯ Backups Tab ❯ Installer Name Option.  To quickly copy the hashed installer name, to your clipboard use the copy icon link."
+msgstr "Po kliknięciu przycisku pobierania instalatora okno dialogowe „Zapisz jako” spowoduje zapisanie nazwy w postaci „[nazwa]_[skrót]_[czas]_installer.php”. Jest to bezpieczna i zalecana opcja. Aby uzyskać więcej informacji, przejdź do menu Ustawienia ❯ karta Kopie zapasowe ❯ opcja Nazwa instalatora. Aby szybko skopiować do schowka nazwę instalatora ze skrótem, użyj odnośnika z ikonką kopiowania."
 
 #: views/packages/main/s3.build.php:170
 msgid "Backup Build Completed"
@@ -2830,6 +2830,10 @@ msgstr "Duplicator Pro!"
 msgid "This feature is only availble in "
 msgstr "Ta funkcjonalność jest dostępna tylko w "
 
+#: views/packages/main/s1.setup2.php:425
+msgid "Enabling this option will allow for basic password protection on the installer. Before running the installer the password below must be entered before proceeding with an install.  This password is a general deterrent and should not be substituted for properly keeping your files secure.  Be sure to remove all installer files when the install process is completed."
+msgstr "Włączenie tej opcji umożliwi podstawową ochronę instalatora hasłem. Przed uruchomieniem instalatora trzeba będzie wpisać poniższe hasło, aby kontynuować instalację. Hasło to jest ogólnym środkiem odstraszającym i nie powinno zastępować właściwego zabezpieczenia plików. Pamiętaj, aby po ukończeniu instalacji usunąć wszystkie pliki instalatora."
+
 #: views/packages/main/s1.setup2.php:440
 msgid "Prefills"
 msgstr "Wypełnienia wstępne"
@@ -2841,10 +2845,6 @@ msgstr "Utwórz bazę danych i użytkownika bazy podczas instalacji bez opuszcza
 #: views/packages/main/s1.setup2.php:550
 msgid "This feature works only with hosts that support cPanel."
 msgstr "Ta funkcja działa tylko z hostami obsługującymi cPanel."
-
-#: views/packages/main/s1.setup2.php:425
-msgid "Enabling this option will allow for basic password protection on the installer. Before running the installer the password below must be entered before proceeding with an install.  This password is a general deterrent and should not be substituted for properly keeping your files secure.  Be sure to remove all installer files when the install process is completed."
-msgstr "Włączenie tej opcji umożliwi podstawową ochronę instalatora hasłem. Przed uruchomieniem instalatora trzeba będzie wpisać poniższe hasło, aby kontynuować instalację. Hasło to jest ogólnym środkiem odstraszającym i nie powinno zastępować właściwego zabezpieczenia plików. Pamiętaj, aby po ukończeniu instalacji usunąć wszystkie pliki instalatora."
 
 #: views/packages/details/detail.php:479 views/packages/main/s1.setup2.php:415
 msgid "Security"
@@ -3238,10 +3238,6 @@ msgstr "Tworzy własny format kopii zapasowej (archive.daf)."
 msgid " Valid only when Backup Engine for ZipArchive is enabled."
 msgstr " Obowiązuje tylko w przypadku włączenia silnika kopii zapasowej ZipArchive."
 
-#: views/settings/packages.php:180
-msgid "Add a custom path if the path to mysqldump is not properly detected.   For all paths use a forward slash as the path seperator.  On Linux systems use mysqldump for Windows systems use mysqldump.exe.  If the path tried does not work please contact your hosting provider for details on the correct path."
-msgstr "Jeśli ścieżka do narzędzia mysqldump nie jest prawidłowo wykrywana, dodaj własną. W każdej ścieżce używaj ukośnika jako separatora. W systemie Linux użyj zapisu „mysqldump”, a w systemie Windows – „mysqldump.exe”. Jeśli podana ścieżka nie działa, skontaktuj się z dostawcą hostingu w celu uzyskania szczegółowych informacji na temat prawidłowej ścieżki."
-
 #: views/settings/packages.php:212
 msgid "Single-Threaded"
 msgstr "Jednowątkowy"
@@ -3249,6 +3245,10 @@ msgstr "Jednowątkowy"
 #: views/settings/packages.php:219
 msgid "PHP Code Mode:"
 msgstr "Tryb kodu PHP:"
+
+#: views/settings/packages.php:180
+msgid "Add a custom path if the path to mysqldump is not properly detected.   For all paths use a forward slash as the path seperator.  On Linux systems use mysqldump for Windows systems use mysqldump.exe.  If the path tried does not work please contact your hosting provider for details on the correct path."
+msgstr "Jeśli ścieżka do narzędzia mysqldump nie jest prawidłowo wykrywana, dodaj własną. W każdej ścieżce używaj ukośnika jako separatora. W systemie Linux użyj zapisu „mysqldump”, a w systemie Windows – „mysqldump.exe”. Jeśli podana ścieżka nie działa, skontaktuj się z dostawcą hostingu w celu uzyskania szczegółowych informacji na temat prawidłowej ścieżki."
 
 #: template/admin_pages/settings/general/general.php:113
 #: template/admin_pages/welcome/intro.php:48
@@ -4491,10 +4491,6 @@ msgstr "Dowiedz się więcej"
 msgid "MySQL Compatibility Mode Enabled"
 msgstr "Włączono tryb zgodności z MySQL"
 
-#: views/packages/details/detail.php:162
-msgid "completed"
-msgstr "zakończone"
-
 #: template/parts/filters/package_components.php:130
 #: views/packages/details/detail.php:378 views/packages/details/detail.php:443
 #: views/packages/main/s1.setup2.php:226
@@ -4520,6 +4516,10 @@ msgstr "ZipArchive"
 #: views/packages/details/detail.php:336 views/packages/main/s1.setup2.php:166
 msgid "Additional Storage:"
 msgstr "Dodatkowa pamięć masowa:"
+
+#: views/packages/details/detail.php:162
+msgid "completed"
+msgstr "zakończono"
 
 #: classes/class.server.php:402 views/packages/details/detail.php:142
 msgid "PHP"
