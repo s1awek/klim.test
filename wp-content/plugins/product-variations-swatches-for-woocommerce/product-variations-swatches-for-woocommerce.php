@@ -3,7 +3,7 @@
  * Plugin Name: Product Variations Swatches for WooCommerce
  * Plugin URI: https://villatheme.com/extensions/woocommerce-product-variations-swatches
  * Description: Showcase variations and impress your customers with beautiful swatches such as color, button, image, and more.
- * Version: 1.1.17
+ * Version: 1.1.19
  * Author: VillaTheme
  * Author URI: https://villatheme.com
  * License:           GPL v2 or later
@@ -11,21 +11,23 @@
  * Text Domain: product-variations-swatches-for-woocommerce
  * Domain Path: /languages
  * Copyright 2020-2026 VillaTheme.com. All rights reserved.
- * Tested up to: 7.0
+ * Tested up to: 7.1
  * WC requires at least: 7.0
- * WC tested up to: 10.8.1
- * Requires PHP: 7.0
+ * WC tested up to: 11.0.0
+ * Requires PHP: 7.4
  * Requires at least: 5.0
  * Requires Plugins: woocommerce
  **/
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-define( 'VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION', '1.1.17' );
+define( 'VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION', '1.1.19' );
 /**
  * Return if the premium version is active
  */
-include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+if ( ! function_exists( 'is_plugin_active' ) ) {
+	include_once ABSPATH . 'wp-admin/includes/plugin.php';
+}
 //compatible with 'High-Performance order storage (COT)'
 add_action( 'before_woocommerce_init', function () {
 	if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
@@ -47,7 +49,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES {
 	}
 	public function check_environment( $recent_activate = false ) {
 		if ( ! class_exists( 'VillaTheme_Require_Environment' ) ) {
-			include_once  WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . "product-variations-swatches-for-woocommerce" . DIRECTORY_SEPARATOR . "includes" . DIRECTORY_SEPARATOR . 'support.php';
+			include_once plugin_dir_path( __FILE__ ) . 'includes' . DIRECTORY_SEPARATOR . 'support.php';
 		}
 		$environment = new \VillaTheme_Require_Environment( [
 				'plugin_name'     => 'Product Variations Swatches for WooCommerce',
@@ -66,7 +68,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES {
 		if ( $environment->has_error() ) {
 			return;
 		}
-		$init_file = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . "product-variations-swatches-for-woocommerce" . DIRECTORY_SEPARATOR . "includes" . DIRECTORY_SEPARATOR . "define.php";
+		$init_file = plugin_dir_path( __FILE__ ) . 'includes' . DIRECTORY_SEPARATOR . 'define.php';
 		require_once $init_file;
 	}
 

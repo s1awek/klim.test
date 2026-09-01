@@ -56,6 +56,9 @@
 		?>
 		<div id="import_finished">
 			<h1><?php _e('Import Complete!', 'wp-all-import-pro'); ?></h1>
+			<?php
+				do_action('pmxi_import_finished_notices', $update_previous);
+			?>
             <div class="wpallimport-content-section wpallimport-complete-statistics">
                 <p><?php printf(__('All <b>%s</b> records from <b>%s</b> were successfully processed.', 'wp-all-import-pro'), '<span class="processed_count"></span>', (PMXI_Plugin::$session->source['type'] != 'url') ? basename(PMXI_Plugin::$session->source['path']) : PMXI_Plugin::$session->source['path']); ?></p>
                 <p class="wpallimport-complete-details">
@@ -131,7 +134,7 @@
 					<?php endif; ?>
 				</div>
 			</div>
-			<input type="submit" id="wpallimport-try-again" style="position: absolute; top: 30%; right: 10px; display: block; padding-top: 1px;" value="<?php _e('Continue Import','wp-all-import-pro');?>" class="button wpallimport-large-button">
+			<input type="submit" id="wpallimport-try-again" style="position: absolute; top: 30%; right: 10px; display: block; padding-top: 1px;" value="<?php _e('Continue Import','wp-all-import-pro');?>" class="button wpallimport-large-button wpallimport-continue-button">
 			<span class="wp_all_import_restart_import"><?php printf(__("with <span id='wpallimport-new-records-per-iteration'>%s</span> records per iteration", 'wp-all-import-pro'), ((ceil($update_previous->options['records_per_request']/2)) ? ceil($update_previous->options['records_per_request']/2) : 1)); ?></span>
 		</div>
 	</div>

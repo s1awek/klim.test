@@ -1506,8 +1506,10 @@
   			default:
   				$('.taxonomy_to_import_wrapper').slideUp();
   				$('.gravity_form_to_import_wrapper').slideUp();
-  				// Show submit buttons for non-taxonomy, non-gravity form post types
-  				if ($('.wpallimport-upload-resource-step-two:visible').length) {
+  				// Show submit buttons for non-taxonomy, non-gravity form post types,
+  				// unless an upgrade notice locks the selected entity.
+  				var is_import_denied = $('.wpallimport-upgrade-notice[rel="'+ selectedValue +'"]').length;
+  				if (!is_import_denied && $('.wpallimport-upload-resource-step-two:visible').length) {
   					$('.wpallimport-choose-file').find('.wpallimport-submit-buttons').slideDown();
   				}
   				break;

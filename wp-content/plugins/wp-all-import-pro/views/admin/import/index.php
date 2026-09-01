@@ -534,7 +534,7 @@
                             do_action( 'pmxi_import_index_after_buttons' );
                             ?>
                             <div style="display: flex; flex-direction: column; align-items: center;">
-                                <input type="submit" class="button wpallimport-large-button" value="<?php _e('Set Up Import', 'wp-all-import-pro') ?>" id="advanced_upload"/>
+                                <input type="submit" class="button wpallimport-large-button wpallimport-continue-button" value="<?php _e('Set Up Import', 'wp-all-import-pro') ?>" id="advanced_upload"/>
                                 <span style="display: block; text-align: center; margin-top: 5px; font-size: 10px; font-weight:500; color:#777;"><?php _e('Import Everything', 'wp-all-import-pro'); ?></span>
                             </div>
                         </div>

@@ -2,12 +2,12 @@
 # This file is distributed under the same license as the Plugins - Contact Form 7 - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-12-11 12:03:49+0000\n"
+"PO-Revision-Date: 2026-08-26 11:14:47+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.3\n"
+"X-Generator: GlotPress/4.1.0\n"
 "Language: pl\n"
 "Project-Id-Version: Plugins - Contact Form 7 - Stable (latest release)\n"
 
@@ -806,17 +806,17 @@ msgstr "Przechowuj i organizuj swoje kontakty, jednocześnie chroniąc prywatno�
 msgid "You have not been authenticated. Make sure the provided API key is correct."
 msgstr "Brak uwierzytelnienia. Proszę się upewnić, że podany klucz API jest poprawny."
 
-#: includes/mail.php:311
+#: includes/mail.php:314
 msgid "Failed to attach a file. The total file size exceeds the limit of 25 megabytes."
 msgstr "Nie udało się dołączyć pliku. Całkowity rozmiar pliku przekracza limit 25 megabajtów."
 
 #. translators: %s: Attachment file path.
-#: includes/mail.php:291
+#: includes/mail.php:294
 msgid "Failed to attach a file. %s is not a readable file."
 msgstr "Nie udało się dołączyć pliku. %s nie jest plikiem do odczytu."
 
 #. translators: %s: Attachment file path.
-#: includes/mail.php:277
+#: includes/mail.php:280
 msgid "Failed to attach a file. %s is not in the allowed directory."
 msgstr "Nie udało się dołączyć pliku. %s nie znajduje się w dozwolonym katalogu."
 
@@ -935,7 +935,7 @@ msgstr "Klucz API"
 
 #: modules/constant-contact/constant-contact.php:56
 msgid "Constant Contact"
-msgstr "Constant Contact"
+msgstr "Stały kontakt"
 
 #: includes/integration.php:26
 msgid "Email marketing"

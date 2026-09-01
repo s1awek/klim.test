@@ -4,6 +4,7 @@ namespace Comfino;
 
 use Comfino\Api\ApiClient;
 use Comfino\Api\ApiService;
+use Comfino\Api\Dto\Payment\AllowedProductConfig;
 use Comfino\Api\Dto\Payment\FinancialProduct;
 use Comfino\Api\Dto\Payment\LoanQueryCriteria;
 use Comfino\Api\Dto\Payment\LoanTypeEnum;
@@ -12,6 +13,7 @@ use Comfino\Common\Backend\Factory\OrderFactory;
 use Comfino\Common\Shop\Cart;
 use Comfino\Configuration\ConfigManager;
 use Comfino\Configuration\SettingsManager;
+use Comfino\Extended\Api\Dto\Plugin\OperationContext;
 use Comfino\FinancialProduct\ProductTypesListTypeEnum;
 use Comfino\Order\OrderManager;
 use Comfino\Order\ShopStatusManager;
@@ -30,15 +32,12 @@ if (!defined('ABSPATH')) {
 class PaymentGateway extends \WC_Payment_Gateway
 {
     public const GATEWAY_ID = 'comfino';
-    public const VERSION = '4.2.8';
-    public const BUILD_TS = 1771246114;
-    public const WIDGET_INIT_SCRIPT_HASH = '0603f4e0904fd65e2aef1aded0c57c40';
-    public const WIDGET_INIT_SCRIPT_LAST_HASH = '55e4306bb493ff6f99b2f8f617e18038';
+    public const VERSION = '4.3.1';
+    public const BUILD_TS = 1787213643;
 
     public function __construct()
     {
         $this->id = self::GATEWAY_ID;
-        $this->icon = $this->get_icon();
         $this->has_fields = true;
         $this->method_title = __('Comfino payments', 'comfino-payment-gateway');
         $this->method_description = __(
@@ -50,7 +49,7 @@ class PaymentGateway extends \WC_Payment_Gateway
             'comfino-payment-gateway'
         );
         $this->supports = ['products'];
-        $this->title = $this->get_option('title');
+        $this->title = 'Comfino';
 
         if (is_admin() && strpos(Main::getCurrentUrl(), $this->id) === false && strpos(Main::getCurrentUrl(), 'wc-orders') === false) {
             return;
@@ -103,18 +102,24 @@ class PaymentGateway extends \WC_Payment_Gateway
         return parent::is_available() && Main::paymentIsAvailable(WC()->cart);
     }
 
-    /* Shop cart checkout front logic. */
-
+    /**
+     * Renders the standard-rendering Comfino logo placeholder via WooCommerce's gateway-icon mechanism: `src` is the
+     * default CDN SVG, marked `data-comfino-logo` so the SDK's DefaultPaymentMethodItemRenderer adopts this same `<img>`
+     * (instead of injecting a second one) and swaps its `src` to the auth API logo while the tile is still hidden behind
+     * the loader overlay (comfino-item-gate-woocommerce.css). The loader span is rendered alongside it for the same reason.
+     */
     public function get_icon(): string
     {
-        if (ConfigManager::getConfigurationValue('COMFINO_SHOW_LOGO')) {
-            $icon = FrontendManager::renderPaywallLogo();
-        } else {
-            $icon = '';
-        }
+        $icon = '<img class="comfino-payment-method-item__logo" data-comfino-logo' .
+            ' src="' . esc_url(ConfigManager::getDefaultLogoUrl()) . '" alt="' . esc_attr($this->get_title()) . '" />' .
+            '<span class="comfino-payment-method-item__loader" aria-hidden="true">' .
+            '<span class="comfino-payment-method-item__loader-spinner"><span></span></span>' .
+            '</span>';
 
         return apply_filters('woocommerce_gateway_icon', $icon, $this->id);
     }
+
+    /* Shop cart checkout front logic. */
 
     public function payment_fields(): void
     {
@@ -123,12 +128,20 @@ class PaymentGateway extends \WC_Payment_Gateway
 
     public function process_payment($order_id): array
     {
+        // Reuse the trackId minted during this checkout session's paywall render, if any.
+        ApiClient::pinCheckoutTrackId();
+
         $cart = WC()->cart;
 
         DebugLogger::logEvent(
             '[PAYMENT GATEWAY]',
             'process_payment',
-            ['cart_id' => $cart->get_cart_hash(), '$order_id' => $order_id, '$_POST' => $_POST]
+            [
+                'cart_id' => $cart->get_cart_hash(),
+                '$order_id' => $order_id,
+                'comfino_loan_type' => $_POST['comfino_loan_type'] ?? 'undefined',
+                'comfino_loan_term' => $_POST['comfino_loan_term'] ?? 'undefined',
+            ]
         );
 
         $wcOrder = wc_get_order($order_id);
@@ -150,22 +163,20 @@ class PaymentGateway extends \WC_Payment_Gateway
             ]
         );
 
-        $initLoanAmount = (int) filter_var(sanitize_text_field(wp_unslash($_POST['comfino_loan_amount'] ?? '0')), FILTER_VALIDATE_INT);
-        $priceModifier = (int) filter_var(sanitize_text_field(wp_unslash($_POST['comfino_price_modifier'] ?? '0')), FILTER_VALIDATE_INT);
         $loanType = sanitize_text_field(wp_unslash($_POST['comfino_loan_type'] ?? 'undefined'));
         $loanTerm = (int) filter_var(sanitize_text_field(wp_unslash($_POST['comfino_loan_term'] ?? '0')), FILTER_VALIDATE_INT);
 
         try {
-            $shopCart = OrderManager::getShopCart($cart, $priceModifier);
+            $shopCart = OrderManager::getShopCart($cart);
         } catch (\Exception $e) {
-            wc_add_notice(FrontendManager::processError('Shop cart creation error', $e)['title'], 'error');
+            wc_add_notice(FrontendManager::processError('Shop cart creation error', $e, null, null, null, '[ERROR]', OperationContext::OrderCreation)['title'], 'error');
 
             return ['result' => 'failure', 'redirect' => ''];
         }
 
         if (empty($loanType) || empty($loanTerm)) {
             // Preselected financial offer data incomplete - load financial offer again and set default product as first user choice before redirection.
-            if (empty($financialProducts = $this->getFinancialProducts($shopCart->getTotalValue()))) {
+            if (empty($financialProducts = $this->getFinancialProducts($shopCart->getTotalValue(), $shopCart))) {
                 // Emergency offer loading failed - return error to the user and prevent redirection to avoid transaction failure.
                 wc_add_notice(__('Preselected financial offer data incomplete. Please try again.', 'comfino-payment-gateway'));
 
@@ -207,8 +218,6 @@ class PaymentGateway extends \WC_Payment_Gateway
             '[PAYMENT]',
             'Validation passed - proceeding with order creation',
             [
-                '$initLoanAmount' => $initLoanAmount,
-                '$priceModifier' => $priceModifier,
                 '$cartTotalValue' => $shopCart->getTotalValue(),
                 '$loanAmount' => $order->getCart()->getTotalAmount(),
                 '$loanType' => (string) $order->getLoanParameters()->getType(),
@@ -237,7 +246,8 @@ class PaymentGateway extends \WC_Payment_Gateway
         } catch (\Throwable $e) {
             ApiClient::processApiError(
                 'Order creation error on page "' . Main::getCurrentUrl() . '" (Comfino API)',
-                $e
+                $e,
+                OperationContext::OrderCreation
             );
 
             wc_add_notice($e->getMessage(), 'error');
@@ -248,7 +258,7 @@ class PaymentGateway extends \WC_Payment_Gateway
                 DebugLogger::logEvent(
                     '[CREATE_ORDER_API_REQUEST]',
                     'createOrder',
-                    ['$request' => $apiRequest->getRequestBody()]
+                    ['order_id' => $order_id, 'request_body_length' => strlen($apiRequest->getRequestBody())]
                 );
             }
         }
@@ -307,6 +317,28 @@ class PaymentGateway extends \WC_Payment_Gateway
             'cache_path' => Main::getCachePath(),
         ];
 
+        /* "What's new" HTML of the latest release, shown in the config header (all tabs) - but only when a newer
+           version is available (hidden when up to date). Server-sanitized already; passed through wp_kses_post so the
+           view output stays safe per marketplace requirements. */
+        $githubVersionData = get_transient('comfino_github_version_check');
+        $updateAvailable = (
+            is_array($githubVersionData) &&
+            !empty($githubVersionData['github_version']) &&
+            !empty($githubVersionData['description_html']) &&
+            version_compare($githubVersionData['github_version'], PaymentGateway::VERSION, '>')
+        );
+        $viewVariables['release_description'] = $updateAvailable
+            ? wp_kses_post($githubVersionData['description_html'])
+            : '';
+        $viewVariables['update_available_message'] = $updateAvailable
+            ? sprintf(
+                /* translators: 1: Available plugin version 2: Current plugin version */
+                __('New Comfino %1$s plugin version is available. You are using %2$s version. Please update your Comfino plugin.', 'comfino-payment-gateway'),
+                $githubVersionData['github_version'],
+                self::VERSION
+            )
+            : '';
+
         if ($activeTab === 'plugin_diagnostics') {
             $viewVariables['shop_info'] = sprintf(
                 'WooCommerce Comfino %1$s, WordPress %2$s, WooCommerce %3$s, PHP %4$s, web server %5$s, database %6$s',
@@ -324,14 +356,15 @@ class PaymentGateway extends \WC_Payment_Gateway
             $viewVariables['api_host'] = ApiClient::getInstance()->getApiHost();
             $viewVariables['shop_domain'] = Main::getShopDomain();
             $viewVariables['widget_key'] = ConfigManager::getWidgetKey();
-            $viewVariables['new_widget_status'] = ConfigManager::getConfigurationValue('COMFINO_NEW_WIDGET_ACTIVE') ? 'Active' : 'Inactive';
             $viewVariables['is_dev_env'] = ConfigManager::useDevEnvVars();
             $viewVariables['build_ts'] = \DateTime::createFromFormat('U', self::BUILD_TS)->format('Y-m-d H:i:s');
 
-            // Get GitHub version information.
-            $githubVersionData = get_transient('comfino_github_version_check');
+            // Get GitHub version information (reuses the transient already read above for the header description).
             $viewVariables['github_version'] = !empty($githubVersionData['github_version']) ? $githubVersionData['github_version'] : null;
             $viewVariables['github_version_checked_at'] = !empty($githubVersionData['checked_at']) ? $githubVersionData['checked_at'] : null;
+            $viewVariables['release_notes_url'] = !empty($githubVersionData['release_notes_url'])
+                ? $githubVersionData['release_notes_url']
+                : 'https://github.com/comfino/woocommerce/releases';
             $viewVariables['auto_updates_enabled'] = in_array(plugin_basename(Main::getPluginFile()), (array) get_site_option(implode('_', ['auto', 'update', 'plugins']), []), true);
         } else {
             $viewVariables['settings_html'] = $this->generate_settings_html(SettingsForm::getFormFields($activeTab), false);
@@ -382,7 +415,7 @@ class PaymentGateway extends \WC_Payment_Gateway
                 try {
                     if ($configurationOptions[$fieldKey] === 'yes' || $configurationOptions[$fieldKey] === 'no') {
                         $configurationOptionsToSave[$optionsMap[$key]] = ($configurationOptions[$fieldKey] === 'yes');
-                    } elseif ($key === 'widget_offer_types') {
+                    } elseif ($key === 'widget_offer_types' || $key === 'checkout_product_types') {
                         $configurationOptions[$fieldKey] = implode(',', $configurationOptions[$fieldKey]);
                         $configurationOptionsToSave[$optionsMap[$key]] = explode(',', $this->get_field_value($key, $field, $configurationOptions));
                     } else {
@@ -391,7 +424,7 @@ class PaymentGateway extends \WC_Payment_Gateway
                 } catch (\Exception $e) {
                     $errorMessages[] = $e->getMessage();
                 }
-            } elseif ($key === 'widget_offer_types') {
+            } elseif ($key === 'widget_offer_types' || $key === 'checkout_product_types') {
                 $configurationOptionsToSave[$optionsMap[$key]] = [];
             }
         }
@@ -417,7 +450,14 @@ class PaymentGateway extends \WC_Payment_Gateway
     public function admin_scripts($hook): void
     {
         if ($hook === 'woocommerce_page_wc-settings') {
-            FrontendManager::includeLocalScripts(['tree.min.js'], [], false, false);
+            FrontendManager::includeLocalScripts(
+                ['tree.min.js', 'payment-settings.js'],
+                ['payment-settings.js' => ['jquery']],
+                false,
+                false,
+                self::VERSION
+            );
+            FrontendManager::includeLocalStyles(['comfino-release-description.css'], [], self::VERSION, false);
         }
     }
 
@@ -449,9 +489,29 @@ class PaymentGateway extends \WC_Payment_Gateway
         );
     }
 
-    public function generate_product_category_tree_html(string $key, array $data): string
+    public function generate_product_category_filter_group_html(string $key, array $data): string
     {
-        return FrontendManager::renderProductCategoryTree($data);
+        return FrontendManager::renderProductCategoryFilterGroup($data);
+    }
+
+    public function generate_product_id_filter_html(string $key, array $data): string
+    {
+        return FrontendManager::renderProductIdFilter($data);
+    }
+
+    public function generate_allowed_products_config_html(string $key, array $data): string
+    {
+        return FrontendManager::renderAllowedProductsConfig($data);
+    }
+
+    public function generate_cart_value_limits_config_html(string $key, array $data): string
+    {
+        return FrontendManager::renderCartValueLimitsConfig($data);
+    }
+
+    public function generate_hr_html(string $key, array $data): string
+    {
+        return '<tr><td colspan="2"><hr style="margin: 1.5em 0"></td></tr>';
     }
 
     public function generatePaywallIframe(bool $isPaymentBlock): string
@@ -512,7 +572,7 @@ class PaymentGateway extends \WC_Payment_Gateway
     }
 
     /**
-     * Validates payment data from Order object before processing.
+     * Validates payment data from the Order object before processing.
      *
      * @return string[] Array of error messages, empty if validation passes.
      */
@@ -546,34 +606,19 @@ class PaymentGateway extends \WC_Payment_Gateway
             $errors[] = __('Last name is required.', 'comfino-payment-gateway');
         }
 
-        // 4. Validate customer address.
-        $address = $order->getCustomer()->getAddress();
-
-        if ($address === null) {
-            $errors[] = __('Delivery address is required.', 'comfino-payment-gateway');
-        } else {
-            if (empty(trim($address->getCity()))) {
-                $errors[] = __('City/Town is required.', 'comfino-payment-gateway');
-            }
-
-            if (empty(trim($address->getPostalCode()))) {
-                $errors[] = __('Postal code is required.', 'comfino-payment-gateway');
-            }
-        }
-
-        // 5. Validate cart data.
+        // 4. Validate cart data.
         $cartItems = $order->getCart()->getItems();
 
         if (empty($cartItems)) {
             $errors[] = __('Cart is empty. Please add products to your cart.', 'comfino-payment-gateway');
         }
 
-        // 6. Validate order amount.
+        // 5. Validate order amount.
         if ($order->getCart()->getTotalAmount() <= 0) {
             $errors[] = __('Cart total amount must be greater than zero.', 'comfino-payment-gateway');
         }
 
-        // 7. Validate payment availability.
+        // 6. Validate payment availability.
         if (!Main::paymentIsAvailable($cart)) {
             $errors[] = __(
                 'Comfino payment is not available for this cart. Please check cart amount and product types.',
@@ -599,12 +644,19 @@ class PaymentGateway extends \WC_Payment_Gateway
     /**
      * @return FinancialProduct[]
      */
-    private function getFinancialProducts(int $loanAmount): array
+    private function getFinancialProducts(int $loanAmount, Cart $shopCart): array
     {
         try {
-            return ApiClient::getInstance()->getFinancialProducts(new LoanQueryCriteria($loanAmount))->financialProducts;
+            $allowedProductTypes = SettingsManager::getAllowedProductTypes(
+                ProductTypesListTypeEnum::LIST_TYPE_PAYWALL,
+                $shopCart
+            );
+            $allowedProductsConfig = self::buildAllowedProductsConfig();
+            $criteria = new LoanQueryCriteria($loanAmount, null, null, null, $allowedProductTypes, null, $allowedProductsConfig);
+
+            return ApiClient::getInstance()->getFinancialProducts($criteria)->financialProducts;
         } catch (ClientExceptionInterface $e) {
-            FrontendManager::processError('Emergency financial offer retrieving error', $e);
+            FrontendManager::processError('Emergency financial offer retrieving error.', $e, null, null, null, '[ERROR]', OperationContext::PaymentProcessing);
 
             return [];
         }
@@ -632,7 +684,42 @@ class PaymentGateway extends \WC_Payment_Gateway
             SettingsManager::getAllowedProductTypes(ProductTypesListTypeEnum::LIST_TYPE_PAYWALL, $shopCart),
             $shopCart->getDeliveryNetCost(),
             $shopCart->getDeliveryTaxRate(),
-            $shopCart->getDeliveryTaxValue()
+            $shopCart->getDeliveryTaxValue(),
+            null,
+            self::buildAllowedProductsConfig()
         );
+    }
+
+    /**
+     * @return AllowedProductConfig[]|null
+     */
+    private static function buildAllowedProductsConfig(): ?array
+    {
+        $normalized = SettingsManager::getAllowedProductsConfigForFrontend();
+
+        if ($normalized === null) {
+            return null;
+        }
+
+        $result = [];
+
+        foreach ($normalized as $entry) {
+            try {
+                $result[] = new AllowedProductConfig(
+                    new LoanTypeEnum($entry['type']),
+                    $entry['maxTerm'] ?? null,
+                    $entry['minTerm'] ?? null,
+                    $entry['terms'] ?? null
+                );
+            } catch (\Throwable $e) {
+                DebugLogger::logEvent(
+                    '[ALLOWED_PRODUCTS_CONFIG]',
+                    'Invalid allowed product config entry skipped.',
+                    ['$entry' => $entry, '$error' => $e->getMessage()]
+                );
+            }
+        }
+
+        return !empty($result) ? $result : null;
     }
 }

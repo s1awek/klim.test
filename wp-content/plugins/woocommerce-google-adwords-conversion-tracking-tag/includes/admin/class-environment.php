@@ -551,6 +551,20 @@ class Environment {
 		return is_plugin_active('google-site-kit/google-site-kit.php');
 	}
 
+	/**
+	 * TikTok for WooCommerce
+	 *
+	 * The wp.org slug is tiktok-for-business, the main file is named after the
+	 * plugin's current title.
+	 *
+	 * @return bool
+	 *
+	 * @since 1.65.2
+	 */
+	public static function is_tiktok_for_woocommerce_active() {
+		return is_plugin_active('tiktok-for-business/tiktok-for-woocommerce.php');
+	}
+
 	public static function is_wp_rocket_active() {
 		return is_plugin_active('wp-rocket/wp-rocket.php');
 	}
@@ -691,6 +705,87 @@ class Environment {
 			|| is_plugin_active('google-customer-reviews-for-woocommerce-premium/google-customer-reviews-for-woocommerce.php');
 	}
 
+	/**
+	 * Check if Nextend Social Login is active.
+	 *
+	 * The Pro addon is a separate plugin that requires the free one, so
+	 * detecting the free plugin covers both.
+	 *
+	 * @return bool
+	 * @since 1.64.1
+	 */
+	public static function is_nextend_social_login_active() {
+		return class_exists('NextendSocialLogin')
+			|| is_plugin_active('nextend-facebook-connect/nextend-facebook-connect.php');
+	}
+
+	/**
+	 * Check if miniOrange Social Login is active.
+	 *
+	 * @return bool
+	 * @since 1.64.1
+	 */
+	public static function is_miniorange_social_login_active() {
+		return defined('MO_OPENID_SOCIAL_LOGIN_VERSION')
+			|| is_plugin_active('miniorange-login-openid/miniorange_openid_sso_settings.php');
+	}
+
+	/**
+	 * Check if UsersWP Social Login is active.
+	 *
+	 * @return bool
+	 * @since 1.64.1
+	 */
+	public static function is_userswp_social_login_active() {
+		return defined('UWP_SOCIAL_VERSION')
+			|| is_plugin_active('userswp-social-login/uwp-social.php');
+	}
+
+	/**
+	 * Check if Super Socializer is active.
+	 *
+	 * Closed on WordPress.org, but still running on existing installs.
+	 *
+	 * @return bool
+	 * @since 1.64.1
+	 */
+	public static function is_super_socializer_active() {
+		return is_plugin_active('super-socializer/super_socializer.php');
+	}
+
+	/**
+	 * Check if Wapu Auth is active.
+	 *
+	 * @return bool
+	 * @since 1.64.1
+	 */
+	public static function is_wapu_auth_active() {
+		return defined('WAPU_AUTH_VERSION')
+			|| is_plugin_active('wapu-auth-social-login/wapu-auth-social-login.php');
+	}
+
+	/**
+	 * Check if Heateor Login is active.
+	 *
+	 * @return bool
+	 * @since 1.64.1
+	 */
+	public static function is_heateor_login_active() {
+		return defined('HEATEOR_FBL_VERSION')
+			|| is_plugin_active('heateor-login/heateor-login.php');
+	}
+
+	/**
+	 * Check if Easy Social Login is active.
+	 *
+	 * @return bool
+	 * @since 1.64.1
+	 */
+	public static function is_easy_social_login_active() {
+		return defined('ESLP_VERSION')
+			|| is_plugin_active('easy-social-login/easy-social-login.php');
+	}
+
 	public static function is_real_cookie_banner_active() {
 		return is_plugin_active('real-cookie-banner/index.php')
 			|| is_plugin_active('real-cookie-banner-pro/index.php');
@@ -778,6 +873,35 @@ class Environment {
 
 	public static function is_woocommerce_active() {
 		return is_plugin_active('woocommerce/woocommerce.php');
+	}
+
+	/**
+	 * The active shop platform of this site.
+	 *
+	 * WooCommerce wins when several supported shop plugins are active.
+	 * Returns 'none' when no supported shop platform is active. Part B of
+	 * docs/PLATFORM-ABSTRACTION-PLAN.md adds 'fluentcart' and 'surecart'.
+	 *
+	 * @since 1.65.0
+	 *
+	 * @return string 'woocommerce' | 'none'
+	 */
+	public static function get_active_shop_platform() {
+
+		$platform = 'none';
+
+		if (self::is_woocommerce_active()) {
+			$platform = 'woocommerce';
+		}
+
+		/**
+		 * Filters the detected shop platform slug.
+		 *
+		 * @since 1.65.0
+		 *
+		 * @param string $platform
+		 */
+		return apply_filters('pmw_active_shop_platform', $platform);
 	}
 
 	public static function is_wp_super_cache_active() {
@@ -1073,15 +1197,30 @@ class Environment {
 	}
 
 	/**
-	 * Third party plugin tweaks
+	 * Third party plugin tweaks that have to be registered on plugins_loaded
 	 *
-	 * !!
-	 * Don't load these on plugins_loaded,
-	 * because our filter won't be applied.
+	 * Two Google plugins decide whether to track earlier than our own init hook,
+	 * so a filter registered from third_party_plugin_tweaks_on_init() is never
+	 * seen by them and their tracking keeps running next to ours:
+	 *
+	 * - Google for WooCommerce evaluates GlobalSiteTag::is_needed() when its
+	 *   service container registers on plugins_loaded priority 20.
+	 * - Google Analytics for WooCommerce evaluates disable_tracking('all') in its
+	 *   integration constructor, which WooCommerce runs in new WC_Integrations()
+	 *   on init priority 0, a few statements before it fires woocommerce_init.
+	 *
+	 * Both filters are therefore registered here, from the plugin constructor on
+	 * plugins_loaded priority 10, and both decide lazily inside the callback.
+	 * Registering them unconditionally keeps Options out of plugins_loaded, where
+	 * initializing it would cache the options tree before shops can register
+	 * their pmw_options filters. That early Options read is why these tweaks were
+	 * moved to init in the first place.
 	 *
 	 * @return void
+	 *
+	 * @since 1.65.2
 	 */
-	public static function third_party_plugin_tweaks_on_init() {
+	public static function third_party_plugin_tweaks_on_plugins_loaded() {
 
 		/**
 		 * Google for WooCommerce (formerly Google Listings & Ads, still "gla" in its code)
@@ -1092,9 +1231,35 @@ class Environment {
 		 * duplicate event tracking. If only GA4 is active in PMW, GLA's Google Ads
 		 * tracking is left intact since PMW isn't handling Google Ads in that case.
 		 */
-		if (Options::is_google_ads_active()) {
-			add_filter('woocommerce_gla_disable_gtag_tracking', '__return_true');
-		}
+		add_filter('woocommerce_gla_disable_gtag_tracking', function ( $disabled ) {
+			return $disabled || Options::is_google_ads_active_early();
+		});
+
+		/**
+		 * Google Analytics for WooCommerce (formerly WooCommerce Google Analytics Integration)
+		 *
+		 * Disable its tracking when GA4 is active in PMW, otherwise both plugins
+		 * send the same GA4 events. Its own gate already exempts admins, so the
+		 * duplicates only ever show up for logged out visitors.
+		 */
+		add_filter('woocommerce_ga_disable_tracking', function ( $disabled ) {
+			return $disabled || Options::is_google_analytics_active_early();
+		});
+	}
+
+	/**
+	 * Third party plugin tweaks
+	 *
+	 * !!
+	 * Don't load these on plugins_loaded,
+	 * because our filter won't be applied.
+	 *
+	 * Exception: plugins that read our filter before init runs. Those belong in
+	 * third_party_plugin_tweaks_on_plugins_loaded().
+	 *
+	 * @return void
+	 */
+	public static function third_party_plugin_tweaks_on_init() {
 
 		/**
 		 * WP Consent API compatibility declaration
@@ -1167,8 +1332,11 @@ class Environment {
 		if (self::is_faz_cookie_manager_active()) {
 			add_filter('faz_whitelisted_scripts', function ( $whitelist ) {
 				$whitelist[] = 'pmwDataLayer';
-				$whitelist[] = '/wp-content/plugins/woocommerce-pixel-manager';
-				$whitelist[] = '/wp-content/plugins/woocommerce-pixel-manager-pro';
+
+				foreach (self::get_pmw_plugin_directory_slugs() as $slug) {
+					$whitelist[] = '/wp-content/plugins/' . $slug;
+				}
+
 				return $whitelist;
 			});
 		}
@@ -1315,6 +1483,36 @@ class Environment {
 		}
 
 		/**
+		 * TikTok for WooCommerce
+		 *
+		 * The plugin exposes no filter to switch its tracking off: its only
+		 * apply_filters call suppresses debug output, and it fires no actions at
+		 * all. Every event it sends comes from one of the static callbacks
+		 * registered in its pixel/tt4b_pixel.php, and each injector emits BOTH
+		 * transports, the Events API post and the browser pixel event, from the
+		 * same method. So the callbacks are unhooked.
+		 *
+		 * They are all registered while the plugin file loads, long before
+		 * plugins_loaded, and the earliest one can fire is woocommerce_add_to_cart
+		 * on a wc-ajax add to cart request, which WooCommerce dispatches from
+		 * template_redirect priority 0. Removing them from here, on init priority
+		 * 0, is therefore in time for every path.
+		 *
+		 * Nothing else is touched: the catalog sync, the order sync, the settings
+		 * screen, the Marketing API eligibility calls and the plugin's own
+		 * tiktok_ttclid cookie all keep working. That cookie becomes unused once
+		 * the events stop, and it stays: PMW reads _ttclid, written by TikTok's
+		 * own events.js, never tiktok_ttclid, and policing another plugin's
+		 * cookies is not PMW's job.
+		 *
+		 * Verified against TikTok for WooCommerce 1.4.1.
+		 */
+
+		if (Options::is_tiktok_active() && self::is_tiktok_for_woocommerce_active()) {
+			self::disable_tiktok_for_woocommerce_tracking();
+		}
+
+		/**
 		 * Reddit for WooCommerce
 		 */
 
@@ -1325,18 +1523,6 @@ class Environment {
 				$data['is_conversion_enabled'] = false;
 				return $data;
 			});
-		}
-
-		/**
-		 * Disable the WooCommerce Google Analytics Integration if Google Analytics is active in PMW
-		 *
-		 * The WooCommerce Google Analytics Integration now is updated to use gtag.js for GA4. If PMW users want to use PMW for GA3 and the WooCommerce Google Analytics Integration for GA4 then we can't disable the WooCommerce Google Analytics Integration.
-		 *
-		 * We only disable the WooCommerce Google Analytics Integration if both, GA3 and GA4 are active in PMW.
-		 */
-
-		if (Options::is_google_analytics_active()) {
-			add_filter('woocommerce_ga_disable_tracking', '__return_true');
 		}
 
 		/**
@@ -1542,6 +1728,51 @@ class Environment {
 		add_filter('wgdr_third_party_cookie_prevention', '__return_true');
 	}
 
+	/**
+	 * Unhooks every event sender of TikTok for WooCommerce.
+	 *
+	 * All eight callbacks are static class methods, so remove_action() matches
+	 * them by their exact callback id and the class does not even have to be
+	 * loaded yet. Priorities have to match the registration, and
+	 * woocommerce_add_to_cart is the only one that is not the default 10.
+	 *
+	 * The option filter is a backstop rather than the mechanism. Every event
+	 * path resolves its credentials through get_and_validate_option(), which
+	 * treats false as "not configured": the two script printers return early and
+	 * the injectors bail because the field array comes back empty. So an event
+	 * hook added by a future release is stopped even though it is not in the
+	 * list below. The filter is not used on its own because
+	 * pixel_event_tracking_field_track() catches the resulting exception and logs
+	 * it at debug level, and WooCommerce writes debug entries with its default
+	 * settings, which would mean a log line per product view, add to cart,
+	 * checkout render and confirmation page. As a backstop it only ever logs when
+	 * something really did slip through the removals, which is exactly when we
+	 * want to hear about it.
+	 *
+	 * tt4b_pixel_code is read nowhere outside the plugin's pixel class, so
+	 * filtering it cannot affect the catalog sync, the order sync or the
+	 * settings screen.
+	 *
+	 * @return void
+	 *
+	 * @since 1.65.2
+	 */
+	private static function disable_tiktok_for_woocommerce_tracking() {
+
+		$pixel_class = 'Tt4b_Pixel_Class';
+
+		remove_action('wp_head', [ $pixel_class, 'print_script' ]);
+		remove_action('wp_enqueue_scripts', [ $pixel_class, 'add_ajax_snippet' ]);
+		remove_action('woocommerce_before_single_product_summary', [ $pixel_class, 'inject_view_content_event' ]);
+		remove_action('woocommerce_add_to_cart', [ $pixel_class, 'inject_add_to_cart_event' ], 40);
+		remove_action('woocommerce_after_checkout_form', [ $pixel_class, 'inject_initiate_checkout_event' ]);
+		remove_action('woocommerce_blocks_checkout_enqueue_data', [ $pixel_class, 'inject_initiate_checkout_event' ]);
+		remove_action('woocommerce_payment_complete', [ $pixel_class, 'inject_purchase_event' ]);
+		remove_action('woocommerce_thankyou', [ $pixel_class, 'inject_purchase_event' ]);
+
+		add_filter('option_tt4b_pixel_code', '__return_false');
+	}
+
 	private static function disable_woofunnels_features() {
 
 		add_filter('option_bwf_gen_config', function ( $options ) {
@@ -1737,28 +1968,47 @@ class Environment {
 	 * @since 1.58.5
 	 */
 	private static function get_pmw_core_script_identifiers() {
+		return array_merge(
+			// Plugin directory slug patterns (all distributions and historical variants)
+			self::get_pmw_plugin_directory_slugs(),
+			[
+				// PMW data layer
+				'pmwDataLayer',
+				'window.pmwDataLayer',
+				// Legacy data layer
+				'wpmDataLayer',
+				'window.wpmDataLayer',
+				// Script handle identifiers
+				'pmw',
+				'pmw-js',
+				'wpm',
+				// Webpack chunk files
+				'.chunk.min.js',
+				// JS directory paths
+				'js/public/free/',
+				'js/public/pro/',
+			]
+		);
+	}
+
+	/**
+	 * Get the plugin directory slugs PMW ships into.
+	 *
+	 * Covers every distribution (wp.org free, Freemius Pro, WooCommerce.com Pro)
+	 * as well as the historical slugs. The slugs are matched as substrings, so
+	 * `woocommerce-pixel-manager` also covers `woocommerce-pixel-manager-free`.
+	 *
+	 * @return string[]
+	 *
+	 * @since 1.64.1
+	 */
+	private static function get_pmw_plugin_directory_slugs() {
 		return [
-			// Plugin directory slug patterns (all historical variants)
 			'pixel-manager-pro-for-woocommerce',
 			'pixel-manager-for-woocommerce',
 			'woocommerce-google-adwords-conversion-tracking-tag',
 			'woocommerce-pixel-manager',
 			'woopt-pixel-manager',
-			// PMW data layer
-			'pmwDataLayer',
-			'window.pmwDataLayer',
-			// Legacy data layer
-			'wpmDataLayer',
-			'window.wpmDataLayer',
-			// Script handle identifiers
-			'pmw',
-			'pmw-js',
-			'wpm',
-			// Webpack chunk files
-			'.chunk.min.js',
-			// JS directory paths
-			'js/public/free/',
-			'js/public/pro/',
 		];
 	}
 

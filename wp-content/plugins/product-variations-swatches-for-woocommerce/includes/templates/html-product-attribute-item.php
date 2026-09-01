@@ -2,7 +2,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-$color_separator = [
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+$vi_wpvs_color_separator = [
         '1'=>__( 'Basic horizontal', 'product-variations-swatches-for-woocommerce' ),
         '2'=>__( 'Basic vertical', 'product-variations-swatches-for-woocommerce' ),
         '3'=>__( 'Basic diagonal left', 'product-variations-swatches-for-woocommerce' ),
@@ -12,15 +13,15 @@ $color_separator = [
         '7'=>__( 'Hard lines diagonal left', 'product-variations-swatches-for-woocommerce' ),
         '8'=>__( 'Hard lines diagonal right', 'product-variations-swatches-for-woocommerce' ),
 ];
-$can_edit                          = in_array( $vi_attribute_type, [ 'image', 'color' ] );
-$img_src                      = $img_id ? wp_get_attachment_image_url( $img_id, 'woocommerce_thumbnail', true ) : wc_placeholder_img_src( 'woocommerce_gallery_thumbnail' );
+$vi_wpvs_can_edit                          = in_array( $vi_wpvs_vi_attribute_type, [ 'image', 'color' ], true );
+$vi_wpvs_img_src                      = $vi_wpvs_img_id ? wp_get_attachment_image_url( $vi_wpvs_img_id, 'woocommerce_thumbnail', true ) : wc_placeholder_img_src( 'woocommerce_gallery_thumbnail' );
 ?>
-<div class="<?php echo esc_attr( $class ); ?>"
-     data-attribute_number="<?php echo esc_attr( $i ); ?>"
-     data-term_id="<?php echo esc_attr( $term_id ?: '' ); ?>">
+<div class="<?php echo esc_attr( $vi_wpvs_class ); ?>"
+     data-attribute_number="<?php echo esc_attr( $vi_wpvs_i ); ?>"
+     data-term_id="<?php echo esc_attr( $vi_wpvs_term_id ?: '' ); ?>">
     <div class="vi-wpvs-attribute-value-title-wrap vi-wpvs-attribute-value-title-toggle">
         <span class="vi-wpvs-attribute-value-name">
-            <?php echo wp_kses_post( $item_name ); ?>
+            <?php echo wp_kses_post( $vi_wpvs_item_name ); ?>
         </span>
         <div class="vi-wpvs-attribute-value-action-wrap">
             <span class="vi-wpvs-attribute-value-action-icon vi-wpvs-attribute-value-action-icon-down dashicons dashicons-arrow-down"></span>
@@ -38,15 +39,15 @@ $img_src                      = $img_id ? wp_get_attachment_image_url( $img_id, 
 					?>
                 </td>
                 <td>
-                    <input type="hidden" name="<?php echo esc_attr( $attr_item_image_name ) ; ?>"
-                           data-name="<?php echo esc_attr( $attr_item_image_name ); ?>" class="vi_attribute_image"
-                           value="<?php echo esc_attr( $img_id?:0 ); ?>">
+                    <input type="hidden" name="<?php echo esc_attr( $vi_wpvs_attr_item_image_name ) ; ?>"
+                           data-name="<?php echo esc_attr( $vi_wpvs_attr_item_image_name ); ?>" class="vi_attribute_image"
+                           value="<?php echo esc_attr( $vi_wpvs_img_id?:0 ); ?>">
                     <div class="vi-attribute-image-wrap vi-attribute-edit-image-wrap vi-wpvs-term-image-upload-img">
                             <span class="vi-attribute-edit-image-preview vi-attribute-image-preview">
-                                 <img src="<?php echo esc_attr( esc_url( $img_src ) ); ?>"
+                                 <img src="<?php echo esc_attr( esc_url( $vi_wpvs_img_src ) ); ?>"
                                       data-src_placeholder="<?php echo esc_attr( wc_placeholder_img_src( 'woocommerce_gallery_thumbnail' ) ); ?>">
                             </span>
-                        <span class="vi-attribute-image-remove dashicons dashicons-dismiss<?php echo $img_id ? '' : esc_attr( ' vi-wpvs-hidden' ); ?>"></span>
+                        <span class="vi-attribute-image-remove dashicons dashicons-dismiss<?php echo $vi_wpvs_img_id ? '' : esc_attr( ' vi-wpvs-hidden' ); ?>"></span>
                         <div class="vi-attribute-image-add-new"><?php esc_html_e( 'Upload/Add an image', 'product-variations-swatches-for-woocommerce' ); ?></div>
                     </div>
                     <p class="description">
@@ -60,14 +61,14 @@ $img_src                      = $img_id ? wp_get_attachment_image_url( $img_id, 
                 </td>
                 <td>
                     <p><?php esc_html_e( 'Color separator', 'product-variations-swatches-for-woocommerce' ); ?>
-                        <select name="<?php echo esc_attr( $attr_item_color_separator_name ); ?>"
-                                data-name="<?php echo esc_attr( $attr_item_color_separator_name ); ?>"
+                        <select name="<?php echo esc_attr( $vi_wpvs_attr_item_color_separator_name ); ?>"
+                                data-name="<?php echo esc_attr( $vi_wpvs_attr_item_color_separator_name ); ?>"
                                 class="vi_attribute_color_separator">
                             <?php
-                            foreach ($color_separator as $color_separator_i => $color_separator_v){
+                            foreach ($vi_wpvs_color_separator as $vi_wpvs_color_separator_i => $vi_wpvs_color_separator_v){
                                 ?>
-                                <option value="<?php echo esc_attr($color_separator_i)?>" <?php selected( $attr_item_color_separator, $color_separator_i ) ?>>
-		                            <?php echo wp_kses_post($color_separator_v)?>
+                                <option value="<?php echo esc_attr($vi_wpvs_color_separator_i)?>" <?php selected( $vi_wpvs_attr_item_color_separator, $vi_wpvs_color_separator_i ) ?>>
+		                            <?php echo wp_kses_post($vi_wpvs_color_separator_v)?>
                                 </option>
                                 <?php
                             }
@@ -80,20 +81,20 @@ $img_src                      = $img_id ? wp_get_attachment_image_url( $img_id, 
                             <th><?php esc_html_e( 'Action', 'product-variations-swatches-for-woocommerce' ); ?></th>
                         </tr>
 						<?php
-                        if (!is_array($colors) || empty($colors)){
-                            $colors =[$vi_default_colors[ strtolower( $item_name ) ] ?? '#fff'];
+                        if (!is_array($vi_wpvs_colors) || empty($vi_wpvs_colors)){
+                            $vi_wpvs_colors =[$vi_wpvs_vi_default_colors[ strtolower( $vi_wpvs_item_name ) ] ?? '#fff'];
                         }
-						foreach ( $colors as $color ) {
+						foreach ( $vi_wpvs_colors as $vi_wpvs_color ) {
 							?>
                             <tr>
                                 <td>
                                     <input type="text" class="vi-wpvs-color vi_attribute_colors"
-                                           name="<?php echo esc_attr( $attr_item_color_name ); ?>"
-                                           data-name="<?php echo esc_attr( $attr_item_color_name ); ?>"
-                                           value="<?php echo esc_attr( $color ) ?>">
+                                           name="<?php echo esc_attr( $vi_wpvs_attr_item_color_name ); ?>"
+                                           data-name="<?php echo esc_attr( $vi_wpvs_attr_item_color_name ); ?>"
+                                           value="<?php echo esc_attr( $vi_wpvs_color ) ?>">
                                 </td>
                                 <td>
-                                    <span class="vi-wpvs-attribute-colors-action-clone button button-primary button-small"">
+                                    <span class="vi-wpvs-attribute-colors-action-clone button button-primary button-small">
 									<?php esc_html_e( 'Clone', 'product-variations-swatches-for-woocommerce' ) ?>
                                     </span>
                                     <span class="vi-wpvs-attribute-colors-action-remove button button-secondary delete button-small">
@@ -111,3 +112,6 @@ $img_src                      = $img_id ? wp_get_attachment_image_url( $img_id, 
         </table>
     </div>
 </div>
+<?php
+// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+?>

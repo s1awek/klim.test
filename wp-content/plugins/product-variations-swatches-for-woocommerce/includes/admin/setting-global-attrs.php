@@ -20,15 +20,23 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Setting_Global_Attrs {
 			'status'  => 'failed',
 			'message' => '',
 		);
+		if ( ! current_user_can( 'manage_options' ) ) {
+			$response['message'] = 'no permission';
+			wp_send_json( $response );
+		}
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'vi_wvps_global_attrs_action' ) ) {
 			$response['message'] = 'wp_verify_nonce failed';
 			wp_send_json( $response );
 		}
 		global $vi_wpvs_settings;
-		$slug         = isset( $_POST['taxonomy_slug'] ) ? sanitize_text_field( $_POST['taxonomy_slug'] ) : '';
-		$profile      = isset( $_POST['taxonomy_profile'] ) ? sanitize_text_field( $_POST['taxonomy_profile'] ) : '';
-		$type         = isset( $_POST['taxonomy_type'] ) ? sanitize_text_field( $_POST['taxonomy_type'] ) : 'select';
-		$display_type = isset( $_POST['taxonomy_display_type'] ) ? sanitize_text_field( $_POST['taxonomy_display_type'] ) : '';
+		$slug         = isset( $_POST['taxonomy_slug'] ) ? sanitize_text_field( wp_unslash( $_POST['taxonomy_slug'] ) ) : '';
+		$profile      = isset( $_POST['taxonomy_profile'] ) ? sanitize_text_field( wp_unslash( $_POST['taxonomy_profile'] ) ) : '';
+		$type         = isset( $_POST['taxonomy_type'] ) ? sanitize_text_field( wp_unslash( $_POST['taxonomy_type'] ) ) : 'select';
+		$display_type = isset( $_POST['taxonomy_display_type'] ) ? sanitize_text_field( wp_unslash( $_POST['taxonomy_display_type'] ) ) : '';
+		if ( ! in_array( $display_type, array( 'vertical', 'horizontal' ), true ) ) {
+			$display_type = 'vertical';
+		}
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, 	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$term_data    = isset( $_POST['term_data'] ) ? vi_wpvs_sanitize_fields( $_POST['term_data'] ) : array();
 
 		if ( ! $slug ) {
@@ -45,10 +53,15 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Setting_Global_Attrs {
 		$args ['taxonomy_display_type']         = $taxonomy_display_type;
 		$args                                   = wp_parse_args( $args, get_option( 'vi_woo_product_variation_swatches_params', $vi_wpvs_settings ) );
 		update_option( 'vi_woo_product_variation_swatches_params', $args );
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 		$vi_wpvs_settings = $args;
 
 		//save attribute type
 		if ( $type ) {
+			$allowed_types = function_exists( 'wc_get_attribute_types' ) ? array_keys( wc_get_attribute_types() ) : array( 'select', 'button', 'color', 'image', 'variation_img', 'radio', 'viwpvs_default' );
+			if ( ! in_array( $type, $allowed_types, true ) ) {
+				$type = 'select';
+			}
 			global $wpdb;
 			$wpdb->update( "{$wpdb->prefix}woocommerce_attribute_taxonomies", array( 'attribute_type' => $type ), array( 'attribute_name' => $slug ), array( '%s' ), array( '%s' ) );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 			// Clear cache and flush rewrite rules.
@@ -59,7 +72,15 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Setting_Global_Attrs {
 		//save term
 		if ( is_array( $term_data ) && count( $term_data ) ) {
 			foreach ( $term_data as $term_id => $term_settings ) {
+				$term_id = absint( $term_id );
+				$term    = get_term( $term_id );
+				if ( ! $term || is_wp_error( $term ) || $term->taxonomy !== 'pa_' . $slug ) {
+					continue;
+				}
 				$old_term_settings = get_term_meta( $term_id, 'vi_wpvs_terms_params', true );
+				if ( ! is_array( $old_term_settings ) ) {
+					$old_term_settings = array();
+				}
 				if ( $old_term_settings !== $term_settings ) {
 					$term_settings = wp_parse_args( $term_settings, $old_term_settings );
 					update_term_meta( $term_id, 'vi_wpvs_terms_params', $term_settings );
@@ -231,8 +252,8 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Setting_Global_Attrs {
 			$per_page = $screen->get_option( 'per_page', 'default' );
 		}
 		$paged                = isset( $_GET['paged'] ) ? sanitize_text_field( wp_unslash( $_GET['paged'] ) ) : 1;// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$keyword              = isset( $_GET['vi_wvps_search'] ) ? strtolower( sanitize_text_field( $_GET['vi_wvps_search'] ) ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$viwvps_attr_id              = isset( $_GET['viwvps_attr'] ) ? absint( sanitize_text_field( $_GET['viwvps_attr'] ) ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$keyword              = isset( $_GET['vi_wvps_search'] ) ? strtolower( sanitize_text_field( wp_unslash($_GET['vi_wvps_search']) ) ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$viwvps_attr_id              = isset( $_GET['viwvps_attr'] ) ? absint( sanitize_text_field( wp_unslash($_GET['viwvps_attr']) ) ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$attribute_taxonomies = wc_get_attribute_taxonomies();
 		?>
         <div class="wrap<?php echo is_rtl() ? esc_attr( ' vi-wpvs-wrap-rtl' ) : ''; ?>">
@@ -312,7 +333,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Setting_Global_Attrs {
                                     <label>
 										<?php esc_html_e( 'Show in product list', 'product-variations-swatches-for-woocommerce' ); ?>
                                     </label>
-                                    <a class="vi-ui button" href="https://1.envato.market/bd0ek"
+                                    <a class="vi-ui button" href="https://villatheme.com/extensions/woocommerce-product-variations-swatches/"
                                        target="_blank"><?php esc_html_e( 'Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
                                 </div>
                                 <div class="field">
@@ -364,7 +385,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Setting_Global_Attrs {
                                     <label>
 			                            <?php esc_html_e( 'Change product image', 'product-variations-swatches-for-woocommerce' ); ?>
                                     </label>
-                                    <a class="vi-ui button" href="https://1.envato.market/bd0ek"
+                                    <a class="vi-ui button" href="https://villatheme.com/extensions/woocommerce-product-variations-swatches/"
                                        target="_blank"><?php esc_html_e( 'Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
                                 </div>
                             </div>
@@ -406,7 +427,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Setting_Global_Attrs {
                                     <tbody>
                                     <tr>
                                         <td colspan="6">
-                                            <a class="vi-ui button" href="https://1.envato.market/bd0ek"
+                                            <a class="vi-ui button" href="https://villatheme.com/extensions/woocommerce-product-variations-swatches/"
                                                target="_blank">
 												<?php esc_html_e( 'Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?>
                                             </a>
@@ -430,7 +451,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Setting_Global_Attrs {
 			}
 			?>
             <div class="vi-wvps-save-sucessful-popup">
-				<?php esc_html_e( 'Settings saved', 'sales-countdown-timer' ); ?>
+				<?php esc_html_e( 'Settings saved', 'product-variations-swatches-for-woocommerce' ); ?>
             </div>
         </div>
 		<?php
@@ -440,9 +461,10 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Setting_Global_Attrs {
 		$terms = get_terms( array(
 			'taxonomy'   => $attribute_name,
 			'hide_empty' => false,
-//			'number'     => 100,//test
-//			'offset'     => 0,
 		) );
+		if ( is_wp_error( $terms ) || empty( $terms ) ) {
+			return;
+		}
 		$count = count( $terms );
 		if ( $count ) {
 			$vi_default_colors   = $this->settings->get_default_color();
@@ -681,7 +703,6 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Setting_Global_Attrs {
 			wp_enqueue_media();
 			wp_enqueue_script( 'jquery-ui-sortable' );
 			wp_enqueue_script( 'viwvps-semantic-ui-accordion', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'accordion.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
-			wp_enqueue_script( 'viwvps-semantic-ui-address', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'address.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
 			wp_enqueue_script( 'viwvps-semantic-ui-checkbox', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'checkbox.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
 			wp_enqueue_script( 'viwvps-semantic-ui-dropdown', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'dropdown.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
 			wp_enqueue_script( 'viwvps-semantic-ui-form', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'form.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );

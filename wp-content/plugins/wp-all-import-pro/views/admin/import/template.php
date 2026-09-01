@@ -273,7 +273,7 @@ $form_classes = apply_filters( 'pmxi_template_form_class', $form_classes, $this 
 							<a href="<?php echo esc_url(remove_query_arg('id', remove_query_arg('action', $this->baseUrl))); ?>" class="back rad3" style="float:none;"><?php _e('Back to Manage Imports', 'wp-all-import-pro') ?></a>
 						<?php endif; ?>
 						<button type="button" id="wpai-full-preview-btn" class="button wpallimport-large-button" style="margin: 0 10px; background: #425f9a !important;"><?php _e('Preview', 'wp-all-import-pro') ?></button>
-						<input type="submit" class="button wpallimport-large-button" value="<?php _e( ($this->isWizard) ? 'Continue to Import Settings' : 'Update Template', 'wp-all-import-pro') ?>" />
+						<input type="submit" class="button wpallimport-large-button<?php echo ($this->isWizard) ? ' wpallimport-continue-button' : ''; ?>" value="<?php _e( ($this->isWizard) ? 'Continue to Import Settings' : 'Update Template', 'wp-all-import-pro') ?>" />
 					</div>
 
 				</div>

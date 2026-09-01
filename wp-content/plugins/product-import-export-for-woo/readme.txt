@@ -4,7 +4,7 @@ Tags: product export, product import, CSV import export, woocommerce product imp
 Requires at least: 3.0
 Tested up to: 7.0
 Requires PHP: 5.6
-Stable tag: 2.6.5
+Stable tag: 2.6.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -63,7 +63,7 @@ With this product export import plugin, you can export WooCommerce products and 
 * The plugin <strong>stores all the past imports and exports</strong> and <strong>lets you re-run</strong> them when needed.
 * <strong>Easy debugging:</strong> View and download import log for debugging purpose.
 &#9989; Tested OK with WordPress 7.0
-&#9989; Tested OK with WooCommerce 10.8.1
+&#9989; Tested OK with WooCommerce 11.0.0
 &#9989; Tested OK with PHP 8.3
 
 ###COMPATIBLE PLUGINS###
@@ -167,19 +167,6 @@ Please visit <a rel="nofollow" href="https://www.webtoffee.com/product/product-i
 This plugin connects to [feedback.webtoffee.com](https://feedback.webtoffee.com) for collecting feedback when the plugin is deactivated. 
 See our [Privacy Policy](https://www.webtoffee.com/privacy-policy/) and [Terms & Conditions](https://www.webtoffee.com/terms-conditions/) for details on data collection and usage.
 
-
-###RELATED PLUGINS FROM WEBTOFFEE###
-
-Other useful plugins from WebToffee for migrating WooCommerce/WordPress data:
-
-&#128312; <a href="https://wordpress.org/plugins/users-customers-import-export-for-wp-woocommerce/">Import Export WordPress Users/Customers</a>: Import and export the users in WordPress and customers in your WooCommerce store using a CSV file with the help of this plugin.
-&#128312; <a href="https://wordpress.org/plugins/order-import-export-for-woocommerce/">Order/Coupon Import-Export for WooCommerce</a>: Import and export orders and/or coupons from your WooCommerce store using CSV with the plugin.
-&#128312; <a href="https://wordpress.org/plugins/wp-migration-duplicator/">WordPress Backup & Migration</a>: Quickly migrate and backup entire WordPress site or selected files from one location to another. Backup to FTP, Google drive, Amazon S3, or local storage and easily restore them back.
-&#128312; <a href="https://wordpress.org/plugins/webtoffee-product-feed/">WebToffee WooCommerce Product Feed & Sync Manager</a>: Generate WooCommerce product feed for Google, Facebook and Instagram Shops and sync WooCommerce products with Facebook catalog.
-&#128312; <a href="https://www.webtoffee.com/product/gdpr-cookie-consent/?utm_source=free_plugin_readme&utm_medium=product_import_export&utm_campaign=GDPR">GDPR Cookie Consent</a>: This premium WebToffee plugin helps websites stay compliant with GDPR, CCPA, and other privacy laws. It lets you display a fully customizable cookie consent banner, manage cookie categories, record user consents, and set up prior consent for cookies.
-&#128312; <a href="https://wordpress.org/plugins/accessibility-plus/">Accessibility Tool Kit</a>: Accessibility Tool Kit is designed to help make your site compliant with accessibility standards such as WCAG 2.1, ADA, and Section 508. It automatically detects and fixes common accessibility issues, ensuring your site is easier for everyone to use.
-
-
 = About WebToffee =
 
 <a rel="nofollow" href="https://www.webtoffee.com/">WebToffee</a> creates quality WordPress/WooCommerce plugins that are easy to use and customize. We are proud to have millions of customers actively using our plugins across the globe.
@@ -247,6 +234,11 @@ Yes, you can import grouped, affiliate/external products in addition to simple p
 
 == Changelog ==
 
+= 2.6.6 2026-08-10 =
+* [Compatibility] – Tested OK with WordPress 7.0.3
+* [Compatibility] – Tested OK with WooCommerce 11.0.0
+* [Translation] – Translation updates.
+
 = 2.6.5 2026-06-22 =
 * [Compatibility] – Tested OK with WooCommerce 10.8.1
 
@@ -260,7 +252,9 @@ Yes, you can import grouped, affiliate/external products in addition to simple p
 
 == Upgrade Notice ==
 
-= 2.6.5 =
-* [Compatibility] – Tested OK with WooCommerce 10.8.1
+= 2.6.6 =
+* [Compatibility] – Tested OK with WordPress 7.0.3
+* [Compatibility] – Tested OK with WooCommerce 11.0.0
+* [Translation] – Translation updates.
 
 

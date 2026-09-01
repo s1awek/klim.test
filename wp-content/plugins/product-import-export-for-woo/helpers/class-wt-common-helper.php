@@ -391,7 +391,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Common_Helper
     }
     
     public static function wt_allowed_screens(){
-        $screens=array('wt_import_export_for_woo_basic','wt_import_export_for_woo_basic_export','wt_import_export_for_woo_basic_import','wt_import_export_for_woo_basic_history','wt_import_export_for_woo_basic_history_log');
+        $screens=array('wt_import_export_for_woo_basic','wt_import_export_for_woo_basic_export','wt_import_export_for_woo_basic_import','wt_import_export_for_woo_basic_history','wt_import_export_for_woo_basic_history_log','wt_iew_scheduled_job');
         return apply_filters('wt_iew_allowed_screens_basic', $screens);
 
     }

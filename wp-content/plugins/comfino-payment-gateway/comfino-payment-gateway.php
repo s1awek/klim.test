@@ -3,14 +3,14 @@
  * Plugin Name: Comfino Payment Gateway
  * Plugin URI: https://github.com/comfino/WooCommerce.git
  * Description: Comfino Payment Gateway for WooCommerce.
- * Version: 4.2.8
+ * Version: 4.3.1
  * Author: Comfino
  * Author URI: https://github.com/comfino
  * Domain Path: /languages
  * Text Domain: comfino-payment-gateway
- * WC tested up to: 10.5.0
+ * WC tested up to: 10.7.0
  * WC requires at least: 3.0
- * Tested up to: 6.9
+ * Tested up to: 7.0
  * Requires at least: 5.0
  * Requires PHP: 7.1
  * License: GPLv3
@@ -23,9 +23,8 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Guard clause to prevent plugin execution in incompatible environments.
- * This MUST be placed before any code which uses PHP 7.1+ syntax and before any use statements.
- * Uses PHP 5.6+ compatible syntax.
+ * Guard clause to prevent plugin execution in incompatible environments. This MUST be placed before any code that uses
+ * PHP 7.1+ syntax and before any use statements. Uses PHP 5.6+ compatible syntax.
  */
 if (PHP_VERSION_ID < 70100) {
     // Display admin notice about PHP version incompatibility.
@@ -65,6 +64,7 @@ if (PHP_VERSION_ID < 70100) {
 
 /* Environment check passed - now safe to use PHP 7.1+ features. */
 
+use Comfino\Api\ApiClient;
 use Comfino\Common\Shop\Order\StatusManager;
 use Comfino\Configuration\ConfigManager;
 use Comfino\DebugLogger;
@@ -73,6 +73,8 @@ use Comfino\Main;
 use Comfino\Order\ShopStatusManager;
 use Comfino\PaymentGateway;
 use Comfino\PluginShared\CacheManager;
+use Comfino\Telemetry\ShopEnvironmentReporter;
+use Comfino\View\FrontendManager;
 use Comfino\View\TemplateManager;
 
 class Comfino_Payment_Gateway
@@ -175,7 +177,10 @@ class Comfino_Payment_Gateway
             return $methods;
         });
 
-        // Add loaded script tag filter for adding custom attribute which prevents blocking by Google CMP scripts.
+        /* Add loaded script tag filter for adding a custom attribute which prevents blocking by Google CMP scripts.
+           Also prevent Cloudflare RocketLoader and JS bundlers (PhastPress, Autoptimize, WP Rocket) from deferring
+           Comfino frontend scripts asynchronously. These scripts depend on the wp_add_inline_script data block that
+           immediately precedes them in the HTML; async delivery breaks that ordering guarantee. */
         add_filter('script_loader_tag', static function (string $tag, string $handle): string {
             if (strpos($handle, PaymentGateway::GATEWAY_ID) !== 0) {
                 return $tag;
@@ -187,13 +192,14 @@ class Comfino_Payment_Gateway
                 if (strpos($tag, 'async') === false) {
                     $attributes[] = 'async';
                 }
-            } elseif (strpos($tag, 'defer') !== false) {
+            } elseif (strpos($handle, 'defer') !== false) {
                 if (strpos($tag, 'defer') === false) {
                     $attributes[] = 'defer';
                 }
             }
 
-            $attributes[] = 'data-cmp-ab="2"';
+            $attributes[] = 'data-cmp-ab="2"'; // Google CMP blocking prevention
+            $attributes[] = 'data-cfasync="false"'; // Cloudflare RocketLoader async deferral prevention
 
             return str_replace('">', '" ' . implode(' ', $attributes) . '>', $tag);
         }, 10, 2);
@@ -242,15 +248,49 @@ class Comfino_Payment_Gateway
 
     /**
      * Automatically disables the plugin on activation if it doesn't meet minimum requirements.
+     *
+     * @param bool $network_wide True when a Multisite Super Admin used "Network Activate" instead of activating the
+     *                           plugin on a single site. WordPress passes this to every activation hook; the absence of
+     *                           a `Network: true` plugin header does not prevent network activation, it only means we do
+     *                           not force it - so this case is reachable without any change on our side.
      */
-    public function activation_check(): void
+    public function activation_check($network_wide = false): void
     {
+        if ($network_wide) {
+            /* Network activation is not supported. WordPress fires this hook only once for the whole network, so
+               per-site provisioning (Main::install() and, from 5.0.0, the outbound request queue table) would run for
+               the current site alone, leaving every other site in the network - and every site created later - without
+               it. Supporting this properly means iterating get_sites() with switch_to_blog() here plus a
+               'wp_initialize_site' handler for new sites; until that exists, refuse loudly instead of activating into a
+               half-provisioned state. Comfino is designed to be activated per site, which is also how WooCommerce
+               itself is normally run under Multisite. */
+            deactivate_plugins(plugin_basename(__FILE__), false, true);
+            /** @noinspection ForgottenDebugOutputInspection */
+            wp_die(
+                esc_html__(
+                    'The Comfino plugin could not be network activated. Comfino does not support network activation - activate it individually on each site in the network that should offer Comfino payments.',
+                    'comfino-payment-gateway'
+                )
+            );
+        }
+
         $environmentWarning = Main::getEnvironmentWarning(true);
 
         if ($environmentWarning) {
             deactivate_plugins(plugin_basename(__FILE__));
             /** @noinspection ForgottenDebugOutputInspection */
             wp_die(wp_kses_post($environmentWarning));
+        }
+
+        if (!in_array('sha3-256', hash_algos(), true)) {
+            add_action('admin_notices', static function () {
+                echo '<div class="notice notice-error"><p>'
+                    . esc_html__(
+                        'Comfino requires OpenSSL >= 1.1.0 (SHA-3 support) for the V3 paywall.',
+                        'comfino-payment-gateway'
+                    )
+                    . '</p></div>';
+            });
         }
 
         Main::install();
@@ -291,6 +331,27 @@ class Comfino_Payment_Gateway
     public function check_environment()
     {
         $environmentWarning = Main::getEnvironmentWarning();
+
+        /* The activation-time guard in activation_check() cannot catch an installation already network activated before
+           that guard shipped - WordPress does not re-fire the activation hook for it. Warn on every admin page instead
+           of silently running half-provisioned, but do not force a deactivation here: that would take Comfino payments
+           offline across the whole network without the Super Admin asking for it. */
+        if (is_multisite()) {
+            if (!function_exists('is_plugin_active_for_network')) {
+                require_once ABSPATH . 'wp-admin/includes/plugin.php';
+            }
+
+            if (is_plugin_active_for_network(plugin_basename(__FILE__))) {
+                $this->add_admin_notice(
+                    'network_activated',
+                    'error',
+                    esc_html__(
+                        'The Comfino plugin is network activated, which is not supported. Only the site it was activated from is fully configured; other sites in the network may be missing Comfino settings and database tables. Deactivate it for the network and activate it individually on each site that should offer Comfino payments.',
+                        'comfino-payment-gateway'
+                    )
+                );
+            }
+        }
 
         if ($environmentWarning) {
             // Ensure is_plugin_active() is available.
@@ -406,6 +467,9 @@ class Comfino_Payment_Gateway
 
         $githubVersion = $versionData['github_version'] ?? '';
         $currentVersion = PaymentGateway::VERSION;
+        $releaseNotesUrl = !empty($versionData['release_notes_url'])
+            ? $versionData['release_notes_url']
+            : 'https://github.com/comfino/woocommerce/releases';
 
         if (version_compare($githubVersion, $currentVersion, '>')) {
             echo '<div class="notice notice-info is-dismissible">';
@@ -416,12 +480,38 @@ class Comfino_Payment_Gateway
                     __('<strong>Comfino Payment Gateway:</strong> A new version (%2$s) is available on GitHub. You are currently using version %1$s. Visit <a href="%3$s" target="_blank">GitHub Releases</a> for more information.', 'comfino-payment-gateway'),
                     esc_html($currentVersion),
                     esc_html($githubVersion),
-                    'https://github.com/comfino/WooCommerce/releases'
+                    esc_url($releaseNotesUrl)
                 ),
                 ['strong' => [], 'a' => ['href' => [], 'target' => []]]
             );
             echo '</p>';
+
+            /* "What's new" HTML of the available release. Server-sanitized already; passed through wp_kses_post so the
+               notice output stays safe per marketplace requirements. */
+            if (!empty($versionData['description_html'])) {
+                echo '<div class="comfino-release-description">' . wp_kses_post($versionData['description_html']) . '</div>';
+            }
+
             echo '</div>';
+        }
+    }
+
+    /**
+     * Enqueue the stylesheet used to render the "what's new" release description block shown by
+     * display_github_version_notice() above. Runs on admin_enqueue_scripts (before admin_notices is printed) so the
+     * <link> tag ends up in <head> as WordPress expects.
+     */
+    public function enqueue_release_description_styles(): void
+    {
+        $versionData = get_transient('comfino_github_version_check');
+
+        if (
+            is_array($versionData) &&
+            !empty($versionData['github_version']) &&
+            !empty($versionData['description_html']) &&
+            version_compare($versionData['github_version'], PaymentGateway::VERSION, '>')
+        ) {
+            FrontendManager::includeLocalStyles(['comfino-release-description.css'], [], PaymentGateway::VERSION, false);
         }
     }
 
@@ -565,11 +655,6 @@ class Comfino_Payment_Gateway
 
     private function upgrade_plugin(): void
     {
-        if (PaymentGateway::WIDGET_INIT_SCRIPT_HASH !== PaymentGateway::WIDGET_INIT_SCRIPT_LAST_HASH) {
-            // Update code of widget initialization script if changed.
-            ConfigManager::updateWidgetCode(PaymentGateway::WIDGET_INIT_SCRIPT_LAST_HASH);
-        }
-
         /* 4.2.0 */
         if (is_array($ignoredStatuses = ConfigManager::getConfigurationValue('COMFINO_IGNORED_STATUSES'))
             && in_array(StatusManager::STATUS_CANCELLED_BY_SHOP, $ignoredStatuses, true)
@@ -603,8 +688,7 @@ class Comfino_Payment_Gateway
 
         ConfigManager::initConfigurationValues([
             'COMFINO_WIDGET_SHOW_PROVIDER_LOGOS' => false,
-            'COMFINP_NEW_WIDGET_ACTIVE' => true,
-            'COMFINP_DEV_ENV_VARS' => false,
+            'COMFINO_DEV_ENV_VARS' => false,
         ]);
 
         if (is_array($catFilterAvailProdTypes = ConfigManager::getConfigurationValue('COMFINO_CAT_FILTER_AVAIL_PROD_TYPES'))
@@ -658,8 +742,21 @@ class Comfino_Payment_Gateway
             update_option('comfino_plugin_current_version', $previousVersion, false);
         }
 
-        // Update code of widget initialization script.
-        ConfigManager::updateWidgetCode();
+        /* 4.3.0 */
+        // Remove COMFINO_SHOW_LOGO — logo is now entirely SDK/CDN-driven; stored value is dead data.
+        $comfinoSettings = get_option('woocommerce_comfino_settings', []);
+
+        if (is_array($comfinoSettings) && array_key_exists('show_logo', $comfinoSettings)) {
+            unset($comfinoSettings['show_logo']);
+            update_option('woocommerce_comfino_settings', $comfinoSettings);
+        }
+
+        if (!is_array(ConfigManager::getConfigurationValue('COMFINO_ALLOWED_PRODUCTS_CONFIG_FORBIDDEN_PROD_TYPES'))) {
+            ConfigManager::updateConfigurationValue(
+                'COMFINO_ALLOWED_PRODUCTS_CONFIG_FORBIDDEN_PROD_TYPES',
+                ['BLIK', 'PAY_LATER', 'PAY_IN_PARTS', 'INSTANT_PAYMENTS']
+            );
+        }
 
         // Clear configuration and front cache.
         CacheManager::getCachePool()->clear();
@@ -680,7 +777,6 @@ class Comfino_Payment_Gateway
                 ? gmdate('Y-m-d H:i:s', get_transient('comfino_plugin_updated_at'))
                 : gmdate('Y-m-d H:i:s'),
             'operations' => [
-                ['name' => 'widget_code_update', 'success' => true],
                 ['name' => 'configuration_migration', 'success' => true],
                 ['name' => 'cache_clear', 'success' => true],
                 ['name' => 'logs_clear', 'success' => true],
@@ -688,6 +784,11 @@ class Comfino_Payment_Gateway
         ];
 
         Main::updateUpgradeLog(print_r($upgradeStats, true));
+
+        // Report the shop environment to Comfino on upgrade (fire-and-forget).
+        if (!empty(ConfigManager::getApiKey())) {
+            ShopEnvironmentReporter::report();
+        }
 
         set_transient('comfino_plugin_updated', 0);
     }
@@ -706,7 +807,7 @@ class Comfino_Payment_Gateway
             return;
         }
 
-        // Check once per day.
+        // Check once per day (at a jittered interval - see next_release_check_interval()).
         $transientKey = 'comfino_github_version_check';
         $cachedData = get_transient($transientKey);
 
@@ -716,6 +817,8 @@ class Comfino_Payment_Gateway
 
         // Schedule the check to run in the background.
         add_action('admin_notices', [$this, 'display_github_version_notice']);
+        // Enqueue the release-description stylesheet used by the notice above (runs before admin_notices).
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_release_description_styles']);
 
         // Perform version check asynchronously.
         add_action('admin_init', static function () use ($transientKey): void {
@@ -723,23 +826,31 @@ class Comfino_Payment_Gateway
                 return;
             }
 
-            // Fetch latest release info from GitHub API.
-            $response = wp_remote_get('https://api.github.com/repos/comfino/WooCommerce/releases/latest', [
-                'timeout' => 5,
-                'headers' => ['Accept' => 'application/vnd.github.v3+json']
-            ]);
+            /* Claim a short-lived exclusive lock before making the request. admin_init fires on every admin page load
+               and admin-ajax.php request (including WP Heartbeat), so several concurrent requests can each observe the
+               transient as expired before any of them writes it back - without this lock that races into duplicate/bursted
+               release-check calls within the same minute. */
+            $lockKey = 'comfino_github_version_check_lock';
 
-            if (is_wp_error($response)) {
-                // Cache failure for 1 hour.
-                set_transient($transientKey, ['error' => true], HOUR_IN_SECONDS);
+            if (get_transient($lockKey) !== false) {
+                return;
+            }
+
+            set_transient($lockKey, true, 5 * MINUTE_IN_SECONDS);
+
+            /* Fetch the latest release from the centralized Comfino release API. It resolves the release of the line
+               compatible with this shop's PHP and WooCommerce version (from the client User-Agent) automatically. */
+            try {
+                $release = ApiClient::getInstance()->getLatestPluginRelease('woocommerce');
+            } catch (\Throwable $e) {
+                // Cache failure too - an unreachable/erroring API must not turn this into an hourly retry loop.
+                set_transient($transientKey, ['error' => true], self::next_release_check_interval());
 
                 return;
             }
 
-            $release = json_decode(wp_remote_retrieve_body($response), true);
-
-            if (!isset($release['tag_name'])) {
-                set_transient($transientKey, ['error' => true], HOUR_IN_SECONDS);
+            if ($release === null) {
+                set_transient($transientKey, ['error' => true], self::next_release_check_interval());
 
                 return;
             }
@@ -747,13 +858,29 @@ class Comfino_Payment_Gateway
             set_transient(
                 $transientKey,
                 [
-                    'github_version' => ltrim($release['tag_name'], 'v'),
+                    'github_version' => $release->version,
                     'current_version' => PaymentGateway::VERSION,
+                    'download_url' => $release->downloadUrl,
+                    'release_notes_url' => $release->releaseUrl,
+                    'description_html' => $release->descriptionHtml,
                     'checked_at' => time()
                 ],
-                DAY_IN_SECONDS
+                self::next_release_check_interval()
             );
         }, 20);
+    }
+
+    /**
+     * Seconds until the next release check, randomized around one day.
+     *
+     * Every shop running this plugin activates/upgrades at roughly the same moments (release day), so a fixed
+     * DAY_IN_SECONDS interval makes every installation re-check at the same hour indefinitely, clustering a load on the
+     * release API across many shops. Jittering the interval (+/- 4 hours) makes each installation's check hour drift
+     * randomly from day to day while keeping the check frequency at effectively once per day.
+     */
+    private static function next_release_check_interval(): int
+    {
+        return (int) wp_rand(20 * HOUR_IN_SECONDS, 28 * HOUR_IN_SECONDS);
     }
 }
 

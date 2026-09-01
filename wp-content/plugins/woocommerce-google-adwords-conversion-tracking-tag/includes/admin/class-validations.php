@@ -343,6 +343,21 @@ class Validations {
 			}
 		}
 
+		// Validate the Microsoft Advertising Conversions API token
+		if (isset($input['bing']['capi']['token'])) {
+
+			// Trim space, newlines and quotes
+			$input['bing']['capi']['token'] = Helpers::trim_string($input['bing']['capi']['token']);
+
+			if (!self::is_bing_capi_token($input['bing']['capi']['token'])) {
+				$input['bing']['capi']['token']
+					= Options::get_bing_capi_token()
+					? Options::get_bing_capi_token()
+					: '';
+				add_settings_error('wgact_plugin_options', 'invalid-bing-capi-token', esc_html__('You have entered an invalid Microsoft Advertising Conversions API token.', 'woocommerce-google-adwords-conversion-tracking-tag'));
+			}
+		}
+
 		// validate LinkedIn partner ID
 		if (isset($input['pixels']['linkedin']['partner_id'])) {
 
@@ -756,6 +771,32 @@ class Validations {
 			}
 		}
 
+		// Validate the Mixpanel project token
+		if (isset($input['pixels']['mixpanel']['project_token'])) {
+
+			// Trim space, newlines and quotes
+			$input['pixels']['mixpanel']['project_token'] = Helpers::trim_string($input['pixels']['mixpanel']['project_token']);
+
+			if (!self::is_mixpanel_project_token($input['pixels']['mixpanel']['project_token'])) {
+				$input['pixels']['mixpanel']['project_token']
+					= Options::get_mixpanel_project_token()
+					? Options::get_mixpanel_project_token()
+					: '';
+				add_settings_error('wgact_plugin_options', 'invalid-mixpanel-project-token', esc_html__('You have entered an invalid Mixpanel project token. It must be a 32 character hexadecimal string.', 'woocommerce-google-adwords-conversion-tracking-tag'));
+			}
+		}
+
+		// Keep the Mixpanel data residency region within the set of regions Mixpanel offers.
+		// Events sent to the wrong region are silently not ingested.
+		if (isset($input['pixels']['mixpanel']['data_residency'])) {
+
+			$input['pixels']['mixpanel']['data_residency'] = Helpers::trim_string($input['pixels']['mixpanel']['data_residency']);
+
+			if (!in_array($input['pixels']['mixpanel']['data_residency'], [ 'us', 'eu', 'in' ], true)) {
+				$input['pixels']['mixpanel']['data_residency'] = Options::get_mixpanel_data_residency();
+			}
+		}
+
 		// Validate the Nextdoor pixel ID
 		if (isset($input['pixels']['nextdoor']['pixel_id'])) {
 
@@ -1112,6 +1153,11 @@ class Validations {
 				'disable_tracking_for' => [],
 			],
 			'google'     => [
+				'ads'       => [
+					'data_manager' => [
+						'credentials' => Options::get_google_ads_dm_credentials(),
+					],
+				],
 				'analytics' => [
 					'ga4' => [
 						'data_api' => [
@@ -1198,6 +1244,7 @@ class Validations {
 		return [
 
 			// Bing / Microsoft Ads
+			'bing.capi.token',
 			'bing.consent_mode.is_active',
 			'bing.enhanced_conversions',
 			'bing.uet_tag_id',
@@ -1206,6 +1253,7 @@ class Validations {
 			'crazyegg.account_number',
 
 			// Facebook / Meta
+			'facebook.capi.send_fb_login_id',
 			'facebook.capi.test_event_code',
 			'facebook.capi.token',
 			'facebook.capi.user_transparency.send_additional_client_identifiers',
@@ -1219,6 +1267,13 @@ class Validations {
 
 			// Google
 			'google.ads.conversion_adjustments.conversion_name',
+			'google.ads.data_manager.auth_method',
+			'google.ads.data_manager.conversion_action_id',
+			'google.ads.data_manager.is_active',
+			'google.ads.data_manager.login_account_id',
+			'google.ads.data_manager.mode',
+			'google.ads.data_manager.operating_account_id',
+			'google.ads.data_manager.validate_only',
 			'google.ads.enhanced_conversions',
 			'google.ads.google_business_vertical',
 			'google.ads.phone_conversion_label',
@@ -1251,6 +1306,12 @@ class Validations {
 			'pixels.linkedin.conversion_ids.purchase',
 			'pixels.linkedin.conversion_ids.view_content',
 			'pixels.linkedin.partner_id',
+			'pixels.mixpanel.autocapture',
+			'pixels.mixpanel.data_residency',
+			'pixels.mixpanel.ingestion_api.enabled',
+			'pixels.mixpanel.project_token',
+			'pixels.mixpanel.session_recording',
+			'pixels.mixpanel.user_identification',
 			'pixels.nextdoor.advanced_matching',
 			'pixels.nextdoor.capi.test_event_code',
 			'pixels.nextdoor.capi.token',
@@ -1357,33 +1418,55 @@ class Validations {
 
 	public static function validate_ga4_data_api_credentials( $credentials ) {
 
+		$result = self::validate_google_service_account_credentials($credentials);
+
+		if (true !== $result) {
+			wp_send_json_error([ 'message' => $result ]);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Validates the shape of a Google Cloud service account credentials JSON
+	 * (as pasted by the merchant). Shared by the GA4 Data API and the Google Ads
+	 * Data Manager API credential imports.
+	 *
+	 * @param array $credentials The decoded credentials JSON.
+	 *
+	 * @return true|string True when valid, otherwise the error message.
+	 *
+	 * @since 1.66.0
+	 */
+	public static function validate_google_service_account_credentials( $credentials ) {
+
 		// If $credentials is an empty array (thus the default empty value), return true
 		if (empty($credentials)) {
 			return true;
 		}
 
 		if (isset($credentials['type']) && 'service_account' !== $credentials['type']) {
-			wp_send_json_error([ 'message' => 'type is not service_account' ]);
+			return 'type is not service_account';
 		}
 
 		// Abort if $credentials['project_id'] is not regular string
 		if (isset($credentials['project_id']) && !is_string($credentials['project_id'])) {
-			wp_send_json_error([ 'message' => 'project_id is not a string' ]);
+			return 'project_id is not a string';
 		}
 
 		// Abort if $credentials['private_key_id'] is not a private key ID
 		if (isset($credentials['private_key_id']) && !is_string($credentials['private_key_id'])) {
-			wp_send_json_error([ 'message' => 'private_key_id is not a string' ]);
+			return 'private_key_id is not a string';
 		}
 
 		// Abort if $credentials['private_key'] is not a private key
 		if (isset($credentials['private_key']) && !is_string($credentials['private_key'])) {
-			wp_send_json_error([ 'message' => 'private_key is not a string' ]);
+			return 'private_key is not a string';
 		}
 
 		// Abort if $credentials['client_email'] is not a client email
 		if (isset($credentials['client_email']) && !Helpers::is_email($credentials['client_email'])) {
-			wp_send_json_error([ 'message' => 'client_email is not an email' ]);
+			return 'client_email is not an email';
 		}
 
 		// Abort if $credentials['client_id'] is not empty and not only numbers
@@ -1391,17 +1474,17 @@ class Validations {
 			!empty($credentials['client_id'])
 			&& !is_numeric($credentials['client_id'])
 		) {
-			wp_send_json_error([ 'message' => 'client_id is not numeric' ]);
+			return 'client_id is not numeric';
 		}
 
 		// Abort if $credentials['auth_uri'] is not a valid URL
 		if (isset($credentials['auth_uri']) && !Helpers::is_url($credentials['auth_uri'])) {
-			wp_send_json_error([ 'message' => 'auth_uri is not a valid URL' ]);
+			return 'auth_uri is not a valid URL';
 		}
 
 		// Abort if $credentials['token_uri'] is not a valid URL
 		if (isset($credentials['token_uri']) && !Helpers::is_url($credentials['token_uri'])) {
-			wp_send_json_error([ 'message' => 'token_uri is not a valid URL' ]);
+			return 'token_uri is not a valid URL';
 		}
 
 		// Abort if $credentials['auth_provider_x509_cert_url'] is not a valid URL
@@ -1409,7 +1492,7 @@ class Validations {
 			isset($credentials['auth_provider_x509_cert_url'])
 			&& !Helpers::is_url($credentials['auth_provider_x509_cert_url'])
 		) {
-			wp_send_json_error([ 'message' => 'auth_provider_x509_cert_url is not a valid URL' ]);
+			return 'auth_provider_x509_cert_url is not a valid URL';
 		}
 
 		// Abort if $credentials['client_x509_cert_url'] is not a valid URL
@@ -1417,7 +1500,7 @@ class Validations {
 			isset($credentials['client_x509_cert_url'])
 			&& !Helpers::is_url($credentials['client_x509_cert_url'])
 		) {
-			wp_send_json_error([ 'message' => 'client_x509_cert_url is not a valid URL' ]);
+			return 'client_x509_cert_url is not a valid URL';
 		}
 
 		return true;
@@ -1446,6 +1529,28 @@ class Validations {
 		$re = '/^\d{8,11}$/m';
 
 		return self::validate_with_regex($re, $string);
+	}
+
+	public static function is_gads_customer_id( $string ) {
+
+		$re = '/^\d{8,12}$/m';
+
+		return self::validate_with_regex($re, $string);
+	}
+
+	public static function is_gads_conversion_action_id( $string ) {
+
+		$re = '/^\d{4,16}$/m';
+
+		return self::validate_with_regex($re, $string);
+	}
+
+	public static function is_gads_dm_mode( $string ) {
+		return in_array($string, [ 'multi_source', 'separate_action' ], true);
+	}
+
+	public static function is_gads_dm_auth_method( $string ) {
+		return in_array($string, [ 'service_account', 'broker' ], true);
 	}
 
 	public static function is_hotjar_site_id( $string ) {
@@ -1539,6 +1644,24 @@ class Validations {
 		// 10 characters (e.g. q9zk3x7p2w). Kept slightly permissive so valid IDs
 		// are never rejected, while still blocking whitespace, markup and control characters.
 		$re = '/^[a-z0-9]{8,15}$/m';
+
+		return self::validate_with_regex($re, $string);
+	}
+
+	/**
+	 * Validate a Mixpanel project token
+	 *
+	 * Mixpanel project tokens are 32 character hexadecimal strings, taken from
+	 * Settings > Project Settings > Project Token in Mixpanel.
+	 *
+	 * @since 1.64.1
+	 *
+	 * @param string $string
+	 * @return bool
+	 */
+	public static function is_mixpanel_project_token( $string ) {
+
+		$re = '/^[a-f0-9]{32}$/m';
 
 		return self::validate_with_regex($re, $string);
 	}
@@ -1732,6 +1855,16 @@ class Validations {
 	public static function is_bing_uet_tag_id( $string ) {
 
 		$re = '/^\d{7,9}$/m';
+
+		return self::validate_with_regex($re, $string);
+	}
+
+	public static function is_bing_capi_token( $string ) {
+
+		// The Microsoft Advertising Conversions API token is an opaque bearer
+		// token generated in Microsoft Advertising or through the Campaign
+		// Management API, so this is deliberately permissive.
+		$re = '/^[A-Za-z0-9._~+\/=-]{10,4096}$/m';
 
 		return self::validate_with_regex($re, $string);
 	}
@@ -2008,6 +2141,12 @@ class Validations {
 				$value = preg_replace('/^.*\//', '', $value);
 				break;
 
+			case 'google.ads.data_manager.operating_account_id':
+			case 'google.ads.data_manager.login_account_id':
+				// Google Ads customer IDs are usually displayed as 123-456-7890
+				$value = str_replace('-', '', $value);
+				break;
+
 			case 'facebook.domain_verification_id':
 				// Extract content value from meta tag if pasted
 				$value = preg_replace('/^.*content\s*=\s*["\']?([^"\']+?)["\']?\s*\/?\s*>?$/', '$1', $value);
@@ -2059,6 +2198,11 @@ class Validations {
 			'google.ads.phone_conversion_label'                 => [ 'is_gads_conversion_label', __('Invalid Google Ads conversion label.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
 			'google.ads.phone_conversion_number'                => [ 'is_phone_number', __('Invalid phone number.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
 			'google.ads.conversion_adjustments.conversion_name' => [ 'is_valid_conversion_adjustments_conversion_name', __('Invalid conversion name. Special characters and quotes are not allowed.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'google.ads.data_manager.operating_account_id'      => [ 'is_gads_customer_id', __('Invalid Google Ads customer ID. It should contain 8 to 12 digits.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'google.ads.data_manager.login_account_id'          => [ 'is_gads_customer_id', __('Invalid Google Ads customer ID. It should contain 8 to 12 digits.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'google.ads.data_manager.conversion_action_id'      => [ 'is_gads_conversion_action_id', __('Invalid conversion action ID. It should contain only digits.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'google.ads.data_manager.mode'                      => [ 'is_gads_dm_mode', __('Invalid upload mode.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'google.ads.data_manager.auth_method'               => [ 'is_gads_dm_auth_method', __('Invalid authentication method.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
 
 			// Google Analytics 4
 			'google.analytics.ga4.measurement_id'               => [ 'is_google_analytics_4_measurement_id', __('Invalid Google Analytics 4 measurement ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
@@ -2084,6 +2228,7 @@ class Validations {
 
 			// Microsoft Advertising
 			'bing.uet_tag_id'                                   => [ 'is_bing_uet_tag_id', __('Invalid Microsoft Advertising UET tag ID. It should contain 7 to 9 digits.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'bing.capi.token'                                   => [ 'is_bing_capi_token', __('Invalid Microsoft Advertising Conversions API token.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
 
 			// LinkedIn
 			'pixels.linkedin.partner_id'                        => [ 'is_linkedin_partner_id', __('Invalid LinkedIn partner ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
@@ -2163,6 +2308,9 @@ class Validations {
 
 			// Triple Whale
 			'pixels.triple_whale.orders_api.token'              => [ 'is_triple_whale_orders_api_token', __('Invalid Triple Whale Orders API key.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Mixpanel
+			'pixels.mixpanel.project_token'                     => [ 'is_mixpanel_project_token', __('Invalid Mixpanel project token. It must be a 32 character hexadecimal string.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
 
 			// Hyros
 			'pixels.hyros.product_hash'                         => [ 'is_hyros_product_hash', __('Invalid Hyros product hash.', 'woocommerce-google-adwords-conversion-tracking-tag') ],

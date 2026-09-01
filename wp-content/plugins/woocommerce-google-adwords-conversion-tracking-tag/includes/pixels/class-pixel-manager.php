@@ -3,14 +3,17 @@
 namespace SweetCode\Pixel_Manager\Pixels;
 
 use SweetCode\Pixel_Manager\Admin\Environment;
+use SweetCode\Pixel_Manager\Click_Ids;
 use SweetCode\Pixel_Manager\Admin\LTV;
 use SweetCode\Pixel_Manager\Admin\Order_Columns;
 use SweetCode\Pixel_Manager\Admin\Validations;
 use SweetCode\Pixel_Manager\Data\GA4_Data_API;
 use SweetCode\Pixel_Manager\Pixels\ABTasty\AB_Tasty;
 use SweetCode\Pixel_Manager\Pixels\Core\Pixel_Registry;
+use SweetCode\Pixel_Manager\Platforms\Platform_Manager;
 use SweetCode\Pixel_Manager\Pixels\Facebook\Facebook;
 use SweetCode\Pixel_Manager\Pixels\Facebook\Facebook_CAPI;
+use SweetCode\Pixel_Manager\Pixels\Google\Google_DMA;
 use SweetCode\Pixel_Manager\Pixels\Google\Google_MP_GA4;
 use SweetCode\Pixel_Manager\Pixels\Google\Google_Helpers;
 use SweetCode\Pixel_Manager\Pixels\Google\GTG_Proxy;
@@ -22,7 +25,9 @@ use SweetCode\Pixel_Manager\Pixels\Snapchat\Snapchat_CAPI;
 use SweetCode\Pixel_Manager\Pixels\Reddit\Reddit_CAPI;
 use SweetCode\Pixel_Manager\Pixels\OpenAI\OpenAI_CAPI;
 use SweetCode\Pixel_Manager\Pixels\Nextdoor\Nextdoor_CAPI;
+use SweetCode\Pixel_Manager\Pixels\Bing\Bing_CAPI;
 use SweetCode\Pixel_Manager\Pixels\TripleWhale\Triple_Whale_API;
+use SweetCode\Pixel_Manager\Pixels\Mixpanel\Mixpanel_API;
 use SweetCode\Pixel_Manager\Pixels\VWO\VWO;
 use SweetCode\Pixel_Manager\First_Event_Confirmation;
 use SweetCode\Pixel_Manager\Geolocation;
@@ -32,6 +37,7 @@ use SweetCode\Pixel_Manager\Options;
 use SweetCode\Pixel_Manager\Product;
 use SweetCode\Pixel_Manager\Server_Event_Processor;
 use SweetCode\Pixel_Manager\Shop;
+use SweetCode\Pixel_Manager\Split_Payments;
 use SweetCode\Pixel_Manager\Tracking_Accuracy_DB;
 use WP_Error;
 defined( 'ABSPATH' ) || exit;
@@ -40,6 +46,17 @@ class Pixel_Manager {
     private $rest_namespace = 'pmw/v1';
 
     private $gads_conversion_adjustments_route = '/google-ads/conversion-adjustments.csv';
+
+    /**
+     * Cart item keys whose data layer script has already been printed in this request.
+     *
+     * Keeps the mini cart from printing the same item twice when a theme fires both
+     * mini cart hooks. See woocommerce_after_cart_item_name().
+     *
+     * @var array<string, bool>
+     * @since 1.64.1
+     */
+    private $printed_cart_item_keys = [];
 
     private static $instance;
 
@@ -122,7 +139,6 @@ class Pixel_Manager {
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Google\\Google_Ads_Descriptor',
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Google\\GA4_Descriptor',
             // Marketing pixels
-            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Bing_Descriptor',
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Twitter_Descriptor',
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\LinkedIn_Descriptor',
             'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\AdRoll_Descriptor',
@@ -209,21 +225,33 @@ class Pixel_Manager {
                 10,
                 3
             );
+            add_filter(
+                'render_block',
+                [$this, 'collect_product_collection_products'],
+                10,
+                2
+            );
             add_action( 'wp_head', [$this, 'woocommerce_inject_product_data_on_product_page'] );
-            // do_action( 'woocommerce_after_cart_item_name', $cart_item, $cart_item_key );
-            add_action(
-                'woocommerce_after_cart_item_name',
-                [$this, 'woocommerce_after_cart_item_name'],
-                10,
-                2
-            );
-            add_action(
-                'woocommerce_after_mini_cart_item_name',
-                [$this, 'woocommerce_after_cart_item_name'],
-                10,
-                2
-            );
-            add_action( 'woocommerce_mini_cart_contents', [$this, 'woocommerce_mini_cart_contents'] );
+            // The cart item scripts feed the front-end bundle, so they follow the same
+            // user gate the bundle does above. Excluded user roles used to receive the
+            // scripts inside every cart fragment with no Pixel Manager JavaScript on the
+            // page to read them. @since 1.64.1
+            if ( Shop::track_user() ) {
+                // do_action( 'woocommerce_after_cart_item_name', $cart_item, $cart_item_key );
+                add_action(
+                    'woocommerce_after_cart_item_name',
+                    [$this, 'woocommerce_after_cart_item_name'],
+                    10,
+                    2
+                );
+                add_action(
+                    'woocommerce_after_mini_cart_item_name',
+                    [$this, 'woocommerce_after_cart_item_name'],
+                    10,
+                    2
+                );
+                add_action( 'woocommerce_mini_cart_contents', [$this, 'woocommerce_mini_cart_contents'] );
+            }
             add_action(
                 'woocommerce_new_order',
                 [$this, 'pmw_woocommerce_new_order'],
@@ -540,22 +568,20 @@ class Pixel_Manager {
         return implode( ',', $ordered );
     }
 
+    /**
+     * Return the corrected conversion value of an order for a RESTATE adjustment.
+     *
+     * Google Ads expects the new total value of the conversion, not the refunded delta.
+     * Shop::get_order_value_total_marketing() already accounts for refunds in each of the three
+     * marketing value logic modes: the subtotal branch deducts the product share of the refunds,
+     * the order total branch deducts get_total_refunded(), and the profit margin branch works off
+     * the refunded quantity per item. So the refund must not be applied a second time here.
+     *
+     * @param $order
+     * @return float
+     */
     private function get_order_value_after_refunds( $order ) {
-        $refunds = $order->get_refunds();
-        $refunded_amount = 0;
-        foreach ( $refunds as $refund ) {
-            $refunded_amount -= $refund->get_total();
-        }
-        $order_total = $order->get_total();
-        $adjusted_value = $order_total - $refunded_amount;
-        // Avoid division by zero for free orders (e.g., fully discounted orders)
-        if ( 0 === (int) $order_total ) {
-            return Helpers::format_decimal( 0, 2 );
-        }
-        // Calculate the new order value considering the order total logic that has been applied by the user
-        $adjusted_value_percentage = $adjusted_value / $order_total;
-        $adjusted_value = Shop::get_order_value_total_marketing( $order, true ) * $adjusted_value_percentage;
-        return Helpers::format_decimal( $adjusted_value, 2 );
+        return Helpers::format_decimal( Shop::get_order_value_total_marketing( $order, true ), 2 );
     }
 
     private function get_order_details_for_acr( $data ) {
@@ -574,6 +600,13 @@ class Pixel_Manager {
         // If order key doesn't match, return error
         if ( $order->get_order_key() !== $order_key ) {
             wp_send_json_error( 'Order key does not match' );
+        }
+        // Deposit plugins: recover the sale from the order that represents it, or not
+        // at all (see Split_Payments). The key above was validated against the order
+        // the recovery cookie was written for.
+        $order = Split_Payments::resolve_order_for_purchase( $order );
+        if ( !$order ) {
+            wp_send_json_error( 'Order is not eligible for ACR' );
         }
         if ( !$this->is_order_eligible_for_acr( $order ) ) {
             wp_send_json_error( 'Order is not eligible for ACR' );
@@ -698,11 +731,85 @@ class Pixel_Manager {
     }
 
     /**
+     * Field names our browser bundles use for the visitor's user agent.
+     *
+     * Facebook, Pinterest and Snapchat nest it as `user_data.client_user_agent`,
+     * TikTok and Reddit as `user.user_agent`, and the camelCase spelling is
+     * Microsoft Ads' convention. The reconciliation below matches on the field
+     * name at any depth rather than on a per-pixel path, so a pixel that reuses
+     * any of these conventions is covered the day it is added, without anyone
+     * having to remember this function exists.
+     *
+     * Test_SSE_Client_User_Agent reads the JS sources and fails when a bundle
+     * starts sending the user agent under a name that is not listed here.
+     *
+     * @return string[]
+     *
+     * @since 1.65.2
+     */
+    private static function get_client_user_agent_field_names() {
+        return ['client_user_agent', 'user_agent', 'clientUserAgent'];
+    }
+
+    /**
+     * Replace every client-supplied user agent in an /sse/ payload fragment
+     * with the user agent of the request that carried it.
+     *
+     * Recurses because the field sits inside a per-pixel container whose name
+     * differs by destination, and a payload holds one such container per pixel.
+     *
+     * @param array  $data       Payload or nested fragment.
+     * @param string $user_agent The request's own user agent, '' when absent.
+     * @param int    $depth      Recursion guard.
+     * @return array
+     *
+     * @since 1.65.2
+     */
+    private static function reconcile_user_agent_fields( $data, $user_agent, $depth = 0 ) {
+        // Payloads are two to three levels deep; the guard is only here so a
+        // pathological body cannot turn into unbounded recursion.
+        if ( $depth > 8 ) {
+            return $data;
+        }
+        $field_names = self::get_client_user_agent_field_names();
+        foreach ( $data as $key => $value ) {
+            if ( is_array( $value ) ) {
+                $data[$key] = self::reconcile_user_agent_fields( $value, $user_agent, $depth + 1 );
+                continue;
+            }
+            if ( !in_array( $key, $field_names, true ) ) {
+                continue;
+            }
+            if ( '' === $user_agent ) {
+                // Nothing authoritative to substitute, so the client's copy is
+                // dropped rather than trusted by default.
+                unset($data[$key]);
+                continue;
+            }
+            $data[$key] = $user_agent;
+        }
+        return $data;
+    }
+
+    /**
      * Reconcile client_ip_address and client_user_agent in an /sse/ payload.
      *
-     * The client_user_agent field is always stripped because the request's own
-     * HTTP_USER_AGENT is authoritative for events fired from the same browser.
-     * Adapters re-derive it from the request.
+     * /sse/ is a public endpoint, so every value in the request body is
+     * attacker-controlled. Both identifiers the browser contributes are
+     * therefore reconciled against what the request itself proves.
+     *
+     * The user agent is replaced with the request's own HTTP_USER_AGENT, which
+     * is authoritative for events fired from the same browser and cannot be
+     * forged through the payload. When the request carries no user agent at all
+     * the field is dropped instead of trusted.
+     *
+     * Between 1.58.10 and 1.65.2 this method only unset the field and left the
+     * substitution to the adapters, which none of Facebook, Pinterest and
+     * Snapchat implemented. Those destinations therefore received an IP with no
+     * user agent for every non-purchase event, which Meta reports as unusable
+     * for matching. The adapters now carry the same fallback (see
+     * Facebook_CAPI::send_event_hit()), so the value is also restored for a
+     * payload that never contained the field.
      *
      * The client_ip_address field is kept only when it adds information the
      * server cannot see, defined as: a valid public IP whose family (IPv4/IPv6)
@@ -716,16 +823,17 @@ class Pixel_Manager {
      * @return array
      *
      * @since 1.58.10
+     * @since 1.65.2 The user agent is substituted instead of only stripped, and
+     *                the substitution reaches every pixel's payload shape.
      */
-    private static function strip_client_identifiers_from_sse_payload( $data ) {
+    private static function reconcile_client_identifiers_in_sse_payload( $data ) {
+        $data = self::reconcile_user_agent_fields( $data, Helpers::get_request_user_agent() );
         $server_ip = Geolocation::get_user_ip();
         $server_is_ipv6 = $server_ip && false !== filter_var( $server_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 );
         foreach ( $data as $pixel_name => $pixel_payload ) {
             if ( !is_array( $pixel_payload ) || !isset( $pixel_payload['user_data'] ) || !is_array( $pixel_payload['user_data'] ) ) {
                 continue;
             }
-            // Always strip client-supplied user agent.
-            unset($data[$pixel_name]['user_data']['client_user_agent']);
             // Reconcile client-supplied IP.
             if ( !isset( $pixel_payload['user_data']['client_ip_address'] ) ) {
                 continue;
@@ -803,6 +911,9 @@ class Pixel_Manager {
                 }
                 if ( Options::is_openai_capi_active() ) {
                     OpenAI_CAPI::set_identifiers_on_session();
+                }
+                if ( Helpers::is_experiment() && Options::is_google_ads_dm_active() ) {
+                    Google_DMA::set_identifiers_on_session();
                 }
             }
             // TODO: That function should probably not go into the Google_MP_GA4 class
@@ -964,6 +1075,27 @@ class Pixel_Manager {
         ) ) {
             return;
         }
+        /**
+         * Print each cart item only once per request.
+         *
+         * Both mini cart hooks are registered, because themes ship their own mini
+         * cart templates and fire only one of the two: woocommerce_mini_cart_contents
+         * runs once and loops over the items, woocommerce_after_mini_cart_item_name
+         * runs per item. On a theme that fires both, every item used to be printed
+         * twice. Whichever hook comes first now wins, and the second one finds the
+         * item already printed. The payload is identical either way, so one script
+         * per item is all the data layer needs.
+         *
+         * The check runs after the filter above on purpose: the filter can suppress
+         * a single action (it receives current_action()), and a suppressed call must
+         * not consume the item's one printing chance.
+         *
+         * @since 1.64.1
+         */
+        if ( isset( $this->printed_cart_item_keys[$cart_item_key] ) ) {
+            return;
+        }
+        $this->printed_cart_item_keys[$cart_item_key] = true;
         $data = [
             'product_id'   => $cart_item['product_id'],
             'variation_id' => $cart_item['variation_id'],
@@ -971,9 +1103,17 @@ class Pixel_Manager {
         $json_encode_options = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
         // add JSON_PRETTY_PRINT
         //      $json_encode_options = $json_encode_options | JSON_PRETTY_PRINT;
+        // The data layer object itself is created here too, not just its
+        // cart_item_keys property. This script ships inside the WooCommerce cart
+        // fragments, which the browser evaluates on every cart update, and a
+        // fragment can land on a page that carries no data layer at all: a consent
+        // tool that blocks the Pixel Manager's head script, an HTML optimizer that
+        // dropped it, or a theme that pulls the fragment into a page without the
+        // Pixel Manager. Assigning into an undefined window.pmwDataLayer threw a
+        // TypeError there, in the middle of WooCommerce's fragment replacement.
         ?>
 		<script>
-			window.pmwDataLayer.cart_item_keys                                          = window.pmwDataLayer.cart_item_keys || {};
+			(window.pmwDataLayer = window.pmwDataLayer || {}).cart_item_keys            = window.pmwDataLayer.cart_item_keys || {};
 			window.pmwDataLayer.cart_item_keys['<?php 
         echo esc_js( $cart_item_key );
         ?>'] = <?php 
@@ -1056,6 +1196,59 @@ class Pixel_Manager {
             return $html;
         }
         return $html . Product::ob_print_get_product_data_layer_script( $product );
+    }
+
+    /**
+     * Product views generated by the Product Collection block
+     *
+     * Product Collection renders its items through the Product Template block,
+     * which runs none of the classic loop hooks. WooCommerce routes
+     * woocommerce_after_shop_loop_item into those items through its archive
+     * template compatibility layer, but only for collections that inherit the
+     * template query, so only on the shop, search and taxonomy templates. A
+     * collection placed on a page, a curated collection, and a related products
+     * collection all render without any Pixel Manager output, which leaves
+     * view_item_list and select_item blind to them.
+     *
+     * The product IDs are read from the block's own item key, which is the
+     * attribute the Interactivity API diffs the items on and is therefore
+     * present on every rendered item. The data layer entries are printed in the
+     * footer and the .pmwProductId markers injected into the matching items,
+     * which is the same mechanism the deferred output uses for page builders.
+     *
+     * Nothing in the block output is modified.
+     *
+     * @param string $block_content
+     * @param array  $block
+     * @return string
+     * @since 1.65.0
+     */
+    public function collect_product_collection_products( $block_content, $block ) {
+        if ( empty( $block['blockName'] ) || 'woocommerce/product-template' !== $block['blockName'] ) {
+            return $block_content;
+        }
+        if ( empty( $block_content ) ) {
+            return $block_content;
+        }
+        /**
+         * Block renders also happen for the editor and for REST responses,
+         * where wp_footer never runs and the collected products would only pile
+         * up in memory.
+         */
+        if ( is_admin() || defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+            return $block_content;
+        }
+        if ( !preg_match_all( '/data-wp-key="product-item-(\\d+)"/', $block_content, $matches ) ) {
+            return $block_content;
+        }
+        foreach ( array_unique( $matches[1] ) as $product_id ) {
+            $product = wc_get_product( (int) $product_id );
+            if ( Product::is_not_wc_product( $product ) ) {
+                continue;
+            }
+            Product::defer_product_data_layer_output( $product );
+        }
+        return $block_content;
     }
 
     public function pmw_wp_footer() {
@@ -1314,6 +1507,7 @@ class Pixel_Manager {
         return [
             'uet_tag_id'           => Options::get_bing_uet_tag_id(),
             'enhanced_conversions' => Options::is_bing_enhanced_conversions_enabled(),
+            'capi'                 => Options::is_bing_capi_active(),
             'dynamic_remarketing'  => [
                 'id_type' => Product::get_dyn_r_id_type( 'bing' ),
             ],
@@ -1422,6 +1616,28 @@ class Pixel_Manager {
         return [
             'product_hash'    => Options::get_hyros_product_hash(),
             'application_tag' => Options::get_hyros_effective_application_tag(),
+        ];
+    }
+
+    /**
+     * Mixpanel data layer configuration
+     *
+     * The api_host is derived from the configured data residency region, because
+     * Mixpanel does not ingest events that reach the wrong region. The remaining
+     * flags drive the mixpanel.init() config in the browser.
+     *
+     * @since 1.64.1
+     *
+     * @return array
+     */
+    private static function get_mixpanel_pixel_data() {
+        return [
+            'project_token'       => Options::get_mixpanel_project_token(),
+            'api_host'            => Options::get_mixpanel_api_host(),
+            'session_recording'   => Options::is_mixpanel_session_recording_enabled(),
+            'autocapture'         => Options::is_mixpanel_autocapture_enabled(),
+            'user_identification' => Options::is_mixpanel_user_identification_enabled(),
+            'ingestion_api'       => Options::is_mixpanel_ingestion_api_active(),
         ];
     }
 
@@ -1579,10 +1795,21 @@ class Pixel_Manager {
         if ( !Shop::pmw_get_current_order() ) {
             return array_merge( $data, [] );
         }
-        if ( !Shop::can_order_confirmation_be_processed( Shop::pmw_get_current_order() ) ) {
+        // Deposit plugins can land the customer on an order that only collects an
+        // instalment for a sale that lives on the parent order, or that re-invoices
+        // a sale that was already reported. Report the purchase from the order that
+        // represents the sale, or not at all. Because the reported order's ID and key
+        // go into the data layer, the duplication prevention marker is written on
+        // that order too, which keeps every other instalment page from reporting
+        // the same sale again.
+        $order = Split_Payments::resolve_order_for_purchase( Shop::pmw_get_current_order() );
+        if ( !$order ) {
             return array_merge( $data, [] );
         }
-        return array_merge( $data, $this->get_order_data( Shop::pmw_get_current_order() ) );
+        if ( !Shop::can_order_confirmation_be_processed( $order ) ) {
+            return array_merge( $data, [] );
+        }
+        return array_merge( $data, $this->get_order_data( $order ) );
     }
 
     /**
@@ -1724,7 +1951,12 @@ class Pixel_Manager {
 
     public function inject_pmw_closing() {
         if ( Environment::is_woocommerce_active() && Shop::pmw_is_order_received_page() && Shop::pmw_get_current_order() ) {
-            $this->increase_conversion_count_for_ratings( Shop::pmw_get_current_order() );
+            // Count the order that actually reported the purchase (deposit plugins can
+            // land the customer on an instalment order, see Split_Payments).
+            $reported_order = Split_Payments::resolve_order_for_purchase( Shop::pmw_get_current_order() );
+            if ( $reported_order ) {
+                $this->increase_conversion_count_for_ratings( $reported_order );
+            }
         }
         echo PHP_EOL . '<!-- END Pixel Manager for WooCommerce -->' . PHP_EOL;
     }
@@ -2073,7 +2305,7 @@ class Pixel_Manager {
             $data['list_name'] = 'Order Received Page';
             $data['list_id'] = 'order_received_page';
             $data['page_type'] = 'order_received_page';
-        } elseif ( is_cart() ) {
+        } elseif ( Shop::pmw_is_cart_page() ) {
             $data['list_name'] = 'Cart';
             $data['list_id'] = 'cart';
             $data['page_type'] = 'cart';
@@ -2103,6 +2335,9 @@ class Pixel_Manager {
             'addToCart'     => (array) apply_filters( 'pmw_add_selectors_add_to_cart', [] ),
             'beginCheckout' => (array) apply_filters( 'pmw_add_selectors_begin_checkout', [] ),
         ];
+        // The active shop platform (docs/PLATFORM-CONTRACT.md). The tracking
+        // library and its harnesses branch on this, never on plugin checks.
+        $data['platform'] = Platform_Manager::get_provider()->get_name();
         $data['order_duplication_prevention'] = Shop::is_order_duplication_prevention_active();
         $data['view_item_list_trigger'] = Shop::view_item_list_trigger_settings();
         $data['variations_output'] = Options::is_shop_variations_output_active();

@@ -3,9 +3,11 @@ Contributors: villatheme, mrt3vn
 Donate link: http://www.villatheme.com/donate
 Tags: ecommerce, variation swatches for woocommerce, woocommerce, woocommerce swatches, woocommerce variation swatches
 Requires at least: 5.0
-Requires PHP: 7.0
-Tested up to: 7.0
-Stable tag: trunk
+Requires PHP: 7.4
+WC requires at least: 7.0
+WC tested up to: 11.0.0
+Tested up to: 7.1
+Stable tag: 1.1.19
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +17,7 @@ Showcase variations and impress your customers with beautiful swatches such as c
 
 Product Variations Swatches for WooCommerce is a professional plugin that allows you to show and select attributes for variation products. The plugin displays variation select options of the products under colors, buttons, images, variation images, radio so it helps the customers observe the products they need more visually, save time to find the wanted products than dropdown type for variations of a variable product.
 
->[Try the Demo](https://new2new.com/?item=woo-product-variations-swatches "Demo WooCommerce Product Variations Swatches") |[Documents](https://docs.villatheme.com/?item=woo-product-variations-swatches "Documents") |[Pro Version](https://1.envato.market/bd0ek "Pro Version") | [Facebook group](https://www.facebook.com/groups/villatheme "VillaTheme")
+>[Try the Demo](https://new2new.com/?item=woo-product-variations-swatches "Demo WooCommerce Product Variations Swatches") |[Documents](https://docs.villatheme.com/?item=woo-product-variations-swatches "Documents") |[Pro Version](https://villatheme.com/extensions/woocommerce-product-variations-swatches/ "Pro Version") | [Facebook group](https://www.facebook.com/groups/villatheme "VillaTheme")
 
 [youtube https://www.youtube.com/watch?v=m53mVhVOd5M]
 
@@ -232,8 +234,8 @@ If you use WPML to translate attributes, you only need configure attribute image
 == Installation ==
 
 1. Unzip the download package
-1. Upload `product-variations-swatches-for-woocommerce` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
+2. Upload `product-variations-swatches-for-woocommerce` to the `/wp-content/plugins/` directory
+3. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Frequently Asked Questions ==
 
@@ -242,88 +244,96 @@ If you use WPML to translate attributes, you only need configure attribute image
 2. Swatches on single product page
 
 == Changelog ==
-/**1.1.17 - 2026.06.20**/
-- Updated: VillaTheme support
-– Updated: Compatible with WP 7.0 and WC 10.8.1
+2026.08.25 - version 1.1.19
+- Updated: Update security
+- Updated: Compatibility check with WP 7.1
 
-/**1.1.16 - 2026.03.06**/
+2026.08.17 - version 1.1.18
+- Updated: Compatibility check with WC 11.0
+- Updated: Optimize code
+
+2026.06.20 - version 1.1.17
+- Updated: VillaTheme support
+- Updated: Compatibility with WC 10.8.1 and WP 7.0
+
+2026.03.06 - version 1.1.16
 - Updated: VillaTheme support
 
-/**1.1.15 - 2026.01.23**/
+2026.01.23 - version 1.1.15
 - Updated: VillaTheme support
 
-/**1.1.14 - 2025.11.22**/
+2025.11.22 - version 1.1.14
 - Added: Option to set the separator and color for the selected attribute label
 - Updated: Compatibility with PHP 8.2 and WC 10.3
 
-/** 1.1.13 - 2025.09.12**/
+2025.09.12 - version 1.1.13
 - Updated: VillaTheme support
 
-/** 1.1.12 - 2025.07.24**/
+2025.07.24 - version 1.1.12
 - Updated: VillaTheme support
 
-/** 1.1.11 - 2025.05.12**/
+2025.05.12 - version 1.1.11
 - Updated: Compatible with Dokan - vendors can easily edit product swatches from the product edit page on their vendor dashboard
 
-/** 1.1.10 - 2025.02.28**/
+2025.02.28 - version 1.1.10
 - Fixed: Can not show the variation image on swatches
 - Updated: Option to use variation swatch images as default display for products with multiple attributes.
 
-/** 1.1.9.5 - 2025.02.25**/
+2025.02.25 - version 1.1.9.5
 - Fixed: Can not click the 'Save attributes' button
 
-/** 1.1.9 - 2025.02.14**/
+2025.02.14 - version 1.1.9
 - Fixed: Error reported by customer
 
-/** 1.1.8 - 2025.02.13**/
+2025.02.13 - version 1.1.8
 - Updated: Option to use variation swatch images as the default display type
 - Updated: setting swatches on the product edit page
 
-/** 1.1.7 - 2024.12.28**/
+2024.12.28 - version 1.1.7
 - Updated: Compatible with WC 9.5
 
-/** 1.1.6 - 2024.11.23**/
+2024.11.23 - version 1.1.6
 - Updated: Compatible with WC 9.4 and WP 6.7
 
-/**1.1.5 - 2024.10.11**/
+2024.10.11 - version 1.1.5
 – Updated: Compatible with WC 9.3 and  WP 6.6
 - Updated: Class VillaTheme_Support
 
-/**1.1.4 - 2024.04.13**/
+2024.04.13 - version 1.1.4
 – Updated: Compatible with WC 8.7 and  WP 6.5
 - Updated: Update support file
 
-/**1.1.3 - 2024.02.05**/
+2024.02.05 - version 1.1.3
 – Updated: Compatible with WC 8.5
 - Fixed: Can not save/add product attributes
 
-/**1.1.2 - 2023.11.30**/
+2023.11.30 - version 1.1.2
 – Updated: Compatible with WC 8.3 and  WP 6.4
 - Fixed: Can not save/add product attributes
 
-/**1.1.1 - 2023.07.24**/
+2023.07.24 - version 1.1.1
 - Fixed: Can not save/add product attributes with WC 7.9
 
-/**1.1.0 - 2023.07.15**/
+2023.07.15 - version 1.1.0
 - Updated: Compatibility with WooCommerce Extended Coupon Features PRO by Soft79
 – Updated: Compatible with HPOS - WC 7.8.0 and  WP 6.2.2
 - Updated: Update support file
 
-/**1.0.10 - 2023.02.23**/
+2023.02.23 - version 1.0.10
 – Updated: Compatible with WC 7.4.0
 
-/**1.0.9 - 2022.12.22**/
+2022.12.22 - version 1.0.9
 – Updated: Compatible with WC 7.2.0 and WP 6.1.1
 – Updated: Language file
 - Updated: Update support file
 
-/**1.0.8 - 2022.07.15**/
+2022.07.15 - version 1.0.8
 - Updated: Dismiss notice at admin bar
 
-/**1.0.7 - 2022.06.21**/
+2022.06.21 - version 1.0.7
 - Fixed: Initialize swatches after a request to admin-ajax.php but not an ajax request
 
-/**1.0.6 - 2022.06.20**/
+2022.06.20 - version 1.0.6
 - Fixed: Custom attributes not saving correctly if name contains quote sign
 - Fixed: Error on settings page in some cases
 - Fixed: "Change the size of attribute items" not applied to Select type
@@ -333,50 +343,50 @@ If you use WPML to translate attributes, you only need configure attribute image
 - Improved: Remove empty css
 - Added: Preview of attribute image and color on Global attributes page
 
-/**1.0.5 - 2022.04.20**/
+2022.04.20 - version 1.0.5
 - Updated: Class VillaTheme_Support
 
-/**1.0.4 - 2022.03.29**/
+2022.03.29 - version 1.0.4
 - Updated: Class VillaTheme_Support
 
-/**1.0.3 - 2022.03.21**/
+2022.03.21 - version 1.0.3
 - Updated: Class VillaTheme_Support
 
-/**1.0.2 - 2022.01.11**/
+2022.01.11 - version 1.0.2
 - Fixed: Swatches not working with Woodmart theme's quickview
 - Fixed: Some fields of global attributes(Edit screen) are duplicated when WPML is active
 - Updated: VillaTheme_Support
 - Updated: Make "Out of stock" design(Swatches profile) apply no matter "Disable 'out of stock' variation items" option is on or off
 
-/**1.0.1.16 - 2021.08.05**/
+2021.08.05 - version 1.0.1.16
 - Fixed: Product not adding to cart correctly when using "Theme default" swatches type
 
-/**1.0.1.15 - 2021.08.03**/
+2021.08.03 - version 1.0.1.15
 - Added: Unlock the Disable 'out of stock' variation items option
 
-/**1.0.1.14 - 2021.07.31**/
+2021.07.31 - version 1.0.1.14
 - Fixed: "Out of stock" style not applying
 - Updated: Compatibility with WP5.8 and WC5.5
 - Updated: Class VillaTheme_Support
 
-/**1.0.1.13 - 2021.06.08**/
+2021.06.08 - version 1.0.1.13
 - Fixed: "Out of stock" check only runs after selecting an attribute
 
-/**1.0.1.12 - 2021.06.05**/
+2021.06.05 - version 1.0.1.12
 - Fixed: Custom attributes not saving correctly if attribute name contains special characters
 - Updated: Product edit page: button "Add new" -> "Add", add button "Add new" like WooCommerce which is to create a new term for global attributes
 
-/**1.0.1.11 - 2021.03.01**/
+2021.03.01 - version 1.0.1.11
 - Added: Reset settings general
 - Fixed: Attribute image not saving
 
-/**1.0.1.10 - 2021.02.20**/
+2021.02.20 - version 1.0.1.10
 - Fixed: Tooltip position
 
-/**1.0.1.9 - 2020.12.15**/
+2020.12.15 - version 1.0.1.9
 - Fixed: Edit attribute on product editor page
 
-/**1.0.1.8 - 2020.12.12**/
+2020.12.12 - version 1.0.1.8
 - Fixed: save attribute on product editor page
 - Updated: Compatibility with WP 5.6
 - Updated: Delete image for attribute item
@@ -384,28 +394,28 @@ If you use WPML to translate attributes, you only need configure attribute image
 - Added: Show selected attribute item on single
 - Added: Import/ export settings general
 
-/**1.0.1.7 - 2020.08.22**/
+2020.08.22 - version 1.0.1.7
 - Fixed: Swatches select revert to attribute slug after add to cart
 
-/**1.0.1.6 - 2020.08.12**/
+2020.08.12 - version 1.0.1.6
 - Updated: Compatibility with WP5.5 and WC4.3
 
-/**1.0.1.5 - 2020.06.29**/
+2020.06.29 - version 1.0.1.5
 – Added: Add ajax variation threshold
 – Added: Add default Swatches profile
 – Added: Select multi value for global in the product edit page
 
-/**1.0.1.3 - 2020.05.09**/
+2020.05.09 - version 1.0.1.3
 - Fixed: Display color type and image type for custom attribute
 
-/**1.0.1.2 - 2020.04.23**/
+2020.04.23 - version 1.0.1.2
 - Update: support class
 
-/**1.0.1.1 - 2020.04.22**/
+2020.04.22 - version 1.0.1.1
 - Fixed: Style 'Out of stock' swatches
 - Updated: Update readme
 
-/**1.0.1 - 2020.04.11/
+2020.04.11 - version 1.0.1
 - Fixed: Horizontal style
 
 == Upgrade Notice ==

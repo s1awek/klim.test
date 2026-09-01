@@ -1,3 +1,9 @@
+= 2.143 =
+* Update to use Font Awesome Free 7.3.1.
+
+= 2.142 =
+* Confirmed compatibility with WordPress 7.1.
+
 = 2.141 =
 * Confirmed compatibility with WordPress 7.0. Additional updates for WordPress 7.0. Other bug fixes.
 

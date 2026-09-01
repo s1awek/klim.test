@@ -800,6 +800,16 @@ class PMXI_Import_Record extends PMXI_Model_Record {
         return ($this->options['update_all_data'] == 'yes' || $this->options[$option] || $this->options['create_new_records']) ? true : false;
     }
 
+    protected $is_custom_fields_import_enabled = NULL;
+
+    public function is_custom_fields_import_enabled(){
+        if ( NULL === $this->is_custom_fields_import_enabled ){
+            $this->is_custom_fields_import_enabled = (bool) apply_filters('pmxi_is_custom_fields_import_enabled', true, $this->id, $this->options);
+        }
+
+        return $this->is_custom_fields_import_enabled;
+    }
+
 	/**
 	 * Perform import operation
 	 * @param string $xml XML string to import
@@ -1356,7 +1366,7 @@ class PMXI_Import_Record extends PMXI_Model_Record {
 			$chunk == 1 and $logger and call_user_func($logger, __('Composing custom parameters...', 'wp-all-import-pro'));
 			$meta_keys = array(); $meta_values = array();
 
-            if ( $this->is_parsing_required('is_update_custom_fields') ){
+            if ( $this->is_custom_fields_import_enabled() and $this->is_parsing_required('is_update_custom_fields') ){
                 foreach ($this->options['custom_name'] as $j => $custom_name) {
                     // Skip stub rows — XmlImportParser fails on an empty template.
                     if (!is_string($custom_name) || trim($custom_name) === '') {
@@ -2977,7 +2987,7 @@ class PMXI_Import_Record extends PMXI_Model_Record {
 					$existing_meta_keys = array();
 					$existing_meta = array();
 
-					if (empty($articleData['ID']) or $this->options['update_all_data'] == 'yes' or ($this->options['update_all_data'] == 'no' and $this->options['is_update_custom_fields']) or ($this->options['update_all_data'] == 'no' and !empty($this->options['is_update_attributes']) and $post_type[$i] == "product" and class_exists('PMWI_Plugin'))) {
+					if ($this->is_custom_fields_import_enabled() and (empty($articleData['ID']) or $this->options['update_all_data'] == 'yes' or ($this->options['update_all_data'] == 'no' and $this->options['is_update_custom_fields']) or ($this->options['update_all_data'] == 'no' and !empty($this->options['is_update_attributes']) and $post_type[$i] == "product" and class_exists('PMWI_Plugin')))) {
 
 						$show_log = ( ! empty($serialized_meta) );
 

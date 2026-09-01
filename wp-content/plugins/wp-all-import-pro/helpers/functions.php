@@ -411,7 +411,8 @@ function wpai_wp_enqueue_code_editor( $args ) {
                     $notice = sprintf(__('<span class="important-warning">Warning</span>: Any %s not in your import file will be <b>permanently deleted</b>, even those not created by this import.', 'wp-all-import-pro'), $custom_type->labels->name);
                 }
             }
-            return $notice;
+
+            return apply_filters('wp_all_import_delete_missing_notice', $notice, $options);
         }
     }
 

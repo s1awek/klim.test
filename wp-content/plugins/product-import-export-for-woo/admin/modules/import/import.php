@@ -158,7 +158,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 			'field_name'=>'default_import_batch',
 			'help_text'=>__('Provide the default count for the records to be imported in a batch.', 'product-import-export-for-woo'),
 			'validation_rule'=>array('type'=>'absint'),
-			'attr' => array('min' => 1, 'max' => 50),
+			'attr' => array('min' => 1, 'max' => 50, 'step' => 1),
 		);
 
 		return $fields;
@@ -173,12 +173,13 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 			
 			'batch_count'=>array(
 				'label'=>__("Import in batches of", 'product-import-export-for-woo'),
-				'type'=>'text',
+				'type'=>'number',
 				'value'=>$this->default_batch_count,
 				'field_name'=>'batch_count',
 				// translators: %d is the default number of records (10)
 				'help_text'=>sprintf(__('The number of records that the server will process for every iteration within the configured timeout interval. If the import fails you can lower this number accordingly and try again. Defaulted to %d records.', 'product-import-export-for-woo'), 10),
 				'validation_rule'=>array('type'=>'absint'),
+				'attr' => array('min' => 1, 'step' => 1),
 			)
 		);
 
@@ -245,11 +246,14 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 		/* taking import_method fields from other modules */
 		$method_import_screen_fields=apply_filters('wt_iew_importer_alter_method_import_fields_basic', $method_import_screen_fields, $this->to_import, $method_import_form_data);
 
+		$delimiter_values  = Wt_Iew_IE_Basic_Helper::_get_delimiter_form_values( $method_import_form_data );
+		$delimiter_default = $delimiter_values['delimiter'];
+		$delimiter_preset  = $delimiter_values['preset'];
 
 		$method_import_screen_fields['delimiter']=array(
 			'label'=>__("Delimiter", 'product-import-export-for-woo'),
 			'type'=>'select',
-			'value'=>",",
+			'value'=>$delimiter_preset,
 			'css_class'=>"wt_iew_delimiter_preset",
 			'tr_id'=>'delimiter_tr',
 			'tr_class'=>$file_from_field_arr['tr_class'], //add tr class from parent.Because we need to toggle the tr when parent tr toggles.
@@ -257,7 +261,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import
 			'sele_vals'=>Wt_Iew_IE_Basic_Helper::_get_csv_delimiters(),
 			'help_text'=>__('The character used to separate columns in the CSV file. Takes comma (,) by default.', 'product-import-export-for-woo'),
 			'validation_rule'=>array('type'=>'skip'),
-			'after_form_field'=>'<input type="text" class="wt_iew_custom_delimiter" name="wt_iew_delimiter" value="," />',//Always pass safe data.
+			'after_form_field'=>'<input type="text" class="wt_iew_custom_delimiter" name="wt_iew_delimiter" value="' . esc_attr( $delimiter_default ) . '" maxlength="1" />', // Always pass safe data.
 		);
 
 		return $method_import_screen_fields;

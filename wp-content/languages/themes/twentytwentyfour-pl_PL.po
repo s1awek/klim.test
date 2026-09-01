@@ -7,7 +7,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.3\n"
+"X-Generator: GlotPress/4.1.0\n"
 "Language: pl\n"
 "Project-Id-Version: Themes - Twenty Twenty-Four\n"
 
@@ -23,31 +23,31 @@ msgstr "Dwadzieścia Dwadzieścia-Cztery został zaprojektowany tak, aby był el
 msgid "Twenty Twenty-Four"
 msgstr "Dwadzieścia Dwadzieścia-Cztery"
 
-#: patterns/footer.php:96
+#: patterns/footer.php:101
 msgid "Twitter/X"
 msgstr "Twitter/X"
 
-#: patterns/footer.php:72
+#: patterns/footer.php:77
 msgid "Privacy Policy"
 msgstr "Polityka prywatności"
 
-#: patterns/footer.php:51
+#: patterns/footer.php:56
 msgid "Careers"
 msgstr "Kariera"
 
-#: patterns/footer.php:50
+#: patterns/footer.php:55
 msgid "History"
 msgstr "Historia"
 
-#: patterns/footer.php:49
+#: patterns/footer.php:54
 msgid "Team"
 msgstr "Zespół"
 
-#: patterns/footer.php:73
+#: patterns/footer.php:78
 msgid "Terms and Conditions"
 msgstr "Regulamin"
 
-#: patterns/footer.php:74
+#: patterns/footer.php:79
 msgid "Contact Us"
 msgstr "Skontaktuj się z nami"
 
@@ -56,23 +56,23 @@ msgctxt "Pattern title"
 msgid "List of posts without images, 1 column"
 msgstr "Lista wpisów bez obrazków, 1 kolumna"
 
-#: patterns/hidden-portfolio-hero.php:16
+#: patterns/hidden-portfolio-hero.php:21
 msgid "I’m <em>Leia Acosta</em>, a passionate photographer who finds inspiration in capturing the fleeting beauty of life."
 msgstr "Jestem <em>Leia Acosta</em>, pasjonatka fotografii, która znajduje inspirację w uchwyceniu ulotnego piękna życia."
 
-#: functions.php:188
+#: functions.php:189
 msgid "A collection of full page layouts."
 msgstr "Kolekcja układów pełnych stron."
 
-#: functions.php:187
+#: functions.php:188
 msgctxt "Block pattern category"
 msgid "Pages"
 msgstr "Strony"
 
 #. Author URI of the theme
 #. Translators: WordPress link.
-#: style.css patterns/footer-centered-logo-nav.php:22
-#: patterns/footer-colophon-3-col.php:91 patterns/footer.php:117
+#: style.css patterns/footer-centered-logo-nav.php:27
+#: patterns/footer-colophon-3-col.php:96 patterns/footer.php:122
 msgid "https://wordpress.org"
 msgstr "https://pl.wordpress.org"
 
@@ -381,71 +381,71 @@ msgctxt "Color name"
 msgid "Contrast / 3"
 msgstr "Kontrast / 3"
 
-#: patterns/footer.php:86
+#: patterns/footer.php:91
 msgid "Social"
 msgstr "Media społecznościowe"
 
-#: patterns/hidden-sidebar.php:33
+#: patterns/hidden-sidebar.php:39
 msgid "Popular Categories"
 msgstr "Popularne kategorie"
 
-#: patterns/footer-colophon-3-col.php:60 patterns/footer.php:94
+#: patterns/footer-colophon-3-col.php:65 patterns/footer.php:99
 msgid "Facebook"
 msgstr "Facebook"
 
-#: patterns/footer-colophon-3-col.php:60 patterns/footer.php:95
+#: patterns/footer-colophon-3-col.php:65 patterns/footer.php:100
 msgid "Instagram"
 msgstr "Instagram"
 
-#: patterns/footer-colophon-3-col.php:39
+#: patterns/footer-colophon-3-col.php:44
 msgid "Contact"
 msgstr "Kontakt"
 
-#: functions.php:47
+#: functions.php:48
 msgid "Pill"
 msgstr "Pigułka"
 
-#: patterns/footer-colophon-3-col.php:82
+#: patterns/footer-colophon-3-col.php:87
 msgid "&copy;"
 msgstr "&copy;"
 
-#: patterns/hidden-sidebar.php:49
+#: patterns/hidden-sidebar.php:55
 msgid "Useful Links"
 msgstr "Przydatne linki"
 
-#: patterns/footer.php:92
+#: patterns/footer.php:97
 msgid "Social Media"
 msgstr "Media społecznościowe"
 
-#: patterns/footer-colophon-3-col.php:57
+#: patterns/footer-colophon-3-col.php:62
 msgid "Follow"
 msgstr "Obserwuj"
 
-#: patterns/footer.php:64 patterns/footer.php:70
+#: patterns/footer.php:69 patterns/footer.php:75
 msgid "Privacy"
 msgstr "Prywatność"
 
-#: patterns/hidden-post-navigation.php:9 patterns/hidden-post-navigation.php:10
-#: patterns/hidden-posts-heading.php:10
-#: patterns/template-index-portfolio.php:16
+#: patterns/hidden-post-navigation.php:14
+#: patterns/hidden-post-navigation.php:15 patterns/hidden-posts-heading.php:16
+#: patterns/template-index-portfolio.php:21
 msgid "Posts"
 msgstr "Wpisy"
 
-#: patterns/hidden-comments.php:12
+#: patterns/hidden-comments.php:17
 msgid "Comments"
 msgstr "Komentarze"
 
-#: patterns/cta-pricing.php:104
+#: patterns/cta-pricing.php:109
 msgctxt "Sample price for the second pricing level"
 msgid "$12"
 msgstr "12 zł"
 
-#: patterns/cta-content-image-on-right.php:47
+#: patterns/cta-content-image-on-right.php:52
 msgctxt "Button text of this section"
 msgid "How it works"
 msgstr "Jak to działa"
 
-#: patterns/cta-content-image-on-right.php:41
+#: patterns/cta-content-image-on-right.php:46
 msgctxt "Button text of this section"
 msgid "Download app"
 msgstr "Pobierz aplikację"
@@ -455,63 +455,63 @@ msgctxt "Pattern title"
 msgid "Pricing"
 msgstr "Cennik"
 
-#: patterns/cta-pricing.php:18
+#: patterns/cta-pricing.php:23
 msgctxt "Sample heading for pricing pattern"
 msgid "Our Services"
 msgstr "Nasze usługi"
 
-#: patterns/cta-pricing.php:11
+#: patterns/cta-pricing.php:16
 msgctxt "Name for the pricing pattern"
 msgid "Pricing Table"
 msgstr "Tabela cen"
 
-#: patterns/cta-pricing.php:203
+#: patterns/cta-pricing.php:208
 msgctxt "Button text for the third pricing level"
 msgid "Subscribe"
 msgstr "Subskrybuj"
 
-#: patterns/cta-pricing.php:145
+#: patterns/cta-pricing.php:150
 msgctxt "Button text for the second pricing level"
 msgid "Subscribe"
 msgstr "Subskrybuj"
 
-#: patterns/text-title-left-image-right.php:35
+#: patterns/text-title-left-image-right.php:40
 msgctxt "Call to Action button text"
 msgid "About us"
 msgstr "O nas"
 
-#: functions.php:24
+#: functions.php:25
 msgid "Arrow icon"
 msgstr "Ikonka strzałki"
 
-#: functions.php:70
+#: functions.php:71
 msgid "Checkmark"
 msgstr "Znacznik wyboru"
 
-#: functions.php:89
+#: functions.php:90
 msgid "With arrow"
 msgstr "Ze strzałką"
 
-#: functions.php:107
+#: functions.php:108
 msgid "With asterisk"
 msgstr "Z gwiazdką"
 
-#: patterns/banner-hero.php:18
+#: patterns/banner-hero.php:23
 msgctxt "Heading of the hero section"
 msgid "A commitment to innovation and sustainability"
 msgstr "Zaangażowanie w innowacyjność i zrównoważony rozwój"
 
-#: patterns/banner-hero.php:26
+#: patterns/banner-hero.php:31
 msgctxt "Content of the hero section"
 msgid "Études is a pioneering firm that seamlessly merges creativity and functionality to redefine architectural excellence."
 msgstr "Études to pionierska firma, która płynnie łączy kreatywność i funkcjonalność, aby na nowo zdefiniować doskonałość architektoniczną."
 
-#: patterns/banner-hero.php:37
+#: patterns/banner-hero.php:42
 msgctxt "Button text of the hero section"
 msgid "About us"
 msgstr "O nas"
 
-#: patterns/banner-hero.php:52
+#: patterns/banner-hero.php:57
 msgid "Building exterior in Toronto, Canada"
 msgstr "Zewnętrzna część budynku w Toronto, Kanadzie"
 
@@ -520,12 +520,12 @@ msgctxt "Pattern title"
 msgid "Project description"
 msgstr "Opis projektu"
 
-#: patterns/banner-project-description.php:17
+#: patterns/banner-project-description.php:23
 msgctxt "Sample title for a project or post"
 msgid "Art Gallery — Overview"
 msgstr "Galeria sztuki — przegląd"
 
-#: patterns/banner-project-description.php:41
+#: patterns/banner-project-description.php:47
 msgid "Hyatt Regency San Francisco, San Francisco, United States"
 msgstr "Hyatt Regency San Francisco, San Francisco, Stany Zjednoczone"
 
@@ -534,96 +534,96 @@ msgctxt "Pattern title"
 msgid "Call to action with image on right"
 msgstr "Wezwanie do działania z obrazkiem po prawej stronie"
 
-#: patterns/cta-content-image-on-right.php:59
-#: patterns/cta-services-image-left.php:19
+#: patterns/cta-content-image-on-right.php:64
+#: patterns/cta-services-image-left.php:24
 msgid "White abstract geometric artwork from Dresden, Germany"
 msgstr "Białe abstrakcyjne dzieło geometryczne z Drezna, Niemiec"
 
-#: patterns/cta-content-image-on-right.php:32
-#: patterns/text-alternating-images.php:52
+#: patterns/cta-content-image-on-right.php:37
+#: patterns/text-alternating-images.php:57
 msgctxt "Sample list item"
 msgid "Experience the world of architecture."
 msgstr "Doświadcz świata architektury."
 
-#: patterns/cta-content-image-on-right.php:28
-#: patterns/text-alternating-images.php:48
+#: patterns/cta-content-image-on-right.php:33
+#: patterns/text-alternating-images.php:53
 msgctxt "Sample list item"
 msgid "Showcase your projects."
 msgstr "Zaprezentuj swoje projekty."
 
-#: patterns/cta-content-image-on-right.php:24
-#: patterns/text-alternating-images.php:44
+#: patterns/cta-content-image-on-right.php:29
+#: patterns/text-alternating-images.php:49
 msgctxt "Sample list item"
 msgid "Collaborate with fellow architects."
 msgstr "Współpracuj z innymi architektami."
 
-#: patterns/cta-content-image-on-right.php:18
+#: patterns/cta-content-image-on-right.php:23
 msgctxt "Sample heading"
 msgid "Enhance your architectural journey with the Études Architect app."
 msgstr "Ulepsz swoją podróż architektoniczną dzięki aplikacji Études Architect."
 
-#: patterns/cta-pricing.php:42
+#: patterns/cta-pricing.php:47
 msgctxt "Sample price for the first pricing level"
 msgid "$0"
 msgstr "0 zł"
 
-#: patterns/cta-pricing.php:37
+#: patterns/cta-pricing.php:42
 msgctxt "Sample heading for the first pricing level"
 msgid "Free"
 msgstr "Bezpłatne"
 
-#: patterns/cta-pricing.php:162
+#: patterns/cta-pricing.php:167
 msgctxt "Sample price for the third pricing level"
 msgid "$28"
 msgstr "28 zł"
 
-#: patterns/cta-pricing.php:157
+#: patterns/cta-pricing.php:162
 msgctxt "Sample heading for the third pricing level"
 msgid "Expert"
 msgstr "Ekspert"
 
-#: patterns/cta-pricing.php:99
+#: patterns/cta-pricing.php:104
 msgctxt "Sample heading for the second pricing level"
 msgid "Connoisseur"
 msgstr "Koneser"
 
-#: patterns/cta-pricing.php:22
+#: patterns/cta-pricing.php:27
 msgctxt "Sample description for a pricing table"
 msgid "We offer flexible options, which you can adapt to the different needs of each project."
 msgstr "Oferujemy elastyczne opcje, które można dostosować do różnych potrzeb każdego projektu."
 
-#: patterns/cta-pricing.php:115
+#: patterns/cta-pricing.php:120
 msgctxt "Feature for pricing level"
 msgid "Access to 20 exclusive <em>Études Articles</em> per month."
 msgstr "Dostęp do 20 ekskluzywnych <em>artykułów Études</em> miesięcznie."
 
-#: patterns/cta-pricing.php:87
+#: patterns/cta-pricing.php:92
 msgctxt "Button text for the first pricing level"
 msgid "Subscribe"
 msgstr "Subskrybuj"
 
-#: patterns/cta-pricing.php:72 patterns/cta-pricing.php:131
+#: patterns/cta-pricing.php:77 patterns/cta-pricing.php:136
 msgctxt "Feature for pricing level"
 msgid "Exclusive access to the <em>Études</em> app for iOS and Android."
 msgstr "Ekskluzywny dostęp do aplikacji <em>Études</em> na iOS i Android."
 
-#: patterns/cta-pricing.php:62 patterns/cta-pricing.php:123
-#: patterns/cta-pricing.php:181
+#: patterns/cta-pricing.php:67 patterns/cta-pricing.php:128
+#: patterns/cta-pricing.php:186
 msgctxt "Feature for pricing level"
 msgid "Weekly print edition."
 msgstr "Tygodniowe wydanie drukowane."
 
-#: patterns/cta-pricing.php:53
+#: patterns/cta-pricing.php:58
 msgctxt "Feature for pricing level"
 msgid "Access to 5 exclusive <em>Études Articles</em> per month."
 msgstr "Dostęp do 5 ekskluzywnych artykułów <em>artykułów Études</em> miesięcznie."
 
-#: patterns/cta-pricing.php:173
+#: patterns/cta-pricing.php:178
 msgctxt "Feature for pricing level"
 msgid "Exclusive, unlimited access to <em>Études Articles</em>."
 msgstr "Ekskluzywny, nieograniczony dostęp do <em>artykułów Études</em>."
 
-#: patterns/cta-pricing.php:189
+#: patterns/cta-pricing.php:194
 msgctxt "Feature for pricing level"
 msgid "Exclusive access to the <em>Études</em> app for iOS and Android"
 msgstr "Ekskluzywny dostęp do aplikacji <em>Études</em> na iOS i Android"
@@ -633,27 +633,27 @@ msgctxt "Pattern title"
 msgid "RSVP"
 msgstr "RSVP"
 
-#: patterns/cta-rsvp.php:11
+#: patterns/cta-rsvp.php:16
 msgctxt "Name of RSVP pattern"
 msgid "RSVP"
 msgstr "RSVP"
 
-#: patterns/cta-rsvp.php:21 patterns/page-rsvp-landing.php:23
+#: patterns/cta-rsvp.php:26 patterns/page-rsvp-landing.php:28
 msgctxt "Initials for ´please respond´"
 msgid "RSVP"
 msgstr "RSVP"
 
-#: patterns/cta-rsvp.php:34 patterns/page-rsvp-landing.php:34
+#: patterns/cta-rsvp.php:39 patterns/page-rsvp-landing.php:39
 msgctxt "Call to action button text for the reservation button"
 msgid "Reserve your spot"
 msgstr "Zarezerwuj swoje miejsce"
 
-#: patterns/cta-services-image-left.php:39
+#: patterns/cta-services-image-left.php:44
 msgctxt "Sample button text to view the services"
 msgid "Our services"
 msgstr "Nasze usługi"
 
-#: patterns/cta-rsvp.php:50 patterns/text-title-left-image-right.php:51
+#: patterns/cta-rsvp.php:55 patterns/text-title-left-image-right.php:56
 msgid "A ramp along a curved wall in the Kiasma Museu, Helsinki, Finland"
 msgstr "Rampa wzdłuż zakrzywionej ściany w muzeum Kiasma, Helsinki, Finlandia"
 
@@ -662,19 +662,19 @@ msgctxt "Pattern title"
 msgid "Centered call to action"
 msgstr "Wyśrodkowane wezwanie do działania"
 
-#: patterns/cta-subscribe-centered.php:20
+#: patterns/cta-subscribe-centered.php:25
 msgctxt "Sample text for Subscriber Heading with numbers"
 msgid "Join 900+ subscribers"
 msgstr "Dołącz do 900+ subskrybentów"
 
-#: patterns/cta-subscribe-centered.php:31
+#: patterns/cta-subscribe-centered.php:36
 msgctxt "Sample text for Sign Up Button"
 msgid "Sign up"
 msgstr "Zapisz się"
 
 #. Translators: Designed with WordPress
-#: patterns/footer-centered-logo-nav.php:25
-#: patterns/footer-colophon-3-col.php:94 patterns/footer.php:120
+#: patterns/footer-centered-logo-nav.php:30
+#: patterns/footer-colophon-3-col.php:99 patterns/footer.php:125
 msgid "Designed with %1$s"
 msgstr "Stworzone z %1$s"
 
@@ -683,7 +683,7 @@ msgctxt "Pattern title"
 msgid "Footer with centered logo and navigation"
 msgstr "Stopka z wyśrodkowanym logo i nawigacją"
 
-#: patterns/cta-subscribe-centered.php:24
+#: patterns/cta-subscribe-centered.php:29
 msgctxt "Sample text for Subscriber Description"
 msgid "Stay in the loop with everything you need to know."
 msgstr "Bądź na bieżąco ze wszystkim, co musisz wiedzieć."
@@ -698,7 +698,7 @@ msgctxt "Pattern title"
 msgid "Footer with colophon, 4 columns"
 msgstr "Stopka z kolofonem, 4 kolumny"
 
-#: patterns/footer-colophon-3-col.php:30
+#: patterns/footer-colophon-3-col.php:35
 msgid "Keep up, get in touch."
 msgstr "Bądź na bieżąco, bądźmy w kontakcie."
 
@@ -707,17 +707,17 @@ msgctxt "Pattern title"
 msgid "Services call to action with image on left"
 msgstr "Usługi - wezwanie do działania z obrazkiem po lewej stronie"
 
-#: patterns/cta-services-image-left.php:32
+#: patterns/cta-services-image-left.php:37
 msgctxt "Sample description of the services pattern"
 msgid "Experience the fusion of imagination and expertise with Études—the catalyst for architectural transformations that enrich the world around us."
 msgstr "Doświadcz połączenia wyobraźni i wiedzy specjalistycznej z Études — katalizatorem transformacji architektonicznych, które wzbogacają otaczający nas świat."
 
-#: patterns/cta-rsvp.php:27 patterns/page-rsvp-landing.php:28
+#: patterns/cta-rsvp.php:32 patterns/page-rsvp-landing.php:33
 msgctxt "RSVP call to action description"
 msgid "Experience the fusion of imagination and expertise with Études Arch Summit, February 2025."
 msgstr "Doświadcz połączenia wyobraźni i wiedzy specjalistycznej podczas konferencji Études Arch, w lutym 2025."
 
-#: patterns/cta-services-image-left.php:28
+#: patterns/cta-services-image-left.php:33
 msgctxt "Sample heading of the services pattern"
 msgid "Guiding your business through the project"
 msgstr "Prowadzimy twój biznes przez projket"
@@ -742,7 +742,7 @@ msgctxt "Pattern title"
 msgid "404"
 msgstr "404"
 
-#: patterns/gallery-project-layout.php:54
+#: patterns/gallery-project-layout.php:59
 msgid "Art Gallery of Ontario, Toronto, Canada"
 msgstr "Galeria Sztuki Ontario, Toronto, Kanada"
 
@@ -751,16 +751,16 @@ msgctxt "Pattern title"
 msgid "Project layout"
 msgstr "Układ projektu"
 
-#: patterns/gallery-project-layout.php:21
+#: patterns/gallery-project-layout.php:26
 msgid "An empty staircase under an angular roof in Darling Harbour, Sydney, Australia"
 msgstr "Pusta klatka schodowa pod kątowym dachem w Darling Harbour, Sydney, Australia"
 
-#: patterns/hidden-404.php:10
+#: patterns/hidden-404.php:15
 msgctxt "Heading for a webpage that is not found"
 msgid "Page Not Found"
 msgstr "Strona nie została znaleziona"
 
-#: patterns/hidden-404.php:13
+#: patterns/hidden-404.php:18
 msgctxt "Message to convey that a webpage could not be found"
 msgid "The page you are looking for does not exist, or it has been moved. Please try searching using the form below."
 msgstr "Strona, której szukasz, nie istnieje lub została przeniesiona. Spróbuj wyszukać za pomocą poniższego formularza."
@@ -775,12 +775,12 @@ msgctxt "Pattern title"
 msgid "No results"
 msgstr "Brak wyników"
 
-#: patterns/hidden-search.php:9
+#: patterns/hidden-search.php:14
 msgctxt "search button text"
 msgid "Search"
 msgstr "Szukaj"
 
-#: patterns/hidden-search.php:9 patterns/hidden-sidebar.php:75
+#: patterns/hidden-search.php:14 patterns/hidden-sidebar.php:81
 msgctxt "search form label"
 msgid "Search"
 msgstr "Szukaj"
@@ -790,12 +790,12 @@ msgctxt "Pattern title"
 msgid "Search"
 msgstr "Wyszukiwanie"
 
-#: patterns/hidden-post-navigation.php:12
+#: patterns/hidden-post-navigation.php:17
 msgctxt "Label before the title of the next post. There is a space after the colon."
 msgid "Next: "
 msgstr "Następny: "
 
-#: patterns/hidden-post-navigation.php:11
+#: patterns/hidden-post-navigation.php:16
 msgctxt "Label before the title of the previous post. There is a space after the colon."
 msgid "Previous: "
 msgstr "Poprzedni: "
@@ -805,12 +805,12 @@ msgctxt "Pattern title"
 msgid "Post navigation"
 msgstr "Nawigacja wpisu"
 
-#: patterns/hidden-post-meta.php:25
+#: patterns/hidden-post-meta.php:30
 msgctxt "Prefix for the post category block: in category name"
 msgid "in "
 msgstr "w "
 
-#: patterns/hidden-no-results.php:9
+#: patterns/hidden-no-results.php:15
 msgctxt "Message explaining that there are no results returned from a search"
 msgid "No posts were found."
 msgstr "Nie znaleziono żadnych wpisów."
@@ -820,41 +820,41 @@ msgctxt "Pattern title"
 msgid "Sidebar"
 msgstr "Panel boczny"
 
-#: patterns/hidden-sidebar.php:17
+#: patterns/hidden-sidebar.php:23
 msgid "About the author"
 msgstr "O autorze"
 
-#: patterns/hidden-sidebar.php:75
+#: patterns/hidden-sidebar.php:81
 msgctxt "search form placeholder"
 msgid "Search..."
 msgstr "Szukaj…"
 
-#: patterns/page-newsletter-landing.php:40
+#: patterns/page-newsletter-landing.php:45
 msgctxt "Sample content for newsletter subscribe button"
 msgid "Sign up"
 msgstr "Zapisz się"
 
-#: patterns/team-4-col.php:97
+#: patterns/team-4-col.php:102
 msgctxt "Sample role of a team member"
 msgid "Architect"
 msgstr "Architekt"
 
-#: patterns/team-4-col.php:44
+#: patterns/team-4-col.php:49
 msgctxt "Sample name of a team member"
 msgid "Francesca Piovani"
 msgstr "Francesca Piovani"
 
-#: patterns/team-4-col.php:92
+#: patterns/team-4-col.php:97
 msgctxt "Sample name of a team member"
 msgid "Helga Steiner"
 msgstr "Helga Steiner"
 
-#: patterns/team-4-col.php:116
+#: patterns/team-4-col.php:121
 msgctxt "Sample name of a team member"
 msgid "Ivan Lawrence"
 msgstr "Ivan Lawrence"
 
-#: patterns/team-4-col.php:68
+#: patterns/team-4-col.php:73
 msgctxt "Sample name of a team member"
 msgid "Rhye Moore"
 msgstr "Rhye Moore"
@@ -864,12 +864,12 @@ msgctxt "Pattern title"
 msgid "Title text and button on left with image on right"
 msgstr "Tekst tytułu i przycisk po lewej stronie, a obrazek po prawej"
 
-#: patterns/banner-project-description.php:26
+#: patterns/banner-project-description.php:32
 msgctxt "Sample descriptive text for a project or post."
 msgid "This transformative project seeks to enhance the gallery's infrastructure, accessibility, and exhibition spaces while preserving its rich cultural heritage."
 msgstr "Rewolucyjny projekt ma na celu ulepszenie infrastruktury galerii, poprawę jej dostępności i przestrzeni wystawowych, jednocześnie zachowując jej bogate dziedzictwo kulturowe."
 
-#: patterns/footer-colophon-3-col.php:42
+#: patterns/footer-colophon-3-col.php:47
 msgctxt "Example email in site footer"
 msgid "info@example.com"
 msgstr "info@example.com"
@@ -879,7 +879,7 @@ msgctxt "Pattern title"
 msgid "Full screen image"
 msgstr "Obrazek na cały ekran"
 
-#: patterns/footer.php:41 patterns/footer.php:47
+#: patterns/footer.php:46 patterns/footer.php:52
 msgid "About"
 msgstr "O nas"
 

@@ -163,6 +163,21 @@
   margin-top: 2px;
   height: auto;
 }
+.wt-iew-plugin-toolbar.bottom .wt_iew_step_footer_actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.wt-iew-plugin-toolbar.bottom .wt_iew_step_footer_actions .button {
+  margin-top: 0;
+}
+.wt-iew-plugin-toolbar.bottom .wt_iew_step_footer_or {
+  font-weight: bold;
+  line-height: 1;
+  margin: 0;
+}
 
 
 /** 
@@ -424,7 +439,7 @@
   height: 20px;
   color: gray;
   position: absolute;
-  top: 10px;
+  top: 16px;
   right: 10px;
 }
 

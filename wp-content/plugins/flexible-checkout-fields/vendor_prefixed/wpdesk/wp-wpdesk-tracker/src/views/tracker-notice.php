@@ -2,6 +2,8 @@
 
 namespace FcfVendor;
 
+/** @var string $username */
+/** @var string $terms_url */
 if (!\defined('ABSPATH')) {
     exit;
 }

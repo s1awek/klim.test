@@ -2,9 +2,9 @@
 Contributors: alekv, wolfbaer, freemius
 Tags: conversion tracking, google ads, google analytics, facebook pixel, woocommerce
 Requires at least: 6.2
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.3
-Stable tag: 1.64.0
+Stable tag: 1.66.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -93,8 +93,9 @@ Have a look at the full feature list over [here](https://sweetcode.com/docs/pmw/
 * GroundTruth Ads – omnichannel engagement and conversion tracking (beta)
 * Hyros – ad attribution through the Hyros Universal Script with funnel milestone tags (beta)
 * LinkedIn Ads
-* Microsoft Ads (Bing Ads)
+* Microsoft Ads (Bing Ads) - UET tag tracking and server-side conversions through the Microsoft Advertising Conversions API
 * Microsoft Clarity – heatmaps and session recordings with e-commerce events (beta)
+* Mixpanel – product analytics with the full shopping funnel, server-side purchases through the Ingestion API, session replay and user identification (beta)
 * Nextdoor Ads – conversion tracking through the Nextdoor Universal Pixel (beta)
 * OpenAI Ads – conversion tracking for ads on ChatGPT
 * Outbrain Ads
@@ -110,7 +111,7 @@ Have a look at the full feature list over [here](https://sweetcode.com/docs/pmw/
 **Premium Features**
 
 * [Automatic Conversion Recovery (ACR)](https://sweetcode.com/docs/pmw/features/acr?utm_source=wordpress.org&utm_medium=wpm-plugin-page&utm_campaign=pixel-manager-for-woocommerce-docs&utm_content=acr) – automatically recover missed conversions nightly
-* Server-side tracking (CAPI) – Meta, TikTok, Pinterest, Snapchat, Reddit, OpenAI, GA4 Measurement Protocol
+* Server-side tracking (CAPI) – Meta, TikTok, Pinterest, Snapchat, Reddit, OpenAI, Nextdoor, Microsoft Ads, GA4 Measurement Protocol
 * Advanced Order Duplication Prevention
 * Google Ads Enhanced Conversions – first-party data for improved attribution
 * Google Ads Conversion Adjustments – send refund data back to Google Ads
@@ -324,6 +325,57 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 1.66.0  =
+*Release date - 26.08.2026*
+
+* New: The debug report now states whether Meta's own Conversions API Gateway is connected to the pixel, and which events it mirrors. The Gateway copies every browser event into the server channel from Meta's side, so it explains a server event count of roughly twice the browser one while being invisible in the WordPress plugin list
+* Tweak: Removed the one-time notice that announced the Nova interface on installs that predate it. Nova has been the default since 1.62.0, and the Support tab still offers the switch back to the Classic interface
+* Tweak: TikTok for WooCommerce no longer tracks alongside the Pixel Manager when the TikTok pixel is configured here. The plugin offers no setting or filter for it, so its event senders are unhooked, which stops its browser pixel and its Events API events while leaving the catalog sync, the order sync and its settings screen untouched
+* Fix: Configurable Composite Products are reported with the price the shopper configured instead of the cheapest possible configuration, so `add_to_cart` no longer under-reports every upgraded option. The quantity of composites and bundles is now read from the container's own quantity input rather than from the first component's
+* Fix: The Meta `AddPaymentInfo` event now reports the cart's contents, value and currency, on the browser pixel and on the Conversions API; it was sent with no commerce data at all, which is what makes Meta ask for valid price and currency data for the event
+* Fix: In explicit consent mode on shops that run Complianz, the pixels are no longer treated as approved before the visitor has answered the cookie banner. Complianz relays each consent category separately through the WP Consent API, and a category missing from such a relay, or a missing consent cookie, was read as consent
+* Fix: Google for WooCommerce and Google Analytics for WooCommerce are switched off again when the Pixel Manager tracks Google Ads or Google Analytics. Both plugins decide whether to track earlier than our compatibility filters were registered, so shops running either one alongside the Pixel Manager sent every event twice for logged out visitors
+* Fix: Events that other plugins or custom code report to the Pixel Manager, an `add_to_cart` from a custom button for example, are no longer lost when they arrive while the plugin is still loading; they are held and processed as soon as it is ready. A shipping method reported by both the plugin and a snippet is now counted once
+* Fix: The checkout page of shops whose checkout builder also makes WooCommerce report it as the cart page, CheckoutWC in Distraction Free Portal mode for example, is recognized as the checkout again, so `begin_checkout` and the other checkout page events fire there. The ambiguity is now resolved the way WooCommerce core resolves it
+* Fix: Visits from bots and automated browsers are now suppressed from the very first event, instead of only from the first server-side send onwards; the events before that were tracked as regular traffic, and with server-side tracking switched off the whole visit was
+
+= 1.65.1  =
+*Release date - 18.08.2026*
+
+* Fix: The license upgrade page shows every license tier again when it is opened in a background tab, which is what a middle click or a cmd/ctrl click produces; the licensing SDK measures the window width once while the page loads, and browsers report zero for a tab that has never been in the foreground
+* Tweak: The purchase event of an order that contains a product WooCommerce can no longer resolve, which deleting a product after the order was placed leaves behind, now reports the products that do still exist instead of none at all, and names the skipped line in the debug log; the line items of every pixel are built as defensively
+
+= 1.65.0  =
+*Release date - 17.08.2026*
+
+* New: Deposit and partial-payment plugins are now tracked correctly: each sale reports one purchase conversion, for the full amount, when the deposit is paid, and the instalment orders no longer produce additional conversions; supported are Deposits & Partial Payments for WooCommerce (Acowebs) and WooCommerce Deposits (Webtomizer), and the `pmw_split_payment_order_role` filter classifies orders of other deposit plugins
+* New: Site snippets and third party integrations can now use the jQuery-free event API `pmw.bus` to listen to the Pixel Manager's events and to dispatch tracking events; every documented jQuery snippet keeps working through a permanent compatibility bridge, and a purchase listener registered after the purchase event has already fired still receives the order
+* Tweak: The tracking library has been restructured for the upcoming multi-platform support: the core now runs without jQuery and all WooCommerce specific code lives in a dedicated platform layer, none of which changes what the pixels send; a new snapshot test suite pins the payloads of every pixel and fails the build on any unintended change
+* Tweak: On shops that run without pretty permalinks, WooCommerce no longer loads the session, the cart and the customer object for the Pixel Manager's own REST requests; WooCommerce only recognizes the `/wp-json/` form of a REST route, so on those shops every tracking call booted the whole WooCommerce frontend stack and could write an outdated cart back into the session
+* Tweak: The cart item data that travels inside the WooCommerce cart fragments is no longer output for user roles that are excluded from tracking, which is the gate the front-end script bundle already followed
+* Tweak: The Cart and Checkout blocks are now also tracked at DOM level, alongside the WooCommerce Blocks JavaScript hooks; WooCommerce is migrating its blocks to the Interactivity API, which dispatches no such hooks, so the shipping method, payment method and place order steps keep being reported once that migration reaches them
+* Tweak: The Google tag gateway opportunity is now offered to every shop that has a Google tag configured and no measurement path set yet; it used to be shown only on shops detectable behind Cloudflare, which left out every shop on another CDN, while shops without a single Google tag were shown the card anyway
+* Tweak: The Google tag gateway log now names the request whose path was rejected; the log line meant to report the original path printed the result of the rejection instead, which is always the same empty value
+* Tweak: The purchase confirmation page now resolves the order key from the URL only once per request, and not at all on a standard WooCommerce confirmation URL; the page check, the order loading and the user ID lookup each ran WooCommerce's order key search, which on the legacy order storage is a full scan of the post meta table
+* Fix: With the marketing value logic set to the order subtotal, the conversion value is now correct for orders that carry fee or refund lines: WooCommerce fee lines (gift wrap, cash on delivery, deposit surcharges) are no longer deducted, because the subtotal never contained them, and refunds are deducted by their product share only
+* Fix: With the marketing value set to the profit margin, a refund entered as a plain amount instead of per line item is now deducted from the margin; the calculation reversed refunds through the refunded quantity, which such a refund does not record, so the value did not move at all, most visibly in the Google Ads conversion adjustments feed
+* Fix: The Google Ads conversion adjustments feed no longer applies a refund twice; the corrected value of a partially refunded order already accounts for the refund, but the feed scaled it down by the refunded share again, so a half refunded order was restated at a quarter of its value
+* Fix: The conversion value reported to the ad platforms can no longer be negative; a deposit or instalment order that carries its payment as a fee line and holds no products, and orders whose refunds exceeded the subtotal, used to report a negative value, which the platforms reject or misinterpret
+* Fix: Turning the order duplication prevention off, or adding `&nodedupe` to a confirmation URL for testing, no longer overrides the deliberate tracking suppressions; it now waives the "this order has already been tracked" check and nothing else, so the `pmw_conversion_prevention` filter, failed, cancelled and refunded orders, and excluded user roles are respected again
+* Fix: The cart item script that travels inside the WooCommerce cart fragments now creates the data layer it writes into, so cart updates no longer raise a JavaScript error when a consent tool blocks the data layer script or an HTML optimizer strips it; it is also no longer output twice per mini cart item on themes such as Flatsome
+* Fix: Product level events triggered by a third party integration or a site snippet now always carry the shop currency; those events may be triggered with a raw `pmwDataLayer.products` entry, which holds no currency, and Meta, TikTok, Snapchat, Pinterest, Reddit, Taboola and AdRoll then sent an amount without one, which Meta rejects outright
+* Fix: Site snippets and third party integrations that read the consent state inside the command queue (`window._pmwq`) now work as documented; the queue ran before the consent module had loaded, so `pmw.consent` did not exist yet and every line after the consent check was skipped, which usually meant the integration's own event listener was never registered
+* Fix: The `add_shipping_info` event now also fires on checkouts that select the shipping method for the customer instead of waiting for a click, CheckoutWC among them, and on shipping packages that offer a single rate; the trigger was bound to the standard checkout form and to a genuine click, so the shipping stage was missing from the funnel
+* Fix: On shops that run the FAZ Cookie Manager, the Pixel Manager's scripts are now whitelisted on every distribution of the plugin; the whitelist only carried the folder name of the woocommerce.com version, so on the wordpress.org and the Pro version the cookie banner's script blocker kept the tracking scripts from loading
+* Fix: On shops that run Cookie Script, the pixels are no longer treated as approved before the visitor has answered the cookie banner; Cookie Script writes its consent cookie already on the first page view, holding no decision yet, and the mere presence of that cookie was read as full consent, so in explicit consent mode every pixel fired beforehand
+* Fix: Consent categories that are not passed to `pmw.consent.categories.set()` now keep their current value instead of being reset, which the documented consent API and the CMP integrations were never affected by because they always pass all categories
+* Fix: The order key that StoreApps Custom Thank You Page puts into the confirmation URL is now also used to load the order, not only to recognize the page as a purchase confirmation; on a URL that carries only that parameter the page was recognized but no purchase was reported
+* Fix: Products shown by the Product Collection block are now tracked, and stay tracked when the block re-renders; the block renders without the classic WooCommerce loop hooks, so collections that do not inherit a shop, search or taxonomy query reported no `view_item_list` and no `select_item` at all, and its client-side pagination and filters left the products loaded that way untracked
+* Fix: Add to cart is now reported for the block add to cart paths that announce a cart change without naming it; the Interactivity API cart store behind the blockified add to cart button and the Add to Cart with Options block names neither product nor quantity, so the Pixel Manager reconciles the two carts and reports the difference
+* Fix: A conflicting copy of the Freemius SDK shipped by another plugin or theme can no longer take the shop down with a critical error; the SDK decides which copy is in charge and can return without providing the function the Pixel Manager calls, so the Pixel Manager now stays inactive and points the administrator at the conflict
+* Fix: The "Upgrade to Pro", free trial and account links now lead to a working page on shops without the licensing SDK's pricing page; the SDK only registers those pages once the shop is connected or a license is active, so before that and after a license expired they produced a "you are not allowed to access this page" error
+* Fix: The Google tag gateway serves the Google tag to returning visitors again; it read Google's "not modified" answer to a cache revalidation as a failure and replied with an error page instead of the script, so from the second visit onwards no Google tag loaded and Google Analytics reported those sessions under "(not set)"
+
 = 1.64.0  =
 *Release date - 29.07.2026*
 
@@ -331,15 +383,15 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * New: Added a check that detects active Meta Event Setup Tool rules on the Facebook pixel and warns in the opportunities and the debug info, because those point-and-click rules fire additional events without deduplication and mostly without values, which inflates event counts and corrupts purchase values in Meta
 * New: Added an "Ask Pixie" chat icon next to most settings, from the pixel IDs and API tokens to the consent and order configuration options, that opens the AI assistant with a ready-to-send question about that setting
 * Tweak: The Facebook (Meta) pixel now detects when another script on the site has defined window.fbq before the Pixel Manager loaded it and logs a clear warning in the browser console, because such a script prevents Meta's standard bootstrap from loading fbevents.js and the browser pixel silently stops tracking
-* Tweak: The Pixel Manager now detects when Meta restricts events for a Facebook (Meta) pixel because of its business category (e.g. health and wellness) and reports the restricted event names in the browser console and in the debug info, because Meta silently drops those events in the browser and on the Conversion API while page views keep working, which looks like a tracking failure even though it is enforced by Meta; a business category review can be requested in the Meta Events Manager
-* Tweak: API tokens are now masked in the log; with request logging enabled, credentials that travel in the request URL (Meta and Snapchat access tokens, the GA4 Measurement Protocol API secret) or in an authorization header used to end up in clear text in the WooCommerce log, which is a file that gets shared with support and third parties; only the last four characters of a credential are shown now, and unknown URL parameters are masked by default
+* Tweak: The Pixel Manager now detects when Meta restricts events for a Facebook (Meta) pixel because of its business category (health and wellness, for example) and reports the restricted event names in the browser console and the debug info; Meta silently drops those events both in the browser and on the Conversion API, which looks like a tracking failure
+* Tweak: API tokens are now masked in the log; with request logging enabled, credentials that travel in the request URL (Meta and Snapchat access tokens, the GA4 Measurement Protocol API secret) or in an authorization header used to end up in clear text in the WooCommerce log, which is a file that gets shared with support
 * Tweak: The "PMW pixels not fired" counter above the WooCommerce order list no longer loads every matching order into memory just to count it; the number now comes from a counting query and is cached for a few minutes, which noticeably speeds up the order list on shops with many orders
 * Tweak: The order value calculation no longer looks up the brand and the categories of the same product more than once per request, which reduces the number of database queries on shop, category, cart, and order pages, most visibly on pages that list many products
-* Tweak: The notification count next to the Pixel Manager entry in the WooCommerce menu is now cached instead of being recalculated on every single admin page load; calculating it meant loading all opportunity checks, one of which aggregates the tracking accuracy statistics, so every admin page in the shop paid for it
+* Tweak: The notification count next to the Pixel Manager entry in the WooCommerce menu is now cached instead of being recalculated on every single admin page load; calculating it meant loading all opportunity checks, one of which aggregates the tracking accuracy statistics
 * Tweak: The notification script and stylesheet are now only loaded on the admin pages that can actually display a Pixel Manager notification (the WordPress dashboard and the Pixel Manager settings), instead of on every admin page
-* Tweak: The tracking accuracy database maintenance (creating the table after an update and scheduling the one-time backfill) no longer runs on storefront and checkout requests; until the backfill had finished, every single page view asked the Action Scheduler whether the backfill was already queued, which is a database query on the critical path; the maintenance now runs on admin, cron, and WP-CLI requests only
+* Tweak: The tracking accuracy database maintenance (creating the table after an update and scheduling the one-time backfill) no longer runs on storefront and checkout requests; until the backfill had finished, every page view asked the Action Scheduler whether it was already queued, which is a database query on the critical path
 * Tweak: The tracking accuracy statistics no longer re-check whether their database table exists on every read and write within the same request, which removes several redundant queries from the purchase path
-* Tweak: The product identifier setting now refers to the "Google for WooCommerce" plugin under its current name instead of "Google Listings & Ads", with the former name kept as a hint so the option is still recognizable; the plugin was renamed by WooCommerce a while ago, and the old name made it hard to tell which of the two plugins the gla_ option belongs to
+* Tweak: The product identifier setting now refers to the "Google for WooCommerce" plugin under its current name instead of "Google Listings & Ads", with the former name kept as a hint; the plugin was renamed a while ago, and the old name made it hard to tell which of the two plugins the gla_ option belongs to
 * Fix: Corrected broken or outdated documentation links in the settings (SweetCode Cloud, LinkedIn, Reddit, LTV recalculation) and added the missing documentation link to the "Disable tracking for user roles" setting
 * Fix: The add to cart event for WooCommerce Product Bundles now reports the value of the bundle as configured by the shopper, instead of the static minimum bundle price, which is 0 for bundles where all items are optional or for bundled subscriptions without an up-front fee
 * Fix: The add to cart event for WooCommerce Product Bundles now reads the quantity from the bundle's own quantity field; before, it could pick up the quantity of the first bundled item
@@ -349,109 +401,6 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 *Release date - 15.07.2026*
 
 * Tweak: Internal improvements to the tracking pixel framework
-
-= 1.62.1  =
-*Release date - 14.07.2026*
-
-* Tweak: The begin_checkout event now also fires when a shopper lands on the checkout page with items in the cart, covering flows that never click a proceed-to-checkout button, such as funnel builders, buy-now links, direct checkout links, and block-based carts; the event waits for the cart to be synced so it carries the products, value, and currency, fires only once per checkout session, skips the order-pay page, and can be disabled with the `pmw_fire_begin_checkout_on_checkout_page` filter
-* Fix: The Conversion Cart Data setting could not be saved on the free version even though it is a free feature; the classic interface silently discarded the value and the Nova interface rejected it with a Pro license error
-* Fix: Calling pmw.addProductToCart() on pages whose data layer contains no products, such as funnel checkout pages that are populated server-side, threw an error instead of loading the product details from the backend, so the add to cart event went out without product data
-* Tweak: The purchase confirmation redirect check in the debug info no longer warns about benign canonical redirects, such as http to https, www, trailing slash, or language redirects that end on the order confirmation page; the check now follows the redirect chain like a browser and only warns when the chain actually leaves the order confirmation page
-* Tweak: The Tag Gateway local proxy now identifies itself to Google's first-party serving infrastructure with a dedicated developer ID header, which Google's tag platform team requested so their support teams can recognize the Pixel Manager proxy setup when merchants contact them with measurement questions
-* Tweak: Added the `pmw_output_product_data_layer_script` and `pmw_defer_product_data_layer_to_footer` filters, which keep product list tracking (view_item_list and select_item) working inside page builders that strip inline scripts from product loops, such as the Elementor Products widget
-* Tweak: The Nova interface now recovers automatically when the WordPress session security token expires after the admin page has been open for a long time, instead of failing to save settings
-* Tweak: Replaced the support chat agent in the admin interface with the new Engadin chat, which also supports voice input
-* Tweak: Confirmed compatibility with WordPress 7.0 and WooCommerce 10.9.4
-* Tweak: Updated the bundled third-party libraries to their current releases
-* Tweak: Updated the translation template (.pot file)
-
-= 1.62.0  =
-*Release date - 04.07.2026*
-
-* New: Nova is now the default Pixel Manager interface for all installs. Installs that were still on the Classic interface are switched automatically and see a one-time notice; all settings and tracking remain exactly as they were, and one click switches back to the Classic interface at any time
-* Fix: On stores with a persistent object cache, such as Redis, creating a subscription renewal order in the background could fail with a fatal error while the Pixel Manager marked the new order for tracking, which in turn caused the scheduled renewal payment to fail; the Pixel Manager now uses the order object that WooCommerce hands over directly and skips the marking gracefully if the order cannot be loaded
-* Fix: On the Pro version distributed through the WooCommerce.com marketplace, the storefront was served the free JavaScript bundle even though the plugin correctly reported Pro everywhere in the admin, so Pro-only browser pixels silently did not fire; the storefront now receives the Pro bundle
-* Fix: On the Pro version distributed through the WooCommerce.com marketplace, the payment gateway accuracy report presented the Automatic Conversion Recovery columns as a locked Pro feature even though they are included in that version
-* Tweak: The interface choice (Nova or Classic) is now remembered per user account instead of per browser session, so it persists across sessions, browsers, and devices
-
-= 1.61.2  =
-*Release date - 02.07.2026*
-
-* Fix: Orders that are created without a customer browser session, such as automatic subscription renewals and orders created in the WP Admin, are no longer counted in the payment gateway tracking accuracy statistics, where they previously dragged down the reported accuracy on stores with many renewals
-* Fix: When the consent module fails to load, for example because an optimization plugin serves stale script chunks, the Pixel Manager now reliably enforces its deny-by-default state; previously, with Google Consent Mode enabled, the gtag.js library could still be requested in this state even though no consent signals could be delivered to it
-* Tweak: Added a `pmw_count_order_for_tracking_accuracy` filter to exclude additional order types from the tracking accuracy statistics, for example renewal orders created by third-party subscription plugins that the Pixel Manager cannot detect generically
-* Tweak: The Tracking Pixels page now leads with the most popular platforms, so a fresh install sees Google and Meta first, while the complete catalog remains listed right below
-* Tweak: On fresh installs the optimization score now starts at zero and grows as the getting-started checklist is completed, instead of reporting a perfect score before the first pixel is even configured
-* Tweak: The Pixel Manager menu badge now also counts the remaining getting-started steps on fresh installs, so an interrupted setup is easy to spot and resume
-* New: Fresh installs now get an immediate "it works" confirmation: after setting up the first pixel, the dashboard invites you to open your shop and turns green the moment your pixels are confirmed live on the storefront, and it celebrates the first order that was tracked end to end; the storefront reports this exactly once through a one-shot beacon that disables itself afterwards and never sends any visitor data
-* Tweak: The getting-started checklist is one step shorter: the general settings review step was removed, and the "See what Pro unlocks" step only appears when an upgrade or trial link is actually available
-* Tweak: The Pro trial promotion card now waits until the getting-started checklist is completed or dismissed, so fresh installs see the value of the plugin first and the upsell after
-* New: A "Did you know?" card on the dashboard surfaces a different Pixel Manager feature on every visit, each with a direct link to try it or read more; features you already use are skipped, and Pro features carry a small Pro label with a trial link on the free tier
-
-= 1.61.1  =
-*Release date - 02.07.2026*
-
-* Fix: Products that entered the cart server-side, for example through funnel builders such as CartFlows, a persistent cart restored on login, or a coupon that automatically adds a free product, were invisible to the browser events, so the begin checkout, add shipping info, and add payment info events could report an empty cart with a value of 0; the Pixel Manager now notices these changes through the WooCommerce cart hash and re-syncs its tracked cart from the store
-* Fix: When the tracked cart is empty at the moment a checkout event fires, the Google Analytics and TikTok events no longer claim a value of 0 with an empty product list; like the Meta pixel, they now send the event without the commerce fields, so the funnel step is still counted without skewing your revenue and item reports with false zeros
-* Tweak: Event parameters that are unavailable, such as the currency on pages without a shop context, are now cleanly omitted from all pixel payloads instead of aborting the event or reaching the pixel as an invalid empty value
-
-= 1.61.0  =
-*Release date - 29.06.2026*
-
-* Tweak: When you enable the Google Tag Gateway but your site is not served through a Cloudflare edge, the Pixel Manager now warns you once that the gateway is handled by your own server and adds load, so you can move it behind Cloudflare, keep it as-is, or turn it off
-* Tweak: The confirmation that appears when you turn on a consent gate (Explicit Consent Mode, or Google TCF support) now offers only "Enable anyway" or "Cancel" and can no longer be closed by clicking beside it, pressing Escape, or a close icon, so this consequential choice is not dismissed by accident
-* Tweak: Added a `pmw_product_price_for_datalayer` filter to override the per-product price used in the browser events
-* Tweak: WooCommerce Product Bundles and Composite Products are now counted once at their full bundle price in purchase and cart events, instead of listing the bundle container alongside each of its child products
-* Fix: After you changed your Google tag or conversion ID, the old ID could keep being used for up to an hour because the cached tag ID was not cleared when you saved your settings; the cache is now cleared on save, so the new ID takes effect immediately
-* Fix: When Google Consent Mode was enabled without a cookie banner, Google Analytics and Google Ads could stop receiving data because the consent signal was applied a moment too late; the Pixel Manager now sets it before the Google tag loads, so your data flows in again
-* Fix: WooCommerce Product Bundles and Composite Products that are priced per item reported a price of 0 in the add to cart and view item events; the Pixel Manager now reports the real bundle price
-
-= 1.60.0  =
-*Release date - 23.06.2026*
-
-* New: Added a "Request a tracking pixel" link to the Tracking Pixels page so you can suggest a tracking pixel you would like us to add
-* Tweak: The Tracking Pixels page now separates active and inactive pixels with a labelled divider, so it is clear at a glance which pixels are currently tracking
-* Tweak: Turning on a consent gate (Explicit Consent Mode, or Google TCF support) now asks for confirmation first, because these settings stop all pixels from firing until your consent management platform grants consent
-* Tweak: Updated the development dependencies and vendor libraries to current releases; development tooling only, with no changes to the shipped plugin
-
-
-= 1.59.4  =
-*Release date - 19.06.2026*
-
-* Fix: The Opportunities tab could show a count in its badge while displaying no opportunity cards on sites running a non-English language; the opportunity impact level is now a stable internal value, so cards always render regardless of the active site language
-
-= 1.59.3  =
-*Release date - 17.06.2026*
-
-* Tweak: Updated the development dependencies to current patched releases; development tooling only, with no changes to the shipped plugin
-* Fix: Fixed the AddToCart event not firing for variable products rendered outside a native product page, such as through the [product_page] shortcode or a page builder's single-product widget; the selected variation is now detected from the add-to-cart form
-* Fix: WooCommerce.com distribution: the upgrade, account, and support links in the admin interface now point to WooCommerce.com
-* Fix: WooCommerce.com distribution: fixed the paid version showing the Pro tracking pixels as locked instead of unlocked
-
-
-= 1.59.2  =
-*Release date - 16.06.2026*
-
-* Tweak: Made the Nova admin UI clearly distinguish Pro from free features on unlicensed sites: Pro tracking pixels now group under a locked "Pixel Manager Pro" section instead of showing a misleading "active" badge, the Dashboard "Active pixels" count includes only pixels that are actually tracking, and locked fields explain whether a saved value is inactive without a Pro license or is a Pro-only feature
-* Tweak: Surfaced the 14-day free trial next to the in-app "Upgrade to Pro" links and the locked Tracking Pixels group, shown only when a trial can actually be started
-* Tweak: Removed the deprecated Meta Microdata output feature and its leftover setting, which no longer emitted any tracking code
-
-= 1.59.1  =
-*Release date - 15.06.2026*
-
-* Tweak: Internal code quality improvements; no functional changes since 1.59.0
-
-= 1.59.0  =
-*Release date - 15.06.2026*
-
-* New: Added Nova, a rebuilt Pixel Manager admin interface that is faster and cleaner and is now the default on new installs; existing sites keep the Classic UI and can switch to Nova in one click
-* New: Added support for the FAZ Cookie Manager Consent Management Platform
-* New: Added a getting-started checklist to the dashboard for new installs (set up the first pixel, review consent and general settings, verify tracking on the Diagnostics page, and meet Pixie, the AI assistant) with saved progress and the option to hide it
-* New: Expanded the Abilities API with a machine-readable settings catalog so AI agents can discover, read, and safely update Pixel Manager settings (pmw/get-settings-schema, pmw/get-settings, pmw/get-setup-status, pmw/update-settings, pmw/configure-pixel); writes are validated sparse patches that redact secret tokens, back up settings on every save, and can be disabled with the pmw_abilities_allow_write filter
-* Tweak: Removed a delay of up to two seconds on the first page view (while waiting for the Facebook pixel cookie); browser tracking now fires immediately and the Facebook cookie is added to server-side events as soon as it is available
-* Tweak: Bumped up WooCommerce version to 10.7
-* Tweak: Bumped up WordPress version to 7.0
-* Fix: Fixed fatal errors that could occur when an order or variation referenced a product or parent product that no longer exists
 
 = Earlier versions =
 

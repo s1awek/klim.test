@@ -57,13 +57,18 @@
         viwpvs_frontend_init();
     });
 
+    let viwpvs_init_attempts = 0;
     function viwpvs_frontend_init() {
         if (!$('.vi_wpvs_variation_form:not(.vi_wpvs_variation_form_init),.variations_form:not(.vi_wpvs_variation_form),.variations_form:not(.vi_wpvs_variation_form_init)').length) {
-            setTimeout(function () {
-                viwpvs_frontend_init();
-            }, 100);
+            if (viwpvs_init_attempts < 50) {
+                viwpvs_init_attempts++;
+                setTimeout(function () {
+                    viwpvs_frontend_init();
+                }, 100);
+            }
             return false;
         }
+        viwpvs_init_attempts = 0;
         $('.vi_wpvs_variation_form:not(.vi_wpvs_variation_form_init)').each(function () {
             $(this).addClass('vi_wpvs_variation_form_init').viwpvs_woo_product_variation_swatches();
         });

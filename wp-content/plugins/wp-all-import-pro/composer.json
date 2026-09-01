@@ -2,7 +2,12 @@
   "name": "soflyy/wp-all-import-pro",
   "type": "wordpress-plugin",
   "description": "The most powerful solution for importing XML and CSV files to WordPress. Import to Posts, Pages, and Custom Post Types. Support for imports that run on a schedule, ability to update existing imports, and much more.",
-  "keywords": ["wordpress", "plugin", "import", "wp all import"],
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "import",
+    "wp all import"
+  ],
   "homepage": "https://www.wpallimport.com",
   "authors": [
     {
@@ -14,7 +19,14 @@
     "issues": "https://www.wpallimport.com/support"
   },
   "repositories": [
-    { "type": "vcs", "url": "https://github.com/soflyy/wpai-test-harness" }
+    {
+      "type": "vcs",
+      "url": "https://github.com/soflyy/wpai-test-harness"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/soflyy/wpai-bridge-plugin.git"
+    }
   ],
   "require-dev": {
     "soflyy/wpai-test-harness": "dev-master",
@@ -26,7 +38,8 @@
     "phpseclib/phpseclib": "^3.0",
     "phpseclib/phpseclib2_compat": "^1.0",
     "enshrined/svg-sanitize": "^0.22.0",
-    "phpoffice/phpspreadsheet": "^1.30"
+    "phpoffice/phpspreadsheet": "^1.30",
+    "soflyy/wpai-bridge": "^1.2"
   },
   "config": {
     "platform": {

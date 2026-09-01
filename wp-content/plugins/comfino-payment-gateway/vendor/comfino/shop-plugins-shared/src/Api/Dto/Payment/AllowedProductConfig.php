@@ -1,0 +1,2 @@
+<?php
+declare(strict_types=1); namespace Comfino\Api\Dto\Payment; class AllowedProductConfig{ public $type; public $maxTerm; public $minTerm; public $terms; public function __construct(LoanTypeEnum $type,?int $maxTerm=null,?int $minTerm=null,?array$terms=null){$this->type=$type;$this->maxTerm=$maxTerm;$this->minTerm=$minTerm;$this->terms=$terms;}}

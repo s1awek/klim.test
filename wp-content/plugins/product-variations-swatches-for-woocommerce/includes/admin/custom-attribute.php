@@ -19,6 +19,9 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Custom_Attribute {
 	 * @param WC_Product_Attribute $attribute Attribute object.
 	 */
 	public function woocommerce_product_option_terms( $attribute_taxonomy, $i, $attribute){
+		if ( empty( $attribute_taxonomy ) || empty( $attribute ) || ! is_a( $attribute, 'WC_Product_Attribute' ) ) {
+			return;
+		}
 		if ($attribute_taxonomy->attribute_type !== 'select'){
 			$attribute_orderby = ! empty( $attribute_taxonomy->attribute_orderby ) ? $attribute_taxonomy->attribute_orderby : 'name';
 			/**
@@ -29,7 +32,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Custom_Attribute {
 			<select multiple="multiple"
 			        data-minimum_input_length="0"
 			        data-limit="<?php echo esc_attr( $term_limit ); ?>" data-return_id="id"
-			        data-placeholder="<?php esc_attr_e( 'Select values', 'woocommerce' ); ?>"
+			        data-placeholder="<?php esc_attr_e( 'Select values', 'product-variations-swatches-for-woocommerce' ); ?>"
 			        data-orderby="<?php echo esc_attr( $attribute_orderby ); ?>"
 			        class="multiselect attribute_values wc-taxonomy-term-search"
 			        name="attribute_values[<?php echo esc_attr( $i ); ?>][]"
@@ -50,9 +53,9 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Custom_Attribute {
 				}
 				?>
 			</select>
-			<button class="button plus select_all_attributes"><?php esc_html_e( 'Select all', 'woocommerce' ); ?></button>
-			<button class="button minus select_no_attributes"><?php esc_html_e( 'Select none', 'woocommerce' ); ?></button>
-			<button class="button fr plus add_new_attribute"><?php esc_html_e( 'Create value', 'woocommerce' ); ?></button>
+			<button class="button plus select_all_attributes"><?php esc_html_e( 'Select all', 'product-variations-swatches-for-woocommerce' ); ?></button>
+			<button class="button minus select_no_attributes"><?php esc_html_e( 'Select none', 'product-variations-swatches-for-woocommerce' ); ?></button>
+			<button class="button fr plus add_new_attribute"><?php esc_html_e( 'Create value', 'product-variations-swatches-for-woocommerce' ); ?></button>
 			<?php
 		}
 	}
@@ -84,7 +87,8 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Custom_Attribute {
 			}
 		}
 		$vi_attribute_settings                                                 = get_post_meta( $post_id, '_vi_woo_product_variation_swatches_product_attribute', true );
-		$vi_attribute_settings                                                 = $vi_attribute_settings ? json_decode( $vi_attribute_settings, true ) : array();
+		$vi_attribute_settings                                                 = is_string( $vi_attribute_settings ) ? json_decode( $vi_attribute_settings, true ) : $vi_attribute_settings;
+		$vi_attribute_settings                                                 = is_array( $vi_attribute_settings ) ? $vi_attribute_settings : array();
 		$vi_attribute_settings['attribute_type'][ $attribute_name ]            = $vi_attribute_type ??'';
 		$vi_attribute_settings['attribute_profile'][ $attribute_name ]         = $vi_attribute_profile??'';
 		$vi_attribute_settings['attribute_color_separator'][ $attribute_name ] = $vi_attribute_color_separator??'';
@@ -93,11 +97,14 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Custom_Attribute {
 		$vi_attribute_settings['attribute_display_type'][ $attribute_name ]    = $vi_attribute_display_type??'';
         global $viwvps_f_save_attribute_settings;
         if (!$viwvps_f_save_attribute_settings){
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
             $viwvps_f_save_attribute_settings = [];
         }
         if (!isset($viwvps_f_save_attribute_settings[$post_id])){
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
             $viwvps_f_save_attribute_settings[$post_id] = [];
         }
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
         $viwvps_f_save_attribute_settings[$post_id][$i] = $vi_attribute_settings;
 		$vi_attribute_settings                                                 = wp_json_encode( $vi_attribute_settings, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 		update_post_meta( $post_id, '_vi_woo_product_variation_swatches_product_attribute', $vi_attribute_settings );
@@ -112,13 +119,13 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Custom_Attribute {
 		$vi_attribute_settings=[];
         $post_id = $thepostid;
         if (!$post_id){
-            $post_id = isset( $_POST['post_id'] ) ? sanitize_text_field(wp_unslash($_POST['post_id'])) :0;//phpcs:ignore WordPress.Security.NonceVerification.Missing
+            $post_id = isset( $_POST['post_id'] ) ? absint( sanitize_text_field(wp_unslash( $_POST['post_id'] )) ) : 0;//phpcs:ignore WordPress.Security.NonceVerification.Missing
         }
         global $viwvps_f_save_attribute_settings;
         if (isset($viwvps_f_save_attribute_settings[$post_id][$i])){
 			$vi_attribute_settings = $viwvps_f_save_attribute_settings[$post_id][$i];
 		}elseif ($post_id) {
-			$vi_attribute_settings = get_post_meta( $thepostid, '_vi_woo_product_variation_swatches_product_attribute', true );
+			$vi_attribute_settings = get_post_meta( $post_id, '_vi_woo_product_variation_swatches_product_attribute', true );
 			$vi_attribute_settings    = $vi_attribute_settings ? json_decode( $vi_attribute_settings, true ) : array();
 		}
 		if (!is_array($vi_attribute_settings)){
@@ -132,16 +139,33 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Custom_Attribute {
 	}
 	public function admin_enqueue_scripts() {
 		$screen = get_current_screen();
-		if ( $screen->id == 'product' ) {
+		if ( $screen && $screen->id === 'product' ) {
             self::enqueue_scripts();
         }
 	}
     public static function enqueue_scripts(){
 	    wp_enqueue_style( 'product-variations-swatches-for-woocommerce-admin-minicolors', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'minicolors.css', array(), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
 	    wp_enqueue_style( 'product-variations-swatches-for-woocommerce-admin-custom-attribute', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'admin-custom-attribute.css', array(), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
-	    wp_enqueue_script( 'viwvps-select2', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'select2.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+        if ( self::woocommerce_version_check( '10.3.0' ) ) {
+            wp_enqueue_script( 'wc-select2' );
+        }else{
+            wp_enqueue_script( 'select2' );
+        }
 	    wp_enqueue_script( 'product-variations-swatches-for-woocommerce-admin-custom-attribute', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'admin-custom-attribute.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
 	    wp_enqueue_script( 'product-variations-swatches-for-woocommerce-admin-minicolors', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'minicolors.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
+    }
+    public static function woocommerce_version_check( $version = '3.0' ) {
+        global $woocommerce;
+
+        if ( ! $woocommerce || empty( $woocommerce->version ) ) {
+            return false;
+        }
+
+        if ( version_compare( $woocommerce->version, $version, ">=" ) ) {
+            return true;
+        }
+
+        return false;
     }
 
 }

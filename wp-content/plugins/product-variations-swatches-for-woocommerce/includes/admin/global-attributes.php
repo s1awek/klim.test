@@ -27,8 +27,11 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Global_Attributes {
 
 	public function woocommerce_attribute_added( $id, $data ) {
 		global $vi_wpvs_settings;
-		$vi_attribute_profile                                     = isset( $_POST['attribute_vi_profile'] ) ? sanitize_text_field( $_POST['attribute_vi_profile'] ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$attribute_vi_display_type                                = isset( $_POST['attribute_vi_display_type'] ) ? sanitize_text_field( $_POST['attribute_vi_display_type'] ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$vi_attribute_profile                                     = isset( $_POST['attribute_vi_profile'] ) ? sanitize_text_field( wp_unslash( $_POST['attribute_vi_profile'] ) ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$attribute_vi_display_type                                = isset( $_POST['attribute_vi_display_type'] ) ? sanitize_text_field( wp_unslash( $_POST['attribute_vi_display_type'] ) ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! in_array( $attribute_vi_display_type, array( 'vertical', 'horizontal' ), true ) ) {
+			$attribute_vi_display_type = 'vertical';
+		}
 		$args                                                     = array();
 		$taxonomy_profiles                                        = isset( $vi_wpvs_settings['taxonomy_profiles'] ) ? $vi_wpvs_settings['taxonomy_profiles'] : array();
 		$taxonomy_display_type                                    = isset( $vi_wpvs_settings['taxonomy_display_type'] ) ? $vi_wpvs_settings['taxonomy_display_type'] : array();
@@ -38,13 +41,17 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Global_Attributes {
 		$args ['taxonomy_display_type']                           = $taxonomy_display_type;
 		$args                                                     = wp_parse_args( $args, get_option( 'vi_woo_product_variation_swatches_params', $vi_wpvs_settings ) );
 		update_option( 'vi_woo_product_variation_swatches_params', $args );
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 		$vi_wpvs_settings = $args;
 	}
 
 	public function woocommerce_attribute_updated( $id, $data, $old_slug ) {
 		global $vi_wpvs_settings;
-		$vi_attribute_profile      = isset( $_POST['attribute_vi_profile'] ) ? sanitize_text_field( $_POST['attribute_vi_profile'] ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$attribute_vi_display_type = isset( $_POST['attribute_vi_display_type'] ) ? sanitize_text_field( $_POST['attribute_vi_display_type'] ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$vi_attribute_profile      = isset( $_POST['attribute_vi_profile'] ) ? sanitize_text_field( wp_unslash( $_POST['attribute_vi_profile'] ) ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$attribute_vi_display_type = isset( $_POST['attribute_vi_display_type'] ) ? sanitize_text_field( wp_unslash( $_POST['attribute_vi_display_type'] ) ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! in_array( $attribute_vi_display_type, array( 'vertical', 'horizontal' ), true ) ) {
+			$attribute_vi_display_type = 'vertical';
+		}
 		$args                      = array();
 		$taxonomy_profiles         = isset( $vi_wpvs_settings['taxonomy_profiles'] ) ? $vi_wpvs_settings['taxonomy_profiles'] : array();
 		$taxonomy_display_type     = isset( $vi_wpvs_settings['taxonomy_display_type'] ) ? $vi_wpvs_settings['taxonomy_display_type'] : array();
@@ -56,6 +63,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Global_Attributes {
 		$args ['taxonomy_display_type']                           = $taxonomy_display_type;
 		$args                                                     = wp_parse_args( $args, get_option( 'vi_woo_product_variation_swatches_params', $vi_wpvs_settings ) );
 		update_option( 'vi_woo_product_variation_swatches_params', $args );
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 		$vi_wpvs_settings = $args;
 	}
 
@@ -123,8 +131,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Global_Attributes {
 
 	public function woocommerce_after_edit_attribute_fields() {
 		global $wpdb;
-		$this->settings           = new  VI_WOO_PRODUCT_VARIATIONS_SWATCHES_DATA();
-		$attribute_id             = isset( $_GET['edit'] ) ? absint( sanitize_text_field( $_GET['edit'] ) ) : 0;// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$attribute_id             = isset( $_GET['edit'] ) ? absint( wp_unslash( $_GET['edit'] ) ) : 0;// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$attribute_slug           = $wpdb->get_var( $wpdb->prepare( "SELECT attribute_name FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_id = %d", $attribute_id ) );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 		$vi_wpvs_ids              = $this->settings->get_params( 'ids' );
 		$vi_wpvs_names            = $this->settings->get_params( 'names' );
@@ -201,12 +208,27 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Global_Attributes {
 		if ( 'pa_' !== substr( $taxonomy, 0, 3 ) ) {
 			return;
 		}
-		$args                    = array();
-		$args['type']            = isset( $_POST['vi_wpvs_term_type'] ) ? sanitize_text_field( $_POST['vi_wpvs_term_type'] ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$args['img_id']          = isset( $_POST['vi_wpvs_term_image'] ) ? sanitize_text_field( $_POST['vi_wpvs_term_image'] ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$args['color']           = isset( $_POST['vi_wpvs_term_color'] ) ? array_map( 'sanitize_text_field', $_POST['vi_wpvs_term_color'] ) : array();// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$args['color_separator'] = isset( $_POST['vi_wpvs_term_color_separator'] ) ? sanitize_text_field( $_POST['vi_wpvs_term_color_separator'] ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$args                    = wp_parse_args( $args, get_term_meta( $term_id, 'vi_wpvs_terms_params', true ) );
+		$allowed_types = array( 'button', 'color', 'image', 'variation_img', 'radio', 'select', 'viwpvs_default', '' );
+		$type          = isset( $_POST['vi_wpvs_term_type'] ) ? sanitize_text_field( wp_unslash( $_POST['vi_wpvs_term_type'] ) ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! in_array( $type, $allowed_types, true ) ) {
+			$type = '';
+		}
+		$colors = array();
+		if ( isset( $_POST['vi_wpvs_term_color'] ) && is_array( $_POST['vi_wpvs_term_color'] ) ) {// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$colors = array_map( 'sanitize_text_field', wp_unslash( $_POST['vi_wpvs_term_color'] ) );// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		}
+		$separator = isset( $_POST['vi_wpvs_term_color_separator'] ) ? sanitize_text_field( wp_unslash( $_POST['vi_wpvs_term_color_separator'] ) ) : '';// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! in_array( $separator, array( '1', '2', '3', '4', '5', '6', '7', '8', '' ), true ) ) {
+			$separator = '1';
+		}
+		$args                    = array(
+			'type'            => $type,
+			'img_id'          => isset( $_POST['vi_wpvs_term_image'] ) ? absint( wp_unslash( $_POST['vi_wpvs_term_image'] ) ) : '',// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			'color'           => $colors,
+			'color_separator' => $separator,
+		);
+		$existing                = get_term_meta( $term_id, 'vi_wpvs_terms_params', true );
+		$args                    = wp_parse_args( $args, is_array( $existing ) ? $existing : array() );
 		update_term_meta( $term_id, 'vi_wpvs_terms_params', $args );
 	}
 
@@ -489,15 +511,27 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Global_Attributes {
 			$args['cb'] = $columns['cb'];
 			unset( $columns['cb'] );
 		}
-		$args['vi-wpvs-term-preview'] = '';
+		$args['vi-wpvs-term-preview'] = esc_html__( 'Preview', 'product-variations-swatches-for-woocommerce' );
 
-		return $columns;
+		return array_merge( $args, $columns );
 	}
 
 	public function global_attribute_custom_column( $contents, $column_name, $term_id ) {
+		if ( 'vi-wpvs-term-preview' !== $column_name ) {
+			return $contents;
+		}
 		$vi_wpvs_terms_settings = get_term_meta( $term_id, 'vi_wpvs_terms_params', true );
-		if ( $column_name === 'vi-wpvs-term-preview' && $vi_wpvs_terms_settings && is_array( $vi_wpvs_terms_settings ) && isset( $vi_wpvs_terms_settings['type'] ) ) {
-
+		if ( ! is_array( $vi_wpvs_terms_settings ) || empty( $vi_wpvs_terms_settings['type'] ) ) {
+			return $contents;
+		}
+		if ( 'color' === $vi_wpvs_terms_settings['type'] && ! empty( $vi_wpvs_terms_settings['color'][0] ) ) {
+			$color    = vi_wpvs_sanitize_css_value( $vi_wpvs_terms_settings['color'][0] );
+			$contents = '<span class="vi-wpvs-term-preview-color" style="display:inline-block;width:24px;height:24px;border:1px solid #ccc;background:' . esc_attr( $color ) . ';"></span>';
+		} elseif ( 'image' === $vi_wpvs_terms_settings['type'] && ! empty( $vi_wpvs_terms_settings['img_id'] ) ) {
+			$src = wp_get_attachment_image_url( absint( $vi_wpvs_terms_settings['img_id'] ), 'thumbnail' );
+			if ( $src ) {
+				$contents = '<img src="' . esc_url( $src ) . '" alt="" width="24" height="24" style="width:24px;height:24px;object-fit:cover;" />';
+			}
 		}
 
 		return $contents;
@@ -505,7 +539,10 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Global_Attributes {
 
 	public function admin_enqueue_scripts() {
 		$screen = get_current_screen();
-		if ( $screen->id === 'product_page_product_attributes' || ( 'pa_' === substr( $screen->taxonomy, 0, 3 ) ) ) {
+		if ( ! $screen ) {
+			return;
+		}
+		if ( $screen->id === 'product_page_product_attributes' || ( ! empty( $screen->taxonomy ) && 'pa_' === substr( $screen->taxonomy, 0, 3 ) ) ) {
 
 			wp_enqueue_script( 'product-variations-swatches-for-woocommerce-admin-global-attributes', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'admin-global-attributes.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
 			wp_enqueue_script( 'product-variations-swatches-for-woocommerce-admin-minicolors', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'minicolors.min.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
@@ -530,6 +567,8 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Global_Attributes {
 					$this,
 					'global_attribute_add_form_fields'
 				) );
+				add_filter( 'manage_edit-' . $screen->taxonomy . '_columns', array( $this, 'global_attribute_taxonomy_columns' ) );
+				add_filter( 'manage_' . $screen->taxonomy . '_custom_column', array( $this, 'global_attribute_custom_column' ), 10, 3 );
 				$args['taxonomy']                  = substr( $screen->taxonomy, 3 );
 				$args['global_attr_setting_title'] = esc_html__( 'Swatches settings', 'product-variations-swatches-for-woocommerce' );
 			}

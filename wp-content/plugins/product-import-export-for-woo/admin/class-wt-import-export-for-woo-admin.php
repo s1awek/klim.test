@@ -98,6 +98,7 @@ if (!class_exists('Wt_Import_Export_For_Woo_Product_Admin_Basic')) {
 		{
 			if (Wt_Import_Export_For_Woo_Product_Basic_Common_Helper::wt_is_screen_allowed()) {
 				wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/wt-import-export-for-woo-admin.css', array(), $this->version, 'all');
+				wp_enqueue_style( 'wt-piew-other-solutions', plugin_dir_url( __FILE__ ) . 'css/wt-piew-os-other-solutions.css', array( 'dashicons' ), $this->version, 'all' );
 			}
 		}
 
@@ -132,6 +133,8 @@ if (!class_exists('Wt_Import_Export_For_Woo_Product_Admin_Basic')) {
 					$this->version,
 					true
 				);
+
+				wp_enqueue_script( 'wt-piew-other-solutions', plugin_dir_url( __FILE__ ) . 'js/wt-piew-os-other-solutions.js', array( 'jquery' ), $this->version, true );
 
 				// Localize script with AJAX URL and nonce
 				wp_localize_script($this->plugin_name . '_wbftHeaderScripts', 'wt_piew_params', array(
@@ -176,7 +179,9 @@ if (!class_exists('Wt_Import_Export_For_Woo_Product_Admin_Basic')) {
 						'cancel' => __('Cancel', 'product-import-export-for-woo'),
 						'hide_features' => __('Hide features', 'product-import-export-for-woo'),
 						'show_features' => __('Show features', 'product-import-export-for-woo'),
-						'changes_not_saved'=> __('Changes that you made may not be saved.', 'product-import-export-for-woo')
+						'changes_not_saved'=> __('Changes that you made may not be saved.', 'product-import-export-for-woo'),
+						'stop_import_confirm' => __('Are you sure to stop the import?', 'product-import-export-for-woo'),
+						'import_cancelled' => __('Import cancelled', 'product-import-export-for-woo')
 
 					),
 					'is_variable_product_exist' => $is_variable_product_exist,

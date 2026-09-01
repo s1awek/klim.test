@@ -51,7 +51,7 @@ HELP FORM -->
         });
 
 <?php if (!empty($open_section)) { ?>
-            $("html, body").animate({scrollTop: $('#<?php echo $open_section; ?>').offset().top}, 1000);
+            $("html, body").animate({scrollTop: $('#<?php echo DUPX_U::esc_js($open_section); ?>').offset().top}, 1000);
 <?php } ?>
 
     });

@@ -25,6 +25,67 @@ if(!class_exists('Wt_Iew_IE_Basic_Helper'))
 				'other'=>array('value'=>__('Other', 'product-import-export-for-woo'), 'val'=>""),
 			);
 		}
+
+		/**
+		 * Resolve delimiter preset key and character from saved form data.
+		 *
+		 * @param array $form_data Form data containing wt_iew_delimiter and/or wt_iew_delimiter_preset.
+		 * @return array{ preset: string, delimiter: string }
+		 */
+		public static function _get_delimiter_form_values( $form_data )
+		{
+			$delimiters = self::_get_csv_delimiters();
+			$delimiter  = isset( $form_data['wt_iew_delimiter'] ) ? $form_data['wt_iew_delimiter'] : ',';
+
+			if ( 'tab' === $delimiter || 't' === $delimiter ) {
+				$delimiter = "\t";
+			}
+
+			if ( isset( $form_data['wt_iew_delimiter_preset'] ) && '' !== $form_data['wt_iew_delimiter_preset'] ) {
+				$preset = $form_data['wt_iew_delimiter_preset'];
+				if ( isset( $delimiters[ $preset ] ) && 'other' !== $preset ) {
+					$delimiter = $delimiters[ $preset ]['val'];
+				}
+				return array(
+					'preset'    => $preset,
+					'delimiter' => $delimiter,
+				);
+			}
+
+			foreach ( $delimiters as $preset_key => $preset_data ) {
+				if ( 'other' === $preset_key ) {
+					continue;
+				}
+				if ( $preset_data['val'] === $delimiter ) {
+					return array(
+						'preset'    => $preset_key,
+						'delimiter' => $delimiter,
+					);
+				}
+			}
+
+			return array(
+				'preset'    => 'other',
+				'delimiter' => $delimiter,
+			);
+		}
+
+		/**
+		 * Use advanced method when template is configured but none exist for the post type.
+		 *
+		 * @param string $method    Requested import/export method.
+		 * @param array  $templates Saved templates for the current post type.
+		 * @return string
+		 */
+		public static function _resolve_method_with_templates( $method, $templates )
+		{
+			if ( 'template' === $method && empty( $templates ) ) {
+				return 'new';
+			}
+
+			return $method;
+		}
+
 		public static function _get_local_file_path($file_url)
 		{
 			$file_path = untrailingslashit(ABSPATH).str_replace(site_url(), '', $file_url);

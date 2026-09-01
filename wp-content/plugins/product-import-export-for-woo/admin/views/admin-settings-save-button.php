@@ -3,7 +3,7 @@
 if ( ! defined( 'WPINC' ) ) {
     die;
 }
-$settings_button_title=isset($settings_button_title) ? $settings_button_title : 'Update Settings';
+$settings_button_title=isset($settings_button_title) ? $settings_button_title : __('Update Settings', 'product-import-export-for-woo');
 $before_button_text=isset($before_button_text) ? $before_button_text : '';
 $after_button_text=isset($after_button_text) ? $after_button_text : '';
 ?>

@@ -3,7 +3,7 @@
 Plugin Name: WP All Import Pro
 Plugin URI: http://www.wpallimport.com/
 Description: The most powerful solution for importing XML and CSV files to WordPress. Import to Posts, Pages, and Custom Post Types. Support for imports that run on a schedule, ability to update existing imports, and much more.
-Version: 5.0.8
+Version: 5.1.0
 Requires PHP: 7.4
 Author: Soflyy
 */
@@ -26,7 +26,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
     /**
      *
      */
-    define('PMXI_VERSION', '5.0.8');
+    define('PMXI_VERSION', '5.1.0');
     /**
      *
      */
@@ -82,6 +82,82 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 	define('WP_ALL_IMPORT_TEMP_DIRECTORY', WP_ALL_IMPORT_UPLOADS_BASE_DIRECTORY . DIRECTORY_SEPARATOR . 'temp');
 
     require WP_ALL_IMPORT_ROOT_DIR . '/vendor/autoload.php';
+
+    /**
+     * Sets the Automatic Setup default once per site: on for a first install of
+     * WP All Import Pro, off for a site that has run it before.
+     */
+    function wp_all_import_decide_ai_bridge_default() {
+        global $wpdb;
+
+        if ( ! defined( 'PMXI_EDITION' ) || 'paid' !== PMXI_EDITION ) {
+            return;
+        }
+
+        // Multisite is left alone. Every marker below is per-blog, so a subsite of
+        // an established network is indistinguishable from a new install, and
+        // guessing wrong there enables a feature across sites nobody opted in for.
+        if ( is_multisite() ) {
+            return;
+        }
+
+        $option = 'wpai_experimental_ai_bridge';
+
+        if ( null !== get_option( $option, null ) ) {
+            return;
+        }
+
+        // Read as rows rather than through get_option: wp_all_import_db_version is
+        // stored un-autoloaded, so a stale object cache can report it missing on a
+        // site that has it, and add_option stops being create-only in the same state.
+        $present = $wpdb->get_col(
+            $wpdb->prepare(
+                "SELECT option_name FROM {$wpdb->options} WHERE option_name IN (%s, %s)",
+                $option,
+                'wp_all_import_db_version'
+            )
+        );
+
+        if ( in_array( $option, $present, true ) ) {
+            // The cache disagreed with the database. Drop the stale entry so the
+            // check above answers from cache next time instead of querying again.
+            wp_cache_delete( 'notoptions', 'options' );
+            return;
+        }
+
+        // Written by Pro alone, so a site arriving from the free plugin still counts
+        // as a first Pro install.
+        $has_run_pro_before = in_array( 'wp_all_import_db_version', $present, true );
+
+        // That marker is only written on an admin page load, so a site that has only
+        // ever run imports over cron or WP-CLI will not carry it. Import history
+        // says the same thing and survives both.
+        if ( ! $has_run_pro_before ) {
+            $exists = $wpdb->get_var(
+                $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->prefix . 'pmxi_imports' ) )
+            );
+
+            if ( $exists ) {
+                $has_run_pro_before = (bool) $wpdb->get_var( "SELECT 1 FROM {$wpdb->prefix}pmxi_imports LIMIT 1" );
+            }
+        }
+
+        add_option( $option, $has_run_pro_before ? 0 : 1, '', true );
+    }
+
+    // The SDK is opt-in and ships off. gate.php owns that setting end to end — the
+    // option, the Experimental section on the settings screen, and saving it — and
+    // requires bootstrap.php only when it is on. Keeping the UI there rather than
+    // here is what stops free and Pro drifting.
+    //
+    // Loaded at file scope, before PMXI_Plugin is instantiated, because its
+    // constructor decides whether to load WP All Import's libraries and the
+    // bridge's REST namespace needs them. Not routed through the Composer
+    // autoloader — the SDK carries its own class loader by design.
+    //
+    // The default is decided first because gate.php reads the option below.
+    wp_all_import_decide_ai_bridge_default();
+    require_once WP_ALL_IMPORT_ROOT_DIR . '/vendor/soflyy/wpai-bridge/gate.php';
 
     /**
 	 * Main plugin file, Introduces MVC pattern

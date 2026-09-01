@@ -131,7 +131,8 @@ final class ParamDescNewAdmin implements DescriptorInterface
                     }
 
                     if (filter_var($value, FILTER_VALIDATE_EMAIL) == false) {
-                        $paramObj->setInvalidMessage('Email "' . $value . '"  isn\'t valid');
+                        // The notice manager renders this message as HTML
+                        $paramObj->setInvalidMessage('Email "' . \DUPX_U::esc_html((string) $value) . '"  isn\'t valid');
                         return false;
                     }
 

@@ -2,14 +2,123 @@
 # This file is distributed under the same license as the Plugins - FiboSearch &#8211; Ajax Search for WooCommerce - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-07-31 06:38:52+0000\n"
+"PO-Revision-Date: 2026-08-24 10:55:41+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.3\n"
+"X-Generator: GlotPress/4.1.0\n"
 "Language: pl\n"
 "Project-Id-Version: Plugins - FiboSearch &#8211; Ajax Search for WooCommerce - Stable (latest release)\n"
+
+#: partials/admin/debug/hooks.php:312
+msgid "Line"
+msgstr "Linia"
+
+#: partials/admin/debug/hooks.php:310
+msgid "Hook"
+msgstr "Hak"
+
+#: partials/admin/debug/hooks.php:306
+msgid "Detected hooks"
+msgstr "Wykryte haki"
+
+#: partials/admin/debug/hooks.php:297
+msgid "No hooks with dgwt/wcas/* or fibosearch/* prefixes were found."
+msgstr "Nie znaleziono żadnych haków z prefiksami dgwt/wcas/* ani fibosearch/*."
+
+#: partials/admin/debug/hooks.php:291
+msgid "File found, but it could not be read (permissions or file too large)."
+msgstr "Plik znaleziono, ale nie udało się go odczytać (brak uprawnień albo plik jest za duży)."
+
+#: partials/admin/debug/hooks.php:284
+msgid "Hooks:"
+msgstr "Haki:"
+
+#: partials/admin/debug/hooks.php:280
+msgid "Path:"
+msgstr "Ścieżka:"
+
+#: partials/admin/debug/hooks.php:248
+msgid "No allowed hooks file was found in supported locations."
+msgstr "W obsługiwanych lokalizacjach nie znaleziono pliku z listą dozwolonych hooków."
+
+#: partials/admin/debug/hooks.php:243
+msgid "Hooks"
+msgstr "Haki"
+
+#: includes/Admin/Promo/FiboSearch2Teaser.php:62
+msgid "Preview what's coming"
+msgstr "Zobacz, co nas czeka"
+
+#: includes/Admin/Promo/FiboSearch2Teaser.php:59
+msgid "A faster, smarter, and more refined search experience with better relevance, deeper insights, and more control over search performance."
+msgstr "Szybsze, inteligentniejsze i bardziej dopracowane wyszukiwanie, które zapewnia trafniejsze wyniki, głębszy wgląd w dane oraz większą kontrolę nad wydajnością wyszukiwania."
+
+#: includes/Admin/Promo/FiboSearch2Teaser.php:58
+msgid "FiboSearch 2.0 is on the way"
+msgstr "FiboSearch 2.0 już wkrótce"
+
+#: includes/Admin/Promo/FiboSearch2Teaser.php:52
+msgid "FiboSearch 2.0 teaser"
+msgstr "Zapowiedź FiboSearch 2.0"
+
+#: includes/Admin/Promo/FiboFiltersTeaser.php:58
+msgid "Faster search. Faster filtering."
+msgstr "Szybsze wyszukiwanie. Szybsze filtrowanie."
+
+#: includes/Admin/Promo/FiboFiltersTeaser.php:52
+msgid "FiboFilters"
+msgstr "Filtry Fibo"
+
+#: includes/Admin/Promo/FiboFiltersTeaser.php:46
+#: includes/Admin/Promo/FiboFiltersTeaser.php:60
+msgid "Try FiboFilters"
+msgstr "Wypróbuj filtry Fibo"
+
+#: partials/admin/debug/hooks.php:311
+msgid "Call"
+msgstr "Zadzwoń"
+
+#: partials/admin/debug/active-integrations.php:21
+msgid "Version"
+msgstr "Wersja"
+
+#: partials/admin/debug/active-integrations.php:20
+msgid "Plugin name"
+msgstr "Nazwa wtyczki"
+
+#: includes/Admin/Troubleshooting.php:847
+msgid "Remove Actions Before Filtering option is enabled"
+msgstr "Opcja „Usuń działania przed filtrowaniem” jest włączona"
+
+#: includes/Admin/Troubleshooting.php:735
+msgid "Save the settings and test filtering again."
+msgstr "Zapisz ustawienia i spróbuj jeszcze raz zastosować filtrowanie."
+
+#: includes/Admin/Troubleshooting.php:734
+msgid "Turn off the %s option."
+msgstr "Wyłącz opcję %s."
+
+#: includes/Admin/Troubleshooting.php:733
+msgid "Open the settings of the relevant filter in Product Filter by WBW."
+msgstr "Otwórz ustawienia odpowiedniego filtra w sekcji „Filtr produktów według WBW”."
+
+#: includes/Admin/Troubleshooting.php:731
+msgid "To make everything work properly, turn this option off."
+msgstr "Żeby wszystko działało jak należy, wyłącz tę opcję."
+
+#: includes/Admin/Troubleshooting.php:730
+msgid "We detected that Product Filter by WBW has the %s option enabled. With filtering active, this can cause filtering to return 0 results."
+msgstr "Zauważyliśmy, że w filtrze produktów WBW jest włączona opcja %s. Gdy filtrowanie jest aktywne, może to sprawić, że filtr zwróci 0 wyników."
+
+#: includes/Admin/Troubleshooting.php:729
+msgid "WBW Product Filter: Option %s is enabled"
+msgstr "Filtr produktów WBW: opcja %s jest włączona"
+
+#: includes/Admin/Troubleshooting.php:728
+msgid "Remove Actions Before Filtering"
+msgstr "Usuń działania przed filtrowaniem"
 
 #: partials/search-form.php:34
 msgid "Open search bar"
@@ -234,6 +343,10 @@ msgctxt "Pirx is proper name."
 msgid "Pirx"
 msgstr "Pirx"
 
+#: includes/Admin/Troubleshooting.php:789
+msgid "You can do it by clicking %1$s or use an external plugin such as %2$s."
+msgstr "Możesz to zrobić, klikając %1$s, albo skorzystać z zewnętrznej wtyczki, takiej jak %2$s."
+
 #: includes/Analytics/UserInterface.php:149
 msgid "Are you sure you want to reset stats?"
 msgstr "Czy na pewno chcesz zresetować statystyki?"
@@ -296,6 +409,11 @@ msgctxt "block title"
 msgid "FiboSearch navigation item"
 msgstr "Element nawigacji FiboSearch"
 
+#: partials/admin/stats/stats.php:276
+msgctxt "The last placeholder is a button with text \"reset your stats\""
+msgid "The stats older than %1$d days are removed from your database on a daily basis. Now you have %2$d records in the DB that weigh %3$.2fMB. You can %4$s now and start collecting them all over again."
+msgstr "Dane starsze niż %1$d dni są codziennie usuwane z twojej bazy danych. Teraz w bazie masz %2$d rekordów, które zajmują %3$.2fMB. Możesz teraz %4$s i zacząć zbierać dane od nowa."
+
 #: includes/Settings.php:174
 msgid "<a target=\"_blank\" href=\"%s\">Read more</a> about this feature."
 msgstr "<a target=\"_blank\" href=\"%s\">Dowiedz się więcej</a> o tej funkcjonalności."
@@ -344,8 +462,8 @@ msgstr "Tutaj jest lista fraz, które wpisali użytkownicy w taki sposób: wpisa
 #: includes/EmbeddingViaMenu.php:204
 #: includes/Integrations/Plugins/Elementor/FiboSearchWidget.php:156
 #: includes/Settings.php:280 widget.php:44 build/blocks/search-nav/index.js:1
-#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:119
-#: src/blocks/search/edit.js:99
+#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:113
+#: src/blocks/search/edit.js:94
 msgid "Icon on desktop, search bar on mobile"
 msgstr "Ikonka (desktop), pole wyszukiwania (mobilki)"
 
@@ -405,7 +523,7 @@ msgstr "Najpopularniejsze wyszukiwania - autouzupełnianie"
 msgid "Top searches - WooCommerce search results page"
 msgstr "Najpopularniejsze wyszukiwania - strona z wynikami wyszukiwania WooCommerce"
 
-#: includes/Settings.php:935
+#: includes/Settings.php:936
 msgid "You have selected the <b>Appearance -> Style -> Pirx</b> option. Pirx style forces a submit button to be enabled. You can find this option a few rows below. That's why this option is blocked."
 msgstr "Wybrałeś opcję <b>Wygląd -> Styl -> Pirx</b>. Wybranie stylu Pirx wymaga włączenia przycisku \"Submit\". Możesz znaleźć tę opcję kilka linii niżej. To dlatego ta opcja jest wyłączona."
 
@@ -526,7 +644,7 @@ msgstr "Powtórzeń"
 msgid "returning results"
 msgstr " z wynikami"
 
-#: includes/Settings.php:723
+#: includes/Settings.php:724
 msgid "Returns suggestions based on likely relevance, even though a search keyword may not exactly match. E.g if you type “ipho<b>m</b>e” you get the same results as for “iphone”. <a target=\"_blank\" href=\"%s\">Read more</a> about the fuzzy search feature."
 msgstr "Zwraca wyniki na podstawie zbliżonej trafności, nawet jeśli słowo kluczowe nie do końca pasuje do produktu. Np. jeżeli użytkownik napisze “ipho<b>m</b>e” to zobaczy te same wyniki, tak jakby wpisał poprawnie “iphone”. <a target=\"_blank\" href=\"%s\">Czytaj więcej</a> o dopasowaniu rozmytym."
 
@@ -575,8 +693,8 @@ msgid "Total searches"
 msgstr "Wszystkich wyszukiwań"
 
 #: includes/Settings.php:320 build/blocks/search-nav/index.js:1
-#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:139
-#: src/blocks/search/edit.js:119
+#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:133
+#: src/blocks/search/edit.js:114
 msgid "Darkened background"
 msgstr "Przyciemniane tło"
 
@@ -613,15 +731,19 @@ msgstr "Nie masz poprawnej templatki Elementora dla stron wyników wyszukiwania 
 msgid "You are using Elementor and we noticed that the template used in the search results page titled <strong>%s</strong> does not include the <strong>Archive Products</strong> widget."
 msgstr "Używasz Elementora i zauważyliśmy, że templatka, której używasz do wyświetlania strony z wynikami wyszukiwania <strong>%s</strong> nie posiada widgetu <strong>Archive Products</strong>."
 
-#: includes/Settings.php:656
+#: includes/Admin/Troubleshooting.php:612
+msgid "Add <strong>Archive Products</strong> widget to the template <strong>%1$s</strong> or create a new template dedicated to the WooCommerce search results page. Learn how to do it in <a href=\"%2$s\" target=\"_blank\">our documentation</a>."
+msgstr "Dodaj widżet <strong>Archiwum produktów</strong> do szablonu <strong>%1$s</strong> albo stwórz nowy szablon przeznaczony specjalnie dla strony wyników wyszukiwania WooCommerce. Dowiedz się, jak to zrobić, w <a href=\"%2$s\" target=\"_blank\">naszej dokumentacji</a>."
+
+#: includes/Settings.php:657
 msgid "Exclude"
 msgstr "Nie indeksuj produktów spełniających poniższe reguły"
 
-#: includes/Settings.php:649
+#: includes/Settings.php:650
 msgid "Exclude the product group from the search results or allow search only among the indicated product group."
 msgstr "Wyklucz grupę produktów z wyników wyszukiwania lub pozwól wyszukiwać tylko wśród wskazanych grup."
 
-#: includes/Settings.php:641
+#: includes/Settings.php:642
 msgid "Exclude/include products"
 msgstr "Indeksuj/Nie indeksuj produkty"
 
@@ -630,15 +752,15 @@ msgstr "Indeksuj/Nie indeksuj produkty"
 msgid "FiboSearch Team"
 msgstr "Zespół FiboSearch"
 
-#: includes/Settings.php:647
+#: includes/Settings.php:648
 msgid "Filtering mode"
 msgstr "Tryb filtrowania"
 
-#: includes/Settings.php:665
+#: includes/Settings.php:666
 msgid "Filters that specify the product group and taxonomy that will be affected by the above mode"
 msgstr "Filtry określające grupę produktów i taksonomię, na które powyższy tryb będzie miał wpływ"
 
-#: includes/Settings.php:657
+#: includes/Settings.php:658
 msgid "Include"
 msgstr "Indeksuj tylko te produkty, które spełniają poniższe reguły"
 
@@ -659,7 +781,7 @@ msgstr "Czy twoja strona jest dostępna tylko dla wybranych adresów IP? <b>Doda
 msgid "Your server can't send an HTTP request to itself"
 msgstr "Twój serwer nie może wysłać żądania HTTP do samego siebie"
 
-#: includes/Settings.php:714
+#: includes/Settings.php:715
 msgid "Schedule time"
 msgstr "Zaplanuj czas"
 
@@ -709,14 +831,27 @@ msgstr "zwiększając szybkość"
 msgid "You are using TranslatePress with Free version of our plugin"
 msgstr "Używasz wtyczki TranslatePress z bezpłatną wersją FiboSearch"
 
+#: ajax-search-for-woocommerce.php:204
+msgid "%1$s is enabled but not effective. It requires %2$s in order to work."
+msgstr "%1$s jest włączone, ale nie działa. Żeby działało, potrzebne jest %2$s."
+
+#: ajax-search-for-woocommerce.php:187
+msgid "%1$s: You need PHP version at least 7.0 to run this plugin. You are currently using PHP version %2$s."
+msgstr "%1$s: do uruchomienia tej wtyczki potrzebna jest wersja PHP co najmniej 7.0. Obecnie używasz wersji PHP %2$s."
+
+#: includes/Admin/Troubleshooting.php:257
+#: includes/Admin/Troubleshooting.php:261
+msgid "You are using the %1$s plugin. The %2$s does not support this plugin."
+msgstr "Korzystasz z wtyczki %1$s. %2$s nie obsługuje tej wtyczki."
+
 #. Plugin Name of the plugin
 #: ajax-search-for-woocommerce.php
 msgid "FiboSearch - AJAX Search for WooCommerce"
 msgstr "FiboSearch - AJAX Search for WooCommerce"
 
 #: partials/admin/settings.php:27 build/blocks/search-nav/index.js:1
-#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:90
-#: src/blocks/search/edit.js:70
+#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:84
+#: src/blocks/search/edit.js:65
 msgid "Settings"
 msgstr "Ustawienia"
 
@@ -728,7 +863,7 @@ msgstr "Za pomocą PHP - %s"
 msgid "Add new rule"
 msgstr "Dodaj nową regułę"
 
-#: includes/Settings.php:663
+#: includes/Settings.php:664
 msgid "Filters"
 msgstr "Filtry"
 
@@ -861,6 +996,10 @@ msgstr "Przekieruj do koszyka po dodaniu produktu"
 msgid "Hit enter to search or ESC to close"
 msgstr "Naciśnij przycisk Enter aby wyszukać lub ESC aby zamknąć"
 
+#: includes/Admin/Troubleshooting.php:418
+msgid "Go to <code>WooCommerce -> Settings -> <a href=\"%1$s\" target=\"_blank\">Products (tab)</a></code> and check option <code>%2$s</code> and uncheck option <code>%3$s</code>."
+msgstr "Przejdź do <code>WooCommerce -> Ustawienia -> <a href=\"%1$s\" target=\"_blank\">Produkty (zakładka)</a></code> i zaznacz opcję <code>%2$s</code>, a odznacz opcję <code>%3$s</code>."
+
 #: includes/Abstracts/ThemeIntegration.php:78
 msgid "%s Theme"
 msgstr "%s Motyw"
@@ -878,23 +1017,23 @@ msgstr "Tutaj jest <a href=\"%s\" target=\"_blank\">wpis</a> o tym, jak to zrobi
 #: includes/EmbeddingViaMenu.php:203
 #: includes/Integrations/Plugins/Elementor/FiboSearchWidget.php:155
 #: includes/Settings.php:279 widget.php:43 build/blocks/search-nav/index.js:1
-#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:115
-#: src/blocks/search/edit.js:95
+#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:109
+#: src/blocks/search/edit.js:90
 msgid "Icon on mobile, search bar on desktop"
 msgstr "Ikonka (mobilki), pole wyszukiwania (desktop)"
 
 #: includes/EmbeddingViaMenu.php:84
 #: includes/Integrations/Plugins/Elementor/FiboSearchWidget.php:150
 #: includes/Settings.php:274 widget.php:46 build/blocks/search-nav/index.js:1
-#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:103
-#: src/blocks/search/edit.js:83
+#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:97
+#: src/blocks/search/edit.js:78
 msgid "Layout"
 msgstr "Układ"
 
 #: includes/Integrations/Plugins/Elementor/FiboSearchWidget.php:166
 #: includes/Settings.php:303 widget.php:51 build/blocks/search-nav/index.js:1
-#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:151
-#: src/blocks/search/edit.js:131
+#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:145
+#: src/blocks/search/edit.js:126
 msgid "Overlay on mobile"
 msgstr "Overlay na urządzeniach mobilnych"
 
@@ -909,8 +1048,8 @@ msgstr "Podmień pola wyszukiwania"
 #: includes/EmbeddingViaMenu.php:202
 #: includes/Integrations/Plugins/Elementor/FiboSearchWidget.php:154
 #: includes/Settings.php:278 widget.php:42 build/blocks/search-nav/index.js:1
-#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:111
-#: src/blocks/search/edit.js:91
+#: build/blocks/search/index.js:1 src/blocks/search-nav/edit.js:105
+#: src/blocks/search/edit.js:86
 msgid "Search icon"
 msgstr "Ikonka wyszukiwania"
 
@@ -992,11 +1131,11 @@ msgstr "Najpopularniejsza wtyczka do szukania produktów w WooCommerce. Pozwala 
 msgid "As a menu item - go to the %s and add the menu item “FiboSearch bar”. Done!"
 msgstr "Jako element menu - idź do %s i dodaj pozycję \"Wyszukiwarka FiboSearch\". Gotowe!"
 
-#: includes/Settings.php:707
+#: includes/Settings.php:708
 msgid "daily"
 msgstr "dzienny"
 
-#: includes/Settings.php:695
+#: includes/Settings.php:696
 msgid "Enable Scheduler"
 msgstr "Włącz harmonogram"
 
@@ -1008,11 +1147,11 @@ msgstr "Pole wyszukiwania FiboSearch będzie tutaj wyswietlone."
 msgid "How to add?"
 msgstr "Jak dodać?"
 
-#: includes/Settings.php:695
+#: includes/Settings.php:696
 msgid "In most cases, you don't need to use the scheduler because the search index updates when you edit products. If you use import tools or custom code to refresh prices or bulk add/edit products, the indexing scheduler will be helpful."
 msgstr "W większości przypadków nie trzeba używać harmonogramu budowania indeksu, ponieważ indeks wyszukiwawczy jest i tak aktualizowany w locie, podczas edytowania produktów. Jeżeli używasz narzędzi do importu lub własnych skryptów do odświeżania cen, lub innych operacji zbiorowych na produktach, wtedy harmonogram budowy indeksu może się przydać."
 
-#: includes/Settings.php:703
+#: includes/Settings.php:704
 msgid "Interval"
 msgstr "Interwał"
 
@@ -1020,7 +1159,7 @@ msgstr "Interwał"
 msgid "Menu Screen"
 msgstr "widoku menu"
 
-#: includes/Settings.php:689
+#: includes/Settings.php:690
 msgid "Scheduling indexing"
 msgstr "Harmonogram indeksowania"
 
@@ -1028,7 +1167,7 @@ msgstr "Harmonogram indeksowania"
 msgid "Add to menu"
 msgstr "Dodaj do menu"
 
-#: includes/Settings.php:708
+#: includes/Settings.php:709
 msgid "weekly"
 msgstr "co tydzień"
 
@@ -1058,7 +1197,7 @@ msgstr " motywu potomnego <b>%s</b>"
 msgid "How to add search bar in your theme?"
 msgstr "Jak dodać pole wyszukiwania w twoim motywie?"
 
-#: includes/Settings.php:722
+#: includes/Settings.php:723
 msgid "Increases sales conversions."
 msgstr "Zwiększ konwersję sprzedaży."
 
@@ -1119,7 +1258,7 @@ msgstr "Przykładowa<strong>nazwa</strong> tagu"
 #: includes/Settings.php:113 includes/Settings.php:277
 #: partials/admin/search-preview.php:21 widget.php:41
 #: build/blocks/search-nav/index.js:1 build/blocks/search/index.js:1
-#: src/blocks/search-nav/edit.js:107 src/blocks/search/edit.js:87
+#: src/blocks/search-nav/edit.js:101 src/blocks/search/edit.js:82
 msgid "Search bar"
 msgstr "Pole wyszukiwania"
 
@@ -1187,11 +1326,11 @@ msgstr "Promocja"
 msgid "SKU"
 msgstr "SKU"
 
-#: includes/Engines/WordPressNative/Search.php:966
+#: includes/Engines/WordPressNative/Search.php:979
 msgid "Tags"
 msgstr "Tagi"
 
-#: includes/Engines/WordPressNative/Search.php:964
+#: includes/Engines/WordPressNative/Search.php:977
 msgid "Categories"
 msgstr "Kategorie"
 
@@ -1204,6 +1343,10 @@ msgstr "https://fibosearch.com?utm_source=wp-admin&utm_medium=referral&utm_campa
 #: partials/admin/search-preview.php:257
 msgid "Sample %s <strong>name</strong>"
 msgstr "Przykładowa <strong>nazwa</strong> %s"
+
+#: partials/admin/embedding-in-theme.php:22
+msgid "You are using the <b>%1$s</b> theme%2$s. Fantastic!"
+msgstr "Korzystasz z motywu <b>%1$s</b>%2$s. Super!"
 
 #: partials/admin/how-to-use.php:24
 msgid "As a widget - go to the %s and choose “FiboSearch bar”"
@@ -1246,7 +1389,7 @@ msgstr "Istnieje %s prostych sposobów wyświetlania paska wyszukiwania w Twoim 
 msgid "Searching in variable products SKU is available only in <a target=\"_blank\" href=\"%s\">the pro version</a>."
 msgstr "Szukanie w SKU wariantów dostępne jest tylko w <a href=\"%s\">wersji Pro</a>."
 
-#: includes/Settings.php:734
+#: includes/Settings.php:735
 msgid "-- Disabled"
 msgstr "-- Wyłączone"
 
@@ -1266,7 +1409,7 @@ msgstr "Kontakt"
 msgid "Fuzziness"
 msgstr "Rozmycie"
 
-#: includes/Settings.php:729
+#: includes/Settings.php:730
 msgid "Fuzzy matching"
 msgstr "Dopasowanie rozmyte"
 
@@ -1274,7 +1417,7 @@ msgstr "Dopasowanie rozmyte"
 msgid "Fuzzy search"
 msgstr "Dopasowanie rozmyte"
 
-#: includes/Settings.php:737
+#: includes/Settings.php:738
 msgid "Hard"
 msgstr "Silne"
 
@@ -1291,15 +1434,15 @@ msgstr "w"
 msgid "Increase sales"
 msgstr "Popraw sprzedaż"
 
-#: includes/Settings.php:744
+#: includes/Settings.php:745
 msgid "Index status"
 msgstr "Status indeksu"
 
-#: includes/Settings.php:736
+#: includes/Settings.php:737
 msgid "Normal"
 msgstr "Średnie"
 
-#: includes/Settings.php:677
+#: includes/Settings.php:678
 msgid "Pro features"
 msgstr "Funkcjonalności Pro"
 
@@ -1335,11 +1478,11 @@ msgstr "Przeszukuje także SKU wariantów"
 msgid "Show details"
 msgstr "Pokaż szczegóły"
 
-#: includes/Settings.php:735
+#: includes/Settings.php:736
 msgid "Soft"
 msgstr "Słabe"
 
-#: includes/Settings.php:683
+#: includes/Settings.php:684
 msgid "Speed up search!"
 msgstr "Przyspiesz wyszukiwanie!"
 
@@ -1390,6 +1533,14 @@ msgstr "Zamknij"
 #: includes/Admin/Promo/FeedbackNotice.php:79
 msgid "Review %s"
 msgstr "Oceń teraz"
+
+#: includes/Admin/Promo/FeedbackNotice.php:63
+msgid "Hey %1$s, it's Damian Góra from %2$s. You have used this free plugin for some time now, and I hope you like it!"
+msgstr "Cześć %1$s, tu Damian Góra z %2$s. Korzystasz z tej darmowej wtyczki już od jakiegoś czasu i mam nadzieję, że ci się podoba!"
+
+#: includes/Admin/Promo/FeedbackNotice.php:71
+msgid "The FiboSearch team have spent countless hours developing it, and it would mean a lot to me if you %1$ssupport it with a quick review on WordPress.org.%2$s"
+msgstr "Zespół FiboSearch poświęcił na jego stworzenie niezliczone godziny i byłbym wam bardzo wdzięczny, gdybyście %1$s wsparli ten projekt, pisząc krótką recenzję na WordPress.org.%2$s"
 
 #: includes/Settings.php:616
 msgid "Exclude “out of stock” products"
@@ -1519,11 +1670,11 @@ msgstr "Załaduj zdjęcie na preloader"
 msgid "Widgets Screen"
 msgstr "widoku widgetów"
 
-#: includes/Engines/WordPressNative/Search.php:967
+#: includes/Engines/WordPressNative/Search.php:980
 msgid "Tag"
 msgstr "Tag"
 
-#: includes/Engines/WordPressNative/Search.php:965
+#: includes/Engines/WordPressNative/Search.php:978
 msgid "Category"
 msgstr "Kategoria"
 

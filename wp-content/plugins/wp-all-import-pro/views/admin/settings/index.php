@@ -278,6 +278,8 @@
 		</tbody>
 	</table>
 
+	<?php do_action('pmxi_settings_sections', $post); ?>
+
 	<h3><?php _e('Force Stream Reader', 'wp-all-import-pro') ?></h3>
 
 	<table class="form-table">

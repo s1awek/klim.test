@@ -5,14 +5,58 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Compatible_Dokan {
 	protected static $cache=[];
-	public function __construct() {
-		add_action( 'dokan_product_edit_after_title', array( 'VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Custom_Attribute', 'enqueue_scripts' ) );
-		add_filter( 'wp_ajax_dokan_load_variations', array( $this, 'swatches_settings' ),9 );
-		add_action( 'wp_ajax_dokan_save_attributes', [ $this, 'save_swatches_settings' ],9 );
-	}
+    public function __construct() {
+        if ( ! self::is_dokan_active() ) {
+            return;
+        }
+
+        add_action( 'dokan_product_edit_after_title', array( 'VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Custom_Attribute', 'enqueue_scripts' ) );
+
+        if ( ! self::is_dokan_pro_active() ) {
+            return;
+        }
+
+        add_action( 'wp_ajax_dokan_load_variations', array( $this, 'swatches_settings' ), 9 );
+        add_action( 'wp_ajax_dokan_save_attributes', array( $this, 'save_swatches_settings' ), 9 );
+    }
+
+    protected static function is_dokan_active() {
+        return function_exists( 'dokan' ) || class_exists( 'WeDevs_Dokan' ) || defined( 'DOKAN_PLUGIN_VERSION' );
+    }
+
+    protected static function is_dokan_pro_active() {
+        return class_exists( '\WeDevs\DokanPro\Ajax' ) || class_exists( 'Dokan_Pro' ) || defined( 'DOKAN_PRO_PLUGIN_VERSION' );
+    }
+
     public function save_swatches_settings(){
-	    $post_id = isset( $_POST['post_id'] ) ? (int) sanitize_text_field(wp_unslash($_POST['post_id'])) :0;//phpcs:ignore WordPress.Security.NonceVerification.Missing
-        parse_str($_POST['data']??'', $data );
+
+	    $post_id = isset( $_POST['post_id'] ) ? absint( sanitize_text_field(wp_unslash( $_POST['post_id'] )) ) : 0;//phpcs:ignore WordPress.Security.NonceVerification.Missing
+        $raw_data = isset( $_POST['data'] ) ? wp_unslash( $_POST['data'] ) : '';//phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+        if ( ! is_string( $raw_data ) ) {
+            return;
+        }
+        parse_str( $raw_data, $data );
+        if ( ! is_array( $data ) ) {
+            $data = array();
+        }
+
+        if ( empty( $data['viwpvs_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $data['viwpvs_nonce'] ) ), 'viwpvs-dokan-save-attributes' ) ) {
+            return;
+        }
+
+        // Check quyền chính sửa
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+            return;
+        }
+
+        // Check xem có đúng sản phẩm và quyền được sửa sản phẩm đó
+        if ( function_exists( 'dokan_get_vendor_by_product' ) ) {
+            $vendor_id = dokan_get_vendor_by_product( $post_id, true );
+            if ($vendor_id && (int) $vendor_id !== get_current_user_id() && ! current_user_can( 'manage_woocommerce' )) {
+                return;
+            }
+        }
+
 	    if ( !$post_id || empty($data['viwpvs_save_attribute']) || !is_array($data['viwpvs_save_attribute'])) {
 		    return;
 	    }
@@ -22,7 +66,8 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Compatible_Dokan {
 	    }
         $viwpvs_save_attribute= $data['viwpvs_save_attribute'];
 	    $vi_attribute_settings                                                 = get_post_meta( $post_id, '_vi_woo_product_variation_swatches_product_attribute', true );
-	    $vi_attribute_settings                                                 = $vi_attribute_settings ? json_decode( $vi_attribute_settings, true ) : array();
+	    $vi_attribute_settings                                                 = is_string( $vi_attribute_settings ) ? json_decode( $vi_attribute_settings, true ) : $vi_attribute_settings;
+	    $vi_attribute_settings                                                 = is_array( $vi_attribute_settings ) ? $vi_attribute_settings : array();
         foreach ($viwpvs_save_attribute as $i => $v){
             if (empty($v)){
                 continue;
@@ -54,15 +99,28 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Compatible_Dokan {
 	    update_post_meta( $post_id, '_vi_woo_product_variation_swatches_product_attribute', $vi_attribute_settings );
     }
 	public function swatches_settings(){
+        check_ajax_referer( 'load-variations', 'security' );
+
+        // Check permissions again and make sure we have what we need
+        if ( ! current_user_can( 'dokandar' ) || empty( $_POST['product_id'] ) || empty( $_POST['attributes'] ) ) {
+            die( -1 );
+        }
+
 		if (empty( $_POST['product_id'] ) || !empty(self::$cache['swatches_settings'])){
 			return;
 		}
+
 		self::$cache['swatches_settings'] = true;
-        $product_id = wc_clean(wp_unslash($_POST['product_id']));
-		$product = wc_get_product($product_id);
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+        $product_id = absint( wc_clean( wp_unslash( $_POST['product_id'] ) ) );
+		$product = wc_get_product( $product_id );
+		if ( ! $product ) {
+			return;
+		}
         $attributes = $product->get_attributes();
 		global $thepostid;
 		$tmp_thepostid = $thepostid;
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
         $thepostid = $product_id;
         if (is_array($attributes) && !empty($attributes)){
             $i=0;
@@ -81,6 +139,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Compatible_Dokan {
                 $i++;
             }
         }
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 		$thepostid = $tmp_thepostid;
 	}
 }

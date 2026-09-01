@@ -10,10 +10,6 @@ class PMXI_Admin_License extends PMXI_Controller_Admin {
 
 		$this->data['post'] = $post = $this->input->post(PMXI_Plugin::getInstance()->getOption());		
 
-		/*$addons = new PMXI_Admin_Addons();
-
-		$this->data['addons'] = $addons->get_premium_addons();*/
-
 		$this->data['addons']['PMXI_Plugin'] = array(
 			'title' => __('WP All Import', 'wp-all-import-pro'),
 			'active' => (class_exists('PMXI_Plugin') and defined('PMXI_EDITION') and PMXI_EDITION == 'paid')

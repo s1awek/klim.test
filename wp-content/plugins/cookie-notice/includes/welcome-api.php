@@ -170,11 +170,32 @@ class Cookie_Notice_Welcome_API {
 				break;
 
 			case 'get_bt_init_token':
+				// The braintree client-token route authenticates with the Bearer JWT
+				// held in the cookie_notice_app_token transient (set only at
+				// register/login, DAY_IN_SECONDS TTL, never refreshed). When that
+				// transient has expired/vanished, the upstream call returns a
+				// guaranteed 401 and $response would fall through as bare false —
+				// which the React PaymentStep shows as a dead-end error. Detect the
+				// missing session here and signal it so the UI can recover via
+				// re-login instead. Non-error shape ('status', not 'error') so it
+				// does not trip the frontend apiRequest() error-throw channel.
+				if ( empty( $data_token->token ) ) {
+					$response = [ 'status' => 'session_expired' ];
+					break;
+				}
+
 				$result = $this->request( 'get_token' );
 
 				// is token available?
 				if ( ! empty( $result->token ) )
 					$response = [ 'token' => $result->token ];
+				// token present but upstream returned none — could be an expired
+				// JWT (rejected by the API) rather than an outright-missing one.
+				elseif ( ! empty( $result->message ) && stripos( $result->message, 'token' ) !== false )
+					$response = [ 'status' => 'session_expired' ];
+				// any other upstream failure is a genuine error, not a session issue.
+				else
+					$response = [ 'error' => esc_html__( 'Unable to initialize payment. Please try again later.', 'cookie-notice' ) ];
 				break;
 
 			case 'payment':
@@ -1079,8 +1100,8 @@ class Cookie_Notice_Welcome_API {
 							}
 
 							// CCPA/OTHERUS: CPRA mandates honoring GPC browser signals.
-							// gpcSupportMode is Pro-gated with grandfather (see KnowledgeHub
-							// decisions.md gpc-pro-gating-with-grandfather). Auto-set fires
+							// gpcSupportMode is Pro-gated with grandfather (see control-room/
+							// solution/knowledge/decisions.md gpc-pro-gating-with-grandfather). Auto-set fires
 							// only when the site can actually enable GPC — Pro tier OR an app
 							// that already has gpcSupportMode=true persisted (grandfathered).
 							// For Free non-grandfathered + CCPA, the existing 'crit' red state
@@ -1364,8 +1385,15 @@ class Cookie_Notice_Welcome_API {
 		// Self-reported client metadata — lets backend correlate cancellation
 		// with integration client (WordPress plugin, future Shopify app, etc.)
 		// and with the UI mode in use. Banner (JS widget) does NOT send these.
+		//
+		// Cn-Client-Version now carries the version of the code that is RUNNING.
+		// It previously carried $cn->db_version — the version at the last
+		// COMPLETED upgrade routine — which lags the running code and is why the
+		// platform recorded 2.5.x for sites on current code. See
+		// cn_get_integration_telemetry().
 		$cn_ui_mode = isset( $cn->options['general']['ui_mode'] ) ? $cn->options['general']['ui_mode'] : 'legacy';
-		$cn_plugin_version = ! empty( $cn->db_version ) ? $cn->db_version : '';
+		$cn_telemetry = cn_get_integration_telemetry();
+		$cn_plugin_version = isset( $cn_telemetry['version'] ) ? $cn_telemetry['version'] : '';
 
 		// request arguments
 		$api_args = [
@@ -1377,6 +1405,15 @@ class Cookie_Notice_Welcome_API {
 				'Cn-Client-Ui-Mode'	=> $cn_ui_mode,
 			]
 		];
+
+		// The rest of the telemetry rides ONE further header rather than a header
+		// per field, so a later field is a value change instead of a new header
+		// for the backend to learn. Omitted entirely when there is nothing safe
+		// to send.
+		$cn_env = cn_encode_integration_telemetry( $cn_telemetry );
+
+		if ( $cn_env !== '' )
+			$api_args['headers']['Cn-Client-Env'] = $cn_env;
 
 		// request parameters
 		$api_params = [];
@@ -1731,8 +1768,19 @@ class Cookie_Notice_Welcome_API {
 
 		// compliance active only
 		if ( $app_id !== '' && $app_key !== '' ) {
+			// ── Begin config pull scheduling
+			// twicedaily, not daily: this pull is what refreshes the stored config
+			// snapshot, and that snapshot is what the admin screens report, what the
+			// quota/threshold state is read from, and what frontend.php seeds into
+			// huOptions on a cold pageview. Halving the interval halves how long any of
+			// them can disagree with the platform. The publish-time
+			// purge (rest_purge_cache) is the primary freshness mechanism and reaches a
+			// healthy 3.1.3+ site in seconds; this cron is the fallback for the tail it
+			// misses, so halving its interval halves the worst case for those sites.
+			// A custom 6-hour schedule was considered and rejected — twicedaily is a core
+			// built-in and needs no cron_schedules registration to carry.
 			if ( $cn->get_status() === 'active' )
-				$recurrence = 'daily';
+				$recurrence = 'twicedaily';
 			else
 				$recurrence = 'hourly';
 
@@ -1740,9 +1788,33 @@ class Cookie_Notice_Welcome_API {
 			if ( ! wp_next_scheduled( 'cookie_notice_get_app_analytics' ) )
 				wp_schedule_event( time(), 'hourly', 'cookie_notice_get_app_analytics' );
 
-			// set schedule if needed
-			if ( ! wp_next_scheduled( 'cookie_notice_get_app_config' ) )
+			// A wp_next_scheduled() guard ALONE pins an install to whatever recurrence it
+			// was FIRST registered with: the guard stays true forever after, so changing
+			// $recurrence above would reach new installs only and leave every existing
+			// site on its original cadence indefinitely. Compare the registered schedule
+			// and re-register when it differs. check_cron() is hooked on `init`, so an
+			// upgraded install self-heals on its first page load — no migration routine,
+			// and nothing to run for sites that upgrade while nobody is looking.
+			//
+			// Re-registering at time() makes that first pull happen immediately rather
+			// than at the old schedule's next due time. Deliberate: an install upgrading
+			// with a snapshot already 20+ hours old would otherwise keep serving it for
+			// most of another day, which is the state the shorter cadence exists to end.
+			// Cost is one extra pull per install, spread over however long the release
+			// takes to roll out — and the analytics job on the same installs already runs
+			// hourly, so this cadence is not new load for the endpoint.
+			//
+			// get_status() is read from stored status data and only moves when the API
+			// says so, so this cannot thrash on ordinary page loads.
+			$scheduled = wp_get_schedule( 'cookie_notice_get_app_config' );
+
+			if ( $scheduled === false )
 				wp_schedule_event( time(), $recurrence, 'cookie_notice_get_app_config' );
+			elseif ( $scheduled !== $recurrence ) {
+				wp_clear_scheduled_hook( 'cookie_notice_get_app_config' );
+				wp_schedule_event( time(), $recurrence, 'cookie_notice_get_app_config' );
+			}
+			// ── End config pull scheduling
 		} else {
 			// remove schedule if needed
 			if ( wp_next_scheduled( 'cookie_notice_get_app_analytics' ) )
@@ -1763,9 +1835,12 @@ class Cookie_Notice_Welcome_API {
 		// get main instance
 		$cn = Cookie_Notice();
 
-		// threshold-gated: free users cannot access consent logs when over 1K visits (#1851)
-		if ( $cn->threshold_exceeded() )
-			return [];
+		// Consent-log access is NOT quota-gated (#1851 reversed, user decision
+		// 2026-08-17). Returning [] here off a locally cached flag told customers whose
+		// records exist perfectly well that they had none — the exact opposite of being
+		// able to demonstrate consent, and wrong for Pro apps too whenever the cached
+		// plan had gone stale. If a usage limit on this is ever wanted again it belongs
+		// server-side next to the authoritative plan, not in a cached client flag.
 
 		// get consent logs for specific date
 		$result = $this->request(
@@ -1803,9 +1878,7 @@ class Cookie_Notice_Welcome_API {
 		// get main instance
 		$cn = Cookie_Notice();
 
-		// threshold-gated: free users cannot access consent logs when over 1K visits (#1851)
-		if ( $cn->threshold_exceeded() )
-			return [];
+		// not quota-gated — see get_privacy_consent_logs() for why the local gate went
 
 		$params = [
 			'AppID'			=> $cn->options['general']['app_id'],
@@ -1832,6 +1905,131 @@ class Cookie_Notice_Welcome_API {
 			$result = [];
 
 		return $result;
+	}
+
+	/**
+	 * Normalize a cycleUsage node to an object.
+	 *
+	 * It reaches us as a stdClass from get_config (the whole AnalyticsData branch
+	 * keeps its object shape through map_deep) but as an array element from
+	 * get_analytics (which casts $response->data to an array first). Both callers
+	 * want the same reads, so flatten the difference once, here.
+	 *
+	 * @param object|array|null $cycle_usage
+	 * @return object
+	 */
+	private function normalize_cycle_usage( $cycle_usage ) {
+		if ( is_object( $cycle_usage ) )
+			return $cycle_usage;
+
+		return (object) ( is_array( $cycle_usage ) ? $cycle_usage : [] );
+	}
+
+	/**
+	 * Age of a cycleUsage snapshot, in hours, from the payload's own clock.
+	 *
+	 * Reads cycleUsage.fetch_time — when the number was COMPUTED — not our
+	 * lastUpdated, which only records when we pulled it. Returns null when the
+	 * payload carries no usable fetch_time, i.e. when the age is unknowable.
+	 *
+	 * @param object|array|null $cycle_usage
+	 * @return float|null
+	 */
+	public function cycle_usage_age_hours( $cycle_usage ) {
+		$usage = $this->normalize_cycle_usage( $cycle_usage );
+
+		if ( empty( $usage->fetch_time ) )
+			return null;
+
+		$fetched = strtotime( (string) $usage->fetch_time . ' UTC' );
+
+		if ( $fetched === false )
+			return null;
+
+		return ( current_time( 'timestamp', true ) - $fetched ) / HOUR_IN_SECONDS;
+	}
+
+	/**
+	 * Is a cycleUsage snapshot fresh enough to enforce a quota on?
+	 *
+	 * The visit counter is materialised once a day by the Daywise Analytics job
+	 * (measured in prod: 01:00 UTC, ~2 min, every day), and the plugin then pulls
+	 * it on WP pseudo-cron, which only fires when somebody loads the site. Two
+	 * hops, the second unbounded on a low-traffic site — and the blob we cache
+	 * records neither, because lastUpdated is stamped when WE pulled rather than
+	 * when the number was computed. So the snapshot has to prove itself:
+	 *
+	 *   1. fetch_time must fall inside the cycle it claims to describe. A blob
+	 *      carried across a cycle rollover still holds last cycle's total, which
+	 *      is the one way a stale number reads HIGH rather than low (HS#47302:
+	 *      a reconnect left visits=1261 against a fresh cycle).
+	 *   2. fetch_time must be no older than twice the job interval.
+	 *
+	 * Anything we cannot prove fresh fails OPEN. Under-enforcing a free quota for
+	 * a day costs a rounding error of usage; over-enforcing on a paying customer
+	 * costs pre-consent tracker leakage and a support ticket. This is the same bar
+	 * the backend already applies before firing a threshold email — Node Cron Job
+	 * app.logic.ts::findAppsForThresholdAction requires fetch_time::date = current_date.
+	 *
+	 * @param object|array|null $cycle_usage
+	 * @return bool
+	 */
+	public function cycle_usage_is_fresh( $cycle_usage ) {
+		$usage = $this->normalize_cycle_usage( $cycle_usage );
+		$age   = $this->cycle_usage_age_hours( $usage );
+
+		// no fetch_time means we cannot establish the age at all
+		if ( $age === null )
+			return false;
+
+		// twice the 24h materialisation interval
+		if ( $age < 0 || $age > 48 )
+			return false;
+
+		$fetched = strtotime( (string) $usage->fetch_time . ' UTC' );
+
+		// snapshot must belong to the cycle it describes
+		if ( ! empty( $usage->startDate ) ) {
+			$start = strtotime( (string) $usage->startDate . ' 00:00:00 UTC' );
+
+			if ( $start !== false && $fetched < $start )
+				return false;
+		}
+
+		if ( ! empty( $usage->endDate ) ) {
+			// endDate is inclusive, so allow the whole of that day
+			$end = strtotime( (string) $usage->endDate . ' 23:59:59 UTC' );
+
+			if ( $end !== false && $fetched > $end )
+				return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Derive threshold_exceeded from a cycleUsage snapshot.
+	 *
+	 * A quota is only enforced against a snapshot we can prove current; see
+	 * cycle_usage_is_fresh() for why that fails open. Pro plans carry
+	 * VisitThreshold = NULL, which sanitizes to 0 here and never arms.
+	 *
+	 * @param object|array|null $cycle_usage
+	 * @return bool
+	 */
+	public function evaluate_threshold_exceeded( $cycle_usage ) {
+		$usage = $this->normalize_cycle_usage( $cycle_usage );
+
+		$threshold = ! empty( $usage->threshold ) ? (int) $usage->threshold : 0;
+		$visits    = ! empty( $usage->visits ) ? (int) $usage->visits : 0;
+
+		if ( $threshold <= 0 )
+			return false;
+
+		if ( ! $this->cycle_usage_is_fresh( $usage ) )
+			return false;
+
+		return $visits >= $threshold;
 	}
 
 	/**
@@ -1903,11 +2101,11 @@ class Cookie_Notice_Welcome_API {
 			$status_data['activation_datetime'] = $cn->get_cc_activation_datetime();
 
 			if ( $status_data['status'] === 'active' && $status_data['subscription'] === 'basic' ) {
-				$threshold = ! empty( $result['cycleUsage']->threshold ) ? (int) $result['cycleUsage']->threshold : 0;
-				$visits = ! empty( $result['cycleUsage']->visits ) ? (int) $result['cycleUsage']->visits : 0;
-
-				if ( $visits >= $threshold && $threshold > 0 )
-					$status_data['threshold_exceeded'] = true;
+				// same freshness bar as the get_config path — see
+				// cycle_usage_is_fresh() for why an unprovable snapshot fails open
+				$status_data['threshold_exceeded'] = $this->evaluate_threshold_exceeded(
+					isset( $result['cycleUsage'] ) ? $result['cycleUsage'] : null
+				);
 			}
 
 			if ( $network ) {
@@ -2045,19 +2243,18 @@ class Cookie_Notice_Welcome_API {
 			$status_data['widget_version'] = ! empty( $result_raw['WidgetVersion'] ) ? sanitize_key( $result_raw['WidgetVersion'] ) : '';
 
 			if ( $status_data['subscription'] === 'basic' ) {
-				// get analytics data options
-				if ( $network )
-					$analytics = get_site_option( 'cookie_notice_app_analytics', [] );
-				else
-					$analytics = get_option( 'cookie_notice_app_analytics', [] );
+				// Usage rides the SAME response as SubscriptionType above, so read it
+				// from there. Reading it instead from the separately-refreshed
+				// cookie_notice_app_analytics option is what let the two disagree: the
+				// plan came back fresh from this call while the visit count came from a
+				// cache the hourly cron had not caught up on, so a domain moved Free ->
+				// Pro kept enforcing the old app's threshold (HS#47302). One response
+				// cannot contradict itself.
+				$analytics = isset( $result_raw['AnalyticsData'] ) ? $result_raw['AnalyticsData'] : null;
+				$cycle_usage = is_object( $analytics ) && isset( $analytics->cycleUsage ) ? $analytics->cycleUsage : null;
 
-				if ( ! empty( $analytics ) ) {
-					$threshold = ! empty( $analytics['cycleUsage']->threshold ) ? (int) $analytics['cycleUsage']->threshold : 0;
-					$visits = ! empty( $analytics['cycleUsage']->visits ) ? (int) $analytics['cycleUsage']->visits : 0;
-
-					if ( $visits >= $threshold && $threshold > 0 )
-						$status_data['threshold_exceeded'] = true;
-				}
+				if ( $cycle_usage !== null )
+					$status_data['threshold_exceeded'] = $this->evaluate_threshold_exceeded( $cycle_usage );
 			}
 
 			// process blocking data
@@ -2072,8 +2269,15 @@ class Cookie_Notice_Welcome_API {
 			if ( ! empty( $result_raw['BannerConfigJSON'] ) && is_object( $result_raw['BannerConfigJSON'] ) ) {
 				$gcm = isset( $result_raw['BannerConfigJSON']->googleConsentMode ) ? (int) $result_raw['BannerConfigJSON']->googleConsentMode : 0;
 
-				// is google consent mode enabled? (free + threshold-gated: #1851)
-				if ( $gcm === 1 && ! $cn->threshold_exceeded() ) {
+				// Is Google consent mode enabled? Free-tier feature, and NOT quota-gated.
+				// Designer API logic.service.ts::downgradeLiveDefaults is explicit that
+				// Google CM, GPC and DNT survive the Free plan; only Facebook and Microsoft
+				// are Pro-only. Consent SIGNALS cost us nothing to serve — storage is the
+				// metered resource — so a site over its visit quota keeps telling Google
+				// what the visitor actually chose rather than silently losing its consent
+				// signalling. The old gate also read the PREVIOUSLY persisted flag, not the
+				// one being computed a few lines above, so it could disagree with itself.
+				if ( $gcm === 1 ) {
 					$result['google_consent_default']['ad_storage'] = isset( $result_raw['BannerConfigJSON']->googleConsentMapAdStorage ) ? (int) $result_raw['BannerConfigJSON']->googleConsentMapAdStorage : 4;
 					$result['google_consent_default']['analytics_storage'] = isset( $result_raw['BannerConfigJSON']->googleConsentMapAnalytics ) ? (int) $result_raw['BannerConfigJSON']->googleConsentMapAnalytics : 3;
 					$result['google_consent_default']['functionality_storage'] = isset( $result_raw['BannerConfigJSON']->googleConsentMapFunctionality ) ? (int) $result_raw['BannerConfigJSON']->googleConsentMapFunctionality : 2;
@@ -2085,15 +2289,23 @@ class Cookie_Notice_Welcome_API {
 
 				$fcm = isset( $result_raw['BannerConfigJSON']->facebookConsentMode ) ? (int) $result_raw['BannerConfigJSON']->facebookConsentMode : 0;
 
-				// is facebook consent mode enabled? (pro-only: #1851)
-				if ( $fcm === 1 && $status_data['subscription'] === 'pro' ) {
+				// Is Facebook consent mode enabled? Pro-only — but enforced by the BACKEND,
+				// which is the only party holding the authoritative plan. Designer API
+				// logic.service.ts::downgradeLiveDefaults resets facebookConsentMode to its
+				// default for a Free-plan app before this response is ever built, so $fcm is
+				// already 0 for a free plan. Re-deciding it here off a locally cached
+				// subscription added no enforcement and one failure mode: a Pro app whose
+				// cache still said 'basic' silently lost the feature it had paid for.
+				if ( $fcm === 1 ) {
 					$result['facebook_consent_default']['consent'] = isset( $result_raw['BannerConfigJSON']->facebookConsentMapConsent ) ? (int) $result_raw['BannerConfigJSON']->facebookConsentMapConsent : 4;
 				}
 
 				$mcm = isset( $result_raw['BannerConfigJSON']->microsoftConsentMode ) ? (int) $result_raw['BannerConfigJSON']->microsoftConsentMode : 0;
 
-				// is microsoft consent mode enabled? (pro-only: #1851)
-				if ( $mcm === 1 && $status_data['subscription'] === 'pro' ) {
+				// Is Microsoft consent mode enabled? Pro-only, enforced by the backend for
+				// the same reason as Facebook above — downgradeLiveDefaults already reset
+				// microsoftConsentMode* for a Free-plan app.
+				if ( $mcm === 1 ) {
 					$result['microsoft_consent_default']['ad_storage'] = isset( $result_raw['BannerConfigJSON']->microsoftConsentMapAdStorage ) ? (int) $result_raw['BannerConfigJSON']->microsoftConsentMapAdStorage : 4;
 					$result['microsoft_consent_default']['analytics_storage'] = isset( $result_raw['BannerConfigJSON']->microsoftConsentMapAnalyticsStorage ) ? (int) $result_raw['BannerConfigJSON']->microsoftConsentMapAnalyticsStorage : 3;
 				}
@@ -2601,8 +2813,8 @@ class Cookie_Notice_Welcome_API {
 		// gpcSupport → gpcSupportMode (bool). Pro-gated with grandfather:
 		// Free apps cannot set gpcSupportMode=true unless it's already true
 		// (grandfathered). Disabling is always allowed; once disabled on Free,
-		// the app loses its grandfather and cannot re-enable. See KnowledgeHub
-		// decisions.md (gpc-pro-gating-with-grandfather).
+		// the app loses its grandfather and cannot re-enable. See control-room/
+		// solution/knowledge/decisions.md (gpc-pro-gating-with-grandfather).
 		if ( isset( $consent_raw['gpcSupport'] ) ) {
 			$incoming_gpc = (bool) (int) $consent_raw['gpcSupport'];
 			$is_pro       = $cn->get_subscription() === 'pro';

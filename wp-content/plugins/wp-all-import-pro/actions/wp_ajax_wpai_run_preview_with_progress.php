@@ -749,7 +749,8 @@ function wpai_execute_unified_preview($preview_data, $file_path, $records_to_imp
 
             $process_start_time = time();
 
-            $use_custom_fields_for_marking = !in_array($import_type, array('shop_order', 'gf_entries'));
+            $use_custom_fields_for_marking = !in_array($import_type, array('shop_order', 'gf_entries'))
+                && apply_filters('pmxi_is_custom_fields_import_enabled', true, $import->id, $import_options);
 
             if ($use_custom_fields_for_marking) {
                 if (!isset($import_options['custom_name'])) {

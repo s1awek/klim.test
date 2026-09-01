@@ -701,6 +701,8 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax
 		{
 			/* setting a default import method */
 			$this->import_method=($this->import_method=='' ? $this->import_obj->default_import_method : $this->import_method);
+			$this->get_mapping_templates();
+			$this->import_method = Wt_Iew_IE_Basic_Helper::_resolve_method_with_templates( $this->import_method, $this->mapping_templates );
 			$this->import_obj->import_method=$this->import_method;
 			$this->steps=$this->import_obj->get_steps();
 
@@ -724,43 +726,42 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax
 			}
 
 			/* meta field list for quick import */
-			$this->get_mapping_templates();
 			$link_array = array(
 				'order' => array(
 					'link'  => 'https://www.webtoffee.com/product/order-import-export-plugin-for-woocommerce/?utm_source=free_plugin_file_upload&utm_medium=basic_revamp&utm_campaign=Order_Import_Export',
-					'text' => 'Upgrade to Order Import Export Pro.',
+					'text' => __('Upgrade to Order Import Export Pro.', 'product-import-export-for-woo'),
 				),
 				'coupon' => array(
 					'link'  => 'https://www.webtoffee.com/product/order-import-export-plugin-for-woocommerce/?utm_source=free_plugin_file_upload&utm_medium=basic_revamp&utm_campaign=Order_Import_Export',
-					'text' => 'Upgrade to Order Import Export Pro.',
+					'text' => __('Upgrade to Order Import Export Pro.', 'product-import-export-for-woo'),
 				),
 				'product' => array(
 					'link' => 'https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_file_upload&utm_medium=basic_revamp&utm_campaign=Product_Import_Export',
-					'text' => 'Upgrade to Product Import Export Pro.',
+					'text' => __('Upgrade to Product Import Export Pro.', 'product-import-export-for-woo'),
 				),
 				'product_review' => array(
 					'link' => 'https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_file_upload&utm_medium=basic_revamp&utm_campaign=Product_Import_Export',
-					'text' => 'Upgrade to Product Import Export Pro.'
+					'text' => __('Upgrade to Product Import Export Pro.', 'product-import-export-for-woo')
 
 				),
 				'product_categories' => array(
 					'link' => 'https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_file_upload&utm_medium=basic_revamp&utm_campaign=Product_Import_Export',
-					'text' => 'Upgrade to Product Import Export Pro.'
+					'text' => __('Upgrade to Product Import Export Pro.', 'product-import-export-for-woo')
 
 				),
 				'product_tags' => array(
 					'link' => 'https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_file_upload&utm_medium=basic_revamp&utm_campaign=Product_Import_Export',
-					'text' => 'Upgrade to Product Import Export Pro.'
+					'text' => __('Upgrade to Product Import Export Pro.', 'product-import-export-for-woo')
 
 				),
 				'user' => array(
 					'link' => 'https://www.webtoffee.com/product/wordpress-users-woocommerce-customers-import-export/?utm_source=free_plugin_file_upload&utm_medium=basic_revamp&utm_campaign=User_Import_Export',
-					'text' => 'Upgrade to User Import Export Pro.'
+					'text' => __('Upgrade to User Import Export Pro.', 'product-import-export-for-woo')
 
 				),
 				'subscription' => array(
 					'link' => 'https://www.webtoffee.com/product/order-import-export-plugin-for-woocommerce/?utm_source=free_plugin_file_upload&utm_medium=basic_revamp&utm_campaign=Order_Import_Export',
-					'text' => 'Upgrade to Order Import Export Pro.'
+					'text' => __('Upgrade to Order Import Export Pro.', 'product-import-export-for-woo')
 
 				),
 			);
@@ -771,7 +772,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax
 				$text = $link_array[$this->to_import]['text'];
 			} else {
 				$link = 'https://www.webtoffee.com/product/product-import-export-woocommerce/?utm_source=free_plugin_file_upload&utm_medium=basic_revamp&utm_campaign=Product_Import_Export';
-				$text = 'Upgrade to Product Import Export Pro.';
+				$text = __('Upgrade to Product Import Export Pro.', 'product-import-export-for-woo');
 			}
 
 			ob_start();		
@@ -1052,6 +1053,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax
 		$step_keys=$this->step_keys;
 		$current_index=$this->current_step_index;
 		$last_page=$this->last_page;
+		$legacy_arrow_style = version_compare( get_bloginfo( 'version' ), '7.0', '>=' ) ? '' : ' style="line-height:27px;"';
 		if($current_index!==false) /* step exists */
 		{
 			if($current_index>0) //add back button
@@ -1060,10 +1062,10 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax
 					'type'=>'button',
 					'action_type'=>'step',
 					'key'=>$step_keys[$current_index-1],
-					'text'=>'<span class="dashicons dashicons-arrow-left-alt2" style="line-height:27px;"></span> '.__('Back', 'product-import-export-for-woo'),
+					'text'=>'<span class="dashicons dashicons-arrow-left-alt2"'.$legacy_arrow_style.'></span> '.__('Back', 'product-import-export-for-woo'),
 				);
 			}
-			
+
 			if(isset($step_keys[$current_index+1])) /* not last step */
 			{
 				$next_number=$current_index+2;
@@ -1073,7 +1075,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Import_Ajax
 					'type'=>'button',
 					'action_type'=>'step',
 					'key'=>$next_key,
-					'text'=>__('Step', 'product-import-export-for-woo').' '.$next_number.': '.$next_title.' <span class="dashicons dashicons-arrow-right-alt2" style="line-height:27px;"></span>',
+					'text'=>__('Step', 'product-import-export-for-woo').' '.$next_number.': '.$next_title.' <span class="dashicons dashicons-arrow-right-alt2"'.$legacy_arrow_style.'></span>',
 				);
 
 				if($this->import_method=='quick' || $this->import_method=='template') //Quick Or Template method

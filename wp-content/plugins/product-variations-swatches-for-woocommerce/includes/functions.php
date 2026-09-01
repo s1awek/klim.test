@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 if ( ! function_exists( 'vi_include_folder' ) ) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 	function vi_include_folder( $path, $prefix = '', $ext = array( 'php' ) ) {
 
 		/*Include all files in payment folder*/
@@ -17,14 +18,20 @@ if ( ! function_exists( 'vi_include_folder' ) ) {
 			$ext = explode( ',', $ext );
 			$ext = array_map( 'trim', $ext );
 		}
+		if ( ! is_dir( $path ) ) {
+			return;
+		}
 		$sfiles = scandir( $path );
+		if ( ! is_array( $sfiles ) ) {
+			return;
+		}
 		foreach ( $sfiles as $sfile ) {
 			if ( $sfile != '.' && $sfile != '..' ) {
 				if ( is_file( $path . "/" . $sfile ) ) {
 					$ext_file  = pathinfo( $path . "/" . $sfile );
 					$file_name = $ext_file['filename'];
-					if ( $ext_file['extension'] ) {
-						if ( in_array( $ext_file['extension'], $ext ) ) {
+					if ( ! empty( $ext_file['extension'] ) ) {
+						if ( in_array( $ext_file['extension'], $ext, true ) ) {
 							$class = preg_replace( '/\W/i', '_', $prefix . ucfirst( $file_name ) );
 
 							if ( ! class_exists( $class ) ) {
@@ -44,6 +51,10 @@ if ( ! function_exists( 'woocommerce_version_check' ) ) {
 	function woocommerce_version_check( $version = '3.0' ) {
 		global $woocommerce;
 
+		if ( ! $woocommerce || empty( $woocommerce->version ) ) {
+			return false;
+		}
+
 		if ( version_compare( $woocommerce->version, $version, ">=" ) ) {
 			return true;
 		}
@@ -52,14 +63,23 @@ if ( ! function_exists( 'woocommerce_version_check' ) ) {
 	}
 }
 if ( ! function_exists( 'vi_wpvs_sanitize_fields' ) ) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 	function vi_wpvs_sanitize_fields( $data ) {
 		if ( ! $data ) {
 			return false;
 		} elseif ( is_array( $data ) ) {
 			return array_map( 'vi_wpvs_sanitize_fields', $data );
 		} else {
-			return sanitize_text_field( stripslashes( $data ) );
+			return sanitize_text_field( wp_unslash( $data ) );
 		}
+	}
+}
+if ( ! function_exists( 'vi_wpvs_sanitize_css_value' ) ) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+	function vi_wpvs_sanitize_css_value( $value ) {
+		$value = is_scalar( $value ) ? (string) $value : '';
+
+		return str_replace( array( "\n", "\r", '{', '}', '<', '>', '"', "'" ), '', $value );
 	}
 }
 

@@ -3,7 +3,7 @@
  * Plugin Name: PW WooCommerce Bulk Edit
  * Plugin URI: https://www.pimwick.com/pw-bulk-edit/
  * Description: A powerful way to update your WooCommerce product catalog. Finally, no more tedious clicking through countless pages making the same change to all products!
- * Version: 2.141
+ * Version: 2.143
  * Author: Pimwick, LLC
  * Author URI: https://www.pimwick.com
  * Text Domain: pw-bulk-edit
@@ -14,7 +14,7 @@
  * Requires Plugins: woocommerce
  *
 */
-define('PWBE_VERSION', '2.141');
+define('PWBE_VERSION', '2.143');
 
 /*
 Copyright (C) Pimwick, LLC
@@ -326,8 +326,11 @@ final class PW_Bulk_Edit {
 
     function admin_scripts( $hook ) {
         if ( !empty( $hook ) && substr( $hook, -strlen( 'pw-bulk-edit' ) ) === 'pw-bulk-edit' ) {
-            wp_register_style( 'pwbe-font-awesome', plugins_url( '/assets/css/font-awesome.min.css', __FILE__ ), array(), PWBE_VERSION ); // 4.6.3
+            wp_register_style( 'pwbe-font-awesome', plugins_url( '/assets/css/all.min.css', __FILE__ ), array(), PWBE_VERSION ); // 7.3.1
             wp_enqueue_style( 'pwbe-font-awesome' );
+
+            wp_register_style( 'pwbe-font-awesome-v4-shims', plugins_url( '/assets/css/v4-shims.min.css', __FILE__ ), array( 'pwbe-font-awesome' ), PWBE_VERSION );
+            wp_enqueue_style( 'pwbe-font-awesome-v4-shims' );
 
             wp_register_style( 'pwbe-select2', plugins_url( '/assets/css/select2.min.css', __FILE__ ), array(), PWBE_VERSION ); // 4.0.3
             wp_enqueue_style( 'pwbe-select2' );

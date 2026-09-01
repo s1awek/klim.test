@@ -191,9 +191,9 @@ if (!class_exists('Wt_Import_Export_For_Woo_Product_Basic')) {
 			require_once plugin_dir_path(dirname(__FILE__)) . 'admin/banner/class-wt-bfcm-twenty-twenty-five.php';
 
 			/**
-			 * Includes the EMA banner for analytics page
+			 * Includes the Smart Coupons CTA banner for the Analytics Revenue page
 			 */
-			require_once plugin_dir_path(dirname(__FILE__)) . 'admin/banner/class-wbte-ema-banner.php';
+			require_once plugin_dir_path(dirname(__FILE__)) . 'admin/banner/class-wbte-smart-coupons-analytics-banner.php';
 
 
 

@@ -1063,6 +1063,18 @@ INDEXPHP;
     }
 
     /**
+     * True if the path contains a ".." segment
+     *
+     * @param string $path file path, absolute or relative
+     *
+     * @return bool
+     */
+    public static function hasTraversalSegment($path)
+    {
+        return preg_match('#(?:^|/)\.\.(?:/|$)#', str_replace('\\', '/', (string) $path)) === 1;
+    }
+
+    /**
      * Check if path is child of mainPath
      *
      * @param string  $path         file path

@@ -189,7 +189,7 @@ if ( ! class_exists('Wt_P_IEW_Cta_Banner') ) {
             // Update the option to hide the banner
             update_option('wt_hide_product_ie_cta_banner', true);
 
-            wp_send_json_success('Banner dismissed successfully');
+            wp_send_json_success(__('Banner dismissed successfully', 'product-import-export-for-woo'));
         }
     }
 

@@ -152,7 +152,7 @@ body.wpallimport-plugin {
 	min-height: 46px !important;
 	line-height: 3.14285714 !important;
 	padding: 0 36px !important;
-	background: url('../img/ui_4.0/continue.png') no-repeat 93% 50% #425f9a !important;
+	background-color: #425f9a !important;
 	color: #fff !important;
 	border: none !important;
 	border-radius: 3px;
@@ -165,11 +165,19 @@ body.wpallimport-plugin {
 .wpallimport-plugin .wpallimport-large-button:hover,
 .wpallimport-plugin .wpallimport-large-button:active,
 .wpallimport-plugin .wpallimport-large-button:focus{
-	background: url('../img/ui_4.0/continue.png') no-repeat 93% 50% #374f85 !important;
+	background-color: #374f85 !important;
 	color: #fff !important;
 	border: none !important;
 	box-shadow: none !important;
 	outline: none !important;
+}
+.wpallimport-plugin .wpallimport-large-button.wpallimport-continue-button{
+	background: url('../img/ui_4.0/continue.png') no-repeat 93% 50% #425f9a !important;
+}
+.wpallimport-plugin .wpallimport-large-button.wpallimport-continue-button:hover,
+.wpallimport-plugin .wpallimport-large-button.wpallimport-continue-button:active,
+.wpallimport-plugin .wpallimport-large-button.wpallimport-continue-button:focus{
+	background: url('../img/ui_4.0/continue.png') no-repeat 93% 50% #374f85 !important;
 }
 
 /*@+ header */

@@ -42,7 +42,7 @@
 				<?php $this->error() ?>
 			<?php endif ?>
 		</div>
-		<input type="submit" class="button wpallimport-large-button" value="<?php _e('Continue to Setup Import', 'wp-all-import-pro'); ?>" style="position:absolute; top:45px; right:10px;"/>
+		<input type="submit" class="button wpallimport-large-button wpallimport-continue-button" value="<?php _e('Continue to Setup Import', 'wp-all-import-pro'); ?>" style="position:absolute; top:45px; right:10px;"/>
 	</div>
 
 	<div class="wpallimport-content-section wpallimport-elements-preloader">
@@ -150,7 +150,7 @@
 		&nbsp;
 		<input type="hidden" name="is_submitted" value="1" />
 		<?php wp_nonce_field('choose-elements', '_wpnonce_choose-elements') ?>
-		<input type="submit" class="button wpallimport-large-button" value="<?php _e('Continue to Setup Import', 'wp-all-import-pro'); ?>" />
+		<input type="submit" class="button wpallimport-large-button wpallimport-continue-button" value="<?php _e('Continue to Setup Import', 'wp-all-import-pro'); ?>" />
 	</p>
 	<a href="http://soflyy.com/" target="_blank" class="wpallimport-created-by"><?php _e('Created by', 'wp-all-import-pro'); ?> <span></span></a>
 

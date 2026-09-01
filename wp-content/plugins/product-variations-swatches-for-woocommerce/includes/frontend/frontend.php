@@ -46,9 +46,8 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 	}
 
 	public function viwpvs_ajax_variation_threshold( $limit, $product ) {
-		$settings = new  VI_WOO_PRODUCT_VARIATIONS_SWATCHES_DATA();
-		$result   = $settings->get_params( 'variation_threshold_single_page' );
-		$result   = $result ?: 30;
+		$result = $this->settings->get_params( 'variation_threshold_single_page' );
+		$result = $result ?: 30;
 
 		return $result;
 	}
@@ -91,13 +90,15 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 				if ( $product && taxonomy_exists( $attribute ) ) {
 					// Get terms if this is a taxonomy - ordered. We need the names too.
 					$terms = wc_get_product_terms( $product->get_id(), $attribute, array( 'fields' => 'all' ) );
-					foreach ( $terms as $term ) {
-						if ( in_array( $term->slug, $options, true ) ) {
-							echo sprintf( '<option value="%s" %s>%s</option>',
-								esc_attr( $term->slug ),
-								selected( sanitize_title( $args['selected'] ), $term->slug, false ),
-								esc_html( apply_filters( 'woocommerce_variation_option_name', $term->name, $term, $attribute, $product ) )
-							);
+					if ( is_array( $terms ) ) {
+						foreach ( $terms as $term ) {
+							if ( in_array( $term->slug, $options, true ) ) {
+								echo sprintf( '<option value="%s" %s>%s</option>',
+									esc_attr( $term->slug ),
+									selected( sanitize_title( $args['selected'] ), $term->slug, false ),
+									esc_html( apply_filters( 'woocommerce_variation_option_name', $term->name, $term, $attribute, $product ) )
+								);
+							}
 						}
 					}
 				} else {
@@ -140,22 +141,30 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 		if ( ! $attribute ) {
 			return $html;
 		}
-		$product                   = $args['product'];
-		$product_id                = method_exists( $product, 'get_id' ) ? $product->get_id() : $product->id;
+		$product = $args['product'] ?? null;
+		if ( ! $product instanceof WC_Product ) {
+			return $html;
+		}
+		$product_id                = $product->get_id();
 		$vi_attribute_settings     = get_post_meta( $product_id, '_vi_woo_product_variation_swatches_product_attribute', true );
-		$vi_attribute_settings     = $vi_attribute_settings ? json_decode( $vi_attribute_settings, true ) : array();
+		if ( is_string( $vi_attribute_settings ) ) {
+			$vi_attribute_settings = json_decode( $vi_attribute_settings, true );
+		}
+		$vi_attribute_settings     = is_array( $vi_attribute_settings ) ? $vi_attribute_settings : array();
 		$vi_attribute_type         = $vi_attribute_settings['attribute_type'][ $attribute ] ?? null;
 		$vi_attribute_profile      = $vi_attribute_settings['attribute_profile'][ $attribute ] ?? null;
 		$vi_attribute_display_type = $vi_attribute_settings['attribute_display_type'][ $attribute ] ?? null;
-		$settings                  = new  VI_WOO_PRODUCT_VARIATIONS_SWATCHES_DATA();
+		$settings                  = VI_WOO_PRODUCT_VARIATIONS_SWATCHES_DATA::get_instance();
 		$is_taxonomy               = ( 'pa_' === substr( $attribute, 0, 3 ) ) ? 1 : 0;
 		$use_taxonomy_type         = false;
 		if ( $is_taxonomy ) {
 			if ( ! $vi_attribute_profile ) {
-				$vi_attribute_profile = $settings->get_params( 'taxonomy_profiles' )[ $attribute ] ?? '';
+				$taxonomy_profiles    = $settings->get_params( 'taxonomy_profiles' );
+				$vi_attribute_profile = ( is_array( $taxonomy_profiles ) && isset( $taxonomy_profiles[ $attribute ] ) ) ? $taxonomy_profiles[ $attribute ] : '';
 			}
 			if ( ! $vi_attribute_display_type ) {
-				$vi_attribute_display_type = $settings->get_params( 'taxonomy_display_type' )[ $attribute ] ?? '';
+				$taxonomy_display_type     = $settings->get_params( 'taxonomy_display_type' );
+				$vi_attribute_display_type = ( is_array( $taxonomy_display_type ) && isset( $taxonomy_display_type[ $attribute ] ) ) ? $taxonomy_display_type[ $attribute ] : '';
 			}
 			if ( ! $vi_attribute_type ) {
 				$use_taxonomy_type = true;
@@ -167,7 +176,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 						'variation_img',
 						'radio',
 						'viwpvs_default'
-					) ) && ! $vi_attribute_profile ) {
+					), true ) && ! $vi_attribute_profile ) {
 					$vi_attribute_type = self::get_attribute_display_type($attribute,$product,$vi_attribute_profile);
 				}
 			}
@@ -201,8 +210,8 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 		);
 		$display_type_class[]          = is_rtl() ? 'vi-wpvs-variation-style-rtl' : '';
 		$display_type_class            = trim( implode( ' ', $display_type_class ) );
-		$new_html                      = '<div class="vi-wpvs-variation-wrap-wrap vi-wpvs-hidden" data-wpvs_double_click="' . $attribute_double_click . '" data-wpvs_attr_title="' . $attribute_title_enable . '" ';
-		$new_html                      .= 'data-display_type="' . $display_type_class . '" data-swatch_type="' . $vi_attribute_type . '" data-show_selected_item="' . $attribute_attr_selected . '" data-hide_outofstock="' . $this->settings->get_params( 'out_of_stock_variation_disable' ) . '" data-wpvs_attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" ';
+		$new_html                      = '<div class="vi-wpvs-variation-wrap-wrap vi-wpvs-hidden" data-wpvs_double_click="' . esc_attr($attribute_double_click) . '" data-wpvs_attr_title="' . esc_attr($attribute_title_enable) . '" ';
+		$new_html                      .= 'data-display_type="' . esc_attr($display_type_class) . '" data-swatch_type="' . esc_attr($vi_attribute_type) . '" data-show_selected_item="' . esc_attr($attribute_attr_selected) . '" data-hide_outofstock="' . esc_attr($this->settings->get_params( 'out_of_stock_variation_disable' )) . '" data-wpvs_attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" ';
 		$new_html                      .= '>';
 		if ( $vi_attribute_type === 'viwpvs_default' ) {
 			$new_html .= $html;
@@ -316,14 +325,19 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 						'fields' => 'all',
 					)
 				);
+                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 				$terms = apply_filters( 'viwpvs_frontend_get_product_terms', $terms, $product, $terms );
+				if ( ! is_array( $terms ) ) {
+					$terms = array();
+				}
 				switch ( $type ) {
 					case 'button':
 						foreach ( $terms as $term ) {
-							if ( ! in_array( $term->slug, $options ) ) {
+							if ( ! in_array( $term->slug, $options, true ) ) {
 								continue;
 							}
 							$term_name    = apply_filters( 'woocommerce_variation_option_name', $term->name, $term, $attribute, $product );
+                            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 							$term_tooltip = apply_filters( 'viwpvs_variation_option_tooltip', $term_name, $term, $attribute, $variations, $product );
 							$term_class   = $option_selected === $term->slug ? 'vi-wpvs-option-wrap vi-wpvs-option-wrap-selected' : 'vi-wpvs-option-wrap vi-wpvs-option-wrap-default';
 							?>
@@ -345,10 +359,11 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 						break;
 					case 'color':
 						foreach ( $terms as $term ) {
-							if ( ! in_array( $term->slug, $options ) ) {
+							if ( ! in_array( $term->slug, $options, true ) ) {
 								continue;
 							}
 							$term_name              = apply_filters( 'woocommerce_variation_option_name', $term->name, $term, $attribute, $product );
+                            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 							$term_tooltip           = apply_filters( 'viwpvs_variation_option_tooltip', $term_name, $term, $attribute, $variations, $product );
 							$vi_wpvs_terms_settings = get_term_meta( $term->term_id, 'vi_wpvs_terms_params', true );
 							$term_class             = $option_selected === $term->slug ? 'vi-wpvs-option-wrap vi-wpvs-option-wrap-selected' : 'vi-wpvs-option-wrap vi-wpvs-option-wrap-default';
@@ -378,10 +393,11 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 						break;
 					case 'image':
 						foreach ( $terms as $term ) {
-							if ( ! in_array( $term->slug, $options ) ) {
+							if ( ! in_array( $term->slug, $options, true ) ) {
 								continue;
 							}
 							$term_name              = apply_filters( 'woocommerce_variation_option_name', $term->name, $term, $attribute, $product );
+                            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 							$term_tooltip           = apply_filters( 'viwpvs_variation_option_tooltip', $term_name, $term, $attribute, $variations, $product );
 							$vi_wpvs_terms_settings = get_term_meta( $term->term_id, 'vi_wpvs_terms_params', true );
 							$term_class             = $option_selected === $term->slug ? 'vi-wpvs-option-wrap vi-wpvs-option-wrap-selected' : 'vi-wpvs-option-wrap vi-wpvs-option-wrap-default';
@@ -413,10 +429,11 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 					case 'variation_img':
 						$variations = $product->get_children();
 						foreach ( $terms as $term ) {
-							if ( ! in_array( $term->slug, $options ) ) {
+							if ( ! in_array( $term->slug, $options, true ) ) {
 								continue;
 							}
 							$term_name    = apply_filters( 'woocommerce_variation_option_name', $term->name, $term, $attribute, $product );
+                            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 							$term_tooltip = apply_filters( 'viwpvs_variation_option_tooltip', $term_name, $term, $attribute, $variations, $product );
 							$term_class   = $option_selected === $term->slug ? 'vi-wpvs-option-wrap vi-wpvs-option-wrap-selected' : 'vi-wpvs-option-wrap vi-wpvs-option-wrap-default';
 							?>
@@ -444,10 +461,11 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 						break;
 					case 'radio':
 						foreach ( $terms as $term ) {
-							if ( ! in_array( $term->slug, $options ) ) {
+							if ( ! in_array( $term->slug, $options, true ) ) {
 								continue;
 							}
 							$term_name    = apply_filters( 'woocommerce_variation_option_name', $term->name, $term, $attribute, $product );
+                            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 							$term_tooltip = apply_filters( 'viwpvs_variation_option_tooltip', $term_name, $term, $attribute, $variations, $product );
 							$term_class   = $option_selected === $term->slug ? 'vi-wpvs-option-wrap vi-wpvs-option-wrap-selected' : 'vi-wpvs-option-wrap vi-wpvs-option-wrap-default';
 							?>
@@ -455,7 +473,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
                                  data-attribute_label="<?php echo esc_attr( $term_name ); ?>"
                                  data-attribute_value="<?php echo esc_attr( $term->slug ); ?>">
 								<?php
-								$option_radio_id = '"vi-wpvs-option-radio-' . $product->get_id() . '-' . $term->slug;
+								$option_radio_id = 'vi-wpvs-option-radio-' . $product->get_id() . '-' . $term->slug;
 								?>
                                 <label for="<?php echo esc_attr( $option_radio_id ); ?>" class="vi-wpvs-option">
                                     <input type="radio" value="<?php echo esc_attr( $term->slug ); ?>"
@@ -497,10 +515,11 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 									<?php
 								}
 								foreach ( $terms as $term ) {
-									if ( ! in_array( $term->slug, $options ) ) {
+									if ( ! in_array( $term->slug, $options, true ) ) {
 										continue;
 									}
 									$term_name    = apply_filters( 'woocommerce_variation_option_name', $term->name, $term, $attribute, $product );
+                                    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 									$term_tooltip = apply_filters( 'viwpvs_variation_option_tooltip', $term_name, $term, $attribute, $variations, $product );
 									$term_class   = $option_selected === $term->slug ? 'vi-wpvs-option-wrap vi-wpvs-option-wrap-selected' : 'vi-wpvs-option-wrap vi-wpvs-option-wrap-default';
 									?>
@@ -526,6 +545,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 					case 'button':
 						foreach ( $options as $k => $option ) {
 							$option_name    = apply_filters( 'woocommerce_variation_option_name', $option, null, $attribute, $product );
+                            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 							$option_tooltip = apply_filters( 'viwpvs_variation_option_tooltip', $option_name, null, $attribute, $variations, $product );
 							$option_class   = ( $option_selected === $option || $option_selected === sanitize_title( $option ) ) ? 'vi-wpvs-option-wrap vi-wpvs-option-wrap-selected' : 'vi-wpvs-option-wrap vi-wpvs-option-wrap-default';
 							?>
@@ -549,6 +569,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 						foreach ( $options as $k => $option ) {
 							$option_class   = ( $option_selected === $option || $option_selected === sanitize_title( $option ) ) ? 'vi-wpvs-option-wrap vi-wpvs-option-wrap-selected' : 'vi-wpvs-option-wrap vi-wpvs-option-wrap-default';
 							$option_name    = apply_filters( 'woocommerce_variation_option_name', $option, null, $attribute, $product );
+                            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 							$option_tooltip = apply_filters( 'viwpvs_variation_option_tooltip', $option_name, null, $attribute, $variations, $product );
 							?>
                             <div class="<?php echo esc_attr( $option_class ); ?>"
@@ -582,6 +603,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 						foreach ( $options as $k => $option ) {
 							$option_class   = ( $option_selected === $option || $option_selected === sanitize_title( $option ) ) ? 'vi-wpvs-option-wrap vi-wpvs-option-wrap-selected' : 'vi-wpvs-option-wrap vi-wpvs-option-wrap-default';
 							$option_name    = apply_filters( 'woocommerce_variation_option_name', $option, null, $attribute, $product );
+                            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 							$option_tooltip = apply_filters( 'viwpvs_variation_option_tooltip', $option_name, null, $attribute, $variations, $product );
 							?>
                             <div class="<?php echo esc_attr( $option_class ); ?>"
@@ -616,6 +638,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 						foreach ( $options as $k => $option ) {
 							$option_class   = ( $option_selected === $option || $option_selected === sanitize_title( $option ) ) ? 'vi-wpvs-option-wrap vi-wpvs-option-wrap-selected' : 'vi-wpvs-option-wrap vi-wpvs-option-wrap-default';
 							$option_name    = apply_filters( 'woocommerce_variation_option_name', $option, null, $attribute, $product );
+                            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 							$option_tooltip = apply_filters( 'viwpvs_variation_option_tooltip', $option_name, null, $attribute, $variations, $product );
 							?>
                             <div class="<?php echo esc_attr( $option_class ); ?>"
@@ -643,6 +666,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 					case 'radio':
 						foreach ( $options as $k => $option ) {
 							$option_name    = apply_filters( 'woocommerce_variation_option_name', $option, null, $attribute, $product );
+                            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 							$option_tooltip = apply_filters( 'viwpvs_variation_option_tooltip', $option_name, null, $attribute, $variations, $product );
 							$option_class   = ( $option_selected === $option || $option_selected === sanitize_title( $option ) ) ? 'vi-wpvs-option-wrap vi-wpvs-option-wrap-selected' : 'vi-wpvs-option-wrap vi-wpvs-option-wrap-default';
 							?>
@@ -650,7 +674,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
                                  data-attribute_value="<?php echo esc_attr( $option ); ?>"
                                  data-attribute_label="<?php echo esc_attr( $option_name ); ?>">
 								<?php
-								$option_radio_id = '"vi-wpvs-option-radio-' . $product->get_id() . '-' . $option;
+								$option_radio_id = 'vi-wpvs-option-radio-' . $product->get_id() . '-' . sanitize_title( $option );
 								?>
                                 <label for="<?php echo esc_attr( $option_radio_id ); ?>" class="vi-wpvs-option">
                                     <input type="radio" value="<?php echo esc_attr( $option ); ?>"
@@ -694,6 +718,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 								foreach ( $options as $k => $option ) {
 									$option_class   = ( $option_selected === $option || $option_selected === sanitize_title( $option ) ) ? 'vi-wpvs-option-wrap vi-wpvs-option-wrap-selected' : 'vi-wpvs-option-wrap vi-wpvs-option-wrap-default';
 									$option_name    = apply_filters( 'woocommerce_variation_option_name', $option, null, $attribute, $product );
+                                    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 									$option_tooltip = apply_filters( 'viwpvs_variation_option_tooltip', $option_name, null, $attribute, $variations, $product );
 									?>
                                     <div class="<?php echo esc_attr( $option_class ); ?>"
@@ -742,13 +767,13 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 		if ($attr_apply === '2'){
 			$match = explode('|',strtolower($settings->get_params('attribute_variation_img_apply_2')));
 			$attr_name = strtolower(wc_attribute_label($attribute));
-			if (!in_array($attr_name, $match)){
+			if ( ! in_array( $attr_name, $match, true ) ) {
 				$type = 'button';
 				$profile = $settings->get_params('attribute_variation_img_profile');
 			}
 		}else{
 			$attributes = array_keys($product->get_attributes());
-			$index = array_search(strtolower($attribute), $attributes);
+			$index = array_search( strtolower( $attribute ), $attributes, true );
 			if ($index !== 0){
 				$type = 'button';
 				$profile = $settings->get_params('attribute_variation_img_profile');
@@ -757,24 +782,25 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 		return $type;
 	}
     public static function get_variation_image_id( $variations, $term, $attribute, $option_tr='' ) {
+		static $cache = array();
+		$term_key  = is_string( $term ) ? $term : ( isset( $term->slug ) ? $term->slug : '' );
+		$cache_key = md5( wp_json_encode( $variations ) . '|' . $attribute . '|' . $term_key . '|' . $option_tr );
+		if ( isset( $cache[ $cache_key ] ) ) {
+			return $cache[ $cache_key ];
+		}
 		$terms_img_id = '';
-		if ( is_string( $term ) ) {
-			foreach ( $variations as $variation_id ) {
-				$attribute_ = get_post_meta( $variation_id, 'attribute_' . sanitize_title( $attribute ), true );
-				if ( $term === $attribute_ || ( $option_tr && $option_tr === $attribute_ ) ) {
-					$terms_img_id = wc_get_product( $variation_id )->get_image_id();
-					break;
+		$compare      = is_string( $term ) ? $term : $term_key;
+		foreach ( (array) $variations as $variation_id ) {
+			$attribute_ = get_post_meta( $variation_id, 'attribute_' . sanitize_title( $attribute ), true );
+			if ( $compare === $attribute_ || ( $option_tr && $option_tr === $attribute_ ) ) {
+				$variation = wc_get_product( $variation_id );
+				if ( $variation ) {
+					$terms_img_id = $variation->get_image_id();
 				}
-			}
-		} else {
-			foreach ( $variations as $variation_id ) {
-				$attribute_ = get_post_meta( $variation_id, 'attribute_' . sanitize_title( $attribute ), true );
-				if ( $term->slug === $attribute_ || ( $option_tr && $option_tr === $attribute_ ) ) {
-					$terms_img_id = wc_get_product( $variation_id )->get_image_id();
-					break;
-				}
+				break;
 			}
 		}
+		$cache[ $cache_key ] = $terms_img_id;
 
 		return $terms_img_id;
 	}
@@ -783,23 +809,25 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 		if ( ! $attribute ) {
 			return 'select';
 		}
-		$attribute_taxonomies = wc_get_attribute_taxonomies();
-		$attribute_type       = 'select';
-		foreach ( $attribute_taxonomies as $item ) {
-			if ( $attribute === 'pa_' . $item->attribute_name ) {
-				$attribute_type = $item->attribute_type;
-				break;
+		static $map = null;
+		if ( null === $map ) {
+			$map                  = array();
+			$attribute_taxonomies = wc_get_attribute_taxonomies();
+			if ( is_array( $attribute_taxonomies ) ) {
+				foreach ( $attribute_taxonomies as $item ) {
+					$map[ 'pa_' . $item->attribute_name ] = $item->attribute_type;
+				}
 			}
 		}
 
-		return $attribute_type;
+		return isset( $map[ $attribute ] ) ? $map[ $attribute ] : 'select';
 	}
 
 	public function wp_enqueue_scripts() {
 		if ( is_admin() ) {
 			return;
 		}
-		if ( WP_DEBUG ) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			wp_enqueue_style( 'vi-wpvs-frontend-style', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_CSS . 'frontend-style.css', array(), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION );
 			wp_enqueue_script( 'vi-wpvs-frontend-script', VI_WOO_PRODUCT_VARIATIONS_SWATCHES_JS . 'frontend-script.js', array( 'jquery' ), VI_WOO_PRODUCT_VARIATIONS_SWATCHES_VERSION, true );
 		} else {
@@ -821,7 +849,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
             $single_attr_selected_color           = $this->settings->get_params( 'single_attr_selected_color' );
             $css = '';
             if ($single_attr_selected_color){
-                $css .= '.vi-wpvs-label-selected.vi-wpvs-label-selected-title{color:'.$single_attr_selected_color.'}';
+                $css .= '.vi-wpvs-label-selected.vi-wpvs-label-selected-title{color:'.vi_wpvs_sanitize_css_value($single_attr_selected_color).'}';
             }
             foreach ( $ids as $i => $id ) {
 				$reduce_mobile        = $this->settings->get_current_setting( 'attribute_reduce_size_mobile', $i );
@@ -1241,6 +1269,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 					}
 				} else {
 					if ( $get_value ) {
+						$get_value = vi_wpvs_sanitize_css_value( $get_value );
 						$return .= $style[ $key ] . ':' . $get_value . $get_suffix . ';';
 					}
 				}
@@ -1286,7 +1315,8 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Frontend_Frontend {
 					}
 				}
 				if ( ! $skip ) {
-					$return .= $style[ $key ] . ':' . $get_value . $suffix[ $key ] . ';';
+					$get_value = is_numeric( $get_value ) ? floatval( $get_value ) : vi_wpvs_sanitize_css_value( $get_value );
+					$return   .= $style[ $key ] . ':' . $get_value . $suffix[ $key ] . ';';
 				}
 			}
 		}

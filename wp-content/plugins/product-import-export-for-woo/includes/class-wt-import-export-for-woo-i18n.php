@@ -36,7 +36,7 @@ class Wt_Import_Export_For_Woo_i18n_Basic {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'wt-import-export-for-woo',
+			'product-import-export-for-woo',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);

@@ -41,7 +41,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Woo_Widget {
 									<label for="vi-wpvs-woo_widget_enable-checkbox"><?php esc_html_e( 'Enable', 'product-variations-swatches-for-woocommerce' ); ?></label>
 								</th>
 								<td>
-									<a class="vi-ui button" href="https://1.envato.market/bd0ek"
+									<a class="vi-ui button" href="https://villatheme.com/extensions/woocommerce-product-variations-swatches/"
 									   target="_blank"><?php esc_html_e( 'Unlock This Feature', 'product-variations-swatches-for-woocommerce' ); ?> </a>
 								</td>
 							</tr>
@@ -50,11 +50,10 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Woo_Widget {
 									<label><?php esc_html_e( 'Preview', 'product-variations-swatches-for-woocommerce' ); ?></label>
 								</th>
 								<td>
-									<a  href="https://1.envato.market/bd0ek"
+									<a  href="https://villatheme.com/extensions/woocommerce-product-variations-swatches/"
 									   target="_blank">
 										<img class="aligncenter wp-image-72516 size-full lazyloaded"
 										     src="<?php echo esc_url(VI_WOO_PRODUCT_VARIATIONS_SWATCHES_IMAGES.'woo-widget.gif');?>"
-										     data-src="<?php ?>"
 										     alt="WooCommerce Product Variation Swatches - WooCommerce Filter Widgets" width="616" height="275">
 									</a>
 								</td>

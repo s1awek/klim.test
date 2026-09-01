@@ -147,18 +147,21 @@ if ( ! defined( 'WPINC' ) ) {
 					<ul>
 					  <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('CSV', 'product-import-export-for-woo');?></li>
                       <li><span style="color:red; line-height:inherit;" class="dashicons dashicons-dismiss"></span> <?php esc_html_e('XML', 'product-import-export-for-woo');?></li>
+                      <li><span style="color:red; line-height:inherit;" class="dashicons dashicons-dismiss"></span> <?php esc_html_e('Excel', 'product-import-export-for-woo');?></li>
                     </ul>
 				  </td>
                   <td>
 					<ul>
 					  <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('CSV', 'product-import-export-for-woo');?></li>
                       <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('XML', 'product-import-export-for-woo');?></li>
+                      <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('Excel', 'product-import-export-for-woo');?></li>
                     </ul>
 				  </td>
                   <td>
 					<ul>
 					  <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('CSV', 'product-import-export-for-woo');?></li>
                       <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('XML', 'product-import-export-for-woo');?></li>
+                      <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('Excel', 'product-import-export-for-woo');?></li>
                     </ul>
 				  </td>
                 </tr>
@@ -320,18 +323,21 @@ if ( ! defined( 'WPINC' ) ) {
 					<ul>
 					  <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('CSV', 'product-import-export-for-woo');?></li>
                       <li><span style="color:red; line-height:inherit;" class="dashicons dashicons-dismiss"></span> <?php esc_html_e('XML', 'product-import-export-for-woo');?></li>
+                      <li><span style="color:red; line-height:inherit;" class="dashicons dashicons-dismiss"></span> <?php esc_html_e('Excel', 'product-import-export-for-woo');?></li>
                     </ul>
 				  </td>
                   <td>
 					<ul>
 					  <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('CSV', 'product-import-export-for-woo');?></li>
                       <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('XML', 'product-import-export-for-woo');?></li>
+                      <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('Excel', 'product-import-export-for-woo');?></li>
                     </ul>
 				  </td>
                   <td>
 					<ul>
 					  <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('CSV', 'product-import-export-for-woo');?></li>
                       <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('XML', 'product-import-export-for-woo');?></li>
+                      <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('Excel', 'product-import-export-for-woo');?></li>
                     </ul>
 				  </td>
                 </tr>
@@ -475,18 +481,21 @@ if ( ! defined( 'WPINC' ) ) {
 					<ul>
 					  <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('CSV', 'product-import-export-for-woo');?></li>
                       <li><span style="color:red; line-height:inherit;" class="dashicons dashicons-dismiss"></span> <?php esc_html_e('XML', 'product-import-export-for-woo');?></li>
+                      <li><span style="color:red; line-height:inherit;" class="dashicons dashicons-dismiss"></span> <?php esc_html_e('Excel', 'product-import-export-for-woo');?></li>
                     </ul>
 				  </td>
                   <td>
 					<ul>
 					  <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('CSV', 'product-import-export-for-woo');?></li>
                       <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('XML', 'product-import-export-for-woo');?></li>
+                      <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('Excel', 'product-import-export-for-woo');?></li>
                     </ul>
 				  </td>
                   <td>
 					<ul>
 					  <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('CSV', 'product-import-export-for-woo');?></li>
                       <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('XML', 'product-import-export-for-woo');?></li>
+                      <li><span style="color:#36D144; line-height:inherit;" class="dashicons dashicons-yes-alt"></span> <?php esc_html_e('Excel', 'product-import-export-for-woo');?></li>
                     </ul>
 				  </td>
                 </tr>

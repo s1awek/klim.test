@@ -171,7 +171,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Export
 			'field_name'=>'default_export_batch',
 			'help_text'=>__('Provide the default count for the records to be exported in a batch.', 'product-import-export-for-woo'),
 			'validation_rule'=>array('type'=>'absint'),
-			'attr' => array('min' => 1, 'max' => 200),
+			'attr' => array('min' => 1, 'max' => 200, 'step' => 1),
 		);
                 
 		$fields['enable_chatgpt'] = array(
@@ -345,7 +345,7 @@ class Wt_Import_Export_For_Woo_Product_Basic_Export
                 'value' => '',
                 'type' => 'number',
                 'field_name' => 'limit',
-                'placeholder' => 'Unlimited',
+                'placeholder' => __('Unlimited', 'product-import-export-for-woo'),
                 'help_text' => __('The actual number of records you want to export. e.g. A limit of 500 with an offset 10 will export records from 11th to 510th position.', 'product-import-export-for-woo'),
                 'attr' => array('step' => 1, 'min' => 0),
                 'validation_rule' => array('type' => 'absint')
@@ -380,7 +380,9 @@ class Wt_Import_Export_For_Woo_Product_Basic_Export
 			}
 		}
 
-		$delimiter_default = isset($advanced_form_data['wt_iew_delimiter']) ? $advanced_form_data['wt_iew_delimiter'] : ",";
+		$delimiter_values  = Wt_Iew_IE_Basic_Helper::_get_delimiter_form_values( $advanced_form_data );
+		$delimiter_default = $delimiter_values['delimiter'];
+		$delimiter_preset  = $delimiter_values['preset'];
 		$advanced_screen_fields=array(
 			'file_name'=>array(
 				'label'=>__("Export file name", 'product-import-export-for-woo'),
@@ -393,18 +395,19 @@ class Wt_Import_Export_For_Woo_Product_Basic_Export
 			),
 			'batch_count'=>array(
 				'label'=>__("Export in batches of", 'product-import-export-for-woo'),
-				'type'=>'text',
+				'type'=>'number',
                                 'merge_right'=>true,
 				'value'=>$this->default_batch_count,
 				'field_name'=>'batch_count',
 				// translators: %d is the default number of records
 				'help_text'=>sprintf(__('The number of records that the server will process for every iteration within the configured timeout interval. If the export fails due to timeout you can lower this number accordingly and try again. Defaulted to %d records.', 'product-import-export-for-woo'), 30),
 				'validation_rule'=>array('type'=>'absint'),
+				'attr' => array('min' => 1, 'step' => 1),
 			),
 			'delimiter'=>array(
 				'label'=>__( 'Delimiter', 'product-import-export-for-woo' ),
 				'type'=>'select',
-				'value'=>",",
+				'value'=>$delimiter_preset,
 				'css_class'=>"wt_iew_delimiter_preset",
 				'tr_id'=>'delimiter_tr',
 				'field_name'=>'delimiter_preset',

@@ -5,6 +5,13 @@
 	 	
 	 	$(".wt-iew-tips").tipTip({'attribute': 'data-wt-iew-tip'});
 
+		$(document).on('input', 'input[name="wt_iew_batch_count"], input[name="wt_iew_default_import_batch"], input[name="wt_iew_default_export_batch"]', function() {
+			var sanitizedValue = $(this).val().replace(/[^\d]/g, '');
+			if ($(this).val() !== sanitizedValue) {
+				$(this).val(sanitizedValue);
+			}
+		});
+
 
 	 	/* tab view */
 	 	var wf_tab_view=
@@ -297,6 +304,7 @@ wt_iew_popup={
 
 var wt_field_group=
 {
+	_click_bound:false,
 	Set:function()
 	{
 		//jQuery('.wt_iew_field_group_children').hide();
@@ -310,7 +318,17 @@ var wt_field_group=
 				group_content_dv.show();
 			}
 		});
-		jQuery('.wt_iew_field_group_hd').click(function(){
+
+		/* Remove legacy direct click handlers that may stack from repeated Set() calls. */
+		jQuery('.wt_iew_field_group_hd').off('click');
+
+		if(this._click_bound)
+		{
+			return;
+		}
+		this._click_bound=true;
+
+		jQuery(document).on('click.wtIewFieldGroup', '.wt_iew_field_group_hd', function(){
 
 			var toggle_btn=jQuery(this).find('.wt_iew_field_group_toggle_btn');
 			var visibility=toggle_btn.attr('data-visibility');
@@ -725,16 +743,20 @@ var wt_iew_custom_and_preset=
 {
 	toggler:function(preset_elm, custom_elm, custom_val) /* Toggle between custom and preset value */
 	{
-		this.do_toggle(preset_elm, custom_elm, custom_val);
+		this.do_toggle(preset_elm, custom_elm, custom_val, false);
 		preset_elm.unbind('change').change(function(){
-			wt_iew_custom_and_preset.do_toggle(preset_elm, custom_elm, custom_val);
+			wt_iew_custom_and_preset.do_toggle(preset_elm, custom_elm, custom_val, true);
 		});
 	},
-	do_toggle:function(preset_elm, custom_elm, custom_val)
+	do_toggle:function(preset_elm, custom_elm, custom_val, clear_custom)
 	{
 		if(preset_elm.val()==custom_val)
 		{
-			custom_elm.prop('readonly', false).css({'background':'#ffffff'}).focus().val('');
+			custom_elm.prop('readonly', false).css({'background':'#ffffff'});
+			if(clear_custom)
+			{
+				custom_elm.focus().val('');
+			}
 		}else
 		{
 			custom_elm.prop('readonly', true).css({'background':'#efefef'}).val(preset_elm.find('option:selected').attr('data-val'));

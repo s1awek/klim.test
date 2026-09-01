@@ -17,7 +17,6 @@ function pmxi_admin_menu() {
 			//array('pmxi-admin-license',  __('Licenses', 'wp-all-import-pro')),
 			array('pmxi-admin-partners',  __('Partner Discounts', 'wp-all-import-pro')),	
 			array('pmxi-admin-history',  __('History', 'wp-all-import-pro'))
-			/*array('pmxi-admin-addons',  __('Add-ons', 'wp-all-import-pro')), */			
 		);
 
 		$wpai_menu = apply_filters('pmxi_admin_menu', $wpai_menu);		
@@ -27,8 +26,16 @@ function pmxi_admin_menu() {
 		$submenu['pmxi-admin-home'] = array();
 
 		foreach ($wpai_menu as $key => $value) {
-			add_submenu_page('pmxi-admin-home', $value[1], $value[1], PMXI_Plugin::$capabilities, $value[0], array(PMXI_Plugin::getInstance(), 'adminDispatcher'));	
+			add_submenu_page('pmxi-admin-home', $value[1], $value[1], PMXI_Plugin::$capabilities, $value[0], array(PMXI_Plugin::getInstance(), 'adminDispatcher'));
 		}
+
+		// Removed inside `submenu_file` so the page stays registered and
+		// `$parent_file` is already resolved, keeping the All Import menu
+		// expanded while viewing history logs.
+		add_filter('submenu_file', function ($submenu_file) {
+			remove_submenu_page('pmxi-admin-home', 'pmxi-admin-history');
+			return $submenu_file;
+		});
 		
 	}	
 }

@@ -1,13 +1,5 @@
 <?php
 function pmxi_admin_head(){
-	?>	
-	<style type="text/css">
-		#toplevel_page_pmxi-admin-home ul li:last-child{
-			display: none;
-		}
-	</style>
-	<?php	
-	
 	$input = new PMXI_Input();
 	$get_params = $input->get(array(
 		'id' => false,

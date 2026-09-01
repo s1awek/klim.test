@@ -20,7 +20,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Recommend {
 		}
 		$prefix = 'swatches';
 		$dismiss_nonce = isset( $_REQUEST[$prefix.'_dismiss_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST[$prefix.'_dismiss_nonce'] ) ) : '';
-		if ( wp_verify_nonce( $dismiss_nonce,  $prefix.'_dismiss_nonce' ) && ! get_option( $this->dismiss ) ) {
+		if ( wp_verify_nonce( $dismiss_nonce,  $prefix.'_dismiss_nonce' ) && current_user_can( 'manage_options' ) && ! get_option( $this->dismiss ) ) {
 			update_option( $this->dismiss , time() , 'no');
 		}
 		if (! get_option( $this->dismiss ) ) {
@@ -81,7 +81,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Recommend {
             <div class="notice notice-info is-dismissible">
                 <?php
                 if (count($notices) > 1){
-	                echo wp_kses_post(__('<p>WooCommerce Product Variations Swatches will work better with:</p>','product-variations-swatches-for-woocommerce'));
+                    echo '<p>' . esc_html__( 'WooCommerce Product Variations Swatches will work better with:', 'product-variations-swatches-for-woocommerce' ) . '</p>';
                     ?>
                     <ol>
                         <?php
@@ -108,7 +108,7 @@ class VI_WOO_PRODUCT_VARIATIONS_SWATCHES_Admin_Recommend {
 			$active_plugins = [];
 			$tmp = get_option( 'active_plugins' ,[]);
 			if (is_multisite()){
-				$tmp += array_keys(get_site_option( 'active_sitewide_plugins', [] ));
+				$tmp = array_merge( (array) $tmp, array_keys( (array) get_site_option( 'active_sitewide_plugins', [] ) ) );
 			}
 			if (!empty($tmp)){
 				foreach ($tmp as $v){

@@ -2,9 +2,9 @@
 Contributors: damian-gora, matczar
 Tags: woocommerce search, ajax search, search by sku, product search, woocommerce
 Requires at least: 6.5
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.34.0
+Stable tag: 1.34.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -147,6 +147,10 @@ You can read more and compare Pro and Free features here: [Full comparison - Pro
 9. Sample settings page (Search Analytics tab)
 
 == Changelog ==
+
+= 1.34.1, August 18, 2026 =
+* SECURITY: A search request with an empty query could reveal password-protected products to unauthenticated users. Thanks to Duy Tran for the responsible disclosure.
+* UPDATED: The `.pot` file
 
 = 1.34.0, August 3, 2026 =
 * FIXED: Enabling search analytics triggered a PHP notice about WooCommerce translations loading too early (`_load_textdomain_just_in_time`)
@@ -323,8 +327,5 @@ You can read more and compare Pro and Free features here: [Full comparison - Pro
 * UPDATED: The `.pot` file
 * UPDATED: Polish translation
 * UPDATED: Freemius SDK
-
-= 1.26.1, October 19, 2023 =
-* FIXED: Details Panel: wrong HTML format of the stock status element
 
 [See changelog for all versions](https://fibosearch.com/changelog/).

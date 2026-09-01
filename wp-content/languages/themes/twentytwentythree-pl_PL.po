@@ -7,7 +7,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.3\n"
+"X-Generator: GlotPress/4.1.0\n"
 "Language: pl\n"
 "Project-Id-Version: Themes - Twenty Twenty-Three\n"
 
@@ -23,7 +23,7 @@ msgstr "Twenty Twenty-Three został zaprojektowany, aby wykorzystać nowe narzę
 msgid "Twenty Twenty-Three"
 msgstr "Twenty Twenty-Three"
 
-#: patterns/hidden-heading.php:9
+#: patterns/hidden-heading.php:15
 msgctxt "Main heading for homepage"
 msgid "Mindblown: a blog about philosophy."
 msgstr "Mindblown: blog o filozofii."
@@ -54,20 +54,20 @@ msgid "Comments Template Part"
 msgstr "Fragment szablonu komentarzy"
 
 #. Translators: WordPress link.
-#: patterns/footer-default.php:20
+#: patterns/footer-default.php:26
 msgid "Proudly powered by %s"
 msgstr "Dumnie wspierane przez %s"
 
-#: patterns/hidden-404.php:13
+#: patterns/hidden-404.php:19
 msgctxt "Error code for a webpage that is not found."
 msgid "404"
 msgstr "404"
 
-#: patterns/hidden-404.php:22 patterns/hidden-no-results.php:14
+#: patterns/hidden-404.php:28 patterns/hidden-no-results.php:20
 msgid "Search"
 msgstr "Szukaj"
 
-#: patterns/hidden-404.php:22 patterns/hidden-no-results.php:14
+#: patterns/hidden-404.php:28 patterns/hidden-no-results.php:20
 msgctxt "label"
 msgid "Search"
 msgstr "Szukaj"
@@ -132,7 +132,7 @@ msgctxt "Style variation name"
 msgid "Whisper"
 msgstr "Whisper"
 
-#: patterns/post-meta.php:29
+#: patterns/post-meta.php:35
 msgctxt "Verb to explain the publication status of a post"
 msgid "Posted"
 msgstr "Opublikowano"
@@ -142,17 +142,17 @@ msgctxt "Pattern title"
 msgid "Post Meta"
 msgstr "Meta dane wpisu"
 
-#: patterns/hidden-no-results.php:10
+#: patterns/hidden-no-results.php:16
 msgctxt "Message explaining that there are no results returned from a search"
 msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
 msgstr "Brak wyników wyszukiwania. Proszę spróbować ponownie z innymi słowami."
 
-#: patterns/hidden-comments.php:13
+#: patterns/hidden-comments.php:19
 msgctxt "Title of comments section"
 msgid "Comments"
 msgstr "Komentarze"
 
-#: patterns/hidden-404.php:19
+#: patterns/hidden-404.php:25
 msgctxt "Message to convey that a webpage could not be found"
 msgid "This page could not be found."
 msgstr "Nie można odnaleźć wybranej strony."
@@ -162,7 +162,7 @@ msgctxt "Pattern title"
 msgid "Default Footer"
 msgstr "Stopka domyślna"
 
-#: patterns/call-to-action.php:25
+#: patterns/call-to-action.php:31
 msgctxt "sample content for call to action button"
 msgid "Get In Touch"
 msgstr "Pozostań w kontakcie"
@@ -172,32 +172,32 @@ msgctxt "Pattern title"
 msgid "Call to action"
 msgstr "Wezwanie do działania"
 
-#: styles/marigold.json styles/pitch.json theme.json
+#: theme.json styles/marigold.json styles/pitch.json
 msgctxt "Space size name"
 msgid "6"
 msgstr "6"
 
-#: styles/marigold.json styles/pitch.json theme.json
+#: theme.json styles/marigold.json styles/pitch.json
 msgctxt "Space size name"
 msgid "5"
 msgstr "5"
 
-#: styles/marigold.json styles/pitch.json theme.json
+#: theme.json styles/marigold.json styles/pitch.json
 msgctxt "Space size name"
 msgid "4"
 msgstr "4"
 
-#: styles/marigold.json styles/pitch.json theme.json
+#: theme.json styles/marigold.json styles/pitch.json
 msgctxt "Space size name"
 msgid "3"
 msgstr "3"
 
-#: styles/marigold.json styles/pitch.json theme.json
+#: theme.json styles/marigold.json styles/pitch.json
 msgctxt "Space size name"
 msgid "2"
 msgstr "2"
 
-#: styles/marigold.json styles/pitch.json theme.json
+#: theme.json styles/marigold.json styles/pitch.json
 msgctxt "Space size name"
 msgid "1"
 msgstr "1"
@@ -218,10 +218,10 @@ msgctxt "Duotone name"
 msgid "Default filter"
 msgstr "Filtr domyślny"
 
-#: styles/aubergine.json styles/block-out.json styles/canary.json
+#: theme.json styles/aubergine.json styles/block-out.json styles/canary.json
 #: styles/electric.json styles/grapes.json styles/marigold.json
 #: styles/pilgrimage.json styles/pitch.json styles/sherbet.json
-#: styles/whisper.json theme.json
+#: styles/whisper.json
 msgctxt "Color name"
 msgid "Contrast"
 msgstr "Kontrast"
@@ -346,34 +346,34 @@ msgctxt "Style variation name"
 msgid "Block out"
 msgstr "Szkicowany"
 
-#: styles/aubergine.json styles/block-out.json styles/canary.json
+#: theme.json styles/aubergine.json styles/block-out.json styles/canary.json
 #: styles/electric.json styles/grapes.json styles/marigold.json
 #: styles/pilgrimage.json styles/pitch.json styles/sherbet.json
-#: styles/whisper.json theme.json
+#: styles/whisper.json
 msgctxt "Color name"
 msgid "Tertiary"
 msgstr "Trzeci"
 
-#: styles/aubergine.json styles/block-out.json styles/canary.json
+#: theme.json styles/aubergine.json styles/block-out.json styles/canary.json
 #: styles/electric.json styles/grapes.json styles/marigold.json
 #: styles/pilgrimage.json styles/pitch.json styles/sherbet.json
-#: styles/whisper.json theme.json
+#: styles/whisper.json
 msgctxt "Color name"
 msgid "Secondary"
 msgstr "Drugi"
 
-#: styles/aubergine.json styles/block-out.json styles/canary.json
+#: theme.json styles/aubergine.json styles/block-out.json styles/canary.json
 #: styles/electric.json styles/grapes.json styles/marigold.json
 #: styles/pilgrimage.json styles/pitch.json styles/sherbet.json
-#: styles/whisper.json theme.json
+#: styles/whisper.json
 msgctxt "Color name"
 msgid "Primary"
 msgstr "Pierwszy"
 
-#: styles/aubergine.json styles/block-out.json styles/canary.json
+#: theme.json styles/aubergine.json styles/block-out.json styles/canary.json
 #: styles/electric.json styles/grapes.json styles/marigold.json
 #: styles/pilgrimage.json styles/pitch.json styles/sherbet.json
-#: styles/whisper.json theme.json
+#: styles/whisper.json
 msgctxt "Color name"
 msgid "Base"
 msgstr "Bazowy"
@@ -403,17 +403,17 @@ msgctxt "Style variation name"
 msgid "Aubergine"
 msgstr "Bakłażanowy"
 
-#: patterns/post-meta.php:65
+#: patterns/post-meta.php:71
 msgctxt "Label for a list of post tags"
 msgid "Tags:"
 msgstr "Tagi:"
 
-#: patterns/post-meta.php:49
+#: patterns/post-meta.php:55
 msgctxt "Preposition to show the relationship between the post and its author"
 msgid "by"
 msgstr "przez"
 
-#: patterns/post-meta.php:37
+#: patterns/post-meta.php:43
 msgctxt "Preposition to show the relationship between the post and its categories"
 msgid "in"
 msgstr "w"
@@ -433,12 +433,12 @@ msgctxt "Pattern title"
 msgid "Hidden 404"
 msgstr "Ukryty 404"
 
-#: patterns/call-to-action.php:16
+#: patterns/call-to-action.php:22
 msgctxt "sample content for call to action"
 msgid "Got any book recommendations?"
 msgstr "Czy możesz polecić książkę?"
 
-#: patterns/hidden-404.php:22 patterns/hidden-no-results.php:14
+#: patterns/hidden-404.php:28 patterns/hidden-no-results.php:20
 msgctxt "placeholder for search field"
 msgid "Search..."
 msgstr "Wyszukiwanie…"
@@ -450,7 +450,7 @@ msgid "the WordPress team"
 msgstr "zespół WordPressa"
 
 #. Author URI of the theme
-#: style.css patterns/footer-default.php:21
+#: style.css patterns/footer-default.php:27
 #, gp-priority: low
 msgid "https://wordpress.org"
 msgstr "https://pl.wordpress.org"

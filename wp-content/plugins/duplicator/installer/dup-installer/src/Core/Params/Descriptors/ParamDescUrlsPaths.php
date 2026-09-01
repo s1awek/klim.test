@@ -136,7 +136,7 @@ final class ParamDescUrlsPaths implements DescriptorInterface
                         $paramObj->setInvalidMessage(
                             'The new path must be an existing folder on the server.<br>' .
                             'It is not possible to continue the installation without first creating the folder <br>' .
-                            '<b>' . $value . '</b>'
+                            '<b>' . \DUPX_U::esc_html((string) $value) . '</b>'
                         );
                         return false;
                     }

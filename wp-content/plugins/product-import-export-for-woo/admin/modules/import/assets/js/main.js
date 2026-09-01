@@ -526,9 +526,9 @@ var wt_iew_basic_import=(function( $ ) {
 				}	
 			});
                         $('.wt_iew_popup_cancel_btn').unbind('click').click(function(e){
-                            if ( confirm( "Are you sure to stop the import?" ) == true ) {
+                            if ( confirm( wt_iew_basic_params.msgs.stop_import_confirm ) == true ) {
                                     var temp_err_message = wt_iew_basic_params.msgs.error;
-                                    wt_iew_basic_params.msgs.error = 'Import cancelled';
+                                    wt_iew_basic_params.msgs.error = wt_iew_basic_params.msgs.import_cancelled;
                                     wt_iew_basic_import.import_finished = true;
                                     wt_iew_basic_import.import_ajax_xhr.abort();
                                     wt_iew_basic_params.msgs.error = temp_err_message;
@@ -1257,7 +1257,7 @@ var wt_iew_basic_import=(function( $ ) {
                     window.onbeforeunload = function (event)
                     {
                         if(!wt_iew_basic_import.import_finished && 'post_type' != wt_iew_basic_import.current_step){
-                            return confirm("Changes that you made may not be saved.");
+                            return confirm(wt_iew_basic_params.msgs.changes_not_saved);
                         }
                     };
                 }                

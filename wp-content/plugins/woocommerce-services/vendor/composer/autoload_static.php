@@ -12,7 +12,7 @@ class ComposerStaticInita892dd54e4ab2e79915fa6e762b177fc
     );
 
     public static $prefixLengthsPsr4 = array (
-        'A' =>
+        'A' => 
         array (
             'Automattic\\WCServices\\' => 22,
             'Automattic\\Jetpack\\Autoloader\\' => 30,
@@ -20,11 +20,11 @@ class ComposerStaticInita892dd54e4ab2e79915fa6e762b177fc
     );
 
     public static $prefixDirsPsr4 = array (
-        'Automattic\\WCServices\\' =>
+        'Automattic\\WCServices\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
-        'Automattic\\Jetpack\\Autoloader\\' =>
+        'Automattic\\Jetpack\\Autoloader\\' => 
         array (
             0 => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src',
         ),
@@ -109,6 +109,7 @@ class ComposerStaticInita892dd54e4ab2e79915fa6e762b177fc
         'Automattic\\WCServices\\StoreNotices\\StoreNoticeTypes' => __DIR__ . '/../..' . '/src/StoreNotices/StoreNoticeTypes.php',
         'Automattic\\WCServices\\StoreNotices\\StoreNoticesController' => __DIR__ . '/../..' . '/src/StoreNotices/StoreNoticesController.php',
         'Automattic\\WCServices\\StoreNotices\\StoreNoticesNotifier' => __DIR__ . '/../..' . '/src/StoreNotices/StoreNoticesNotifier.php',
+        'Automattic\\WCServices\\Tax\\Address' => __DIR__ . '/../..' . '/src/Tax/Address.php',
         'Automattic\\WCServices\\Utils' => __DIR__ . '/../..' . '/src/Utils.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Jetpack_IXR_Client' => __DIR__ . '/..' . '/automattic/jetpack-connection/legacy/class-jetpack-ixr-client.php',

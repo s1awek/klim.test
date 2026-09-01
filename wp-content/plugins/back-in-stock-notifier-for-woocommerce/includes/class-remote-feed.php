@@ -34,6 +34,7 @@ if ( ! class_exists( 'CWG_Instock_Remote_Feed' ) ) {
 
 		const FEED_URL_OPTION      = 'cwg_bis_remote_feed_url';
 		const PRODUCTS_OPTION      = 'cwg_bis_feed_products';
+		const PROMOTION_OPTION     = 'cwg_bis_feed_promotion';
 		const LAST_FETCH_OPTION    = 'cwg_bis_feed_last_fetch';
 		const AS_HOOK              = 'cwg_bis_daily_feed_fetch';
 		const SCHEDULE_FLAG_OPTION = 'cwg_bis_feed_scheduled';
@@ -214,28 +215,65 @@ if ( ! class_exists( 'CWG_Instock_Remote_Feed' ) ) {
 		 * Uses a transient lock to prevent concurrent fetches.
 		 * Stores data with autoload=false (no frontend impact).
 		 */
-		public function fetch_remote_feed() {
+		/**
+		 * Arguments for a feed request that must not be served from a cache.
+		 *
+		 * The feed is a plain GET on a public REST route, so page caches and
+		 * CDNs happily store it. Without this a refresh can return a response
+		 * that is hours old, and the merchant sees stale product counts.
+		 *
+		 * @since 7.4.0
+		 * @param int $timeout Request timeout in seconds.
+		 * @return array
+		 */
+		private static function no_cache_request_args( $timeout = 30 ) {
+			return array(
+				'timeout'   => $timeout,
+				'sslverify' => true,
+				'headers'   => array(
+					'Accept'        => 'application/json',
+					'Cache-Control' => 'no-cache, no-store, max-age=0',
+					'Pragma'        => 'no-cache',
+				),
+			);
+		}
+
+		/**
+		 * Append a unique parameter so intermediate caches treat every fetch
+		 * as a new URL.
+		 *
+		 * @since 7.4.0
+		 * @param string $url Endpoint.
+		 * @return string
+		 */
+		private static function bust_cache_url( $url ) {
+			return add_query_arg( 'cwg_ts', time(), $url );
+		}
+
+		/**
+		 * Fetch the product feed.
+		 *
+		 * @param bool $force Skip the concurrency lock. Used when an admin
+		 *                    presses Refresh, which must always run now.
+		 * @return bool
+		 */
+		public function fetch_remote_feed( $force = false ) {
 			$feed_url = self::get_feed_url();
 			if ( empty( $feed_url ) ) {
 				return false;
 			}
 
-			// Prevent concurrent runs with a 5-minute lock
+			// Prevent overlapping automatic runs with a short lock. A manual
+			// refresh passes $force and always goes through.
 			$lock_key = 'cwg_bis_feed_fetch_lock';
-			if ( get_transient( $lock_key ) ) {
+			if ( ! $force && get_transient( $lock_key ) ) {
 				return false;
 			}
 			set_transient( $lock_key, 1, 5 * MINUTE_IN_SECONDS );
 
 			$response = wp_remote_get(
-				esc_url_raw( $feed_url ),
-				array(
-					'timeout'   => 30,
-					'sslverify' => true,
-					'headers'   => array(
-						'Accept' => 'application/json',
-					),
-				)
+				esc_url_raw( self::bust_cache_url( $feed_url ) ),
+				self::no_cache_request_args( 30 )
 			);
 
 			if ( is_wp_error( $response ) ) {
@@ -273,6 +311,10 @@ if ( ! class_exists( 'CWG_Instock_Remote_Feed' ) ) {
 			update_option( self::PRODUCTS_OPTION, $clean_products, false );
 			update_option( self::LAST_FETCH_OPTION, time(), false );
 
+			// Site wide promotion is served from its own endpoint, so the
+			// products endpoint keeps its original shape.
+			$this->fetch_promotion();
+
 			delete_transient( $lock_key );
 
 			return true;
@@ -288,7 +330,8 @@ if ( ! class_exists( 'CWG_Instock_Remote_Feed' ) ) {
 				wp_send_json_error( array( 'message' => __( 'Permission denied.', 'back-in-stock-notifier-for-woocommerce' ) ), 403 );
 			}
 
-			$result = $this->fetch_remote_feed();
+			// Manual refresh: ignore the lock and any upstream cache.
+			$result = $this->fetch_remote_feed( true );
 
 			if ( ! $result ) {
 				wp_send_json_error(
@@ -313,6 +356,85 @@ if ( ! class_exists( 'CWG_Instock_Remote_Feed' ) ) {
 		/**
 		 * Sanitize a single product from remote feed.
 		 */
+		/**
+		 * Fetch the site wide promotion. Failures are non fatal, the previous
+		 * promotion is simply left in place.
+		 *
+		 * @since 7.4.0
+		 * @return bool
+		 */
+		public function fetch_promotion() {
+			$url = str_replace( '/products', '/promotion', self::get_feed_url() );
+			if ( empty( $url ) ) {
+				return false;
+			}
+
+			$response = wp_remote_get(
+				esc_url_raw( self::bust_cache_url( $url ) ),
+				self::no_cache_request_args( 15 )
+			);
+
+			if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+				return false;
+			}
+
+			$data = json_decode( wp_remote_retrieve_body( $response ), true );
+			if ( ! is_array( $data ) ) {
+				$data = array();
+			}
+
+			update_option( self::PROMOTION_OPTION, self::sanitize_promotion( $data ), false );
+			return true;
+		}
+
+		/**
+		 * Sanitize a promotion payload.
+		 *
+		 * @since 7.4.0
+		 * @param array $raw Raw promotion data.
+		 * @return array
+		 */
+		private static function sanitize_promotion( $raw ) {
+			if ( ! is_array( $raw ) || empty( $raw['code'] ) ) {
+				return array();
+			}
+
+			return array(
+				'code'        => sanitize_text_field( $raw['code'] ),
+				'headline'    => isset( $raw['headline'] ) ? sanitize_text_field( $raw['headline'] ) : '',
+				'description' => isset( $raw['description'] ) ? sanitize_textarea_field( $raw['description'] ) : '',
+				'discount'    => isset( $raw['discount'] ) ? sanitize_text_field( $raw['discount'] ) : '',
+				'url'         => isset( $raw['url'] ) ? esc_url_raw( $raw['url'] ) : '',
+				'expires'     => isset( $raw['expires'] ) ? sanitize_text_field( $raw['expires'] ) : '',
+				'applies_to'  => isset( $raw['applies_to'] ) ? sanitize_key( $raw['applies_to'] ) : 'all',
+			);
+		}
+
+		/**
+		 * Get the stored promotion, or an empty array when there is none or it
+		 * has passed its end date.
+		 *
+		 * @since 7.4.0
+		 * @return array
+		 */
+		public static function get_promotion() {
+			$promo = get_option( self::PROMOTION_OPTION, array() );
+			if ( ! is_array( $promo ) || empty( $promo['code'] ) ) {
+				return array();
+			}
+
+			// Respect the end date locally too, in case the store has not
+			// refreshed the feed since the promotion ended.
+			if ( ! empty( $promo['expires'] ) ) {
+				$expires_ts = strtotime( $promo['expires'] . ' 23:59:59' );
+				if ( $expires_ts && $expires_ts < time() ) {
+					return array();
+				}
+			}
+
+			return $promo;
+		}
+
 		private static function sanitize_product( $raw ) {
 			if ( ! is_array( $raw ) ) {
 				return array();
@@ -333,6 +455,7 @@ if ( ! class_exists( 'CWG_Instock_Remote_Feed' ) ) {
 				'icon_url'        => isset( $raw['icon_url'] ) ? esc_url_raw( $raw['icon_url'] ) : '',
 				'sort_order'      => isset( $raw['sort_order'] ) ? absint( $raw['sort_order'] ) : 0,
 				'plugin_file'     => isset( $raw['plugin_file'] ) ? sanitize_text_field( $raw['plugin_file'] ) : '',
+				'wporg_slug'      => isset( $raw['wporg_slug'] ) ? sanitize_title( $raw['wporg_slug'] ) : '',
 			);
 		}
 

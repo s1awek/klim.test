@@ -1,0 +1,331 @@
+/*--------------------------------------------------------------------------
+*
+*	AI Bridge LLM Configuration Styles
+*	Matches WP All Import Pro UI patterns
+*
+*-------------------------------------------------------------------------*/
+
+/* Main container - matches wpallimport-content-section */
+.wpai-llm-config-container {
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-khtml-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	padding: 30px;
+	overflow: hidden;
+}
+
+/* When iframe is active, remove container padding so it fills the space */
+.wpai-llm-config-container.wpai-iframe-active {
+	background: #f0f0f1;
+	border-color: #ddd;
+	padding: 0;
+}
+
+/* Loading status section */
+.wpai-llm-config-status {
+	text-align: center;
+	padding: 40px 20px;
+}
+
+.wpai-llm-spinner {
+	margin: 0 auto 20px;
+	width: 20px;
+	height: 20px;
+}
+
+.wpai-llm-spinner .wpai-spinner {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 3px solid #f0f0f1;
+	border-top-color: #2d8a8b;
+	border-radius: 50%;
+	animation: wpai-spin 0.6s linear infinite;
+}
+
+@keyframes wpai-spin {
+	to { transform: rotate(360deg); }
+}
+
+#wpai-llm-status-message {
+	margin: 0 0 8px;
+	font-size: 22px;
+	font-weight: normal;
+	color: #425f9a;
+	line-height: 28px;
+}
+
+#wpai-llm-status-detail {
+	margin: 0;
+	font-size: 14px;
+	color: #646970;
+	line-height: 1.5;
+}
+
+/* Iframe container */
+.wpai-llm-config-iframe-container {
+	width: 100%;
+	min-height: 600px;
+	position: relative;
+	background: #f0f0f1;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+#wpai-llm-config-iframe {
+	width: 100%;
+	height: 600px;
+	border: none;
+	border-radius: 8px;
+	background: transparent;
+}
+
+/* Error section - modern card-based design */
+.wpai-llm-config-error {
+	display: flex;
+	justify-content: center;
+	padding: 40px 20px;
+}
+
+.wpai-error-card {
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 12px;
+	padding: 32px;
+	max-width: 560px;
+	width: 100%;
+	text-align: center;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.wpai-error-icon {
+	margin-bottom: 16px;
+}
+
+.wpai-error-icon svg {
+	color: #d63638;
+}
+
+.wpai-llm-config-error .wpai-error-content {
+	margin-bottom: 24px;
+}
+
+.wpai-llm-config-error h3 {
+	margin: 0 0 8px;
+	font-size: 20px;
+	font-weight: 600;
+	color: #1d2327;
+	line-height: 1.4;
+}
+
+.wpai-llm-config-error p {
+	margin: 0;
+	font-size: 14px;
+	color: #646970;
+	line-height: 1.6;
+}
+
+.wpai-error-details {
+	margin-top: 16px;
+	padding: 16px;
+	background: #fef2f2;
+	border: 1px solid #fecaca;
+	border-radius: 8px;
+	text-align: left;
+}
+
+.wpai-error-details h4 {
+	margin: 0 0 8px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #991b1b;
+}
+
+.wpai-error-details p {
+	font-size: 13px;
+	color: #7f1d1d;
+	margin: 0 0 8px;
+}
+
+.wpai-error-details code {
+	display: inline-block;
+	background: #fef2f2;
+	border: 1px solid #fca5a5;
+	padding: 2px 6px;
+	border-radius: 4px;
+	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+	font-size: 12px;
+	color: #991b1b;
+}
+
+.wpai-error-details ul {
+	margin: 8px 0 0;
+	padding-left: 20px;
+}
+
+.wpai-error-details li {
+	font-size: 13px;
+	color: #7f1d1d;
+	margin-bottom: 4px;
+}
+
+.wpai-error-actions {
+	display: flex;
+	gap: 12px;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+/* Success section - matches wpallimport-ready-to-go */
+.wpai-llm-config-success {
+	overflow: hidden;
+	/* Position at bottom of container using order in flex layout */
+	order: 99;
+}
+
+/* Header wrapper */
+.wpai-success-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px 24px;
+}
+
+.wpai-llm-config-success .wpai-success-content,
+.wpai-reentry-band .wpai-success-content {
+	text-align: left;
+	flex: 1 1 auto;
+	max-width: 60%;
+	box-sizing: border-box;
+	background: url('../img/elements.png') no-repeat left center;
+	background-size: 50px;
+	padding-left: 70px;
+	min-height: 50px;
+}
+
+.wpai-llm-config-success h3,
+.wpai-reentry-band h3 {
+	color: #425f9a;
+	margin-bottom: 0;
+	margin-top: 3px;
+	font-size: 22px;
+	line-height: 28px;
+}
+
+.wpai-llm-config-success .wpai-success-subtitle,
+.wpai-reentry-band .wpai-success-subtitle {
+	color: #777;
+	margin-top: 5px;
+	margin-bottom: 0;
+	font-size: 18px;
+}
+
+/* Success actions - matches confirm form button styling */
+.wpai-success-actions {
+	text-align: right;
+	flex: 0 0 auto;
+}
+
+.wpai-success-actions .wpai-back-button {
+	border: none;
+	cursor: pointer;
+	font-family: inherit;
+}
+
+.wpai-success-actions .wpai-preview-button {
+	margin: 0 10px;
+}
+
+/* Geometry comes from .wpallimport-large-button. WPAI's base rule (and its
+   hover/focus/active rule) sets background as a shorthand that paints the
+   continue.png chevron, so we must reset background-image explicitly here
+   or the chevron reappears on hover even though only background-color is
+   otherwise meant to change. */
+.wpallimport-plugin .wpai-run-import-btn {
+	background-color: #2e7d4f !important;
+	background-image: none !important;
+	color: #fff !important;
+}
+
+.wpallimport-plugin .wpai-run-import-btn:hover,
+.wpallimport-plugin .wpai-run-import-btn:focus,
+.wpallimport-plugin .wpai-run-import-btn:active {
+	background-color: #276843 !important;
+	background-image: none !important;
+	color: #fff !important;
+}
+
+.wpallimport-plugin .wpai-secondary-btn {
+	background-color: #f0f0f1 !important;
+	background-image: none !important;
+	color: #50575e !important;
+	border: 1px solid #c3c4c7 !important;
+	margin-right: 10px;
+}
+
+.wpallimport-plugin .wpai-secondary-btn:hover,
+.wpallimport-plugin .wpai-secondary-btn:focus,
+.wpallimport-plugin .wpai-secondary-btn:active {
+	background-color: #e5e5e5 !important;
+	background-image: none !important;
+	color: #1d2327 !important;
+	border: 1px solid #c3c4c7 !important;
+}
+
+.wpallimport-plugin .wpai-llm-config-container {
+	margin-bottom: 30px;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 1200px) {
+	.wpai-llm-config-success .wpai-success-content,
+	.wpai-reentry-band .wpai-success-content {
+		max-width: none;
+	}
+
+	.wpai-success-actions {
+		text-align: left;
+	}
+
+	#wpai-llm-status-message,
+	.wpai-llm-config-error h3 {
+		font-size: 18px;
+	}
+}
+
+@media screen and (max-width: 782px) {
+	.wpai-llm-config-success .wpai-success-content,
+	.wpai-reentry-band .wpai-success-content {
+		padding-left: 60px;
+		background-size: 40px;
+	}
+
+	/* Error card responsive */
+	.wpai-llm-config-error {
+		padding: 20px 12px;
+	}
+
+	.wpai-error-card {
+		padding: 24px 20px;
+	}
+
+	.wpai-error-icon svg {
+		width: 40px;
+		height: 40px;
+	}
+
+	.wpai-error-actions {
+		flex-direction: column;
+	}
+
+	.wpai-error-actions .wpai-secondary-btn,
+	.wpai-error-actions .wpai-run-import-btn {
+		width: 100%;
+	}
+}

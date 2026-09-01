@@ -689,17 +689,24 @@ final class DUPX_S3_Funcs
         }
 
         if (($relativeAbsPath = SnapIO::getRelativePath($paramsManager->getValue(PrmMng::PARAM_PATH_WP_CORE_NEW), $pathNew)) === false) {
-            $blogHeaderValue = "'" . $paramsManager->getValue(PrmMng::PARAM_PATH_WP_CORE_NEW) . "/wp-blog-header.php'";
+            $blogHeaderValue = var_export($paramsManager->getValue(PrmMng::PARAM_PATH_WP_CORE_NEW) . '/wp-blog-header.php', true);
         } else {
             $relativeAbsPath = strlen($relativeAbsPath) ? '/' . $relativeAbsPath : '';
-            $blogHeaderValue = "__DIR__ . '" . $relativeAbsPath . "/wp-blog-header.php'";
+            $blogHeaderValue = '__DIR__ . ' . var_export($relativeAbsPath . '/wp-blog-header.php', true);
         }
 
         if (($indexContent = file_get_contents($indexPath)) === false) {
             Log::info('Can\'t read index.php content');
             return false;
         }
-        $indexContent = preg_replace('/(require\s*\(.*wp-blog-header.php[\'"]\s*\))/m', 'require(' . $blogHeaderValue . ')', $indexContent);
+        // Callback form: a backslash or "$" in the literal would be read as a backreference
+        $indexContent = preg_replace_callback(
+            '/(require\s*\(.*wp-blog-header.php[\'"]\s*\))/m',
+            static function () use ($blogHeaderValue) {
+                return 'require(' . $blogHeaderValue . ')';
+            },
+            $indexContent
+        );
 
         if (file_put_contents($indexPath, $indexContent) === false) {
             Log::info('Can\'t update index.php content');
@@ -901,10 +908,11 @@ LONGMSG;
         }
 
         if ($confTransformer->exists('constant', 'ABSPATH')) {
+            // raw => true is required or formatValue() var_exports the whole __DIR__ expression
             if (($relativeAbsPath = SnapIO::getRelativePath($paramsManager->getValue(PrmMng::PARAM_PATH_WP_CORE_NEW), $pathNew)) === false) {
-                $absPathValue = "'" . $paramsManager->getValue(PrmMng::PARAM_PATH_WP_CORE_NEW) . "'";
+                $absPathValue = var_export($paramsManager->getValue(PrmMng::PARAM_PATH_WP_CORE_NEW), true);
             } else {
-                $absPathValue = "__DIR__ . '/" . $relativeAbsPath . "'";
+                $absPathValue = '__DIR__ . ' . var_export('/' . ltrim($relativeAbsPath, '/'), true);
             }
             $confTransformer->update('constant', 'ABSPATH', $absPathValue, array('raw' => true));
             Log::info('UPDATE ABSPATH ' . Log::v2str($absPathValue));

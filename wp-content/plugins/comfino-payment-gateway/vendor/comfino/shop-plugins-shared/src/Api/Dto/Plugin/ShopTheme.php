@@ -1,0 +1,2 @@
+<?php
+declare(strict_types=1); namespace Comfino\Api\Dto\Plugin; final class ShopTheme{ public $code; public $family; public $parents=[]; public $isPwa; public function __construct(string $code,string $family,array$parents=[],?bool $isPwa=null){$this->code=$code;$this->family=$family;$this->parents=$parents;$this->isPwa=$isPwa;}}

@@ -650,9 +650,15 @@ class DUPX_ArchiveConfig
      * @param string $pathInArchive
      *
      * @return string
+     *
+     * @throws Exception If the entry path contains a traversal segment
      */
     public function destFileFromArchiveName($pathInArchive)
     {
+        if (SnapIO::hasTraversalSegment((string) $pathInArchive)) {
+            throw new Exception('Illegal archive entry (path traversal): ' . $pathInArchive);
+        }
+
         $pathsMapping = $this->getPathsMapping();
 
         if (is_string($pathsMapping)) {

@@ -189,10 +189,6 @@ class DUP_Log
             $formatted_time            = date('d-m-H:i:s', $ticks);
             $formatted_logging_message = "{$formatted_time}|DUP|{$logging_message} \r\n";
 
-            // Always write to error log - if they don't want the info they can turn off WordPress error logging or tracing
-            self::ErrLog($logging_message);
-
-            // Everything goes to the plugin log, whether it's part of package generation or not.
             self::WriteToTrace($formatted_logging_message);
         }
     }
@@ -280,7 +276,6 @@ class DUP_Log
     public static function error($msg, $detail = '', $behavior = Dup_ErrorBehavior::Quit)
     {
 
-        SnapUtil::errorLog($msg . ' DETAIL:' . $detail);
         $source = self::getStack(debug_backtrace());
 
         $err_msg  = "\n==================================================================================\n";
@@ -293,7 +288,11 @@ class DUP_Log
         }
         $err_msg .= "TRACE:\n{$source}";
         $err_msg .= "==================================================================================\n\n";
-        @fwrite(self::$logFileHandle, "{$err_msg}");
+        if (is_null(self::$logFileHandle)) {
+            self::Trace($err_msg);
+        } else {
+            @fwrite(self::$logFileHandle, "{$err_msg}");
+        }
 
         switch ($behavior) {
             case Dup_ErrorBehavior::ThrowException:
@@ -343,12 +342,12 @@ class DUP_Log
 
             if (file_exists($backup_log_filepath)) {
                 if (@unlink($backup_log_filepath) === false) {
-                    self::errLog("Couldn't delete backup log $backup_log_filepath");
+                    self::errLog("Couldn't delete backup trace log");
                 }
             }
 
             if (@rename($log_filepath, $backup_log_filepath) === false) {
-                self::errLog("Couldn't rename log $log_filepath to $backup_log_filepath");
+                self::errLog("Couldn't rename trace log");
             }
         }
 
