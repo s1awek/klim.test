@@ -2,12 +2,12 @@
 # This file is distributed under the same license as the Plugins - Redux Framework - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-07-22 04:10:16+0000\n"
+"PO-Revision-Date: 2026-08-19 04:37:09+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.3\n"
+"X-Generator: GlotPress/4.1.0\n"
 "Language: pl\n"
 "Project-Id-Version: Plugins - Redux Framework - Stable (latest release)\n"
 
@@ -3819,10 +3819,6 @@ msgstr "To jest tytuł."
 msgid "This is the info field, if you want to break sections up."
 msgstr "To jest pole informacyjne, jeżeli chcesz podzielić sekcje."
 
-#: sample/sections/presentation-fields/info.php:15
-msgid "Info"
-msgstr "Informacje"
-
 #: sample/sections/presentation-fields/divide.php:17
 msgid "The spacer to the section menu as seen to the left (after this section block) is the divide \"section\". Also the divider below is the divide \"field\"."
 msgstr "Odstęp do menu sekcji widoczny po lewej (po tym bloku sekcji) to podział „sekcja”. Również podział poniżej to podział „pole”."
@@ -4508,3 +4504,7 @@ msgstr "Pole zaznaczenia"
 #: sample/sections/basic-fields/radio.php:15
 msgid "Radio"
 msgstr "Pole wyboru"
+
+#: sample/sections/presentation-fields/info.php:15
+msgid "Info"
+msgstr "Informacja"
