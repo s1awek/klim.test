@@ -12,22 +12,22 @@ class OptInPage implements Hookable
     /**
      * @var string
      */
-    private $plugin_file;
-    /**
-     * @var string
-     */
     private $plugin_slug;
     /** @var Shop|null */
     private $shop;
     /**
-     * @param string $plugin_file
-     * @param string $plugin_slug
-     * @param Shop|null $shop_url
+     * @param string $plugin_file_or_slug Plugin file in the legacy signature, or plugin slug.
+     * @param string|Shop|null $plugin_slug_or_shop Plugin slug in the legacy signature, or shop.
+     * @param Shop|null $shop Shop in the legacy signature.
      */
-    public function __construct($plugin_file, $plugin_slug, $shop = null)
+    public function __construct($plugin_file_or_slug, $plugin_slug_or_shop = null, $shop = null)
     {
-        $this->plugin_file = $plugin_file;
-        $this->plugin_slug = $plugin_slug;
+        if (is_string($plugin_slug_or_shop)) {
+            $this->plugin_slug = $plugin_slug_or_shop;
+        } else {
+            $this->plugin_slug = $plugin_file_or_slug;
+            $shop = $plugin_slug_or_shop;
+        }
         $this->shop = $shop ?? new Shop('', $this->plugin_slug);
     }
     public function hooks()
@@ -58,9 +58,9 @@ class OptInPage implements Hookable
         }
         $terms_url = $shop->get_usage_tracking_page();
         $logo = $shop->get_shop_logo_file();
-        $logo_url = plugin_dir_url(__FILE__) . '../../../assets/images/' . $logo;
+        $logo_url = plugin_dir_url(__FILE__) . '../assets/images/' . $logo;
         $renderer = new SimplePhpRenderer(new DirResolver(__DIR__ . '/views'));
-        $renderer->output_render('tracker-connect', ['logo_url' => apply_filters('wpdesk/tracker/logo_url', $logo_url, $this->plugin_slug), 'shop_name' => $shop->get_shop_name(), 'username' => $username, 'allow_url' => $allow_url, 'skip_url' => $skip_url, 'terms_url' => $terms_url]);
+        $renderer->output_render('tracker-connect', ['logo_url' => apply_filters_ref_array('wpdesk/tracker/logo_url', [$logo_url, $this->plugin_slug]), 'shop_name' => $shop->get_shop_name(), 'username' => $username, 'allow_url' => $allow_url, 'skip_url' => $skip_url, 'terms_url' => $terms_url]);
     }
     /**
      * @deprecated Use OptInPage::output()

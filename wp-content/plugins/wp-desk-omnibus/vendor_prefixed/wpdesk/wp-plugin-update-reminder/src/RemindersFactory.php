@@ -10,7 +10,7 @@ class RemindersFactory implements Hookable
     private string $plugin_file;
     private string $plugin_name;
     private array $reminders = [];
-    public function __construct(string $plugin_dir, string $plugin_file, string $plugin_name, array $reminders = RemindersFactory::REMINDERS)
+    public function __construct(string $plugin_dir, string $plugin_file, string $plugin_name, array $reminders = self::REMINDERS)
     {
         $this->plugin_dir = $plugin_dir;
         $this->plugin_file = $plugin_file;
@@ -27,6 +27,9 @@ class RemindersFactory implements Hookable
             return;
         }
         $reminder_data = new ReminderData($this->plugin_dir, $this->plugin_file, $this->plugin_name, WC());
+        if (!$reminder_data->has_available_update()) {
+            return;
+        }
         foreach ($this->reminders as $reminder) {
             $reminder = new $reminder();
             if ($reminder instanceof Reminder) {

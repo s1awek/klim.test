@@ -55,7 +55,7 @@ class PluginActionLinks implements Hookable
      */
     private function append_opt_link($links)
     {
-        if (!$this->tracker_enabled() || apply_filters('wpdesk_tracker_do_not_ask', \false) || !is_array($links)) {
+        if (!$this->tracker_enabled() || apply_filters('wpdesk_tracker_do_not_ask', \false)) {
             return $links;
         }
         $tracker_consent = new \OmnibusProVendor\WPDesk_Tracker_Persistence_Consent();

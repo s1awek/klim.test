@@ -3,12 +3,12 @@
 namespace OmnibusProVendor;
 
 /**
- * @var $logo_url  string
- * @var $username  string
- * @var $allow_url string
- * @var $skip_url  string
- * @var $terms_url string
- * @var $shop_name string
+ * @var string $logo_url
+ * @var string $username
+ * @var string $allow_url
+ * @var string $skip_url
+ * @var string $terms_url
+ * @var string $shop_name
  */
 if (!\defined('ABSPATH')) {
     exit;
@@ -94,5 +94,4 @@ echo \esc_url_raw($terms_url);
 		</div>
 	</div>
 </div>
-
 <?php 

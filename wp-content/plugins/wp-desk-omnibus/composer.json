@@ -45,7 +45,7 @@
 		"wpdesk/php-di": "^6.3",
 		"wpdesk/phpstan-rules": "^1",
 		"wpdesk/wp-code-sniffer": "^1",
-		"wpdesk/wp-codeception": "^2",
+		"wpdesk/wp-codeception": "^3",
 		"wpdesk/wp-logs": "^1.10",
 		"wpdesk/wp-migrations": "^1.0",
 		"wpdesk/wp-mutex": "^1.1",
@@ -83,6 +83,6 @@
 			"url": "https://gitlab.wpdesk.dev/api/v4/group/wpdesk/-/packages/composer/"
 		}
 	},
-	"version": "2.2.22",
+	"version": "2.2.24",
 	"type": "wordpress-plugin"
 }

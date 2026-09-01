@@ -23,15 +23,21 @@ class ReminderData
     }
     public function get_plugin_name(): string
     {
+        // phpcs:ignore WordPress.WP.I18n
         return $this->get_plugin_data()['Name'] ? __($this->get_plugin_data()['Name'], $this->get_plugin_data()['TextDomain'] ?? '') : $this->plugin_name;
     }
     private function get_plugins_page_url(): string
     {
-        return admin_url('plugins.php' . '#' . basename($this->plugin_dir) . '-wpdesk-reminder');
+        return admin_url('plugins.php#' . basename($this->plugin_dir) . '-wpdesk-reminder');
     }
     public function get_plugin_file(): string
     {
         return $this->plugin_file;
+    }
+    public function has_available_update(): bool
+    {
+        $updates = get_site_transient('update_plugins');
+        return is_object($updates) && isset($updates->response) && is_array($updates->response) && isset($updates->response[$this->get_plugin_file()]);
     }
     protected function get_plugin_file_path(): string
     {

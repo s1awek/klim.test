@@ -36,7 +36,7 @@ class SiteHealthReminder implements Reminder, Hookable
     }
     private function get_results($description, $status, $color): array
     {
-        $results = array('label' => __('You should update plugin', 'wpdesk-omnibus'), 'status' => $status, 'badge' => array('label' => __('Compatibility', 'wpdesk-omnibus'), 'color' => $color), 'description' => $description, 'actions' => '', 'test' => basename($this->reminder_data->get_plugin_dir()));
+        $results = ['label' => __('You should update plugin', 'wpdesk-omnibus'), 'status' => $status, 'badge' => ['label' => __('Compatibility', 'wpdesk-omnibus'), 'color' => $color], 'description' => $description, 'actions' => '', 'test' => basename($this->reminder_data->get_plugin_dir())];
         return $results;
     }
 }

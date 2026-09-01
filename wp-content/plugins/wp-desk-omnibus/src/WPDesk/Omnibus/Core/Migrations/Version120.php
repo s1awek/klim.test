@@ -6,12 +6,17 @@ namespace WPDesk\Omnibus\Core\Migrations;
 use OmnibusProVendor\WPDesk\Migrations\AbstractMigration;
 
 class Version120 extends AbstractMigration {
+	use ColumnExistsTrait;
 
 	public function up(): bool {
 		$table = Schema::price_logger_table_name();
 		$sql   = "ALTER TABLE {$table}
-		ADD PRIMARY KEY `product_data` (`product_id`, `created`, `price`),
-        DROP INDEX `PRIMARY`;";
+		DROP PRIMARY KEY,
+		ADD PRIMARY KEY `product_data` (`product_id`, `created`, `price`);";
 		return (bool) $this->wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	}
+
+	public function is_needed(): bool {
+		return $this->column_exists( 'id' ) === false;
 	}
 }

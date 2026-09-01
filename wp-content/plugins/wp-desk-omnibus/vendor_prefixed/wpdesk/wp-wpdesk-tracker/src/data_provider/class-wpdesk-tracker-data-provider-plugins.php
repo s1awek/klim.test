@@ -14,7 +14,7 @@ namespace OmnibusProVendor;
 if (!\defined('ABSPATH')) {
     exit;
 }
-if (!\class_exists('WPDesk_Tracker_Data_Provider')) {
+if (!\class_exists('OmnibusProVendor\WPDesk_Tracker_Data_Provider_Plugins')) {
     /**
      * Class WPDesk_Tracker_Data_Provider_Plugins
      */

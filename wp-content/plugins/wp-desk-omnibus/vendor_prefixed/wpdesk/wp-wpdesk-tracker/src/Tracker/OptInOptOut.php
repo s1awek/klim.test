@@ -42,7 +42,7 @@ class OptInOptOut implements HookableCollection
     public function create_objects()
     {
         $this->add_hookable(new PluginActionLinks($this->plugin_file, $this->plugin_slug, $this->shop_url));
-        $this->add_hookable(new OptInPage($this->plugin_file, $this->plugin_slug));
+        $this->add_hookable(new OptInPage($this->plugin_slug));
         $this->add_hookable(new OptOut($this->plugin_slug, $this->plugin_name));
         $this->add_hookable(new Assets($this->plugin_slug));
     }
